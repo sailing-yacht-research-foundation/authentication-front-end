@@ -1,4 +1,5 @@
 import { ThemeState } from 'styles/theme/slice/types';
+import { LoginState } from 'app/pages/LoginPage/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -9,5 +10,6 @@ import { ThemeState } from 'styles/theme/slice/types';
 */
 export interface RootState {
   theme?: ThemeState;
+  login?: LoginState
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

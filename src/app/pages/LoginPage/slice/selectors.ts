@@ -1,0 +1,22 @@
+import { createSelector } from '@reduxjs/toolkit';
+
+import { RootState } from 'types';
+import { initialState } from '.';
+
+// First select the relevant part from the state
+const selectDomain = (state: RootState) => state.login || initialState;
+
+export const selectUser = createSelector(
+  [selectDomain],
+  loginState => loginState.user,
+);
+
+export const selectIsAuthenticated = createSelector(
+  [selectDomain],
+  loginState => loginState.isAuthenticated,
+);
+
+export const selectAccessToken = createSelector(
+  [selectDomain],
+  loginState => loginState.access_token,
+);

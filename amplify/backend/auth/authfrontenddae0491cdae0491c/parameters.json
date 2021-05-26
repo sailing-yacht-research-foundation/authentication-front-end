@@ -1,6 +1,6 @@
 {
-    "resourceNameTruncated": "syrfau7c0cf78c",
-    "userPoolName": "react_amplify_cognito_user_pool",
+    "resourceNameTruncated": "authfrdae0491c",
+    "userPoolName": "authfrontenddae0491c_userpool_dae0491c",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -12,12 +12,11 @@
     "smsVerificationMessage": "Your verification code is {####}",
     "emailVerificationSubject": "Your verification code",
     "emailVerificationMessage": "Your verification code is {####}",
-    "defaultPasswordPolicy": true,
-    "passwordPolicyMinLength": "8",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
         "email",
-        "gender",
         "name"
     ],
     "userpoolClientGenerateSecret": false,
@@ -28,10 +27,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "reactA7c0cf78c_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "authfrdae0491c_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "7c0cf78c",
-    "resourceName": "reactAmplifyCognito",
+    "sharedId": "dae0491c",
+    "resourceName": "authfrontenddae0491cdae0491c",
     "authSelections": "userPoolOnly",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -51,27 +50,15 @@
     ],
     "userPoolGroups": false,
     "adminQueries": false,
-    "triggers": "{\n  \"CustomMessage\": [\n    \"verification-link\"\n  ]\n}",
+    "triggers": "{}",
     "hostedUI": false,
     "userPoolGroupList": [],
     "serviceName": "Cognito",
-    "verificationBucketName": "reactamplifycognitoverificationbucket",
     "usernameCaseSensitive": false,
     "parentStack": {
         "Ref": "AWS::StackId"
     },
-    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"reactAmplifyCognitoCustomMessage\"\n  }\n]",
     "breakCircularDependency": true,
     "permissions": [],
-    "dependsOn": [
-        {
-            "category": "function",
-            "resourceName": "reactAmplifyCognitoCustomMessage",
-            "triggerProvider": "Cognito",
-            "attributes": [
-                "Arn",
-                "Name"
-            ]
-        }
-    ]
+    "dependsOn": []
 }

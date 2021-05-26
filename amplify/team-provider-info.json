@@ -1,29 +1,26 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-syrfauthentication-dev-181435-authRole",
-      "UnauthRoleArn": "arn:aws:iam::254011757774:role/amplify-syrfauthentication-dev-181435-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::254011757774:role/amplify-syrfauthentication-dev-181435-authRole",
-      "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-syrfauthentication-dev-181435-deployment",
-      "UnauthRoleName": "amplify-syrfauthentication-dev-181435-unauthRole",
-      "StackName": "amplify-syrfauthentication-dev-181435",
-      "StackId": "arn:aws:cloudformation:us-west-2:254011757774:stack/amplify-syrfauthentication-dev-181435/3c2c4770-bc81-11eb-8abb-06d6aa5a4f0f",
-      "AmplifyAppId": "d37b1t0wkgnqvc"
-    },
-    "categories": {
-      "function": {
-        "reactAmplifyCognitoCustomMessage": {
-          "REDIRECTURL": "",
-          "EMAILSUBJECT": "Account confirmation",
-          "EMAILMESSAGE": "Hi",
-          "deploymentBucketName": "amplify-syrfauthentication-dev-181435-deployment",
-          "s3Key": "amplify-builds/reactAmplifyCognitoCustomMessage-51636c703750536b714e-build.zip"
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-authfrontend-dev-144712-authRole",
+            "UnauthRoleArn": "arn:aws:iam::254011757774:role/amplify-authfrontend-dev-144712-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::254011757774:role/amplify-authfrontend-dev-144712-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-authfrontend-dev-144712-deployment",
+            "UnauthRoleName": "amplify-authfrontend-dev-144712-unauthRole",
+            "StackName": "amplify-authfrontend-dev-144712",
+            "StackId": "arn:aws:cloudformation:us-west-2:254011757774:stack/amplify-authfrontend-dev-144712/6db860b0-bd2d-11eb-a477-06427eda73c1",
+            "AmplifyAppId": "dnobarax6nt22"
+        },
+        "categories": {
+            "auth": {
+                "authfrontenddae0491cdae0491c": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "dnobarax6nt22",
+                    "type": "manual"
+                }
+            }
         }
-      },
-      "auth": {
-        "reactAmplifyCognito": {}
-      }
     }
-  }
 }

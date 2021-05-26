@@ -4,8 +4,10 @@ import { Link } from 'app/components/Link';
 import { NavBar } from 'app/components/NavBar';
 import { Helmet } from 'react-helmet-async';
 import { StyleConstants } from 'styles/StyleConstants';
-
 import { Input, Form, Checkbox, Button } from 'antd';
+import { Auth } from 'aws-amplify';
+import { useDispatch } from 'react-redux';
+import { UseLoginSlice } from './slice';
 
 const layout = {
   labelCol: { span: 8 },
@@ -15,15 +17,37 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-export function LoginPage() {
+export function LoginPage(props) {
+  const { actions } = UseLoginSlice();
+  // Used to dispatch slice actions
+  const dispatch = useDispatch();
+  
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    let { email, password } = values;
+    Auth.signIn({
+      username: email,
+      password
+    }).then(user => {
+      if (user.attributes && user.attributes.email_verified) {
+        dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
+        dispatch(actions.setIsAuthenticated(true));
+        props.history.push('/');
+      }
+    }).catch(error => {
+      if (error.code === 'UserNotConfirmedException') {
+        props.history.push('/verify-account', {
+          state: {
+            email: email
+          }
+        });
+      }
+    })
   }
 
   return (
     <>
       <Helmet>
-        <title>Login</title>
+        <title>Please Login</title>
         <meta name="description" content="Login" />
       </Helmet>
       <NavBar />
@@ -34,12 +58,12 @@ export function LoginPage() {
           {...layout}
           name="basic"
           initialValues={{ remember: true }}
-        onFinish={onFinish}
+          onFinish={onFinish}
         >
           <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            label="Email"
+            name="email"
+            rules={[{ required: true, type: 'email' }]}
           >
             <Input />
           </Form.Item>
@@ -47,19 +71,26 @@ export function LoginPage() {
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true }]}
           >
             <Input.Password />
-          </Form.Item>
-
-          <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
           </Form.Item>
 
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
               Login
             </Button>
+          </Form.Item>
+
+          <Form.Item {...tailLayout}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', }}>
+              <a style={{ float: 'right' }} onClick={() => props.history.push('/signup')}>
+                Signup
+              </a>
+              <a style={{ float: 'right' }}>
+                Forgot password
+            </a>
+            </div>
           </Form.Item>
         </Form>
       </Wrapper>

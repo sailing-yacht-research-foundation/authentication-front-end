@@ -9,18 +9,6 @@ Parameters:
     Type: String
 
   
-  
-  
-  functionreactAmplifyCognitoCustomMessageArn:
-    Type: String
-    Default: functionreactAmplifyCognitoCustomMessageArn
-  
-  functionreactAmplifyCognitoCustomMessageName:
-    Type: String
-    Default: functionreactAmplifyCognitoCustomMessageName
-  
-  
-  
 
     
   resourceNameTruncated:
@@ -63,10 +51,10 @@ Parameters:
   defaultPasswordPolicy:
     Type: String
             
+    
   passwordPolicyMinLength:
-    Type: String
-  
-            
+    Type: Number
+          
         
   passwordPolicyCharacters:
     Type: CommaDelimitedList
@@ -146,10 +134,6 @@ Parameters:
     Type: String
   
             
-  verificationBucketName:
-    Type: String
-  
-            
   
   usernameCaseSensitive:
     Type: String
@@ -158,10 +142,6 @@ Parameters:
   parentStack:
     Type: String
         
-  authTriggerConnections:
-    Type: String
-  
-            
   
   breakCircularDependency:
     Type: String
@@ -182,34 +162,13 @@ Conditions:
 
 Resources:
   
-  CustomMessageConfirmationBucket:
-    Type: AWS::S3::Bucket
-    DeletionPolicy: "Retain"
-    Properties:
-      BucketName:  !If [ShouldNotCreateEnvResources, !Ref verificationBucketName, !Join ['',[!Ref verificationBucketName, '-', !Ref env]]]
-      AccessControl: "Private"
-      WebsiteConfiguration:
-        IndexDocument: "index.html"
-        ErrorDocument: "index.html"
-      CorsConfiguration:
-        CorsRules:
-          -
-            AllowedHeaders:
-              - "Authorization"
-              - "Content-Length"
-            AllowedMethods:
-              - "GET"
-            AllowedOrigins:
-              - "*"
-            MaxAge: 3000
-  
   
   # BEGIN SNS ROLE RESOURCE
   SNSRole:
   # Created to allow the UserPool SMS Config to publish via the Simple Notification Service during MFA Process
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, 'syrfau7c0cf78c_sns-role', !Join ['',[ 'sns', '7c0cf78c', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, 'authfrdae0491c_sns-role', !Join ['',[ 'sns', 'dae0491c', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -221,10 +180,10 @@ Resources:
               - "sts:AssumeRole"
             Condition:
               StringEquals:
-                sts:ExternalId: syrfau7c0cf78c_role_external_id
+                sts:ExternalId: authfrdae0491c_role_external_id
       Policies:
         -
-          PolicyName: syrfau7c0cf78c-sns-policy
+          PolicyName: authfrdae0491c-sns-policy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -250,11 +209,6 @@ Resources:
         
         -
           Name: email
-          Required: true
-          Mutable: true
-        
-        -
-          Name: gender
           Required: true
           Mutable: true
         
@@ -287,7 +241,7 @@ Resources:
       SmsAuthenticationMessage: !Ref smsAuthenticationMessage
       SmsConfiguration:
         SnsCallerArn: !GetAtt SNSRole.Arn
-        ExternalId: syrfau7c0cf78c_role_external_id
+        ExternalId: authfrdae0491c_role_external_id
     
   
   UserPoolClientWeb:
@@ -295,7 +249,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: syrfau7c0cf78c_app_clientWeb
+      ClientName: authfrdae0491c_app_clientWeb
       
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
       UserPoolId: !Ref UserPool
@@ -305,7 +259,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: syrfau7c0cf78c_app_client
+      ClientName: authfrdae0491c_app_client
       
       GenerateSecret: !Ref userpoolClientGenerateSecret
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
@@ -316,7 +270,7 @@ Resources:
   # Created to execute Lambda which gets userpool app client config values
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', '7c0cf78c', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', 'dae0491c', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -370,7 +324,7 @@ Resources:
   # Marked as depending on UserPoolClientRole for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: syrfau7c0cf78c_userpoolclient_lambda_iam_policy
+      PolicyName: authfrdae0491c_userpoolclient_lambda_iam_policy
       Roles:
         - !Ref UserPoolClientRole
       PolicyDocument:
@@ -387,7 +341,7 @@ Resources:
   # Marked as depending on UserPoolClientLambdaPolicy for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: syrfau7c0cf78c_userpoolclient_lambda_log_policy
+      PolicyName: authfrdae0491c_userpoolclient_lambda_log_policy
       Roles:
         - !Ref UserPoolClientRole
       PolicyDocument:

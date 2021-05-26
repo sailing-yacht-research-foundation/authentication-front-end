@@ -1,11 +1,26 @@
 import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import styled from 'styled-components/macro';
-import { ReactComponent as DocumentationIcon } from './assets/documentation-icon.svg';
-import { ReactComponent as GithubIcon } from './assets/github-icon.svg';
+import { useHistory } from 'react-router';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import Auth from '@aws-amplify/auth';
 
 export function Nav() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { actions } = UseLoginSlice();
+  const isAuthenenticated = useSelector(selectIsAuthenticated);
+
+  const logout = () => {
+    dispatch(actions.setLogout());
+    history.push('/signin');
+    Auth.signOut();
+  }
+
   return (
     <Wrapper>
+      { isAuthenenticated ? <a onClick={() => logout()}>Sign Out</a> : ''}
     </Wrapper>
   );
 }
