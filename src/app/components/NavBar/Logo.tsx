@@ -1,29 +1,27 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
+import { ReactComponent as LogoLight } from './assets/logo-light.svg';
+import { ReactComponent as LogoDark } from './assets/logo-dark.svg';
 
-export function Logo() {
+
+
+export function Logo(props) {
+  const Wrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: ${props.type === 'light' ? '20px' : '0px'} 0;
+  `;
+
   return (
     <Wrapper>
-      <Title>SYRF</Title>
-      <Description>Sailing Yacht Research Foundation - Improving Yacht Racing</Description>
+      <Link to="/">
+        {
+          props.type === 'light' ? <LogoLight /> : <LogoDark />
+        }
+      </Link>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const Title = styled.div`
-  font-size: 1.25rem;
-  color: ${p => p.theme.text};
-  font-weight: bold;
-  margin-right: 1rem;
-`;
-
-const Description = styled.div`
-  font-size: 0.875rem;
-  color: ${p => p.theme.textSecondary};
-  font-weight: normal;
-`;

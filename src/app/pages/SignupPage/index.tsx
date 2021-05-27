@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { Link } from 'app/components/Link';
-import { NavBar } from 'app/components/NavBar';
-import { Helmet } from 'react-helmet-async';
-import { StyleConstants } from 'styles/StyleConstants';
 
-import { Input, Form, Button } from 'antd';
+import { Input, Form, Button, Row } from 'antd';
 
 import { Auth } from 'aws-amplify';
 
@@ -52,73 +47,44 @@ export function SignupPage(props) {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Signup</title>
-        <meta name="description" content="Signup" />
-      </Helmet>
-      <NavBar />
-      <Wrapper>
-        <Title>
-        </Title>
-        <Form
-          {...layout}
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
+    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+      <Form
+        {...layout}
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[{ required: true, type: 'email' }]}
         >
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[{ required: true, type: 'email' }]}
-          >
-            <Input />
-          </Form.Item>
+          <Input />
+        </Form.Item>
 
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
+        <Form.Item
+          label="Name"
+          name="name"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            hasFeedback={amplifyFeedBack.show}
-            help={amplifyFeedBack.message}
-            rules={[{ required: true, max: 16, min: 8 }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              Signup
-            </Button>
-          </Form.Item>
-        </Form>
-      </Wrapper>
-    </>
+        <Form.Item
+          label="Password"
+          name="password"
+          hasFeedback={amplifyFeedBack.show}
+          help={amplifyFeedBack.message}
+          rules={[{ required: true, max: 16, min: 8 }]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            Signup
+      </Button>
+        </Form.Item>
+      </Form>
+    </Row>
   );
 }
-
-const Wrapper = styled.div`
-  height: calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT});
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  min-height: 320px;
-`;
-
-const Title = styled.div`
-  margin-top: -8vh;
-  font-weight: bold;
-  color: ${p => p.theme.text};
-  font-size: 3.375rem;
-
-  span {
-    font-size: 3.125rem;
-  }
-`;
