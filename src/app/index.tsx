@@ -49,6 +49,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 export function App(props) {
   const { i18n } = useTranslation();
+  
   return (
     <BrowserRouter>
       <Layout className="site-layout">
