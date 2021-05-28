@@ -15,16 +15,7 @@ const tailLayout = {
 export function HomePage() {
   return (
     <>
-      <Helmet>
-        <title>Home Page</title>
-        <meta name="description" content="Login" />
-      </Helmet>
-      <NavBar />
-      <Wrapper>
-        <Title>
-        </Title>
-        <div>This is home page</div>
-      </Wrapper>
+      <div>This is home page</div>
     </>
   );
 }

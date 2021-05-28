@@ -5,6 +5,8 @@ import styled from 'styled-components/macro';
 import { useHistory } from 'react-router';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import Auth from '@aws-amplify/auth';
+import { SelectLanguage } from '../SelectLanguages'
+import { Link } from 'react-router-dom';
 
 export function Nav() {
   const history = useHistory();
@@ -20,7 +22,18 @@ export function Nav() {
 
   return (
     <Wrapper>
-      { isAuthenenticated ? <a onClick={() => logout()}>Sign Out</a> : ''}
+      { isAuthenenticated ? (
+        <>
+          <SelectLanguage />
+          <a onClick={() => logout()} style={{ marginLeft: '10px' }}>Sign Out</a>
+        </>
+      ) : (
+        <>
+          <Link to="/sigin">Sign in</Link>
+          <span style={{ marginLeft: '5px', marginRight: '5px' }}>|</span>
+          <Link to="/signup">Sign Up</Link>
+        </>
+      )}
     </Wrapper>
   );
 }

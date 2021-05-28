@@ -1,10 +1,6 @@
 import * as React from 'react';
-import styled from 'styled-components/macro';
-import { NavBar } from 'app/components/NavBar';
-import { Helmet } from 'react-helmet-async';
-import { StyleConstants } from 'styles/StyleConstants';
 
-import { Input, Form, Button } from 'antd';
+import { Input, Form, Button, Row } from 'antd';
 import { Auth } from 'aws-amplify';
 
 const layout = {
@@ -43,59 +39,30 @@ export function VerifyAccountPage(props) {
     Auth.resendSignUp(email);
   }
   return (
-    <>
-      <Helmet>
-        <title>Verify your account</title>
-        <meta name="description" content="Login" />
-      </Helmet>
-      <NavBar />
-      <Wrapper>
-        <Title>
-        </Title>
-        <Form
-          {...layout}
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
+    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+      <Form
+        {...layout}
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+          label="Verification code"
+          name="code"
+          rules={[{ required: true }]}
         >
-          <Form.Item
-            label="Verification code"
-            name="code"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
-              Verify my account
+          <Input />
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
+            Verify my account
             </Button>
-            <div style={{ clear: 'both' }}></div>
-            <div style={{ marginTop: '10px' }}>
-              <span> Could not receive the code? <a style={{ float: 'right' }} onClick={() => resendConfirmationCode()}>resend</a></span>
-            </div>
-          </Form.Item>
-        </Form>
-      </Wrapper>
-    </>
+          <div style={{ clear: 'both' }}></div>
+          <div style={{ marginTop: '10px' }}>
+            <span> Could not receive the code? <a style={{ float: 'right' }} onClick={() => resendConfirmationCode()}>resend</a></span>
+          </div>
+        </Form.Item>
+      </Form>
+    </Row>
   );
 }
-
-const Wrapper = styled.div`
-  height: calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT});
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  min-height: 320px;
-`;
-
-const Title = styled.div`
-  margin-top: -8vh;
-  font-weight: bold;
-  color: ${p => p.theme.text};
-  font-size: 3.375rem;
-
-  span {
-    font-size: 3.125rem;
-  }
-`;

@@ -27,6 +27,11 @@ import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 import Amplify from 'aws-amplify';
 import config from '../aws-exports';
 
+import { Layout } from 'antd';
+import { HeaderContent } from './components/HeaderContent';
+import { SideMenu } from './components/SideMenu';
+
+const { Header, Sider, Content } = Layout;
 Amplify.configure(config);
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -44,22 +49,32 @@ export function App(props) {
   const { i18n } = useTranslation();
   return (
     <BrowserRouter>
-      <Helmet
-        titleTemplate="%s - SYRF Sailing Yacht Research Foundation"
-        defaultTitle="Improving Yacht Racing"
-        htmlAttributes={{ lang: i18n.language }}
-      >
-        <meta name="description" content="A React Boilerplate application" />
-      </Helmet>
-
-      <Switch>
-        <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
-        <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
-        <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
-        <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
-        <Route exact path={process.env.PUBLIC_URL + '/forgot-pasword'} component={ForgotPasswordPage} />
-        <Route component={NotFoundPage} />
-      </Switch>
+      <Layout>
+        
+        <Layout className="site-layout">
+          <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'center' }}>
+            <HeaderContent />
+          </Header>
+          <SideMenu/>
+          <Content
+            className="site-layout-background"
+            style={{
+              margin: '24px 16px',
+              padding: 24,
+              minHeight: 280,
+            }}
+          >
+            <Switch>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/forgot-pasword'} component={ForgotPasswordPage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </Content>
+        </Layout>
+      </Layout>
       <GlobalStyle />
     </BrowserRouter>
   );

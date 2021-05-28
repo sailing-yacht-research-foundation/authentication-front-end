@@ -1,10 +1,6 @@
 import * as React from 'react';
-import styled from 'styled-components/macro';
-import { Link } from 'app/components/Link';
-import { NavBar } from 'app/components/NavBar';
-import { Helmet } from 'react-helmet-async';
-import { StyleConstants } from 'styles/StyleConstants';
-import { Input, Form, Checkbox, Button } from 'antd';
+
+import { Input, Form, Button, Row } from 'antd';
 import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from './slice';
@@ -21,7 +17,7 @@ export function LoginPage(props) {
   const { actions } = UseLoginSlice();
   // Used to dispatch slice actions
   const dispatch = useDispatch();
-  
+
   const onFinish = (values: any) => {
     let { email, password } = values;
     Auth.signIn({
@@ -45,75 +41,46 @@ export function LoginPage(props) {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Please Login</title>
-        <meta name="description" content="Login" />
-      </Helmet>
-      <NavBar />
-      <Wrapper>
-        <Title>
-        </Title>
-        <Form
-          {...layout}
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
+    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+      <Form
+        {...layout}
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[{ required: true, type: 'email' }]}
         >
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[{ required: true, type: 'email' }]}
-          >
-            <Input />
-          </Form.Item>
+          <Input />
+        </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true }]}
-          >
-            <Input.Password />
-          </Form.Item>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true }]}
+        >
+          <Input.Password />
+        </Form.Item>
 
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              Login
-            </Button>
-          </Form.Item>
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            Login
+      </Button>
+        </Form.Item>
 
-          <Form.Item {...tailLayout}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', }}>
-              <a style={{ float: 'right' }} onClick={() => props.history.push('/signup')}>
-                Signup
-              </a>
-              <a style={{ float: 'right' }}>
-                Forgot password
-            </a>
-            </div>
-          </Form.Item>
-        </Form>
-      </Wrapper>
-    </>
+        <Form.Item {...tailLayout}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', }}>
+            <a style={{ float: 'right' }} onClick={() => props.history.push('/signup')}>
+              Signup
+        </a>
+            <a style={{ float: 'right' }}>
+              Forgot password
+      </a>
+          </div>
+        </Form.Item>
+      </Form>
+    </Row>
   );
 }
-
-const Wrapper = styled.div`
-  height: calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT});
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  min-height: 320px;
-`;
-
-const Title = styled.div`
-  margin-top: -8vh;
-  font-weight: bold;
-  color: ${p => p.theme.text};
-  font-size: 3.375rem;
-
-  span {
-    font-size: 3.125rem;
-  }
-`;
