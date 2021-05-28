@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Input, Form, Button, Row, Spin } from 'antd';
+import { Input, Form, Button, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
@@ -84,10 +84,10 @@ export const LoginForm = (props) => {
 
         <Form.Item {...tailLayout}>
           <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', }}>
-            <a style={{ float: 'right' }} onClick={() => props.history.push('/signup')}>
+            <a style={{ float: 'right' }} onClick={() => history.push('/signup')}>
               Signup
             </a>
-            <a style={{ float: 'right' }}>
+            <a style={{ float: 'right' }} onClick={() => history.push('/forgot-password')}>
               Forgot password
             </a>
           </div>

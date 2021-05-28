@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Row } from 'antd';
-import { LoginForm } from './components/loginForm';
+import { LoginForm } from './components/LoginForm';
 
 export const LoginPage = () => {
 
