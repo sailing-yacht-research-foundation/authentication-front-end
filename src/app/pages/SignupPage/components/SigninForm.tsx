@@ -149,6 +149,7 @@ export const SignupForm = () => {
                 <Form.Item
                     label="Date Of Birth"
                     name="birthdate"
+                    rules={[{ type: 'date' }]}
                 >
                     <DatePicker
                         defaultValue={moment('2002-01-01')}
@@ -174,7 +175,6 @@ export const SignupForm = () => {
                 <Form.Item
                     label="World Sailing Number"
                     name="sailing_number"
-                    rules={[{ type: 'number' }]}
                 >
                     <Input />
                 </Form.Item>
