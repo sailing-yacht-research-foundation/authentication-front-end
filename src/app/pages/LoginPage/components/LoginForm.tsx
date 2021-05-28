@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
 import { useHistory } from 'react-router';
+import { toast } from 'react-toastify';
 
 const layout = {
   labelCol: { span: 8 },
@@ -20,7 +21,7 @@ export const LoginForm = (props) => {
   const dispatch = useDispatch();
 
   const history = useHistory();
-  
+
   const [isSigningIn, setIsSigningIn] = React.useState<boolean>(false);
 
   const onFinish = (values: any) => {
@@ -41,19 +42,24 @@ export const LoginForm = (props) => {
       }
     }).catch(error => {
       setIsSigningIn(false);
-
-      if (error.code === 'UserNotConfirmedException') {
-        history.push('/verify-account', {
-          state: {
-            email: email
-          }
-        });
+      if (error.code) {
+        if (error.code === 'UserNotConfirmedException') {
+          history.push('/verify-account', {
+            state: {
+              email: email
+            }
+          });
+        } else {
+          toast.error(error.message);
+        }
+      } else {
+        toast.error("Cannot sign you in at the moment.");
       }
     })
   }
 
   return (
-    <Spin spinning={isSigningIn} tip="Signing you up...">
+    <Spin spinning={isSigningIn} tip="Signing you in...">
       <Form
         {...layout}
         name="basic"
