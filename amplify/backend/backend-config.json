@@ -1,6 +1,6 @@
 {
   "auth": {
-    "authfrontenddae0491cdae0491c": {
+    "authenticationfronte013cf316013cf316": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -8,10 +8,9 @@
     }
   },
   "hosting": {
-    "amplifyhosting": {
-      "service": "amplifyhosting",
-      "providerPlugin": "awscloudformation",
-      "type": "manual"
+    "S3AndCloudFront": {
+      "service": "S3AndCloudFront",
+      "providerPlugin": "awscloudformation"
     }
   }
 }
