@@ -6,11 +6,13 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import * as React from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
-
 import 'antd/dist/antd.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+import * as React from 'react';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+
 import { GlobalStyle } from '../styles/global-styles';
 
 import { LoginPage } from './pages/LoginPage/Loadable';
@@ -49,31 +51,29 @@ export function App(props) {
   const { i18n } = useTranslation();
   return (
     <BrowserRouter>
-      <Layout>
-        
-        <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'center' }}>
-            <HeaderContent />
-          </Header>
-          <SideMenu/>
-          <Content
-            className="site-layout-background"
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 280,
-            }}
-          >
-            <Switch>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
-              <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/forgot-pasword'} component={ForgotPasswordPage} />
-              <Route component={NotFoundPage} />
-            </Switch>
-          </Content>
-        </Layout>
+      <Layout className="site-layout">
+        <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'center' }}>
+          <HeaderContent />
+        </Header>
+        <SideMenu />
+        <Content
+          className="site-layout-background"
+          style={{
+            margin: '24px 16px',
+            padding: 24,
+            minHeight: 280,
+          }}
+        >
+          <Switch>
+            <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+            <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
+            <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
+            <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
+            <Route exact path={process.env.PUBLIC_URL + '/forgot-pasword'} component={ForgotPasswordPage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+          <ToastContainer />
+        </Content>
       </Layout>
       <GlobalStyle />
     </BrowserRouter>
