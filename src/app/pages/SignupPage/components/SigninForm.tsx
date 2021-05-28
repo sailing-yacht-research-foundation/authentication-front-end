@@ -7,6 +7,7 @@ import { LANGUAGE_BY_LOCALE as locales } from 'utils/locale-list';
 import PhoneInput from 'react-phone-number-input'
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { useHistory } from 'react-router';
 
 const { Option } = Select;
 
@@ -28,8 +29,10 @@ const disabledDates = [
     },
 ];
 
-export const SignupForm = (props) => {
+export const SignupForm = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
+
+    const history = useHistory();
 
     const onFinish = (values) => {
         const { email, name, password, locale, phone_number, sailing_number, address, facebook, instagram, twitter, birthdate } = values;
@@ -56,7 +59,7 @@ export const SignupForm = (props) => {
             setIsSigningUp(false);
 
             if (registerSuccess) {
-                props.history.push('/verify-account', {
+                history.push('/verify-account', {
                     state: {
                         email: response.user?.getUsername()
                     }
