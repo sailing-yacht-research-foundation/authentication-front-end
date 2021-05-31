@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Input, Form, Button, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
 import { useHistory } from 'react-router';
+import { toast } from 'react-toastify';
 
 const layout = {
     labelCol: { span: 8 },
@@ -23,12 +24,13 @@ export const VerifyAccountForm = () => {
     const onFinish = (values) => {
         const { code } = values;
         const email = history?.location?.state?.state?.email;
+
         try {
             Auth.confirmSignUp(email, code)
                 .then(response => {
                     history.push('/')
                 }).catch(error => {
-                    console.log(error)
+                    toast.error(error.message);
                 })
         } catch (error) {
 
@@ -39,6 +41,7 @@ export const VerifyAccountForm = () => {
         const email = history?.location?.state?.state?.email;
         Auth.resendSignUp(email);
     }
+    
     return (
         <Form
             {...layout}
