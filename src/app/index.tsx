@@ -49,23 +49,24 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 export function App(props) {
   const { i18n } = useTranslation();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
   return (
     <BrowserRouter>
       <Layout className="site-layout">
         <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'center' }}>
           <HeaderContent />
         </Header>
-        <SideMenu />
+        { isAuthenticated && <SideMenu/> }
         <Content
           className="site-layout-background"
           style={{
             margin: '24px 16px',
-            padding: 24,
             minHeight: 280,
           }}
         >
           <Switch>
-            <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+            <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
             <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
             <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
             <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
