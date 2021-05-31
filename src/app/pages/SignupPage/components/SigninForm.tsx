@@ -1,12 +1,12 @@
 import 'react-phone-number-input/style.css'
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Input, Form, Button, Select, Divider, DatePicker, Checkbox, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
 import { LANGUAGE_BY_LOCALE as locales } from 'utils/locale-list';
 import PhoneInput from 'react-phone-number-input'
 import { toast } from 'react-toastify';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { useHistory } from 'react-router';
 
 const { Option } = Select;
@@ -32,6 +32,8 @@ const disabledDates = [
 export const SignupForm = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
 
+    const [datePicker, setDatePicker] = useState<Moment>(moment());
+
     const history = useHistory();
 
     const onFinish = (values) => {
@@ -47,7 +49,7 @@ export const SignupForm = () => {
                 locale: locale,
                 phone_number: phone_number,
                 address: address,
-                birthdate: birthdate.format("YYYY-MM-DD"),
+                birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : datePicker.format("YYYY-MM-DD"),
                 'custom:sailing_number': sailing_number,
                 'custom:facebook': facebook,
                 'custom:instagram': instagram,
@@ -80,7 +82,7 @@ export const SignupForm = () => {
         const objectArray = Object.entries(locales);
 
         return objectArray.map(([key, value]) => {
-            return <Option value={key}>{value}</Option>
+            return <Option key={key} value={key}>{value}</Option>
         });
     }
 
@@ -152,6 +154,7 @@ export const SignupForm = () => {
                     rules={[{ type: 'date' }]}
                 >
                     <DatePicker
+                        ref="datePickerRef"
                         defaultValue={moment('2002-01-01')}
                         showToday={false}
                         disabledDate={current => {
@@ -163,6 +166,7 @@ export const SignupForm = () => {
                             );
                         }}
                         dateRender={current => {
+                            setDatePicker(current);
                             return (
                                 <div className="ant-picker-cell-inner">
                                     {current.date()}
