@@ -18,14 +18,24 @@ export const SideMenu = (props) => {
             left: 0,
             zIndex: 2
         }}>
-            <Logo type='light'/>
+            <Logo type='light' />
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                 <Menu.Item key="1" icon={<UserOutlined />}>
                     Deals
-            </Menu.Item>
-                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                </Menu.Item>
+                <Menu.Item key="2" icon={<UserOutlined />}>
                     Profile
-            </Menu.Item>
+                    <Menu.SubMenu key="sub1" icon={<UserOutlined />} title="Navigation One">
+                        <Menu.ItemGroup key="g1" title="Item 1">
+                            <Menu.Item key="1">Option 1</Menu.Item>
+                            <Menu.Item key="2">Option 2</Menu.Item>
+                        </Menu.ItemGroup>
+                        <Menu.ItemGroup key="g2" title="Item 2">
+                            <Menu.Item key="3">Option 3</Menu.Item>
+                            <Menu.Item key="4">Option 4</Menu.Item>
+                        </Menu.ItemGroup>
+                    </Menu.SubMenu >
+                </Menu.Item>
                 <Menu.Item key="3" icon={<UploadOutlined />}>
                     App Connections
             </Menu.Item>

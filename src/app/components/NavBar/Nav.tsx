@@ -1,31 +1,20 @@
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { UseLoginSlice } from 'app/pages/LoginPage/slice';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
-import { useHistory } from 'react-router';
-import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
-import Auth from '@aws-amplify/auth';
-import { SelectLanguage } from '../SelectLanguages'
+import { SelectLanguage } from './components/SelectLanguage';
+import { UserDropdown } from './components/UserDropdown';
 import { Link } from 'react-router-dom';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 
-export function Nav() {
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const { actions } = UseLoginSlice();
+export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);
-
-  const logout = () => {
-    dispatch(actions.setLogout());
-    history.push('/signin');
-    Auth.signOut();
-  }
 
   return (
     <Wrapper>
       { isAuthenenticated ? (
         <>
+          <UserDropdown/>
           <SelectLanguage />
-          <a onClick={() => logout()} style={{ marginLeft: '10px' }}>Sign Out</a>
         </>
       ) : (
         <>
@@ -41,27 +30,4 @@ export function Nav() {
 const Wrapper = styled.nav`
   display: flex;
   margin-right: -1rem;
-`;
-
-const Item = styled.a`
-  color: ${p => p.theme.primary};
-  cursor: pointer;
-  text-decoration: none;
-  display: flex;
-  padding: 0.25rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  align-items: center;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:active {
-    opacity: 0.4;
-  }
-
-  .icon {
-    margin-right: 0.25rem;
-  }
 `;
