@@ -1,7 +1,4 @@
 import * as React from 'react';
-import styled from 'styled-components/macro';
-import { StyleConstants } from 'styles/StyleConstants';
-
 import { Input, Form, Button, Row } from 'antd';
 import { Auth } from 'aws-amplify';
 import { toast } from 'react-toastify';
@@ -25,7 +22,7 @@ export function ForgotPasswordForm(props) {
 
   const onFinish = (values) => {
     const { email } = values;
-    
+
     setEmail(email);
     sendForgotPasswordCode(email);
   }
@@ -99,7 +96,10 @@ export function ForgotPasswordForm(props) {
 
           <Form.Item {...tailLayout}>
             <div style={{ marginTop: '10px' }}>
-              <span> Could not receive the code? <a onClick={() => sendForgotPasswordCode(email)}>resend</a></span>
+              <span> Could not receive the code? <a href="/" onClick={(e) => {
+                e.preventDefault();
+                sendForgotPasswordCode(email);
+              }}>resend</a></span>
             </div>
           </Form.Item>
         </Form>
@@ -107,23 +107,3 @@ export function ForgotPasswordForm(props) {
     </Row>
   );
 }
-
-const Wrapper = styled.div`
-  height: calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT});
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  min-height: 320px;
-`;
-
-const Title = styled.div`
-  margin-top: -8vh;
-  font-weight: bold;
-  color: ${p => p.theme.text};
-  font-size: 3.375rem;
-
-  span {
-    font-size: 3.125rem;
-  }
-`;

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
 import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const layout = {
   labelCol: { span: 8 },
@@ -90,12 +91,12 @@ export const LoginForm = (props) => {
 
         <Form.Item {...tailLayout}>
           <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', }}>
-            <a style={{ float: 'right' }} onClick={() => history.push('/signup')}>
+            <Link to="/signup">
               Signup
-            </a>
-            <a style={{ float: 'right' }} onClick={() => history.push('/forgot-password')}>
+            </Link>
+            <Link to="/forgot-password">
               Forgot password
-            </a>
+            </Link>
           </div>
         </Form.Item>
       </Form>
