@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row } from 'antd';
-import { SignupForm } from './components/SigninForm';
+import { SignupForm } from './components/SignupForm';
 
 export const SignupPage = () => {
   return (

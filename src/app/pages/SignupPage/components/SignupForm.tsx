@@ -1,6 +1,6 @@
 import 'react-phone-number-input/style.css'
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Input, Form, Button, Select, Divider, DatePicker, Checkbox, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
 import { LANGUAGE_BY_LOCALE as locales } from 'utils/locale-list';
