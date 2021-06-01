@@ -1,5 +1,5 @@
 import React from 'react';
-import { Carousel, Image } from 'antd';
+import { Carousel } from 'antd';
 import Background from './../assets/hero-homepage-3.jpg';
 import styled from 'styled-components';
 

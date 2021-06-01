@@ -51,16 +51,6 @@ const Wrapper = styled.div`
     text-align: center;
 `
 
-const FooterContent = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`
-
-const FooterRightContent = styled.div`
-`
-
 const FooterTextCopyRight = styled.div`
    margin-top: 30px;
    color: #fff;

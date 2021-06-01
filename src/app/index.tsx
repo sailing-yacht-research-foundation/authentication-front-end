@@ -33,7 +33,7 @@ import { Layout } from 'antd';
 import { HeaderContent } from './components/HeaderContent';
 import { SideMenu } from './components/SideMenu';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 Amplify.configure(config);
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
