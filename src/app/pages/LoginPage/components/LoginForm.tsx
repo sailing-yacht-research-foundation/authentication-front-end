@@ -28,7 +28,9 @@ export const LoginForm = (props) => {
   const onFinish = (values: any) => {
     const { email, password } = values;
 
-    setIsSigningIn(true)
+    setIsSigningIn(true);
+
+    Auth.configure({ storage: localStorage });
 
     Auth.signIn({
       username: email,
