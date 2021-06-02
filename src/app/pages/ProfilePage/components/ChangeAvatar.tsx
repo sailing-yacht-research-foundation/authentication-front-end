@@ -36,7 +36,7 @@ export const ChangeAvatar = (props) => {
                 })
             })
             .catch(err => {
-                toast.error(error.message);
+                toast.error(err.message);
             });
     }
 
