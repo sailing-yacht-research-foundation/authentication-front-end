@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "authenticationfronte013cf316013cf316_identitypool_5c8e9b89",
+    "identityPoolName": "syrfauth_identitypool_d1922f89",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "authen013cf316",
-    "userPoolName": "authenticationfronte013cf316_userpool_013cf316",
+    "resourceNameTruncated": "syrfb01c934b",
+    "userPoolName": "syrf_userpool",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -37,15 +37,15 @@
         "address",
         "birthdate",
         "email",
-        "locale",
         "name",
         "phone_number",
+        "picture",
         "email_verified"
     ],
-    "userpoolClientLambdaRole": "authen013cf316_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "syrfaub01c934b_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": true,
-    "sharedId": "013cf316",
-    "resourceName": "authenticationfronte013cf316013cf316",
+    "sharedId": "b01c934b",
+    "resourceName": "syrfauth",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [

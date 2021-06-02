@@ -1,15 +1,15 @@
 {
   "auth": {
-    "authenticationfronte013cf316013cf316": {
+    "syrfauth": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false
     }
   },
-  "hosting": {
-    "S3AndCloudFront": {
-      "service": "S3AndCloudFront",
+  "storage": {
+    "syrfstorage": {
+      "service": "S3",
       "providerPlugin": "awscloudformation"
     }
   },
