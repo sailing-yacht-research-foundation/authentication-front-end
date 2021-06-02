@@ -1,42 +1,59 @@
-import React, { useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Auth, Storage } from 'aws-amplify';
-import { getAvatar } from 'utils/user-utils';
+import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
 import { EditFilled } from '@ant-design/icons';
-import { Image } from 'antd';
-import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { Image, Spin, Typography } from 'antd';
 import { toast } from 'react-toastify';
+import Resizer from "react-image-file-resizer";
 
 export const ChangeAvatar = (props) => {
-    const user = useSelector(selectUser);
+    const { authUser } = props;
 
     const fileUploadRef = useRef<HTMLInputElement>(null);
 
-    const onFileChanged = (e) => {
-        e.preventDefault();
-        let reader = new FileReader();
-        let file = e.target.files[0];
+    const [isUploadingProfilePicture, setIsUploadingProfilePicture] = useState<boolean>(false);
 
-        const avatarFileName = `${'_' + Math.random().toString(36).substr(2, 9)}-profile-picture.png`;
+    const resizeImage = async (file) => {
+        return new Promise((resolve) => Resizer.imageFileResizer(
+            file, 300, 300, "PNG", 100, 0,
+            (uri) => {
+                resolve(uri);
+            },
+            'file'
+        ));
+    }
+
+    const onFileChanged = async (e) => {
+        e.preventDefault();
+        const file = await resizeImage(e.target.files[0]);
+        const avatarFileName = `${String(authUser.username).substring(0, 8)}-profile-picture.png`;
+
+        setIsUploadingProfilePicture(true);
+
         Storage.put(avatarFileName, file, {
-            contentType: "image/png"
+            contentType: "image/png",
+            Acl: "public-read"
         })
             .then(result => {
+                setIsUploadingProfilePicture(false);
+
                 Auth.currentAuthenticatedUser().then(user => {
                     Auth.updateUserAttributes(user, {
                         'picture': avatarFileName
                     }).then(response => {
                         toast.success('Upload avatar success');
+                        props.cancelUpdateProfile();
                     }).catch(error => {
-                        console.log(error);
+                        toast.error(error.message);
                     })
                 }).catch(error => {
-                    console.log(error);
+                    toast.error(error.message);
                 })
             })
             .catch(err => {
                 toast.error(err.message);
+                setIsUploadingProfilePicture(false);
             });
     }
 
@@ -45,20 +62,26 @@ export const ChangeAvatar = (props) => {
     }
 
     return (
-        <Wrapper>
-            <AvatarHolder>
-                <Image src={getAvatar(user)} />
-            </AvatarHolder>
-            <ChangeAvatarButton>
-                <EditFilled onClick={() => triggerChooseAvatar()} size={20} />
-                <input ref={fileUploadRef} accept="image/png, image/jpeg" onChange={onFileChanged} hidden={true} type="file" />
-            </ChangeAvatarButton>
-        </Wrapper>
+        <>
+            <Spin spinning={isUploadingProfilePicture} tip="Uploading...">
+                <Wrapper>
+                    <AvatarHolder>
+                        <Image src={getProfilePicture(authUser)} />
+                    </AvatarHolder>
+                    <ChangeAvatarButton>
+                        <EditFilled onClick={() => triggerChooseAvatar()} size={20} />
+                        <input ref={fileUploadRef} accept="image/png, image/jpeg" onChange={onFileChanged} hidden={true} type="file" />
+                    </ChangeAvatarButton>
+                </Wrapper>
+            </Spin>
+            <Typography.Title style={{ marginTop: '15px' }} level={3}>{getUserAttribute(authUser, 'name')}</Typography.Title>
+        </>
     )
 }
 
 const Wrapper = styled.div`
     position: relative;
+    width: 150px;
 `
 
 const ChangeAvatarButton = styled.div`

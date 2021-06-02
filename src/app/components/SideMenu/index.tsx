@@ -27,7 +27,7 @@ export const SideMenu = (props) => {
                 </Menu.Item>
 
                 <Menu.SubMenu key="sub2" icon={<UserOutlined />} title="Profile">
-                    <Menu.Item key="9">Update Profile</Menu.Item>
+                    <Menu.Item key="9" onClick={()=> history.push('/profile')}>My Profile</Menu.Item>
                     <Menu.Item onClick={()=> history.push('/profile/change-password')} key="10">Change Password</Menu.Item>
                 </Menu.SubMenu>
 

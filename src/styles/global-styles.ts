@@ -40,6 +40,12 @@ export const GlobalStyle = createGlobalStyle`
     background: rgba(255, 255, 255, 0.2);
   }
   .site-layout .site-layout-background {
-    background: #fff;
+    background: #fff !important;
+  }
+
+  .site-content {
+    min-height: 280px;
+    width: calc(100% - 200px);
+    align-self: flex-end;
   }
 `;

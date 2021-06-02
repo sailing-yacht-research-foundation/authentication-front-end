@@ -5577,6 +5577,11 @@ cloneable-readable@^1.0.0:
     process-nextick-args "^2.0.0"
     readable-stream "^2.3.5"
 
+clsx@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
+  integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
+
 co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
@@ -5926,6 +5931,11 @@ cosmiconfig@^7.0.0:
     parse-json "^5.0.0"
     path-type "^4.0.0"
     yaml "^1.10.0"
+
+country-flag-icons@^1.0.2:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/country-flag-icons/-/country-flag-icons-1.2.10.tgz#c60fdf25883abacd28fbbf3842b920890f944591"
+  integrity sha512-nG+kGe4wVU9M+EsLUhP4buSuNdBH0leTm0Fv6RToXxO9BbbxUKV9VUq+9AcztnW7nEnweK7WYdtJsfyNLmQugQ==
 
 create-ecdh@^4.0.0:
   version "4.0.4"
@@ -8714,6 +8724,13 @@ ini@^1.3.4, ini@^1.3.5, ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
+input-format@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/input-format/-/input-format-0.3.6.tgz#b9b167dbd16435eb3c0012347964b230ea0024c8"
+  integrity sha512-SbUu43CDVV5GlC8Xi6NYBUoiU+tLpN/IMYyQl0mzSXDiU1w0ql8wpcwjDOFpaCVLySLoreLUimhI82IA5y42Pw==
+  dependencies:
+    prop-types "^15.7.2"
+
 inquirer-directory@2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/inquirer-directory/-/inquirer-directory-2.2.0.tgz#a919fc0e06d05fdab2d5e2e6f45ffd024ed25643"
@@ -10053,6 +10070,11 @@ levn@~0.3.0:
   dependencies:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
+
+libphonenumber-js@^1.9.19:
+  version "1.9.19"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.19.tgz#2e49c86185ed1aa67f2906fb20d752c8837a5c29"
+  integrity sha512-RjStfSE63LvXQEBw7pgQHPkY35z8feiMjC9wLvL1Hbt8PbhxpRrACwMXmLQgabb+IpVdcEx+olh8ll7UDXXkfA==
 
 liftoff@^2.5.0:
   version "2.5.0"
@@ -13176,6 +13198,11 @@ react-i18next@11.7.2:
     "@babel/runtime" "^7.3.1"
     html-parse-stringify2 "2.0.1"
 
+react-image-file-resizer@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/react-image-file-resizer/-/react-image-file-resizer-0.4.4.tgz#07d47d795e07a8a9850d480765c618686a4af4dd"
+  integrity sha512-qSZ5VJwWDkFan8IKCxDZqkAlQ6OW+mIDQLA9Y8T6/mLNUbHfnl3kjTpUWACeuh7cyPDXr1i6/GjlinyI75rBmQ==
+
 react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6, react-is@^16.9.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -13192,6 +13219,17 @@ react-native-get-random-values@^1.4.0:
   integrity sha512-zDhmpWUekGRFb9I+MQkxllHcqXN9HBSsgPwBQfrZ1KZYpzDspWLZ6/yLMMZrtq4pVqNR7C7N96L3SuLpXv1nhQ==
   dependencies:
     fast-base64-decode "^1.0.0"
+
+react-phone-number-input@^3.1.23:
+  version "3.1.23"
+  resolved "https://registry.yarnpkg.com/react-phone-number-input/-/react-phone-number-input-3.1.23.tgz#8e8d2b7fb98d94514721d05ca5c58bd31f8d06e1"
+  integrity sha512-UuIRC4UIwjuC7itrLKH0slq7f6ZDulQt9TB6clPhoevYeu/0yB86bQLKoHaTWCxxY1rYUPGctzR1OzNgBngP/Q==
+  dependencies:
+    classnames "^2.2.5"
+    country-flag-icons "^1.0.2"
+    input-format "^0.3.6"
+    libphonenumber-js "^1.9.19"
+    prop-types "^15.7.2"
 
 react-redux@7.2.1:
   version "7.2.1"
@@ -13313,6 +13351,13 @@ react-test-renderer@16.13.1:
     prop-types "^15.6.2"
     react-is "^16.8.6"
     scheduler "^0.19.1"
+
+react-toastify@^7.0.4:
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-7.0.4.tgz#7d0b743f2b96f65754264ca6eae31911a82378db"
+  integrity sha512-Rol7+Cn39hZp5hQ/k6CbMNE2CKYV9E5OQdC/hBLtIQU2xz7DdAm7xil4NITQTHR6zEbE5RVFbpgSwTD7xRGLeQ==
+  dependencies:
+    clsx "^1.1.1"
 
 react@16.13.1:
   version "16.13.1"

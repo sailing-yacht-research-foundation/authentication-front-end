@@ -2,16 +2,19 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import { Menu, Dropdown, Image } from 'antd';
 import { DownOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
-import NoAvatar from '../assets/no-avatar.png';
 import { useHistory } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import Auth from '@aws-amplify/auth';
+import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
 
 export const UserDropdown = () => {
     const history = useHistory();
 
     const dispatch = useDispatch();
+
+    const authUser = useSelector(selectUser);
 
     const { actions } = UseLoginSlice();
 
@@ -36,10 +39,10 @@ export const UserDropdown = () => {
         <Dropdown overlay={menu}>
             <UserDropdownWrapper>
                 <AvatarWrapper>
-                    <Image src={NoAvatar}/>
+                    <Image src={getProfilePicture(authUser)}/>
                 </AvatarWrapper>
                 <UserNameWrapper>
-                    <UserName className="ant-dropdown-link">Dat Dang</UserName>
+                    <UserName className="ant-dropdown-link">{ getUserAttribute(authUser, 'name') }</UserName>
                     <DownOutlined />
                 </UserNameWrapper>
             </UserDropdownWrapper>

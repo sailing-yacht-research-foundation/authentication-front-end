@@ -25,7 +25,7 @@ import { ChangePasswordPage } from './pages/ChangePasswordPage/Loadable';
 import { ProfilePage } from './pages/ProfilePage/Loadable';
 
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 
 import Amplify from 'aws-amplify';
@@ -34,12 +34,14 @@ import config from '../aws-exports';
 import { Layout } from 'antd';
 import { HeaderContent } from './components/HeaderContent';
 import { SideMenu } from './components/SideMenu';
+import { loginActions } from './pages/LoginPage/slice';
 
 const { Header, Sider, Content } = Layout;
 Amplify.configure(config);
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
   return (
     <Route {...rest} render={(props) => (
       isAuthenticated === true
@@ -51,6 +53,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 export function App(props) {
   const { i18n } = useTranslation();
+
+  const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  React.useEffect(() => {
+    if (isAuthenticated)
+      dispatch(loginActions.getUser());
+  }, []);
+
   return (
     <BrowserRouter>
       <Layout className="site-layout">
@@ -59,12 +71,7 @@ export function App(props) {
         </Header>
         <SideMenu />
         <Content
-          className="site-layout-background"
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
-          }}
+          className="site-content"
         >
           <Switch>
             <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
