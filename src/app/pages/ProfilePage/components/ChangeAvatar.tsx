@@ -6,6 +6,7 @@ import { getAvatar } from 'utils/user-utils';
 import { EditFilled } from '@ant-design/icons';
 import { Image } from 'antd';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { toast } from 'react-toastify';
 
 export const ChangeAvatar = (props) => {
     const user = useSelector(selectUser);
@@ -17,27 +18,25 @@ export const ChangeAvatar = (props) => {
         let reader = new FileReader();
         let file = e.target.files[0];
 
-        try {
-            reader.readAsDataURL(file);
-        } catch (err) {
-            console.log(err);
-        }
-
         const avatarFileName = `${'_' + Math.random().toString(36).substr(2, 9)}-profile-picture.png`;
         Storage.put(avatarFileName, file, {
             contentType: "image/png"
         })
             .then(result => {
-                Auth.updateUserAttributes(user, {
-                    'picture': avatarFileName
-                }).then(response => {
-                    console.log(response);
+                Auth.currentAuthenticatedUser().then(user => {
+                    Auth.updateUserAttributes(user, {
+                        'picture': avatarFileName
+                    }).then(response => {
+                        toast.success('Upload avatar success');
+                    }).catch(error => {
+                        console.log(error);
+                    })
                 }).catch(error => {
                     console.log(error);
                 })
             })
             .catch(err => {
-                console.log(err);
+                toast.error(error.message);
             });
     }
 
@@ -51,7 +50,7 @@ export const ChangeAvatar = (props) => {
                 <Image src={getAvatar(user)} />
             </AvatarHolder>
             <ChangeAvatarButton>
-                <EditFilled onClick={()=> triggerChooseAvatar()} size={20} />
+                <EditFilled onClick={() => triggerChooseAvatar()} size={20} />
                 <input ref={fileUploadRef} accept="image/png, image/jpeg" onChange={onFileChanged} hidden={true} type="file" />
             </ChangeAvatarButton>
         </Wrapper>
