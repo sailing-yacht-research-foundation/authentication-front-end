@@ -18,7 +18,7 @@ export const Nav = () => {
         </>
       ) : (
         <>
-          <Link to="/sigin">Sign in</Link>
+          <Link to="/signin">Sign in</Link>
           <span style={{ marginLeft: '5px', marginRight: '5px' }}>|</span>
           <Link to="/signup">Sign Up</Link>
         </>

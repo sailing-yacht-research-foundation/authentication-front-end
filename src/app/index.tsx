@@ -69,7 +69,7 @@ export function App(props) {
             <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
             <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
             <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
-            <Route exact path={process.env.PUBLIC_URL + '/forgot-pasword'} component={ForgotPasswordPage} />
+            <Route exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
             <Route component={NotFoundPage} />
           </Switch>
           <ToastContainer />
