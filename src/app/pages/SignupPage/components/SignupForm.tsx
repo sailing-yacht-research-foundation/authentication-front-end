@@ -32,8 +32,6 @@ const disabledDates = [
 export const SignupForm = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
 
-    const [datePicker, setDatePicker] = useState<Moment>(moment());
-
     const history = useHistory();
 
     const onFinish = (values) => {
@@ -49,7 +47,7 @@ export const SignupForm = () => {
                 locale: locale,
                 phone_number: phone_number,
                 address: address,
-                birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : datePicker.format("YYYY-MM-DD"),
+                birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
                 'custom:sailing_number': sailing_number,
                 'custom:facebook': facebook,
                 'custom:instagram': instagram,
@@ -166,7 +164,6 @@ export const SignupForm = () => {
                             );
                         }}
                         dateRender={current => {
-                            setDatePicker(current);
                             return (
                                 <div className="ant-picker-cell-inner">
                                     {current.date()}
