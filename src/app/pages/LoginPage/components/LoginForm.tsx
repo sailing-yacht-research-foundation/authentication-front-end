@@ -39,6 +39,7 @@ export const LoginForm = (props) => {
       if (user.attributes && user.attributes.email_verified) {
         dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
         dispatch(actions.setIsAuthenticated(true));
+        dispatch(actions.setUser(user));
         history.push('/');
       }
     }).catch(error => {
@@ -64,7 +65,6 @@ export const LoginForm = (props) => {
       <Form
         {...layout}
         name="basic"
-        initialValues={{ remember: true }}
         onFinish={onFinish}
       >
         <Form.Item

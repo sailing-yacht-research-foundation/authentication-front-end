@@ -1,4 +1,6 @@
 {
+    "identityPoolName": "authenticationfronte013cf316013cf316_identitypool_5c8e9b89",
+    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "authen013cf316",
     "userPoolName": "authenticationfronte013cf316_userpool_013cf316",
     "autoVerifiedAttributes": [
@@ -44,7 +46,7 @@
     "userpoolClientSetAttributes": true,
     "sharedId": "013cf316",
     "resourceName": "authenticationfronte013cf316013cf316",
-    "authSelections": "userPoolOnly",
+    "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",

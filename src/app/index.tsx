@@ -21,8 +21,10 @@ import { SignupPage } from './pages/SignupPage/Loadable';
 import { HomePage } from './pages/HomePage/Loadable';
 import { VerifyAccountPage } from './pages/VerifyAccountPage/Loadable';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
-import { useTranslation } from 'react-i18next';
+import { ChangePasswordPage } from './pages/ChangePasswordPage/Loadable';
+import { ProfilePage } from './pages/ProfilePage/Loadable';
 
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 
@@ -70,6 +72,8 @@ export function App(props) {
             <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
             <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
             <Route exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
+            <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
+            <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
             <Route component={NotFoundPage} />
           </Switch>
           <ToastContainer />
