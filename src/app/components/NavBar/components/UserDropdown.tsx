@@ -26,7 +26,7 @@ export const UserDropdown = () => {
 
     const menu = (
         <Menu>
-            <Menu.Item key="1" icon={<UserOutlined />}>
+            <Menu.Item key="1" onClick={()=> history.push('/profile')} icon={<UserOutlined />}>
                 Update Profile
           </Menu.Item>
             <Menu.Item onClick={() => logout()} key="2" icon={<LockOutlined />}>

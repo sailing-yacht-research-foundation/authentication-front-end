@@ -45,7 +45,8 @@ export const GlobalStyle = createGlobalStyle`
 
   .site-content {
     min-height: 280px;
-    width: calc(100% - 200px);
+    width: calc(100% - ${StyleConstants.SIDE_BAR_WITH});
     align-self: flex-end;
+    background: #fff;
   }
 `;

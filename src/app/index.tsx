@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as React from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import classNames from 'classnames';
 
 import { GlobalStyle } from '../styles/global-styles';
 
@@ -71,7 +72,7 @@ export function App(props) {
         </Header>
         <SideMenu />
         <Content
-          className="site-content"
+          className={classNames({ 'site-content': isAuthenticated })}
         >
           <Switch>
             <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
