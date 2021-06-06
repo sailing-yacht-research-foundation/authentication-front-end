@@ -5,7 +5,7 @@ import { ForgotPasswordForm } from './components/ForgotPasswordForm';
 export const ForgotPasswordPage = (props) => {
 
   return (
-    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+    <Row justify="center" align="middle" style={{ minHeight: '100vh', padding: '0 15px' }}>
       <ForgotPasswordForm/>
     </Row>
   );

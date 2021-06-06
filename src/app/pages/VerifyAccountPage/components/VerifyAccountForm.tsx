@@ -3,14 +3,7 @@ import { Input, Form, Button, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
 import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
-
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-};
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-};
+import { SyrfFormButton } from 'app/components/SyrfForm';
 
 export const VerifyAccountForm = () => {
     const history = useHistory<any>();
@@ -41,10 +34,10 @@ export const VerifyAccountForm = () => {
         const email = history?.location?.state?.state?.email;
         Auth.resendSignUp(email);
     }
-    
+
     return (
         <Form
-            {...layout}
+            layout={'vertical'}
             name="basic"
             initialValues={{ remember: true }}
             onFinish={onFinish}
@@ -56,14 +49,13 @@ export const VerifyAccountForm = () => {
             >
                 <Input />
             </Form.Item>
-            
-            <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
+
+            <Form.Item>
+                <SyrfFormButton type="primary" htmlType="submit">
                     Verify my account
-                    </Button>
-                <div style={{ clear: 'both' }}></div>
-                <div style={{ marginTop: '10px' }}>
-                    <span> Could not receive the code? <a style={{ float: 'right' }} onClick={() => resendConfirmationCode()}>resend</a></span>
+                </SyrfFormButton>
+                <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                    <span> Could not receive the code? &nbsp; <a style={{ float: 'right' }} onClick={() => resendConfirmationCode()}>resend</a></span>
                 </div>
             </Form.Item>
         </Form>

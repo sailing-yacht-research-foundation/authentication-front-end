@@ -42,6 +42,7 @@ npm manifest:
       "antd": "^4.15.6",
       "aws-amplify": "^4.0.2",
       "chalk": "4.1.0",
+      "classnames": "^2.3.1",
       "cross-env": "7.0.2",
       "eslint-config-prettier": "6.11.0",
       "eslint-plugin-prettier": "3.1.4",
@@ -63,6 +64,7 @@ npm manifest:
       "react-dom": "16.13.1",
       "react-helmet-async": "1.0.6",
       "react-i18next": "11.7.2",
+      "react-image-file-resizer": "^0.4.4",
       "react-phone-number-input": "^3.1.23",
       "react-redux": "7.2.1",
       "react-router-dom": "5.2.0",
@@ -5600,7 +5602,7 @@ Lockfile:
       isobject "^3.0.0"
       static-extend "^0.1.1"
   
-  classnames@2.x, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6:
+  classnames@2.x, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6, classnames@^2.3.1:
     version "2.3.1"
     resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
     integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
@@ -13357,6 +13359,11 @@ Lockfile:
     dependencies:
       "@babel/runtime" "^7.3.1"
       html-parse-stringify2 "2.0.1"
+  
+  react-image-file-resizer@^0.4.4:
+    version "0.4.4"
+    resolved "https://registry.yarnpkg.com/react-image-file-resizer/-/react-image-file-resizer-0.4.4.tgz#07d47d795e07a8a9850d480765c618686a4af4dd"
+    integrity sha512-qSZ5VJwWDkFan8IKCxDZqkAlQ6OW+mIDQLA9Y8T6/mLNUbHfnl3kjTpUWACeuh7cyPDXr1i6/GjlinyI75rBmQ==
   
   react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6, react-is@^16.9.0:
     version "16.13.1"
