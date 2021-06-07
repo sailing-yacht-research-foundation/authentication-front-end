@@ -23,10 +23,10 @@ export const Footer = (props) => {
                                 <a className="text-white" href="https://syrf.io">SYRF</a>
                             </Row>
                             <Row justify="center" align="middle" style={{ marginTop: '10px' }}>
-                                <Link className="text-white" to="https://syrf.io">Privacy Policy</Link>
+                                <Link className="text-white" to="privacy-policy">Privacy Policy</Link>
                             </Row>
                             <Row justify="center" align="middle" style={{ marginTop: '10px' }}>
-                                <Link className="text-white" to="https://syrf.io">End user license agreement</Link>
+                                <Link className="text-white" to="eula">End user license agreement</Link>
                             </Row>
                         </Col>
                     </Row>
