@@ -9,11 +9,12 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 16 },
+  labelCol: { sm: 24, md: 8, lg: 6 },
+  wrapperCol: { sm: 24, md: 16, lg: 18 }
 };
+
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
+  wrapperCol: { offset: 6, sm: 24, md: 16, lg: 18 },
 };
 
 export const LoginForm = (props) => {
@@ -85,22 +86,16 @@ export const LoginForm = (props) => {
           <Input.Password />
         </Form.Item>
 
-        <Form.Item {...tailLayout}>
+        <div style={{ textAlign: 'right' }}>
+          <Link style={{ display: 'block', marginBottom: '20px' }} to="/forgot-password">Forgot password?</Link>
           <Button type="primary" htmlType="submit">
-            Login
+            Sign In
           </Button>
-        </Form.Item>
-
-        <Form.Item {...tailLayout}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', }}>
-            <Link to="/signup">
-              Signup
-            </Link>
-            <Link to="/forgot-password">
-              Forgot password
-            </Link>
-          </div>
-        </Form.Item>
+          <span style={{ textAlign: 'right', display: 'block', marginTop: '20px' }}>Don't have an account?&nbsp;
+          <Link to="/signup">
+            Sign Up
+          </Link></span>
+        </div>
       </Form>
     </Spin>
   );
