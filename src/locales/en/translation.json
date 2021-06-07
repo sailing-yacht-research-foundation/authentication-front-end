@@ -1,19 +1,151 @@
 {
-  "routingFeature": {
-    "title": "Industry-standard Routing",
-    "description": "It's natural to want to add pages (e.g. `/about`) to your application, and routing makes this possible."
+  "home_page": {
+    "nav": {
+      "sign_in": "Sign In",
+      "sign_up": "Sign Up",
+      "user_dropdown": {
+        "change_password": "Change Password",
+        "sign_out": "Sign Out"
+      }
+    }
   },
-  "i18nFeature": {
-    "title": "i18n Internationalization & Pluralization",
-    "selectLanguage": "Select Language",
-    "description": "Scalable apps need to support multiple languages, easily add and support multiple languages. Change the language below to see how instantly it updates the page without refreshing."
+  "signin_page": {
+    "email": {
+      "label": "Email",
+      "email_validate": "Your input must be an email",
+      "required_validate": "Email is required"
+    },
+    "password": {
+      "label": "Password",
+      "password_validate": "Your password must be at least 6 characters and max 15 characters",
+      "required_validate": "Password is required"
+    },
+    "signin": "Sign In"
   },
-  "feedbackFeature": {
-    "title": "Instant Feedback",
-    "description": "Enjoy the best DX and code your app at the speed of thought! Your saved changes to the CSS and JS are reflected instantaneously without refreshing the page."
+  "signup_page": {
+    "email": {
+      "label": "Email",
+      "email_validate": "Your input must be an email",
+      "required_validate": "Email is required"
+    },
+    "password": {
+      "label": "Password",
+      "password_validation": "Your password must be at least 6 characters and max 15 characters",
+      "required_validation": "Password is required"
+    },
+    "name": {
+      "label": "Name",
+      "required_validation": "Name is required"
+    },
+    "locale": {
+      "label": "Locale",
+      "required_validation": "Locale is required"
+    },
+    "phone_number": {
+      "label":  "Phone Number"
+    },
+    "address": {
+      "label": "Address"
+    },
+    "date_of_birth": {
+      "label": "Date Of Birth"
+    },
+    "sailing_number": {
+      "label": "Sailing Number"
+    },
+    "facebook": {
+      "label": "Facebook Profile",
+      "validation": "Your Facebook profile must be a valid URL"
+    },
+    "instagram": {
+      "label": "Instagram Profile",
+      "validation": "Your Instagram profile must be a valid URL"
+    },
+    "twitter": {
+      "label": "Twitter Profile",
+      "validation": "Your Twitter profile must be a valid URL"
+    },
+    "eula": {
+      "label": "Agree to %{eula}",
+      "validation": "You should accept our EULA"
+    },
+    "privacy_policy": {
+      "label": "Agree to %{privacy_policy}",
+      "validation": "You must agree to our privacy policy."
+    },
+    "acknowledge": {
+      "label": "Acknowledge that email provided will not be a shared email (one email per user).",
+      "validation": "You must acknowledge that email provided will not be a shared email."
+    },
+    "signup": "Sign Up"
   },
-  "scaffoldingFeature": {
-    "title": "Quick Scaffolding",
-    "description": "Automate the creation of components, features, routes, selectors and sagas - and their tests - right from the CLI! Avoid fighting the glue of your code and focus on your app!"
+  "side_menu": {
+    "deal": "Deals",
+    "profile": {
+      "title": "My Profile",
+      "change_password": "Change Password",
+      "notification_setting": "Notification Settings",
+      "profile_setting": "Profile Settings"
+    },
+    "app_connection": "App Connections",
+    "organizational_membership": "Organizational Memberships",
+    "my_data": "My Data",
+    "test_data": "Test Data"
+  },
+  "profile_page": {
+    "update_profile": {
+      "email": {
+        "label": "Email",
+        "email_validate": "Your input must be an email",
+        "required_validate": "Email is required"
+      },
+      "name": {
+        "label": "Name",
+        "required_validation": "Name is required"
+      },
+      "phone_number": {
+        "label":  "Phone Number"
+      },
+      "address": {
+        "label": "Address"
+      },
+      "date_of_birth": {
+        "label": "Date Of Birth"
+      },
+      "sailing_number": {
+        "label": "Sailing Number"
+      },
+      "facebook": {
+        "label": "Facebook Profile",
+        "validation": "Your Facebook profile must be a valid URL"
+      },
+      "instagram": {
+        "label": "Instagram Profile",
+        "validation": "Your Instagram profile must be a valid URL"
+      },
+      "twitter": {
+        "label": "Twitter Profile",
+        "validation": "Your Twitter profile must be a valid URL"
+      },
+      "update_profile": "Update Profile"
+    },
+    "change_password": {
+      "old_password": {
+        "title": "Old Password",
+        "requilred_validation": "Old password is required"
+      },
+      "new_password": {
+        "title": "New Password",
+        "requilred_validation": "New password is required",
+        "password_validate": "Your password must be at least 6 characters and max 15 characters"
+      },
+      "change_password": "Change Password"
+    }
+  },
+  "privacy_page": {
+
+  },
+  "eulapage": {
+
   }
 }
