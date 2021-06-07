@@ -4,8 +4,8 @@ import { SignupForm } from './components/SignupForm';
 
 export const SignupPage = () => {
   return (
-    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
-      <SignupForm />
+    <Row justify="center" align="middle" style={{ minHeight: '100vh', marginTop: '50px' }}>
+      <SignupForm/>
     </Row>
   );
 }

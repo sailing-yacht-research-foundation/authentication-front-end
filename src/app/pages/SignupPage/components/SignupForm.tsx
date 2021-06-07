@@ -8,16 +8,17 @@ import PhoneInput from 'react-phone-number-input'
 import { toast } from 'react-toastify';
 import moment, { Moment } from 'moment';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 
 const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+    labelCol: { sm: 24, md: 8, lg: 6 },
+    wrapperCol: { sm: 24, md: 16, lg: 18 }
 };
 
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { xs: { span: 24 }, sm: { span: 12, offset: 12 }, md: { span: 12, offset: 8 }, lg: { span: 12, offset: 6 } }
 };
 
 const format = "DD.MM.YYYY HH:mm";
@@ -48,7 +49,7 @@ export const SignupForm = () => {
                 phone_number: phone_number,
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
-                'custom:sailing_number': sailing_number,
+                'custom:sailing_number': String(sailing_number).toLowerCase(),
                 'custom:facebook': facebook,
                 'custom:instagram': instagram,
                 'custom:twitter': twitter,
@@ -121,7 +122,7 @@ export const SignupForm = () => {
                     name="locale"
                     rules={[{ required: true }]}
                 >
-                    <Select placeholder={'Select a locale'} style={{ width: 120 }}>
+                    <Select placeholder={'Select a locale'}>
                         {
                             renderLocaleDropdownList()
                         }
@@ -155,6 +156,7 @@ export const SignupForm = () => {
                         ref="datePickerRef"
                         defaultValue={moment('2002-01-01')}
                         showToday={false}
+                        style={{ width: '100%' }}
                         disabledDate={current => {
                             return disabledDates.some(date =>
                                 current.isBetween(
@@ -174,7 +176,7 @@ export const SignupForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="World Sailing Number"
+                    label="Sailing Number"
                     name="sailing_number"
                 >
                     <Input />
@@ -212,7 +214,7 @@ export const SignupForm = () => {
                             value ? Promise.resolve() : Promise.reject(new Error('You should accept our EULA.')),
                     },
                 ]}>
-                    <Checkbox>Agree to EULA</Checkbox>
+                    <Checkbox>Agree to <Link to="eula">EULA</Link></Checkbox>
                 </Form.Item>
 
                 <Form.Item {...tailLayout} name="pp_agree" valuePropName="checked" rules={[
@@ -221,7 +223,7 @@ export const SignupForm = () => {
                             value ? Promise.resolve() : Promise.reject(new Error('You must agree to our privacy policy.')),
                     },
                 ]}>
-                    <Checkbox value={1}>Agree to Privacy policy</Checkbox>
+                    <Checkbox value={1}>Agree to <Link to="eula">Privacy policy</Link></Checkbox>
                 </Form.Item>
 
                 <Form.Item {...tailLayout} name="email_not_shared" valuePropName="checked" rules={[
