@@ -49,4 +49,8 @@ export const GlobalStyle = createGlobalStyle`
     align-self: flex-end;
     background: #fff;
   }
+
+  .PhoneInputInput {
+    border: none;
+  }
 `;

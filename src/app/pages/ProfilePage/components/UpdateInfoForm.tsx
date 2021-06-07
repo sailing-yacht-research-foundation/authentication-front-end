@@ -10,12 +10,12 @@ import Auth from '@aws-amplify/auth';
 import { toast } from 'react-toastify';
 
 const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 8 },
+    labelCol: { xs: { span: 24 }, sm: { span: 24 }, lg: { span: 8 } },
+    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 8 }, lg: { span: 8 } },
 };
 
 const tailLayout = {
-    wrapperCol: { offset: 11, span: 16 },
+    wrapperCol: { xs: { span: 24 }, sm: { span: 24 }, md: { span: 12, offset: 8 }, lg: { span: 12, offset: 8 } }
 };
 
 const format = "DD.MM.YYYY HH:mm";
@@ -36,7 +36,7 @@ export const UpdateInfo = (props) => {
         const { name, phone_number, sailing_number, address, facebook, instagram, twitter, birthdate } = values;
 
         setIsUpdatingProfile(true);
-        
+
         Auth.currentAuthenticatedUser().then(user => {
             setIsUpdatingProfile(false);
             Auth.updateUserAttributes(user, {
@@ -95,7 +95,6 @@ export const UpdateInfo = (props) => {
                         <Input />
                     </Form.Item>
 
-
                     <Divider />
 
                     <Form.Item
@@ -121,6 +120,7 @@ export const UpdateInfo = (props) => {
                     >
                         <DatePicker
                             ref="datePickerRef"
+                            style={{ width: '100%' }}
                             defaultValue={moment('2002-01-01')}
                             showToday={false}
                             disabledDate={current => {
