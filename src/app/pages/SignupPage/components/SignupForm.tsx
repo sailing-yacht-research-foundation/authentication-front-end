@@ -237,7 +237,7 @@ export const SignupForm = () => {
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">
-                        Signup
+                        Sign Up
             </Button>
                 </Form.Item>
             </Form>
