@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Input, Form, Button, Select, Divider, DatePicker, Checkbox, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
 import { LANGUAGE_BY_LOCALE as locales } from 'utils/locale-list';
-import PhoneInput from 'react-phone-number-input'
+import PhoneInput from 'react-phone-number-input';
 import { toast } from 'react-toastify';
 import moment, { Moment } from 'moment';
 import { useHistory } from 'react-router';
