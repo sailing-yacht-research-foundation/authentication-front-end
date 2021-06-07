@@ -21,6 +21,7 @@ import { SignupPage } from './pages/SignupPage/Loadable';
 import { HomePage } from './pages/HomePage/Loadable';
 import { VerifyAccountPage } from './pages/VerifyAccountPage/Loadable';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
 import { useTranslation } from 'react-i18next';
 
 import { useSelector } from 'react-redux';
@@ -70,6 +71,7 @@ export function App(props) {
             <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
             <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
             <Route exact path={process.env.PUBLIC_URL + '/forgot-pasword'} component={ForgotPasswordPage} />
+            <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
             <Route component={NotFoundPage} />
           </Switch>
           <ToastContainer />
