@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProfilePage /> should render to match the snapshot 1`] = `
+<Row
+  align="top"
+  justify="center"
+  style={
+    Object {
+      "background": " #fff",
+      "minHeight": "100vh",
+      "padding": "10px",
+    }
+  }
+>
+  <Profile />
+</Row>
+`;

@@ -1,7 +1,7 @@
 import NoAvatar from 'app/components/NavBar/assets/no-avatar.png';
 
 export const getUserAttribute = (user, attribute: string) => {
-    if (user.attributes && user.attributes[attribute]) {
+    if (user && user.attributes && user.attributes[attribute]) {
         return user.attributes[attribute];
     }
 
