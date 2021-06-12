@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<VideoSection /> should render and matchs the snapshot 1`] = `
+<VideoSection__Wrapper>
+  <Row>
+    <Title
+      className="text-white uppercase"
+    >
+      One Login
+    </Title>
+  </Row>
+  <Row>
+    <Title
+      className="text-white uppercase"
+    >
+      Ultimate Potential
+    </Title>
+  </Row>
+  <Row>
+    <Space
+      size={15}
+    >
+      <Col>
+        <Button
+          className="syrf-button-outline"
+          onClick={[Function]}
+        >
+          Login
+        </Button>
+      </Col>
+      <Col>
+        <Button
+          className="syrf-button"
+          onClick={[Function]}
+        >
+          Signup
+        </Button>
+      </Col>
+    </Space>
+  </Row>
+</VideoSection__Wrapper>
+`;
