@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoginPage /> should render and match the snapshot 1`] = `
+<Row
+  align="middle"
+  justify="center"
+  style={
+    Object {
+      "minHeight": "100vh",
+    }
+  }
+>
+  <LoginForm />
+</Row>
+`;

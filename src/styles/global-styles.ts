@@ -38,6 +38,7 @@ export const GlobalStyle = createGlobalStyle`
     margin: 16px;
     background: rgba(255, 255, 255, 0.2);
   }
+
   .site-layout .site-layout-background {
     background: #fff;
   }
@@ -79,5 +80,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .uppercase {
     text-transform: uppercase;
+  .PhoneInputInput {
+    border: none;
   }
 `;
