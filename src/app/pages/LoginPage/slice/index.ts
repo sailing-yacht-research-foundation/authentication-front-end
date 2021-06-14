@@ -27,7 +27,6 @@ const slice = createSlice({
     setLogout(state) {
       state.isAuthenticated = false;
       state.access_token = '';
-      localStorage.removeItem('access_token');
     },
     getUser() {},
   },

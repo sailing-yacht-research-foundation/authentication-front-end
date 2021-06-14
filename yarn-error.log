@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js add react-image-file-resizer
+  /usr/bin/node /usr/share/yarn/bin/yarn.js add moment
 
 PATH: 
   /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/dat/code/authentication-front-end/node_modules/@ant-design/colors/README.md'
+  Error: EACCES: permission denied, unlink '/home/dat/code/authentication-front-end/node_modules/@ant-design/colors/LICENSE'
 
 npm manifest: 
   {

@@ -22,6 +22,7 @@ export const UserDropdown = () => {
         dispatch(actions.setLogout());
         history.push('/signin');
         Auth.signOut();
+        localStorage.removeItem('access_token');
       }
 
     const menu = (

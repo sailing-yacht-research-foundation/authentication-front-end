@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
-import Auth from '@aws-amplify/auth';
-import { Col, Descriptions, Row } from 'antd';
+import { Descriptions } from 'antd';
 
 export const ShowInfoView = (props) => {
     const { authUser } = props;

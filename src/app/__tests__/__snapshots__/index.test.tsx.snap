@@ -2,32 +2,83 @@
 
 exports[`<App /> should render and match the snapshot 1`] = `
 <BrowserRouter>
-  <Helmet
-    defaultTitle="React Boilerplate"
-    defer={true}
-    encodeSpecialCharacters={true}
-    htmlAttributes={
-      Object {
-        "lang": "en-US",
-      }
-    }
-    titleTemplate="%s - React Boilerplate"
+  <Layout
+    className="site-layout"
   >
-    <meta
-      content="A React Boilerplate application"
-      name="description"
-    />
-  </Helmet>
-  <Switch>
-    <Route
-      component={[Function]}
-      exact={true}
-      path="/"
-    />
-    <Route
-      component={[Function]}
-    />
-  </Switch>
+    <Header
+      className="site-layout-background"
+      style={
+        Object {
+          "borderBottom": "1px solid #eee",
+          "display": "flex",
+          "justifyContent": "center",
+          "position": "fixed",
+          "width": "100%",
+          "zIndex": 1,
+        }
+      }
+    >
+      <HeaderContent />
+    </Header>
+    <SideMenu />
+    <Content
+      className="site-layout-background"
+      style={
+        Object {
+          "margin": "24px 16px",
+          "minHeight": 280,
+          "padding": 24,
+        }
+      }
+    >
+      <Switch>
+        <PrivateRoute
+          component={[Function]}
+          exact={true}
+          path="/"
+        />
+        <Route
+          component={[Function]}
+          exact={true}
+          path="/signin"
+        />
+        <Route
+          component={[Function]}
+          exact={true}
+          path="/signup"
+        />
+        <Route
+          component={[Function]}
+          exact={true}
+          path="/verify-account"
+        />
+        <Route
+          component={[Function]}
+          exact={true}
+          path="/forgot-password"
+        />
+        <Route
+          component={[Function]}
+        />
+      </Switch>
+      <ToastContainer
+        autoClose={5000}
+        closeButton={[Function]}
+        closeOnClick={true}
+        draggable={true}
+        draggableDirection="x"
+        draggablePercent={80}
+        hideProgressBar={false}
+        newestOnTop={false}
+        pauseOnFocusLoss={true}
+        pauseOnHover={true}
+        position="top-right"
+        role="alert"
+        rtl={false}
+        transition={[Function]}
+      />
+    </Content>
+  </Layout>
   <Memo(GlobalStyleComponent) />
 </BrowserRouter>
 `;

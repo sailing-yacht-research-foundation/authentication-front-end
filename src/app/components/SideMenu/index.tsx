@@ -27,7 +27,7 @@ export const SideMenu = (props) => {
             height: '100vh',
             position: 'fixed',
             left: 0,
-            zIndex: 2
+            zIndex: 2,
         }}>
             <Logo type='light' />
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>

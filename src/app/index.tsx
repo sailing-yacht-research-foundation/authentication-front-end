@@ -37,7 +37,7 @@ import { HeaderContent } from './components/HeaderContent';
 import { SideMenu } from './components/SideMenu';
 import { loginActions } from './pages/LoginPage/slice';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 Amplify.configure(config);
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -70,12 +70,12 @@ export function App(props) {
         <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'center' }}>
           <HeaderContent />
         </Header>
-        <SideMenu />
+        { isAuthenticated && <SideMenu/> }
         <Content
           className={classNames({ 'site-content': isAuthenticated })}
         >
           <Switch>
-            <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+            <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
             <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
             <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
             <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
