@@ -92,4 +92,13 @@ export const GlobalStyle = createGlobalStyle`
   .PhoneInputInput {
     border: none;
   }
+
+  .connect-btn {
+    display: none;
+  }
+
+  .instagram-button {
+    border: none;
+    background: none;
+  }
 `;

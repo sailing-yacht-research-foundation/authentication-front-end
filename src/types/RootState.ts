@@ -1,5 +1,7 @@
 import { ThemeState } from 'styles/theme/slice/types';
 import { LoginState } from 'app/pages/LoginPage/slice/types';
+import { FacebookState } from 'app/pages/ProfilePage/components/Facebook/slice/types';
+import { InstagramState } from 'app/pages/ProfilePage/components/Instagram/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -10,6 +12,8 @@ import { LoginState } from 'app/pages/LoginPage/slice/types';
 */
 export interface RootState {
   theme?: ThemeState;
-  login?: LoginState
+  login?: LoginState;
+  facebook?: FacebookState;
+  instagram?: InstagramState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
