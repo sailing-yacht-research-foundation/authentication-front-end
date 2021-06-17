@@ -1,17 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ProfilePage /> should render to match the snapshot 1`] = `
-<Row
-  align="top"
-  justify="center"
-  style={
+<Provider
+  store={
     Object {
-      "background": " #fff",
-      "minHeight": "100vh",
-      "padding": "10px",
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
     }
   }
 >
-  <Profile />
-</Row>
+  <ProfilePage />
+</Provider>
 `;

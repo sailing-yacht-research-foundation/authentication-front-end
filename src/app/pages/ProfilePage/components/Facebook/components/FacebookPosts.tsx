@@ -14,12 +14,12 @@ const FacebookPosts = ({ isConnected }) => {
 
     useEffect(() => {
         dispatch(actions.getPosts());
-    }, []);
+    });
 
     const renderFacebookPosts = () => {
-        return posts.map(post => {
+        return posts.map(post => (
             <PostTemplate post={post} />
-        });
+        ));
     }
 
     return (

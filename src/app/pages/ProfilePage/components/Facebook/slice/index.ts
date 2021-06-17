@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import facebookSaga from './saga';
+import { facebookSaga } from './saga';
 import { FacebookState } from './types';
 
 export const initialState: FacebookState = {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { ConnectButton } from 'app/components/ConnectButton';
 import Auth from '@aws-amplify/auth';
@@ -24,7 +24,7 @@ const FacebookIntegration = (props) => {
 
     useEffect(() => {
         checkForConnectStatus();
-    }, []);
+    });
 
     const checkForConnectStatus = () => {
         const token = getUserAttribute(user, 'custom:fb_token');
@@ -33,9 +33,9 @@ const FacebookIntegration = (props) => {
         dispatch(actions.setIsConnected(connectStatus));
     }
 
-    const onComponentClicked = (data) => {
-        console.log(data);
-    }
+    // const onComponentClicked = (data) => {
+    //     console.log(data);
+    // }
 
     const onFacebookResponded = (response) => {
         if (response && response.accessToken)

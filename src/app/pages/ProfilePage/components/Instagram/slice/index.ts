@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import instagramSaga from './saga';
+import { instagramSaga } from './saga';
 import { InstagramState } from './types';
 
 export const initialState: InstagramState = {

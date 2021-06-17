@@ -1,5 +1,4 @@
-import React, { memo } from 'react';
-import styled from 'styled-components/macro';
+import React from 'react';
 
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';

@@ -3,12 +3,12 @@
  */
 
 import { facebookActions } from ".";
-import { all, call, put, takeLatest, select } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import axios from "axios";
 import { selectUser } from "app/pages/LoginPage/slice/selectors";
 import { getUserAttribute } from "utils/user-utils";
 
-function* getFacebookFeeds() {
+export function* getFacebookFeeds() {
     const user = yield select(selectUser);
     const posts = yield call(getFeeds, user);
 
@@ -32,6 +32,6 @@ async function getFeeds(user) {
     return posts;
 }
 
-export default function* facebookSaga() {
+export function* facebookSaga() {
     yield takeLatest(facebookActions.getPosts.type, getFacebookFeeds);
 }

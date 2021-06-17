@@ -3,12 +3,12 @@
  */
 
  import { instagramActions } from ".";
- import { all, call, put, takeLatest, select } from 'redux-saga/effects';
+ import { call, put, takeLatest, select } from 'redux-saga/effects';
  import axios from "axios";
  import { selectUser } from "app/pages/LoginPage/slice/selectors";
  import { getUserAttribute } from "utils/user-utils";
  
- function* getInstagramFeeds() {
+export function* getInstagramFeeds() {
      const user = yield select(selectUser);
      const posts = yield call(getFeeds, user);
  
@@ -32,7 +32,7 @@
      return posts;
  }
  
- export default function* facebookSaga() {
+ export function* instagramSaga() {
      yield takeLatest(instagramActions.getPosts.type, getInstagramFeeds);
  }
  

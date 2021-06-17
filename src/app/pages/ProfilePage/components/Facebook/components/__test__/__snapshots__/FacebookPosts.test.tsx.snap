@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<App /> should render and match the snapshot 1`] = `
+exports[`<FacebookPosts /> should render and match the snapshot 1`] = `
 <Provider
   store={
     Object {
@@ -16,6 +16,8 @@ exports[`<App /> should render and match the snapshot 1`] = `
     }
   }
 >
-  <App />
+  <FacebookPosts
+    isConnected={false}
+  />
 </Provider>
 `;

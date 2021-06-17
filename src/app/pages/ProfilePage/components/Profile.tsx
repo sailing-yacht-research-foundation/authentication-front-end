@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChangeAvatar } from './ChangeAvatar';
 import { ShowInfoView } from './ShowInfoView';
 import { LinkToProviders } from './LinkToProviders';
@@ -12,8 +12,8 @@ import { UpdateInfo } from './UpdateInfoForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { loginActions } from 'app/pages/LoginPage/slice';
-import FacebookPosts from './Facebook/components/FacebookPosts';
-import InstagramPosts from './Instagram/components/InstagramPost';
+// import FacebookPosts from './Facebook/components/FacebookPosts';
+// import InstagramPosts from './Instagram/components/InstagramPost';
 
 export const Profile = () => {
     const authUser = useSelector(selectUser);

@@ -12,12 +12,12 @@ const InstagramPosts = () => {
 
     useEffect(() => {
         dispatch(instagramActions.getPosts());
-    }, []);
+    });
 
     const renderFacebookFeeds = () => {
-        return posts.map(post => {
+        return posts.map(post => (
             <PostTemplate post={post} />
-        });
+        ));
     }
 
     return (

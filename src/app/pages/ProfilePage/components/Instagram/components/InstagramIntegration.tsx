@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import {
     InstagramFilled
 } from '@ant-design/icons';
-import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+// import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserAttribute } from 'utils/user-utils';
 import { selectIsConnected } from '../slice/selectors';
@@ -23,16 +23,16 @@ const InstagramIntegration = (props) => {
 
     useEffect(() => {
         checkForConnectStatus();
-    }, []);
+    });
 
     const checkForConnectStatus = () => {
         const token = getUserAttribute(user, 'custom:ig_token');
         dispatch(actions.setIsConnected(!!token));
     }
 
-    const onComponentClicked = (data) => {
-        console.log(data);
-    }
+    // const onComponentClicked = (data) => {
+    //     console.log(data);
+    // }
 
     const onInstagramResponded = (token) => {
         console.log(token);
