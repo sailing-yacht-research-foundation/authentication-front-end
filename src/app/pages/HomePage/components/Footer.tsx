@@ -23,7 +23,7 @@ export const Footer = (props) => {
             <SYRFFooterContainer>
                 <Row justify="space-between">
                     <Col lg={{
-                        offset: 1,
+                        offset: 3,
                         span: 4
                     }}
                         xs={{
@@ -43,17 +43,17 @@ export const Footer = (props) => {
                             span: 24
                         }}
                     >
-                        <Row justify="center" align="middle" style={{ marginTop: '50px' }}>
-                            <a className="text-white" href="https://syrf.io">SYRF</a>
-                        </Row>
+                        <StyledRow justify="end" align="middle" style={{ marginTop: '50px' }}>
+                            <StyledLink to="/">SYRF</StyledLink>
+                        </StyledRow>
 
-                        <Row justify="center" align="middle" style={{ marginTop: '10px' }}>
-                            <Link className="text-white" to="privacy-policy">Privacy Policy</Link>
-                        </Row>
-                        
-                        <Row justify="center" align="middle" style={{ marginTop: '10px' }}>
-                            <Link className="text-white" to="eula">End user license agreement</Link>
-                        </Row>
+                        <StyledRow justify="end" align="middle" style={{ marginTop: '10px' }}>
+                            <StyledLink to="privacy-policy">Privacy Policy</StyledLink>
+                        </StyledRow>
+
+                        <StyledRow justify="end" align="middle" style={{ marginTop: '10px' }}>
+                            <StyledLink to="eula">End user license agreement</StyledLink>
+                        </StyledRow>
                     </Col>
                 </Row>
 
@@ -73,7 +73,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     // background-color: #001529;
     text-align: center;
-`
+`;
 
 const FooterTextCopyRight = styled.div`
    margin-top: 22px;
@@ -81,7 +81,7 @@ const FooterTextCopyRight = styled.div`
    color: #fff;
    font-size: 0.8rem;
    text-align: center;
-`
+`;
 
 const DeveloperSectionContainer = styled.div`
     background: #EBEFF7;
@@ -91,21 +91,21 @@ const DeveloperSectionContainer = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 86px 15px;
-`
+`;
 
 const DeveloperDescription = styled.div`
     font-size: 14px;
     font-weight: 400;
     max-width: 805px;
     margin: 15px 0;
-`
+`;
 
 const SYRFFooterContainer = styled.div`
     background: #0C4983;
     width: 100%;
     padding: 0 15px;
     padding-top: 65px;
-`
+`;
 
 const SYRFDescription = styled.p`
     font-weight: 400;
@@ -122,7 +122,7 @@ const SYRFDescription = styled.p`
     ${media.small`
         text-align:center;
     `};
-`
+`;
 
 const LogoResponsive = styled(Logo)`
     ${media.large`
@@ -137,3 +137,35 @@ const LogoResponsive = styled(Logo)`
         justify-content: center;
     `};
 `;
+
+const StyledLink = styled(Link)`
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+
+    ${media.large`
+        margin-right: 170px;
+        text-align: right;
+    `};
+
+    ${media.medium`
+        margin-right: 120px;
+        text-align: right;
+    `};
+`;
+
+const StyledRow = styled(Row)`
+        justify-content: center;
+
+    ${media.large`
+        justify-content: flex-end;
+    `};
+
+    ${media.medium`
+        justify-content: flex-end;
+    `};
+
+    ${media.small`
+        justify-contents: center;
+    `};
+`

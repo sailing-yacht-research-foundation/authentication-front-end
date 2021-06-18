@@ -15,14 +15,14 @@ export const PartnerAppCarousel = (props) => {
                 {
                     breakpoint: 1200,
                     settings: {
-                        slidesToShow: 2,
+                        slidesToShow: 4,
                         slidesToScroll: 1
                     }
                 },
                 {
                     breakpoint: 1008,
                     settings: {
-                        slidesToShow: 1,
+                        slidesToShow: 3,
                         slidesToScroll: 1
                     }
                 },
@@ -42,6 +42,7 @@ export const PartnerAppCarousel = (props) => {
                         src={Brand1}
                     />
                 </ImageContainer>
+                
                 <ImageContainer>
                     <Image
                         width={200}
@@ -49,6 +50,7 @@ export const PartnerAppCarousel = (props) => {
                         src={Brand2}
                     />
                 </ImageContainer>
+
                 <ImageContainer>
                     <Image
                         width={200}
@@ -56,6 +58,7 @@ export const PartnerAppCarousel = (props) => {
                         src={Brand3}
                     />
                 </ImageContainer>
+
                 <ImageContainer>
                     <Image
                         width={200}
@@ -63,6 +66,7 @@ export const PartnerAppCarousel = (props) => {
                         src={Brand4}
                     />
                 </ImageContainer>
+
                 <ImageContainer>
                     <Image
                         preview={false}
@@ -70,6 +74,7 @@ export const PartnerAppCarousel = (props) => {
                         src={Brand1}
                     />
                 </ImageContainer>
+
                 <ImageContainer>
                     <Image
                         width={200}
@@ -77,6 +82,7 @@ export const PartnerAppCarousel = (props) => {
                         src={Brand2}
                     />
                 </ImageContainer>
+
                 <ImageContainer>
                     <Image
                         width={200}
@@ -84,6 +90,7 @@ export const PartnerAppCarousel = (props) => {
                         src={Brand3}
                     />
                 </ImageContainer>
+
                 <ImageContainer>
                     <Image
                         width={200}
@@ -99,8 +106,8 @@ export const PartnerAppCarousel = (props) => {
 const Wrapper = styled.div`
     margin: 88px 0;
     padding: 0 15px;
-`
+`;
 
 const ImageContainer = styled.div`
     margin-top: 60px;    
-`
+`;

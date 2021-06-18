@@ -18,9 +18,9 @@ export const Nav = () => {
         </>
       ) : (
         <>
-          <Link to="/signin">Sign in</Link>
+          <LinkStyled to="/signin">Log In</LinkStyled>
           <span style={{ marginLeft: '5px', marginRight: '5px' }}>|</span>
-          <Link to="/signup">Sign Up</Link>
+          <LinkStyled style={{ color: '#0C4983' }} to="/signup">Sign Up</LinkStyled>
         </>
       )}
     </Wrapper>
@@ -30,3 +30,8 @@ export const Nav = () => {
 const Wrapper = styled.nav`
   display: flex;
 `;
+
+const LinkStyled = styled(Link)`
+  color:#599DF9;
+  font-weight: 700;
+`

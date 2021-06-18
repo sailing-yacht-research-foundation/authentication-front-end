@@ -74,6 +74,7 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 8px;
     width: 184px;
     height: 56px;
+    font-weight: 700;
   }
 
   @media screen and (max-width: 600px) {

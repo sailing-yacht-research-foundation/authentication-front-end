@@ -14,16 +14,19 @@ export const VideoSection = (props) => {
             <Row style={{ marginTop: '88px' }}>
                 <Typography.Title className="text-white introduction-text">One Login <br /> Ultimate Potential</Typography.Title>
             </Row>
+            
             <Row>
                 <p className="introduction-description">
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
                 </p>
             </Row>
+
             <Row  style={{ marginTop: '40px' }}>
                 <Space size={15}>
                     <Col>
                         <Button onClick={() => history.push('/signin')} className="syrf-button">Login</Button>
                     </Col>
+                    
                     <Col>
                         <Button onClick={() => history.push('/signup')} className="syrf-button-outline">Signup</Button>
                     </Col>
