@@ -1,0 +1,18 @@
+@media screen and (max-width: 600px) {
+    .carousel-inner-container {
+        padding: 0 15px !important;
+    }
+
+    .carousel-image-background {
+        margin-top: 40px;
+        height: 420px
+    }
+
+    .carousel-dot:not(.custom) li,.carousel-dot:not(.custom) button {
+        width: 30px !important;
+    }
+
+    .carousel-dot.custom {
+        right: 0 !important;
+    }
+  }

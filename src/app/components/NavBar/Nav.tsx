@@ -29,5 +29,4 @@ export const Nav = () => {
 
 const Wrapper = styled.nav`
   display: flex;
-  margin-right: -1rem;
 `;

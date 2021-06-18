@@ -1,7 +1,8 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Logo } from '../NavBar/Logo';
 import { Nav } from '../NavBar/Nav';
+import { media } from 'styles/media';
 
 export const HeaderContent = (props) => {
     return (
@@ -13,9 +14,20 @@ export const HeaderContent = (props) => {
 }
 
 const Wrapper = styled.nav`
-display: flex;
-margin-right: -1rem;
-justify-content: space-between;
-align-self: center;
-width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-self: center;
+    width: 100%;
+
+    ${media.large`
+        width: 90%;
+    `};
+
+    ${media.medium`
+        width: 100%%;
+    `};
+
+    ${media.small`
+        width: 100%%;
+    `};
 `;

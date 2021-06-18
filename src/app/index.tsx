@@ -67,7 +67,7 @@ export function App(props) {
   return (
     <BrowserRouter>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'center' }}>
+        <Header className="site-header">
           <HeaderContent />
         </Header>
         { isAuthenticated && <SideMenu/> }

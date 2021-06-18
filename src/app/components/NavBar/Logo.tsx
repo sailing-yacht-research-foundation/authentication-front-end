@@ -17,7 +17,7 @@ export function Logo(props) {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <Link to="/">
         {
           props.type === 'light' ? <LogoLight /> : (isAuthenticated ? <div></div> : <LogoDark />)
