@@ -7,10 +7,11 @@ import { UseLoginSlice } from '../slice';
 import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { StyleConstants } from 'styles/StyleConstants';
 
 const layout = {
-  labelCol: { sm: 24, md: 8, lg: 6 },
-  wrapperCol: { sm: 24, md: 16, lg: 18 }
+  wrapperCol: { sm: 24, md: 24, lg: 24 }
 };
 
 const tailLayout = {
@@ -63,40 +64,187 @@ export const LoginForm = (props) => {
   }
 
   return (
-    <Spin spinning={isSigningIn} tip="Signing you in...">
-      <Form
-        {...layout}
-        name="basic"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[{ required: true, type: 'email' }]}
-        >
-          <Input />
-        </Form.Item>
+    <Wrapper>
+      <Spin spinning={isSigningIn} tip="Signing you in...">
+        <Title>My Sailing ID</Title>
 
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[{ required: true }]}
-        >
-          <Input.Password />
-        </Form.Item>
+        <FormWrapper>
+          <FormTitle>Log In</FormTitle>
+          <Form
+            {...layout}
+            name="basic"
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+          >
+            <Form.Item
+              name="email"
+              rules={[{ required: true, type: 'email' }]}
+            >
+              <SyrfInput placeholder={'Email'} />
+            </Form.Item>
 
-        <div style={{ textAlign: 'right' }}>
-          <Link style={{ display: 'block', marginBottom: '20px' }} to="/forgot-password">Forgot password?</Link>
-          <Button type="primary" htmlType="submit">
-            Sign In
-          </Button>
-          <span style={{ textAlign: 'right', display: 'block', marginTop: '20px' }}>Don't have an account?&nbsp;
-          <Link to="/signup">
+            <Form.Item
+              name="password"
+              rules={[{ required: true }]}
+            >
+              <SyrfInputPassword placeholder={'Password'} />
+            </Form.Item>
+
+            <Form.Item
+            >
+              <SyrfFormButton type="primary" htmlType="submit">
+                Sign In
+              </SyrfFormButton>
+            </Form.Item>
+
+            <ForgotPasswordLinkContainer>
+              <Link to="/forgot-password">Forgot password?</Link>
+            </ForgotPasswordLinkContainer>
+
+            {/* <div style={{ textAlign: 'right' }}>
+              <Link style={{ display: 'block', marginBottom: '20px' }} to="/forgot-password">Forgot password?</Link>
+             
+              <span style={{ textAlign: 'right', display: 'block', marginTop: '20px' }}>Don't have an account?&nbsp;
+                <Link to="/signup">
+                  Sign Up
+                </Link></span>
+            </div> */}
+          </Form>
+        </FormWrapper>
+
+        <SignupContainer>
+          <GreyTitle>Don't have an account</GreyTitle>
+
+          <SyrfSignupButton>
             Sign Up
-          </Link></span>
-        </div>
-      </Form>
-    </Spin>
+          </SyrfSignupButton>
+        </SignupContainer>
+      </Spin>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  background: #EEF5FF;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  align-items: center;
+`;
+
+const Title = styled.h2`
+  font-family: Inter;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 44px;
+  letter-spacing: 0em;
+  text-align: center;
+  margin-top: 119px;
+`
+
+const FormWrapper = styled.div`
+  width: 460px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 0 60px;
+  padding-bottom: 30px;
+  margin-top: 61px;
+`
+
+const FormTitle = styled.h3`
+  font-family: ${StyleConstants.FONT_OPEN_SANS};
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #626262;
+  padding: 20px;
+  padding-top: 70px;
+`
+
+const SyrfInput = styled(Input)`
+  background: #F8F8F8 !important;
+  border-radius: 4px;
+  border: none;
+  height: 36px;
+`
+
+const SyrfInputPassword = styled(Input.Password)`
+  background: #F8F8F8 !important;
+  border-radius: 4px;
+  border: none;
+  height: 36px;
+
+  > input {
+    background: #F8F8F8 !important;
+  }
+`;
+
+const SyrfFormButton = styled(Button)`
+  width: 100%;
+  max-width: 360px;
+  height: 36px;
+  border-radius: 4px;
+  background:  ${(props: { background: string }) => props.background ? props.background : '#348BCD'};
+  font-family: ${StyleConstants.FONT_OPEN_SANS};
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 19px;
+  color: #fff;
+
+`
+
+const ForgotPasswordLinkContainer = styled.div`
+  display: block;
+  text-align: center;
+  font-family: Open Sans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #348BCD;
+`;
+
+const SignupContainer = styled.div`
+  background: #FCF1E9;
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 40px;
+`
+
+const GreyTitle = styled.h3`
+  font-family: ${StyleConstants.FONT_OPEN_SANS};
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #7A7A7A;
+`
+
+const SyrfSignupButton = styled(Button)`
+  width: 100%;
+  max-width: 360px;
+  height: 36px;
+  border-radius: 4px;
+  background: #DB6E1E;
+  font-family: ${StyleConstants.FONT_OPEN_SANS};
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 19px;
+  color: #fff;
+
+  &:hover {
+    background: #DB6E1E;
+  } 
+`
