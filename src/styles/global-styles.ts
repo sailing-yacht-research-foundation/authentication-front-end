@@ -11,7 +11,6 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    padding-top: ${StyleConstants.NAV_BAR_HEIGHT};
     background-color: ${p => p.theme.background};
   }
 
@@ -39,7 +38,49 @@ export const GlobalStyle = createGlobalStyle`
     margin: 16px;
     background: rgba(255, 255, 255, 0.2);
   }
+
   .site-layout .site-layout-background {
     background: #fff;
+  }
+
+  .text-white {
+    color: #fff !important;
+  }
+
+  .syrf-button-outline, .syrf-button {
+    color: #fff;
+    padding: 1rem 2rem !important;
+    font-size: 1.25rem !important;
+    height: auto !important;
+    border-radius: 0.2rem;
+  }
+
+  .syrf-button {
+    background-color: #DC6E1E;
+    border-color: #DC6E1E !important;
+  }
+
+  .syrf-button:hover {
+    color: #fff;
+    background-color: #ba5d19;
+    border-color: #af5818;
+  }
+
+  .syrf-button-outline {
+    color: #fff;
+    background-color: transparent;
+    border: 2px solid #fff;
+  }
+
+  .syrf-button-outline:hover {
+    color: #000;
+    background-color: white;
+    border-color: #fff;
+  }
+
+  .uppercase {
+    text-transform: uppercase;
+  .PhoneInputInput {
+    border: none;
   }
 `;

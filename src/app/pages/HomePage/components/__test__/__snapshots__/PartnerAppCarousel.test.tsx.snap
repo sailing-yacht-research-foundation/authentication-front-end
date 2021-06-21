@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PartnerAppCarousel /> should render and matchs the snapshot 1`] = `
+<PartnerAppCarousel__Wrapper>
+  <Title
+    level={3}
+    style={
+      Object {
+        "marginBottom": 50,
+        "textAlign": "center",
+      }
+    }
+  >
+    Use with these innotive apps
+  </Title>
+  <ForwardRef
+    autoplay={true}
+    responsive={
+      Array [
+        Object {
+          "breakpoint": 1200,
+          "settings": Object {
+            "slidesToScroll": 1,
+            "slidesToShow": 2,
+          },
+        },
+        Object {
+          "breakpoint": 1008,
+          "settings": Object {
+            "slidesToScroll": 1,
+            "slidesToShow": 1,
+          },
+        },
+        Object {
+          "breakpoint": 800,
+          "settings": Object {
+            "slidesToScroll": 1,
+            "slidesToShow": 1,
+          },
+        },
+      ]
+    }
+    slidesToShow={3}
+  >
+    <div>
+      <Image
+        preview={false}
+        src="https://chippou.github.io/assets/images/clients/angularjs_logo.png"
+        width={200}
+      />
+    </div>
+    <div>
+      <Image
+        preview={false}
+        src="https://chippou.github.io/assets/images/clients/angularjs_logo.png"
+        width={200}
+      />
+    </div>
+    <div>
+      <Image
+        preview={false}
+        src="https://chippou.github.io/assets/images/clients/angularjs_logo.png"
+        width={200}
+      />
+    </div>
+    <div>
+      <Image
+        preview={false}
+        src="https://chippou.github.io/assets/images/clients/angularjs_logo.png"
+        width={200}
+      />
+    </div>
+    <div>
+      <Image
+        preview={false}
+        src="https://chippou.github.io/assets/images/clients/angularjs_logo.png"
+        width={200}
+      />
+    </div>
+    <div>
+      <Image
+        preview={false}
+        src="https://chippou.github.io/assets/images/clients/angularjs_logo.png"
+        width={200}
+      />
+    </div>
+  </ForwardRef>
+</PartnerAppCarousel__Wrapper>
+`;
