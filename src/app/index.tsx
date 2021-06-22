@@ -54,6 +54,18 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   )
 }
 
+const PublicRoute = ({ component: Component, ...rest }) => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  return (
+    <Route {...rest} render={(props) => (
+      isAuthenticated === false
+        ? <Component {...props} />
+        : <Redirect to='/404' />
+    )} />
+  )
+}
+
 export function App(props) {
   const { i18n } = useTranslation();
 
@@ -86,11 +98,11 @@ export function App(props) {
         <Layout className="site-layout">
           <Content>
             <Switch>
-              <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
-              <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
               <Route component={NotFoundPage} />
