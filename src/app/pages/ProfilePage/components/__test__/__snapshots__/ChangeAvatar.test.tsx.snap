@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChangeAvatar /> should render to match the snapshot 1`] = `
+<React.Fragment>
+  <Spin
+    size="default"
+    spinning={false}
+    tip="Uploading..."
+    wrapperClassName=""
+  >
+    <styled.div>
+      <styled.div>
+        <Image
+          src="no-avatar.png"
+        />
+      </styled.div>
+      <styled.div>
+        <ForwardRef(EditFilled)
+          onClick={[Function]}
+          size={20}
+        />
+        <input
+          accept="image/png, image/jpeg"
+          hidden={true}
+          onChange={[Function]}
+          type="file"
+        />
+      </styled.div>
+    </styled.div>
+  </Spin>
+  <Title
+    level={3}
+    style={
+      Object {
+        "marginTop": "15px",
+      }
+    }
+  />
+</React.Fragment>
+`;

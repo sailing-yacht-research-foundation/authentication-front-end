@@ -1,3 +1,5 @@
 export enum StyleConstants {
-  NAV_BAR_HEIGHT = '4rem',
+  SIDE_BAR_WITH = '250px',
+  NAV_BAR_HEIGHT = '73px',
 }
+
