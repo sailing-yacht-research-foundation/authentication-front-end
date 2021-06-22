@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
+import { media } from 'styles/media';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
@@ -43,6 +44,7 @@ export const LoginForm = (props) => {
       if (user.attributes && user.attributes.email_verified) {
         dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
         dispatch(actions.setIsAuthenticated(true));
+        dispatch(actions.setUser(user));
         history.push('/');
       }
     }).catch(error => {
@@ -93,29 +95,20 @@ export const LoginForm = (props) => {
             <Form.Item
             >
               <SyrfFormButton type="primary" htmlType="submit">
-                Sign In
+                Log In
               </SyrfFormButton>
             </Form.Item>
 
             <ForgotPasswordLinkContainer>
               <Link to="/forgot-password">Forgot password?</Link>
             </ForgotPasswordLinkContainer>
-
-            {/* <div style={{ textAlign: 'right' }}>
-              <Link style={{ display: 'block', marginBottom: '20px' }} to="/forgot-password">Forgot password?</Link>
-             
-              <span style={{ textAlign: 'right', display: 'block', marginTop: '20px' }}>Don't have an account?&nbsp;
-                <Link to="/signup">
-                  Sign Up
-                </Link></span>
-            </div> */}
           </Form>
         </FormWrapper>
 
         <SignupContainer>
           <GreyTitle>Don't have an account</GreyTitle>
 
-          <SyrfSignupButton>
+          <SyrfSignupButton onClick={() => history.push('/signup')}>
             Sign Up
           </SyrfSignupButton>
         </SignupContainer>
@@ -127,11 +120,16 @@ export const LoginForm = (props) => {
 const Wrapper = styled.div`
   background: #EEF5FF;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  // justify-content: center;
   align-items: center;
+  padding-bottom: 50px;
+
+  ${media.medium`
+    height: 100vh;
+    padding-bottom: 0;
+  `};
 `;
 
 const Title = styled.h2`
@@ -146,13 +144,17 @@ const Title = styled.h2`
 `
 
 const FormWrapper = styled.div`
-  width: 460px;
   background: #fff;
   border-radius: 4px;
   padding: 0 60px;
   padding-bottom: 30px;
   margin-top: 61px;
-`
+  width: 100%;
+
+  ${media.medium`
+  width: 460px;
+  `};
+`;
 
 const FormTitle = styled.h3`
   font-family: ${StyleConstants.FONT_OPEN_SANS};
@@ -190,7 +192,7 @@ const SyrfFormButton = styled(Button)`
   max-width: 360px;
   height: 36px;
   border-radius: 4px;
-  background:  ${(props: { background: string }) => props.background ? props.background : '#348BCD'};
+  background:  #348BCD;
   font-family: ${StyleConstants.FONT_OPEN_SANS};
   font-size: 14px;
   font-style: normal;
@@ -216,7 +218,7 @@ const ForgotPasswordLinkContainer = styled.div`
 const SignupContainer = styled.div`
   background: #FCF1E9;
   text-align: center;
-  padding-top: 30px;
+  padding: 0 60px;
   padding-bottom: 40px;
 `
 
@@ -229,6 +231,7 @@ const GreyTitle = styled.h3`
   letter-spacing: 0em;
   text-align: center;
   color: #7A7A7A;
+  padding-top: 30px;
 `
 
 const SyrfSignupButton = styled(Button)`
@@ -246,5 +249,7 @@ const SyrfSignupButton = styled(Button)`
 
   &:hover {
     background: #DB6E1E;
+    color: #fff;
+    border-color: #DB6E1E;
   } 
 `

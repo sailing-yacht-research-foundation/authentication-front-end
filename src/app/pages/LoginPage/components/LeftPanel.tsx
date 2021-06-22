@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import BG from '../assets/sail.webp';
 import PartnerLogo from '../assets/dummy-logo.svg';
+import { media } from 'styles/media';
 
 export const LeftPanel = () => {
     return (
@@ -12,7 +13,8 @@ export const LeftPanel = () => {
             </Description>
 
             <PartnerPlaceHolder>
-                <PartnerLogoImage src={`${PartnerLogo}`}/>
+                <PartnerLogoImage src={PartnerLogo}/>
+                <PartnerLogoImage src={PartnerLogo}/>
                 <PartnerLogoImage src={PartnerLogo}/>
                 <PartnerLogoImage src={PartnerLogo}/>
                 <PartnerLogoImage src={PartnerLogo}/>
@@ -47,8 +49,10 @@ const Description = styled.p`
 
 const PartnerPlaceHolder = styled.div`
     display: flex;
+    margin-top: 163px;
+    justify-content:center;
 `
 
-const PartnerLogoImage = styled.image`
-
+const PartnerLogoImage = styled.img`
+    margin: 0 15px;
 `

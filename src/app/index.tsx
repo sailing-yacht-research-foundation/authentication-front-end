@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as React from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import classNames from 'classnames';
 
 import { GlobalStyle } from '../styles/global-styles';
 
@@ -21,23 +22,27 @@ import { SignupPage } from './pages/SignupPage/Loadable';
 import { HomePage } from './pages/HomePage/Loadable';
 import { VerifyAccountPage } from './pages/VerifyAccountPage/Loadable';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
-import { useTranslation } from 'react-i18next';
+import { ChangePasswordPage } from './pages/ChangePasswordPage/Loadable';
+import { ProfilePage } from './pages/ProfilePage/Loadable';
 
-import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 
 import Amplify from 'aws-amplify';
 import config from '../aws-exports';
 
 import { Layout } from 'antd';
-import { HeaderContent } from './components/HeaderContent';
 import { SideMenu } from './components/SideMenu';
+import { loginActions } from './pages/LoginPage/slice';
+import { Header } from './components/Header';
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 Amplify.configure(config);
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
   return (
     <Route {...rest} render={(props) => (
       isAuthenticated === true
@@ -49,21 +54,23 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 export function App(props) {
   const { i18n } = useTranslation();
+
+  const dispatch = useDispatch();
+
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  React.useEffect(() => {
+    if (isAuthenticated)
+      dispatch(loginActions.getUser());
+  }, []);
 
   return (
     <BrowserRouter>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'center' }}>
-          <HeaderContent />
-        </Header>
+        <Header/>
         { isAuthenticated && <SideMenu/> }
         <Content
-          className="site-layout-background"
-          style={{
-            margin: '24px 16px',
-            minHeight: 280,
-          }}
+          className={classNames({ 'site-content': isAuthenticated })}
         >
           <Switch>
             <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
@@ -71,6 +78,8 @@ export function App(props) {
             <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
             <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
             <Route exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
+            <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
+            <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
             <Route component={NotFoundPage} />
           </Switch>
           <ToastContainer />

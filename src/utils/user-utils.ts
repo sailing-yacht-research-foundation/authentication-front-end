@@ -1,0 +1,16 @@
+import NoAvatar from 'app/components/NavBar/assets/no-avatar.png';
+
+export const getUserAttribute = (user, attribute: string) => {
+    if (user && user.attributes && user.attributes[attribute]) {
+        return user.attributes[attribute];
+    }
+
+    return null;
+}
+
+export const getProfilePicture = (user) => {
+    const picture = getUserAttribute(user, 'picture');
+    if (picture) return process.env.REACT_APP_BUCKET_URL + picture;
+
+    return NoAvatar;
+}
