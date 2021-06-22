@@ -155,4 +155,9 @@ export const GlobalStyle = createGlobalStyle`
     line-hight: 47px !important;
   }
   
+  .syrf-datepicker {
+    border-radius: 10px;
+    border: 1px solid #4F61A6;
+    height: 36px;
+  }
 `;

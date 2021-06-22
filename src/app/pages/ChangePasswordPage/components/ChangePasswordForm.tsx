@@ -1,59 +1,90 @@
 import * as React from 'react';
-import { Input, Form, Button, Row } from 'antd';
+import { Form, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import { selectUser } from 'app/pages/LoginPage/slice/selectors';
-
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-};
-
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-};
+import {
+    SyrfFormWrapper,
+    SyrfSubmitButton,
+    SyrfFormTitle,
+    SyrfFieldLabel,
+    SyrfPasswordInputField
+} from 'app/components/SyrfForm';
+import styled from 'styled-components';
+import { useState } from 'react';
+import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
 
 export const ChangePasswordForm = (props) => {
-    const user = useSelector(selectUser);
+    const [form] = Form.useForm();
+
+    const [isChangingPassword, setIsChangingPassword] = useState<boolean>(false);
 
     const onFinish = (values) => {
         const { oldPassword, newPassword } = values;
 
-        Auth.changePassword(user, oldPassword, newPassword).then(response => {
-            toast.success('Password changed successfully');
+        setIsChangingPassword(true);
+        Auth.currentAuthenticatedUser().then(user => {
+            Auth.changePassword(user, oldPassword, newPassword).then(response => {
+                toast.success('Password changed successfully');
+                form.resetFields();
+                setIsChangingPassword(false);
+            }).catch(error => {
+                toast.error(error.message);
+                setIsChangingPassword(false);
+            })
         }).catch(error => {
             toast.error(error.message);
-        }) 
+            setIsChangingPassword(false);
+        })
     }
 
     return (
-        <Form
-            {...layout}
-            name="basic"
-            onFinish={onFinish}
-        >
-            <Form.Item
-                label="Old password"
-                name="oldPassword"
-                rules={[{ required: true, max: 16, min: 8 }]}
-            >
-                <Input.Password />
-            </Form.Item>
+        <Wrapper>
+            <ProfileTabs />
+            <SyrfFormWrapper style={{ marginTop: '50px'}}>
+                <Spin spinning={isChangingPassword}>
+                    <SyrfFormTitle>Change Your Password</SyrfFormTitle>
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        name="basic"
+                        onFinish={onFinish}
+                        initialValues={{
+                            newPassword: '',
+                            oldPassword: '',
+                        }}
+                    >
+                        <Form.Item
+                            label={<SyrfFieldLabel>Old Password</SyrfFieldLabel>}
+                            name="oldPassword"
+                            rules={[{ required: true, max: 16, min: 8 }]}
+                        >
+                            <SyrfPasswordInputField />
+                        </Form.Item>
 
-            <Form.Item
-                label="New password"
-                name="newPassword"
-                rules={[{ required: true, max: 16, min: 8 }]}
-            >
-                <Input.Password />
-            </Form.Item>
+                        <Form.Item
+                            label={<SyrfFieldLabel>New Password</SyrfFieldLabel>}
+                            name="newPassword"
+                            rules={[{ required: true, max: 16, min: 8 }]}
+                        >
+                            <SyrfPasswordInputField />
+                        </Form.Item>
 
-            <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
-                    Change password
-                    </Button>
-            </Form.Item>
-        </Form>
+                        <Form.Item>
+                            <SyrfSubmitButton type="primary" htmlType="submit">
+                                Change password
+                            </SyrfSubmitButton>
+                        </Form.Item>
+                    </Form>
+                </Spin>
+            </SyrfFormWrapper>
+        </Wrapper>
     );
 }
+
+const Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 132px;
+    align-items: center;
+    width: 100%;
+`;

@@ -74,7 +74,7 @@ export const ChangeAvatar = (props) => {
                     </ChangeAvatarButton>
                 </Wrapper>
             </Spin>
-            <Typography.Title style={{ marginTop: '15px' }} level={3}>{getUserAttribute(authUser, 'name')}</Typography.Title>
+            <Typography.Title style={{ marginTop: '15px', textAlign: 'center' }} level={3}>{getUserAttribute(authUser, 'name')}</Typography.Title>
         </>
     )
 }
@@ -97,4 +97,5 @@ const AvatarHolder = styled.div`
     height: 150px;
     border-radius: 50%;
     overflow:hidden;
+    border: 1px solid #4F61A5;
 `

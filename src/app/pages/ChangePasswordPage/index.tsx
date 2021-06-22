@@ -5,7 +5,7 @@ import { ChangePasswordForm } from './components/ChangePasswordForm';
 export const ChangePasswordPage = (props) => {
 
   return (
-    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+    <Row justify="center" align="top" style={{ minHeight: '100vh', background: '#E5E5E5' }}>
       <ChangePasswordForm/>
     </Row>
   );

@@ -9,17 +9,9 @@ import { toast } from 'react-toastify';
 import moment, { Moment } from 'moment';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
+import { SyrfFormButton } from 'app/components/SyrfForm';
 
 const { Option } = Select;
-
-const layout = {
-    labelCol: { sm: 24, md: 8, lg: 6 },
-    wrapperCol: { sm: 24, md: 16, lg: 18 }
-};
-
-const tailLayout = {
-    wrapperCol: { xs: { span: 24 }, sm: { span: 12, offset: 12 }, md: { span: 12, offset: 8 }, lg: { span: 12, offset: 6 } }
-};
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -88,7 +80,7 @@ export const SignupForm = () => {
     return (
         <Spin spinning={isSigningUp} tip="Signing you up...">
             <Form
-                {...layout}
+                layout={'vertical'}
                 name="basic"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
@@ -208,7 +200,7 @@ export const SignupForm = () => {
 
                 <Divider />
 
-                <Form.Item {...tailLayout} name="eula_agree" valuePropName="checked" rules={[
+                <Form.Item name="eula_agree" valuePropName="checked" rules={[
                     {
                         validator: (_, value) =>
                             value ? Promise.resolve() : Promise.reject(new Error('You should accept our EULA.')),
@@ -217,7 +209,7 @@ export const SignupForm = () => {
                     <Checkbox>Agree to <Link to="eula">EULA</Link></Checkbox>
                 </Form.Item>
 
-                <Form.Item {...tailLayout} name="pp_agree" valuePropName="checked" rules={[
+                <Form.Item name="pp_agree" valuePropName="checked" rules={[
                     {
                         validator: (_, value) =>
                             value ? Promise.resolve() : Promise.reject(new Error('You must agree to our privacy policy.')),
@@ -226,7 +218,7 @@ export const SignupForm = () => {
                     <Checkbox value={1}>Agree to <Link to="eula">Privacy policy</Link></Checkbox>
                 </Form.Item>
 
-                <Form.Item {...tailLayout} name="email_not_shared" valuePropName="checked" rules={[
+                <Form.Item name="email_not_shared" valuePropName="checked" rules={[
                     {
                         validator: (_, value) =>
                             value ? Promise.resolve() : Promise.reject(new Error('You must acknowledge that email provided will not be a shared email.')),
@@ -235,10 +227,10 @@ export const SignupForm = () => {
                     <Checkbox value={1}>Acknowledge that email provided will not be a shared email (one email per user).</Checkbox>
                 </Form.Item>
 
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
+                <Form.Item>
+                    <SyrfFormButton type="primary" htmlType="submit">
                         Sign Up
-            </Button>
+                    </SyrfFormButton>
                 </Form.Item>
             </Form>
         </Spin>

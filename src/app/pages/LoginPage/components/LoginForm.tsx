@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { media } from 'styles/media';
+import { SyrfFormButton } from 'app/components/SyrfForm';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
@@ -186,21 +187,6 @@ const SyrfInputPassword = styled(Input.Password)`
     background: #F8F8F8 !important;
   }
 `;
-
-const SyrfFormButton = styled(Button)`
-  width: 100%;
-  max-width: 360px;
-  height: 36px;
-  border-radius: 4px;
-  background:  #348BCD;
-  font-family: ${StyleConstants.FONT_OPEN_SANS};
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 19px;
-  color: #fff;
-
-`
 
 const ForgotPasswordLinkContainer = styled.div`
   display: block;

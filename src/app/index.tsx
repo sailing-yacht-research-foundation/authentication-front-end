@@ -12,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as React from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import classNames from 'classnames';
 
 import { GlobalStyle } from '../styles/global-styles';
 
@@ -33,11 +32,14 @@ import Amplify from 'aws-amplify';
 import config from '../aws-exports';
 
 import { Layout } from 'antd';
-import { SideMenu } from './components/SideMenu';
-import { loginActions } from './pages/LoginPage/slice';
+import { SiderContent } from './components/SiderContent';
+import { UseLoginSlice } from './pages/LoginPage/slice';
 import { Header } from './components/Header';
+import { media } from 'styles/media';
+import styled from 'styled-components';
+import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
 
-const { Content } = Layout;
+const { Sider, Content } = Layout
 Amplify.configure(config);
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -57,35 +59,57 @@ export function App(props) {
 
   const dispatch = useDispatch();
 
+  const { actions } = UseLoginSlice();
+
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  const isSiderToggled = useSelector(selectIsSiderToggled);
 
   React.useEffect(() => {
     if (isAuthenticated)
-      dispatch(loginActions.getUser());
+      dispatch(actions.getUser());
   }, []);
 
   return (
     <BrowserRouter>
-      <Layout className="site-layout">
-        <Header/>
-        { isAuthenticated && <SideMenu/> }
-        <Content
-          className={classNames({ 'site-content': isAuthenticated })}
+      <Layout style={{ minHeight: '100vh' }}>
+        <Header />
+        {isAuthenticated && isSiderToggled  && <StyledSider
+          style={{
+            background: '#4F61A6',
+            zIndex: 10
+          }}
         >
-          <Switch>
-            <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
-            <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
-            <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
-            <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
-            <Route exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
-            <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
-            <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
-            <Route component={NotFoundPage} />
-          </Switch>
-          <ToastContainer />
-        </Content>
+          <SiderContent/>
+        </StyledSider>
+        }
+        <Layout className="site-layout">
+          <Content>
+            <Switch>
+              <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+            <ToastContainer />
+          </Content>
+        </Layout>
       </Layout>
       <GlobalStyle />
     </BrowserRouter>
   );
 }
+
+const StyledSider = styled(Sider)`
+  height: 100vh;
+  position: fixed;
+
+  ${media.medium`
+    position: static;
+  `}
+
+`
