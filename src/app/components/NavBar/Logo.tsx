@@ -4,8 +4,12 @@ import styled from 'styled-components/macro';
 import { ReactComponent as LogoLight } from './assets/logo-light.svg';
 import { ReactComponent as LogoDark } from './assets/logo-dark.svg';
 import { media } from 'styles/media';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 
 export function Logo(props) {
+  
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const StyledLogoDark = styled(LogoDark)`
     display: block;
@@ -13,6 +17,7 @@ export function Logo(props) {
     
     ${media.medium`
       height: auto;
+      display: ${isAuthenticated ? 'none' : 'block'};
     `}
   `;
 
