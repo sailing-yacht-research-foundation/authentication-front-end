@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HomePage /> should render the home page and matchs the snapshot 1`] = `
+<HomePage__Wrapper>
+  <VideoSection />
+  <BenefitCarousel />
+  <PartnerAppCarousel />
+  <Footer />
+</HomePage__Wrapper>
+`;

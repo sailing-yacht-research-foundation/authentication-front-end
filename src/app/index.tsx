@@ -21,24 +21,31 @@ import { SignupPage } from './pages/SignupPage/Loadable';
 import { HomePage } from './pages/HomePage/Loadable';
 import { VerifyAccountPage } from './pages/VerifyAccountPage/Loadable';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { ChangePasswordPage } from './pages/ChangePasswordPage/Loadable';
+import { ProfilePage } from './pages/ProfilePage/Loadable';
 import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
-import { useTranslation } from 'react-i18next';
 
-import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 
 import Amplify from 'aws-amplify';
 import config from '../aws-exports';
 
 import { Layout } from 'antd';
-import { HeaderContent } from './components/HeaderContent';
-import { SideMenu } from './components/SideMenu';
+import { SiderContent } from './components/SiderContent';
+import { UseLoginSlice } from './pages/LoginPage/slice';
+import { Header } from './components/Header';
+import { media } from 'styles/media';
+import styled from 'styled-components';
+import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout
 Amplify.configure(config);
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
   return (
     <Route {...rest} render={(props) => (
       isAuthenticated === true
@@ -48,36 +55,75 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   )
 }
 
+const PublicRoute = ({ component: Component, ...rest }) => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  return (
+    <Route {...rest} render={(props) => (
+      isAuthenticated === false
+        ? <Component {...props} />
+        : <Redirect to='/404' />
+    )} />
+  )
+}
+
 export function App(props) {
   const { i18n } = useTranslation();
+
+  const dispatch = useDispatch();
+
+  const { actions } = UseLoginSlice();
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  const isSiderToggled = useSelector(selectIsSiderToggled);
+
+  React.useEffect(() => {
+    if (isAuthenticated)
+      dispatch(actions.getUser());
+  }, []);
+
   return (
     <BrowserRouter>
-      <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'center' }}>
-          <HeaderContent />
-        </Header>
-        <SideMenu />
-        <Content
-          className="site-layout-background"
+      <Layout style={{ minHeight: '100vh' }}>
+        <Header />
+        {isAuthenticated && isSiderToggled  && <StyledSider
           style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
+            background: '#4F61A6',
+            zIndex: 10
           }}
         >
-          <Switch>
-            <PrivateRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
-            <Route exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
-            <Route exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
-            <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
-            <Route exact path={process.env.PUBLIC_URL + '/forgot-pasword'} component={ForgotPasswordPage} />
-            <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
-            <Route component={NotFoundPage} />
-          </Switch>
-          <ToastContainer />
-        </Content>
+          <SiderContent/>
+        </StyledSider>
+        }
+        <Layout className="site-layout">
+          <Content>
+            <Switch>
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+            <ToastContainer />
+          </Content>
+        </Layout>
       </Layout>
       <GlobalStyle />
     </BrowserRouter>
   );
 }
+
+const StyledSider = styled(Sider)`
+  height: 100vh;
+  position: fixed;
+
+  ${media.medium`
+    position: static;
+  `}
+
+`
