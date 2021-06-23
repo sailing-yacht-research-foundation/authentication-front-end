@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Footer /> should render and matchs the snapshot 1`] = `
+<styled.div>
+  <Title
+    className="text-white"
+    level={3}
+    style={
+      Object {
+        "marginTop": "25px",
+      }
+    }
+  >
+    Are you a developer who wants to use My Sailing Profile?
+  </Title>
+  <Button
+    className="syrf-button"
+    size="large"
+    style={
+      Object {
+        "marginBottom": "20px",
+        "marginTop": "20px",
+      }
+    }
+  >
+    Developers
+  </Button>
+  <Row
+    align="middle"
+    justify="center"
+  >
+    <Col
+      lg={16}
+    >
+      <Row>
+        <Col
+          lg={5}
+        >
+          <Logo
+            style={
+              Object {
+                "marginBottom": "30px",
+              }
+            }
+            type="light"
+          />
+          <span
+            className="text-white"
+          >
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.
+          </span>
+        </Col>
+        <Col
+          lg={14}
+          style={
+            Object {
+              "marginTop": "50px",
+            }
+          }
+          xs={24}
+        >
+          <Row
+            align="middle"
+            justify="center"
+            style={
+              Object {
+                "marginTop": "10px",
+              }
+            }
+          >
+            <a
+              className="text-white"
+              href="https://syrf.io"
+            >
+              SYRF
+            </a>
+          </Row>
+          <Row
+            align="middle"
+            justify="center"
+            style={
+              Object {
+                "marginTop": "10px",
+              }
+            }
+          >
+            <Link
+              className="text-white"
+              to="privacy-policy"
+            >
+              Privacy Policy
+            </Link>
+          </Row>
+          <Row
+            align="middle"
+            justify="center"
+            style={
+              Object {
+                "marginTop": "10px",
+              }
+            }
+          >
+            <Link
+              className="text-white"
+              to="eula"
+            >
+              End user license agreement
+            </Link>
+          </Row>
+        </Col>
+      </Row>
+    </Col>
+  </Row>
+  <Divider />
+  <Row>
+    <styled.div>
+      Copyright (c) 2021 Sailing Yacht Research Foundation
+    </styled.div>
+  </Row>
+</styled.div>
+`;
