@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { Input, Button, DatePicker } from 'antd';
-import PhoneInput from 'react-phone-number-input';
+import PhoneInput from 'react-phone-input-2';
 import { media } from 'styles/media';
 
 export const SyrfFormWrapper = styled.div`
@@ -44,10 +44,6 @@ export const SyrfPasswordInputField = styled(Input)`
 `;
 
 export const SyrfPhoneInput = styled(PhoneInput)`
-    border-radius: 10px;
-    border: 1px solid #4F61A6;
-    height: 36px;
-    padding: 0 7px;
 `;
 
 export const SyrfFieldLabel = styled.label`

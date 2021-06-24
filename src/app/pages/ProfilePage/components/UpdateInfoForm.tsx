@@ -1,4 +1,4 @@
-import 'react-phone-number-input/style.css';
+import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
 import { Form, Divider, Spin, Row, Col, DatePicker } from 'antd';
@@ -40,7 +40,7 @@ export const UpdateInfo = (props) => {
         Auth.currentAuthenticatedUser().then(user => {
             Auth.updateUserAttributes(user, {
                 name: name,
-                phone_number: phone_number,
+                phone_number: '+' + phone_number,
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
                 'custom:sailing_number': sailing_number,
@@ -52,7 +52,7 @@ export const UpdateInfo = (props) => {
                 toast.success('Your profile has been successfully updated!');
                 props.cancelUpdateProfile();
             }).catch(error => {
-                console.log(error);
+                toast.error(error.message);
                 setIsUpdatingProfile(false);
             })
         }).catch(error => {
@@ -165,6 +165,8 @@ export const UpdateInfo = (props) => {
                                     rules={[{ type: 'string' }]}
                                 >
                                     <SyrfPhoneInput
+                                        inputClass="syrf-phone-number-input"
+                                        buttonClass="syrf-flag-dropdown"
                                         placeholder="Enter phone number" />
                                 </Form.Item>
                             </Col>

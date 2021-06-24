@@ -160,4 +160,26 @@ export const GlobalStyle = createGlobalStyle`
     border: 1px solid #4F61A6;
     height: 36px;
   }
+
+  .phone-number-input {
+    width: 100% !important;
+    border-radius: 0 !important;
+    border-color: #d9d9d9 !important;
+    font-family: Inter;
+  }
+
+  .syrf-phone-number-input {
+    border-radius: 10px !important;
+    border: 1px solid #4F61A6 !important;
+    height: 36px !important;
+    font-weight: normal;
+    font-family: Inter;
+    width: 100% !important;
+  }
+
+  .syrf-flag-dropdown {
+    border: 1px solid #4F61A6 !important;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+  }
 `;
