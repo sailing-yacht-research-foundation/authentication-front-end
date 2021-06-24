@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { SelectLanguage } from './components/SelectLanguage';
 import { UserDropdown } from './components/UserDropdown';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { media } from 'styles/media';
 import { useHistory } from 'react-router';
@@ -27,6 +27,8 @@ export const Nav = () => {
 
   const history = useHistory();
 
+  const location = useLocation();
+
   const dispatch = useDispatch();
 
   const toggleSider = () => {
@@ -43,7 +45,13 @@ export const Nav = () => {
     if (isMobile()) {
       dispatch(actions.setIsToggled(false));
     }
-  }, [])
+  }, []);
+
+  React.useEffect(() => {
+    if (isMobile()) {
+      dispatch(actions.setIsToggled(false));
+    }
+  }, [location])
 
   const logout = () => {
     dispatch(loginActions.setLogout());

@@ -201,7 +201,7 @@ export const SignupForm = () => {
                             value ? Promise.resolve() : Promise.reject(new Error('You must agree to our privacy policy.')),
                     },
                 ]}>
-                    <Checkbox value={1}>Agree to <Link to="eula">Privacy policy</Link></Checkbox>
+                    <Checkbox value={1}>Agree to <Link to="privacy-policy">Privacy policy</Link></Checkbox>
                 </Form.Item>
 
                 <Form.Item name="email_not_shared" valuePropName="checked" rules={[
