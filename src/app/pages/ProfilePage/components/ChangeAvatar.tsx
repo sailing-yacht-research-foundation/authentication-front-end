@@ -27,13 +27,13 @@ export const ChangeAvatar = (props) => {
     const onFileChanged = async (e) => {
         e.preventDefault();
         const file = await resizeImage(e.target.files[0]);
-        const avatarFileName = `${String(authUser.username).substring(0, 8)}-profile-picture.png`;
+        const avatarFileName = `${(+ new Date())}-${String(authUser.username).substring(0, 8)}-profile-picture.png`;
 
         setIsUploadingProfilePicture(true);
 
         Storage.put(avatarFileName, file, {
             contentType: "image/png",
-            Acl: "public-read"
+            level: 'public',
         })
             .then(result => {
                 setIsUploadingProfilePicture(false);
