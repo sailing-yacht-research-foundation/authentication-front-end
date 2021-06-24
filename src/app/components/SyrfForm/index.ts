@@ -6,15 +6,14 @@ import { media } from 'styles/media';
 
 export const SyrfFormWrapper = styled.div`
     background: #fff;
-    padding: 0 15px;
+    padding: 50px 15px;
     border-radius: 10px;
-    padding-top: 51px;
     width: 100%;
     padding-bottom: 30px;
 
     ${media.medium`
         width: 55%;
-        padding: 0 56px;
+        padding: 50px 56px;
     `}
 `;
 
