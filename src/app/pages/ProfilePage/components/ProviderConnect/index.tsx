@@ -27,7 +27,7 @@ const ConnectButtonContainer = styled.div`
     border-radius: 50%;
     margin: 0 15px;
     cursor: pointer;
-    border: 1px solid #4F61A6;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
     box-sizing: border-box;
     border-radius: 10px;
     position: relative;
@@ -67,5 +67,5 @@ export const ConnectDisconnectButton = styled.div`
     line-height: 16px;
     letter-spacing: 0.03em;
     text-align: left;
-    color: #4F61A5;
+    color: ${StyleConstants.MAIN_TONE_COLOR};
 `;

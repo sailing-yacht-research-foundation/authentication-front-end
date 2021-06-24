@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import InstagramLogin from 'instagram-login-react';
-import { ConnectButton, ConnectDisconnectButton } from 'app/pages/ProfilePage/components/ProviderConnect';
 import Auth from '@aws-amplify/auth';
 import { toast } from 'react-toastify';
 import {
     InstagramFilled
 } from '@ant-design/icons';
+import { ConnectButton, ConnectDisconnectButton } from 'app/pages/ProfilePage/components/ProviderConnect';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserAttribute } from 'utils/user-utils';
 import { selectIsConnected } from '../slice/selectors';
 import { useInstagramSlice } from '../slice';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import styled from 'styled-components';
 
 const InstagramIntegration = (props) => {
     const isConnected = useSelector(selectIsConnected);
@@ -64,10 +65,7 @@ const InstagramIntegration = (props) => {
             connected={isConnected}
             Color="#3b5998"
             title="Connect To Instgram"
-            icon={<InstagramFilled size={25} style={{
-                marginTop: '20px', fontSize: '30px', background: '-webkit-linear-gradient(#eee, #333)',
-                backgroundClip: 'text'
-            }} />}
+            icon={<StyledInstagramIcon />}
         >
             {!isConnected ? <InstagramLogin
                 clientId="478370613251328"
@@ -85,3 +83,9 @@ const InstagramIntegration = (props) => {
 }
 
 export default InstagramIntegration;
+
+const StyledInstagramIcon = styled(InstagramFilled)`
+    margin-top: 20px;
+    font-size: 30px;
+    color: #E8878C;
+`;

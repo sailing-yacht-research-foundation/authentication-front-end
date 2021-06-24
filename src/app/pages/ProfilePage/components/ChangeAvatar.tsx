@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import { StyleConstants } from 'styles/StyleConstants';
 import { Auth, Storage } from 'aws-amplify';
 import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
-import { EditFilled } from '@ant-design/icons';
+import { CameraFilled } from '@ant-design/icons';
 import { Image, Spin, Typography } from 'antd';
 import { toast } from 'react-toastify';
 import Resizer from "react-image-file-resizer";
+import styled from 'styled-components';
 
 export const ChangeAvatar = (props) => {
     const { authUser } = props;
@@ -69,7 +70,7 @@ export const ChangeAvatar = (props) => {
                         <Image src={getProfilePicture(authUser)} />
                     </AvatarHolder>
                     <ChangeAvatarButton>
-                        <EditFilled onClick={() => triggerChooseAvatar()} size={20} />
+                        <CameraFilled style={{ color: StyleConstants.MAIN_TONE_COLOR, fontSize: '25px' }} onClick={() => triggerChooseAvatar()} size={20} />
                         <input ref={fileUploadRef} accept="image/png, image/jpeg" onChange={onFileChanged} hidden={true} type="file" />
                     </ChangeAvatarButton>
                 </Wrapper>
@@ -97,5 +98,5 @@ const AvatarHolder = styled.div`
     height: 150px;
     border-radius: 50%;
     overflow:hidden;
-    border: 1px solid #4F61A5;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
 `
