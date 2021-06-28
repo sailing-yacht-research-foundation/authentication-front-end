@@ -39,6 +39,8 @@ import config from '../aws-exports';
 import { SiderContent } from './components/SiderContent';
 import { Header } from './components/Header';
 import { StyleConstants } from 'styles/StyleConstants';
+import { isMobile } from 'utils/helper';
+import { useSiderSlice } from './components/SiderContent/slice';
 
 const { Sider, Content } = Layout
 Amplify.configure(config);
@@ -72,7 +74,9 @@ export function App(props) {
 
   const dispatch = useDispatch();
 
-  const { actions } = UseLoginSlice();
+  const loginActions = UseLoginSlice().actions;
+
+  const siderActions = useSiderSlice().actions;
 
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
@@ -80,14 +84,20 @@ export function App(props) {
 
   React.useEffect(() => {
     if (isAuthenticated)
-      dispatch(actions.getUser());
+      dispatch(loginActions.getUser());
   }, []);
+
+  const onSiderCollapsed = () => {
+    dispatch(siderActions.setIsToggled(false));
+  }
 
   return (
     <BrowserRouter>
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
         {isAuthenticated && isSiderToggled  && <StyledSider
+          collapsible={isMobile()}
+          onCollapse={onSiderCollapsed}
           style={{
             background: StyleConstants.MAIN_TONE_COLOR,
             zIndex: 10
