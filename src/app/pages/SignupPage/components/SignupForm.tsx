@@ -3,7 +3,7 @@ import 'react-phone-input-2/lib/style.css';
 import React, { useState } from 'react';
 import { Input, Form, Select, Divider, DatePicker, Checkbox, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
-import { LANGUAGE_BY_LOCALE as locales } from 'utils/locale-list';
+import { languagesList, localesList } from 'utils/languages-util';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
 import moment from 'moment';
@@ -30,7 +30,7 @@ export const SignupForm = () => {
     const [countryCode, setCountryCode] = useState<string>('us');
 
     const onFinish = (values) => {
-        const { email, name, password, locale, phone_number, sailing_number, address, facebook, instagram, twitter, birthdate } = values;
+        const { email, name, password, locale, phone_number, language, address, birthdate } = values;
 
         setIsSigningUp(true);
 
@@ -40,13 +40,10 @@ export const SignupForm = () => {
             attributes: {
                 name: name,
                 locale: locale,
+                language: language,
                 phone_number: '+' + phone_number,
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
-                'custom:sailing_number': String(sailing_number).toLowerCase(),
-                'custom:facebook': facebook,
-                'custom:instagram': instagram,
-                'custom:twitter': twitter,
             }
         }).then(response => {
             let registerSuccess = !!response.user;
@@ -76,10 +73,18 @@ export const SignupForm = () => {
     }
 
     const renderLocaleDropdownList = () => {
-        const objectArray = Object.entries(locales);
+        const objectArray = Object.entries(localesList);
 
         return objectArray.map(([key, value]) => {
             return <Option key={key} value={key.toLowerCase()}>{value}</Option>
+        });
+    }
+
+    const renderLanguegesDropdownList = () => {
+        const objectArray = Object.entries(languagesList);
+
+        return objectArray.map(([key, value]) => {
+            return <Option key={key} value={key.toLowerCase()}>{value.name}</Option>
         });
     }
 
@@ -88,7 +93,16 @@ export const SignupForm = () => {
             <Form
                 layout={'vertical'}
                 name="basic"
-                initialValues={{ remember: true }}
+                initialValues={{
+                    language: 'en',
+                    email: '',
+                    name: '',
+                    password: '',
+                    locale: 'us',
+                    birthdate: moment('2002-01-01'),
+                    address: '',
+                    phone_number: ''
+                }}
                 onFinish={onFinish}
             >
                 <Form.Item
@@ -116,11 +130,11 @@ export const SignupForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Country / Language"
+                    label="Country"
                     name="locale"
                     rules={[{ required: true }]}
                 >
-                    <Select placeholder={'Select a language'}
+                    <Select placeholder={'Select a country'}
                         showSearch
                         onSelect={onLocaleSelected}
                         filterOption={(input, option) => {
@@ -138,32 +152,36 @@ export const SignupForm = () => {
                     </Select>
                 </Form.Item>
 
-                <Divider />
-
                 <Form.Item
-                    label="Phone Number"
-                    name="phone_number"
-                    rules={[{ type: 'string' }]}
+                    label="Language"
+                    name="language"
+                    rules={[{ required: true }]}
                 >
-                    <PhoneInput country={countryCode} inputClass="phone-number-input"
-                        placeholder="Enter phone number" />
-                </Form.Item>
+                    <Select placeholder={'Select a Language'}
+                        showSearch
+                        onSelect={onLocaleSelected}
+                        filterOption={(input, option) => {
+                            if (option) {
+                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
 
-                <Form.Item
-                    label="Address"
-                    name="address"
-                >
-                    <Input />
+                            return false;
+                        }}
+                    >
+                        {
+                            renderLanguegesDropdownList()
+                        }
+                    </Select>
                 </Form.Item>
 
                 <Form.Item
                     label="Date Of Birth"
                     name="birthdate"
-                    rules={[{ type: 'date' }]}
+                    rules={[{ type: 'date', required: true }]}
                 >
                     <DatePicker
                         ref="datePickerRef"
-                        defaultValue={moment('2002-01-01')}
                         showToday={false}
                         style={{ width: '100%' }}
                         disabledDate={current => {
@@ -182,6 +200,24 @@ export const SignupForm = () => {
                             );
                         }}
                     />
+                </Form.Item>
+
+                <Divider />
+
+                <Form.Item
+                    label="Address"
+                    name="address"
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    label="Phone Number"
+                    name="phone_number"
+                    rules={[{ type: 'string' }]}
+                >
+                    <PhoneInput country={countryCode} inputClass="phone-number-input"
+                        placeholder="Enter phone number" />
                 </Form.Item>
 
                 <Divider />
