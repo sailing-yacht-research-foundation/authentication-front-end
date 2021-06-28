@@ -8,14 +8,14 @@
     }
   },
   "storage": {
-    "syrfstorage": {
+    "s3daabcfe9": {
       "service": "S3",
       "providerPlugin": "awscloudformation"
     }
   },
-  "storage": {
-    "s3daabcfe9": {
-      "service": "S3",
+  "hosting": {
+    "S3AndCloudFront": {
+      "service": "S3AndCloudFront",
       "providerPlugin": "awscloudformation"
     }
   }

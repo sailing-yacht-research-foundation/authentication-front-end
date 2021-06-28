@@ -33,11 +33,11 @@ import Amplify from 'aws-amplify';
 import config from '../aws-exports';
 
 import { Layout } from 'antd';
-import { HeaderContent } from './components/HeaderContent';
 import { SideMenu } from './components/SideMenu';
 import { loginActions } from './pages/LoginPage/slice';
+import { Header } from './components/Header';
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 Amplify.configure(config);
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -67,9 +67,7 @@ export function App(props) {
   return (
     <BrowserRouter>
       <Layout className="site-layout">
-        <Header className="site-header">
-          <HeaderContent />
-        </Header>
+        <Header/>
         { isAuthenticated && <SideMenu/> }
         <Content
           className={classNames({ 'site-content': isAuthenticated })}
