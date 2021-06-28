@@ -1,26 +1,26 @@
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { Input, Button, DatePicker } from 'antd';
-import PhoneInput from 'react-phone-number-input';
+import PhoneInput from 'react-phone-input-2';
 import { media } from 'styles/media';
 
 export const SyrfFormWrapper = styled.div`
     background: #fff;
-    padding: 0 56px;
+    padding: 50px 15px;
     border-radius: 10px;
-    padding-top: 51px;
     width: 100%;
     padding-bottom: 30px;
 
     ${media.medium`
         width: 55%;
+        padding: 50px 56px;
     `}
 `;
 
 export const SyrfSubmitButton = styled(Button)`
     width: 100%;
     padding: 20px 0;
-    background: #4F61A5;
+    background: ${StyleConstants.MAIN_TONE_COLOR};
     font-family: ${StyleConstants.FONT_ROBOTO};
     font-size: 18px;
     font-style: normal;
@@ -34,20 +34,16 @@ export const SyrfSubmitButton = styled(Button)`
 
 export const SyrfInputField = styled(Input)`
     border-radius: 10px;
-    border: 1px solid #4F61A6;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
     height: 36px;
 `;
 
 export const SyrfPasswordInputField = styled(Input)`
     border-radius: 10px;
-    border: 1px solid #4F61A6;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
 `;
 
 export const SyrfPhoneInput = styled(PhoneInput)`
-    border-radius: 10px;
-    border: 1px solid #4F61A6;
-    height: 36px;
-    padding: 0 7px;
 `;
 
 export const SyrfFieldLabel = styled.label`

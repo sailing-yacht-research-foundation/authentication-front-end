@@ -21,7 +21,10 @@ export function ForgotPasswordForm(props) {
 
   const sendForgotPasswordCode = (email) => {
     Auth.forgotPassword(email)
-      .then(data => setRequestedResetPassword(true))
+      .then(data => {
+        setRequestedResetPassword(true)
+        toast.success('Confirmation code sent!');
+      })
       .catch(err => toast.error(err.message));
   }
 

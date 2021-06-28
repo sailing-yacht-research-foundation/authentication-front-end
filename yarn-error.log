@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js add moment
+  /usr/bin/node /usr/share/yarn/bin/yarn.js add react-phone-number-input
 
 PATH: 
   /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/dat/code/authentication-front-end/node_modules/@ant-design/colors/LICENSE'
+  Error: EACCES: permission denied, unlink '/home/dat/code/authentication-front-end/node_modules/.bin/acorn'
 
 npm manifest: 
   {
@@ -41,6 +41,7 @@ npm manifest:
       "@types/webpack-env": "1.15.2",
       "antd": "^4.15.6",
       "aws-amplify": "^4.0.2",
+      "axios": "^0.21.1",
       "chalk": "4.1.0",
       "classnames": "^2.3.1",
       "cross-env": "7.0.2",
@@ -54,23 +55,29 @@ npm manifest:
       "i18next-scanner": "2.11.0",
       "inquirer": "7.3.3",
       "inquirer-directory": "2.2.0",
+      "instagram-login-react": "^2.0.0",
       "jest-styled-components": "7.0.3",
       "lint-staged": "10.3.0",
+      "moment": "^2.29.1",
       "node-plop": "0.26.2",
       "plop": "2.7.4",
       "prettier": "2.1.1",
       "react": "16.13.1",
       "react-app-polyfill": "1.0.6",
       "react-dom": "16.13.1",
+      "react-facebook-login": "^4.1.1",
       "react-helmet-async": "1.0.6",
       "react-i18next": "11.7.2",
       "react-image-file-resizer": "^0.4.4",
+      "react-instagram-login": "^1.4.0",
       "react-phone-number-input": "^3.1.23",
       "react-redux": "7.2.1",
+      "react-responsive-carousel": "^3.2.18",
       "react-router-dom": "5.2.0",
       "react-scripts": "4.0.3",
       "react-test-renderer": "16.13.1",
       "react-toastify": "^7.0.4",
+      "react-twitter-login": "^1.4.0",
       "redux-injectors": "1.3.0",
       "redux-saga": "1.1.3",
       "replace-in-file": "6.1.0",
@@ -153,7 +160,8 @@ npm manifest:
           "statements": 90
         }
       }
-    }
+    },
+    "devDependencies": {}
   }
 
 yarn manifest: 
@@ -4740,7 +4748,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.1.2.tgz#7cf783331320098bfbef620df3b3c770147bc224"
     integrity sha512-V+Nq70NxKhYt89ArVcaNL9FDryB3vQOd+BFXZIfO3RP6rwtj+2yqqqdHEkacutglPaZLkJeuXKCjCJDMGPtPqg==
   
-  axios@0.21.1:
+  axios@0.21.1, axios@^0.21.1:
     version "0.21.1"
     resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
     integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -6182,6 +6190,11 @@ Lockfile:
       public-encrypt "^4.0.0"
       randombytes "^2.0.0"
       randomfill "^1.0.3"
+  
+  crypto-js@^3.1.9-1:
+    version "3.3.0"
+    resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
+    integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
   
   crypto-js@^4.0.0:
     version "4.0.0"
@@ -8945,6 +8958,11 @@ Lockfile:
       strip-ansi "^3.0.0"
       through "^2.3.6"
   
+  instagram-login-react@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/instagram-login-react/-/instagram-login-react-2.0.0.tgz#b83940f5e724a5378897c17e22cecbeb8ff51ad2"
+    integrity sha512-m0RVwTQuLyWJ/WJXO+6L2HPNvtOUKaqyNLjBSNv26M0QsZ4nbSg2MnOyZgIfwmXi7dLMXZqwCEEEjcu9kccMvQ==
+  
   internal-ip@^4.3.0:
     version "4.3.0"
     resolved "https://registry.yarnpkg.com/internal-ip/-/internal-ip-4.3.0.tgz#845452baad9d2ca3b69c635a137acb9a0dad0907"
@@ -10911,7 +10929,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
     integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
   
-  moment@^2.24.0, moment@^2.25.3:
+  moment@^2.24.0, moment@^2.25.3, moment@^2.29.1:
     version "2.29.1"
     resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
     integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
@@ -12735,7 +12753,7 @@ Lockfile:
       kleur "^3.0.3"
       sisteransi "^1.0.5"
   
-  prop-types@^15.6.2, prop-types@^15.7.2:
+  prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
     integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -13331,10 +13349,22 @@ Lockfile:
       prop-types "^15.6.2"
       scheduler "^0.19.1"
   
+  react-easy-swipe@^0.0.21:
+    version "0.0.21"
+    resolved "https://registry.yarnpkg.com/react-easy-swipe/-/react-easy-swipe-0.0.21.tgz#ce9384d576f7a8529dc2ca377c1bf03920bac8eb"
+    integrity sha512-OeR2jAxdoqUMHIn/nS9fgreI5hSpgGoL5ezdal4+oO7YSSgJR8ga+PkYGJrSrJ9MKlPcQjMQXnketrD7WNmNsg==
+    dependencies:
+      prop-types "^15.5.8"
+  
   react-error-overlay@^6.0.9:
     version "6.0.9"
     resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
     integrity sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==
+  
+  react-facebook-login@^4.1.1:
+    version "4.1.1"
+    resolved "https://registry.yarnpkg.com/react-facebook-login/-/react-facebook-login-4.1.1.tgz#005121236a6ac0dee02099976fb1a3265f9d633e"
+    integrity sha512-COnHEHlYGTKipz4963safFAK9PaNTcCiXfPXMS/yxo8El+/AJL5ye8kMJf23lKSSGGPgqFQuInskIHVqGqTvSw==
   
   react-fast-compare@^3.0.1:
     version "3.2.0"
@@ -13364,6 +13394,11 @@ Lockfile:
     version "0.4.4"
     resolved "https://registry.yarnpkg.com/react-image-file-resizer/-/react-image-file-resizer-0.4.4.tgz#07d47d795e07a8a9850d480765c618686a4af4dd"
     integrity sha512-qSZ5VJwWDkFan8IKCxDZqkAlQ6OW+mIDQLA9Y8T6/mLNUbHfnl3kjTpUWACeuh7cyPDXr1i6/GjlinyI75rBmQ==
+  
+  react-instagram-login@^1.4.0:
+    version "1.4.0"
+    resolved "https://registry.yarnpkg.com/react-instagram-login/-/react-instagram-login-1.4.0.tgz#c2419d1569a0144f0220de17e0fc3294545218ae"
+    integrity sha512-iXVYm7bvHdVsjNOmCvHDbf3DIegYg/wH2khL8nA1LGAd5WoTcauOwaZNzMtQkRm4jkfbmbUORPV4fa7kEL4bnw==
   
   react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6, react-is@^16.9.0:
     version "16.13.1"
@@ -13408,6 +13443,15 @@ Lockfile:
     version "0.8.3"
     resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
     integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
+  
+  react-responsive-carousel@^3.2.18:
+    version "3.2.18"
+    resolved "https://registry.yarnpkg.com/react-responsive-carousel/-/react-responsive-carousel-3.2.18.tgz#5e44b3aab6c482c63cd1c6045ea48c97b49a69b9"
+    integrity sha512-A6eXp/HofjZ8p23Q/b25dqtokHFFXKhKKn82ZJkCI0edxjtAUid8SImr8rHp0rRi9aEYXej3ynWOzaUHFE4RKA==
+    dependencies:
+      classnames "^2.2.5"
+      prop-types "^15.5.8"
+      react-easy-swipe "^0.0.21"
   
   react-router-dom@5.2.0:
     version "5.2.0"
@@ -13520,6 +13564,13 @@ Lockfile:
     integrity sha512-Rol7+Cn39hZp5hQ/k6CbMNE2CKYV9E5OQdC/hBLtIQU2xz7DdAm7xil4NITQTHR6zEbE5RVFbpgSwTD7xRGLeQ==
     dependencies:
       clsx "^1.1.1"
+  
+  react-twitter-login@^1.4.0:
+    version "1.4.0"
+    resolved "https://registry.yarnpkg.com/react-twitter-login/-/react-twitter-login-1.4.0.tgz#554051b27b9f6c15fe31fec6e7315b72554aed36"
+    integrity sha512-b688EnR3r7/g16qZmJsbUnAq3oDTAmV6fekVQ+CA+K1skTtrD74jkcft7OokcXExVPJenarTFuwmambUnRv9wA==
+    dependencies:
+      crypto-js "^3.1.9-1"
   
   react@16.13.1:
     version "16.13.1"

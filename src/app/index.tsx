@@ -12,6 +12,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as React from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { Layout } from 'antd';
+import { media } from 'styles/media';
+import styled from 'styled-components';
 
 import { GlobalStyle } from '../styles/global-styles';
 
@@ -24,21 +27,22 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ChangePasswordPage } from './pages/ChangePasswordPage/Loadable';
 import { ProfilePage } from './pages/ProfilePage/Loadable';
 import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
+import { EULAPage } from './pages/EULAPage/Loadable';
 
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
+import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
+import { UseLoginSlice } from './pages/LoginPage/slice';
 
 import Amplify from 'aws-amplify';
 import config from '../aws-exports';
 
-import { Layout } from 'antd';
 import { SiderContent } from './components/SiderContent';
-import { UseLoginSlice } from './pages/LoginPage/slice';
 import { Header } from './components/Header';
-import { media } from 'styles/media';
-import styled from 'styled-components';
-import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
+import { StyleConstants } from 'styles/StyleConstants';
+import { isMobile } from 'utils/helper';
+import { useSiderSlice } from './components/SiderContent/slice';
 
 const { Sider, Content } = Layout
 Amplify.configure(config);
@@ -72,7 +76,9 @@ export function App(props) {
 
   const dispatch = useDispatch();
 
-  const { actions } = UseLoginSlice();
+  const loginActions = UseLoginSlice().actions;
+
+  const siderActions = useSiderSlice().actions;
 
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
@@ -80,16 +86,22 @@ export function App(props) {
 
   React.useEffect(() => {
     if (isAuthenticated)
-      dispatch(actions.getUser());
+      dispatch(loginActions.getUser());
   }, []);
+
+  const onSiderCollapsed = () => {
+    dispatch(siderActions.setIsToggled(false));
+  }
 
   return (
     <BrowserRouter>
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
         {isAuthenticated && isSiderToggled  && <StyledSider
+          collapsible={isMobile()}
+          onCollapse={onSiderCollapsed}
           style={{
-            background: '#4F61A6',
+            background: StyleConstants.MAIN_TONE_COLOR,
             zIndex: 10
           }}
         >
@@ -107,6 +119,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
@@ -125,5 +138,4 @@ const StyledSider = styled(Sider)`
   ${media.medium`
     position: static;
   `}
-
-`
+`;
