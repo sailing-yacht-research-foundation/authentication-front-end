@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { Logo } from '../NavBar/Logo';
 import { Nav } from '../NavBar/Nav';
 import { media } from 'styles/media';
+import { SiderToggle } from '../NavBar/SiderToggle';
 
 export const HeaderContent = (props) => {
     return (
         <Wrapper>
-            <Logo type="dark" />
+            <SiderToggle />
+            <Logo type="dark" align="left" />
             <Nav />
         </Wrapper>
     )

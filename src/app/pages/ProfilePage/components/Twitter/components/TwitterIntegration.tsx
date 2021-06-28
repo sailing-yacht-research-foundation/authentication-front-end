@@ -1,9 +1,9 @@
-import { ConnectButton } from 'app/components/ConnectButton';
 import React from 'react';
 import TwitterLogin from "react-twitter-login";
 import {
     TwitterCircleFilled
 } from '@ant-design/icons';
+import { ConnectButton, ConnectDisconnectButton } from 'app/pages/ProfilePage/components/ProviderConnect';
 
 const TwitterIntegration = () => {
 
@@ -12,17 +12,22 @@ const TwitterIntegration = () => {
     }
 
     return (
-        <>
+        <ConnectButton
+            bgColor="#00ACEE"
+            providerTitle="Twitter"
+            title="Connect to Twitter"
+            connected={false}
+            icon={<TwitterCircleFilled style={{ marginTop: '20px', color: '#00aece', fontSize: '30px' }} />}>
             <TwitterLogin
                 authCallback={onTwitterCallback}
                 consumerKey={'key'}
                 className="connect-btn"
                 consumerSecret={'key'}
-            />
-            <ConnectButton bgColor="#00ACEE" title="Connect to Twitter">
-                <TwitterCircleFilled style={{ color: '#fff', fontSize:'25px' }}/>
-            </ConnectButton>
-        </>
+
+            >
+            </TwitterLogin>
+            <ConnectDisconnectButton>Connect</ConnectDisconnectButton>
+        </ConnectButton>
     );
 }
 

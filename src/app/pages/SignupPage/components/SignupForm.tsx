@@ -1,12 +1,12 @@
-import 'react-phone-number-input/style.css'
+import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Input, Form, Button, Select, Divider, DatePicker, Checkbox, Spin } from 'antd';
+import { Input, Form, Select, Divider, DatePicker, Checkbox, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
-import { LANGUAGE_BY_LOCALE as locales } from 'utils/locale-list';
-import PhoneInput from 'react-phone-number-input';
+import { languagesList, localesList } from 'utils/languages-util';
+import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { SyrfFormButton } from 'app/components/SyrfForm';
@@ -27,8 +27,10 @@ export const SignupForm = () => {
 
     const history = useHistory();
 
+    const [countryCode, setCountryCode] = useState<string>('us');
+
     const onFinish = (values) => {
-        const { email, name, password, locale, phone_number, sailing_number, address, facebook, instagram, twitter, birthdate } = values;
+        const { email, name, password, locale, phone_number, language, address, birthdate } = values;
 
         setIsSigningUp(true);
 
@@ -38,13 +40,10 @@ export const SignupForm = () => {
             attributes: {
                 name: name,
                 locale: locale,
-                phone_number: phone_number,
+                language: language,
+                phone_number: '+' + phone_number,
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
-                'custom:sailing_number': String(sailing_number).toLowerCase(),
-                'custom:facebook': facebook,
-                'custom:instagram': instagram,
-                'custom:twitter': twitter,
             }
         }).then(response => {
             let registerSuccess = !!response.user;
@@ -69,11 +68,23 @@ export const SignupForm = () => {
         })
     }
 
+    const onLocaleSelected = (locale) => {
+        setCountryCode(locale);
+    }
+
     const renderLocaleDropdownList = () => {
-        const objectArray = Object.entries(locales);
+        const objectArray = Object.entries(localesList);
 
         return objectArray.map(([key, value]) => {
-            return <Option key={key} value={key}>{value}</Option>
+            return <Option key={key} value={key.toLowerCase()}>{value}</Option>
+        });
+    }
+
+    const renderLanguegesDropdownList = () => {
+        const objectArray = Object.entries(languagesList);
+
+        return objectArray.map(([key, value]) => {
+            return <Option key={key} value={key.toLowerCase()}>{value.name}</Option>
         });
     }
 
@@ -82,7 +93,16 @@ export const SignupForm = () => {
             <Form
                 layout={'vertical'}
                 name="basic"
-                initialValues={{ remember: true }}
+                initialValues={{
+                    language: 'en',
+                    email: '',
+                    name: '',
+                    password: '',
+                    locale: 'us',
+                    birthdate: moment('2002-01-01'),
+                    address: '',
+                    phone_number: ''
+                }}
                 onFinish={onFinish}
             >
                 <Form.Item
@@ -110,43 +130,58 @@ export const SignupForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Locale"
+                    label="Country"
                     name="locale"
                     rules={[{ required: true }]}
                 >
-                    <Select placeholder={'Select a locale'}>
+                    <Select placeholder={'Select a country'}
+                        showSearch
+                        onSelect={onLocaleSelected}
+                        filterOption={(input, option) => {
+                            if (option) {
+                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+
+                            return false;
+                        }}
+                    >
                         {
                             renderLocaleDropdownList()
                         }
                     </Select>
                 </Form.Item>
 
-                <Divider />
-
                 <Form.Item
-                    label="Phone Number"
-                    name="phone_number"
-                    rules={[{ type: 'string' }]}
+                    label="Language"
+                    name="language"
+                    rules={[{ required: true }]}
                 >
-                    <PhoneInput className="ant-input"
-                        placeholder="Enter phone number" />
-                </Form.Item>
+                    <Select placeholder={'Select a Language'}
+                        showSearch
+                        onSelect={onLocaleSelected}
+                        filterOption={(input, option) => {
+                            if (option) {
+                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
 
-                <Form.Item
-                    label="Address"
-                    name="address"
-                >
-                    <Input />
+                            return false;
+                        }}
+                    >
+                        {
+                            renderLanguegesDropdownList()
+                        }
+                    </Select>
                 </Form.Item>
 
                 <Form.Item
                     label="Date Of Birth"
                     name="birthdate"
-                    rules={[{ type: 'date' }]}
+                    rules={[{ type: 'date', required: true }]}
                 >
                     <DatePicker
                         ref="datePickerRef"
-                        defaultValue={moment('2002-01-01')}
                         showToday={false}
                         style={{ width: '100%' }}
                         disabledDate={current => {
@@ -167,35 +202,22 @@ export const SignupForm = () => {
                     />
                 </Form.Item>
 
+                <Divider />
+
                 <Form.Item
-                    label="Sailing Number"
-                    name="sailing_number"
+                    label="Address"
+                    name="address"
                 >
                     <Input />
                 </Form.Item>
 
                 <Form.Item
-                    label="Facebook profile"
-                    name="facebook"
-                    rules={[{ type: 'url' }]}
+                    label="Phone Number"
+                    name="phone_number"
+                    rules={[{ type: 'string' }]}
                 >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    label="Instagram profile"
-                    name="instagram"
-                    rules={[{ type: 'url' }]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    label="Twitter profile"
-                    name="twitter"
-                    rules={[{ type: 'url' }]}
-                >
-                    <Input />
+                    <PhoneInput country={countryCode} inputClass="phone-number-input"
+                        placeholder="Enter phone number" />
                 </Form.Item>
 
                 <Divider />
@@ -215,7 +237,7 @@ export const SignupForm = () => {
                             value ? Promise.resolve() : Promise.reject(new Error('You must agree to our privacy policy.')),
                     },
                 ]}>
-                    <Checkbox value={1}>Agree to <Link to="eula">Privacy policy</Link></Checkbox>
+                    <Checkbox value={1}>Agree to <Link to="privacy-policy">Privacy policy</Link></Checkbox>
                 </Form.Item>
 
                 <Form.Item name="email_not_shared" valuePropName="checked" rules={[

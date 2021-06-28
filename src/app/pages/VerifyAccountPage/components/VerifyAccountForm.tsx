@@ -33,6 +33,7 @@ export const VerifyAccountForm = () => {
     const resendConfirmationCode = () => {
         const email = history?.location?.state?.state?.email;
         Auth.resendSignUp(email);
+        toast.success('Confirmation code sent!');
     }
 
     return (

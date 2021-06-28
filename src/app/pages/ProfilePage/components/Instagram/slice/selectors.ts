@@ -4,7 +4,7 @@ import { RootState } from 'types';
 import { initialState } from '.';
 
 // First select the relevant part from the state
-const selectDomain = (state: RootState) => state.facebook || initialState;
+const selectDomain = (state: RootState) => state.instagram || initialState;
 
 export const selectPosts = createSelector(
   [selectDomain],

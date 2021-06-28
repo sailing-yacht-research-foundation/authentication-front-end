@@ -16,6 +16,7 @@ import {
 } from '@ant-design/icons';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
+import { StyleConstants } from 'styles/StyleConstants';
 
 export const SiderContent = (props) => {
   const history = useHistory();
@@ -58,22 +59,22 @@ export const SiderContent = (props) => {
 const SiderWrapper = styled.div`
   position: fixed;
   width: 200px;
-  background: #4F61A6;
+  background: ${StyleConstants.MAIN_TONE_COLOR};
 `;
 
 const SyrfMenu = styled(Menu)`
-    background: #4F61A6;
+    background: ${StyleConstants.MAIN_TONE_COLOR};
     color: #fff;
     font-weight: 500;
     height: 100vh;
 `;
 
 const SyrfSubmenu = styled(Menu.SubMenu)`
-    background: #4F61A6 !important;
+    background: ${StyleConstants.MAIN_TONE_COLOR} !important;
     color: #fff;
 
     ul {
-        background: #4F61A6 !important;
+        background: ${StyleConstants.MAIN_TONE_COLOR} !important;
         color: #fff;
     }
 `;
