@@ -1,7 +1,7 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Form, Divider, Spin, Row, Col, DatePicker } from 'antd';
+import { Form, Divider, Spin, Row, Col, DatePicker, Select } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
@@ -17,6 +17,7 @@ import {
     SyrfFormTitle,
 } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
+import { languagesList } from 'utils/languages-util';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -33,7 +34,7 @@ export const UpdateInfo = (props) => {
     const { authUser } = props;
 
     const onFinish = (values) => {
-        const { name, phone_number, sailing_number, address, facebook, instagram, twitter, birthdate } = values;
+        const { name, phone_number, sailing_number, address, facebook, instagram, twitter, birthdate, language } = values;
 
         setIsUpdatingProfile(true);
 
@@ -47,6 +48,7 @@ export const UpdateInfo = (props) => {
                 'custom:facebook': facebook,
                 'custom:instagram': instagram,
                 'custom:twitter': twitter,
+                'custom:language': language
             }).then(response => {
                 setIsUpdatingProfile(false);
                 toast.success('Your profile has been successfully updated!');
@@ -59,6 +61,14 @@ export const UpdateInfo = (props) => {
             toast.error(error.message);
             setIsUpdatingProfile(false);
         })
+    }
+
+    const renderLanguegesDropdownList = () => {
+        const objectArray = Object.entries(languagesList);
+
+        return objectArray.map(([key, value]) => {
+            return <Select.Option key={key} value={key.toLowerCase()}>{value.name}</Select.Option>
+        });
     }
 
     return (
@@ -82,6 +92,7 @@ export const UpdateInfo = (props) => {
                             facebook: getUserAttribute(authUser, 'custom:facebook'),
                             instagram: getUserAttribute(authUser, 'custom:instagram'),
                             twitter: getUserAttribute(authUser, 'custom:twitter'),
+                            language: getUserAttribute(authUser, 'custom:language')
                         }}
                         onFinish={onFinish}
                     >
@@ -121,7 +132,7 @@ export const UpdateInfo = (props) => {
                                 <Form.Item
                                     label={<SyrfFieldLabel>Date Of Birth</SyrfFieldLabel>}
                                     name="birthdate"
-                                    rules={[{ type: 'date' }]}
+                                    rules={[{ type: 'date', required: true }]}
                                 >
                                     <DatePicker
                                         style={{ width: '100%' }}
@@ -203,6 +214,28 @@ export const UpdateInfo = (props) => {
                                 </Form.Item>
                             </Col>
                         </Row>
+
+                        <Form.Item
+                            label="Language"
+                            name="language"
+                            rules={[{ required: true }]}
+                        >
+                            <Select placeholder={'Select a Language'}
+                                showSearch
+                                filterOption={(input, option) => {
+                                    if (option) {
+                                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    }
+
+                                    return false;
+                                }}
+                            >
+                                {
+                                    renderLanguegesDropdownList()
+                                }
+                            </Select>
+                        </Form.Item>
 
                         <Divider />
 
