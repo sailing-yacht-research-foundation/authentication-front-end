@@ -157,18 +157,7 @@ export const SignupForm = () => {
                     name="language"
                     rules={[{ required: true }]}
                 >
-                    <Select placeholder={'Select a Language'}
-                        showSearch
-                        onSelect={onLocaleSelected}
-                        filterOption={(input, option) => {
-                            if (option) {
-                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-
-                            return false;
-                        }}
-                    >
+                    <Select placeholder={'Select a Language'}>
                         {
                             renderLanguegesDropdownList()
                         }
