@@ -40,7 +40,7 @@ export const SignupForm = () => {
             attributes: {
                 name: name,
                 locale: locale,
-                language: language,
+                'custom:language': language,
                 phone_number: '+' + phone_number,
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),

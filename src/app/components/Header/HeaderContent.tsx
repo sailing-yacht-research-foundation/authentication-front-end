@@ -9,7 +9,7 @@ export const HeaderContent = (props) => {
     return (
         <Wrapper>
             <SiderToggle />
-            <Logo type="dark" align="left" />
+            <StyledLogo type="dark" align="left" />
             <Nav />
         </Wrapper>
     )
@@ -32,4 +32,16 @@ const Wrapper = styled.nav`
     ${media.small`
         width: 100%%;
     `};
+`;
+
+const StyledLogo = styled(Logo)`
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    ${media.medium`
+        position: static;
+    `} 
 `;
