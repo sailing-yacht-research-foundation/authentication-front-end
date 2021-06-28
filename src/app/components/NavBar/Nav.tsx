@@ -1,20 +1,49 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { SelectLanguage } from './components/SelectLanguage';
 import { UserDropdown } from './components/UserDropdown';
 import { Link } from 'react-router-dom';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { media } from 'styles/media';
+import { useHistory } from 'react-router';
+import { UseLoginSlice } from 'app/pages/LoginPage/slice';
+import Auth from '@aws-amplify/auth';
+import { Space } from 'antd';
 
 export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);
 
+  const dispatch = useDispatch();
+
+  const loginActions = UseLoginSlice().actions;
+
+  const history = useHistory();
+
+  const logout = () => {
+    dispatch(loginActions.setLogout());
+    history.push('/signin');
+    Auth.signOut();
+    localStorage.removeItem('access_token');
+  }
+
   return (
     <Wrapper>
-      { isAuthenenticated ? (
+      {isAuthenenticated ? (
         <>
-          <UserDropdown/>
-          <SelectLanguage />
+          <DropDownWrapper>
+            <UserDropdown logout={logout} />
+            <SelectLanguage />
+          </DropDownWrapper>
+          {isAuthenenticated &&
+            <MobileMenuWrapper>
+              <Space size={10}>
+                <LinkStyled to="/" onClick={(e) => {
+                  e.preventDefault();
+                  logout();
+                }}>Log Out</LinkStyled>
+              </Space>
+            </MobileMenuWrapper>}
         </>
       ) : (
         <>
@@ -34,4 +63,21 @@ const Wrapper = styled.nav`
 const LinkStyled = styled(Link)`
   color:#599DF9;
   font-weight: 700;
-`
+`;
+
+const DropDownWrapper = styled.div`
+  display: none;
+
+  ${media.medium`
+    display: flex;
+  `}
+`;
+
+export const MobileMenuWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${media.medium`
+    display: none;
+  `}
+`;

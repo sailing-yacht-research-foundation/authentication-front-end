@@ -5,7 +5,7 @@ import { Row } from 'antd';
 export function VerifyAccountPage(props) {
 
   return (
-    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+    <Row justify="center" align="middle" style={{ minHeight: '100vh', padding: '0 15px' }}>
       <VerifyAccountForm />
     </Row>
   );

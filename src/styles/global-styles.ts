@@ -50,7 +50,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0 10px;
     height: ${StyleConstants.NAV_BAR_HEIGHT};
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     borderBottom: 1px solid #eee;
     display: flex;
@@ -155,4 +155,31 @@ export const GlobalStyle = createGlobalStyle`
     line-hight: 47px !important;
   }
   
+  .syrf-datepicker {
+    border-radius: 10px;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
+    height: 36px;
+  }
+
+  .phone-number-input {
+    width: 100% !important;
+    border-radius: 0 !important;
+    border-color: #d9d9d9 !important;
+    font-family: Inter;
+  }
+
+  .syrf-phone-number-input {
+    border-radius: 10px !important;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR} !important;
+    height: 36px !important;
+    font-weight: normal;
+    font-family: Inter;
+    width: 100% !important;
+  }
+
+  .syrf-flag-dropdown {
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR} !important;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+  }
 `;

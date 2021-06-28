@@ -3,15 +3,7 @@ import { Input, Form, Button, Row } from 'antd';
 import { Auth } from 'aws-amplify';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
+import { SyrfFormButton } from 'app/components/SyrfForm';
 
 export function ForgotPasswordForm(props) {
   const [requestedResetPassword, setRequestedResetPassword] = React.useState(false);
@@ -29,7 +21,10 @@ export function ForgotPasswordForm(props) {
 
   const sendForgotPasswordCode = (email) => {
     Auth.forgotPassword(email)
-      .then(data => setRequestedResetPassword(true))
+      .then(data => {
+        setRequestedResetPassword(true)
+        toast.success('Confirmation code sent!');
+      })
       .catch(err => toast.error(err.message));
   }
 
@@ -47,7 +42,7 @@ export function ForgotPasswordForm(props) {
     <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
       {!requestedResetPassword ? (
         <Form
-          {...layout}
+          layout={'vertical'}
           name="basic"
           initialValues={{ remember: true }}
           onFinish={onFinish}
@@ -60,16 +55,16 @@ export function ForgotPasswordForm(props) {
             <Input />
           </Form.Item>
 
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
+          <Form.Item>
+            <SyrfFormButton type="primary" htmlType="submit">
               Recover password
-        </Button>
+            </SyrfFormButton>
           </Form.Item>
         </Form>
       ) : (
         <Form
-          {...layout}
           name="basic"
+          layout={'vertical'}
           initialValues={{ remember: true }}
           onFinish={onSubmitPasswordReset}
         >
@@ -88,18 +83,18 @@ export function ForgotPasswordForm(props) {
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
+          <Form.Item>
+            <SyrfFormButton type="primary" htmlType="submit">
               Change password
-        </Button>
+            </SyrfFormButton>
           </Form.Item>
 
-          <Form.Item {...tailLayout}>
-            <div style={{ marginTop: '10px' }}>
-              <span> Could not receive the code? <a href="/" onClick={(e) => {
+          <Form.Item >
+            <div style={{ marginTop: '10px', textAlign: 'right' }}>
+              <div> Could not receive the code? <a href="/" onClick={(e) => {
                 e.preventDefault();
                 sendForgotPasswordCode(email);
-              }}>resend</a></span>
+              }}>resend</a></div>
             </div>
           </Form.Item>
         </Form>
