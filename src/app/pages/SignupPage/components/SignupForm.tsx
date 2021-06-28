@@ -153,18 +153,6 @@ export const SignupForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Language"
-                    name="language"
-                    rules={[{ required: true }]}
-                >
-                    <Select placeholder={'Select a Language'}>
-                        {
-                            renderLanguegesDropdownList()
-                        }
-                    </Select>
-                </Form.Item>
-
-                <Form.Item
                     label="Date Of Birth"
                     name="birthdate"
                     rules={[{ type: 'date', required: true }]}
@@ -207,6 +195,17 @@ export const SignupForm = () => {
                 >
                     <PhoneInput country={countryCode} inputClass="phone-number-input"
                         placeholder="Enter phone number" />
+                </Form.Item>
+
+                <Form.Item
+                    label="Language"
+                    name="language"
+                >
+                    <Select placeholder={'Select a Language'}>
+                        {
+                            renderLanguegesDropdownList()
+                        }
+                    </Select>
                 </Form.Item>
 
                 <Divider />
