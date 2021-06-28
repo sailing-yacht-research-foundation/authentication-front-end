@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ShowInfoView /> should render to match the snapshot 1`] = `
+<styled.div>
+  <Descriptions
+    layout="vertical"
+    title="User Info"
+  >
+    <DescriptionsItem
+      label="Email"
+    />
+    <DescriptionsItem
+      label="Name"
+    />
+    <DescriptionsItem
+      label="Phone Number"
+    />
+    <DescriptionsItem
+      label="Address"
+    />
+    <DescriptionsItem
+      label="World Sailing Number"
+    />
+    <DescriptionsItem
+      label="Facebook"
+    />
+    <DescriptionsItem
+      label="Instagram"
+    />
+    <DescriptionsItem
+      label="Twitter"
+    />
+    <DescriptionsItem
+      label="Address"
+    />
+  </Descriptions>
+</styled.div>
+`;

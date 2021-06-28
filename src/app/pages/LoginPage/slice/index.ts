@@ -1,9 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { LoginSaga } from './saga';
+import loginSaga from './saga';
 import { LoginState } from './types';
-import { CognitoUser } from 'amazon-cognito-identity-js';
 
 export const initialState: LoginState = {
   user: {},
@@ -15,7 +14,7 @@ const slice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<CognitoUser>) {
+    setUser(state, action: PayloadAction<Object>) {
       state.user = action.payload;
     },
     setAccessToken(state, action: PayloadAction<string>) {
@@ -28,8 +27,8 @@ const slice = createSlice({
     setLogout(state) {
       state.isAuthenticated = false;
       state.access_token = '';
-      localStorage.removeItem('access_token');
-    }
+    },
+    getUser() {},
   },
 });
 
@@ -37,6 +36,6 @@ export const { actions: loginActions, reducer } = slice;
 
 export const UseLoginSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: LoginSaga });
+  useInjectSaga({ key: slice.name, saga: loginSaga });
   return { actions: slice.actions };
 };

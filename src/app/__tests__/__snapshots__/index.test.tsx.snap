@@ -1,33 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<App /> should render and match the snapshot 1`] = `
-<BrowserRouter>
-  <Helmet
-    defaultTitle="React Boilerplate"
-    defer={true}
-    encodeSpecialCharacters={true}
-    htmlAttributes={
-      Object {
-        "lang": "en-US",
-      }
+<Provider
+  store={
+    Object {
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
     }
-    titleTemplate="%s - React Boilerplate"
-  >
-    <meta
-      content="A React Boilerplate application"
-      name="description"
-    />
-  </Helmet>
-  <Switch>
-    <Route
-      component={[Function]}
-      exact={true}
-      path="/"
-    />
-    <Route
-      component={[Function]}
-    />
-  </Switch>
-  <Memo(GlobalStyleComponent) />
-</BrowserRouter>
+  }
+>
+  <App />
+</Provider>
 `;

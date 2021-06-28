@@ -1,37 +1,55 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import styled from 'styled-components/macro';
-import { useHistory } from 'react-router';
-import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
-import Auth from '@aws-amplify/auth';
-import { SelectLanguage } from '../SelectLanguages'
+import { SelectLanguage } from './components/SelectLanguage';
+import { UserDropdown } from './components/UserDropdown';
 import { Link } from 'react-router-dom';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { media } from 'styles/media';
+import { useHistory } from 'react-router';
+import { UseLoginSlice } from 'app/pages/LoginPage/slice';
+import Auth from '@aws-amplify/auth';
+import { Space } from 'antd';
 
-export function Nav() {
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const { actions } = UseLoginSlice();
+export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);
 
+  const dispatch = useDispatch();
+
+  const loginActions = UseLoginSlice().actions;
+
+  const history = useHistory();
+
   const logout = () => {
-    dispatch(actions.setLogout());
+    dispatch(loginActions.setLogout());
     history.push('/signin');
     Auth.signOut();
+    localStorage.removeItem('access_token');
   }
 
   return (
     <Wrapper>
-      { isAuthenenticated ? (
+      {isAuthenenticated ? (
         <>
-          <SelectLanguage />
-          <a onClick={() => logout()} style={{ marginLeft: '10px' }}>Sign Out</a>
+          <DropDownWrapper>
+            <UserDropdown logout={logout} />
+            <SelectLanguage />
+          </DropDownWrapper>
+          {isAuthenenticated &&
+            <MobileMenuWrapper>
+              <Space size={10}>
+                <LinkStyled to="/" onClick={(e) => {
+                  e.preventDefault();
+                  logout();
+                }}>Log Out</LinkStyled>
+              </Space>
+            </MobileMenuWrapper>}
         </>
       ) : (
         <>
-          <Link to="/sigin">Sign in</Link>
+          <LinkStyled to="/signin">Log In</LinkStyled>
           <span style={{ marginLeft: '5px', marginRight: '5px' }}>|</span>
-          <Link to="/signup">Sign Up</Link>
+          <LinkStyled style={{ color: '#0C4983' }} to="/signup">Sign Up</LinkStyled>
         </>
       )}
     </Wrapper>
@@ -40,28 +58,26 @@ export function Nav() {
 
 const Wrapper = styled.nav`
   display: flex;
-  margin-right: -1rem;
 `;
 
-const Item = styled.a`
-  color: ${p => p.theme.primary};
-  cursor: pointer;
-  text-decoration: none;
+const LinkStyled = styled(Link)`
+  color:#599DF9;
+  font-weight: 700;
+`;
+
+const DropDownWrapper = styled.div`
+  display: none;
+
+  ${media.medium`
+    display: flex;
+  `}
+`;
+
+export const MobileMenuWrapper = styled.div`
   display: flex;
-  padding: 0.25rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+  justify-content: center;
   align-items: center;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:active {
-    opacity: 0.4;
-  }
-
-  .icon {
-    margin-right: 0.25rem;
-  }
+  ${media.medium`
+    display: none;
+  `}
 `;

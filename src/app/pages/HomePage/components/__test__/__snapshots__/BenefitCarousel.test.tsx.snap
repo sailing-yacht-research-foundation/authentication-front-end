@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BenefitCarousel /> should render the benefit carousel and matchs the snapshot 1`] = `
+<ForwardRef
+  autoplay={true}
+>
+  <styled.div>
+    <styled.div>
+      <styled.div
+        style={
+          Object {
+            "backgroundImage": "linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(hero-homepage-3.jpg)",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.h1>
+        One password for all sailing app and data
+      </styled.h1>
+      <styled.span>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+      </styled.span>
+    </styled.div>
+  </styled.div>
+  <styled.div>
+    <styled.div>
+      <styled.div
+        style={
+          Object {
+            "backgroundImage": "linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(hero-homepage-3.jpg)",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.h1>
+        You control who can access your sailing data
+      </styled.h1>
+      <styled.span>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+      </styled.span>
+    </styled.div>
+  </styled.div>
+  <styled.div>
+    <styled.div>
+      <styled.div
+        style={
+          Object {
+            "backgroundImage": "linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(hero-homepage-3.jpg)",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.h1>
+        GDPR & CCPA Compliant
+      </styled.h1>
+      <styled.span>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+      </styled.span>
+    </styled.div>
+  </styled.div>
+  <styled.div>
+    <styled.div>
+      <styled.div
+        style={
+          Object {
+            "backgroundImage": "url(hero-homepage-3.jpg)",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.h1>
+        Organization independent
+      </styled.h1>
+      <styled.span>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+      </styled.span>
+    </styled.div>
+  </styled.div>
+</ForwardRef>
+`;

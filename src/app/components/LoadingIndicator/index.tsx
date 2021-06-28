@@ -1,13 +1,28 @@
 import * as React from 'react';
 import styled, { keyframes } from 'styled-components/macro';
 
-interface Props extends SvgProps {}
+interface Props extends SvgProps { }
 
 export const LoadingIndicator = (props: Props) => (
-  <Svg viewBox="-24 -24 48 48" small={props.small}>
-    <Circle cx="0" cy="0" r="20" fill="none" strokeWidth="4"></Circle>
-  </Svg>
+  <LoaderContainer>
+    <Svg viewBox="-24 -24 48 48" small={props.small}>
+      <Circle cx="0" cy="0" r="20" fill="none" strokeWidth="4"></Circle>
+    </Svg>
+  </LoaderContainer>
 );
+
+const LoaderContainer = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
 
 const speed = 1.5;
 
