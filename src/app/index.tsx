@@ -12,6 +12,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as React from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { Layout } from 'antd';
+import { media } from 'styles/media';
+import styled from 'styled-components';
 
 import { GlobalStyle } from '../styles/global-styles';
 
@@ -27,17 +30,15 @@ import { ProfilePage } from './pages/ProfilePage/Loadable';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
+import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
+import { UseLoginSlice } from './pages/LoginPage/slice';
 
 import Amplify from 'aws-amplify';
 import config from '../aws-exports';
 
-import { Layout } from 'antd';
 import { SiderContent } from './components/SiderContent';
-import { UseLoginSlice } from './pages/LoginPage/slice';
 import { Header } from './components/Header';
-import { media } from 'styles/media';
-import styled from 'styled-components';
-import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
+import { StyleConstants } from 'styles/StyleConstants';
 
 const { Sider, Content } = Layout
 Amplify.configure(config);
@@ -88,7 +89,7 @@ export function App(props) {
         <Header />
         {isAuthenticated && isSiderToggled  && <StyledSider
           style={{
-            background: '#4F61A6',
+            background: StyleConstants.MAIN_TONE_COLOR,
             zIndex: 10
           }}
         >

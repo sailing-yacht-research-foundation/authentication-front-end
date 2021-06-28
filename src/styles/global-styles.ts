@@ -50,7 +50,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0 10px;
     height: ${StyleConstants.NAV_BAR_HEIGHT};
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     borderBottom: 1px solid #eee;
     display: flex;
@@ -157,7 +157,7 @@ export const GlobalStyle = createGlobalStyle`
   
   .syrf-datepicker {
     border-radius: 10px;
-    border: 1px solid #4F61A6;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
     height: 36px;
   }
 
@@ -170,7 +170,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .syrf-phone-number-input {
     border-radius: 10px !important;
-    border: 1px solid #4F61A6 !important;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR} !important;
     height: 36px !important;
     font-weight: normal;
     font-family: Inter;
@@ -178,7 +178,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .syrf-flag-dropdown {
-    border: 1px solid #4F61A6 !important;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR} !important;
     border-top-left-radius: 10px !important;
     border-bottom-left-radius: 10px !important;
   }

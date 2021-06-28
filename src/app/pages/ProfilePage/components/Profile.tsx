@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { loginActions } from 'app/pages/LoginPage/slice';
 import { ProfileTabs } from './ProfileTabs';
+import { LinkToProviders } from './LinkToProviders';
 // import FacebookPosts from './Facebook/components/FacebookPosts';
 // import InstagramPosts from './Instagram/components/InstagramPost';
 
@@ -26,19 +27,9 @@ export const Profile = () => {
 
     return (
         <Wrapper>
-            <ProfileTabs/>
+            <ProfileTabs />
             <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
-            {/* <ChangeAvatar cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
-            {!isUpdatingProfile ?
-                <>
-                    <Button onClick={() => setIsUpdatingProfile(true)} style={{ alignSelf: 'flex-end', marginTop: '50px' }}><EditOutlined /> Update Profile</Button>
-                    <ShowInfoView authUser={authUser} />
-                    <LinkToProviders/>
-                </> :
-
-            } */}
-            {/* <FacebookPosts/> */}
-            {/* <InstagramPosts/> */}
+            <LinkToProviders />
         </Wrapper>
     )
 }
@@ -50,4 +41,5 @@ const Wrapper = styled.div`
     align-items: center;
     width: 100%;
     position: relative;
+    padding-bottom: 50px;
 `;

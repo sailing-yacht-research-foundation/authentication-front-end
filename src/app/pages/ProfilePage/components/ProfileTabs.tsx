@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { media } from 'styles/media';
+import { StyleConstants } from 'styles/StyleConstants';
 
 export const ProfileTabs = (props) => {
 
@@ -43,6 +44,6 @@ const TabItem = styled(Link)`
     `}
 
     &.active {
-        color: #4F61A6;
+        color: ${StyleConstants.MAIN_TONE_COLOR};
     }
 `
