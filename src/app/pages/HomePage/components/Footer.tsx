@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Typography, Button, Row, Col, Divider } from 'antd';
-import { Logo } from 'app/components/NavBar/Logo';
 import { Link } from 'react-router-dom';
 import { media } from 'styles/media';
+import { ReactComponent as Logo } from './assets/logo-light.svg';
 
 export const Footer = (props) => {
     return (
@@ -30,7 +30,7 @@ export const Footer = (props) => {
                             span: 24
                         }}
                     >
-                        <LogoResponsive type="light" />
+                        <Logo style={{ marginBottom: '15px' }}/>
                         <SYRFDescription>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.</SYRFDescription>
                     </Col>
 
@@ -121,20 +121,6 @@ const SYRFDescription = styled.p`
 
     ${media.small`
         text-align:center;
-    `};
-`;
-
-const LogoResponsive = styled(Logo)`
-    ${media.large`
-        justify-content: flex-start !important;
-    `};
-
-    ${media.medium`
-        justify-content: flex-start !important;
-    `};
-
-    ${media.small`
-        justify-content: center;
     `};
 `;
 
