@@ -182,4 +182,9 @@ export const GlobalStyle = createGlobalStyle`
     border-top-left-radius: 10px !important;
     border-bottom-left-radius: 10px !important;
   }
+
+  .ant-image {
+    height: 100%;
+    width: 100%;
+  }
 `;

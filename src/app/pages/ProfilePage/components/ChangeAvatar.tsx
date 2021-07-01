@@ -17,7 +17,7 @@ export const ChangeAvatar = (props) => {
 
     const resizeImage = async (file) => {
         return new Promise((resolve) => Resizer.imageFileResizer(
-            file, 300, 300, "PNG", 100, 0,
+            file, 500, 500, "PNG", 100, 0,
             (uri) => {
                 resolve(uri);
             },
@@ -27,7 +27,8 @@ export const ChangeAvatar = (props) => {
 
     const onFileChanged = async (e) => {
         e.preventDefault();
-        const file = await resizeImage(e.target.files[0]);
+        // const file = await resizeImage(e.target.files[0]);
+        const file = e.target.files[0];
         const avatarFileName = `${(+ new Date())}-${String(authUser.username).substring(0, 8)}-profile-picture.png`;
 
         setIsUploadingProfilePicture(true);
@@ -67,7 +68,7 @@ export const ChangeAvatar = (props) => {
             <Spin spinning={isUploadingProfilePicture} tip="Uploading...">
                 <Wrapper>
                     <AvatarHolder>
-                        <Image src={getProfilePicture(authUser)} />
+                        <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
                     </AvatarHolder>
                     <ChangeAvatarButton>
                         <CameraFilled style={{ color: StyleConstants.MAIN_TONE_COLOR, fontSize: '25px' }} onClick={() => triggerChooseAvatar()} size={20} />

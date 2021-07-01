@@ -32,10 +32,6 @@ const ConnectButtonContainer = styled.div`
     border-radius: 10px;
     position: relative;
     margin-bottom: 15px;
-
-    ${media.medium`
-        margin-bottom: 0;
-    `}
 `;
 
 const ConnectStatusText = styled.div`

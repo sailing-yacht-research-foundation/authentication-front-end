@@ -40,6 +40,7 @@ const FacebookIntegration = (props) => {
     }
 
     const storeFacebookAccessToken = (facebookAccessToken: string, notificationMessage: string, connectState: boolean) => {
+        console.log(facebookAccessToken);
         Auth.currentAuthenticatedUser().then(user => {
             Auth.updateUserAttributes(user, {
                 'custom:fb_token': facebookAccessToken

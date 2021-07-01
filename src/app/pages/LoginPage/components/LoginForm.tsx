@@ -45,7 +45,7 @@ export const LoginForm = (props) => {
       if (user.attributes && user.attributes.email_verified) {
         dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
         dispatch(actions.setIsAuthenticated(true));
-        dispatch(actions.setUser(user));
+        dispatch(actions.setUser(JSON.parse(JSON.stringify(user))));
         history.push('/');
       }
     }).catch(error => {

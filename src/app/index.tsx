@@ -27,6 +27,7 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ChangePasswordPage } from './pages/ChangePasswordPage/Loadable';
 import { ProfilePage } from './pages/ProfilePage/Loadable';
 import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
+import { EULAPage } from './pages/EULAPage/Loadable';
 
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -118,6 +119,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
@@ -136,5 +138,4 @@ const StyledSider = styled(Sider)`
   ${media.medium`
     position: static;
   `}
-
-`
+`;
