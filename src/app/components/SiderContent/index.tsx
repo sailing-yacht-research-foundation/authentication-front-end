@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Menu } from 'antd';
-import { Logo } from '../NavBar/Logo';
+import { ReactComponent as Logo } from './assets/my-sailing.svg';
 import {
   UserOutlined,
   MoneyCollectOutlined,
@@ -23,7 +23,7 @@ export const SiderContent = (props) => {
 
   return (
     <SiderWrapper>
-     <Logo type='light' />
+      <Logo style={{ margin: '20px auto', display:'block' }}/>
       <SyrfMenu mode="inline" defaultSelectedKeys={['1']}>
         <SyrfMenuItem title={'Deals'} key="1" icon={<MoneyCollectOutlined />}>
           Deals
@@ -58,7 +58,7 @@ export const SiderContent = (props) => {
 
 const SiderWrapper = styled.div`
   position: fixed;
-  width: 200px;
+  width: 300px;
   background: ${StyleConstants.MAIN_TONE_COLOR};
 `;
 

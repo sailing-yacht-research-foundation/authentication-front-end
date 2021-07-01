@@ -100,6 +100,7 @@ export function App(props) {
         {isAuthenticated && isSiderToggled  && <StyledSider
           collapsible={isMobile()}
           onCollapse={onSiderCollapsed}
+          width={300}
           style={{
             background: StyleConstants.MAIN_TONE_COLOR,
             zIndex: 10
