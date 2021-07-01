@@ -4,31 +4,35 @@ import styled from 'styled-components/macro';
 import { Col, Row, Button, Space, Typography } from 'antd';
 import SailingBackground from './../assets/hero-homepage-3.jpg';
 import { useHistory } from 'react-router';
-import { media } from 'styles/media';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const VideoSection = (props) => {
+    
+    const { t, i18n } = useTranslation();
+
     const history = useHistory();
 
     return (
         <Wrapper className="video-section">
             <Row style={{ marginTop: '88px' }}>
-                <Typography.Title className="text-white introduction-text">One Login <br /> Ultimate Potential</Typography.Title>
+                <Typography.Title className="text-white introduction-text">{t(translations.home_page.video_section.one_login)} <br /> {t(translations.home_page.video_section.ultimate_potential)}</Typography.Title>
             </Row>
             
             <Row>
                 <p className="introduction-description">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
+                {t(translations.home_page.video_section.description)}
                 </p>
             </Row>
 
             <Row  style={{ marginTop: '40px' }}>
                 <Space size={15}>
                     <Col>
-                        <Button onClick={() => history.push('/signin')} className="syrf-button">Login</Button>
+                        <Button onClick={() => history.push('/signin')} className="syrf-button">{t(translations.home_page.video_section.login)}</Button>
                     </Col>
                     
                     <Col>
-                        <Button onClick={() => history.push('/signup')} className="syrf-button-outline">Signup</Button>
+                        <Button onClick={() => history.push('/signup')} className="syrf-button-outline">{t(translations.home_page.video_section.signup)}</Button>
                     </Col>
                 </Space>
             </Row>

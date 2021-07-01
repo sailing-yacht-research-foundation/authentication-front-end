@@ -1,19 +1,201 @@
 {
-  "routingFeature": {
-    "title": "Standard Routing",
-    "description": "Routing macht es möglich Seiten (z.B. '/about') Ihrer Anwendung hinzuzufügen."
+  "home_page": {
+    "nav": {
+      "log_in": "Log In",
+      "sign_up": "Sign Up",
+      "user_dropdown": {
+        "change_password": "Change Password",
+        "log_out": "Logout Out"
+      }
+    },
+    "video_section": {
+      "one_login": "One Login",
+      "ultimate_potential": "Ultimate Potential",
+      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
+      "login": "Log In",
+      "signup": "Sign Up"
+    },
+    "benefit_carousel": {
+      "slide_one": {
+        "title": "One password for all sailing apps and data",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+      },
+      "slide_two": {
+        "title": "You control who can access your sailing data",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+      },
+      "slide_three": {
+        "title": "GDPR & CCPA Compliant",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+      },
+      "slide_four": {
+        "title": "Organization independent",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+      }
+    },
+    "partner_app_carousel": {
+      "title": "Use with these innotive apps"
+    },
+    "footer": {
+      "title": "Are you a developer who wants to use My Sailing Profile?",
+      "description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
+      "developer_button": "Developers",
+      "syrf_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.",
+      "syrf_link": "SYRF",
+      "policy_privacy_link": "Privacy Policy",
+      "eula_link": "End User License Agreement",
+      "copyright": "Copyright (c) 2021 Sailing Yacht Research Foundation"
+    }
   },
-  "i18nFeature": {
-    "title": "i18n Internationalisierung und Pluralisierung",
-    "selectLanguage": "Sprache auswählen",
-    "description": "Das Internet ist global. Mehrsprachige- und Pluralisierungsunterstützung ist entscheidend für große Web-Anwendungen. Sie können die Sprache unten verändern, ohne die Seite aktualisieren zu müssen."
+  "login_page": {
+    "email": {
+      "label": "Email",
+      "email_validate": "Your input must be an email",
+      "required_validate": "Email is required"
+    },
+    "password": {
+      "label": "Password",
+      "password_validate": "Your password must be at least 6 characters and max 15 characters",
+      "required_validate": "Password is required"
+    },
+    "login": "Log In",
+    "login_message": "Logging you in....",
+    "login_error": "Cannot log you in at the moment.",
+    "forgot_password": "Forgot Password?",
+    "dont_have_account": "Don't have an account?",
+    "signup": "Sign Up",
+    "leftpanel_title": "Lorem Ispum dolot",
+    "leftpanel_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. At diam, lobortis sit pretium. Sem nec, in scelerisque diam. In felis nunc lectus pulvinar laoreet tempor vitae. Auctor suspendisse tristique libero facilisis quis turpis feugiat vitae. Lacus quam blandit arcu sagittis nulla eleifend. Nisl quam et malesuada eu fusce semper. Augue curabitur duis et, nunc, ullamcorper. Massa pulvinar faucibus in volutpat venenatis suspendisse est. Ut velit vivamus vitae, etiam id."
   },
-  "feedbackFeature": {
-    "title": "Sofortiges Feedback",
-    "description": "Genießen Sie die beste Entwicklungserfahrung und programmieren Sie Ihre App so schnell wie noch nie! Ihre Änderungen an dem CSS und JavaScript sind sofort reflektiert, ohne die Seite aktualisieren zu müssen."
+  "signup_page": {
+    "email": {
+      "label": "Email",
+      "email_validate": "Your input must be an email",
+      "required_validate": "Email is required"
+    },
+    "password": {
+      "label": "Password",
+      "password_validation": "Your password must be at least 6 characters and max 15 characters",
+      "required_validation": "Password is required"
+    },
+    "name": {
+      "label": "Name",
+      "required_validation": "Name is required"
+    },
+    "locale": {
+      "label": "Locale",
+      "required_validation": "Locale is required"
+    },
+    "phone_number": {
+      "label":  "Phone Number"
+    },
+    "address": {
+      "label": "Address"
+    },
+    "date_of_birth": {
+      "label": "Date Of Birth"
+    },
+    "sailing_number": {
+      "label": "Sailing Number"
+    },
+    "facebook": {
+      "label": "Facebook Profile",
+      "validation": "Your Facebook profile must be a valid URL"
+    },
+    "instagram": {
+      "label": "Instagram Profile",
+      "validation": "Your Instagram profile must be a valid URL"
+    },
+    "twitter": {
+      "label": "Twitter Profile",
+      "validation": "Your Twitter profile must be a valid URL"
+    },
+    "eula": {
+      "label": "Agree to %{eula}",
+      "validation": "You should accept our EULA"
+    },
+    "privacy_policy": {
+      "label": "Agree to %{privacy_policy}",
+      "validation": "You must agree to our privacy policy."
+    },
+    "acknowledge": {
+      "label": "Acknowledge that email provided will not be a shared email (one email per user).",
+      "validation": "You must acknowledge that email provided will not be a shared email."
+    },
+    "signup": "Sign Up"
   },
-  "scaffoldingFeature": {
-    "title": "Schnelles Scaffolding",
-    "description": "Automatisieren Sie die Kreation von Komponenten, Containern, Routen, Selektoren und Sagas – und ihre Tests – direkt von dem Terminal!"
+  "side_menu": {
+    "deal": "Deals",
+    "profile": {
+      "title": "Profile",
+      "name": "My Profile",
+      "change_password": "Change Password",
+      "notification_setting": "Notification Settings",
+      "profile_setting": "Profile Settings"
+    },
+    "app_connection": "App Connections",
+    "organizational_membership": "Organizational Memberships",
+    "my_data": "My Data",
+    "test_data": "Test Data"
+  },
+  "profile_page": {
+    "update_profile": {
+      "email": {
+        "label": "Email",
+        "email_validate": "Your input must be an email",
+        "required_validate": "Email is required"
+      },
+      "name": {
+        "label": "Name",
+        "required_validation": "Name is required"
+      },
+      "phone_number": {
+        "label":  "Phone Number"
+      },
+      "address": {
+        "label": "Address"
+      },
+      "date_of_birth": {
+        "label": "Date Of Birth"
+      },
+      "sailing_number": {
+        "label": "Sailing Number"
+      },
+      "facebook": {
+        "label": "Facebook Profile",
+        "validation": "Your Facebook profile must be a valid URL"
+      },
+      "instagram": {
+        "label": "Instagram Profile",
+        "validation": "Your Instagram profile must be a valid URL"
+      },
+      "twitter": {
+        "label": "Twitter Profile",
+        "validation": "Your Twitter profile must be a valid URL"
+      },
+      "update_profile": "Update Profile"
+    },
+    "change_password": {
+      "old_password": {
+        "title": "Old Password",
+        "requilred_validation": "Old password is required"
+      },
+      "new_password": {
+        "title": "New Password",
+        "requilred_validation": "New password is required",
+        "password_validate": "Your password must be at least 6 characters and max 15 characters"
+      },
+      "change_password": "Change Password"
+    }
+  },
+  "privacy_page": {
+
+  },
+  "eulapage": {
+
+  },
+  "not_found_page": {
+    "page_not_found": "Page not found",
+    "return_to_homepage": "Return to Home page"
   }
 }

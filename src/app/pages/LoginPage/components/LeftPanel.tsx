@@ -2,14 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import BG from '../assets/sail.webp';
 import PartnerLogo from '../assets/dummy-logo.svg';
-import { media } from 'styles/media';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
+
 
 export const LeftPanel = () => {
+    const { t, i18n } = useTranslation();
+
     return (
         <Wrapper>
-            <Title>Lorem Ispum dolot</Title>
+            <Title>{t(translations.login_page.leftpanel_title)}</Title>
             <Description>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. At diam, lobortis sit pretium. Sem nec, in scelerisque diam. In felis nunc lectus pulvinar laoreet tempor vitae. Auctor suspendisse tristique libero facilisis quis turpis feugiat vitae. Lacus quam blandit arcu sagittis nulla eleifend. Nisl quam et malesuada eu fusce semper. Augue curabitur duis et, nunc, ullamcorper. Massa pulvinar faucibus in volutpat venenatis suspendisse est. Ut velit vivamus vitae, etiam id.
+            {t(translations.login_page.leftpanel_description)}
             </Description>
 
             <PartnerPlaceHolder>

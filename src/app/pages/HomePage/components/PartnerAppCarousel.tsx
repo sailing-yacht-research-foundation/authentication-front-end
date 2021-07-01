@@ -1,16 +1,20 @@
 import React from 'react';
 import { Image, Carousel } from 'antd';
-import { media } from 'styles/media';
 import styled from 'styled-components/macro';
 import Brand1 from '../assets/brand1.png';
 import Brand2 from '../assets/brand2.png';
 import Brand3 from '../assets/brand3.png';
 import Brand4 from '../assets/brand4.png';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const PartnerAppCarousel = (props) => {
+
+    const { t, i18n } = useTranslation();
+
     return (
         <Wrapper>
-            <h1 className="section-header-text" style={{ textAlign: 'center' }}>Use with these innotive apps</h1>
+            <h1 className="section-header-text" style={{ textAlign: 'center' }}>{t(translations.home_page.partner_app_carousel.title)}</h1>
             <Carousel slidesToShow={4} dots={{ className: 'carousel-dot partner-app' }} responsive={[
                 {
                     breakpoint: 1200,

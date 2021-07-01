@@ -4,20 +4,25 @@ import { Typography, Button, Row, Col, Divider } from 'antd';
 import { Logo } from 'app/components/NavBar/Logo';
 import { Link } from 'react-router-dom';
 import { media } from 'styles/media';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const Footer = (props) => {
+
+    const { t, i18n } = useTranslation();
+
     return (
         <Wrapper>
             <DeveloperSectionContainer>
                 <Typography.Title className="section-header-text">
-                    Are you a developer who wants to use My Sailing Profile?
+                    {t(translations.home_page.footer.title)}
                 </Typography.Title>
 
                 <DeveloperDescription>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
+                    {t(translations.home_page.footer.description)}
                 </DeveloperDescription>
 
-                <Button size={'large'} className="syrf-button" style={{ marginTop: '20px', marginBottom: '20px' }}>Developers</Button>
+                <Button size={'large'} className="syrf-button" style={{ marginTop: '20px', marginBottom: '20px' }}>{t(translations.home_page.footer.developer_button)}</Button>
             </DeveloperSectionContainer>
 
             <SYRFFooterContainer>
@@ -31,7 +36,7 @@ export const Footer = (props) => {
                         }}
                     >
                         <LogoResponsive type="light" />
-                        <SYRFDescription>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.</SYRFDescription>
+                        <SYRFDescription>{t(translations.home_page.footer.syrf_description)}</SYRFDescription>
                     </Col>
 
                     <Col
@@ -48,18 +53,18 @@ export const Footer = (props) => {
                         </StyledRow>
 
                         <StyledRow justify="end" align="middle" style={{ marginTop: '10px' }}>
-                            <StyledLink to="privacy-policy">Privacy Policy</StyledLink>
+                            <StyledLink to="privacy-policy">{t(translations.home_page.footer.policy_privacy_link)}</StyledLink>
                         </StyledRow>
 
                         <StyledRow justify="end" align="middle" style={{ marginTop: '10px' }}>
-                            <StyledLink to="eula">End user license agreement</StyledLink>
+                            <StyledLink to="eula">{t(translations.home_page.footer.eula_link)}</StyledLink>
                         </StyledRow>
                     </Col>
                 </Row>
 
                 <Divider />
 
-                <FooterTextCopyRight>Copyright (c) 2021 Sailing Yacht Research Foundation</FooterTextCopyRight>
+                <FooterTextCopyRight>{t(translations.home_page.footer.copyright)}</FooterTextCopyRight>
             </SYRFFooterContainer>
         </Wrapper>
     )

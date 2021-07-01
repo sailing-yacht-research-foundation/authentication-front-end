@@ -11,6 +11,8 @@ import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { media } from 'styles/media';
 import { SyrfFormButton } from 'app/components/SyrfForm';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
@@ -28,6 +30,8 @@ export const LoginForm = (props) => {
   const history = useHistory();
 
   const [isSigningIn, setIsSigningIn] = React.useState<boolean>(false);
+
+  const { t, i18n } = useTranslation();
 
   const onFinish = (values: any) => {
     const { email, password } = values;
@@ -61,18 +65,18 @@ export const LoginForm = (props) => {
           toast.error(error.message);
         }
       } else {
-        toast.error("Cannot sign you in at the moment.");
+        toast.error(t(translations.login_page.login_error));
       }
     })
   }
 
   return (
     <Wrapper>
-      <Spin spinning={isSigningIn} tip="Signing you in...">
+      <Spin spinning={isSigningIn} tip={t(translations.login_page.login_message)}>
         <Title>My Sailing ID</Title>
 
         <FormWrapper>
-          <FormTitle>Log In</FormTitle>
+          <FormTitle>{t(translations.login_page.login)}</FormTitle>
           <Form
             {...layout}
             name="basic"
@@ -83,34 +87,34 @@ export const LoginForm = (props) => {
               name="email"
               rules={[{ required: true, type: 'email' }]}
             >
-              <SyrfInput placeholder={'Email'} />
+              <SyrfInput placeholder={t(translations.login_page.email.label)} />
             </Form.Item>
 
             <Form.Item
               name="password"
               rules={[{ required: true }]}
             >
-              <SyrfInputPassword placeholder={'Password'} />
+              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} />
             </Form.Item>
 
             <Form.Item
             >
               <SyrfFormButton type="primary" htmlType="submit">
-                Log In
+                {t(translations.login_page.login)}
               </SyrfFormButton>
             </Form.Item>
 
             <ForgotPasswordLinkContainer>
-              <Link to="/forgot-password">Forgot password?</Link>
+              <Link to="/forgot-password">{t(translations.login_page.forgot_password)}</Link>
             </ForgotPasswordLinkContainer>
           </Form>
         </FormWrapper>
 
         <SignupContainer>
-          <GreyTitle>Don't have an account</GreyTitle>
+          <GreyTitle>{t(translations.login_page.dont_have_account)}</GreyTitle>
 
           <SyrfSignupButton onClick={() => history.push('/signup')}>
-            Sign Up
+            {t(translations.login_page.signup)}
           </SyrfSignupButton>
         </SignupContainer>
       </Spin>

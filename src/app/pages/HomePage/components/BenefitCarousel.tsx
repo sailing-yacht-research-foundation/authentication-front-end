@@ -8,6 +8,8 @@ import PasswordBg from '../assets/one-password.svg';
 import AccessControlBg from '../assets/access-control.svg';
 import OrganizationBg from '../assets/organization.svg';
 import GDPRBg from '../assets/gdpr.svg';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 const backgroundProperties = {
     backgroundRepeat: 'no-repeat',
@@ -17,6 +19,8 @@ const backgroundProperties = {
 
 export const BenefitCarousel = (props) => {
 
+    const { t, i18n } = useTranslation();
+
     return (
         <Carousel
             slidesToShow={1}
@@ -25,8 +29,8 @@ export const BenefitCarousel = (props) => {
                 <CarouselInnerContainer className="carousel-inner-container">
                     <Row className="carousel-row">
                         <Col lg={12} md={24} xs={24} sm={24}>
-                            <CarouselText className="section-header-text">One password for all sailing app and data</CarouselText>
-                            <CarouselItemDescription>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</CarouselItemDescription>
+                            <CarouselText className="section-header-text">{t(translations.home_page.benefit_carousel.slide_one.title)}</CarouselText>
+                            <CarouselItemDescription>{t(translations.home_page.benefit_carousel.slide_one.description)}</CarouselItemDescription>
                         </Col>
                         <Col lg={12} md={24} xs={24} sm={24}>
                             <CarouselImage className="carousel-image-container" style={{ backgroundImage: `url(${PasswordBg})`, ...backgroundProperties }} />
@@ -39,8 +43,8 @@ export const BenefitCarousel = (props) => {
                 <CarouselInnerContainer className="carousel-inner-container">
                     <Row className="carousel-row">
                         <Col lg={12} md={12} xs={24} sm={24}>
-                            <CarouselText className="section-header-text">You control who can access your sailing data</CarouselText>
-                            <CarouselItemDescription>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</CarouselItemDescription>
+                            <CarouselText className="section-header-text">{t(translations.home_page.benefit_carousel.slide_two.title)}</CarouselText>
+                            <CarouselItemDescription>{t(translations.home_page.benefit_carousel.slide_two.description)}</CarouselItemDescription>
                         </Col>
                         <Col lg={12} md={12} xs={24} sm={24}>
                             <CarouselImage className="carousel-image-container" style={{ backgroundImage: `url(${AccessControlBg})`, ...backgroundProperties }} />
@@ -53,8 +57,8 @@ export const BenefitCarousel = (props) => {
                 <CarouselInnerContainer className="carousel-inner-container">
                     <Row className="carousel-row">
                         <Col lg={12} md={12} xs={24} sm={24}>
-                            <CarouselText className="section-header-text">GDPR & CCPA Compliant</CarouselText>
-                            <CarouselItemDescription>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</CarouselItemDescription>
+                            <CarouselText className="section-header-text">{t(translations.home_page.benefit_carousel.slide_three.title)}</CarouselText>
+                            <CarouselItemDescription>{t(translations.home_page.benefit_carousel.slide_three.description)}</CarouselItemDescription>
                         </Col>
                         <Col lg={12} md={12} xs={24} sm={24}>
                             <CarouselImage className="carousel-image-container" style={{ backgroundImage: `url(${GDPRBg})`, ...backgroundProperties }} />
@@ -67,8 +71,8 @@ export const BenefitCarousel = (props) => {
                 <CarouselInnerContainer className="carousel-inner-container">
                     <Row className="carousel-row">
                         <Col lg={12} md={12} xs={24} sm={24}>
-                            <CarouselText className="section-header-text">Organization independent</CarouselText>
-                            <CarouselItemDescription>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</CarouselItemDescription>
+                            <CarouselText className="section-header-text">{t(translations.home_page.benefit_carousel.slide_four.title)}</CarouselText>
+                            <CarouselItemDescription>{t(translations.home_page.benefit_carousel.slide_four.description)}</CarouselItemDescription>
                         </Col>
                         <Col lg={12} md={12} xs={24} sm={24}>
                             <CarouselImage className="carousel-image-container" style={{ backgroundImage: `url(${OrganizationBg})`, ...backgroundProperties }} />
