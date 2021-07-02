@@ -13,11 +13,18 @@ export const HeaderContent = (props) => {
 
     return (
         <Wrapper>
-            <SiderToggle />
-             {
-                !isAuthenticated ?  <Logo type="dark" align="left" /> : <div></div>
-             }
-             <StyledLogo type="dark" align="left" />
+            {
+                !isAuthenticated ? <>
+                    <div></div>
+                    <Logo type="dark" align="left" />
+                </> : (
+                    <>
+                        <SiderToggle />
+                        <div></div>
+                    </>
+                )
+            }
+            <StyledLogo type="dark" align="left" />
             <Nav />
         </Wrapper>
     )

@@ -62,6 +62,7 @@ export const Nav = () => {
 
 const Wrapper = styled.nav`
   display: flex;
+  z-index: 999;
 `;
 
 const LinkStyled = styled(Link)`

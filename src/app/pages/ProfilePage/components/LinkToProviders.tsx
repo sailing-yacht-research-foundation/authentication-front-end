@@ -8,6 +8,8 @@ import {
     SyrfFormTitle
 } from 'app/components/SyrfForm';
 import { useEffect } from 'react';
+import { media } from 'styles/media';
+import styled from 'styled-components';
 
 const FACEBOOK = 0;
 const INSTAGRAM = 1;
@@ -23,7 +25,7 @@ export const LinkToProviders = () => {
     return (
         <SyrfFormWrapper style={{ marginTop: '33px' }}>
             <SyrfFormTitle>Social Profiles Connection</SyrfFormTitle>
-            <Row justify="start" align="middle">
+            <StyledRow justify="start" align="middle">
                 <FacebookIntegration
                     onClick={()=> setSelectedProvider(FACEBOOK)}
                     active={selectedProvider === FACEBOOK} />
@@ -33,7 +35,15 @@ export const LinkToProviders = () => {
                 <TwitterIntegration
                     onClick={()=> setSelectedProvider(TWITTER)}
                     active={selectedProvider === TWITTER} />
-            </Row>
+            </StyledRow>
         </SyrfFormWrapper>
     )
 }
+
+const StyledRow = styled(Row)`
+    justify-content: center;
+
+    ${media.medium`
+        justify-content: flex-start;
+    `}
+`
