@@ -10,6 +10,21 @@ exports[`<LoginPage /> should render and match the snapshot 1`] = `
     }
   }
 >
-  <LoginForm />
+  <Col
+    lg={12}
+    md={12}
+    sm={0}
+    xs={0}
+  >
+    <LeftPanel />
+  </Col>
+  <Col
+    lg={12}
+    md={12}
+    sm={24}
+    xs={24}
+  >
+    <LoginForm />
+  </Col>
 </Row>
 `;

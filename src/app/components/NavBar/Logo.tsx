@@ -30,7 +30,7 @@ export function Logo(props) {
 
   return (
     <Wrapper {...props}>
-      <Link to="/">
+      <Link to="/deals">
         {
           props.type === 'light' ? <StyledLogoLight/> : <StyledLogoDark />
         }

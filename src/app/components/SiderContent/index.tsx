@@ -25,7 +25,7 @@ export const SiderContent = (props) => {
     <SiderWrapper>
      <Logo type='light' />
       <SyrfMenu mode="inline" defaultSelectedKeys={['1']}>
-        <SyrfMenuItem title={'Deals'} key="1" icon={<MoneyCollectOutlined />}>
+        <SyrfMenuItem title={'Deals'} onClick={() => history.push('/deals')} key="1" icon={<MoneyCollectOutlined />}>
           Deals
         </SyrfMenuItem>
 
