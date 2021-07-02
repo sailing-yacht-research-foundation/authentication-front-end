@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import DealLogoSvg from '../assets/dummy-logo.svg';
 import { StyleConstants } from 'styles/StyleConstants';
 import { Link } from 'app/components/Link';
+import { media } from 'styles/media';
 
 export const Deals = () => {
   return (
@@ -46,6 +47,11 @@ export const Deals = () => {
 const DealWrapper = styled.div`
     display: flex;
     justify-content:center;
+    flex-direction: column;
+
+    ${media.medium`
+      flex-direction: row;
+    `}
 `;
 
 const DealInnerwrapper = styled.div`
