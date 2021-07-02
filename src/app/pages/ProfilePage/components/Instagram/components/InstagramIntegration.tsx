@@ -65,6 +65,8 @@ const InstagramIntegration = (props) => {
             connected={isConnected}
             Color="#3b5998"
             title="Connect To Instgram"
+            active={props.active}
+            onClick={props.onClick}
             icon={<StyledInstagramIcon />}
         >
             {!isConnected ? <InstagramLogin
@@ -77,7 +79,10 @@ const InstagramIntegration = (props) => {
                 scope="user_profile,user_media"
             >
                 <ConnectDisconnectButton>Connect</ConnectDisconnectButton>
-            </InstagramLogin> : <ConnectDisconnectButton onClick={disconnect}>Disconnect</ConnectDisconnectButton>}
+            </InstagramLogin> : 
+                <></>
+            // <ConnectDisconnectButton onClick={disconnect}>Disconnect</ConnectDisconnectButton>
+            }
         </ConnectButton>
     )
 }
@@ -85,7 +90,6 @@ const InstagramIntegration = (props) => {
 export default InstagramIntegration;
 
 const StyledInstagramIcon = styled(InstagramFilled)`
-    margin-top: 20px;
     font-size: 30px;
     color: #E8878C;
 `;

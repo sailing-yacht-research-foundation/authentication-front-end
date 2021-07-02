@@ -5,7 +5,7 @@ import {
 } from '@ant-design/icons';
 import { ConnectButton, ConnectDisconnectButton } from 'app/pages/ProfilePage/components/ProviderConnect';
 
-const TwitterIntegration = () => {
+const TwitterIntegration = (props) => {
 
     const onTwitterCallback = (response) => {
         console.log(response);
@@ -17,7 +17,9 @@ const TwitterIntegration = () => {
             providerTitle="Twitter"
             title="Connect to Twitter"
             connected={false}
-            icon={<TwitterCircleFilled style={{ marginTop: '20px', color: '#00aece', fontSize: '30px' }} />}>
+            active={props.active}
+            onClick={props.onClick}
+            icon={<TwitterCircleFilled style={{ color: '#00aece', fontSize: '30px' }} />}>
             <TwitterLogin
                 authCallback={onTwitterCallback}
                 consumerKey={'key'}
@@ -26,7 +28,7 @@ const TwitterIntegration = () => {
 
             >
             </TwitterLogin>
-            <ConnectDisconnectButton>Connect</ConnectDisconnectButton>
+            <ConnectDisconnectButton>Not connected</ConnectDisconnectButton>
         </ConnectButton>
     );
 }

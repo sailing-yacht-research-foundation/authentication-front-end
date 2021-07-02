@@ -4,7 +4,7 @@ import { ConnectButton, ConnectDisconnectButton } from 'app/pages/ProfilePage/co
 import Auth from '@aws-amplify/auth';
 import { toast } from 'react-toastify';
 import {
-    FacebookFilled
+    FacebookOutlined
 } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
@@ -65,7 +65,9 @@ const FacebookIntegration = (props) => {
             connected={isConnected}
             Color="#3b5998"
             title="Connect To Facebook"
-            icon={<FacebookFilled size={25} twoToneColor="#eb2f96" color="#3b5998" style={{ marginTop: '20px', color: '#3B5998', fontSize: '30px' }} />}
+            active={props.active}
+            onClick={props.onClick}
+            icon={<FacebookOutlined size={25} twoToneColor="#eb2f96" color="#3b5998" style={{ color: '#3B5998', fontSize: '30px' }} />}
         >
             {!isConnected ? (
                 <FacebookLogin
@@ -75,10 +77,13 @@ const FacebookIntegration = (props) => {
                     callback={onFacebookResponded}
                     cssClass="connect-btn"
                     render={rednerProps => (
-                        <ConnectDisconnectButton onClick={rednerProps.onClick}>Connect</ConnectDisconnectButton>
+                        <ConnectDisconnectButton onClick={rednerProps.onClick}>Not Connected</ConnectDisconnectButton>
                     )}
                 />
-            ) : <ConnectDisconnectButton onClick={disconnect}>Disconnect</ConnectDisconnectButton>}
+            ) : 
+            <></>
+            // <ConnectDisconnectButton onClick={disconnect}>Disconnect</ConnectDisconnectButton>
+            }
         </ConnectButton>
     )
 }

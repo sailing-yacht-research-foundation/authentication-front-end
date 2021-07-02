@@ -6,32 +6,37 @@ import { StyleConstants } from 'styles/StyleConstants';
 export const ConnectButton = (props) => {
     return (
         <ConnectButtonContainer
-            className={props.connected ? 'connected' : ''}
+            className={props.active ? 'active' : ''}
             onClick={props.connected ? () => { } : props.onClick}
             title={props.title}>
-            {props.connected && <ConnectStatusText>Connected</ConnectStatusText>}
-            {props.icon}
-            <ProviderTitle>{ props.providerTitle }</ProviderTitle>
-            {props.children}
+            <ImageContainer  className={!props.connected ? 'not-connected' : ''}>
+                {props.icon}
+            </ImageContainer>
+            <TextContainer className={!props.connected ? 'not-connected' : ''}>
+                <ProviderTitle>{props.providerTitle}</ProviderTitle>
+                {props.children}
+            </TextContainer>
         </ConnectButtonContainer>
     )
 }
 
 const ConnectButtonContainer = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items:center;
-    flex-direction: column;
-    width: 189px;;
-    height: 116px;
-    border-radius: 50%;
-    margin: 0 15px;
+    flex-direction: row;
+    width: 189px;
+    padding: 15px 0;
+    margin-right: 15px;
     cursor: pointer;
-    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
     box-sizing: border-box;
-    border-radius: 10px;
     position: relative;
     margin-bottom: 15px;
+    border-bottom: 4px solid rgba(79, 97, 165, .5);
+
+    &.active {
+        border-bottom: 4px solid ${StyleConstants.MAIN_TONE_COLOR};
+    }
 `;
 
 const ConnectStatusText = styled.div`
@@ -44,24 +49,40 @@ const ConnectStatusText = styled.div`
     font-size: 10px;
 `;
 
+const TextContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+
+    &.not-connected {
+        opacity: .7;
+    }
+`
+
 const ProviderTitle = styled.h4`
     font-family: ${StyleConstants.FONT_ROBOTO};
-    font-size: 14px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: bold;
+    font-size: 14px;
     line-height: 16px;
     letter-spacing: 0.03em;
-    text-align: left;
-    margin-top: 10px;
+    color: #000000;
+    margin-bottom: 5px;
+`;
+
+const ImageContainer = styled.div`
+    &.not-connected {
+        opacity: .7;
+    }
 `;
 
 export const ConnectDisconnectButton = styled.div`
     font-family: ${StyleConstants.FONT_ROBOTO};
-    font-size: 14px;
     font-style: normal;
-    font-weight: 700;
-    line-height: 16px;
+    font-weight: bold;
+    font-size: 8px;
+    line-height: 9px;
     letter-spacing: 0.03em;
-    text-align: left;
-    color: ${StyleConstants.MAIN_TONE_COLOR};
+    text-transform: uppercase;
+    color: #000000;
 `;
