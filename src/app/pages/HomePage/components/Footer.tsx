@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Typography, Button, Row, Col, Divider } from 'antd';
-import { Logo } from 'app/components/NavBar/Logo';
 import { Link } from 'react-router-dom';
 import { media } from 'styles/media';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { ReactComponent as Logo } from './assets/logo-light.svg';
 
 export const Footer = (props) => {
 
@@ -35,7 +35,7 @@ export const Footer = (props) => {
                             span: 24
                         }}
                     >
-                        <LogoResponsive type="light" />
+                        <Logo style={{ marginBottom: '15px' }}/>
                         <SYRFDescription>{t(translations.home_page.footer.syrf_description)}</SYRFDescription>
                     </Col>
 
@@ -126,20 +126,6 @@ const SYRFDescription = styled.p`
 
     ${media.small`
         text-align:center;
-    `};
-`;
-
-const LogoResponsive = styled(Logo)`
-    ${media.large`
-        justify-content: flex-start !important;
-    `};
-
-    ${media.medium`
-        justify-content: flex-start !important;
-    `};
-
-    ${media.small`
-        justify-content: center;
     `};
 `;
 
