@@ -15,7 +15,6 @@ export const HeaderContent = (props) => {
         <Wrapper>
             {
                 !isAuthenticated ? <>
-                    <div></div>
                     <Logo type="dark" align="left" />
                 </> : (
                     <>
@@ -35,13 +34,11 @@ const Wrapper = styled.nav`
     justify-content: space-between;
     align-self: center;
     width: 100%;
-
-    ${media.large`
-        width: 90%;
-    `};
+    flex-direction: row-reverse;
 
     ${media.medium`
-        width: 100%%;
+        width: 90%;
+        flex-direction: row;
     `};
 
     ${media.small`

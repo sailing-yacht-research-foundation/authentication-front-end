@@ -10,7 +10,7 @@ import 'antd/dist/antd.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import * as React from 'react';
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
+import { Switch, Route, BrowserRouter, Redirect, useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Layout } from 'antd';
 import { media } from 'styles/media';
@@ -85,9 +85,12 @@ export function App(props) {
 
   const isSiderToggled = useSelector(selectIsSiderToggled);
 
+  const history = useHistory();
+
   React.useEffect(() => {
-    if (isAuthenticated)
+    if (isAuthenticated) {
       dispatch(loginActions.getUser());
+    }
   }, []);
 
   const onSiderCollapsed = () => {
@@ -98,7 +101,7 @@ export function App(props) {
     <BrowserRouter>
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
-        {isAuthenticated && isSiderToggled  && <StyledSider
+        {isAuthenticated && isSiderToggled && <StyledSider
           collapsible={isMobile()}
           onCollapse={onSiderCollapsed}
           width={300}
@@ -107,13 +110,13 @@ export function App(props) {
             zIndex: 10
           }}
         >
-          <SiderContent/>
+          <SiderContent />
         </StyledSider>
         }
         <Layout className="site-layout">
           <Content>
             <Switch>
-              <PublicRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/'} component={isAuthenticated ? DealsPage : HomePage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
