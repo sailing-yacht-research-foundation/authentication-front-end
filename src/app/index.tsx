@@ -122,7 +122,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
