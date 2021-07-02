@@ -7,7 +7,7 @@ import { media } from 'styles/media';
 export function Logo(props) {
   return (
     <Wrapper {...props}>
-      <Link to="/deals">
+      <Link to="/">
         <StyledLogoDark />
       </Link>
     </Wrapper>
