@@ -50,7 +50,7 @@ export const LoginForm = (props) => {
         dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
         dispatch(actions.setIsAuthenticated(true));
         dispatch(actions.setUser(JSON.parse(JSON.stringify(user))));
-        history.push('/');
+        history.push('/deals');
       }
     }).catch(error => {
       setIsSigningIn(false);

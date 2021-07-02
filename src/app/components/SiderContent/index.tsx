@@ -27,9 +27,9 @@ export const SiderContent = (props) => {
 
   return (
     <SiderWrapper>
-      <Logo style={{ margin: '20px auto', display:'block' }}/>
+      <Logo onClick={() => history.push('/deals')} style={{ margin: '20px auto', display: 'block' }} />
       <SyrfMenu mode="inline" defaultSelectedKeys={['1']}>
-        <SyrfMenuItem title={t(translations.side_menu.deal)} key="1" icon={<MoneyCollectOutlined />}>
+        <SyrfMenuItem title={t(translations.side_menu.deal)} key="1" onClick={() => history.push('/deals')} icon={<MoneyCollectOutlined />}>
           {t(translations.side_menu.deal)}
         </SyrfMenuItem>
 
