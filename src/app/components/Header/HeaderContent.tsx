@@ -14,14 +14,16 @@ export const HeaderContent = (props) => {
     return (
         <Wrapper>
             {
-                !isAuthenticated ? <>
-                    <Logo type="dark" align="left" />
-                </> : (
-                    <>
-                        <SiderToggle />
-                        <div></div>
-                    </>
-                )
+                !isAuthenticated ?
+                    (<>
+                        <StyledDiv />
+                        <Logo type="dark" align="left" />
+                    </>) : (
+                        <>
+                            <SiderToggle />
+                            <div></div>
+                        </>
+                    )
             }
             <StyledLogo type="dark" align="left" />
             <Nav />
@@ -34,11 +36,9 @@ const Wrapper = styled.nav`
     justify-content: space-between;
     align-self: center;
     width: 100%;
-    flex-direction: row-reverse;
 
     ${media.medium`
         width: 90%;
-        flex-direction: row;
     `};
 
     ${media.small`
@@ -52,4 +52,12 @@ const StyledLogo = styled(Logo)`
     ${media.medium`
         display: none;
     `}
-`
+`;
+
+const StyledDiv = styled.div`
+    display: block;
+
+    ${media.medium`
+        display: none;
+    `}
+`;
