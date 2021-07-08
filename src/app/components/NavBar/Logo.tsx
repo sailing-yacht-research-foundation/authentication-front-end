@@ -17,7 +17,7 @@ export function Logo(props) {
 
 
   React.useEffect(() => {
-    setLeftAligned((location.pathname === '/') && !isAuthenticated);
+    setLeftAligned(!isAuthenticated);
   }, [location]);
 
   return (
