@@ -60,30 +60,45 @@ const InstagramIntegration = (props) => {
     }
 
     return (
-        <ConnectButton
-            providerTitle="Instagram"
-            connected={isConnected}
-            Color="#3b5998"
-            title="Connect To Instgram"
-            active={props.active}
-            onClick={props.onClick}
-            icon={<StyledInstagramIcon />}
-        >
-            {!isConnected ? <InstagramLogin
-                clientId="478370613251328"
-                buttonText=""
-                onSuccess={onInstagramResponded}
-                onFailure={onInstagramResponFailed}
-                cssClass="instagram-button"
-                redirectUri="https://syrf.dev/profile"
-                scope="user_profile,user_media"
-            >
-                <ConnectDisconnectButton>Connect</ConnectDisconnectButton>
-            </InstagramLogin> : 
-                <></>
-            // <ConnectDisconnectButton onClick={disconnect}>Disconnect</ConnectDisconnectButton>
+        <>
+            {!isConnected ? (
+                <InstagramLogin
+                    clientId="478370613251328"
+                    buttonText=""
+                    onSuccess={onInstagramResponded}
+                    onFailure={onInstagramResponFailed}
+                    cssClass="instagram-button"
+                    redirectUri="https://syrf.dev/profile"
+                    scope="user_profile,user_media"
+                >
+                    <ConnectButton
+                        providerTitle="Instagram"
+                        connected={isConnected}
+                        Color="#3b5998"
+                        title="Connect To Instgram"
+                        active={props.active}
+                        onClick={props.onClick}
+                        icon={<StyledInstagramIcon />}
+                    >
+                        <ConnectDisconnectButton>Not Connected</ConnectDisconnectButton>
+                    </ConnectButton>
+                </InstagramLogin>
+            ) :
+
+                (<ConnectButton
+                    providerTitle="Instagram"
+                    connected={isConnected}
+                    Color="#3b5998"
+                    title="Connect To Instgram"
+                    active={props.active}
+                    // onClick={disconnect}
+                    onClick={props.onClick}
+                    icon={<StyledInstagramIcon />}
+                >
+                    <ConnectDisconnectButton>Connected</ConnectDisconnectButton>
+                </ConnectButton>)
             }
-        </ConnectButton>
+        </>
     )
 }
 

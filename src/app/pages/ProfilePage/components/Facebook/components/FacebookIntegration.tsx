@@ -40,7 +40,6 @@ const FacebookIntegration = (props) => {
     }
 
     const storeFacebookAccessToken = (facebookAccessToken: string, notificationMessage: string, connectState: boolean) => {
-        console.log(facebookAccessToken);
         Auth.currentAuthenticatedUser().then(user => {
             Auth.updateUserAttributes(user, {
                 'custom:fb_token': facebookAccessToken
@@ -60,15 +59,7 @@ const FacebookIntegration = (props) => {
     }
 
     return (
-        <ConnectButton
-            providerTitle="Facebook"
-            connected={isConnected}
-            Color="#3b5998"
-            title="Connect To Facebook"
-            active={props.active}
-            onClick={props.onClick}
-            icon={<FacebookOutlined size={25} twoToneColor="#eb2f96" color="#3b5998" style={{ color: '#3B5998', fontSize: '30px' }} />}
-        >
+        <>
             {!isConnected ? (
                 <FacebookLogin
                     appId="4037107746377946"
@@ -77,14 +68,35 @@ const FacebookIntegration = (props) => {
                     callback={onFacebookResponded}
                     cssClass="connect-btn"
                     render={rednerProps => (
-                        <ConnectDisconnectButton onClick={rednerProps.onClick}>Not Connected</ConnectDisconnectButton>
+                        <ConnectButton
+                            providerTitle="Facebook"
+                            connected={isConnected}
+                            Color="#3b5998"
+                            title="Connect To Facebook"
+                            active={props.active}
+                            onClick={rednerProps.onClick}
+                            icon={<FacebookOutlined size={25} twoToneColor="#eb2f96" color="#3b5998" style={{ color: '#3B5998', fontSize: '30px' }} />}
+                        >
+                            <ConnectDisconnectButton>Not Connected</ConnectDisconnectButton>
+
+                        </ConnectButton>
                     )}
                 />
-            ) : 
-            <></>
-            // <ConnectDisconnectButton onClick={disconnect}>Disconnect</ConnectDisconnectButton>
+            ) :
+                <ConnectButton
+                    providerTitle="Facebook"
+                    connected={isConnected}
+                    Color="#3b5998"
+                    title="Connect To Facebook"
+                    active={props.active}
+                    // onClick={disconnect}
+                    onClick={props.onClick}
+                    icon={<FacebookOutlined size={25} twoToneColor="#eb2f96" color="#3b5998" style={{ color: '#3B5998', fontSize: '30px' }} />}
+                >
+                    <ConnectDisconnectButton>Connected</ConnectDisconnectButton>
+                </ConnectButton>
             }
-        </ConnectButton>
+        </>
     )
 }
 

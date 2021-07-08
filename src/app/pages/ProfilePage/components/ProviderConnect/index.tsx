@@ -7,7 +7,7 @@ export const ConnectButton = (props) => {
     return (
         <ConnectButtonContainer
             className={props.active ? 'active' : ''}
-            onClick={props.connected ? () => { } : props.onClick}
+            onClick={props.onClick}
             title={props.title}>
             <ImageContainer  className={!props.connected ? 'not-connected' : ''}>
                 {props.icon}

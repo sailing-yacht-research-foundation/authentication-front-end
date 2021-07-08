@@ -127,7 +127,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .carousel-dot.custom {
-    right: auto !important;
+    right: auto;
   }
 
   .carousel-dot.partner-app {

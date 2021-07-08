@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFacebookSlice } from '../slice';
 import { selectPosts } from '../slice/selectors';
 import PostTemplate from './PostTemplate';
+import { Timeline } from 'antd';
 
-const FacebookPosts = ({ isConnected }) => {
+const FacebookPosts = () => {
     const posts = useSelector(selectPosts);
 
     const { actions } = useFacebookSlice();
@@ -14,7 +15,7 @@ const FacebookPosts = ({ isConnected }) => {
 
     useEffect(() => {
         dispatch(actions.getPosts());
-    });
+    }, []);
 
     const renderFacebookPosts = () => {
         return posts.map(post => (
@@ -23,9 +24,9 @@ const FacebookPosts = ({ isConnected }) => {
     }
 
     return (
-        <>
+        <Timeline>
             {renderFacebookPosts()}
-        </>
+        </Timeline>
     )
 }
 

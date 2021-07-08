@@ -1,7 +1,7 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Form, Divider, Spin, Row, Col, DatePicker, Select } from 'antd';
+import { Form, Divider, Spin, Row, Col, DatePicker, Select, Menu, Dropdown } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
@@ -15,9 +15,11 @@ import {
     SyrfPhoneInput,
     SyrfSubmitButton,
     SyrfFormTitle,
+    SyrfFormSelect,
 } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { languagesList } from 'utils/languages-util';
+import PlacesAutocomplete from 'react-places-autocomplete';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -33,8 +35,10 @@ export const UpdateInfo = (props) => {
 
     const { authUser } = props;
 
+    const [address, setAddress] = useState<string>(getUserAttribute(authUser, 'address'));
+
     const onFinish = (values) => {
-        const { name, phone_number, sailing_number, address, facebook, instagram, twitter, birthdate, language } = values;
+        const { name, phone_number, sailing_number, birthdate, language } = values;
 
         setIsUpdatingProfile(true);
 
@@ -45,9 +49,6 @@ export const UpdateInfo = (props) => {
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
                 'custom:sailing_number': sailing_number,
-                'custom:facebook': facebook,
-                'custom:instagram': instagram,
-                'custom:twitter': twitter,
                 'custom:language': language
             }).then(response => {
                 setIsUpdatingProfile(false);
@@ -67,7 +68,7 @@ export const UpdateInfo = (props) => {
         const objectArray = Object.entries(languagesList);
 
         return objectArray.map(([key, value]) => {
-            return <Select.Option key={key} value={key.toLowerCase()}>{value.name}</Select.Option>
+            return <Select.Option key={key} value={key.toLowerCase()}>{value.nativeName}</Select.Option>
         });
     }
 
@@ -124,7 +125,47 @@ export const UpdateInfo = (props) => {
                             label={<SyrfFieldLabel>Address</SyrfFieldLabel>}
                             name="address"
                         >
-                            <SyrfInputField />
+
+                            <PlacesAutocomplete
+                                value={address}
+                                onChange={(address) => { setAddress(address) }}
+                            >
+                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                    <>
+                                        <SyrfInputField
+                                            {...getInputProps({
+                                                placeholder: 'Search Places ...',
+                                                className: 'location-search-input',
+                                            })}
+                                            value={address}
+                                        />
+                                        {suggestions.length > 0 && <StyledPLaceDropdown>
+                                            {suggestions.map((suggestion) => {
+                                                console.log();
+                                                const className = suggestion.active
+                                                    ? 'suggestion-item--active'
+                                                    : 'suggestion-item';
+                                                // inline style for demonstration purpose
+                                                const style = suggestion.active
+                                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                                return (
+                                                    <Menu.Item
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className,
+                                                            style,
+                                                        })}
+                                                        key={suggestion.index}
+                                                    >
+                                                        <span>{suggestion.description}</span>
+                                                    </Menu.Item>
+                                                );
+                                            })}
+                                        </StyledPLaceDropdown>}
+                                    </>
+                                )}
+                            </PlacesAutocomplete>
+
                         </Form.Item>
 
                         <Row gutter={24}>
@@ -181,61 +222,31 @@ export const UpdateInfo = (props) => {
                                         placeholder="Enter phone number" />
                                 </Form.Item>
                             </Col>
-
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={<SyrfFieldLabel>Facebook Profile</SyrfFieldLabel>}
-                                    name="facebook"
-                                    rules={[{ type: 'url' }]}
+                                    label="Language"
+                                    name="language"
+                                    rules={[{ required: true }]}
                                 >
-                                    <SyrfInputField />
+                                    <SyrfFormSelect placeholder={'Select a Language'}
+                                        showSearch
+                                        filterOption={(input, option) => {
+                                            if (option) {
+                                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+
+                                            return false;
+                                        }}
+                                    >
+                                        {
+                                            renderLanguegesDropdownList()
+                                        }
+                                    </SyrfFormSelect>
                                 </Form.Item>
+
                             </Col>
                         </Row>
-
-                        <Row gutter={24}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>Instagram Profile</SyrfFieldLabel>}
-                                    name="instagram"
-                                    rules={[{ type: 'url' }]}
-                                >
-                                    <SyrfInputField />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>Twitter Profile</SyrfFieldLabel>}
-                                    name="twitter"
-                                    rules={[{ type: 'url' }]}
-                                >
-                                    <SyrfInputField />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Form.Item
-                            label="Language"
-                            name="language"
-                            rules={[{ required: true }]}
-                        >
-                            <Select placeholder={'Select a Language'}
-                                showSearch
-                                filterOption={(input, option) => {
-                                    if (option) {
-                                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                            || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    }
-
-                                    return false;
-                                }}
-                            >
-                                {
-                                    renderLanguegesDropdownList()
-                                }
-                            </Select>
-                        </Form.Item>
 
                         <Divider />
 
@@ -272,4 +283,12 @@ const ChangeAvatarWrapper = styled.div`
         left: 50px;
         top: 70px;
     `}
+`;
+
+const StyledPLaceDropdown = styled(Menu)`
+    position: absolute;
+    z-index: 2;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    width: 100%;
 `;

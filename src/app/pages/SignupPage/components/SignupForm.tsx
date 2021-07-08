@@ -27,10 +27,8 @@ export const SignupForm = () => {
 
     const history = useHistory();
 
-    const [countryCode, setCountryCode] = useState<string>('us');
-
     const onFinish = (values) => {
-        const { email, name, password, locale, phone_number, language, address, birthdate } = values;
+        const { email, name, password, locale, language, passwordConfirmation, birthdate } = values;
 
         setIsSigningUp(true);
 
@@ -40,9 +38,7 @@ export const SignupForm = () => {
             attributes: {
                 name: name,
                 locale: locale,
-                language: language,
-                phone_number: '+' + phone_number,
-                address: address,
+                'custom:language': language,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
             }
         }).then(response => {
@@ -68,10 +64,6 @@ export const SignupForm = () => {
         })
     }
 
-    const onLocaleSelected = (locale) => {
-        setCountryCode(locale);
-    }
-
     const renderLocaleDropdownList = () => {
         const objectArray = Object.entries(localesList);
 
@@ -84,7 +76,7 @@ export const SignupForm = () => {
         const objectArray = Object.entries(languagesList);
 
         return objectArray.map(([key, value]) => {
-            return <Option key={key} value={key.toLowerCase()}>{value.name}</Option>
+            return <Option key={key} value={key.toLowerCase()}>{value.nativeName}</Option>
         });
     }
 
@@ -99,9 +91,7 @@ export const SignupForm = () => {
                     name: '',
                     password: '',
                     locale: 'us',
-                    birthdate: moment('2002-01-01'),
-                    address: '',
-                    phone_number: ''
+                    birthdate: moment('2002-01-01')
                 }}
                 onFinish={onFinish}
             >
@@ -130,49 +120,24 @@ export const SignupForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Country"
-                    name="locale"
-                    rules={[{ required: true }]}
-                >
-                    <Select placeholder={'Select a country'}
-                        showSearch
-                        onSelect={onLocaleSelected}
-                        filterOption={(input, option) => {
-                            if (option) {
-                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-
-                            return false;
-                        }}
-                    >
+                    label="Password Confirmation"
+                    name="passwordConfirmation"
+                    rules={[
                         {
-                            renderLocaleDropdownList()
-                        }
-                    </Select>
-                </Form.Item>
-
-                <Form.Item
-                    label="Language"
-                    name="language"
-                    rules={[{ required: true }]}
+                            required: true,
+                            message: 'Please confirm your password!',
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                            },
+                        }),
+                    ]}
                 >
-                    <Select placeholder={'Select a Language'}
-                        showSearch
-                        onSelect={onLocaleSelected}
-                        filterOption={(input, option) => {
-                            if (option) {
-                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-
-                            return false;
-                        }}
-                    >
-                        {
-                            renderLanguegesDropdownList()
-                        }
-                    </Select>
+                    <Input.Password />
                 </Form.Item>
 
                 <Form.Item
@@ -205,19 +170,46 @@ export const SignupForm = () => {
                 <Divider />
 
                 <Form.Item
-                    label="Address"
-                    name="address"
+                    label="Country"
+                    name="locale"
+                    rules={[{ required: true }]}
                 >
-                    <Input />
+                    <Select placeholder={'Select a country'}
+                        showSearch
+                        filterOption={(input, option) => {
+                            if (option) {
+                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+
+                            return false;
+                        }}
+                    >
+                        {
+                            renderLocaleDropdownList()
+                        }
+                    </Select>
                 </Form.Item>
 
                 <Form.Item
-                    label="Phone Number"
-                    name="phone_number"
-                    rules={[{ type: 'string' }]}
+                    label="Language"
+                    name="language"
+                    rules={[{ required: true }]}
                 >
-                    <PhoneInput country={countryCode} inputClass="phone-number-input"
-                        placeholder="Enter phone number" />
+                    <Select placeholder={'Select a Language'}
+                        filterOption={(input, option) => {
+                            if (option) {
+                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+
+                            return false;
+                        }}
+                    >
+                        {
+                            renderLanguegesDropdownList()
+                        }
+                    </Select>
                 </Form.Item>
 
                 <Divider />

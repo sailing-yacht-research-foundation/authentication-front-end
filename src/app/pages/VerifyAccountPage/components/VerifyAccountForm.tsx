@@ -12,6 +12,7 @@ export const VerifyAccountForm = () => {
         if (!history?.location?.state?.state?.email) {
             history?.push('/not-found')
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onFinish = (values) => {
