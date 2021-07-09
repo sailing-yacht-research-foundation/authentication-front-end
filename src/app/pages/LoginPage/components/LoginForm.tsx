@@ -18,10 +18,6 @@ const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
 };
 
-const tailLayout = {
-  wrapperCol: { offset: 6, sm: 24, md: 16, lg: 18 },
-};
-
 export const LoginForm = (props) => {
   const { actions } = UseLoginSlice();
   // Used to dispatch slice actions
@@ -31,7 +27,7 @@ export const LoginForm = (props) => {
 
   const [isSigningIn, setIsSigningIn] = React.useState<boolean>(false);
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const onFinish = (values: any) => {
     const { email, password } = values;

@@ -53,6 +53,7 @@
     "react-instagram-login": "^1.4.0",
     "react-phone-input-2": "^2.14.0",
     "react-phone-number-input": "^3.1.23",
+    "react-places-autocomplete": "^7.3.0",
     "react-redux": "7.2.1",
     "react-responsive-carousel": "^3.2.18",
     "react-router-dom": "5.2.0",

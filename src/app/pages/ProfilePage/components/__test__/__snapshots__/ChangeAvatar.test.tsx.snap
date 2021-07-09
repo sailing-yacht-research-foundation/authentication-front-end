@@ -12,12 +12,25 @@ exports[`<ChangeAvatar /> should render to match the snapshot 1`] = `
       <styled.div>
         <Image
           src="no-avatar.png"
+          style={
+            Object {
+              "maxHeight": "100%",
+              "maxWidth": "100%",
+              "objectFit": "cover",
+            }
+          }
         />
       </styled.div>
       <styled.div>
-        <ForwardRef(EditFilled)
+        <ForwardRef(CameraFilled)
           onClick={[Function]}
           size={20}
+          style={
+            Object {
+              "color": "#4F61A5",
+              "fontSize": "25px",
+            }
+          }
         />
         <input
           accept="image/png, image/jpeg"
@@ -33,6 +46,7 @@ exports[`<ChangeAvatar /> should render to match the snapshot 1`] = `
     style={
       Object {
         "marginTop": "15px",
+        "textAlign": "center",
       }
     }
   />

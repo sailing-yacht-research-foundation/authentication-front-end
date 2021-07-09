@@ -9,7 +9,7 @@ import { ReactComponent as Logo } from './assets/logo-light.svg';
 
 export const Footer = (props) => {
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <Wrapper>

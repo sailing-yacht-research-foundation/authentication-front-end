@@ -41,8 +41,12 @@ exports[`<Footer /> should render and matchs the snapshot 1`] = `
           }
         }
       >
-        <Styled(Logo)
-          type="light"
+        <ForwardRef(SvgLogoLight)
+          style={
+            Object {
+              "marginBottom": "15px",
+            }
+          }
         />
         <styled.p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.
@@ -103,7 +107,7 @@ exports[`<Footer /> should render and matchs the snapshot 1`] = `
           <Styled(Link)
             to="eula"
           >
-            End user license agreement
+            End User License Agreement
           </Styled(Link)>
         </Styled(Row)>
       </Col>

@@ -1,39 +1,57 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<VideoSection /> should render and matchs the snapshot 1`] = `
-<VideoSection__Wrapper>
-  <Row>
+<VideoSection__Wrapper
+  className="video-section"
+>
+  <Row
+    style={
+      Object {
+        "marginTop": "88px",
+      }
+    }
+  >
     <Title
-      className="text-white uppercase"
+      className="text-white introduction-text"
     >
       One Login
-    </Title>
-  </Row>
-  <Row>
-    <Title
-      className="text-white uppercase"
-    >
+       
+      <br />
+       
       Ultimate Potential
     </Title>
   </Row>
   <Row>
+    <p
+      className="introduction-description"
+    >
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
+    </p>
+  </Row>
+  <Row
+    style={
+      Object {
+        "marginTop": "40px",
+      }
+    }
+  >
     <Space
       size={15}
     >
       <Col>
         <Button
-          className="syrf-button-outline"
+          className="syrf-button"
           onClick={[Function]}
         >
-          Login
+          Log In
         </Button>
       </Col>
       <Col>
         <Button
-          className="syrf-button"
+          className="syrf-button-outline"
           onClick={[Function]}
         >
-          Signup
+          Sign Up
         </Button>
       </Col>
     </Space>

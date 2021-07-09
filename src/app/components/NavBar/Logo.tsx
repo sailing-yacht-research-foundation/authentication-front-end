@@ -3,10 +3,26 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { ReactComponent as LogoDark } from './assets/logo-dark.svg';
 import { media } from 'styles/media';
+import { useLocation } from 'react-router';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 
 export function Logo(props) {
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  const location = useLocation();
+
+  const [leftAligned, setLeftAligned] = React.useState<boolean>(false);
+
+
+  React.useEffect(() => {
+    setLeftAligned((location.pathname === '/') && !isAuthenticated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
+
   return (
-    <Wrapper {...props}>
+    <Wrapper {...props} className={leftAligned ? 'left-aligned-logo' : ''}>
       <Link to="/">
         <StyledLogoDark />
       </Link>
@@ -34,6 +50,10 @@ const Wrapper = styled.div`
   top: 0;
   bottom:0;
 
+  &.left-aligned-logo {
+    left: 0 !important;
+    right: auto;
+  }
 
 ${media.medium`
   height: auto;

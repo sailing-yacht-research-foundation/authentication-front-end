@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { media } from 'styles/media';
 import { StyleConstants } from 'styles/StyleConstants';
 
 export const ConnectButton = (props) => {
     return (
         <ConnectButtonContainer
             className={props.active ? 'active' : ''}
-            onClick={props.connected ? () => { } : props.onClick}
+            onClick={props.onClick}
             title={props.title}>
             <ImageContainer  className={!props.connected ? 'not-connected' : ''}>
                 {props.icon}
@@ -39,15 +38,15 @@ const ConnectButtonContainer = styled.div`
     }
 `;
 
-const ConnectStatusText = styled.div`
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    color: #00A8A8;
-    font-family: ${StyleConstants.FONT_ROBOTO};
-    font-weight: 500;
-    font-size: 10px;
-`;
+// const ConnectStatusText = styled.div`
+//     position: absolute;
+//     right: 10px;
+//     top: 10px;
+//     color: #00A8A8;
+//     font-family: ${StyleConstants.FONT_ROBOTO};
+//     font-weight: 500;
+//     font-size: 10px;
+// `;
 
 const TextContainer = styled.div`
     display: flex;

@@ -28,12 +28,14 @@ export const SiderToggle = () => {
         if (isMobile()) {
             dispatch(actions.setIsToggled(false));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
         if (isMobile()) {
             dispatch(actions.setIsToggled(false));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location])
 
     return (

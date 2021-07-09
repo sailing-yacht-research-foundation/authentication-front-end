@@ -22,7 +22,7 @@ export const Nav = () => {
 
   const history = useHistory();
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const logout = () => {
     dispatch(loginActions.setLogout());
@@ -51,9 +51,14 @@ export const Nav = () => {
         </>
       ) : (
         <>
-          <LinkStyled to="/signin">{t(translations.home_page.nav.log_in)}</LinkStyled>
-          <span style={{ marginLeft: '5px', marginRight: '5px' }}>|</span>
-          <LinkStyled style={{ color: '#0C4983' }} to="/signup">{t(translations.home_page.nav.sign_up)}</LinkStyled>
+          <Space size={15}>
+            <div>
+              <LinkStyled to="/signin">{t(translations.home_page.nav.log_in)}</LinkStyled>
+              <span style={{ marginLeft: '5px', marginRight: '5px' }}>|</span>
+              <LinkStyled style={{ color: '#0C4983' }} to="/signup">{t(translations.home_page.nav.sign_up)}</LinkStyled>
+            </div>
+            <SelectLanguage />
+          </Space>
         </>
       )}
     </Wrapper>

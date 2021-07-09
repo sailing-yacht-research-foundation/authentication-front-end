@@ -21,11 +21,10 @@ export const HeaderContent = (props) => {
                     </>) : (
                         <>
                             <SiderToggle />
-                            <div></div>
+                            <StyledLogo type="dark" align="left" />
                         </>
                     )
             }
-            <StyledLogo type="dark" align="left" />
             <Nav />
         </Wrapper>
     )

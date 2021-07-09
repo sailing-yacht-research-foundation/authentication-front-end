@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<VerifyAccountForm /> should render and matches the snaphshot 1`] = `
+<ForwardRef(InternalForm)
+  initialValues={
+    Object {
+      "remember": true,
+    }
+  }
+  layout="vertical"
+  name="basic"
+  onFinish={[Function]}
+>
+  <FormItem
+    label="Verification code"
+    name="code"
+    rules={
+      Array [
+        Object {
+          "required": true,
+        },
+      ]
+    }
+  >
+    <Input
+      type="text"
+    />
+  </FormItem>
+  <FormItem>
+    <Styled(Button)
+      htmlType="submit"
+      type="primary"
+    >
+      Verify my account
+    </Styled(Button)>
+    <div
+      style={
+        Object {
+          "marginTop": "10px",
+          "textAlign": "right",
+        }
+      }
+    >
+      <span>
+         Could not receive the code?   
+        <a
+          onClick={[Function]}
+          style={
+            Object {
+              "float": "right",
+            }
+          }
+        >
+          resend
+        </a>
+      </span>
+    </div>
+  </FormItem>
+</ForwardRef(InternalForm)>
+`;

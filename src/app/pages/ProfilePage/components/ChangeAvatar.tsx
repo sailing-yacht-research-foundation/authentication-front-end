@@ -5,7 +5,7 @@ import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
 import { CameraFilled } from '@ant-design/icons';
 import { Image, Spin, Typography } from 'antd';
 import { toast } from 'react-toastify';
-import Resizer from "react-image-file-resizer";
+// import Resizer from "react-image-file-resizer";
 import styled from 'styled-components';
 
 export const ChangeAvatar = (props) => {
@@ -15,15 +15,15 @@ export const ChangeAvatar = (props) => {
 
     const [isUploadingProfilePicture, setIsUploadingProfilePicture] = useState<boolean>(false);
 
-    const resizeImage = async (file) => {
-        return new Promise((resolve) => Resizer.imageFileResizer(
-            file, 500, 500, "PNG", 100, 0,
-            (uri) => {
-                resolve(uri);
-            },
-            'file'
-        ));
-    }
+    // const resizeImage = async (file) => {
+    //     return new Promise((resolve) => Resizer.imageFileResizer(
+    //         file, 500, 500, "PNG", 100, 0,
+    //         (uri) => {
+    //             resolve(uri);
+    //         },
+    //         'file'
+    //     ));
+    // }
 
     const onFileChanged = async (e) => {
         e.preventDefault();

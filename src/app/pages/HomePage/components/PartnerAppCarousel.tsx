@@ -10,7 +10,7 @@ import { translations } from 'locales/translations';
 
 export const PartnerAppCarousel = (props) => {
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <Wrapper>

@@ -3,12 +3,13 @@ import React from 'react';
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserAttribute } from 'utils/user-utils';
 import Auth from '@aws-amplify/auth';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import { languagesList } from 'utils/languages-util';
+import { useState } from 'react';
 
 export const SelectLanguage = (props) => {
 
@@ -16,35 +17,45 @@ export const SelectLanguage = (props) => {
 
     const user = useSelector(selectUser);
 
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+
     const { actions } = UseLoginSlice();
 
     const dispatch = useDispatch();
 
+    const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
+
     React.useEffect(() => {
-        changeLanguage(getUserAttribute(user, 'custom:language'))
+        changeLanguage(getUserAttribute(user, 'custom:language'));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+        setSelectedLanguage(lng);
         Auth.currentAuthenticatedUser().then(user => {
             Auth.updateUserAttributes(user, {
                 'custom:language': lng,
             }).then(response => {
-                i18n.changeLanguage(lng);
                 Auth.currentAuthenticatedUser()
                     .then(user => dispatch(actions.setUser(JSON.parse(JSON.stringify(user)))))
                     .catch(error => { });
-            }).catch(error => {
-
-            })
+            }).catch(error => { })
         }).catch(error => {
         })
     }
 
     const renderSelectedLanguage = (lng) => {
-        if (lng)
-            return languagesList[lng].name;
-        
-        return languagesList['en'].name;
+        if (isAuthenticated) {
+            if (lng && languagesList[lng])
+                return languagesList[lng].nativeName;
+
+            return languagesList['en'].nativeName;
+        }
+
+        return languagesList[selectedLanguage] ?
+            languagesList[selectedLanguage].nativeName
+            : languagesList['en'].nativeName;
     }
 
     const menu = (
@@ -62,7 +73,7 @@ export const SelectLanguage = (props) => {
                     e.preventDefault();
                     changeLanguage('nl');
                 }}>
-                    Dutch
+                    Nederlands
                 </a>
             </Menu.Item>
             <Menu.Item>
@@ -70,7 +81,7 @@ export const SelectLanguage = (props) => {
                     e.preventDefault();
                     changeLanguage('de');
                 }}>
-                    German
+                    Deutsch
                 </a>
             </Menu.Item>
             <Menu.Item>
@@ -78,7 +89,7 @@ export const SelectLanguage = (props) => {
                     e.preventDefault();
                     changeLanguage('zh');
                 }}>
-                    Chinese
+                    中文
                 </a>
             </Menu.Item>
             <Menu.Item>
@@ -86,7 +97,7 @@ export const SelectLanguage = (props) => {
                     e.preventDefault();
                     changeLanguage('es');
                 }}>
-                    Spanish
+                    español
                 </a>
             </Menu.Item>
             <Menu.Item>
@@ -94,7 +105,7 @@ export const SelectLanguage = (props) => {
                     e.preventDefault();
                     changeLanguage('it');
                 }}>
-                    Italian
+                    Italiano
                 </a>
             </Menu.Item>
         </Menu>
@@ -102,7 +113,7 @@ export const SelectLanguage = (props) => {
 
     return (
         <Dropdown overlay={menu}>
-            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+            <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                 {renderSelectedLanguage(getUserAttribute(user, 'custom:language'))} <DownOutlined />
             </a>
         </Dropdown>
