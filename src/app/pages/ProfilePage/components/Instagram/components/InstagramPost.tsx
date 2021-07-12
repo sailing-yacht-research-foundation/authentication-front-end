@@ -5,6 +5,7 @@ import { PostInnerWrapper } from '../../LinkToProviders';
 import { instagramActions } from '../slice';
 import { selectPosts } from '../slice/selectors';
 import PostTemplate from './PostTemplate';
+import { Spin } from 'antd';
 
 const InstagramPosts = () => {
     const posts = useSelector(selectPosts);
@@ -17,6 +18,9 @@ const InstagramPosts = () => {
     }, []);
 
     const renderFacebookFeeds = () => {
+        if (posts.length === 0)
+            return <Spin />;
+
         return posts.map((post, index) => (
             <PostTemplate index={index} post={post} />
         ));

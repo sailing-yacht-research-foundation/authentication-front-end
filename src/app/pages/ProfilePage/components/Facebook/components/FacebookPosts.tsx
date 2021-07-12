@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFacebookSlice } from '../slice';
 import { selectPosts } from '../slice/selectors';
 import PostTemplate from './PostTemplate';
-import { Timeline } from 'antd';
+import { Spin } from 'antd';
 import { PostInnerWrapper } from '../../LinkToProviders';
 
 const FacebookPosts = () => {
@@ -20,6 +20,9 @@ const FacebookPosts = () => {
     }, []);
 
     const renderFacebookPosts = () => {
+        if (posts.length === 0)
+            return <Spin />;
+
         return posts.map(post => (
             <PostTemplate post={post} />
         ));
@@ -27,9 +30,7 @@ const FacebookPosts = () => {
 
     return (
         <PostInnerWrapper>
-            <Timeline>
-                {renderFacebookPosts()}
-            </Timeline>
+            {renderFacebookPosts()}
         </PostInnerWrapper>
     )
 }

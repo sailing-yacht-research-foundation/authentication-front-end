@@ -107,12 +107,16 @@ const NotConnectedMessage = styled.div`
 export const PostInnerWrapper = styled.div`
     background: #eee;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 `;
 
 export const Post = styled.div`
     background: #fff;
     padding: 15px;
     margin-bottom: 15px;
+    width: 100%;
 `;
 
 export const PostUserWrapper = styled.div`
