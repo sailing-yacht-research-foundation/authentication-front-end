@@ -58,52 +58,51 @@ export const SelectLanguage = (props) => {
             : languagesList['en'].nativeName;
     }
 
+    const setLanguague = (e, lang) => {
+        e.preventDefault();
+        changeLanguage(lang);
+    }
+
     const menu = (
         <Menu>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="/" onClick={(e) => {
-                    e.preventDefault();
-                    changeLanguage('en');
+                <a rel="noopener noreferrer" href="/#" onClick={(e) => {
+                    setLanguague(e, 'en');
                 }}>
                     English
                 </a>
             </Menu.Item>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="/" onClick={(e) => {
-                    e.preventDefault();
-                    changeLanguage('nl');
+                <a rel="noopener noreferrer" href="/#" onClick={(e) => {
+                    setLanguague(e, 'nl');
                 }}>
                     Nederlands
                 </a>
             </Menu.Item>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="/" onClick={(e) => {
-                    e.preventDefault();
-                    changeLanguage('de');
+                <a rel="noopener noreferrer" href="/#" onClick={(e) => {
+                    setLanguague(e, 'de');
                 }}>
                     Deutsch
                 </a>
             </Menu.Item>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="/" onClick={(e) => {
-                    e.preventDefault();
-                    changeLanguage('zh');
+                <a rel="noopener noreferrer" href="/#" onClick={(e) => {
+                    setLanguague(e, 'zh');
                 }}>
                     中文
                 </a>
             </Menu.Item>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="/" onClick={(e) => {
-                    e.preventDefault();
-                    changeLanguage('es');
+                <a rel="noopener noreferrer" href="/#" onClick={(e) => {
+                    setLanguague(e, 'es');
                 }}>
                     español
                 </a>
             </Menu.Item>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="/" onClick={(e) => {
-                    e.preventDefault();
-                    changeLanguage('it');
+                <a rel="noopener noreferrer" href="/#" onClick={(e) => {
+                    setLanguague(e, 'it');
                 }}>
                     Italiano
                 </a>
