@@ -26,7 +26,8 @@ export const SelectLanguage = (props) => {
     const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
 
     React.useEffect(() => {
-        changeLanguage(getUserAttribute(user, 'custom:language'))
+        changeLanguage(getUserAttribute(user, 'custom:language'));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const changeLanguage = (lng) => {
@@ -112,7 +113,7 @@ export const SelectLanguage = (props) => {
 
     return (
         <Dropdown overlay={menu}>
-            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+            <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                 {renderSelectedLanguage(getUserAttribute(user, 'custom:language'))} <DownOutlined />
             </a>
         </Dropdown>

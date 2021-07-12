@@ -22,7 +22,7 @@ export const Nav = () => {
 
   const history = useHistory();
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const logout = () => {
     dispatch(loginActions.setLogout());

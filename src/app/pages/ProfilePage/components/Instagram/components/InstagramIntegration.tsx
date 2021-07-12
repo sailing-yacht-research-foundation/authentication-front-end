@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import InstagramLogin from 'instagram-login-react';
-import Auth from '@aws-amplify/auth';
 import { toast } from 'react-toastify';
 import {
     InstagramFilled
@@ -24,6 +23,7 @@ const InstagramIntegration = (props) => {
 
     useEffect(() => {
         checkForConnectStatus();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const checkForConnectStatus = () => {
@@ -31,33 +31,34 @@ const InstagramIntegration = (props) => {
         dispatch(actions.setIsConnected(!!token));
     }
 
-    const onInstagramResponded = (token) => {
-        if (token)
-            storeInstagramAccessToken(token, 'Successfully linked Instagram to your SYRF account', true);
+    const onInstagramResponded = (code) => {
+        if (code)
+            // storeInstagramAccessToken(token, 'Successfully linked Instagram to your SYRF account', true);
+            dispatch(actions.exchangeTokenFromCode(code));
     }
 
-    const storeInstagramAccessToken = (instagramAccessToken: string, notificationMessage: string, connectState: boolean) => {
-        Auth.currentAuthenticatedUser().then(user => {
-            Auth.updateUserAttributes(user, {
-                'custom:ig_token': instagramAccessToken
-            }).then(response => {
-                toast.success(notificationMessage);
-                dispatch(actions.setIsConnected(connectState));
-            }).catch(error => {
-                toast.error(error.message);
-            })
-        }).catch(error => {
-            toast.error(error.message);
-        })
-    }
+    // const storeInstagramAccessToken = (instagramAccessToken: string, notificationMessage: string, connectState: boolean) => {
+    //     Auth.currentAuthenticatedUser().then(user => {
+    //         Auth.updateUserAttributes(user, {
+    //             'custom:ig_token': instagramAccessToken
+    //         }).then(response => {
+    //             toast.success(notificationMessage);
+    //             dispatch(actions.setIsConnected(connectState));
+    //         }).catch(error => {
+    //             toast.error(error.message);
+    //         })
+    //     }).catch(error => {
+    //         toast.error(error.message);
+    //     })
+    // }
 
     const onInstagramResponFailed = (data) => {
         toast.error('We have encountered an unexpected error.');
     }
 
-    const disconnect = () => {
-        storeInstagramAccessToken('', 'Successfully disconnect Instagram from your SYRF account', false);
-    }
+    // const disconnect = () => {
+    //     storeInstagramAccessToken('', 'Successfully disconnect Instagram from your SYRF account', false);
+    // }
 
     return (
         <>

@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getUserAttribute } from 'utils/user-utils';
+import InstagramPosts from './Instagram/components/InstagramPost';
 
 const FACEBOOK = {
     name: 'Facebook',
@@ -48,13 +49,12 @@ export const LinkToProviders = () => {
 
     const renderPostsByProvider = () => {
         if (connectedProviders.facebook
-            && selectedProvider.value == FACEBOOK.value) {
+            && selectedProvider.value === FACEBOOK.value) {
             return <FacebookPosts />
+        } else if (connectedProviders.instagram 
+            && selectedProvider.value === INSTAGRAM.value) {
+            return <InstagramPosts />
         }
-
-        // if (connectedProviders.instagram) {
-        //     return <InstgramPost />
-        // }
 
         // if (connectedProviders.twitter) {
         //     return <Twitte />
@@ -102,4 +102,36 @@ const PostsWrapper = styled.div`
 
 const NotConnectedMessage = styled.div`
     text-align: center;
+`;
+
+export const PostInnerWrapper = styled.div`
+    background: #eee;
+    padding: 10px;
+`;
+
+export const Post = styled.div`
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+`;
+
+export const PostUserWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+`;
+
+export const UserAvatar = styled.div`
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    margin-right: 20px;
+`;
+
+export const PostUserName = styled.div`
+    font-weight: 700;
+`;
+
+export const PostCaption = styled.p`
+    margin: 10px;
 `;

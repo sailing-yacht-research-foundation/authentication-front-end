@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Input, Form, Select, Divider, DatePicker, Checkbox, Spin } from 'antd';
 import { Auth } from 'aws-amplify';
 import { languagesList, localesList } from 'utils/languages-util';
-import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { useHistory } from 'react-router';
@@ -28,7 +27,7 @@ export const SignupForm = () => {
     const history = useHistory();
 
     const onFinish = (values) => {
-        const { email, name, password, locale, language, passwordConfirmation, birthdate } = values;
+        const { email, name, password, locale, language, birthdate } = values;
 
         setIsSigningUp(true);
 

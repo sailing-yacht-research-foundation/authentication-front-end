@@ -5,6 +5,7 @@ import { useFacebookSlice } from '../slice';
 import { selectPosts } from '../slice/selectors';
 import PostTemplate from './PostTemplate';
 import { Timeline } from 'antd';
+import { PostInnerWrapper } from '../../LinkToProviders';
 
 const FacebookPosts = () => {
     const posts = useSelector(selectPosts);
@@ -15,6 +16,7 @@ const FacebookPosts = () => {
 
     useEffect(() => {
         dispatch(actions.getPosts());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const renderFacebookPosts = () => {
@@ -24,9 +26,11 @@ const FacebookPosts = () => {
     }
 
     return (
-        <Timeline>
-            {renderFacebookPosts()}
-        </Timeline>
+        <PostInnerWrapper>
+            <Timeline>
+                {renderFacebookPosts()}
+            </Timeline>
+        </PostInnerWrapper>
     )
 }
 

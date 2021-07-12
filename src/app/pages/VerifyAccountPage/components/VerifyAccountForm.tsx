@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Form, Button, Spin } from 'antd';
+import { Input, Form } from 'antd';
 import { Auth } from 'aws-amplify';
 import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
@@ -57,7 +57,10 @@ export const VerifyAccountForm = () => {
                     Verify my account
                 </SyrfFormButton>
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                    <span> Could not receive the code? &nbsp; <a style={{ float: 'right' }} onClick={() => resendConfirmationCode()}>resend</a></span>
+                    <span> Could not receive the code? &nbsp; <a style={{ float: 'right' }} href="/" onClick={(e) => {
+                        e.preventDefault();
+                        resendConfirmationCode();
+                    }}>resend</a></span>
                 </div>
             </Form.Item>
         </Form>

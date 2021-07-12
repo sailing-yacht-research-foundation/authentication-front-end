@@ -1,7 +1,9 @@
 /* --- STATE --- */
 export interface InstagramState {
     posts: object[],
-    isConnected: boolean
+    isConnected: boolean,
+    getFeedError: boolean,
+    exchangeTokenError: boolean,
   }
   
   export type ContainerState = InstagramState

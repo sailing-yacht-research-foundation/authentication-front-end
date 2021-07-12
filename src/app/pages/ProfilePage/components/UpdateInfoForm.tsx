@@ -1,7 +1,7 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Form, Divider, Spin, Row, Col, DatePicker, Select, Menu, Dropdown } from 'antd';
+import { Form, Divider, Spin, Row, Col, DatePicker, Select, Menu } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
@@ -35,7 +35,7 @@ export const UpdateInfo = (props) => {
 
     const { authUser } = props;
 
-    const [address, setAddress] = useState<string>(getUserAttribute(authUser, 'address'));
+    const [address, setAddress] = useState<string>(getUserAttribute(authUser, 'address') || '');
 
     const onFinish = (values) => {
         const { name, phone_number, sailing_number, birthdate, language } = values;

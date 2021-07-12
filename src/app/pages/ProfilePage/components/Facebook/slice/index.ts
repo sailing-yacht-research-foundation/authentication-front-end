@@ -7,6 +7,8 @@ import { FacebookState } from './types';
 export const initialState: FacebookState = {
   posts: [],
   isConnected: false,
+  getFeedError: false,
+  exchangeTokenError: false
 };
 
 const slice = createSlice({
@@ -19,7 +21,14 @@ const slice = createSlice({
     },
     setIsConnected(state, action: PayloadAction<boolean>) {
       state.isConnected = action.payload;
-    }
+    },
+    setGetFeedsErrorState(state, action: PayloadAction<boolean>) {
+      state.getFeedError = action.payload;
+    },
+    setExchangeTokenErrorState(state, action: PayloadAction<boolean>) {
+      state.exchangeTokenError = action.payload;
+    },
+    exchangeToken(state, action: PayloadAction<string>) { }
   },
 });
 

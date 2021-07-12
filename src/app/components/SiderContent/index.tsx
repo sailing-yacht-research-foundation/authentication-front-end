@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Menu } from 'antd';
 import { ReactComponent as Logo } from './assets/my-sailing.svg';
 import {
@@ -23,7 +22,7 @@ import { translations } from 'locales/translations';
 export const SiderContent = (props) => {
   const history = useHistory();
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <SiderWrapper>
@@ -86,4 +85,4 @@ const SyrfSubmenu = styled(Menu.SubMenu)`
 const SyrfMenuItem = styled(Menu.Item)`
     height: 50px !important;
     line-height: 50px !important;
-`
+`;

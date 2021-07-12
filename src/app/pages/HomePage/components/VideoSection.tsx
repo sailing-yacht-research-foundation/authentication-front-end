@@ -9,7 +9,7 @@ import { translations } from 'locales/translations';
 
 export const VideoSection = (props) => {
     
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     const history = useHistory();
 

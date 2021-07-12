@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
 import { LoginForm } from '../LoginForm';
+import Provider from 'app/components/Provider/index';
 // import i18next from 'i18next';
 
 const shallowRenderer = createRenderer();
@@ -8,7 +9,10 @@ const shallowRenderer = createRenderer();
 describe('<LoginForm />', () => {
   it('should render with en translations', () => {
     // i18next.changeLanguage('en');
-    shallowRenderer.render(<LoginForm />);
+    shallowRenderer.render(
+      <Provider>
+        <LoginForm />
+      </Provider>);
     const renderedOutput = shallowRenderer.getRenderOutput();
     expect(renderedOutput).toMatchSnapshot();
   });

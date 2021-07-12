@@ -19,7 +19,7 @@ const backgroundProperties = {
 
 export const BenefitCarousel = (props) => {
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <Carousel

@@ -10,7 +10,7 @@ import 'antd/dist/antd.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import * as React from 'react';
-import { Switch, Route, BrowserRouter, Redirect, useHistory } from 'react-router-dom';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Layout } from 'antd';
 import { media } from 'styles/media';
@@ -30,7 +30,6 @@ import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
 import { EULAPage } from './pages/EULAPage/Loadable';
 import { DealsPage } from './pages/DealsPage/Loadable';
 
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
@@ -73,7 +72,6 @@ const PublicRoute = ({ component: Component, ...rest }) => {
 }
 
 export function App(props) {
-  const { i18n } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -85,12 +83,11 @@ export function App(props) {
 
   const isSiderToggled = useSelector(selectIsSiderToggled);
 
-  const history = useHistory();
-
   React.useEffect(() => {
     if (isAuthenticated) {
       dispatch(loginActions.getUser());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSiderCollapsed = () => {
@@ -107,7 +104,7 @@ export function App(props) {
           width={300}
           style={{
             background: StyleConstants.MAIN_TONE_COLOR,
-            zIndex: 10
+            zIndex: 999
           }}
         >
           <SiderContent />

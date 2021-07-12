@@ -7,7 +7,7 @@ import { translations } from 'locales/translations';
 
 
 export const LeftPanel = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <Wrapper>
