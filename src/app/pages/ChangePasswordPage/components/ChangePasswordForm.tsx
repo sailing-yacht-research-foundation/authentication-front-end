@@ -12,8 +12,13 @@ import {
 import styled from 'styled-components';
 import { useState } from 'react';
 import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const ChangePasswordForm = (props) => {
+
+    const { t } = useTranslation();
+
     const [form] = Form.useForm();
 
     const [isChangingPassword, setIsChangingPassword] = useState<boolean>(false);
@@ -40,9 +45,9 @@ export const ChangePasswordForm = (props) => {
     return (
         <Wrapper>
             <ProfileTabs />
-            <SyrfFormWrapper style={{ marginTop: '50px'}}>
+            <SyrfFormWrapper style={{ marginTop: '50px' }}>
                 <Spin spinning={isChangingPassword}>
-                    <SyrfFormTitle>Change Your Password</SyrfFormTitle>
+                    <SyrfFormTitle>{t(translations.change_password_page.change_your_password)}</SyrfFormTitle>
                     <Form
                         form={form}
                         layout="vertical"
@@ -54,7 +59,7 @@ export const ChangePasswordForm = (props) => {
                         }}
                     >
                         <Form.Item
-                            label={<SyrfFieldLabel>Old Password</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.change_password_page.old_password)}</SyrfFieldLabel>}
                             name="oldPassword"
                             rules={[{ required: true, max: 16, min: 8 }]}
                         >
@@ -62,7 +67,7 @@ export const ChangePasswordForm = (props) => {
                         </Form.Item>
 
                         <Form.Item
-                            label={<SyrfFieldLabel>New Password</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                             name="newPassword"
                             rules={[{ required: true, max: 16, min: 8 }]}
                         >
@@ -71,7 +76,7 @@ export const ChangePasswordForm = (props) => {
 
                         <Form.Item>
                             <SyrfSubmitButton type="primary" htmlType="submit">
-                                Change password
+                                {t(translations.change_password_page.change_password)}
                             </SyrfSubmitButton>
                         </Form.Item>
                     </Form>

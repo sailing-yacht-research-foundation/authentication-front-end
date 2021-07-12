@@ -5,7 +5,7 @@
       "sign_up": "Sign Up",
       "user_dropdown": {
         "change_password": "Change Password",
-        "log_out": "Logout Out"
+        "log_out": "Log Out"
       }
     },
     "video_section": {
@@ -38,7 +38,7 @@
     },
     "footer": {
       "title": "Are you a developer who wants to use My Sailing Profile?",
-      "description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
+      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
       "developer_button": "Developers",
       "syrf_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.",
       "syrf_link": "SYRF",
@@ -87,7 +87,7 @@
       "required_validation": "Locale is required"
     },
     "phone_number": {
-      "label":  "Phone Number"
+      "label": "Phone Number"
     },
     "address": {
       "label": "Address"
@@ -150,7 +150,7 @@
         "required_validation": "Name is required"
       },
       "phone_number": {
-        "label":  "Phone Number"
+        "label": "Phone Number"
       },
       "address": {
         "label": "Address"
@@ -188,14 +188,32 @@
       "change_password": "Change Password"
     }
   },
-  "privacy_page": {
-
-  },
-  "eulapage": {
-
-  },
+  "privacy_page": {},
+  "eulapage": {},
   "not_found_page": {
     "page_not_found": "Page not found",
     "return_to_homepage": "Return to Home page"
+  },
+  "change_password_page": {
+    "change_your_password": "Change Your Password",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "change_password": "Change Password"
+  },
+  "forgot_password_page": {
+    "confirmation_code_sent": "Confirmation code sent!",
+    "your_password_has_been_changed_you_can_login_now": "Your password has been changed, you can login now",
+    "recover_password": "Recover Password",
+    "new_password": "New Password",
+    "change_password": "Change Password",
+    "could_not_receive_the_code": "Could not receive the code?",
+    "resend": "resend"
+  },
+  "verify_account_page": {
+    "confirmation_code_sent": "Confimation code sent!",
+    "verification_code": "Verification code",
+    "verify_my_account": "Verify my account",
+    "could_not_receive_the_code": "Could not receive the code",
+    "resend": "resend"
   }
 }
