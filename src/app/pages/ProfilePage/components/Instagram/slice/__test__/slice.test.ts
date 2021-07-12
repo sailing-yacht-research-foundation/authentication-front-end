@@ -30,4 +30,44 @@ describe('Instagram slice', () => {
       posts: []
     });
   });
+
+  it('should handle setGetFeedsErrorState', () => {
+    const getFeedError = true;
+    expect(
+      slice.reducer(state, slice.instagramActions.setGetFeedsErrorState(getFeedError)),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      getFeedError: true
+    });
+  });
+
+  it('should handle setExchangeTokenErrorState', () => {
+    const posts = [];
+    expect(
+      slice.reducer(state, slice.instagramActions.setPosts([])),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      posts: []
+    });
+  });
+
+  it('should handle exchangeTokenFromCode', () => {
+    const posts = [];
+    expect(
+      slice.reducer(state, slice.instagramActions.setPosts([])),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      posts: []
+    });
+  });
+
+  it('should handle exchangeLongLivedToken', () => {
+    const posts = [];
+    expect(
+      slice.reducer(state, slice.instagramActions.setPosts([])),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      posts: []
+    });
+  });
 });

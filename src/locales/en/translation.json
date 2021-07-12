@@ -1,15 +1,53 @@
 {
   "home_page": {
     "nav": {
-      "sign_in": "Sign In",
+      "log_in": "Log In",
       "sign_up": "Sign Up",
       "user_dropdown": {
         "change_password": "Change Password",
-        "sign_out": "Sign Out"
+        "log_out": "Logout Out"
       }
+    },
+    "video_section": {
+      "one_login": "One Login",
+      "ultimate_potential": "Ultimate Potential",
+      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
+      "login": "Log In",
+      "signup": "Sign Up"
+    },
+    "benefit_carousel": {
+      "slide_one": {
+        "title": "One password for all sailing apps and data",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+      },
+      "slide_two": {
+        "title": "You control who can access your sailing data",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+      },
+      "slide_three": {
+        "title": "GDPR & CCPA Compliant",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+      },
+      "slide_four": {
+        "title": "Organization independent",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+      }
+    },
+    "partner_app_carousel": {
+      "title": "Use with these innotive apps"
+    },
+    "footer": {
+      "title": "Are you a developer who wants to use My Sailing Profile?",
+      "description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
+      "developer_button": "Developers",
+      "syrf_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.",
+      "syrf_link": "SYRF",
+      "policy_privacy_link": "Privacy Policy",
+      "eula_link": "End User License Agreement",
+      "copyright": "Copyright (c) 2021 Sailing Yacht Research Foundation"
     }
   },
-  "signin_page": {
+  "login_page": {
     "email": {
       "label": "Email",
       "email_validate": "Your input must be an email",
@@ -20,7 +58,14 @@
       "password_validate": "Your password must be at least 6 characters and max 15 characters",
       "required_validate": "Password is required"
     },
-    "signin": "Sign In"
+    "login": "Log In",
+    "login_message": "Logging you in....",
+    "login_error": "Cannot log you in at the moment.",
+    "forgot_password": "Forgot Password?",
+    "dont_have_account": "Don't have an account?",
+    "signup": "Sign Up",
+    "leftpanel_title": "Lorem Ispum dolot",
+    "leftpanel_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. At diam, lobortis sit pretium. Sem nec, in scelerisque diam. In felis nunc lectus pulvinar laoreet tempor vitae. Auctor suspendisse tristique libero facilisis quis turpis feugiat vitae. Lacus quam blandit arcu sagittis nulla eleifend. Nisl quam et malesuada eu fusce semper. Augue curabitur duis et, nunc, ullamcorper. Massa pulvinar faucibus in volutpat venenatis suspendisse est. Ut velit vivamus vitae, etiam id."
   },
   "signup_page": {
     "email": {
@@ -82,7 +127,8 @@
   "side_menu": {
     "deal": "Deals",
     "profile": {
-      "title": "My Profile",
+      "title": "Profile",
+      "name": "My Profile",
       "change_password": "Change Password",
       "notification_setting": "Notification Settings",
       "profile_setting": "Profile Settings"
@@ -147,5 +193,9 @@
   },
   "eulapage": {
 
+  },
+  "not_found_page": {
+    "page_not_found": "Page not found",
+    "return_to_homepage": "Return to Home page"
   }
 }

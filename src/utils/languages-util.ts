@@ -1,32 +1,28 @@
 export const languagesList = {
+    "zh":{
+        "name":"Chinese",
+        "nativeName":"中文"
+    },
+    "nl":{
+        "name":"Dutch",
+        "nativeName":"Nederlands"
+    },
     "en":{
         "name":"English",
         "nativeName":"English"
-    },
-    "fr":{
-        "name":"French",
-        "nativeName":"français, langue française"
     },
     "de":{
         "name":"German",
         "nativeName":"Deutsch"
     },
-    "nl":{
-        "name":"Dutch",
-        "nativeName":"Nederlands, Vlaams"
-    },
     "es":{
         "name":"Spanish; Castilian",
-        "nativeName":"español, castellano"
+        "nativeName":"español"
     },
-    "zh":{
-        "name":"Chinese",
-        "nativeName":"中文 (Zhōngwén), 汉语, 漢語"
+    "it":{
+        "name":"Italian",
+        "nativeName":"Italiano"
     },
-    "it": {
-        "name": "Italian",
-        "nativeName": "Italian"
-    }
 }
 
 export const localesList = {

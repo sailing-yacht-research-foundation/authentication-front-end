@@ -2,6 +2,28 @@
 
 exports[`<LoadingIndicator /> should match snapshot 1`] = `
 .c0 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.c1 {
   -webkit-animation: cqkDSr 2.625s linear infinite;
   animation: cqkDSr 2.625s linear infinite;
   height: 3rem;
@@ -11,30 +33,56 @@ exports[`<LoadingIndicator /> should match snapshot 1`] = `
   transform-origin: center;
 }
 
-.c1 {
+.c2 {
   -webkit-animation: caVMmK 1.5s ease-in-out infinite;
   animation: caVMmK 1.5s ease-in-out infinite;
   stroke: rgba(215,113,88,1);
   stroke-linecap: round;
 }
 
-<svg
+<div
   class="c0"
-  viewBox="-24 -24 48 48"
 >
-  <circle
+  <svg
     class="c1"
-    cx="0"
-    cy="0"
-    fill="none"
-    r="20"
-    stroke-width="4"
-  />
-</svg>
+    viewBox="-24 -24 48 48"
+  >
+    <circle
+      class="c2"
+      cx="0"
+      cy="0"
+      fill="none"
+      r="20"
+      stroke-width="4"
+    />
+  </svg>
+</div>
 `;
 
 exports[`<LoadingIndicator /> should match snapshot when props changed 1`] = `
 .c0 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.c1 {
   -webkit-animation: cqkDSr 2.625s linear infinite;
   animation: cqkDSr 2.625s linear infinite;
   height: 1.25rem;
@@ -44,24 +92,28 @@ exports[`<LoadingIndicator /> should match snapshot when props changed 1`] = `
   transform-origin: center;
 }
 
-.c1 {
+.c2 {
   -webkit-animation: caVMmK 1.5s ease-in-out infinite;
   animation: caVMmK 1.5s ease-in-out infinite;
   stroke: rgba(215,113,88,1);
   stroke-linecap: round;
 }
 
-<svg
+<div
   class="c0"
-  viewBox="-24 -24 48 48"
 >
-  <circle
+  <svg
     class="c1"
-    cx="0"
-    cy="0"
-    fill="none"
-    r="20"
-    stroke-width="4"
-  />
-</svg>
+    viewBox="-24 -24 48 48"
+  >
+    <circle
+      class="c2"
+      cx="0"
+      cy="0"
+      fill="none"
+      r="20"
+      stroke-width="4"
+    />
+  </svg>
+</div>
 `;

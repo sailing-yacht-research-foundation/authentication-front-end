@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row } from 'antd';
 import { SignupForm } from './components/SignupForm';
-import { StyleConstants } from 'styles/StyleConstants';
 
 export const SignupPage = () => {
   return (

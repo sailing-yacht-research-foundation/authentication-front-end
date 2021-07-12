@@ -4,7 +4,7 @@
 
 import Auth from "@aws-amplify/auth";
 import { loginActions } from ".";
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
 function* getAuthUser() {
     const user =  yield call(getAuthorizedUser);

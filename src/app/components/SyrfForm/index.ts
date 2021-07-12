@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { Input, Button, DatePicker } from 'antd';
+import { Input, Button, Select } from 'antd';
 import PhoneInput from 'react-phone-input-2';
 import { media } from 'styles/media';
 
@@ -78,4 +78,16 @@ export const SyrfFormButton = styled(Button)`
     font-weight: 700;
     line-height: 19px;
     color: #fff;
+`;
+
+export const SyrfFormSelect = styled(Select)`
+    border-radius: 10px;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
+    height: 36px;
+
+    > div {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
 `;

@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFacebookSlice } from '../slice';
 import { selectPosts } from '../slice/selectors';
 import PostTemplate from './PostTemplate';
+import { Timeline } from 'antd';
+import { PostInnerWrapper } from '../../LinkToProviders';
 
-const FacebookPosts = ({ isConnected }) => {
+const FacebookPosts = () => {
     const posts = useSelector(selectPosts);
 
     const { actions } = useFacebookSlice();
@@ -14,7 +16,8 @@ const FacebookPosts = ({ isConnected }) => {
 
     useEffect(() => {
         dispatch(actions.getPosts());
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const renderFacebookPosts = () => {
         return posts.map(post => (
@@ -23,9 +26,11 @@ const FacebookPosts = ({ isConnected }) => {
     }
 
     return (
-        <>
-            {renderFacebookPosts()}
-        </>
+        <PostInnerWrapper>
+            <Timeline>
+                {renderFacebookPosts()}
+            </Timeline>
+        </PostInnerWrapper>
     )
 }
 

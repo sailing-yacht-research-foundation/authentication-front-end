@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js add react-phone-number-input
+  /usr/bin/node /usr/share/yarn/bin/yarn.js add react-places-autocomplete
 
 PATH: 
   /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -8,13 +8,13 @@ Yarn version:
   1.22.5
 
 Node version: 
-  10.24.0
+  10.24.1
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/dat/code/authentication-front-end/node_modules/.bin/acorn'
+  Error: EACCES: permission denied, unlink '/home/dat/code/authentication-front-end/node_modules/lodash.debounce/LICENSE'
 
 npm manifest: 
   {
@@ -70,7 +70,9 @@ npm manifest:
       "react-i18next": "11.7.2",
       "react-image-file-resizer": "^0.4.4",
       "react-instagram-login": "^1.4.0",
+      "react-phone-input-2": "^2.14.0",
       "react-phone-number-input": "^3.1.23",
+      "react-places-autocomplete": "^7.3.0",
       "react-redux": "7.2.1",
       "react-responsive-carousel": "^3.2.18",
       "react-router-dom": "5.2.0",
@@ -10385,6 +10387,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
     integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
   
+  lodash.debounce@^4.0.8:
+    version "4.0.8"
+    resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+    integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
+  
   lodash.get@^4.4.2:
     version "4.4.2"
     resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
@@ -10395,10 +10402,20 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
     integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
   
+  lodash.reduce@^4.6.0:
+    version "4.6.0"
+    resolved "https://registry.yarnpkg.com/lodash.reduce/-/lodash.reduce-4.6.0.tgz#f1ab6b839299ad48f784abbf476596f03b914d3b"
+    integrity sha1-8atrg5KZrUj3hKu/R2WW8DuRTTs=
+  
   lodash.sortby@^4.7.0:
     version "4.7.0"
     resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
     integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
+  
+  lodash.startswith@^4.2.1:
+    version "4.2.1"
+    resolved "https://registry.yarnpkg.com/lodash.startswith/-/lodash.startswith-4.2.1.tgz#c598c4adce188a27e53145731cdc6c0e7177600c"
+    integrity sha1-xZjErc4YiiflMUVzHNxsDnF3YAw=
   
   lodash.template@^4.5.0:
     version "4.5.0"
@@ -13417,6 +13434,18 @@ Lockfile:
     dependencies:
       fast-base64-decode "^1.0.0"
   
+  react-phone-input-2@^2.14.0:
+    version "2.14.0"
+    resolved "https://registry.yarnpkg.com/react-phone-input-2/-/react-phone-input-2-2.14.0.tgz#75dff7ba503becc7a19e0e8ff5aa3d878265af77"
+    integrity sha512-gOY3jUpwO7ulryXPEdqzH7L6DPqI9RQxKfBxZbgqAwXyALGsmwLWFyi2RQwXlBLWN/EPPT4Nv6I9TESVY2YBcg==
+    dependencies:
+      classnames "^2.2.6"
+      lodash.debounce "^4.0.8"
+      lodash.memoize "^4.1.2"
+      lodash.reduce "^4.6.0"
+      lodash.startswith "^4.2.1"
+      prop-types "^15.7.2"
+  
   react-phone-number-input@^3.1.23:
     version "3.1.23"
     resolved "https://registry.yarnpkg.com/react-phone-number-input/-/react-phone-number-input-3.1.23.tgz#8e8d2b7fb98d94514721d05ca5c58bd31f8d06e1"
@@ -13427,6 +13456,14 @@ Lockfile:
       input-format "^0.3.6"
       libphonenumber-js "^1.9.19"
       prop-types "^15.7.2"
+  
+  react-places-autocomplete@^7.3.0:
+    version "7.3.0"
+    resolved "https://registry.yarnpkg.com/react-places-autocomplete/-/react-places-autocomplete-7.3.0.tgz#81a2345ae4a6fc35d7a712ccd4850d497553ba1b"
+    integrity sha512-86wcHC69JATvWBnIS/yCsBHLtwzOGcnx3Ye94u74yTrz1jLRC/txkVDkf6rvC+Jq3zNe/tAg/W53x0EaH1ZPPw==
+    dependencies:
+      lodash.debounce "^4.0.8"
+      prop-types "^15.5.8"
   
   react-redux@7.2.1:
     version "7.2.1"

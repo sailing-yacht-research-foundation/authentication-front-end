@@ -13,7 +13,6 @@ const slice = createSlice({
     initialState,
     reducers: {
         setIsToggled(state, action: PayloadAction<boolean>) {
-            console.log(action.payload);
             state.isToggled = action.payload;
         }
     },

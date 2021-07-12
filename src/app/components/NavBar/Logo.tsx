@@ -1,48 +1,62 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { ReactComponent as LogoLight } from './assets/logo-light.svg';
 import { ReactComponent as LogoDark } from './assets/logo-dark.svg';
 import { media } from 'styles/media';
+import { useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 
 export function Logo(props) {
-  
+
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  const StyledLogoDark = styled(LogoDark)`
-    display: block;
-    height: 25px;
-    
-    ${media.medium`
-      height: auto;
-      display: ${isAuthenticated ? 'none' : 'block'};
-    `}
-  `;
+  const location = useLocation();
 
-  const Wrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: ${props.type === 'light' ? '20px' : '0px'} 0;
-  `;
+  const [leftAligned, setLeftAligned] = React.useState<boolean>(false);
+
+
+  React.useEffect(() => {
+    setLeftAligned(!isAuthenticated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   return (
-    <Wrapper {...props}>
+    <Wrapper {...props} className={leftAligned ? 'left-aligned-logo' : ''}>
       <Link to="/">
-        {
-          props.type === 'light' ? <StyledLogoLight/> : <StyledLogoDark />
-        }
+        <StyledLogoDark />
       </Link>
     </Wrapper>
   );
 }
 
-const StyledLogoLight = styled(LogoLight)`
+const StyledLogoDark = styled(LogoDark)`
+  display: block;
   height: 25px;
-      
+  
   ${media.medium`
     height: auto;
   `}
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom:0;
+
+  &.left-aligned-logo {
+    left: 0 !important;
+    right: auto;
+  }
+
+${media.medium`
+  height: auto;
+  position: relative;
+`}
 `;

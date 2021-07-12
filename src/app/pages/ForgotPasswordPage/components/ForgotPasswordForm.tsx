@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Form, Button, Row } from 'antd';
+import { Input, Form, Row } from 'antd';
 import { Auth } from 'aws-amplify';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
@@ -21,7 +21,7 @@ export function ForgotPasswordForm(props) {
 
   const sendForgotPasswordCode = (email) => {
     Auth.forgotPassword(email)
-      .then(data => {
+      .then(() => {
         setRequestedResetPassword(true)
         toast.success('Confirmation code sent!');
       })
@@ -31,7 +31,7 @@ export function ForgotPasswordForm(props) {
   const onSubmitPasswordReset = (values) => {
     const { code, newPassword } = values;
     Auth.forgotPasswordSubmit(email, code, newPassword)
-      .then(data => {
+      .then(() => {
         history.push('/signin')
         toast.success('Your password has been changed, you can login now.');
       })
