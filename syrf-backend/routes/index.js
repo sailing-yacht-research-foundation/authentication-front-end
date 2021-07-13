@@ -109,7 +109,7 @@ router.post('/instagram/token', async function (req, res, next) {
  */
 function handleErrorResponse(err, res) {
   if (err.response)
-    return res.json(err.response.data);
+    return res.json(400, err.response.data);
   return res.status(500);
 }
 
