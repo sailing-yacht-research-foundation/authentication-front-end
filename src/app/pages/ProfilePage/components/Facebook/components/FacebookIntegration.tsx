@@ -62,7 +62,7 @@ const FacebookIntegration = (props) => {
         <>
             {!isConnected ? (
                 <FacebookLogin
-                    appId="4037107746377946"
+                    appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}
                     fields="name,email,picture"
                     scope="user_posts"
                     callback={onFacebookResponded}

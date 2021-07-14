@@ -11,6 +11,8 @@ import { Auth } from "aws-amplify";
 import { toast } from 'react-toastify';
 import { loginActions } from "app/pages/LoginPage/slice";
 
+const SERVICE_URL = process.env.REACT_APP_TOKEN_SERVICE_ENDPOINT;
+
 export function* getFacebookFeeds() {
     const user = yield select(selectUser);
     const response = yield call(getFeeds, user);
@@ -73,7 +75,7 @@ function getFeeds(user) {
 }
 
 function exchangeToken(payload) {
-    return axios.post('http://localhost:3003/facebook/token/exchange', {
+    return axios.post(`${SERVICE_URL}/facebook/token/exchange`, {
         token: payload.payload
     }).then(response => {
         return response;

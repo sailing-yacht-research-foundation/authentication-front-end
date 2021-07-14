@@ -64,7 +64,7 @@ const InstagramIntegration = (props) => {
         <>
             {!isConnected ? (
                 <InstagramLogin
-                    clientId="478370613251328"
+                    clientId={process.env.REACT_APP_INSTAGRAM_CLIENT_ID}
                     buttonText=""
                     onSuccess={onInstagramResponded}
                     onFailure={onInstagramResponFailed}

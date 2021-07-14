@@ -3,6 +3,22 @@
 
 SYRF Node Service is for getting and exchanging access token from Facebook, Instagram, Twitter because we can only get tokens with a backend due to CORS.
 
+
+## Project structure
+
+    ├── bin                   
+    ├── node_modules                   
+    ├── public                   # public assets
+    ├── routes                   # controller routes
+    ├── tests                    # tests
+    ├── view
+    ├── app.js
+    ├── docker-compose.yml
+    ├── dockerfile
+    ├── package.json
+    ├── package-lock.json
+    └── README.md
+
 ## Installation
 From the command line run:
 
@@ -84,5 +100,19 @@ curl -i -H 'Accept: application/json' -d 'code={code-returned-from-instagram-aft
     "access_token": "{instagram-access-token}",
     "user_id": "{user-id}"
 }
+
+```
+
+## Testing
+This project using Jest as test engine.
+
+To start testing, first you have to use docker container environment
+```bash
+docker exec -it syrf-backend_main_1 bash
+
+```
+Then run test using the following command:
+```bash
+npm run test
 
 ```

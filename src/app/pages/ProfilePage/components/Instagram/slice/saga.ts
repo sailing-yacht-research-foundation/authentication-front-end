@@ -11,6 +11,8 @@ import { Auth } from "aws-amplify";
 import { toast } from 'react-toastify';
 import { loginActions } from "app/pages/LoginPage/slice";
 
+const SERVICE_URL = process.env.REACT_APP_TOKEN_SERVICE_ENDPOINT;
+
 export function* getInstagramFeeds() {
     const user = yield select(selectUser);
     const response = yield call(getFeeds, user);
@@ -61,7 +63,7 @@ async function getFeeds(user) {
 }
 
 function exchangeTokenFromCode(action) {
-    return axios.post('http://localhost:3003/instagram/token', {
+    return axios.post(`${SERVICE_URL}/instagram/token`, {
         code: action.payload
     }).then(response => {
         return response;
@@ -71,7 +73,7 @@ function exchangeTokenFromCode(action) {
 }
 
 function exChangeLongLivedToken(action) {
-    return axios.post('http://localhost:3003/instagram/token/exchange', {
+    return axios.post(`${SERVICE_URL}/instagram/token/exchange`, {
         token: action.payload
     }).then(response => {
         return response;
