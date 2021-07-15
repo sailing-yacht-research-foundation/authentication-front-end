@@ -16,6 +16,13 @@ COPY ./yarn.lock /app/yarn.lock
 
 RUN yarn install
 COPY . .
+
+RUN npm install -g @aws-amplify/cli
+
+RUN chmod +x amplify-pull-staging.sh
+
+RUN ./amplify-pull-staging.sh
+
 RUN yarn build
 
 FROM nginx
