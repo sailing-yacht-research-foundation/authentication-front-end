@@ -38,7 +38,7 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
           
- test: # names the job
+ test-develop: # names the job
     runs-on: ubuntu-latest # sets the version of linux we want to use, should be what you have on your server
     needs: build-and-push-image-develop
     strategy:
@@ -54,7 +54,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install # installs your dependencies
-      - run: yarn test # runs your test suite
+      - run: npm install -g @aws-amplify/cli
+      - run: chmod +x amplify-pull-staging.sh
+      - run: ./amplify-pull-staging.sh
+      - run: yarn test --u # runs your test suite
         env:
           CI: true # shows terminal output!
           
