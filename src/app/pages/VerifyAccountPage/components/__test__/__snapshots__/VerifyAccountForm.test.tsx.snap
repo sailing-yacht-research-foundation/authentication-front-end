@@ -44,6 +44,7 @@ exports[`<VerifyAccountForm /> should render and matches the snaphshot 1`] = `
       <span>
          Could not receive the code?   
         <a
+          href="/"
           onClick={[Function]}
           style={
             Object {
