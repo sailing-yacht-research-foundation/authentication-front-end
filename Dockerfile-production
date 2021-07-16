@@ -20,9 +20,9 @@ COPY . .
 
 RUN npm install -g @aws-amplify/cli
 
-RUN chmod +x amplify-pull-staging.sh
+RUN chmod +x amplify-pull-production.sh
 
-RUN ./amplify-pull-staging.sh
+RUN ./amplify-pull-production.sh
 
 RUN yarn test -- --watchAll=false --u
 
