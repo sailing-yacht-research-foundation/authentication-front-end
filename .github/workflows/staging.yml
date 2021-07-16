@@ -34,7 +34,7 @@ jobs:
 
  deploy-staging:
     runs-on: ubuntu-latest
-    needs: [build-test-and-push-image-develop]
+    needs: [build-test-and-push-image-staging]
     if: github.ref == 'refs/heads/feature/SNS-224'
     steps:
     # Step 1
