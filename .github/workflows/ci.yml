@@ -6,69 +6,56 @@ env:
   IMAGE_NAME: syrf_my_sailing_profile
 
 jobs:
- build-and-push-image-develop:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    if: github.ref == 'refs/heads/feature/SNS-224'
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build image
-        run: docker build . --file Dockerfile-staging --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-
-      - name: Log in to registry
-        # This is where you will update the PAT to GITHUB_TOKEN
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
-          
- test-develop: # names the job
-    runs-on: ubuntu-latest # sets the version of linux we want to use, should be what you have on your server
-    needs: build-and-push-image-develop
-    strategy:
-      fail-fast: false # tells github to not run further steps if this one fails
-      matrix:
-        node-version: [12.x] # sets the version of node we want to use, should be what you have on your server
-
-    if: github.ref == 'refs/heads/feature/SNS-224'
-    steps:
-      - uses: actions/checkout@v2 # fetches your commit to test it
-      - name: Use Node.js ${{ matrix.node-version }} # names our step
-        uses: actions/setup-node@v1 # downloads node and npm
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: yarn install # installs your dependencies
-      - run: npm install -g @aws-amplify/cli
-      - run: chmod +x amplify-pull-staging.sh
-      - run: ./amplify-pull-staging.sh
-      - run: yarn test --u # runs your test suite
-        env:
-          CI: true # shows terminal output!
-          
-#   deploy:
+#  build-test-and-push-image-develop:
 #     runs-on: ubuntu-latest
-#     needs: test # this job depends on "test" having finished
-#     if: github.ref == 'refs/heads/develop' # we tell Github to only execute this step if we're on our develop branch (so we don't put unfinished branches in production)
+#     permissions:
+#       contents: read
+#       packages: write
+#     if: github.ref == 'refs/heads/feature/SNS-224'
 #     steps:
-#       - name: Deploy SYRF My Sailing Profile app in Staging environment.
-#         uses: appleboy/ssh-action@master # An action made to control Linux servers
-#         env:
-#           SSH_PRIVATE_KEY: ${{secrets.SSH_KEY_PEM}}
-# #         with: # We set all our secrets here for the action, these won't be shown in the action logs
-# #           script: |
+#       - uses: actions/checkout@v2
+#       - name: Build image and test
+#         run: docker build . --file Dockerfile-staging --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+
+#       - name: Log in to registry
+#         # This is where you will update the PAT to GITHUB_TOKEN
+#         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+#       - name: Push image
+#         run: |
+#           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+#           # Change all uppercase to lowercase
+#           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+#           # Strip git ref prefix from version
+#           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+#           # Strip "v" prefix from tag name
+#           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+#           # Use Docker `latest` tag convention
+#           [ "$VERSION" == "master" ] && VERSION=latest
+#           echo IMAGE_ID=$IMAGE_ID
+#           echo VERSION=$VERSION
+#           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+#           docker push $IMAGE_ID:$VERSION
+          
+ deploy-develop:
+    runs-on: ubuntu-latest
+    # needs: [build-test-and-push-image-develop]
+    if: github.ref == 'refs/heads/feature/SNS-224'
+    steps:
+    # Step 1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+    # Step 2
+      # - name: Create CodeDeploy Deployment
+      #   id: deploy
+      #   run: |
+      #     aws deploy create-deployment \
+      #       --application-name application-name \
+      #       --deployment-group-name AppDeploymentGroupName \
+      #       --deployment-config-name CodeDeployDefault.OneAtATime \
+      #       --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
