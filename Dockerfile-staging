@@ -15,11 +15,21 @@ COPY ./package.json /app/package.json
 COPY ./yarn.lock /app/yarn.lock
 
 RUN yarn install
+
 COPY . .
+
+RUN npm install -g @aws-amplify/cli
+
+RUN chmod +x amplify-pull-staging.sh
+
+RUN ./amplify-pull-staging.sh
+
+RUN yarn test -- --watchAll=false --u
+
 RUN yarn build
 
 FROM nginx
 
 COPY --from=build /app/build /usr/share/nginx/html
 
-ADD nginx.conf /etc/nginx/conf.d/
+ADD default.conf /etc/nginx/conf.d/
