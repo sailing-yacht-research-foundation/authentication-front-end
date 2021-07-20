@@ -4,14 +4,11 @@
 
 import { instagramActions } from ".";
 import { call, put, takeLatest, select } from 'redux-saga/effects';
-import axios from "axios";
 import { selectUser } from "app/pages/LoginPage/slice/selectors";
-import { getUserAttribute } from "utils/user-utils";
 import { Auth } from "aws-amplify";
 import { toast } from 'react-toastify';
 import { loginActions } from "app/pages/LoginPage/slice";
-
-const SERVICE_URL = process.env.REACT_APP_TOKEN_SERVICE_ENDPOINT;
+import { getFeeds, exchangeTokenFromCode, exChangeLongLivedToken } from "services/instagram";
 
 export function* getInstagramFeeds() {
     const user = yield select(selectUser);
@@ -48,38 +45,6 @@ export function* exchangeInstagramLongLivedToken(token) {
             toast.success(result.message);
         } else toast.error(result.message);
     }
-}
-
-async function getFeeds(user) {
-    return axios.get('https://graph.instagram.com/me/media?fields=id,caption,media_url', {
-        params: {
-            access_token: getUserAttribute(user, 'custom:ig_token')
-        }
-    }).then(response => {
-        return response;
-    }).catch(error => {
-        return error;
-    })
-}
-
-function exchangeTokenFromCode(action) {
-    return axios.post(`${SERVICE_URL}/instagram/token`, {
-        code: action.payload
-    }).then(response => {
-        return response;
-    }).catch(error => {
-        return error;
-    });
-}
-
-function exChangeLongLivedToken(action) {
-    return axios.post(`${SERVICE_URL}/instagram/token/exchange`, {
-        token: action.payload
-    }).then(response => {
-        return response;
-    }).catch(error => {
-        return error;
-    });
 }
 
 export function updateUserInstagramToken(token) {

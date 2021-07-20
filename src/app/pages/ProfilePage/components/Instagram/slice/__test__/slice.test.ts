@@ -24,7 +24,7 @@ describe('Instagram slice', () => {
   it('should handle setPosts', () => {
     const posts = [];
     expect(
-      slice.reducer(state, slice.instagramActions.setPosts([])),
+      slice.reducer(state, slice.instagramActions.setPosts(posts)),
     ).toEqual<ContainerState>({
       ...slice.initialState,
       posts: []
@@ -42,32 +42,27 @@ describe('Instagram slice', () => {
   });
 
   it('should handle setExchangeTokenErrorState', () => {
-    const posts = [];
     expect(
-      slice.reducer(state, slice.instagramActions.setPosts([])),
+      slice.reducer(state, slice.instagramActions.setExchangeTokenErrorState(true)),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-      posts: []
+      exchangeTokenError: true
     });
   });
 
   it('should handle exchangeTokenFromCode', () => {
-    const posts = [];
     expect(
-      slice.reducer(state, slice.instagramActions.setPosts([])),
+      slice.reducer(state, slice.instagramActions.exchangeTokenFromCode('code')),
     ).toEqual<ContainerState>({
-      ...slice.initialState,
-      posts: []
+      ...slice.initialState
     });
   });
 
   it('should handle exchangeLongLivedToken', () => {
-    const posts = [];
     expect(
-      slice.reducer(state, slice.instagramActions.setPosts([])),
+      slice.reducer(state, slice.instagramActions.exchangeLongLivedToken('token')),
     ).toEqual<ContainerState>({
-      ...slice.initialState,
-      posts: []
+      ...slice.initialState
     });
   });
 });

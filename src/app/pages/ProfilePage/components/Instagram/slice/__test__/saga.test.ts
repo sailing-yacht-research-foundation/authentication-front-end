@@ -34,7 +34,7 @@ describe('instagram Saga', () => {
   });
 
   it('should return set posts to empty array if feed response is empty', () => {
-    var response = {
+    const response = {
       data: {
         data: []
       }
@@ -49,7 +49,7 @@ describe('instagram Saga', () => {
   });
 
   it('should setGetFeedsErrorState to true when response.data is undefined', () => {
-    var response = {
+    const response = {
       data: undefined
     }
 
@@ -63,7 +63,7 @@ describe('instagram Saga', () => {
   });
 
   it('should setExchangeTokenErrorState to true when response.response is defined', () => {
-    var response = {
+    const response = {
       response: {}
     }
 
@@ -77,7 +77,7 @@ describe('instagram Saga', () => {
   });
 
   it('should exchangeLongLivedToken when response.data.access_token is defined', () => {
-    var response = {
+    const response = {
       data: {
         access_token: 'token'
       }
@@ -93,7 +93,7 @@ describe('instagram Saga', () => {
   });
 
   it('should setExchangeTokenErrorState when response.response is defined when exchanging long lived token', () => {
-    var response = {
+    const response = {
       response: {}
     }
 
@@ -107,13 +107,13 @@ describe('instagram Saga', () => {
   });
 
   it('should setIsConnected to true and getUser when response.data.token is recieved when exchanging long lived token', () => {
-    var response = {
+    const response = {
       data: {
         access_token: 'token'
       }
     }
 
-    var result = {
+    const result = {
       success: true,
     }
     

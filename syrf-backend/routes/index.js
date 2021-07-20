@@ -1,6 +1,6 @@
 const { default: axios } = require('axios');
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 router.get('/', async function (req, res, next) {
   res.redirect('https://syrf.io');
