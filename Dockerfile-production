@@ -1,0 +1,35 @@
+FROM node:12 as build
+
+ENV REACT_APP_FACEBOOK_CLIENT_ID=00000
+ENV REACT_APP_TWITTER_CLIENT_ID=00000
+ENV REACT_APP_INSTAGRAM_CLIENT_ID=0000
+ENV REACT_APP_TOKEN_SERVICE_ENDPOINT=https://services.syrf.io
+ENV REACT_APP_BUCKET_URL=https://syrfstorage154055-dev.s3-us-west-2.amazonaws.com/public/
+ENV REACT_APP_ENV=production
+
+RUN mkdir /app
+
+WORKDIR /app
+
+COPY ./package.json /app/package.json
+COPY ./yarn.lock /app/yarn.lock
+
+RUN yarn install
+
+COPY . .
+
+RUN npm install -g @aws-amplify/cli
+
+RUN chmod +x amplify-pull-production.sh
+
+RUN ./amplify-pull-production.sh
+
+RUN yarn test -- --watchAll=false --u
+
+RUN yarn build
+
+FROM nginx
+
+COPY --from=build /app/build /usr/share/nginx/html
+
+ADD default.conf /etc/nginx/conf.d/

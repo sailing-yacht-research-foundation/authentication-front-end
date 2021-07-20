@@ -6,8 +6,9 @@ exports[`<SignupPage /> should render and match the snapshot 1`] = `
   justify="center"
   style={
     Object {
-      "marginTop": "50px",
+      "marginTop": "100px",
       "minHeight": "100vh",
+      "padding": "0 15px",
     }
   }
 >

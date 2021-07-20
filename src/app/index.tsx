@@ -28,8 +28,8 @@ import { ChangePasswordPage } from './pages/ChangePasswordPage/Loadable';
 import { ProfilePage } from './pages/ProfilePage/Loadable';
 import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
 import { EULAPage } from './pages/EULAPage/Loadable';
+import { DealsPage } from './pages/DealsPage/Loadable';
 
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
@@ -72,7 +72,6 @@ const PublicRoute = ({ component: Component, ...rest }) => {
 }
 
 export function App(props) {
-  const { i18n } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -85,8 +84,10 @@ export function App(props) {
   const isSiderToggled = useSelector(selectIsSiderToggled);
 
   React.useEffect(() => {
-    if (isAuthenticated)
+    if (isAuthenticated) {
       dispatch(loginActions.getUser());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSiderCollapsed = () => {
@@ -97,21 +98,22 @@ export function App(props) {
     <BrowserRouter>
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
-        {isAuthenticated && isSiderToggled  && <StyledSider
+        {isAuthenticated && isSiderToggled && <StyledSider
           collapsible={isMobile()}
           onCollapse={onSiderCollapsed}
+          width={300}
           style={{
             background: StyleConstants.MAIN_TONE_COLOR,
-            zIndex: 10
+            zIndex: 999
           }}
         >
-          <SiderContent/>
+          <SiderContent />
         </StyledSider>
         }
         <Layout className="site-layout">
           <Content>
             <Switch>
-              <PublicRoute exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/'} component={isAuthenticated ? DealsPage : HomePage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
@@ -120,6 +122,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
