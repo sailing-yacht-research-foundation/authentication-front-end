@@ -12,15 +12,15 @@ describe('GithubRepoForm slice', () => {
     expect(slice.reducer(undefined, { type: '' })).toEqual(state);
   });
 
-//   it('should handle setUser', () => {
-//     const user = {};
-//     expect(
-//       slice.reducer(state, slice.loginActions.setUser(user)),
-//     ).toEqual<ContainerState>({
-//       ...slice.initialState,
-//       user: user,
-//     });
-//   });
+  it('should handle setUser', () => {
+    const user = {};
+    expect(
+      slice.reducer(state, slice.loginActions.setUser(user)),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      user: user,
+    });
+  });
 
   it('should handle setIsAuthenticated', () => {
     expect(
