@@ -4,14 +4,11 @@
 
 import { facebookActions } from ".";
 import { call, put, takeLatest, select } from 'redux-saga/effects';
-import axios from "axios";
 import { selectUser } from "app/pages/LoginPage/slice/selectors";
-import { getUserAttribute } from "utils/user-utils";
 import { Auth } from "aws-amplify";
 import { toast } from 'react-toastify';
 import { loginActions } from "app/pages/LoginPage/slice";
-
-const SERVICE_URL = process.env.REACT_APP_TOKEN_SERVICE_ENDPOINT;
+import { getFeeds, exchangeToken } from "services/facebook";
 
 export function* getFacebookFeeds() {
     const user = yield select(selectUser);
@@ -60,28 +57,6 @@ export function updateUserFacebookToken(token) {
             message: error.message
         }
     })
-}
-
-function getFeeds(user) {
-    return axios.get('https://graph.facebook.com/me/feed?fields=attachments', {
-        params: {
-            access_token: getUserAttribute(user, 'custom:fb_token')
-        }
-    }).then(response => {
-        return response;
-    }).catch(error => {
-        return error;
-    })
-}
-
-function exchangeToken(payload) {
-    return axios.post(`${SERVICE_URL}/facebook/token/exchange`, {
-        token: payload.payload
-    }).then(response => {
-        return response;
-    }).catch(error => {
-        return error;
-    });
 }
 
 export function* facebookSaga() {
