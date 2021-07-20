@@ -90,7 +90,7 @@ export const SignupForm = () => {
                     name: '',
                     password: '',
                     locale: 'us',
-                    birthdate: moment('2002-01-01')
+                    birthdate: moment('2002-01-01 00:00:00')
                 }}
                 onFinish={onFinish}
             >

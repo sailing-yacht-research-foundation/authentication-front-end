@@ -39,25 +39,6 @@ const FacebookIntegration = (props) => {
         else toast.error('We have encountered an unexpected error.');
     }
 
-    // const storeFacebookAccessToken = (facebookAccessToken: string, notificationMessage: string, connectState: boolean) => {
-    //     Auth.currentAuthenticatedUser().then(user => {
-    //         Auth.updateUserAttributes(user, {
-    //             'custom:fb_token': facebookAccessToken
-    //         }).then(response => {
-    //             toast.success(notificationMessage);
-    //             dispatch(actions.setIsConnected(connectState));
-    //         }).catch(error => {
-    //             toast.error(error.message);
-    //         })
-    //     }).catch(error => {
-    //         toast.error(error.message);
-    //     })
-    // }
-
-    // const disconnect = () => {
-    //     storeFacebookAccessToken('', 'Successfully disconnect Facebook from your SYRF account', false);
-    // }
-
     return (
         <>
             {!isConnected ? (
@@ -88,7 +69,6 @@ const FacebookIntegration = (props) => {
                     Color="#3b5998"
                     title="Connect To Facebook"
                     active={props.active}
-                    // onClick={disconnect}
                     onClick={props.onClick}
                     icon={<FacebookOutlined size={25} twoToneColor="#eb2f96" color="#3b5998" style={{ color: '#3B5998', fontSize: '30px' }} />}
                 >

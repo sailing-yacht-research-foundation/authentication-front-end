@@ -15,19 +15,8 @@ export const ChangeAvatar = (props) => {
 
     const [isUploadingProfilePicture, setIsUploadingProfilePicture] = useState<boolean>(false);
 
-    // const resizeImage = async (file) => {
-    //     return new Promise((resolve) => Resizer.imageFileResizer(
-    //         file, 500, 500, "PNG", 100, 0,
-    //         (uri) => {
-    //             resolve(uri);
-    //         },
-    //         'file'
-    //     ));
-    // }
-
     const onFileChanged = async (e) => {
         e.preventDefault();
-        // const file = await resizeImage(e.target.files[0]);
         const file = e.target.files[0];
         const avatarFileName = `${(+ new Date())}-${String(authUser.username).substring(0, 8)}-profile-picture.png`;
 

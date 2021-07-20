@@ -33,32 +33,12 @@ const InstagramIntegration = (props) => {
 
     const onInstagramResponded = (code) => {
         if (code)
-            // storeInstagramAccessToken(token, 'Successfully linked Instagram to your SYRF account', true);
             dispatch(actions.exchangeTokenFromCode(code));
     }
-
-    // const storeInstagramAccessToken = (instagramAccessToken: string, notificationMessage: string, connectState: boolean) => {
-    //     Auth.currentAuthenticatedUser().then(user => {
-    //         Auth.updateUserAttributes(user, {
-    //             'custom:ig_token': instagramAccessToken
-    //         }).then(response => {
-    //             toast.success(notificationMessage);
-    //             dispatch(actions.setIsConnected(connectState));
-    //         }).catch(error => {
-    //             toast.error(error.message);
-    //         })
-    //     }).catch(error => {
-    //         toast.error(error.message);
-    //     })
-    // }
 
     const onInstagramResponFailed = (data) => {
         toast.error('We have encountered an unexpected error.');
     }
-
-    // const disconnect = () => {
-    //     storeInstagramAccessToken('', 'Successfully disconnect Instagram from your SYRF account', false);
-    // }
 
     return (
         <>
@@ -92,7 +72,6 @@ const InstagramIntegration = (props) => {
                     Color="#3b5998"
                     title="Connect To Instgram"
                     active={props.active}
-                    // onClick={disconnect}
                     onClick={props.onClick}
                     icon={<StyledInstagramIcon />}
                 >
