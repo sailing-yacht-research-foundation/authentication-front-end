@@ -22,7 +22,8 @@ export const VerifyAccountForm = () => {
         try {
             Auth.confirmSignUp(email, code)
                 .then(response => {
-                    history.push('/')
+                    history.push('/signin');
+                    toast.success('Account verified, please login!');
                 }).catch(error => {
                     toast.error(error.message);
                 })

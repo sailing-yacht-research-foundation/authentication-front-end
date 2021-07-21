@@ -39,6 +39,7 @@ export const SignupForm = () => {
                 locale: locale,
                 'custom:language': language,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
+                picture: String(Math.floor(Math.random() * 20) + 1)
             }
         }).then(response => {
             let registerSuccess = !!response.user;
