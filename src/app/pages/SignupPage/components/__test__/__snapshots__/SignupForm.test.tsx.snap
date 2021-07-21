@@ -10,7 +10,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
   <ForwardRef(InternalForm)
     initialValues={
       Object {
-        "birthdate": "2001-12-31T17:00:00.000Z",
+        "birthdate": "2002-01-01T00:00:00.000Z",
         "email": "",
         "language": "en",
         "locale": "us",

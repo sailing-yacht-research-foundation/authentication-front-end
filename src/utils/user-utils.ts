@@ -11,7 +11,7 @@ export const getUserAttribute = (user, attribute: string) => {
 export const getProfilePicture = (user) => {
     const picture = getUserAttribute(user, 'picture');
 
-    if (!isNaN(picture)) return `/default-avatars/avatar-${picture}.png`;
+    if (picture && !isNaN(picture)) return `/default-avatars/avatar-${picture}.png`;
 
     if (picture) return process.env.REACT_APP_BUCKET_URL + picture;
 
