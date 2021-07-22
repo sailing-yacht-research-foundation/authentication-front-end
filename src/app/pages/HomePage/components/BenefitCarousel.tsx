@@ -4,10 +4,10 @@ import { Carousel, Col, Row } from 'antd';
 import styled from 'styled-components';
 import { media } from 'styles/media';
 
-import PasswordBg from '../assets/one-password.svg';
-import AccessControlBg from '../assets/access-control.svg';
-import OrganizationBg from '../assets/organization.svg';
-import GDPRBg from '../assets/gdpr.svg';
+import PasswordBg from '../assets/Image-1.svg';
+import AccessControlBg from '../assets/Image-2.svg';
+import OrganizationBg from '../assets/Image-3.svg';
+import GDPRBg from '../assets/Image-4.svg';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
