@@ -9,9 +9,10 @@ import { media } from 'styles/media';
 import { useHistory } from 'react-router';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import Auth from '@aws-amplify/auth';
-import { Space } from 'antd';
+import { Space, Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { AiFillPlusCircle } from 'react-icons/ai';
 
 export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);
@@ -35,22 +36,30 @@ export const Nav = () => {
     <Wrapper>
       {isAuthenenticated ? (
         <>
+          <StyledButtonCreate
+            shape="round"
+            size={'large'}
+            icon={<AiFillPlusCircle
+              style={{ marginRight: '5px' }}
+              size={18} />} type="primary">
+            Create
+          </StyledButtonCreate>
           <DropDownWrapper>
             <UserDropdown logout={logout} />
             <SelectLanguage />
           </DropDownWrapper>
-          {isAuthenenticated &&
-            <MobileMenuWrapper>
-              <Space size={10}>
-                <LinkStyled to="/" onClick={(e) => {
-                  e.preventDefault();
-                  logout();
-                }}>{t(translations.home_page.nav.user_dropdown.log_out)}</LinkStyled>
-              </Space>
-            </MobileMenuWrapper>}
+          <MobileMenuWrapper>
+            <Space size={10}>
+              <LinkStyled to="/" onClick={(e) => {
+                e.preventDefault();
+                logout();
+              }}>{t(translations.home_page.nav.user_dropdown.log_out)}</LinkStyled>
+            </Space>
+          </MobileMenuWrapper>
         </>
       ) : (
         <>
+          <AboutLink to="/about">{'About Us'}</AboutLink>
           <Space size={15}>
             <div>
               <LinkStyled to="/signin">{t(translations.home_page.nav.log_in)}</LinkStyled>
@@ -90,5 +99,24 @@ export const MobileMenuWrapper = styled.div`
   z-index: 10;
   ${media.medium`
     display: none;
+  `}
+`;
+
+const AboutLink = styled(LinkStyled)`
+  visibility: hidden;
+
+  ${media.medium`
+     margin-right: 30px;
+     margin-top: 2px;
+     visibility: visible;
+  `}
+`;
+
+const StyledButtonCreate = styled(Button)`
+  display: none;
+  ${media.medium`
+    display: block;
+    margin-right: 30px;
+    margin-top: 13px;
   `}
 `;

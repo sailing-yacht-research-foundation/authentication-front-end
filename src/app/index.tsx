@@ -29,6 +29,7 @@ import { ProfilePage } from './pages/ProfilePage/Loadable';
 import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
 import { EULAPage } from './pages/EULAPage/Loadable';
 import { DealsPage } from './pages/DealsPage/Loadable';
+import { AboutPage } from './pages/AboutPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -113,7 +114,7 @@ export function App(props) {
         <Layout className="site-layout">
           <Content>
             <Switch>
-              <Route exact path={process.env.PUBLIC_URL + '/'} component={isAuthenticated ? DealsPage : HomePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
@@ -123,6 +124,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
