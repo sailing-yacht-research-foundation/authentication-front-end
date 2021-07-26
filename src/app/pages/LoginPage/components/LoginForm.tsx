@@ -46,7 +46,7 @@ export const LoginForm = (props) => {
         dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
         dispatch(actions.setIsAuthenticated(true));
         dispatch(actions.setUser(JSON.parse(JSON.stringify(user))));
-        history.push('/deals');
+        history.push('/');
       }
     }).catch(error => {
       setIsSigningIn(false);
@@ -69,7 +69,7 @@ export const LoginForm = (props) => {
   return (
     <Wrapper>
       <Spin spinning={isSigningIn} tip={t(translations.login_page.login_message)}>
-        <Title>My Sailing ID</Title>
+        <Title>SYRF</Title>
 
         <FormWrapper>
           <FormTitle>{t(translations.login_page.login)}</FormTitle>

@@ -6,9 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { loginActions } from 'app/pages/LoginPage/slice';
 import { ProfileTabs } from './ProfileTabs';
-import { LinkToProviders } from './LinkToProviders';
-// import FacebookPosts from './Facebook/components/FacebookPosts';
-// import InstagramPosts from './Instagram/components/InstagramPost';
+// import { LinkToProviders } from './LinkToProviders';
 
 export const Profile = () => {
     const authUser = useSelector(selectUser);
@@ -29,7 +27,7 @@ export const Profile = () => {
         <Wrapper>
             <ProfileTabs />
             <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
-            <LinkToProviders />
+            {/* <LinkToProviders /> Hide & comment this base on Jon's request of SNS-250 */}
         </Wrapper>
     )
 }

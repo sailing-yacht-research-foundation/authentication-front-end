@@ -1,7 +1,7 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Form, Divider, Spin, Row, Col, DatePicker, Select, Menu } from 'antd';
+import { Form, Divider, Spin, Row, Col, DatePicker, Select, Menu, Switch } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
@@ -18,8 +18,9 @@ import {
     SyrfFormSelect,
 } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
-import { languagesList } from 'utils/languages-util';
+import { languagesList, localesList as countryList } from 'utils/languages-util';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import { replaceObjectPropertiesFromNullToEmptyString } from 'utils/helper';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -38,7 +39,14 @@ export const UpdateInfo = (props) => {
     const [address, setAddress] = useState<string>(getUserAttribute(authUser, 'address') || '');
 
     const onFinish = (values) => {
-        const { name, phone_number, sailing_number, birthdate, language } = values;
+        const {
+            name,
+            phone_number,
+            sailing_number,
+            birthdate,
+            language,
+            country
+        } = replaceObjectPropertiesFromNullToEmptyString(values);
 
         setIsUpdatingProfile(true);
 
@@ -48,8 +56,9 @@ export const UpdateInfo = (props) => {
                 phone_number: '+' + phone_number,
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
+                locale: country,
                 'custom:sailing_number': sailing_number,
-                'custom:language': language
+                'custom:language': language,
             }).then(response => {
                 setIsUpdatingProfile(false);
                 toast.success('Your profile has been successfully updated!');
@@ -72,14 +81,19 @@ export const UpdateInfo = (props) => {
         });
     }
 
+    const renderCountryDropdownList = () => {
+        const objectArray = Object.entries(countryList);
+
+        return objectArray.map(([key, value]) => {
+            return <Select.Option key={key} value={key.toLowerCase()}>{value}</Select.Option>
+        });
+    }
+
     return (
         <Wrapper>
             <SyrfFormWrapper>
-                <ChangeAvatarWrapper>
-                    <ChangeAvatar cancelUpdateProfile={props.cancelUpdateProfile} authUser={authUser} />
-                </ChangeAvatarWrapper>
                 <Spin spinning={isUpdatingProfile} tip="Updating your profile...">
-                    <SyrfFormTitle>Change User Information here</SyrfFormTitle>
+
                     <Form
                         layout="vertical"
                         name="basic"
@@ -93,39 +107,25 @@ export const UpdateInfo = (props) => {
                             facebook: getUserAttribute(authUser, 'custom:facebook'),
                             instagram: getUserAttribute(authUser, 'custom:instagram'),
                             twitter: getUserAttribute(authUser, 'custom:twitter'),
-                            language: getUserAttribute(authUser, 'custom:language')
+                            language: getUserAttribute(authUser, 'custom:language'),
+                            country: getUserAttribute(authUser, 'locale')
                         }}
                         onFinish={onFinish}
                     >
-                        <Row gutter={24}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
-                                    name="email"
-                                    rules={[{ required: true, type: 'email' }]}
-                                >
-                                    <SyrfInputField disabled />
-                                </Form.Item>
-                            </Col>
+                        <SyrfFormTitle>Private User Details</SyrfFormTitle>
 
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>Name</SyrfFieldLabel>}
-                                    name="name"
-                                    rules={[{ required: true }]}
-                                >
-                                    <SyrfInputField />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Divider />
+                        <Form.Item
+                            label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
+                            name="email"
+                            rules={[{ required: true, type: 'email' }]}
+                        >
+                            <SyrfInputField disabled />
+                        </Form.Item>
 
                         <Form.Item
                             label={<SyrfFieldLabel>Address</SyrfFieldLabel>}
                             name="address"
                         >
-
                             <PlacesAutocomplete
                                 value={address}
                                 onChange={(address) => { setAddress(address) }}
@@ -165,7 +165,6 @@ export const UpdateInfo = (props) => {
                                     </>
                                 )}
                             </PlacesAutocomplete>
-
                         </Form.Item>
 
                         <Row gutter={24}>
@@ -244,11 +243,51 @@ export const UpdateInfo = (props) => {
                                         }
                                     </SyrfFormSelect>
                                 </Form.Item>
-
                             </Col>
                         </Row>
 
                         <Divider />
+
+                        <SyrfFormTitle>Public User Details</SyrfFormTitle>
+
+                        <ChangeAvatarWrapper>
+                            <ChangeAvatar cancelUpdateProfile={props.cancelUpdateProfile} authUser={authUser} />
+                        </ChangeAvatarWrapper>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>Name</SyrfFieldLabel>}
+                            name="name"
+                            rules={[{ required: true }]}
+                        >
+                            <SyrfInputField />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>Country</SyrfFieldLabel>}
+                            name="country"
+                            rules={[{ required: true }]}
+                        >
+                            <Select placeholder={'Select a country'}
+                                showSearch
+                                filterOption={(input, option) => {
+                                    if (option) {
+                                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    }
+
+                                    return false;
+                                }}
+                            >
+                                {renderCountryDropdownList()}
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>Share social media</SyrfFieldLabel>}
+                            name="share_social"
+                        >
+                            <Switch defaultChecked />
+                        </Form.Item>
 
                         <Form.Item>
                             <SyrfSubmitButton type="primary" htmlType="submit">
@@ -257,6 +296,7 @@ export const UpdateInfo = (props) => {
                         </Form.Item>
 
                     </Form>
+                    <DisclaimerText>* Your personal details will never be shared with 3rd party apps without your permission and will never be sold to advertisers.</DisclaimerText>
                 </Spin >
             </SyrfFormWrapper >
         </Wrapper >
@@ -277,12 +317,6 @@ const ChangeAvatarWrapper = styled.div`
     justitify-content: center;
     align-items:center;
     padding: 50px 0;
-
-    ${media.medium`
-        position: absolute;
-        left: 50px;
-        top: 70px;
-    `}
 `;
 
 const StyledPLaceDropdown = styled(Menu)`
@@ -291,4 +325,8 @@ const StyledPLaceDropdown = styled(Menu)`
     background: #fff;
     border: 1px solid #d9d9d9;
     width: 100%;
+`;
+
+const DisclaimerText = styled.span`
+    font-size: 13px;
 `;

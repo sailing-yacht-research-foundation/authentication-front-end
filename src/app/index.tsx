@@ -43,6 +43,7 @@ import { Header } from './components/Header';
 import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helper';
 import { useSiderSlice } from './components/SiderContent/slice';
+import { useState } from 'react';
 
 const { Sider, Content } = Layout
 Amplify.configure(config);
@@ -83,6 +84,8 @@ export function App(props) {
 
   const isSiderToggled = useSelector(selectIsSiderToggled);
 
+  const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
+
   React.useEffect(() => {
     if (isAuthenticated) {
       dispatch(loginActions.getUser());
@@ -90,26 +93,36 @@ export function App(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSiderCollapsed = () => {
-    dispatch(siderActions.setIsToggled(false));
+  const onSiderCollapsed = (collapsed) => {
+    if (isMobile()) {
+      dispatch(siderActions.setIsToggled(false));
+    } else {
+      setIsDesktopSiderToggled(!collapsed);
+    }
+  }
+
+  const renderSider = () => {
+    if (isAuthenticated && isSiderToggled)
+      return (
+        <StyledSider
+          collapsible
+          onCollapse={onSiderCollapsed}
+          width={256}
+          style={{
+            background: StyleConstants.MAIN_TONE_COLOR,
+            zIndex: 999
+          }}
+        >
+          <SiderContent toggled={isDesktopSiderToggled} />
+        </StyledSider>
+      )
   }
 
   return (
     <BrowserRouter>
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
-        {isAuthenticated && isSiderToggled && <StyledSider
-          collapsible={isMobile()}
-          onCollapse={onSiderCollapsed}
-          width={300}
-          style={{
-            background: StyleConstants.MAIN_TONE_COLOR,
-            zIndex: 999
-          }}
-        >
-          <SiderContent />
-        </StyledSider>
-        }
+        {renderSider()}
         <Layout className="site-layout">
           <Content>
             <Switch>
@@ -141,4 +154,4 @@ const StyledSider = styled(Sider)`
   ${media.medium`
     position: static;
   `}
-`;
+`

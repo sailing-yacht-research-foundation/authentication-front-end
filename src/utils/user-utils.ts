@@ -1,5 +1,11 @@
 import NoAvatar from 'app/components/NavBar/assets/no-avatar.png';
 
+/**
+ * Get user attribute based of the attribute name
+ * @param user 
+ * @param attribute 
+ * @returns attribute
+ */
 export const getUserAttribute = (user, attribute: string) => {
     if (user && user.attributes && user.attributes[attribute]) {
         return user.attributes[attribute];
@@ -8,6 +14,11 @@ export const getUserAttribute = (user, attribute: string) => {
     return null;
 }
 
+/**
+ * Get the profile picture of the user
+ * @param user 
+ * @returns profile picture
+ */
 export const getProfilePicture = (user) => {
     const picture = getUserAttribute(user, 'picture');
 
