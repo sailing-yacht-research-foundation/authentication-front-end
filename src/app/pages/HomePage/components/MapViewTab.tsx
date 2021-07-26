@@ -11,19 +11,27 @@ interface StyledSearchBarProps {
     onFocus: (e: Event) => void;
 }
 
+const TAB_BAR_HEIGHT = '76px';
+
 export const MapViewTab = () => {
-    
+
     const [showSearchPanel, setShowSearchPanel] = React.useState<boolean>(false);
 
     return (
         <>
-            <iframe title="Google Maps" src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7862661.401754289!2d105.9102078!3d15.7939252!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1627017281620!5m2!1svi!2s" style={{ width: '100%', height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - 66px)` }} loading="lazy"></iframe>
+            <iframe title="Google Maps"
+                src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7862661.401754289!2d105.9102078!3d15.7939252!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1627017281620!5m2!1svi!2s"
+                style={{ width: '100%', height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})` }} // 
+                loading="lazy">
+            </iframe>
             <SearchBarWrapper>
-                <StyledSearchBar onClick={e => setShowSearchPanel(true)} onFocus={e => setShowSearchPanel(true)} placeholder={'Search races with SYRF'} />
+                <StyledSearchBar
+                    onClick={e => setShowSearchPanel(true)}
+                    onFocus={e => setShowSearchPanel(true)}
+                    placeholder={'Search races with SYRF'} />
                 <SearchBarLogo />
             </SearchBarWrapper>
-            {showSearchPanel && <StyledSearchPane closable close={() => setShowSearchPanel(false)} /> }
-            
+            {showSearchPanel && <StyledSearchPane closable close={() => setShowSearchPanel(false)} />}
         </>
     )
 }
@@ -64,14 +72,15 @@ const StyledSearchPane = styled(FilterPane)`
     left: 0;
     right: 0;
     margin: 0 auto;
-    width: 530px;
     background: #fff;
     border-radius: 8px;
     padding: 0 20px;
     display: block;
     border-top: 1px solid #eee;
+    width: 100%;
 
     ${media.medium`
         height: 550px;
+        width: 530px;
     `}
 `;

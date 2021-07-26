@@ -42,7 +42,7 @@ import config from '../aws-exports';
 import { SiderContent } from './components/SiderContent';
 import { Header } from './components/Header';
 import { StyleConstants } from 'styles/StyleConstants';
-import { isMobile } from 'utils/helper';
+import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 
 const { Sider, Content } = Layout

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { FiMap } from 'react-icons/fi';
 import { BsListUl } from 'react-icons/bs';
-import { isMobile } from 'utils/helper';
+import { isMobile } from 'utils/helpers';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { useSelector } from 'react-redux';
 
@@ -17,7 +17,7 @@ export const Main = () => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
     return (
-        <StyledTabs defaultActiveKey="1">
+        <StyledTabs animated defaultActiveKey="1">
             <TabPane tab={<FiMap />} key="1">
                 <MapViewTab />
             </TabPane>
@@ -26,11 +26,16 @@ export const Main = () => {
             </TabPane>
             {
                 (isMobile() || !isAuthenticated) && <ButtonCreateContainer>
-                    <Button shape="round" size={'large'} icon={<AiFillPlusCircle style={{ marginRight: '5px' }} size={18} />} type="primary">
+                    <Button
+                        shape="round"
+                        size={'large'}
+                        icon={<AiFillPlusCircle
+                            style={{ marginRight: '5px' }}
+                            size={18} />}
+                        type="primary">
                         Create
                     </Button>
                 </ButtonCreateContainer>
-
             }
         </StyledTabs>
     )

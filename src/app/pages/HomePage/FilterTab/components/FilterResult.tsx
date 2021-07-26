@@ -70,14 +70,14 @@ export const FilterResult = () => {
         };
 
         if (resultData.length === 0)
-        return (
-            <LottieWrapper>
-                <Lottie
-                    options={defaultOptions}
-                    height={400}
-                    width={400} />
-                <LottieMessage>Start searching by typing something.</LottieMessage>
-            </LottieWrapper>);
+            return (
+                <LottieWrapper>
+                    <Lottie
+                        options={defaultOptions}
+                        height={400}
+                        width={400} />
+                    <LottieMessage>Start searching by typing something.</LottieMessage>
+                </LottieWrapper>);
 
         return resultData.map((result, index) => {
             return <ResultItem item={result} key={index} index={index} />

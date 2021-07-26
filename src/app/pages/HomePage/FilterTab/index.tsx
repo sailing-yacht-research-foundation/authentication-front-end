@@ -5,7 +5,7 @@ import { FilterPane } from './components/FilterPane';
 import { FilterResult } from './components/FilterResult';
 import { BsSearch } from 'react-icons/bs';
 import { StyleConstants } from 'styles/StyleConstants';
-import { isMobile } from 'utils/helper';
+import { isMobile } from 'utils/helpers';
 
 export const FilterTab = () => {
     const [showFilterPanel, setShowFilterPanel] = React.useState<boolean>(false);

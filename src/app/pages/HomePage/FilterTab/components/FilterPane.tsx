@@ -5,6 +5,7 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { StyleConstants } from 'styles/StyleConstants';
+import { isMobile } from 'utils/helpers';
 
 export const FilterPane = (props) => {
 
@@ -12,7 +13,7 @@ export const FilterPane = (props) => {
         <Wrapper {...props}>
             <FilterHeader>
                 <FilterTabTitle>Advaced Search</FilterTabTitle>
-                {props.closable && <AiFillCloseCircle
+                {props.closable && !isMobile() && <AiFillCloseCircle
                     onClick={props.close}
                     style={{ cursor: 'pointer' }}
                     size={22}
@@ -23,6 +24,7 @@ export const FilterPane = (props) => {
                     size={22}
                     color={StyleConstants.MAIN_TONE_COLOR} />
             </FilterHeader>
+
             <Form
                 layout={'vertical'}
                 name="basic"
@@ -33,6 +35,7 @@ export const FilterPane = (props) => {
                 <Form.Item
                     label="Race Name"
                     name="name"
+                    rules={[{ required: true }]}
                 >
                     <Input />
                 </Form.Item>
@@ -42,7 +45,7 @@ export const FilterPane = (props) => {
                         <Form.Item
                             label="From Date"
                             name="from_date"
-                            rules={[{ type: 'date', required: true }]}
+                            rules={[{ type: 'date' }]}
                         >
                             <DatePicker
                                 ref="datePickerRef"
@@ -64,7 +67,7 @@ export const FilterPane = (props) => {
                         <Form.Item
                             label="To date"
                             name="to_date"
-                            rules={[{ type: 'date', required: true }]}
+                            rules={[{ type: 'date' }]}
                         >
                             <DatePicker
                                 ref="datePickerRef"
