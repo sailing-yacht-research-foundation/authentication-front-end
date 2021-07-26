@@ -29,6 +29,13 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
     <FormItem
       label="Race Name"
       name="name"
+      rules={
+        Array [
+          Object {
+            "required": true,
+          },
+        ]
+      }
     >
       <Input
         type="text"
@@ -49,7 +56,6 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
           rules={
             Array [
               Object {
-                "required": true,
                 "type": "date",
               },
             ]
@@ -78,7 +84,6 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
           rules={
             Array [
               Object {
-                "required": true,
                 "type": "date",
               },
             ]

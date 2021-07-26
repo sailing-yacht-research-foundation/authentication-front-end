@@ -7,7 +7,7 @@ exports[`<MapViewTab /> should render and match the snapshot 1`] = `
     src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7862661.401754289!2d105.9102078!3d15.7939252!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1627017281620!5m2!1svi!2s"
     style={
       Object {
-        "height": "calc(100vh - 73px - 66px)",
+        "height": "calc(100vh - 73px - 76px)",
         "width": "100%",
       }
     }
