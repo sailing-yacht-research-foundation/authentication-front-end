@@ -7,10 +7,14 @@ SYRF Node Service is for getting and exchanging access token from Facebook, Inst
 ## Project structure
 
     ├── bin                   
-    ├── node_modules                   
+    ├── node_modules
+    ├── models                   # model classes
+    ├── controllers              # app controllers
+    ├── config                   # app relative configs
     ├── public                   # public assets
     ├── routes                   # controller routes
     ├── tests                    # tests
+    ├── utils                    # helpers
     ├── view
     ├── app.js
     ├── docker-compose.yml

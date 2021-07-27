@@ -47,16 +47,14 @@ export const LoginForm = (props) => {
         dispatch(actions.setIsAuthenticated(true));
         dispatch(actions.setUser(JSON.parse(JSON.stringify(user))));
         history.push('/');
+      } else {
+        redirectToVerifyAccountPage(email);
       }
     }).catch(error => {
       setIsSigningIn(false);
       if (error.code) {
         if (error.code === 'UserNotConfirmedException') {
-          history.push('/verify-account', {
-            state: {
-              email: email
-            }
-          });
+          redirectToVerifyAccountPage(email);
         } else {
           toast.error(error.message);
         }
@@ -64,6 +62,14 @@ export const LoginForm = (props) => {
         toast.error(t(translations.login_page.login_error));
       }
     })
+  }
+
+  const redirectToVerifyAccountPage = (email) => {
+    history.push('/verify-account', {
+      state: {
+        email: email
+      }
+    });
   }
 
   return (

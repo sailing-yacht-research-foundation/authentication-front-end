@@ -17,7 +17,6 @@ import {
     SyrfFormTitle,
     SyrfFormSelect,
 } from 'app/components/SyrfForm';
-import { media } from 'styles/media';
 import { languagesList, localesList as countryList } from 'utils/languages-util';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { replaceObjectPropertiesFromNullToEmptyString } from 'utils/helper';
@@ -45,7 +44,8 @@ export const UpdateInfo = (props) => {
             sailing_number,
             birthdate,
             language,
-            country
+            country,
+            share_social
         } = replaceObjectPropertiesFromNullToEmptyString(values);
 
         setIsUpdatingProfile(true);
@@ -53,12 +53,13 @@ export const UpdateInfo = (props) => {
         Auth.currentAuthenticatedUser().then(user => {
             Auth.updateUserAttributes(user, {
                 name: name,
-                phone_number: '+' + phone_number,
+                phone_number: phone_number ? ('+' + phone_number) : '',
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
                 locale: country,
                 'custom:sailing_number': sailing_number,
                 'custom:language': language,
+                'custom:share_social': share_social ? 'y' : '', // y stands for yes
             }).then(response => {
                 setIsUpdatingProfile(false);
                 toast.success('Your profile has been successfully updated!');
@@ -108,7 +109,8 @@ export const UpdateInfo = (props) => {
                             instagram: getUserAttribute(authUser, 'custom:instagram'),
                             twitter: getUserAttribute(authUser, 'custom:twitter'),
                             language: getUserAttribute(authUser, 'custom:language'),
-                            country: getUserAttribute(authUser, 'locale')
+                            country: getUserAttribute(authUser, 'locale'),
+                            share_social: !!getUserAttribute(authUser, 'custom:share_social'),
                         }}
                         onFinish={onFinish}
                     >
@@ -285,8 +287,9 @@ export const UpdateInfo = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>Share social media</SyrfFieldLabel>}
                             name="share_social"
+                            valuePropName="checked"
                         >
-                            <Switch defaultChecked />
+                            <Switch defaultChecked checkedChildren="Yes" unCheckedChildren="No" />
                         </Form.Item>
 
                         <Form.Item>

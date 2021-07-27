@@ -7,10 +7,15 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 
 export const VerifyAccountForm = () => {
     const history = useHistory<any>();
-
+    
     React.useEffect(() => {
-        if (!history?.location?.state?.state?.email) {
+        let code = new URLSearchParams(history.location.search).get("code");
+        let email = new URLSearchParams(history.location.search).get("email");
+
+        if (!history?.location?.state?.state?.email && !(code && email)) {
             history?.push('/not-found')
+        } else if (code && email) {
+            verifyAccount(email, code);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -19,6 +24,10 @@ export const VerifyAccountForm = () => {
         const { code } = values;
         const email = history?.location?.state?.state?.email;
 
+        verifyAccount(email, code);
+    }
+
+    const verifyAccount = (email, code) => {
         try {
             Auth.confirmSignUp(email, code)
                 .then(response => {
@@ -34,8 +43,12 @@ export const VerifyAccountForm = () => {
 
     const resendConfirmationCode = () => {
         const email = history?.location?.state?.state?.email;
-        Auth.resendSignUp(email);
-        toast.success('Confirmation code sent!');
+        
+        Auth.resendSignUp(email).then(response => {
+            toast.success('Confirmation code sent!');
+        }).catch(error => {
+            toast.error(error.message);
+        })
     }
 
     return (
