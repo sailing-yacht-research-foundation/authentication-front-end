@@ -54,9 +54,7 @@ const HeadDescriptionWrapper = styled.div`
     color: #70757a;
 `;
 
-const DescriptionWrapper = styled.div`
-
-`;
+const DescriptionWrapper = styled.div``;
 
 const DescriptionItem = styled.span`
     :first-child {

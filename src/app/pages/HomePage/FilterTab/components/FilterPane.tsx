@@ -60,7 +60,6 @@ export const FilterPane = (props) => {
                                 }}
                             />
                         </Form.Item>
-
                     </Col>
 
                     <Col xs={24} sm={24} md={12} lg={12}>
@@ -91,6 +90,7 @@ export const FilterPane = (props) => {
                 >
                     <Input />
                 </Form.Item>
+
                 <Form.Item
                     label="Number of Participants"
                     name="participants"
@@ -103,6 +103,7 @@ export const FilterPane = (props) => {
                         Search
                     </SyrfFormButton>
                 </Form.Item>
+                
             </Form>
         </Wrapper>
     )
