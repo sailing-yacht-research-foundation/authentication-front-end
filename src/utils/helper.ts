@@ -55,3 +55,18 @@ export const toBase64 = file => new Promise((resolve, reject) => {
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
 });
+
+/**
+ * Format phone number to the right format
+ * @param phoneNumber
+ */
+export const removePlusFromPhoneNumber = (phoneNumber) => {
+    if (String(phoneNumber).includes('+')) return phoneNumber;
+
+    return '+' + phoneNumber;
+}
+
+export const FIELD_VALIDATE = {
+    phone: 'phone',
+    email: 'email'
+}

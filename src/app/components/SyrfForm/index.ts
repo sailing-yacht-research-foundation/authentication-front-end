@@ -1,8 +1,14 @@
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { Input, Button, Select } from 'antd';
+import { Input, Button, Select, InputNumber } from 'antd';
 import PhoneInput from 'react-phone-input-2';
 import { media } from 'styles/media';
+
+const inputStyle = `
+    border-radius: 10px;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
+    height: 36px;
+`;
 
 export const SyrfFormWrapper = styled.div`
     background: #fff;
@@ -33,10 +39,8 @@ export const SyrfSubmitButton = styled(Button)`
 `
 
 export const SyrfInputField = styled(Input)`
-    border-radius: 10px;
-    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
-    height: 36px;
-`;
+    ${inputStyle}
+`
 
 export const SyrfPasswordInputField = styled(Input)`
     border-radius: 10px;
@@ -90,4 +94,9 @@ export const SyrfFormSelect = styled(Select)`
         background: transparent !important;
         box-shadow: none !important;
     }
+`;
+
+export const SyrfInputNumber = styled(InputNumber)`
+    ${inputStyle}
+    width: 100%;
 `;

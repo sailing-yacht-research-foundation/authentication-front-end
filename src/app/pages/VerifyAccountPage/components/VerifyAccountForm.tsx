@@ -7,7 +7,7 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 
 export const VerifyAccountForm = () => {
     const history = useHistory<any>();
-    
+
     React.useEffect(() => {
         let code = new URLSearchParams(history.location.search).get("code");
         let email = new URLSearchParams(history.location.search).get("email");
@@ -27,23 +27,34 @@ export const VerifyAccountForm = () => {
         verifyAccount(email, code);
     }
 
-    const verifyAccount = (email, code) => {
-        try {
-            Auth.confirmSignUp(email, code)
-                .then(response => {
-                    history.push('/signin');
-                    toast.success('Account verified, please login!');
-                }).catch(error => {
-                    toast.error(error.message);
-                })
-        } catch (error) {
+    const showVerifySuccessAndRedirectToLogin = () => {
+        history.push('/signin');
+        toast.success('Account verified, please login!');
+    }
 
-        }
+    const verifyAccount = (email, code) => {
+        Auth.confirmSignUp(email, code)
+            .then(response => {
+                showVerifySuccessAndRedirectToLogin();
+            }).catch(error => {
+                if (error.code !== 'NotAuthorizedException') // don't show when user already confirmed and only want to re-verify email.
+                    toast.error(error.message);
+            });
+
+        Auth.currentAuthenticatedUser().then(user => { // this case is for re-verify email.
+            Auth.verifyCurrentUserAttributeSubmit('email', code).then(() => {
+                showVerifySuccessAndRedirectToLogin();
+            }).catch(error => {
+                toast.error(error.message);
+            });
+        }).catch(e => {
+
+        });
     }
 
     const resendConfirmationCode = () => {
         const email = history?.location?.state?.state?.email;
-        
+
         Auth.resendSignUp(email).then(response => {
             toast.success('Confirmation code sent!');
         }).catch(error => {

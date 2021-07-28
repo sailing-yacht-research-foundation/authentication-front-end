@@ -28,3 +28,13 @@ export const getProfilePicture = (user) => {
 
     return NoAvatar;
 }
+
+/**
+ * Check if user's phone number is verified
+ * @param user 
+ * @param field 
+ * @returns 
+ */
+export const checkForVerifiedField = (user, field) => {
+    return field === 'email' ? user.attributes?.email_verified : user.attributes?.phone_number_verified;
+}

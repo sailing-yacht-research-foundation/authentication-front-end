@@ -1,4 +1,4 @@
-
+const { models } = require('../config/db.config');
 
 module.exports = {
 

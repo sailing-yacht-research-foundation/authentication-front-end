@@ -42,6 +42,8 @@ export const LoginForm = (props) => {
     }).then(user => {
       setIsSigningIn(false);
 
+      console.log(user);
+
       if (user.attributes && user.attributes.email_verified) {
         dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
         dispatch(actions.setIsAuthenticated(true));

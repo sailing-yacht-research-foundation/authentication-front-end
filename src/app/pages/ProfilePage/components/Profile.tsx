@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Auth from '@aws-amplify/auth';
-import { UpdateInfo } from './UpdateInfoForm';
+import { UpdateInfo } from './UpdateInfoForm/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { loginActions } from 'app/pages/LoginPage/slice';
