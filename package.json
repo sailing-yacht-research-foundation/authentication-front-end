@@ -54,6 +54,7 @@
     "react-image-file-resizer": "^0.4.4",
     "react-instagram-login": "^1.4.0",
     "react-lottie": "^1.2.3",
+    "react-map-gl": "^6.1.16",
     "react-phone-input-2": "^2.14.0",
     "react-phone-number-input": "^3.1.23",
     "react-places-autocomplete": "^7.3.0",

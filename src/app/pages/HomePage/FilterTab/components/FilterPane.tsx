@@ -12,7 +12,7 @@ export const FilterPane = (props) => {
     return (
         <Wrapper {...props}>
             <FilterHeader>
-                <FilterTabTitle>Advaced Search</FilterTabTitle>
+                <FilterTabTitle>Advanced Search</FilterTabTitle>
                 {props.closable && !isMobile() && <AiFillCloseCircle
                     onClick={props.close}
                     style={{ cursor: 'pointer' }}
@@ -41,7 +41,7 @@ export const FilterPane = (props) => {
                 </Form.Item>
 
                 <Row gutter={24}>
-                    <Col xs={24} sm={24} md={12} lg={12}>
+                    <Col xs={12} sm={12} md={12} lg={12}>
                         <Form.Item
                             label="From Date"
                             name="from_date"
@@ -62,7 +62,7 @@ export const FilterPane = (props) => {
                         </Form.Item>
                     </Col>
 
-                    <Col xs={24} sm={24} md={12} lg={12}>
+                    <Col xs={12} sm={12} md={12} lg={12}>
                         <Form.Item
                             label="To date"
                             name="to_date"
@@ -89,13 +89,6 @@ export const FilterPane = (props) => {
                     name="location"
                 >
                     <Input />
-                </Form.Item>
-
-                <Form.Item
-                    label="Number of Participants"
-                    name="participants"
-                >
-                    <InputNumber style={{ width: '100%' }} />
                 </Form.Item>
 
                 <Form.Item>
