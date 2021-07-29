@@ -41,7 +41,7 @@ exports[`<BenefitCarousel /> should render the benefit carousel and matchs the s
             className="carousel-image-container"
             style={
               Object {
-                "backgroundImage": "url(one-password.svg)",
+                "backgroundImage": "url(Image-1.svg)",
                 "backgroundPosition": "100% -50%",
                 "backgroundRepeat": "no-repeat",
                 "backgroundSize": "contain",
@@ -84,7 +84,7 @@ exports[`<BenefitCarousel /> should render the benefit carousel and matchs the s
             className="carousel-image-container"
             style={
               Object {
-                "backgroundImage": "url(access-control.svg)",
+                "backgroundImage": "url(Image-2.svg)",
                 "backgroundPosition": "100% -50%",
                 "backgroundRepeat": "no-repeat",
                 "backgroundSize": "contain",
@@ -127,7 +127,7 @@ exports[`<BenefitCarousel /> should render the benefit carousel and matchs the s
             className="carousel-image-container"
             style={
               Object {
-                "backgroundImage": "url(gdpr.svg)",
+                "backgroundImage": "url(Image-4.svg)",
                 "backgroundPosition": "100% -50%",
                 "backgroundRepeat": "no-repeat",
                 "backgroundSize": "contain",
@@ -170,7 +170,7 @@ exports[`<BenefitCarousel /> should render the benefit carousel and matchs the s
             className="carousel-image-container"
             style={
               Object {
-                "backgroundImage": "url(organization.svg)",
+                "backgroundImage": "url(Image-3.svg)",
                 "backgroundPosition": "100% -50%",
                 "backgroundRepeat": "no-repeat",
                 "backgroundSize": "contain",

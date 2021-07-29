@@ -80,6 +80,7 @@ export const UpdateInfo = (props) => {
             <DeleteUserModal
                 showDeleteUserModal={showDeleteUserModal}
                 setShowDeleteUserModal={setShowDeleteUserModal}
+                authUser={authUser}
             />
             <SyrfFormWrapper>
                 <ChangeAvatarWrapper>
@@ -265,6 +266,12 @@ export const UpdateInfo = (props) => {
 
                     </Form>
                 </Spin >
+                <DeleteAccountButtonWrapper>
+                    <a href="/" onClick={(e) => {
+                        e.preventDefault();
+                        setShowDeleteUserModal(true);
+                    }}>Delete your account</a>
+                </DeleteAccountButtonWrapper>
             </SyrfFormWrapper >
         </Wrapper >
     )
@@ -298,4 +305,12 @@ const StyledPLaceDropdown = styled(Menu)`
     background: #fff;
     border: 1px solid #d9d9d9;
     width: 100%;
+`;
+
+const DeleteAccountButtonWrapper = styled.div`
+    text-align: right;
+
+    > a {
+        color: red;
+    }
 `;

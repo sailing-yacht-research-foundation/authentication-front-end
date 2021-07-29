@@ -39,23 +39,24 @@ export const DeleteUserModal = (props) => {
         dispatch(loginActions.setLogout());
         history.push('/signin');
         Auth.signOut();
+        toast.info('We hope to see you again!');
         localStorage.removeItem('access_token');
     }
 
     return (
         <Modal
             visible={showDeleteUserModal}
-            onOk={deleteUser}
-            onCancel={() => setShowDeleteUserModal(false)}
+            onOk={() => setShowDeleteUserModal(false)}
+            okText={'Cancel'}
+            cancelText={'Yes'}
+            onCancel={deleteUser}
             title="Are you really sure you want to delete your account?">
             <DeleteWarningMessageText>
-                Hey {getUserAttribute(authUser, 'name')}, You're going to delete your account and information come along with it.
+                Hey {getUserAttribute(authUser, 'name')}, You're going to delete your account and all information.
                 Your information will be lost and cannot be recovered. Are you sure you want to continue?
             </DeleteWarningMessageText>
         </Modal>
     );
 }
 
-const DeleteWarningMessageText = styled.div`
-    
-`;
+const DeleteWarningMessageText = styled.div``;
