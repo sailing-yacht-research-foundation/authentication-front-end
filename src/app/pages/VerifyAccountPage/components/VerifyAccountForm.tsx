@@ -44,6 +44,7 @@ export const VerifyAccountForm = () => {
         Auth.currentAuthenticatedUser().then(user => { // this case is for re-verify email.
             Auth.verifyCurrentUserAttributeSubmit('email', code).then(() => {
                 showVerifySuccessAndRedirectToLogin();
+                Auth.signOut();
             }).catch(error => {
                 toast.error(error.message);
             });
