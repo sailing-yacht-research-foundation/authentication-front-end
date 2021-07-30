@@ -18,8 +18,10 @@ export const Profile = () => {
     }
 
     const getAuthorizedAuthUser = () => {
-        Auth.currentAuthenticatedUser()
-            .then(user => dispatch(loginActions.setUser(JSON.parse(JSON.stringify(user)))))
+        Auth.currentAuthenticatedUser({ bypassCache: true })
+            .then(user => {
+                dispatch(loginActions.setUser(JSON.parse(JSON.stringify(user))))
+            })
             .catch(error => { });
     }
 
