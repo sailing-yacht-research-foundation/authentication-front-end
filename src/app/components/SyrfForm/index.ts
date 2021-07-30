@@ -48,7 +48,7 @@ export const SyrfInputField = styled(Input)`
     ${inputStyle}
 `
 
-export const SyrfPasswordInputField = styled(Input)`
+export const SyrfPasswordInputField = styled(Input.Password)`
     border-radius: 10px;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
 `;
