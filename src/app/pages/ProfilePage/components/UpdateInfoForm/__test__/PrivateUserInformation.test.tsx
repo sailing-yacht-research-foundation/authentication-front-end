@@ -1,13 +1,17 @@
 
 import * as React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
-import { UpdateInfo } from '../UpdateInfoForm';
+import { PrivateUserInformation } from '../PrivateUserInformation';
+import MyProvider from 'app/components/Provider';
 
 const shallowRenderer = createRenderer();
 
-describe('<UpdateInfo />', () => {
+describe('<PrivateUserInformation />', () => {
   it('should render to match the snapshot', () => {
-    shallowRenderer.render(<UpdateInfo />);
+    shallowRenderer.render(
+      <MyProvider>
+        <PrivateUserInformation />
+      </MyProvider>);
     const renderedOutput = shallowRenderer.getRenderOutput();
     expect(renderedOutput).toMatchSnapshot();
   });

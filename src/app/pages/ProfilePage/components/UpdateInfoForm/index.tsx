@@ -6,12 +6,13 @@ import moment from 'moment';
 import styled from 'styled-components';
 import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';
 import Auth from '@aws-amplify/auth';
-import { SyrfFormWrapper } from 'app/components/SyrfForm';
+import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { FIELD_VALIDATE, removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helper';
 import { PrivateUserInformation } from './PrivateUserInformation';
 import { toast } from 'react-toastify';
 import { PublicUserInformation } from './PublicUserInformation';
 import { VerifyPhoneModal } from './VerifyPhoneModal';
+import { EditEmailChangeModal } from './EditEmailChangeModal';
 
 const defaultFormFields = {
     email: '',
@@ -63,14 +64,17 @@ export const UpdateInfo = (props) => {
         birthdate,
         language,
         country,
-        share_social }) => {
+        share_social,
+        bio,
+        first_name,
+        last_name,
+    }) => {
 
         setIsUpdatingProfile(true);
 
         Auth.currentAuthenticatedUser().then(user => {
             Auth.updateUserAttributes(user, {
                 email: email,
-                name: name,
                 phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
                 address: address,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
@@ -78,6 +82,9 @@ export const UpdateInfo = (props) => {
                 'custom:sailing_number': sailing_number,
                 'custom:language': language,
                 'custom:share_social': share_social ? 'y' : '', // y stands for yes
+                'custom:first_name': first_name,
+                'custom:last_name': last_name,
+                'custom:bio': bio,
             }).then(response => {
                 onUpdateProfileSuccess();
             }).catch(error => {
@@ -135,25 +142,17 @@ export const UpdateInfo = (props) => {
 
     return (
         <Wrapper>
-            <Modal title="Email change confirmation"
-                visible={showEmailChangeAlertModal}
-                onOk={() => {
-                    updateUserInfo(formFieldsBeforeUpdate);
-                    setShowEmailChangeAlertModal(false);
-                }}
-                onCancel={() => {
-                    setShowEmailChangeAlertModal(false);
-                    setFormFieldsBeforeUpdate(defaultFormFields);
-                    form.setFieldsValue({ // reset the email to the last state.
-                        email: getUserAttribute(authUser, 'email')
-                    });
-                }}>
-                <EmailChangeMessageText>
-                    Hey {getUserAttribute(authUser, 'name')}, You're about to change your email (username).
-                    You have to make sure that the new changed email is your email otherwise you will not be able to login the next time.
-                    You will have to re-verify your email once again in the next login, do you really want to change your email?
-                </EmailChangeMessageText>
-            </Modal>
+            <EditEmailChangeModal
+                formFieldsBeforeUpdate={formFieldsBeforeUpdate}
+                defaultFormFields={defaultFormFields}
+                authUser={authUser}
+                form={form}
+                updateUserInfo={updateUserInfo}
+                setShowEmailChangeAlertModal={setShowEmailChangeAlertModal}
+                setFormFieldsBeforeUpdate={setFormFieldsBeforeUpdate}
+                showEmailChangeAlertModal={showEmailChangeAlertModal}
+            />
+
             <VerifyPhoneModal
                 showPhoneVerifyModal={showPhoneVerifyModal}
                 sendPhoneVerification={sendPhoneVerification}
@@ -161,7 +160,8 @@ export const UpdateInfo = (props) => {
                 message={phoneVerifyModalMessage}
                 setPhoneVerifyModalMessage={setPhoneVerifyModalMessage}
                 cancelUpdateProfile={props.cancelUpdateProfile} />
-            <SyrfFormWrapper>
+                
+            <SyrfFormWrapper className="no-background">
                 <Spin spinning={isUpdatingProfile} tip="Updating your profile...">
                     <Form
                         form={form}
@@ -169,7 +169,9 @@ export const UpdateInfo = (props) => {
                         name="basic"
                         initialValues={{
                             email: getUserAttribute(authUser, 'email'),
-                            name: getUserAttribute(authUser, 'name'),
+                            last_name: getUserAttribute(authUser, 'custom:last_name'),
+                            first_name: getUserAttribute(authUser, 'custom:first_name'),
+                            bio: getUserAttribute(authUser, 'custom:bio'),
                             phone_number: getUserAttribute(authUser, 'phone_number'),
                             address: getUserAttribute(authUser, 'address'),
                             birthdate: moment(getUserAttribute(authUser, 'birthdate')),
@@ -183,15 +185,21 @@ export const UpdateInfo = (props) => {
                         }}
                         onFinish={onFinish}
                     >
+                        <PublicUserInformation
+                            authUser={authUser}
+                            cancelUpdateProfile={props.cancelUpdateProfile} />
+
                         <PrivateUserInformation
                             setShowPhoneVerifyModal={setShowPhoneVerifyModal}
                             address={address} setAddress={setAddress}
                             sendPhoneVerification={sendPhoneVerification}
                             authUser={authUser} />
-                        <Divider />
-                        <PublicUserInformation
-                            authUser={authUser}
-                            cancelUpdateProfile={props.cancelUpdateProfile} />
+
+                        <Form.Item>
+                            <SyrfFormButton type="primary" htmlType="submit">
+                                Save
+                            </SyrfFormButton>
+                        </Form.Item>
                     </Form>
                     <DisclaimerText>* Your personal details will never be shared with 3rd party apps without your permission and will never be sold to advertisers.</DisclaimerText>
                 </Spin >
@@ -209,9 +217,4 @@ const Wrapper = styled.div`
 
 const DisclaimerText = styled.span`
     font-size: 13px;
-`;
-
-const EmailChangeMessageText = styled.div`
-    margin-bottom: 10px;
-    color: #f81d22;
 `;

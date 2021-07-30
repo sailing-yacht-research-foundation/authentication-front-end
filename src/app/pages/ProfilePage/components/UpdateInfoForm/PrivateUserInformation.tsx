@@ -56,14 +56,14 @@ export const PrivateUserInformation = (props) => {
     }
 
     return (
-        <>
+        <Wrapper>
             <SyrfFormTitle>Private User Details</SyrfFormTitle>
             <Form.Item
                 label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
                 name="email"
                 rules={[{ required: true, type: 'email' }]}
             >
-                <SyrfInputField />
+                <SyrfInputField disabled/>
             </Form.Item>
             {renderVerifiedStatus(FIELD_VALIDATE.email)}
 
@@ -191,9 +191,16 @@ export const PrivateUserInformation = (props) => {
                     </Form.Item>
                 </Col>
             </Row>
-        </>
+        </Wrapper>
     )
 }
+
+const Wrapper = styled.div`
+    background: #fff;
+    padding: 30px 25px;
+    border-radius: 10px;
+    margin: 30px 0;
+`;
 
 const ItemVerifyMessage = styled.div`
     color: rgb(115, 116, 117);

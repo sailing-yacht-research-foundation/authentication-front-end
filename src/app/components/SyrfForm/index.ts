@@ -17,6 +17,12 @@ export const SyrfFormWrapper = styled.div`
     width: 100%;
     padding-bottom: 30px;
 
+    &.no-background {
+        background: none;
+        padding: 0;
+        padding-bottom: 30px;
+    }
+
     ${media.medium`
         width: 55%;
         padding: 50px 56px;
@@ -99,4 +105,8 @@ export const SyrfFormSelect = styled(Select)`
 export const SyrfInputNumber = styled(InputNumber)`
     ${inputStyle}
     width: 100%;
+`;
+
+export const SyrfTextArea = styled(Input.TextArea)`
+    ${inputStyle}
 `;
