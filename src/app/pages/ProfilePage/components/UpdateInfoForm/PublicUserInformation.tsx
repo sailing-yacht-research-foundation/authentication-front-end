@@ -7,7 +7,7 @@ import {
     SyrfTextArea,
 } from 'app/components/SyrfForm';
 import { ChangeAvatar } from '../ChangeAvatar';
-import { Select, Switch, Form, Row, Col } from 'antd';
+import { Select, Form, Row, Col } from 'antd';
 import styled from 'styled-components';
 import { localesList as countryList } from 'utils/languages-util';
 
@@ -79,14 +79,6 @@ export const PublicUserInformation = (props) => {
             >
                 <SyrfTextArea placeholder={'e.g. Olympic 29er Champion and meteorology nerd.'} />
             </Form.Item>
-
-            {/* <Form.Item
-                label={<SyrfFieldLabel>Share social media</SyrfFieldLabel>}
-                name="share_social"
-                valuePropName="checked"
-            >
-                <Switch defaultChecked checkedChildren="Yes" unCheckedChildren="No" />
-            </Form.Item> */}
         </Wrapper>
     );
 }

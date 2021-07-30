@@ -3,7 +3,6 @@ import { Menu } from 'antd';
 import { ReactComponent as Logo } from './assets/logo-light.svg';
 import {
   UserOutlined,
-  MoneyCollectOutlined,
   CrownOutlined,
   HeatMapOutlined,
   SlidersOutlined,

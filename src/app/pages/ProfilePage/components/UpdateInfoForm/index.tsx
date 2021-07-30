@@ -1,7 +1,7 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Form, Divider, Spin, Modal } from 'antd';
+import { Form, Spin } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
 import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';

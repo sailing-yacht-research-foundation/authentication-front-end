@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleConstants } from 'styles/StyleConstants';
 import { Auth, Storage } from 'aws-amplify';
-import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
+import { getProfilePicture } from 'utils/user-utils';
 import { CameraFilled } from '@ant-design/icons';
-import { Image, Spin, Typography, Modal } from 'antd';
+import { Image, Spin, Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Avatar from 'react-avatar-edit';

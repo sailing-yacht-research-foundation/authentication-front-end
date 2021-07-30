@@ -27,7 +27,7 @@ export const SignupForm = () => {
     const history = useHistory();
 
     const onFinish = (values) => {
-        const { email, name, password, locale, language, birthdate, first_name, last_name } = values;
+        const { email, password, locale, language, birthdate, first_name, last_name } = values;
 
         setIsSigningUp(true);
 
