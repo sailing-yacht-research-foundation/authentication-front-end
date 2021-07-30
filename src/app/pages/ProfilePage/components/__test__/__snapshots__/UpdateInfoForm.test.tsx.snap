@@ -2,10 +2,6 @@
 
 exports[`<UpdateInfo /> should render to match the snapshot 1`] = `
 <styled.div>
-  <DeleteUserModal
-    setShowDeleteUserModal={[Function]}
-    showDeleteUserModal={false}
-  />
   <styled.div>
     <styled.div>
       <ChangeAvatar />
@@ -268,14 +264,6 @@ exports[`<UpdateInfo /> should render to match the snapshot 1`] = `
         </FormItem>
       </ForwardRef(InternalForm)>
     </Spin>
-    <styled.div>
-      <a
-        href="/"
-        onClick={[Function]}
-      >
-        Delete your account
-      </a>
-    </styled.div>
   </styled.div>
 </styled.div>
 `;

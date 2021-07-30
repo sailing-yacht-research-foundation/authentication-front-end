@@ -11,6 +11,10 @@ export const SyrfFormWrapper = styled.div`
     width: 100%;
     padding-bottom: 30px;
 
+    &.danger-zone {
+        margin-top: 30px;
+    }
+
     ${media.medium`
         width: 55%;
         padding: 50px 56px;
@@ -90,4 +94,13 @@ export const SyrfFormSelect = styled(Select)`
         background: transparent !important;
         box-shadow: none !important;
     }
+`;
+
+export const SyrfButtonTitle = styled.h4`
+    color: #595959;
+`;
+
+export const SyrfButtonDescription = styled.span`
+    font-size: 13px;
+    color: #000000d9;
 `;

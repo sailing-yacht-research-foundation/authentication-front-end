@@ -46,10 +46,8 @@ export const DeleteUserModal = (props) => {
     return (
         <Modal
             visible={showDeleteUserModal}
-            onOk={() => setShowDeleteUserModal(false)}
-            okText={'Cancel'}
-            cancelText={'Yes'}
-            onCancel={deleteUser}
+            onCancel={() => setShowDeleteUserModal(false)}
+            onOk={deleteUser}
             title="Are you really sure you want to delete your account?">
             <DeleteWarningMessageText>
                 Hey {getUserAttribute(authUser, 'name')}, You're going to delete your account and all information.

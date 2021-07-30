@@ -77,11 +77,6 @@ export const UpdateInfo = (props) => {
 
     return (
         <Wrapper>
-            <DeleteUserModal
-                showDeleteUserModal={showDeleteUserModal}
-                setShowDeleteUserModal={setShowDeleteUserModal}
-                authUser={authUser}
-            />
             <SyrfFormWrapper>
                 <ChangeAvatarWrapper>
                     <ChangeAvatar cancelUpdateProfile={props.cancelUpdateProfile} authUser={authUser} />
@@ -266,13 +261,7 @@ export const UpdateInfo = (props) => {
 
                     </Form>
                 </Spin >
-                <DeleteAccountButtonWrapper>
-                    <a href="/" onClick={(e) => {
-                        e.preventDefault();
-                        setShowDeleteUserModal(true);
-                    }}>Delete your account</a>
-                </DeleteAccountButtonWrapper>
-            </SyrfFormWrapper >
+            </SyrfFormWrapper>
         </Wrapper >
     )
 }
@@ -281,7 +270,8 @@ const Wrapper = styled.div`
     margin-top: 50px;
     width: 100%;
     display:flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const ChangeAvatarWrapper = styled.div`
@@ -305,12 +295,4 @@ const StyledPLaceDropdown = styled(Menu)`
     background: #fff;
     border: 1px solid #d9d9d9;
     width: 100%;
-`;
-
-const DeleteAccountButtonWrapper = styled.div`
-    text-align: right;
-
-    > a {
-        color: red;
-    }
 `;
