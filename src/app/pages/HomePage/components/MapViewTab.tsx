@@ -8,11 +8,6 @@ import { media } from 'styles/media';
 import ReactMapGL from 'react-map-gl';
 import { useEffect } from 'react';
 
-interface StyledSearchBarProps {
-    onClick: (e: Event) => void;
-    onFocus: (e: Event) => void;
-}
-
 const TAB_BAR_HEIGHT = '76px';
 
 export const MapViewTab = () => {
@@ -26,6 +21,8 @@ export const MapViewTab = () => {
     });
 
     const [showSearchPanel, setShowSearchPanel] = React.useState<boolean>(false);
+
+    const [searchKeyword, setSearchKeyWord] = React.useState<string>('');
 
     useEffect(() => {
         if (navigator.geolocation)
@@ -53,26 +50,43 @@ export const MapViewTab = () => {
             >
             </ReactMapGL>
             <SearchBarWrapper>
-                <StyledSearchBar
-                    onClick={e => setShowSearchPanel(true)}
-                    onFocus={e => setShowSearchPanel(true)}
-                    placeholder={'Search races with SYRF'} />
-                <SearchBarLogo />
+                <SearchBarInnerWrapper>
+                    <StyledSearchBar
+                        type={'search'}
+                        value={searchKeyword}
+                        onChange={(e) => {
+                            setSearchKeyWord(e.target.value);
+                        }}
+                        placeholder={'Search races with SYRF'} />
+                    <SearchBarLogo />
+                </SearchBarInnerWrapper>
+                <AdvancedSearchTextWrapper>
+                    <a href="/" onClick={(e) => {
+                        e.preventDefault();
+                        setShowSearchPanel(true);
+                    }}>Advanced search?</a>
+                </AdvancedSearchTextWrapper>
             </SearchBarWrapper>
-            {showSearchPanel && <StyledSearchPane closable close={() => setShowSearchPanel(false)} />}
+            {showSearchPanel && <StyledSearchPane
+                defaultFocus
+                searchKeyWord={searchKeyword}
+                closable
+                close={() => setShowSearchPanel(false)} />}
         </>
     )
 }
 
 const SearchBarWrapper = styled.div`
     position: absolute;
-    bottom: 70px;
+    bottom: 110px;
     left: 0;
     right: 0;
     margin: 0 auto;
     width: 530px;
     max-width: 80%;
 `;
+
+const SearchBarInnerWrapper = styled.div``;
 
 const SearchBarLogo = styled(SYRFLogo)`
     position: absolute;
@@ -82,7 +96,7 @@ const SearchBarLogo = styled(SYRFLogo)`
     height: 45px;
 `;
 
-const StyledSearchBar = styled(Input) <StyledSearchBarProps>`
+const StyledSearchBar = styled(Input)`
     border-radius: 10px;
     box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
     padding-top: 10px;
@@ -97,18 +111,26 @@ const StyledSearchBar = styled(Input) <StyledSearchBarProps>`
 const StyledSearchPane = styled(FilterPane)`
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
     margin: 0 auto;
     background: #fff;
     border-radius: 8px;
     padding: 0 20px;
     display: block;
     border-top: 1px solid #eee;
-    width: 100%;
+    width: 97%;
 
     ${media.medium`
         height: 380px;
         width: 530px;
     `}
+`;
+
+const AdvancedSearchTextWrapper = styled.div`
+    text-align:right;
+     margin-top: 5px;
+    a {
+        color: #fff;
+        font-size: 12px;
+        margin-left: 5px;
+    }
 `;

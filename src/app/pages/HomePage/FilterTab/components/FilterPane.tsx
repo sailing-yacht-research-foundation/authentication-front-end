@@ -6,8 +6,21 @@ import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helpers';
+import { useEffect } from 'react';
 
 export const FilterPane = (props) => {
+
+    const { searchKeyWord, defaultFocus } = props;
+
+    const searchInputRef = React.createRef<Input>();
+
+    useEffect(() => {
+        if (defaultFocus) {
+            if (searchInputRef)
+                searchInputRef.current?.focus();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Wrapper {...props}>
@@ -29,7 +42,7 @@ export const FilterPane = (props) => {
                 layout={'vertical'}
                 name="basic"
                 initialValues={{
-                    name: '',
+                    name: searchKeyWord ? searchKeyWord : '',
                     participants: 6
                 }}>
                 <Form.Item
@@ -37,7 +50,7 @@ export const FilterPane = (props) => {
                     name="name"
                     rules={[{ required: true }]}
                 >
-                    <Input />
+                    <Input ref={searchInputRef} />
                 </Form.Item>
 
                 <Row gutter={24}>
@@ -84,19 +97,11 @@ export const FilterPane = (props) => {
                     </Col>
                 </Row>
 
-                <Form.Item
-                    label="Location"
-                    name="location"
-                >
-                    <Input />
-                </Form.Item>
-
                 <Form.Item>
                     <SyrfFormButton type="primary" htmlType="submit">
                         Search
                     </SyrfFormButton>
                 </Form.Item>
-                
             </Form>
         </Wrapper>
     )

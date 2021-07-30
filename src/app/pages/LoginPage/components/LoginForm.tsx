@@ -13,6 +13,7 @@ import { media } from 'styles/media';
 import { SyrfFormButton } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { ReactComponent as Logo } from '../assets/logo-dark.svg';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
@@ -69,7 +70,9 @@ export const LoginForm = (props) => {
   return (
     <Wrapper>
       <Spin spinning={isSigningIn} tip={t(translations.login_page.login_message)}>
-        <Title>My Sailing ID</Title>
+        <Title>
+          <Logo/>
+        </Title>
 
         <FormWrapper>
           <FormTitle>{t(translations.login_page.login)}</FormTitle>
