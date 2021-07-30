@@ -88,6 +88,10 @@ export const SyrfFormButton = styled(Button)`
     font-weight: 700;
     line-height: 19px;
     color: #fff;
+
+    :disabled {
+        background: #dddddd;
+    }
 `;
 
 export const SyrfFormSelect = styled(Select)`

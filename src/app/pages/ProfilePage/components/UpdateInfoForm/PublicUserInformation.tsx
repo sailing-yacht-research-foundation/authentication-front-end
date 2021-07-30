@@ -80,13 +80,13 @@ export const PublicUserInformation = (props) => {
                 <SyrfTextArea placeholder={'e.g. Olympic 29er Champion and meteorology nerd.'} />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
                 label={<SyrfFieldLabel>Share social media</SyrfFieldLabel>}
                 name="share_social"
                 valuePropName="checked"
             >
                 <Switch defaultChecked checkedChildren="Yes" unCheckedChildren="No" />
-            </Form.Item>
+            </Form.Item> */}
         </Wrapper>
     );
 }

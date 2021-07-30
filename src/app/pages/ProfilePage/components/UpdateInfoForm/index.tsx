@@ -40,6 +40,8 @@ export const UpdateInfo = (props) => {
 
     const [form] = Form.useForm();
 
+    const [formHasBeenChanged, setFormHasBeenChanged] = React.useState<boolean>(false);
+
     // for storing fields filled by user from the form for later use when
     // user still chooses to change the email.
     const [formFieldsBeforeUpdate, setFormFieldsBeforeUpdate] = React.useState(defaultFormFields);
@@ -58,7 +60,6 @@ export const UpdateInfo = (props) => {
 
     const updateUserInfo = ({
         email,
-        name,
         phone_number,
         sailing_number,
         birthdate,
@@ -85,6 +86,7 @@ export const UpdateInfo = (props) => {
                 'custom:first_name': first_name,
                 'custom:last_name': last_name,
                 'custom:bio': bio,
+                name: first_name + ' ' + last_name
             }).then(response => {
                 onUpdateProfileSuccess();
             }).catch(error => {
@@ -164,6 +166,7 @@ export const UpdateInfo = (props) => {
             <SyrfFormWrapper className="no-background">
                 <Spin spinning={isUpdatingProfile} tip="Updating your profile...">
                     <Form
+                        onValuesChange={()=> setFormHasBeenChanged(true)}
                         form={form}
                         layout="vertical"
                         name="basic"
@@ -196,7 +199,7 @@ export const UpdateInfo = (props) => {
                             authUser={authUser} />
 
                         <Form.Item>
-                            <SyrfFormButton type="primary" htmlType="submit">
+                            <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
                                 Save
                             </SyrfFormButton>
                         </Form.Item>
