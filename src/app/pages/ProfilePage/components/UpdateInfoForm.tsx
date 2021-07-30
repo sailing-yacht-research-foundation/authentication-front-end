@@ -20,7 +20,6 @@ import {
 import { media } from 'styles/media';
 import { languagesList } from 'utils/languages-util';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { DeleteUserModal } from './DeleteUserModal';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -37,8 +36,6 @@ export const UpdateInfo = (props) => {
     const { authUser } = props;
 
     const [address, setAddress] = useState<string>(getUserAttribute(authUser, 'address') || '');
-
-    const [showDeleteUserModal, setShowDeleteUserModal] = useState<boolean>(false);
 
     const onFinish = (values) => {
         const { name, phone_number, sailing_number, birthdate, language } = values;
