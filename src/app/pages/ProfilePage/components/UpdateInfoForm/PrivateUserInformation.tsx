@@ -169,7 +169,7 @@ export const PrivateUserInformation = (props) => {
 
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
-                        label="Language"
+                        label={<SyrfFieldLabel>Language</SyrfFieldLabel>}
                         name="language"
                         rules={[{ required: true }]}
                     >
