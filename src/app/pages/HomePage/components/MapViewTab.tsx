@@ -120,7 +120,7 @@ const StyledSearchPane = styled(FilterPane)`
     width: 97%;
 
     ${media.medium`
-        height: 380px;
+        height: 300px;
         width: 530px;
     `}
 `;
