@@ -2,24 +2,98 @@
 
 exports[`<MapViewTab /> should render and match the snapshot 1`] = `
 <React.Fragment>
-  <iframe
-    loading="lazy"
-    src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7862661.401754289!2d105.9102078!3d15.7939252!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1627017281620!5m2!1svi!2s"
-    style={
-      Object {
-        "height": "calc(100vh - 73px - 76px)",
-        "width": "100%",
+  <InteractiveMap
+    altitude={1.5}
+    asyncRender={false}
+    attributionControl={true}
+    bearing={0}
+    className=""
+    clickRadius={0}
+    container={<body />}
+    disableTokenWarning={false}
+    doubleClickZoom={true}
+    dragPan={true}
+    dragRotate={true}
+    getCursor={[Function]}
+    height="calc(100vh - 73px - 76px)"
+    keyboard={true}
+    latitude={37.8}
+    longitude={-122.4}
+    mapOptions={Object {}}
+    mapStyle="mapbox://styles/jweisbaum89/cki2dpc9a2s7919o8jqyh1gss"
+    mapboxApiAccessToken="no-token"
+    mapboxApiUrl="https://api.mapbox.com"
+    maxPitch={60}
+    maxZoom={24}
+    minPitch={0}
+    minZoom={0}
+    onClick={null}
+    onContextMenu={[Function]}
+    onError={[Function]}
+    onHover={null}
+    onLoad={[Function]}
+    onNativeClick={null}
+    onResize={[Function]}
+    onStateChange={[Function]}
+    onTransitionEnd={[Function]}
+    onTransitionInterrupt={[Function]}
+    onTransitionStart={[Function]}
+    onViewStateChange={null}
+    onViewportChange={[Function]}
+    pitch={0}
+    preserveDrawingBuffer={false}
+    preventStyleDiffing={false}
+    reuseMaps={false}
+    scrollZoom={true}
+    style={null}
+    touchAction="none"
+    touchRotate={false}
+    touchZoom={true}
+    transitionDuration={0}
+    transitionEasing={[Function]}
+    transitionInterpolator={
+      LinearInterpolator {
+        "around": undefined,
+        "propNames": Array [
+          "longitude",
+          "latitude",
+          "zoom",
+          "bearing",
+          "pitch",
+        ],
       }
     }
-    title="Google Maps"
+    transitionInterruption={1}
+    visibilityConstraints={
+      Object {
+        "maxPitch": 60,
+        "maxZoom": 24,
+        "minPitch": 0,
+        "minZoom": 0,
+      }
+    }
+    visible={true}
+    width="100vw"
+    zoom={14}
   />
   <styled.div>
-    <Styled(Input)
-      onClick={[Function]}
-      onFocus={[Function]}
-      placeholder="Search races with SYRF"
-    />
-    <Styled(Component) />
+    <styled.div>
+      <Styled(Input)
+        onChange={[Function]}
+        placeholder="Search races with SYRF"
+        type="search"
+        value=""
+      />
+      <Styled(Component) />
+    </styled.div>
+    <styled.div>
+      <a
+        href="/"
+        onClick={[Function]}
+      >
+        Advanced search?
+      </a>
+    </styled.div>
   </styled.div>
 </React.Fragment>
 `;

@@ -4,7 +4,7 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
 <styled.div>
   <styled.div>
     <styled.h4>
-      Advaced Search
+      Advanced Search
     </styled.h4>
     <Styled(AiFillCloseCircle)
       color="#4F61A5"
@@ -47,8 +47,8 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
       <Col
         lg={12}
         md={12}
-        sm={24}
-        xs={24}
+        sm={12}
+        xs={12}
       >
         <FormItem
           label="From Date"
@@ -75,8 +75,8 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
       <Col
         lg={12}
         md={12}
-        sm={24}
-        xs={24}
+        sm={12}
+        xs={12}
       >
         <FormItem
           label="To date"
@@ -101,26 +101,6 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
         </FormItem>
       </Col>
     </Row>
-    <FormItem
-      label="Location"
-      name="location"
-    >
-      <Input
-        type="text"
-      />
-    </FormItem>
-    <FormItem
-      label="Number of Participants"
-      name="participants"
-    >
-      <ForwardRef
-        style={
-          Object {
-            "width": "100%",
-          }
-        }
-      />
-    </FormItem>
     <FormItem>
       <Styled(Button)
         htmlType="submit"
