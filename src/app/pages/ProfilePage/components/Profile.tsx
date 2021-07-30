@@ -10,6 +10,7 @@ import { LinkToProviders } from './LinkToProviders';
 import { DeleteUserModal } from './DeleteUserModal';
 import { SyrfButtonDescription, SyrfButtonTitle, SyrfFormTitle, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { Row, Col, Button } from 'antd';
+import { media } from 'styles/media';
 
 export const Profile = () => {
 
@@ -42,11 +43,11 @@ export const Profile = () => {
             <SyrfFormWrapper className="danger-zone">
                 <SyrfFormTitle>Danger Zone</SyrfFormTitle>
                 <Row gutter={24}>
-                    <Col xs={12} sm={12} md={12} lg={12}>
+                    <Col xs={21} sm={24} md={12} lg={12}>
                         <SyrfButtonTitle>Delete My account</SyrfButtonTitle>
                         <SyrfButtonDescription>You will delete your account along with all information</SyrfButtonDescription>
                     </Col>
-                    <Col xs={12} sm={12} md={12} lg={12}>
+                    <Col xs={24} sm={24} md={12} lg={12}>
                         <DeleteAccountButtonWrapper>
                             <Button danger onClick={() => setShowDeleteUserModal(true)}>
                                 Permantly delete my account
@@ -71,6 +72,11 @@ const Wrapper = styled.div`
 
 const DeleteAccountButtonWrapper = styled.div`
     text-align: center;
+    margin-top: 20px;
 
     > a { color: red; }
+
+    ${media.medium`
+        margin-top: 0;
+    `}
 `;
