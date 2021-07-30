@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { PublicUserInformation } from './PublicUserInformation';
 import { VerifyPhoneModal } from './VerifyPhoneModal';
 import { EditEmailChangeModal } from './EditEmailChangeModal';
+import { media } from 'styles/media';
 
 const defaultFormFields = {
     email: '',
@@ -163,11 +164,11 @@ export const UpdateInfo = (props) => {
                 message={phoneVerifyModalMessage}
                 setPhoneVerifyModalMessage={setPhoneVerifyModalMessage}
                 cancelUpdateProfile={props.cancelUpdateProfile} />
-                
+
             <SyrfFormWrapper className="no-background">
                 <Spin spinning={isUpdatingProfile} tip="Updating your profile...">
                     <Form
-                        onValuesChange={()=> setFormHasBeenChanged(true)}
+                        onValuesChange={() => setFormHasBeenChanged(true)}
                         form={form}
                         layout="vertical"
                         name="basic"
@@ -200,9 +201,11 @@ export const UpdateInfo = (props) => {
                             authUser={authUser} />
 
                         <Form.Item>
-                            <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
-                                Save
-                            </SyrfFormButton>
+                            <StyledSyrfFormButtonWrapper>
+                                <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
+                                    Save
+                                </SyrfFormButton>
+                            </StyledSyrfFormButtonWrapper>
                         </Form.Item>
                     </Form>
                     <DisclaimerText>* Your personal details will never be shared with 3rd party apps without your permission and will never be sold to advertisers.</DisclaimerText>
@@ -219,6 +222,19 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-const DisclaimerText = styled.span`
+const DisclaimerText = styled.div`
     font-size: 13px;
+    padding: 0 15px;
+
+    ${media.medium`
+        padding: 0;
+    `}
+`;
+
+const StyledSyrfFormButtonWrapper = styled.div`
+    padding: 0 15px;
+
+    ${media.medium`
+        padding: 0;
+    `}
 `;
