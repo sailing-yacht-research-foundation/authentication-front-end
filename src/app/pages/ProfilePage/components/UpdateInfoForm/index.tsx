@@ -107,6 +107,7 @@ export const UpdateInfo = (props) => {
         props.cancelUpdateProfile();
         checkPhoneVerifyStatus();
         setFormFieldsBeforeUpdate(defaultFormFields);
+        setFormHasBeenChanged(false);
     }
 
     const checkPhoneVerifyStatus = () => {
