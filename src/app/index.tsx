@@ -105,7 +105,7 @@ export function App(props) {
           width={300}
           style={{
             background: StyleConstants.MAIN_TONE_COLOR,
-            zIndex: 999
+            zIndex: 9999
           }}
         >
           <SiderContent />
