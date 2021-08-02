@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { ReactComponent as SYRFLogo } from '../assets/logo-dark.svg';
 import { FilterPane } from '../../FilterTab/components/FilterPane';
 import { media } from 'styles/media';
-import { useEffect } from 'react';
 import { MapContainer, } from 'react-leaflet';
 import { MapView } from './MapView';
 import { StyleConstants } from 'styles/StyleConstants';

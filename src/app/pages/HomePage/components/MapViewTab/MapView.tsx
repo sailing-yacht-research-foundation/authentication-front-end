@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 
@@ -27,7 +27,7 @@ export const MapView = (props) => {
                     lng: position.coords.longitude
                 }, zoom);
             });
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
