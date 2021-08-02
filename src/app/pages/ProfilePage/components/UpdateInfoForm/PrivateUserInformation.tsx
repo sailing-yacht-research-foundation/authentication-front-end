@@ -13,7 +13,7 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import moment from 'moment';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { FIELD_VALIDATE } from 'utils/helper';
+import { FIELD_VALIDATE } from 'utils/helpers';
 
 const format = "DD.MM.YYYY HH:mm";
 

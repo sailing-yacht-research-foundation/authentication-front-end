@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';
 import Auth from '@aws-amplify/auth';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
-import { FIELD_VALIDATE, removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helper';
+import { FIELD_VALIDATE, removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helpers';
 import { PrivateUserInformation } from './PrivateUserInformation';
 import { toast } from 'react-toastify';
 import { PublicUserInformation } from './PublicUserInformation';

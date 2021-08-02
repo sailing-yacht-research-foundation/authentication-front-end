@@ -13,6 +13,7 @@ import { media } from 'styles/media';
 import { SyrfFormButton } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { ReactComponent as Logo } from '../assets/logo-dark.svg';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
@@ -75,7 +76,9 @@ export const LoginForm = (props) => {
   return (
     <Wrapper>
       <Spin spinning={isSigningIn} tip={t(translations.login_page.login_message)}>
-        <Title>SYRF</Title>
+        <Title>
+          <Logo/>
+        </Title>
 
         <FormWrapper>
           <FormTitle>{t(translations.login_page.login)}</FormTitle>
@@ -132,7 +135,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding-bottom: 50px;
-
   ${media.medium`
     height: 100vh;
     padding-bottom: 0;
@@ -157,7 +159,6 @@ const FormWrapper = styled.div`
   padding-bottom: 30px;
   margin-top: 61px;
   width: 100%;
-
   ${media.medium`
   width: 460px;
   `};
@@ -188,7 +189,6 @@ const SyrfInputPassword = styled(Input.Password)`
   border-radius: 4px;
   border: none;
   height: 36px;
-
   > input {
     background: #F8F8F8 !important;
   }
@@ -238,10 +238,9 @@ const SyrfSignupButton = styled(Button)`
   font-weight: 700;
   line-height: 19px;
   color: #fff;
-
   &:hover {
     background: #DB6E1E;
     color: #fff;
     border-color: #DB6E1E;
   } 
-`
+`;

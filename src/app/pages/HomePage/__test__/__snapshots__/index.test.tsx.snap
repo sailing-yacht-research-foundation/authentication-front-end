@@ -2,9 +2,6 @@
 
 exports[`<HomePage /> should render the home page and matchs the snapshot 1`] = `
 <HomePage__Wrapper>
-  <VideoSection />
-  <BenefitCarousel />
-  <PartnerAppCarousel />
-  <Footer />
+  <Main />
 </HomePage__Wrapper>
 `;

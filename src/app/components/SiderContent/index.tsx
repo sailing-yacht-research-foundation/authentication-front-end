@@ -10,7 +10,8 @@ import {
   LockOutlined,
   BellOutlined,
   SettingOutlined,
-  ProfileOutlined
+  ProfileOutlined,
+  SearchOutlined
 } from '@ant-design/icons';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -18,6 +19,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { media } from 'styles/media';
+import { GiSailboat } from 'react-icons/gi';
 
 export const SiderContent = (props) => {
 
@@ -31,13 +33,20 @@ export const SiderContent = (props) => {
         <Logo
           onClick={() => history.push('/')}
           style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px' }} />
+        <SyrfMenuItem title={'Search'} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
+          {'Search'}
+        </SyrfMenuItem>
+
+        <SyrfMenuItem title={'My Races'} key="11" onClick={() => history.push('/')} icon={<GiSailboat />}>
+          {'My Races'}
+        </SyrfMenuItem>
 
         <SyrfSubmenu key="sub2" icon={<UserOutlined />} title={t(translations.side_menu.profile.title)}>
           <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />} onClick={() => history.push('/profile')}>{t(translations.side_menu.profile.name)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} onClick={() => history.push('/profile/change-password')} key="8">{t(translations.side_menu.profile.change_password)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.notification_setting)} icon={<BellOutlined />} onClick={() => history.push('/profile')} key="9">{t(translations.side_menu.profile.notification_setting)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.profile_setting)} icon={<SettingOutlined />} onClick={() => history.push('/profile')} key="10">{t(translations.side_menu.profile.profile_setting)}</SyrfMenuItem>
-          {/* <SyrfMenuItem title={t(translations.side_menu.deal)} key="1" onClick={() => history.push('/deals')} icon={<MoneyCollectOutlined />}>{t(translations.side_menu.deal)}</SyrfMenuItem> */} { /* Jon asked to hide this page (move down to profile and hide) */ }
+          {/* <SyrfMenuItem title={t(translations.side_menu.deal)} key="1" onClick={() => history.push('/deals')} icon={<MoneyCollectOutlined />}>{t(translations.side_menu.deal)}</SyrfMenuItem> */} { /* Jon asked to hide this page (move down to profile and hide) */}
         </SyrfSubmenu>
 
         <SyrfMenuItem key="3" title={t(translations.side_menu.app_connection)} icon={<ApiOutlined />}>

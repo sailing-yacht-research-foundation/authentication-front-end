@@ -7,7 +7,7 @@ import { Image, Spin, Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Avatar from 'react-avatar-edit';
-import { dataURLtoFile } from 'utils/helper';
+import { dataURLtoFile } from 'utils/helpers';
 
 export const ChangeAvatar = (props) => {
     const { authUser } = props;

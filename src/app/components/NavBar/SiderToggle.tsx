@@ -8,7 +8,7 @@ import { selectIsSiderToggled } from '../SiderContent/slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSiderSlice } from '../SiderContent/slice';
 import { useLocation } from 'react-router-dom';
-import { isMobile } from 'utils/helper';
+import { isMobile } from 'utils/helpers';
 
 export const SiderToggle = () => {
 

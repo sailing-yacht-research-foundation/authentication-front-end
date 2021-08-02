@@ -16,13 +16,15 @@ export const SyrfFormWrapper = styled.div`
     border-radius: 10px;
     width: 100%;
     padding-bottom: 30px;
-
+    &.danger-zone {
+        margin-top: 30px;
+    }
+    
     &.no-background {
         background: none;
         padding: 0;
         padding-bottom: 30px;
     }
-
     ${media.medium`
         width: 55%;
         padding: 50px 56px;
@@ -88,7 +90,6 @@ export const SyrfFormButton = styled(Button)`
     font-weight: 700;
     line-height: 19px;
     color: #fff;
-
     :disabled {
         background: #dddddd;
     }
@@ -98,7 +99,6 @@ export const SyrfFormSelect = styled(Select)`
     border-radius: 10px;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
     height: 36px;
-
     > div {
         border: none !important;
         background: transparent !important;
@@ -109,6 +109,15 @@ export const SyrfFormSelect = styled(Select)`
 export const SyrfInputNumber = styled(InputNumber)`
     ${inputStyle}
     width: 100%;
+`;
+
+export const SyrfButtonTitle = styled.h4`
+    color: #595959;
+`;
+
+export const SyrfButtonDescription = styled.span`
+    font-size: 13px;
+    color: #000000d9;
 `;
 
 export const SyrfTextArea = styled(Input.TextArea)`
