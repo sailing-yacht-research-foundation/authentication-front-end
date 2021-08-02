@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Form, Input, InputNumber, DatePicker, Row, Col } from 'antd';
+import { Form, Input, DatePicker, Row, Col } from 'antd';
 import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';

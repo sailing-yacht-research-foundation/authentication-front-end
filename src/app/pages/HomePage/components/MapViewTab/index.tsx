@@ -1,54 +1,36 @@
+// import 'leaflet/dist/leaflet.css';
+
 import React from 'react';
-import { StyleConstants } from 'styles/StyleConstants';
 import { Input } from 'antd';
 import styled from 'styled-components';
-import { ReactComponent as SYRFLogo } from './assets/logo-dark.svg';
-import { FilterPane } from '../FilterTab/components/FilterPane';
+import { ReactComponent as SYRFLogo } from '../assets/logo-dark.svg';
+import { FilterPane } from '../../FilterTab/components/FilterPane';
 import { media } from 'styles/media';
-import ReactMapGL from 'react-map-gl';
 import { useEffect } from 'react';
+import { MapContainer, } from 'react-leaflet';
+import { MapView } from './MapView';
+import { StyleConstants } from 'styles/StyleConstants';
 
 const TAB_BAR_HEIGHT = '76px';
 
-export const MapViewTab = () => {
+const center = {
+    lng: -122.4,
+    lat: 37.8
+}
 
-    const [viewport, setViewport] = React.useState({
-        latitude: 37.8,
-        longitude: -122.4,
-        zoom: 14,
-        bearing: 0,
-        pitch: 0
-    });
+const ZOOM = 13;
+
+export const MapViewTab = () => {
 
     const [showSearchPanel, setShowSearchPanel] = React.useState<boolean>(false);
 
     const [searchKeyword, setSearchKeyWord] = React.useState<string>('');
 
-    useEffect(() => {
-        if (navigator.geolocation)
-            navigator.geolocation.getCurrentPosition(setViewPortPosition);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const setViewPortPosition = (position) => {
-        setViewport({
-            ...viewport,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-        });
-    }
-
     return (
         <>
-            <ReactMapGL
-                {...viewport}
-                width="100vw"
-                height={`calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`}
-                mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_API_KEY}
-                mapStyle={'mapbox://styles/jweisbaum89/cki2dpc9a2s7919o8jqyh1gss'}
-                onViewportChange={nextViewport => setViewport(nextViewport)}
-            >
-            </ReactMapGL>
+            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100wh' }} center={center} zoom={ZOOM}>
+                <MapView zoom={ZOOM} />
+            </MapContainer>
             <SearchBarWrapper>
                 <SearchBarInnerWrapper>
                     <StyledSearchBar
@@ -84,6 +66,7 @@ const SearchBarWrapper = styled.div`
     margin: 0 auto;
     width: 530px;
     max-width: 80%;
+    z-index: 998;
 `;
 
 const SearchBarInnerWrapper = styled.div``;
@@ -104,7 +87,7 @@ const StyledSearchBar = styled(Input)`
     text-indent: 60px;
 
     ::placeholder {
-        font-weight: 500;
+        font - weight: 500;
     }
 `;
 
@@ -118,6 +101,7 @@ const StyledSearchPane = styled(FilterPane)`
     display: block;
     border-top: 1px solid #eee;
     width: 97%;
+    z-index: 999;
 
     ${media.medium`
         height: 300px;
@@ -127,10 +111,10 @@ const StyledSearchPane = styled(FilterPane)`
 
 const AdvancedSearchTextWrapper = styled.div`
     text-align:right;
-     margin-top: 5px;
+    margin-top: 5px;
     a {
         color: #fff;
-        font-size: 12px;
-        margin-left: 5px;
-    }
+    font-size: 12px;
+    margin-left: 5px;
+ }
 `;
