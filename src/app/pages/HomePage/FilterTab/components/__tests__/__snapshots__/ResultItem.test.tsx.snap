@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ResultItem /> should render and match the snapshot 1`] = `
+<styled.div>
+  <styled.div>
+    <Space
+      size={5}
+    >
+      <GiPositionMarker />
+      California Coast
+    </Space>
+  </styled.div>
+  <styled.h3>
+    Race at Wales west coast
+  </styled.h3>
+  <styled.div>
+    <styled.span>
+      Team: 6
+    </styled.span>
+    •
+    <styled.span>
+      Length: 1:00:21
+    </styled.span>
+    •
+    <styled.span>
+      Winner: Lübecker Yacht-Club
+    </styled.span>
+    •
+    <styled.span>
+      07-01-2021
+    </styled.span>
+  </styled.div>
+</styled.div>
+`;

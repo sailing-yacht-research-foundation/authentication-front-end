@@ -9,3 +9,5 @@ import 'jest-styled-components';
 
 // Init i18n for the tests needing it
 import 'locales/i18n';
+
+import 'jest-canvas-mock';

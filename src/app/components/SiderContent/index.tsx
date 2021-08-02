@@ -3,7 +3,6 @@ import { Menu } from 'antd';
 import { ReactComponent as Logo } from './assets/my-sailing.svg';
 import {
   UserOutlined,
-  MoneyCollectOutlined,
   CrownOutlined,
   HeatMapOutlined,
   SlidersOutlined,
@@ -11,13 +10,15 @@ import {
   LockOutlined,
   BellOutlined,
   SettingOutlined,
-  ProfileOutlined
+  ProfileOutlined,
+  SearchOutlined
 } from '@ant-design/icons';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { GiSailboat } from 'react-icons/gi';
 
 export const SiderContent = (props) => {
   const history = useHistory();
@@ -26,10 +27,14 @@ export const SiderContent = (props) => {
 
   return (
     <SiderWrapper>
-      <Logo onClick={() => history.push('/deals')} style={{ margin: '20px auto', display: 'block' }} />
+      <Logo onClick={() => history.push('/')} style={{ margin: '20px auto', display: 'block' }} />
       <SyrfMenu mode="inline" defaultSelectedKeys={['1']}>
-        <SyrfMenuItem title={t(translations.side_menu.deal)} key="1" onClick={() => history.push('/deals')} icon={<MoneyCollectOutlined />}>
-          {t(translations.side_menu.deal)}
+        <SyrfMenuItem title={'Search'} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
+          { 'Search' }
+        </SyrfMenuItem>
+
+        <SyrfMenuItem title={'My Races'} key="11" onClick={() => history.push('/')} icon={<GiSailboat />}>
+          { 'My Races' }
         </SyrfMenuItem>
 
         <SyrfSubmenu key="sub2" icon={<UserOutlined />} title={t(translations.side_menu.profile.title)}>
