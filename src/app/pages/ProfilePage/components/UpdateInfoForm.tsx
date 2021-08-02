@@ -258,7 +258,7 @@ export const UpdateInfo = (props) => {
 
                     </Form>
                 </Spin >
-            </SyrfFormWrapper >
+            </SyrfFormWrapper>
         </Wrapper >
     )
 }
@@ -267,7 +267,8 @@ const Wrapper = styled.div`
     margin-top: 50px;
     width: 100%;
     display:flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const ChangeAvatarWrapper = styled.div`

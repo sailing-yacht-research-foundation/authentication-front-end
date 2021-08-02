@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
 import { UpdateInfo } from '../UpdateInfoForm';

@@ -7,10 +7,15 @@ import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { loginActions } from 'app/pages/LoginPage/slice';
 import { ProfileTabs } from './ProfileTabs';
 import { LinkToProviders } from './LinkToProviders';
-// import FacebookPosts from './Facebook/components/FacebookPosts';
-// import InstagramPosts from './Instagram/components/InstagramPost';
+import { DeleteUserModal } from './DeleteUserModal';
+import { SyrfButtonDescription, SyrfButtonTitle, SyrfFormTitle, SyrfFormWrapper } from 'app/components/SyrfForm';
+import { Row, Col, Button } from 'antd';
+import { media } from 'styles/media';
 
 export const Profile = () => {
+
+    const [showDeleteUserModal, setShowDeleteUserModal] = React.useState<boolean>(false);
+
     const authUser = useSelector(selectUser);
 
     const dispatch = useDispatch();
@@ -27,9 +32,30 @@ export const Profile = () => {
 
     return (
         <Wrapper>
+            <DeleteUserModal
+                showDeleteUserModal={showDeleteUserModal}
+                setShowDeleteUserModal={setShowDeleteUserModal}
+                authUser={authUser}
+            />
             <ProfileTabs />
             <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
             <LinkToProviders />
+            <SyrfFormWrapper className="danger-zone">
+                <SyrfFormTitle>Danger Zone</SyrfFormTitle>
+                <Row gutter={24}>
+                    <Col xs={21} sm={24} md={12} lg={12}>
+                        <SyrfButtonTitle>Delete My account</SyrfButtonTitle>
+                        <SyrfButtonDescription>You will delete your account along with all information</SyrfButtonDescription>
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12}>
+                        <DeleteAccountButtonWrapper>
+                            <Button danger onClick={() => setShowDeleteUserModal(true)}>
+                                Permantly delete my account
+                            </Button>
+                        </DeleteAccountButtonWrapper>
+                    </Col>
+                </Row>
+            </SyrfFormWrapper>
         </Wrapper>
     )
 }
@@ -42,4 +68,15 @@ const Wrapper = styled.div`
     width: 100%;
     position: relative;
     padding-bottom: 50px;
+`;
+
+const DeleteAccountButtonWrapper = styled.div`
+    text-align: center;
+    margin-top: 20px;
+
+    > a { color: red; }
+
+    ${media.medium`
+        margin-top: 0;
+    `}
 `;
