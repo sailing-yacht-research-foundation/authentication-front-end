@@ -1,4 +1,4 @@
-// import 'leaflet/dist/leaflet.css';
+import 'leaflet/dist/leaflet.css';
 
 import React from 'react';
 import { Input } from 'antd';
