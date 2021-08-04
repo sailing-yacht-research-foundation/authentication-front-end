@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs, Button } from 'antd';
-import { MapViewTab } from './MapViewTab';
+import { MapViewTab } from './MapViewTab/index';
 import { FilterTab } from '../FilterTab';
 import styled from 'styled-components';
 import { AiFillPlusCircle } from 'react-icons/ai';
