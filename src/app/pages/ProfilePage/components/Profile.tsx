@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import Auth from '@aws-amplify/auth';
-import { UpdateInfo } from './UpdateInfoForm';
+import { UpdateInfo } from './UpdateInfoForm/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { loginActions } from 'app/pages/LoginPage/slice';
 import { ProfileTabs } from './ProfileTabs';
-import { LinkToProviders } from './LinkToProviders';
 import { DeleteUserModal } from './DeleteUserModal';
 import { SyrfButtonDescription, SyrfButtonTitle, SyrfFormTitle, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { Row, Col, Button } from 'antd';
@@ -25,8 +24,10 @@ export const Profile = () => {
     }
 
     const getAuthorizedAuthUser = () => {
-        Auth.currentAuthenticatedUser()
-            .then(user => dispatch(loginActions.setUser(JSON.parse(JSON.stringify(user)))))
+        Auth.currentAuthenticatedUser({ bypassCache: true })
+            .then(user => {
+                dispatch(loginActions.setUser(JSON.parse(JSON.stringify(user))))
+            })
             .catch(error => { });
     }
 
@@ -39,7 +40,7 @@ export const Profile = () => {
             />
             <ProfileTabs />
             <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
-            <LinkToProviders />
+             {/* <LinkToProviders /> Hide & comment this base on Jon's request of SNS-250 */}
             <SyrfFormWrapper className="danger-zone">
                 <SyrfFormTitle>Danger Zone</SyrfFormTitle>
                 <Row gutter={24}>

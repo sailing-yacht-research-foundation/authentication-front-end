@@ -2,6 +2,63 @@
 
 exports[`<ChangeAvatar /> should render to match the snapshot 1`] = `
 <React.Fragment>
+  <Modal
+    bodyStyle={
+      Object {
+        "display": "flex",
+        "justifyContent": "center",
+        "overflow": "hidden",
+      }
+    }
+    confirmLoading={false}
+    okType="primary"
+    onCancel={[Function]}
+    onOk={[Function]}
+    title="Change profile picture"
+    visible={false}
+    width={520}
+  >
+    <r
+      backgroundColor="grey"
+      borderStyle={
+        Object {
+          "border": "2px solid #979797",
+          "borderRadius": "8px",
+          "borderStyle": "dashed",
+          "textAlign": "center",
+        }
+      }
+      closeIconColor="white"
+      cropColor="white"
+      exportAsSquare={true}
+      exportMimeType="image/png"
+      exportQuality={1}
+      height={295}
+      label="Choose a file"
+      labelStyle={
+        Object {
+          "color": "black",
+          "cursor": "pointer",
+          "display": "inline-block",
+          "fontFamily": "sans-serif",
+          "fontSize": "1.25em",
+          "fontWeight": "700",
+        }
+      }
+      lineWidth={4}
+      mimeTypes="image/jpeg,image/png"
+      minCropRadius={30}
+      mobileScaleSpeed={0.5}
+      onBeforeFileLoad={[Function]}
+      onClose={[Function]}
+      onCrop={[Function]}
+      onFileLoad={[Function]}
+      onImageLoad={[Function]}
+      shadingColor="grey"
+      shadingOpacity={0.6}
+      width={390}
+    />
+  </Modal>
   <Spin
     size="default"
     spinning={false}
@@ -32,23 +89,8 @@ exports[`<ChangeAvatar /> should render to match the snapshot 1`] = `
             }
           }
         />
-        <input
-          accept="image/png, image/jpeg"
-          hidden={true}
-          onChange={[Function]}
-          type="file"
-        />
       </styled.div>
     </styled.div>
   </Spin>
-  <Title
-    level={3}
-    style={
-      Object {
-        "marginTop": "15px",
-        "textAlign": "center",
-      }
-    }
-  />
 </React.Fragment>
 `;

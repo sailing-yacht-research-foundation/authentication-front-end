@@ -9,8 +9,6 @@ export const ProfileTabs = (props) => {
     return (
         <Tabs>
             <TabItem className="active" to="/profile">Account settings</TabItem>
-            <TabItem to="/profile">Notifications</TabItem>
-            <TabItem to="/profile">Membership Plan</TabItem>
             <TabItem to="/profile/change-password">Password & Security</TabItem>
         </Tabs>
     )
@@ -26,7 +24,7 @@ const Tabs = styled.div`
         font-size: 24px;
         flex-direction: row;
     `}
-`
+`;
 
 const TabItem = styled(Link)`
     font-family: Roboto;
@@ -46,4 +44,4 @@ const TabItem = styled(Link)`
     &.active {
         color: ${StyleConstants.MAIN_TONE_COLOR};
     }
-`
+`;

@@ -1,7 +1,7 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Input, Form, Select, Divider, DatePicker, Checkbox, Spin } from 'antd';
+import { Input, Form, Select, Divider, DatePicker, Checkbox, Spin, Row, Col } from 'antd';
 import { Auth } from 'aws-amplify';
 import { languagesList, localesList } from 'utils/languages-util';
 import { toast } from 'react-toastify';
@@ -27,7 +27,7 @@ export const SignupForm = () => {
     const history = useHistory();
 
     const onFinish = (values) => {
-        const { email, name, password, locale, language, birthdate } = values;
+        const { email, password, locale, language, birthdate, first_name, last_name } = values;
 
         setIsSigningUp(true);
 
@@ -35,11 +35,13 @@ export const SignupForm = () => {
             username: email,
             password: password,
             attributes: {
-                name: name,
+                name: first_name + ' ' + last_name,
                 locale: locale,
                 'custom:language': language,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
-                picture: String(Math.floor(Math.random() * 20) + 1)
+                picture: String(Math.floor(Math.random() * 20) + 1),
+                'custom:first_name': first_name,
+                'custom:last_name': last_name
             }
         }).then(response => {
             let registerSuccess = !!response.user;
@@ -103,13 +105,27 @@ export const SignupForm = () => {
                     <Input />
                 </Form.Item>
 
-                <Form.Item
-                    label="Name"
-                    name="name"
-                    rules={[{ required: true }]}
-                >
-                    <Input />
-                </Form.Item>
+                <Row gutter={24}>
+                    <Col xs={24} sm={24} md={12} lg={12}>
+                        <Form.Item
+                            label="First Name"
+                            name="first_name"
+                            rules={[{ required: true, max: 15 }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+
+                    <Col xs={24} sm={24} md={12} lg={12}>
+                        <Form.Item
+                            label="Last Name"
+                            name="last_name"
+                            rules={[{ required: true, max: 15 }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
                 <Form.Item
                     label="Password"

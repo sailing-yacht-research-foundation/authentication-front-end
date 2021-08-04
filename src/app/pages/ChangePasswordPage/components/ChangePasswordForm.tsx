@@ -74,6 +74,27 @@ export const ChangePasswordForm = (props) => {
                             <SyrfPasswordInputField />
                         </Form.Item>
 
+                        <Form.Item
+                            label={<SyrfFieldLabel>Re-type new password</SyrfFieldLabel>}
+                            name="newPasswordConfirmation"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please confirm your new password!',
+                                },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('newPassword') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                    },
+                                }),
+                            ]}
+                        >
+                            <SyrfPasswordInputField />
+                        </Form.Item>
+
                         <Form.Item>
                             <SyrfSubmitButton type="primary" htmlType="submit">
                                 {t(translations.change_password_page.change_password)}

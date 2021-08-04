@@ -9,8 +9,13 @@ export const VerifyAccountForm = () => {
     const history = useHistory<any>();
 
     React.useEffect(() => {
-        if (!history?.location?.state?.state?.email) {
+        let code = new URLSearchParams(history.location.search).get("code");
+        let email = new URLSearchParams(history.location.search).get("email");
+
+        if (!history?.location?.state?.state?.email && !(code && email)) {
             history?.push('/not-found')
+        } else if (code && email) {
+            verifyAccount(email, code);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -19,23 +24,43 @@ export const VerifyAccountForm = () => {
         const { code } = values;
         const email = history?.location?.state?.state?.email;
 
-        try {
-            Auth.confirmSignUp(email, code)
-                .then(response => {
-                    history.push('/signin');
-                    toast.success('Account verified, please login!');
-                }).catch(error => {
-                    toast.error(error.message);
-                })
-        } catch (error) {
+        verifyAccount(email, code);
+    }
 
-        }
+    const showVerifySuccessAndRedirectToLogin = () => {
+        history.push('/signin');
+        toast.success('Account verified, please login!');
+    }
+
+    const verifyAccount = (email, code) => {
+        Auth.confirmSignUp(email, code)
+            .then(response => {
+                showVerifySuccessAndRedirectToLogin();
+            }).catch(error => {
+                if (error.code !== 'NotAuthorizedException') // don't show when user already confirmed and only want to re-verify email.
+                    toast.error(error.message);
+            });
+
+        Auth.currentAuthenticatedUser().then(user => { // this case is for re-verify email.
+            Auth.verifyCurrentUserAttributeSubmit('email', code).then(() => {
+                showVerifySuccessAndRedirectToLogin();
+                Auth.signOut();
+            }).catch(error => {
+                toast.error(error.message);
+            });
+        }).catch(e => {
+
+        });
     }
 
     const resendConfirmationCode = () => {
         const email = history?.location?.state?.state?.email;
-        Auth.resendSignUp(email);
-        toast.success('Confirmation code sent!');
+
+        Auth.resendSignUp(email).then(response => {
+            toast.success('Confirmation code sent!');
+        }).catch(error => {
+            toast.error(error.message);
+        })
     }
 
     return (

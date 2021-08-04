@@ -55,6 +55,8 @@ export const GlobalStyle = createGlobalStyle`
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: center;
+    max-width: 1920px;
+    margin: 0 auto;
   }
 
   .site-content {
