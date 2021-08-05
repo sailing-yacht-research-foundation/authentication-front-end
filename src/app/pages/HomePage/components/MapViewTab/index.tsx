@@ -141,18 +141,26 @@ const AdvancedSearchTextWrapper = styled.div`
 
 const MyLocationWrapper = styled.div`
     position: absolute;
-    bottom: 20px;
+    bottom: 80px;
     z-index: 999;
     cursor: pointer;
-    left: 20px;
+    left: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    ${media.medium`
+        bottom: 20px;
+    `}
 `;
 
 const StyledMyLocationIcon = styled(BiTargetLock)`
     color: #fff;
-    font-size: 40px;
+    font-size: 30px;
+
+    ${media.medium`
+        font-size: 40px;
+    `}
 `;
 
 const MyLocationText = styled.span`
