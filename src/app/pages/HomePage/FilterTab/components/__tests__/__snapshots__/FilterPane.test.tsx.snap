@@ -79,7 +79,7 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
         xs={12}
       >
         <FormItem
-          label="To date"
+          label="To Date"
           name="to_date"
           rules={
             Array [

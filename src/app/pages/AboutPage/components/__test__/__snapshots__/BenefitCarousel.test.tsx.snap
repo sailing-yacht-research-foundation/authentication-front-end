@@ -25,10 +25,10 @@ exports[`<BenefitCarousel /> should render the benefit carousel and matchs the s
           <styled.h1
             className="section-header-text"
           >
-            One password for all sailing apps and data
+            One password for all sailing apps and data:
           </styled.h1>
           <styled.p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+            syrf.io allows third party developers to use your SYRF profile for authentication. This means you have one less password to remember for your favorite sailing apps.
           </styled.p>
         </Col>
         <Col
@@ -68,10 +68,10 @@ exports[`<BenefitCarousel /> should render the benefit carousel and matchs the s
           <styled.h1
             className="section-header-text"
           >
-            You control who can access your sailing data
+            You control who can access your sailing data:
           </styled.h1>
           <styled.p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+            syrf.io is like Google Drive for all of your sailing data. 3rd party apps (such as those from your favorite sailing organization) can request to import your data. You retain strict control over who does and doesn’t have access.
           </styled.p>
         </Col>
         <Col
@@ -111,10 +111,10 @@ exports[`<BenefitCarousel /> should render the benefit carousel and matchs the s
           <styled.h1
             className="section-header-text"
           >
-            GDPR & CCPA Compliant
+            GDPR & CCPA Compliant:
           </styled.h1>
           <styled.p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+             We take your privacy seriously. Our apps go above and beyond to ensure we only collect race related data and that your data is anonymized and protected. We never, EVER, sell your data to 3rd parties and our revenue model does not rely on personalized advertising. We only use cookies with your permission and you are free to delete your data at any time.
           </styled.p>
         </Col>
         <Col
@@ -154,10 +154,10 @@ exports[`<BenefitCarousel /> should render the benefit carousel and matchs the s
           <styled.h1
             className="section-header-text"
           >
-            Organization independent
+            Organization independent:
           </styled.h1>
           <styled.p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+            The sailing world is full of passionate groups of people. We decided to build tech that enables everyone, rather than hitching our wagon to any one organization in particular. By staying unaffiliated, SYRF is able to stay innovative and build tools for everyone.
           </styled.p>
         </Col>
         <Col

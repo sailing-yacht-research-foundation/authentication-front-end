@@ -6,13 +6,25 @@ exports[`<Footer /> should render and matchs the snapshot 1`] = `
     <Title
       className="section-header-text"
     >
-      Are you a developer who wants to use My Sailing Profile?
+      Are you a developer who wants to use SYRF.io?
     </Title>
     <styled.div>
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
+      SYRF.io provides tools for:
+      <styled.ul>
+        <li>
+          Authentication
+        </li>
+        <li>
+           Data science
+        </li>
+        <li>
+          Playback and streaming
+        </li>
+      </styled.ul>
     </styled.div>
     <Button
       className="syrf-button"
+      onClick={[Function]}
       size="large"
       style={
         Object {
@@ -42,14 +54,16 @@ exports[`<Footer /> should render and matchs the snapshot 1`] = `
         }
       >
         <ForwardRef(SvgLogoLight)
+          onClick={[Function]}
           style={
             Object {
+              "cursor": "pointer",
               "marginBottom": "15px",
             }
           }
         />
         <styled.p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.
+          syrf.io is a project built by the Sailing Yacht Research Foundation. SYRF is the only non profit to focus on using science and technology to advance the sport of sailing. SYRF is what happens when you pair the world’s most accomplished and capable sailors with the world’s most accomplished and capable technologists.
         </styled.p>
       </Col>
       <Col
@@ -75,7 +89,12 @@ exports[`<Footer /> should render and matchs the snapshot 1`] = `
           }
         >
           <Styled(Link)
-            to="/"
+            target="_blank"
+            to={
+              Object {
+                "pathname": "https://sailyachtresearch.org",
+              }
+            }
           >
             SYRF
           </Styled(Link)>
