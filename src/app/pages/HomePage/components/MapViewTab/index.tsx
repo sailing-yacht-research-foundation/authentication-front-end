@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Input } from 'antd';
 import styled from 'styled-components';
 import { ReactComponent as SYRFLogo } from '../assets/logo-dark.svg';
@@ -9,6 +9,7 @@ import { media } from 'styles/media';
 import { MapContainer, } from 'react-leaflet';
 import { MapView } from './MapView';
 import { StyleConstants } from 'styles/StyleConstants';
+import { BiTargetLock } from 'react-icons/bi';
 
 const TAB_BAR_HEIGHT = '76px';
 
@@ -25,10 +26,18 @@ export const MapViewTab = () => {
 
     const [searchKeyword, setSearchKeyWord] = React.useState<string>('');
 
+    const mapViewRef = useRef(null);
+
+    const ZoomToUserLocation = () => {
+        if (mapViewRef.current !== null) {
+            // mapViewRef.current.zoomToCurrentUserLocationIfAllowed();
+        }
+    }
+
     return (
-        <>
+        <Wrapper>
             <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100wh' }} center={center} zoom={ZOOM}>
-                <MapView zoom={ZOOM} />
+                <MapView ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
             <SearchBarWrapper>
                 <SearchBarInnerWrapper>
@@ -53,9 +62,17 @@ export const MapViewTab = () => {
                 searchKeyWord={searchKeyword}
                 closable
                 close={() => setShowSearchPanel(false)} />}
-        </>
+            <MyLocationWrapper onClick={() => zoo}>
+                <StyledMyLocationIcon />
+                <MyLocationText>My location</MyLocationText>
+            </MyLocationWrapper>
+        </Wrapper>
     )
 }
+
+const Wrapper = styled.div`
+    position: relative;
+`;
 
 const SearchBarWrapper = styled.div`
     position: absolute;
@@ -116,4 +133,25 @@ const AdvancedSearchTextWrapper = styled.div`
     font-size: 12px;
     margin-left: 5px;
  }
+`;
+
+const MyLocationWrapper = styled.div`
+    position: absolute;
+    bottom: 20px;
+    z-index: 999;
+    cursor: pointer;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const StyledMyLocationIcon = styled(BiTargetLock)`
+    color: #fff;
+    font-size: 40px;
+`;
+
+const MyLocationText = styled.span`
+    color: #fff;
+    font-size: 13px;
 `;

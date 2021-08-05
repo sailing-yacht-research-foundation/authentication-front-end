@@ -37,9 +37,7 @@ const races = [
     }
 ];
 
-export const MapView = (props) => {
-
-    const { zoom } = props;
+export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     const map = useMap();
 
@@ -80,7 +78,7 @@ export const MapView = (props) => {
                     className: 'myDivIcon'
                 })
             })
-            .addTo(map);
+                .addTo(map);
         });
     }
 
@@ -88,4 +86,4 @@ export const MapView = (props) => {
         <>
         </>
     );
-}
+})
