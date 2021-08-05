@@ -11,6 +11,10 @@ import { MapView } from './MapView';
 import { StyleConstants } from 'styles/StyleConstants';
 import { BiTargetLock } from 'react-icons/bi';
 
+type MapViewProps = {
+    zoomToCurrentUserLocationIfAllowed: () => void;
+}
+
 const TAB_BAR_HEIGHT = '76px';
 
 const center = {
@@ -26,11 +30,11 @@ export const MapViewTab = () => {
 
     const [searchKeyword, setSearchKeyWord] = React.useState<string>('');
 
-    const mapViewRef = useRef(null);
+    const mapViewRef = useRef<MapViewProps>(null);
 
-    const ZoomToUserLocation = () => {
-        if (mapViewRef.current !== null) {
-            // mapViewRef.current.zoomToCurrentUserLocationIfAllowed();
+    const zoomToUserLocation = () => {
+        if (null !== mapViewRef.current) {
+            mapViewRef.current.zoomToCurrentUserLocationIfAllowed();
         }
     }
 
@@ -62,7 +66,7 @@ export const MapViewTab = () => {
                 searchKeyWord={searchKeyword}
                 closable
                 close={() => setShowSearchPanel(false)} />}
-            <MyLocationWrapper onClick={() => zoo}>
+            <MyLocationWrapper onClick={() => zoomToUserLocation()}>
                 <StyledMyLocationIcon />
                 <MyLocationText>My location</MyLocationText>
             </MyLocationWrapper>

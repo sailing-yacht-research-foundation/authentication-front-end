@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useImperativeHandle } from 'react';
 import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
@@ -37,24 +37,41 @@ const races = [
     }
 ];
 
+const MAP_MOVE_TYPE = {
+    immediately: 'immediately',
+    animation: 'animation'
+}
+
 export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     const map = useMap();
 
     useEffect(() => {
         initializeMapView();
-        zoomToCurrentUserLocationIfAllowed();
+        zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
         attachRaceMarkersToMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const zoomToCurrentUserLocationIfAllowed = () => {
+    useImperativeHandle(ref, () => ({
+        zoomToCurrentUserLocationIfAllowed() {
+            zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.animation);
+        }
+      }));
+
+    /**
+     * Zoom to the location of current user
+     * @param type should be either type: immediately or animation
+     */
+    const zoomToCurrentUserLocationIfAllowed = (type: string) => {
         if (navigator.geolocation)
             navigator.geolocation.getCurrentPosition((position) => {
-                map.setView({
+                const params = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
-                }, zoom);
+                };
+                
+                type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
             });
     }
 
@@ -78,7 +95,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                     className: 'myDivIcon'
                 })
             })
-                .addTo(map);
+            .addTo(map);
         });
     }
 
