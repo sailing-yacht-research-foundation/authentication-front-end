@@ -11,7 +11,6 @@ export function AboutPage() {
     <Wrapper>
       <VideoSection/>
       <BenefitCarousel/>
-      <PartnerAppCarousel/>
       <Footer/>
     </Wrapper>
   );

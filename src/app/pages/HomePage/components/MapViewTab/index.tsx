@@ -27,7 +27,7 @@ export const MapViewTab = () => {
 
     return (
         <>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100wh' }} center={center} zoom={ZOOM}>
+            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
                 <MapView zoom={ZOOM} />
             </MapContainer>
             <SearchBarWrapper>
@@ -45,7 +45,7 @@ export const MapViewTab = () => {
                     <a href="/" onClick={(e) => {
                         e.preventDefault();
                         setShowSearchPanel(true);
-                    }}>Advanced search?</a>
+                    }}>Advanced search</a>
                 </AdvancedSearchTextWrapper>
             </SearchBarWrapper>
             {showSearchPanel && <StyledSearchPane

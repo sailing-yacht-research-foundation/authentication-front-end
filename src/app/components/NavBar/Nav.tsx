@@ -59,7 +59,7 @@ export const Nav = () => {
         </>
       ) : (
         <>
-          <AboutLink to="/about">{'About Us'}</AboutLink>
+          <AboutLink to="/about">{'About'}</AboutLink>
           <Space size={15}>
             <div>
               <LinkStyled to="/signin">{t(translations.home_page.nav.log_in)}</LinkStyled>

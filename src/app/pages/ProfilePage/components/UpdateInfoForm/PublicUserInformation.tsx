@@ -77,7 +77,7 @@ export const PublicUserInformation = (props) => {
                 label={<SyrfFieldLabel>Biography</SyrfFieldLabel>}
                 name="bio"
             >
-                <SyrfTextArea placeholder={'e.g. Olympic 29er Champion and meteorology nerd.'} />
+                <SyrfTextArea placeholder={'e.g. Olympic 29er champion and meteorology nerd.'} />
             </Form.Item>
         </Wrapper>
     );

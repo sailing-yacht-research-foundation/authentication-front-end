@@ -115,7 +115,7 @@ export const UpdateInfo = (props) => {
         Auth.currentAuthenticatedUser().then(user => {
             if (!!getUserAttribute(user, 'phone_number') && !checkForVerifiedField(user, FIELD_VALIDATE.phone)) { // user inputed phone and it's not verified
                 showPhoneVerifyModalWithMessage(
-                    `Hey ${getUserAttribute(user, 'name')}, your phone number is not verified, you will receive a call to verify your phone number.`
+                    `Hey ${getUserAttribute(user, 'name')}, your phone number is not verified, you will receive an sms/call to verify your phone number.`
                 );
             }
         }).catch((error) => {

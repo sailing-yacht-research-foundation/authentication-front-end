@@ -77,7 +77,7 @@ export const FilterPane = (props) => {
 
                     <Col xs={12} sm={12} md={12} lg={12}>
                         <Form.Item
-                            label="To date"
+                            label="To Date"
                             name="to_date"
                             rules={[{ type: 'date' }]}
                         >

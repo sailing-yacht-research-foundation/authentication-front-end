@@ -45,8 +45,8 @@ export const Profile = () => {
                 <SyrfFormTitle>Danger Zone</SyrfFormTitle>
                 <Row gutter={24}>
                     <Col xs={21} sm={24} md={12} lg={12}>
-                        <SyrfButtonTitle>Delete My account</SyrfButtonTitle>
-                        <SyrfButtonDescription>You will delete your account along with all information</SyrfButtonDescription>
+                        <SyrfButtonTitle>Delete my account</SyrfButtonTitle>
+                        <SyrfButtonDescription>You will delete your account along with all associated information.</SyrfButtonDescription>
                     </Col>
                     <Col xs={24} sm={24} md={12} lg={12}>
                         <DeleteAccountButtonWrapper>

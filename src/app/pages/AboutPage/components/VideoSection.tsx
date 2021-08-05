@@ -18,12 +18,6 @@ export const VideoSection = (props) => {
             <Row style={{ marginTop: '88px' }}>
                 <Typography.Title className="text-white introduction-text">{t(translations.home_page.video_section.one_login)} <br /> {t(translations.home_page.video_section.ultimate_potential)}</Typography.Title>
             </Row>
-            
-            <Row>
-                <p className="introduction-description">
-                {t(translations.home_page.video_section.description)}
-                </p>
-            </Row>
 
             <Row  style={{ marginTop: '40px' }}>
                 <Space size={15}>
@@ -46,7 +40,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    min-height: 514px;
+    min-height: 414px;
     width: 100%;
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(${SailingBackground});
     background-size: cover;

@@ -75,7 +75,7 @@ export const ChangePasswordForm = (props) => {
                         </Form.Item>
 
                         <Form.Item
-                            label={<SyrfFieldLabel>Re-type new password</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>Confirm New Password</SyrfFieldLabel>}
                             name="newPasswordConfirmation"
                             rules={[
                                 {

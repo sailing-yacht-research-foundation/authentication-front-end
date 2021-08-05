@@ -41,12 +41,12 @@ export const PrivateUserInformation = (props) => {
         const userPhoneNumberExists = !!getUserAttribute(authUser, 'phone_number');
 
         if (type === FIELD_VALIDATE.email)
-            return <ItemVerifyMessage className={verified ? 'verified' : ''}>{`Your Email is ${verified ? '' : 'not'} verified`}</ItemVerifyMessage>;
+            return <ItemVerifyMessage className={verified ? 'verified' : ''}>{`Your email is ${verified ? '' : 'not'} verified`}</ItemVerifyMessage>;
 
         if (userPhoneNumberExists) {
-            return verified ? (<ItemVerifyMessage className={'verified'}>{`Your Phone is verified`}</ItemVerifyMessage>) :
+            return verified ? (<ItemVerifyMessage className={'verified'}>{`Your phone is verified`}</ItemVerifyMessage>) :
                 (
-                    <ItemVerifyMessage>{`Your Phone is not verified.`} <a href="/" onClick={(e) => {
+                    <ItemVerifyMessage>{`Your phone is not verified.`} <a href="/" onClick={(e) => {
                         e.preventDefault();
                         sendPhoneVerification();
                         setShowPhoneVerifyModal(true);
@@ -115,7 +115,7 @@ export const PrivateUserInformation = (props) => {
             <Row gutter={24}>
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
-                        label={<SyrfFieldLabel>Date Of Birth</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>Date of Birth</SyrfFieldLabel>}
                         name="birthdate"
                         rules={[{ type: 'date', required: true }]}
                     >

@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Form } from 'antd';
 import {
     SyrfFieldLabel,
+    SyrfInputField,
     SyrfInputNumber,
 } from 'app/components/SyrfForm';
 import { Auth } from 'aws-amplify';
@@ -64,9 +65,12 @@ export const VerifyPhoneModal = (props) => {
                 <Form.Item
                     label={<SyrfFieldLabel>Code</SyrfFieldLabel>}
                     name="code"
-                    rules={[{ required: true, type: 'number', min: 6 }]}
+                    rules={[{ required: true, min: 6 }]}
                 >
-                    <SyrfInputNumber />
+                    <SyrfInputField
+                        placeholder="Enter the code you received"
+                        type="number"
+                    />
                 </Form.Item>
             </Form>
 

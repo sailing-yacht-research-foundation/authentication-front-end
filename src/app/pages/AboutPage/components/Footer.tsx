@@ -19,10 +19,18 @@ export const Footer = (props) => {
                 </Typography.Title>
 
                 <DeveloperDescription>
-                    {t(translations.home_page.footer.description)}
+                    SYRF.io provides tools for:
+                    <FooterDeveloperBenefitList>
+                        <li>Authentication</li>
+                        <li> Data science</li>
+                        <li>Playback and streaming</li>
+                    </FooterDeveloperBenefitList>
                 </DeveloperDescription>
-
-                <Button size={'large'} className="syrf-button" style={{ marginTop: '20px', marginBottom: '20px' }}>{t(translations.home_page.footer.developer_button)}</Button>
+                <Button size={'large'} onClick={() => {
+                    window.open('https://developers.syrf.io', '_blank');
+                }} className="syrf-button"
+                    style={{ marginTop: '20px', marginBottom: '20px' }}
+                >{t(translations.home_page.footer.developer_button)}</Button>
             </DeveloperSectionContainer>
 
             <SYRFFooterContainer>
@@ -35,7 +43,9 @@ export const Footer = (props) => {
                             span: 24
                         }}
                     >
-                        <Logo style={{ marginBottom: '15px' }}/>
+                        <Logo
+                            onClick={() => window.open('https://sailyachtresearch.org', '_blank')}
+                            style={{ marginBottom: '15px', cursor: 'pointer' }} />
                         <SYRFDescription>{t(translations.home_page.footer.syrf_description)}</SYRFDescription>
                     </Col>
 
@@ -49,7 +59,7 @@ export const Footer = (props) => {
                         }}
                     >
                         <StyledRow justify="end" align="middle" style={{ marginTop: '50px' }}>
-                            <StyledLink to="/">SYRF</StyledLink>
+                            <StyledLink to={{ pathname: 'https://sailyachtresearch.org' }} target="_blank">SYRF</StyledLink>
                         </StyledRow>
 
                         <StyledRow justify="end" align="middle" style={{ marginTop: '10px' }}>
@@ -159,4 +169,9 @@ const StyledRow = styled(Row)`
     ${media.small`
         justify-contents: center;
     `};
-`
+`;
+
+const FooterDeveloperBenefitList = styled.ul`
+    margin-top: 15px;
+    text-align: left;
+`; 
