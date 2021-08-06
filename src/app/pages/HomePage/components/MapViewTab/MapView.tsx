@@ -5,6 +5,7 @@ import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
 import { GiSailboat } from 'react-icons/gi';
+import { toast } from 'react-toastify';
 
 const races = [
     {
@@ -57,7 +58,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
         zoomToCurrentUserLocationIfAllowed() {
             zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.animation);
         }
-      }));
+    }));
 
     /**
      * Zoom to the location of current user
@@ -70,9 +71,20 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-                
+
                 type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
+            }, error => {
+                handleLocationPermissionError(error, type);
             });
+    }
+
+    const handleLocationPermissionError = (error, type: string) => {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                if (type === MAP_MOVE_TYPE.animation)
+                    toast.error("Please share your location to use this feature.")
+                break;
+        }
     }
 
     const initializeMapView = () => {
@@ -95,7 +107,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                     className: 'myDivIcon'
                 })
             })
-            .addTo(map);
+                .addTo(map);
         });
     }
 
