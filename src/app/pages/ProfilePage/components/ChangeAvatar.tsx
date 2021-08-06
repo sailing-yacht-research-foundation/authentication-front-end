@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Avatar from 'react-avatar-edit';
 import { dataURLtoFile } from 'utils/helpers';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const ChangeAvatar = (props) => {
     const { authUser } = props;
@@ -18,9 +20,11 @@ export const ChangeAvatar = (props) => {
 
     const [cropAvatarModalVisible, setCropAvatarModalVisible] = useState<boolean>(false);
 
+    const { t } = useTranslation();
+
     const onSubmitCroppedAvatar = async () => {
         if (base64ConvertedURL === '') {
-            toast.error('Please choose an image to crop!');
+            toast.error(t(translations.profile_page.update_profile.please_choose_an_image_to_crop));
             return;
         }
 
@@ -41,7 +45,7 @@ export const ChangeAvatar = (props) => {
                     Auth.updateUserAttributes(user, {
                         'picture': avatarFileName
                     }).then(response => {
-                        toast.success('Upload avatar success');
+                        toast.success(t(translations.profile_page.update_profile.upload_profile_picture_successfully));
                         props.cancelUpdateProfile();
                     }).catch(error => {
                         toast.error(error.message);
@@ -72,7 +76,7 @@ export const ChangeAvatar = (props) => {
     return (
         <>
             <Modal
-                title="Change profile picture"
+                title={t(translations.profile_page.update_profile.change_profile_picture)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
                 visible={cropAvatarModalVisible}
                 onOk={onSubmitCroppedAvatar}
@@ -85,7 +89,7 @@ export const ChangeAvatar = (props) => {
                     onCrop={onAvatarCropped}
                 />
             </Modal>
-            <Spin spinning={isUploadingProfilePicture} tip="Uploading...">
+            <Spin spinning={isUploadingProfilePicture} tip={t(translations.profile_page.update_profile.uploading)}>
                 <Wrapper>
                     <AvatarHolder>
                         <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
@@ -102,7 +106,7 @@ export const ChangeAvatar = (props) => {
 const Wrapper = styled.div`
     position: relative;
     width: 150px;
-`
+`;
 
 const ChangeAvatarButton = styled.div`
     position: absolute;
@@ -110,7 +114,7 @@ const ChangeAvatarButton = styled.div`
     bottom: 20px;
     z-index: 1;
     cursor: pointer;
-`
+`;
 
 const AvatarHolder = styled.div`
     width: 150px;
@@ -118,4 +122,4 @@ const AvatarHolder = styled.div`
     border-radius: 50%;
     overflow:hidden;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
-`
+`;

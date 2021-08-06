@@ -4,9 +4,14 @@ import { Auth } from 'aws-amplify';
 import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import { SyrfFormButton } from 'app/components/SyrfForm';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 export const VerifyAccountForm = () => {
+
     const history = useHistory<any>();
+
+    const { t } = useTranslation();
 
     React.useEffect(() => {
         let code = new URLSearchParams(history.location.search).get("code");
@@ -29,7 +34,7 @@ export const VerifyAccountForm = () => {
 
     const showVerifySuccessAndRedirectToLogin = () => {
         history.push('/signin');
-        toast.success('Account verified, please login!');
+        toast.success(t(translations.verify_account_page.account_verified_please_login));
     }
 
     const verifyAccount = (email, code) => {
@@ -57,7 +62,7 @@ export const VerifyAccountForm = () => {
         const email = history?.location?.state?.state?.email;
 
         Auth.resendSignUp(email).then(response => {
-            toast.success('Confirmation code sent!');
+            toast.success(t(translations.verify_account_page.confirmation_code_sent));
         }).catch(error => {
             toast.error(error.message);
         })
@@ -71,7 +76,7 @@ export const VerifyAccountForm = () => {
             onFinish={onFinish}
         >
             <Form.Item
-                label="Verification code"
+                label={t(translations.verify_account_page.verification_code)}
                 name="code"
                 rules={[{ required: true }]}
             >
@@ -80,13 +85,13 @@ export const VerifyAccountForm = () => {
 
             <Form.Item>
                 <SyrfFormButton type="primary" htmlType="submit">
-                    Verify my account
+                    {t(translations.verify_account_page.verify_my_account)}
                 </SyrfFormButton>
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                    <span> Could not receive the code? &nbsp; <a style={{ float: 'right' }} href="/" onClick={(e) => {
+                    <span>{t(translations.verify_account_page.could_not_receive_the_code)} &nbsp; <a style={{ float: 'right' }} href="/" onClick={(e) => {
                         e.preventDefault();
                         resendConfirmationCode();
-                    }}>resend</a></span>
+                    }}>{t(translations.verify_account_page.resend)}</a></span>
                 </div>
             </Form.Item>
         </Form>

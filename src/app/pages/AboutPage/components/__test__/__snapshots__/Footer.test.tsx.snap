@@ -15,7 +15,7 @@ exports[`<Footer /> should render and matchs the snapshot 1`] = `
           Authentication
         </li>
         <li>
-           Data science
+          Data science
         </li>
         <li>
           Playback and streaming

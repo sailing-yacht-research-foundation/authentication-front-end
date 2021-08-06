@@ -16,21 +16,20 @@ export const VideoSection = (props) => {
     return (
         <Wrapper className="video-section">
             <Row style={{ marginTop: '88px' }}>
-                <Typography.Title className="text-white introduction-text">{t(translations.home_page.video_section.one_login)} <br /> {t(translations.home_page.video_section.ultimate_potential)}</Typography.Title>
+                <Typography.Title className="text-white introduction-text">{t(translations.about_page.video_section.one_login)} <br /> {t(translations.about_page.video_section.ultimate_potential)}</Typography.Title>
             </Row>
 
             <Row  style={{ marginTop: '40px' }}>
                 <Space size={15}>
                     <Col>
-                        <Button onClick={() => history.push('/signin')} className="syrf-button">{t(translations.home_page.video_section.login)}</Button>
+                        <Button onClick={() => history.push('/signin')} className="syrf-button">{t(translations.about_page.video_section.login)}</Button>
                     </Col>
                     
                     <Col>
-                        <Button onClick={() => history.push('/signup')} className="syrf-button-outline">{t(translations.home_page.video_section.signup)}</Button>
+                        <Button onClick={() => history.push('/signup')} className="syrf-button-outline">{t(translations.about_page.video_section.signup)}</Button>
                     </Col>
                 </Space>
             </Row>
-
         </Wrapper>
     );
 }

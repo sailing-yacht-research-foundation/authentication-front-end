@@ -4,7 +4,7 @@ exports[`<FilterPane /> should render and match the snapshot 1`] = `
 <styled.div>
   <styled.div>
     <styled.h4>
-      Advanced Search
+      Advanced search
     </styled.h4>
     <Styled(AiFillCloseCircle)
       color="#4F61A5"

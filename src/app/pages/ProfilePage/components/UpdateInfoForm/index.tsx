@@ -14,6 +14,8 @@ import { PublicUserInformation } from './PublicUserInformation';
 import { VerifyPhoneModal } from './VerifyPhoneModal';
 import { EditEmailChangeModal } from './EditEmailChangeModal';
 import { media } from 'styles/media';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 const defaultFormFields = {
     email: '',
@@ -42,6 +44,8 @@ export const UpdateInfo = (props) => {
     const [form] = Form.useForm();
 
     const [formHasBeenChanged, setFormHasBeenChanged] = React.useState<boolean>(false);
+
+    const { t } = useTranslation();
 
     // for storing fields filled by user from the form for later use when
     // user still chooses to change the email.
@@ -87,7 +91,7 @@ export const UpdateInfo = (props) => {
                 'custom:first_name': first_name,
                 'custom:last_name': last_name,
                 'custom:bio': bio,
-                name: first_name + ' ' + last_name
+                name: String(first_name) + ' ' + String(last_name)
             }).then(response => {
                 onUpdateProfileSuccess();
             }).catch(error => {
@@ -104,7 +108,7 @@ export const UpdateInfo = (props) => {
 
     const onUpdateProfileSuccess = () => {
         setIsUpdatingProfile(false);
-        toast.success('Your profile has been successfully updated!');
+        toast.success(t(translations.profile_page.update_profile.your_profile_has_been_successfully_updated));
         props.cancelUpdateProfile();
         checkPhoneVerifyStatus();
         setFormFieldsBeforeUpdate(defaultFormFields);
@@ -114,9 +118,7 @@ export const UpdateInfo = (props) => {
     const checkPhoneVerifyStatus = () => {
         Auth.currentAuthenticatedUser().then(user => {
             if (!!getUserAttribute(user, 'phone_number') && !checkForVerifiedField(user, FIELD_VALIDATE.phone)) { // user inputed phone and it's not verified
-                showPhoneVerifyModalWithMessage(
-                    `Hey ${getUserAttribute(user, 'name')}, your phone number is not verified, you will receive an sms/call to verify your phone number.`
-                );
+                showPhoneVerifyModalWithMessage(t(translations.profile_page.update_profile.hey_your_phone_number_is_not_verified_you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number, { name: getUserAttribute(user, 'name') }));
             }
         }).catch((error) => {
             toast.error(error.message);
@@ -138,7 +140,7 @@ export const UpdateInfo = (props) => {
 
     const sendPhoneVerification = () => {
         Auth.verifyCurrentUserAttribute('phone_number').then(() => {
-            toast.success('You will receive a phone call to verify your phone number.');
+            toast.success(t(translations.profile_page.update_profile.you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number));
         }).catch(error => {
             toast.error(error.message);
         });
@@ -166,7 +168,7 @@ export const UpdateInfo = (props) => {
                 cancelUpdateProfile={props.cancelUpdateProfile} />
 
             <SyrfFormWrapper className="no-background">
-                <Spin spinning={isUpdatingProfile} tip="Updating your profile...">
+                <Spin spinning={isUpdatingProfile} tip={t(translations.profile_page.update_profile.updating_your_profile)}>
                     <Form
                         onValuesChange={() => setFormHasBeenChanged(true)}
                         form={form}
@@ -179,7 +181,7 @@ export const UpdateInfo = (props) => {
                             bio: getUserAttribute(authUser, 'custom:bio'),
                             phone_number: getUserAttribute(authUser, 'phone_number'),
                             address: getUserAttribute(authUser, 'address'),
-                            birthdate: moment(getUserAttribute(authUser, 'birthdate')),
+                            birthdate: !!getUserAttribute(authUser, 'birthdate') ? moment(getUserAttribute(authUser, 'birthdate')) : moment('2002-01-01 00:00:00').utcOffset('+0000'),
                             sailing_number: getUserAttribute(authUser, 'custom:sailing_number'),
                             facebook: getUserAttribute(authUser, 'custom:facebook'),
                             instagram: getUserAttribute(authUser, 'custom:instagram'),
@@ -203,12 +205,12 @@ export const UpdateInfo = (props) => {
                         <Form.Item>
                             <StyledSyrfFormButtonWrapper>
                                 <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
-                                    Save
+                                    {t(translations.profile_page.update_profile.save)}
                                 </SyrfFormButton>
                             </StyledSyrfFormButtonWrapper>
                         </Form.Item>
                     </Form>
-                    <DisclaimerText>* Your personal details will never be shared with 3rd party apps without your permission and will never be sold to advertisers.</DisclaimerText>
+                    <DisclaimerText>{t(translations.profile_page.update_profile.your_personal_details_will_never_be_shared_with_3rd_party_app)}</DisclaimerText>
                 </Spin >
             </SyrfFormWrapper >
         </Wrapper >

@@ -14,7 +14,7 @@ export const PartnerAppCarousel = (props) => {
 
     return (
         <Wrapper>
-            <h1 className="section-header-text" style={{ textAlign: 'center' }}>{t(translations.home_page.partner_app_carousel.title)}</h1>
+            <h1 className="section-header-text" style={{ textAlign: 'center' }}>{t(translations.about_page.partner_app_carousel.title)}</h1>
             <Carousel slidesToShow={4} dots={{ className: 'carousel-dot partner-app' }} responsive={[
                 {
                     breakpoint: 1200,

@@ -9,6 +9,8 @@ import { media } from 'styles/media';
 import { MapContainer, } from 'react-leaflet';
 import { MapView } from './MapView';
 import { StyleConstants } from 'styles/StyleConstants';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 const TAB_BAR_HEIGHT = '76px';
 
@@ -25,6 +27,8 @@ export const MapViewTab = () => {
 
     const [searchKeyword, setSearchKeyWord] = React.useState<string>('');
 
+    const { t } = useTranslation();
+
     return (
         <>
             <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
@@ -38,14 +42,14 @@ export const MapViewTab = () => {
                         onChange={(e) => {
                             setSearchKeyWord(e.target.value);
                         }}
-                        placeholder={'Search races with SYRF'} />
+                        placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                     <SearchBarLogo />
                 </SearchBarInnerWrapper>
                 <AdvancedSearchTextWrapper>
                     <a href="/" onClick={(e) => {
                         e.preventDefault();
                         setShowSearchPanel(true);
-                    }}>Advanced search</a>
+                    }}>{t(translations.home_page.map_view_tab.advanced_search)}</a>
                 </AdvancedSearchTextWrapper>
             </SearchBarWrapper>
             {showSearchPanel && <StyledSearchPane

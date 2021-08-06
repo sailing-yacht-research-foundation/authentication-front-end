@@ -10,10 +10,14 @@ import { ChangeAvatar } from '../ChangeAvatar';
 import { Select, Form, Row, Col } from 'antd';
 import styled from 'styled-components';
 import { localesList as countryList } from 'utils/languages-util';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const PublicUserInformation = (props) => {
 
     const { authUser, cancelUpdateProfile } = props;
+
+    const { t } = useTranslation();
 
     const renderCountryDropdownList = () => {
         const objectArray = Object.entries(countryList);
@@ -25,7 +29,7 @@ export const PublicUserInformation = (props) => {
 
     return (
         <Wrapper>
-            <SyrfFormTitle>Public User Details</SyrfFormTitle>
+            <SyrfFormTitle>{t(translations.profile_page.update_profile.public_user_details)}</SyrfFormTitle>
 
             <ChangeAvatarWrapper>
                 <ChangeAvatar cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
@@ -34,7 +38,7 @@ export const PublicUserInformation = (props) => {
             <Row gutter={24}>
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
-                        label={<SyrfFieldLabel>First Name</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.first_name)}</SyrfFieldLabel>}
                         name="first_name"
                         rules={[{ required: true, max: 15 }]}
                     >
@@ -44,7 +48,7 @@ export const PublicUserInformation = (props) => {
 
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
-                        label={<SyrfFieldLabel>Last Name</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.last_name)}</SyrfFieldLabel>}
                         name="last_name"
                         rules={[{ required: true, max: 15 }]}
                     >
@@ -54,11 +58,11 @@ export const PublicUserInformation = (props) => {
             </Row>
 
             <Form.Item
-                label={<SyrfFieldLabel>Country</SyrfFieldLabel>}
+                label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.country)}</SyrfFieldLabel>}
                 name="country"
                 rules={[{ required: true }]}
             >
-                <SyrfFormSelect placeholder={'Select a country'}
+                <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_country)}
                     showSearch
                     filterOption={(input, option) => {
                         if (option) {
@@ -74,10 +78,10 @@ export const PublicUserInformation = (props) => {
             </Form.Item>
 
             <Form.Item
-                label={<SyrfFieldLabel>Biography</SyrfFieldLabel>}
+                label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.biography)}</SyrfFieldLabel>}
                 name="bio"
             >
-                <SyrfTextArea placeholder={'e.g. Olympic 29er champion and meteorology nerd.'} />
+                <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
             </Form.Item>
         </Wrapper>
     );
