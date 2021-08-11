@@ -5,165 +5,23 @@ import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
 import { BsFillSkipBackwardFill, BsFillSkipForwardFill, BsPlayFill } from 'react-icons/bs';
-import { CgFlag } from 'react-icons/cg';
-import { HiShare } from 'react-icons/hi';
-import ReactDOMServer from 'react-dom/server';
-import {
-    EmailIcon,
-    EmailShareButton,
-    FacebookIcon,
-    FacebookShareButton,
-    InstapaperIcon,
-    InstapaperShareButton,
-    TwitterIcon,
-    TwitterShareButton,
-    WhatsappIcon,
-    WhatsappShareButton
-} from "react-share";
-import { Table, Tag, Space } from 'antd';
 import { media } from 'styles/media';
+import * as CourseData from 'utils/race/data/0a0b3868-f8c6-403f-923d-0ad515e0236a_course_definition.json';
+import * as MarkData from 'utils/race/data/0a0b3868-f8c6-403f-923d-0ad515e0236a_mark_positions.json';
+import * as TrackData from 'utils/race/data/0a0b3868-f8c6-403f-923d-0ad515e0236a_tracks.json';
+import RaceDirector from 'utils/race/RaceDirector';
+import OuroborosRace from 'utils/race/OuroborosRace';
+import { CgFlag } from 'react-icons/cg';
+import ReactDOMServer from 'react-dom/server';
+import { PlayerInfo } from './PlayerInfo';
 
 require("leaflet.boatmarker");
 require('leaflet-hotline');
-
-
-const columns = [
-    {
-        title: 'Rank',
-        dataIndex: 'rank',
-        key: 'rank',
-    },
-    {
-        title: 'Competitor',
-        dataIndex: 'competitor',
-        key: 'competitor',
-    },
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title: 'Color',
-        key: 'color',
-        dataIndex: 'color',
-        render: color => (
-            <Tag color={color} key={color}>
-            </Tag>
-        ),
-    },
-];
-
-const data = [
-    {
-        key: '1',
-        competitor: 'CZE',
-        name: 'John Brown',
-        rank: 1,
-        color: 'blue',
-    },
-    {
-        key: '2',
-        competitor: '4441',
-        name: 'Jim Green',
-        rank: 2,
-        color: 'red',
-    },
-    {
-        key: '3',
-        competitor: 'CZE',
-        name: 'Joe Black',
-        rank: 3,
-        color: 'green',
-    },
-    {
-        key: '4',
-        competitor: '4125',
-        name: 'Joe Brown',
-        rank: 4,
-        color: 'yellow',
-    },
-    {
-        key: '5',
-        name: 'Joe Blue',
-        competitor: 'CZE',
-        rank: 5,
-        color: 'orange',
-    },
-];
+const turf = require('@turf/turf');
 
 const buttonStyle = {
     fontSize: '25px',
     color: '#fff'
-}
-
-const renderPlayerInfoPopup = () => {
-    return (
-        <div>
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Competitor:
-                </RacerInfoTitle>
-                Klárka a Domča
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Sail number:
-                </RacerInfoTitle>
-                906
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Rank:
-                </RacerInfoTitle>
-                1
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Speed:
-                </RacerInfoTitle>
-                4.9 kts
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Competitor:
-                </RacerInfoTitle>
-                Klárka a Domča
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Bearing:
-                </RacerInfoTitle>
-                116 deg
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Angle to wind:
-                </RacerInfoTitle>
-                147 deg
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Position:
-                </RacerInfoTitle>
-                N48°43.776' E014°04.227'
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Position:
-                </RacerInfoTitle>
-                (48.72959622625286, 14.070451233946242)
-            </RacerInfoContainer>
-        </div>
-    )
 }
 
 export const Playback = (props) => {
@@ -171,8 +29,129 @@ export const Playback = (props) => {
     const map = useMap();
 
     useEffect(() => {
+
+
         initializeMapView();
-        addBoatsToMap();
+
+        const tracks: any[] = [];
+
+        TrackData.features.forEach(boatFeature => {
+            if (boatFeature.geometry.coordinates.length > 0) {
+                tracks.push({
+                    type: 'boat',
+                    id: boatFeature.properties.competitor_id,
+                    first_ping_time: boatFeature.geometry.coordinates[0][3],
+                    track: boatFeature.geometry.coordinates,
+                    competitor_name: boatFeature.properties.competitor_name,
+                    competitor_sail_number: boatFeature.properties.competitor_sail_number
+                })
+            }
+        })
+
+        MarkData.features.forEach(markFeature => {
+            if (markFeature.geometry.coordinates.length > 0) {
+                tracks.push({ type: 'mark', id: markFeature.properties.mark_id, first_ping_time: markFeature.geometry.coordinates[0][3], track: markFeature.geometry.coordinates })
+            }
+        })
+
+        const timeOffset = tracks[0].first_ping_time
+        let pingIndex = 0
+        for (let trackIndex in tracks) {
+            const track = tracks[trackIndex]
+            track.first_ping_time = track.first_ping_time - timeOffset
+            for (let positionIndex in track.track) {
+                track.track[positionIndex][3] = track.track[positionIndex][3] - timeOffset
+                track.track[positionIndex][2] = pingIndex
+                pingIndex++
+            }
+        }
+
+        const raceInformation = {
+            tracks: tracks,
+            course: JSON.parse(JSON.stringify(CourseData)).default,
+            id: '0a0b3868-f8c6-403f-923d-0ad515e0236a'
+        };
+
+        var EventEmitter = require('events');
+        var ee = new EventEmitter();
+
+        const raceDirector = new RaceDirector(ee);
+        const ouroborsosRace = new OuroborosRace(raceInformation, raceDirector, ee);
+
+        const deviceIdsToLayers = {};
+        const deviceIdsToBoatMarkers = {};
+        var zoomToRaceLocation = false;
+
+        ee.on('ping', function (data) {
+            let received_msg = JSON.parse(data);
+
+            let deviceId = received_msg.deviceId
+
+            let json = toSimplifiedGeoJson(received_msg)
+            let heading = simplifiedGeoJsonTrackToLastHeading(json)
+
+            if (!zoomToRaceLocation) {
+                map.setView({
+                    lat: received_msg.content.lat,
+                    lng: received_msg.content.lon
+                }, 18)
+                zoomToRaceLocation = true;
+            }
+
+            //console.log(received_msg)
+            Object.keys(deviceIdsToLayers).forEach(k => {
+                try {
+                    map.removeLayer(deviceIdsToLayers[k])
+                    map.removeLayer(deviceIdsToBoatMarkers[k])
+                } catch (e) {
+
+                }
+            })
+
+            var boatMarker;
+
+            console.log(received_msg.color);
+
+            if (received_msg.deviceType == 'boat') {
+                boatMarker = L.boatMarker([received_msg.content.lat, received_msg.content.lon], {
+                    color: received_msg.color, 	// color of the boat
+                    idleCircle: false	// if set to true, the icon will draw a circle if
+                    // boatspeed == 0 and the ship-shape if speed > 0
+                }).on('click', function () {
+                    var markerLayer = L.marker([received_msg.content.lat, received_msg.content.lon], { clickable: false })
+                        .bindPopup(ReactDOMServer.renderToString(<PlayerInfo playerLocation={{
+                            lat: received_msg.content.lat, long: received_msg.content.lon
+                        }} playerData={received_msg.playerData} />)).openPopup().setOpacity(0).addTo(map);
+                    markerLayer.openPopup();
+                });
+
+                boatMarker.setHeading(heading);
+            } else {
+                boatMarker = L.marker([received_msg.content.lat, received_msg.content.lon], {
+
+                    icon: L.divIcon({
+                        html: ReactDOMServer.renderToString(<CgFlag style={{ color: '#fff', fontSize: '35px' }} />),
+                        iconSize: [20, 20],
+                        className: 'myDivIcon'
+                    })
+                });
+            }
+
+            let coords = simulateThirdParameter(json);
+
+            var hotlineLayer = L.polyline(coords).setStyle({
+                color: received_msg.color,
+                weight: 1
+            })
+
+            deviceIdsToLayers[deviceId] = hotlineLayer
+            deviceIdsToBoatMarkers[deviceId] = boatMarker
+
+            Object.keys(deviceIdsToLayers).forEach(k => {
+                deviceIdsToLayers[k].addTo(map);
+                deviceIdsToBoatMarkers[k].addTo(map)
+            })
+        });
     }, []);
 
     const initializeMapView = () => {
@@ -186,124 +165,55 @@ export const Playback = (props) => {
         }).addTo(map);
     }
 
-    const addBoatsToMap = () => {
-        L.boatMarker(map.getCenter(), {
-            color: "red", 	// color of the boat
-            idleCircle: false	// if set to true, the icon will draw a circle if
-        }).bindPopup(ReactDOMServer.renderToString(renderPlayerInfoPopup())).openPopup().addTo(map);
+    const simplifiedGeoJsonTrackToLastHeading = (geojson) => {
+        if (!geojson.features[0].geometry.coordinates) return;
 
+        var lastIndex = geojson.features[0].geometry.coordinates.length - 1
+        var lastPoint = geojson.features[0].geometry.coordinates[lastIndex]
+        var secondLastPoint = geojson.features[0].geometry.coordinates[lastIndex - 1]
 
-        L.polyline([
-            [47.822007, -125.688816],
-            [47.797659, -125.683594],
-            [47.784281, -125.684624],
-            [47.726808, -125.678444],
-        ]).setStyle({
-            color: 'red',
-            weight: 1
-        }).addTo(map);
+        var point1 = turf.point(lastPoint);
+        var point2 = turf.point(secondLastPoint);
 
+        var bearing = turf.bearing(point2, point1);
+        return bearing
+    }
 
-        L.boatMarker({
-            lng: -125.672436,
-            lat: 47.824520
-        }, {
-            color: "blue", 	// color of the boat
-            idleCircle: false	// if set to true, the icon will draw a circle if
-        }).addTo(map);
+    const toSimplifiedGeoJson = (message) => {
+        var obj = {
+            'type': 'FeatureCollection',
+            'crs': {
+                'type': 'name',
+                'properties': {
+                    'name': 'EPSG:3857',
+                },
+            },
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': message.simplified?.geometry ? message.simplified?.geometry : {}
+                }]
+        }
+        return obj
+    }
 
-        L.polyline([
-            [47.824520, -125.672436],
-            [47.772007, -125.670547],
-            [47.741078, -125.682220],
-        ]).setStyle({
-            color: 'blue',
-            weight: 1
-        }).addTo(map);
+    const simulateThirdParameter = (geojson) => {
 
+        let coords: any[] = []
+        let index = 0;
 
-        L.boatMarker({
-            lng: -125.650449,
-            lat: 47.827516
-        }, {
-            color: "purple", 	// color of the boat
-            idleCircle: false	// if set to true, the icon will draw a circle if
-        }).addTo(map);
+        if (geojson.features[0].geometry.coordinates)
+            geojson.features[0].geometry.coordinates.forEach(point => {
+                let p = [point[1], point[0], index % 360]
+                index += 10
+                coords.push(p)
+            });
 
-        L.polyline([
-            [47.827516, -125.650449],
-            [47.771268, -125.700073],
-            [47.737569, -125.669174],
-        ]).setStyle({
-            color: 'purple',
-            weight: 1
-        }).addTo(map);
-
-        L.boatMarker({
-            lng: -125.731526,
-            lat: 47.814146
-        }, {
-            color: "green", 	// color of the boat
-            idleCircle: false	// if set to true, the icon will draw a circle if
-        }).addTo(map);
-
-        L.polyline([
-            [47.814146, -125.731526],
-            [47.770299, -125.734749],
-            [47.754837, -125.707283],
-        ]).setStyle({
-            color: 'green',
-            weight: 1
-        }).addTo(map);
-
-
-        L.boatMarker({
-            lng: -125.653541,
-            lat: 47.803770
-        }, {
-            color: "#f1c40f", 	// color of the boat
-            idleCircle: false	// if set to true, the icon will draw a circle if
-        }).addTo(map);
-
-        L.polyline([
-            [47.803770, -125.653541],
-            [47.799365, -125.649948],
-            [47.794753, -125.647202],
-            [47.774452, -125.643425],
-            [47.743987, -125.638275]
-        ]).setStyle({
-            color: 'yellow',
-            weight: 1
-        }).addTo(map);
-
-        L.marker({
-            lat: 47.808151,
-            lng: -125.642891
-        }, {
-            icon: L.divIcon({
-                html: ReactDOMServer.renderToString(<CgFlag style={{ color: '#fff', fontSize: '35px' }} />),
-                iconSize: [20, 20],
-                className: 'myDivIcon'
-            })
-        }).addTo(map);
-
-        L.marker({
-            lat: 47.800541,
-            lng: -125.741146
-        }, {
-            icon: L.divIcon({
-                html: ReactDOMServer.renderToString(<CgFlag style={{ color: '#fff', fontSize: '35px' }} />),
-                iconSize: [20, 20],
-                className: 'myDivIcon'
-            })
-        }).addTo(map);
+        return coords
     }
 
     return (
         <>
-            {/* <Leaderboard>
-                <Table pagination={false} columns={columns} dataSource={data} />
-            </Leaderboard> */}
             <PlaybackWrapper>
                 <ProgressBar>
                     <ProgressedBar />
@@ -329,38 +239,6 @@ export const Playback = (props) => {
                         <BsFillSkipForwardFill style={buttonStyle} />
                     </ButtonContainer>
                 </PlayBackControlContainer>
-                <ShareButtonWrapper>
-                    <ButtonContainer style={{ width: '30px', height: '30px' }}>
-                        <ShareButton />
-                    </ButtonContainer>
-                    <ShareDropdown>
-                        <ShareButtonItemWrapper>
-                            <EmailShareButton url="">
-                                <EmailIcon size={35} round={true} />
-                            </EmailShareButton>
-                        </ShareButtonItemWrapper>
-                        <ShareButtonItemWrapper>
-                            <FacebookShareButton url="">
-                                <FacebookIcon size={35} round={true} />
-                            </FacebookShareButton>
-                        </ShareButtonItemWrapper>
-                        <ShareButtonItemWrapper>
-                            <InstapaperShareButton url="">
-                                <InstapaperIcon size={35} round={true} />
-                            </InstapaperShareButton>
-                        </ShareButtonItemWrapper>
-                        <ShareButtonItemWrapper>
-                            <TwitterShareButton url="">
-                                <TwitterIcon size={35} round={true} />
-                            </TwitterShareButton>
-                        </ShareButtonItemWrapper>
-                        <ShareButtonItemWrapper>
-                            <WhatsappShareButton url="">
-                                <WhatsappIcon size={35} round={true} />
-                            </WhatsappShareButton>
-                        </ShareButtonItemWrapper>
-                    </ShareDropdown>
-                </ShareButtonWrapper>
             </PlaybackWrapper>
         </>
     )
@@ -420,45 +298,6 @@ const PlaybackLengthContainer = styled.div`
 const TimeText = styled.span`
     color: ${StyleConstants.MAIN_TONE_COLOR};
     font-size: 14px;
-`;
-
-const ShareButtonWrapper = styled.div`
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
-`;
-
-const ShareButtonItemWrapper = styled.div`
-    margin: 5px 0;
-`;
-
-const ShareButton = styled(HiShare)`
-    color: #fff;
-    font-size: 17px;
-`;
-
-const ShareDropdown = styled.div`
-    width: 100%;
-    background: #fff;
-    box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
-    border-radius: 20px;
-    position: absolute;
-    height: auto;
-    bottom: 50px;
-    display: flex;
-    flex-direction: column;
-    padding: 0 10px;
-    align-items: center;
-    // display: none;
-`;
-
-const RacerInfoContainer = styled.div`
-    font-size: 14px;
-`;
-
-const RacerInfoTitle = styled.span`
-    font-weight: bold;
-    margin-right: 5px;
 `;
 
 const Leaderboard = styled.div`
