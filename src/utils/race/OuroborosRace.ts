@@ -7,9 +7,9 @@ type DeviceID = {
 }
 
 class OuroborosRace {
-
+    private devices: DeviceSimulator[];
     constructor(raceInformation, raceDirector: RaceDirector, eventEmiter: EventEmitter) {
-
+        this.devices = [];
         new Promise(function (resolve, reject) {
             let deviceIds: DeviceID[] = []
             raceInformation.tracks.forEach(track => {
@@ -20,7 +20,6 @@ class OuroborosRace {
             resolve('')
         }).then(() => {
             const devices: DeviceSimulator[] = []
-            const connectPromises = []
             raceInformation.tracks.forEach(track => {
                 devices.push(new DeviceSimulator(track.track, raceInformation.id, track.id, track.type, {
                     competitor_name: track.competitor_name,
@@ -28,13 +27,41 @@ class OuroborosRace {
                 }, raceDirector, eventEmiter))
             })
             // Wait for all websocket connections to be ready before sending data.
-            Promise.all(connectPromises).then(() => {
-                console.log('all devices setup')
-                devices.forEach(device => {
-                    device.waitAndPing(0, 0);
-                })
+            devices.forEach(device => {
+                device.waitAndPing(0, 0);
             });
+            this.devices = devices;
         })
+    }
+
+    pingDevicesAtTime(pingIndex, elapsedTime) {
+        this.devices.forEach(device => {
+            device.waitAndPing(pingIndex, elapsedTime);
+        });
+    }
+
+    pauseUnpauseAllPing() {
+        this.devices.forEach(device => {
+            device.pauseUnpausePing();
+        })
+    }
+
+    backward(milliseconds) {
+        this.devices.forEach(device => {
+            device.backward(milliseconds);
+        });
+    }
+
+    forward(milliseconds) {
+        this.devices.forEach(device => {
+            device.forward(milliseconds);
+        });
+    }
+
+    playAt(milliseconds) {
+        this.devices.forEach(device => {
+            device.pingAtTime(milliseconds);
+        });
     }
 }
 
