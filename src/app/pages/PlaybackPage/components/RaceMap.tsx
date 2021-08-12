@@ -40,11 +40,12 @@ export const RaceMap = (props) => {
     useEffect(() => {
         initializeMapView();
 
-        const mapVariable = {
+        const mapVariable: any = {
             deviceIdsToLayers: {},
             deviceIdsToBoatMarkers: {},
             zoomedToRaceLocation: false,
-            deviceMarker: null
+            deviceMarker: null,
+            markerAttachedToMap: false
         }
 
         ee.on('ping', function (data) {
@@ -62,7 +63,7 @@ export const RaceMap = (props) => {
             setRaceElapsedTime(receivedMessage);
             zoomToRaceLocation(receivedMessage, mapVariable);
             removeAllRaceObjectLayers(mapVariable);
-            
+
             if (receivedMessage.deviceType == objectType.boat) {
                 deviceMarker = L.boatMarker([receivedMessage.content.lat, receivedMessage.content.lon], {
                     color: receivedMessage.color, 	// color of the boat
@@ -86,13 +87,25 @@ export const RaceMap = (props) => {
             }
 
             mapVariable.deviceIdsToLayers[deviceId] = hotlineLayer;
-            mapVariable.deviceIdsToBoatMarkers[deviceId] = deviceMarker;
+            if (mapVariable.deviceIdsToBoatMarkers[deviceId] == null) {
+                mapVariable.deviceIdsToBoatMarkers[deviceId] = {
+                    layer: deviceMarker
+                }
+            } else {
+                mapVariable.deviceIdsToBoatMarkers[deviceId].layer.setLatLng(new L.LatLng(receivedMessage.content.lat, receivedMessage.content.lon));
+                if (receivedMessage.deviceType == objectType.boat) {
+                    mapVariable.deviceIdsToBoatMarkers[deviceId].layer.setHeading(heading);
+                }
+                // console.log( mapVariable.deviceIdsToBoatMarkers[deviceId].layer);
+            }
 
             Object.keys(mapVariable.deviceIdsToLayers).forEach(k => {
                 mapVariable.deviceIdsToLayers[k].addTo(map);
-                mapVariable.deviceIdsToBoatMarkers[k].addTo(map)
+                if (mapVariable.deviceIdsToBoatMarkers[k].attached == undefined) {
+                    mapVariable.deviceIdsToBoatMarkers[k].layer.addTo(map);
+                    mapVariable.deviceIdsToBoatMarkers[k].attached = true;
+                }
             });
-
         });
     }, []);
 
@@ -121,7 +134,7 @@ export const RaceMap = (props) => {
         Object.keys(mapVariable.deviceIdsToLayers).forEach(k => {
             try {
                 map.removeLayer(mapVariable.deviceIdsToLayers[k])
-                map.removeLayer(mapVariable.deviceIdsToBoatMarkers[k])
+                // map.removeLayer(mapVariable.deviceIdsToBoatMarkers[k])
             } catch (e) {
             }
         })

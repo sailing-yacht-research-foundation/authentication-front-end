@@ -85,7 +85,6 @@ export default class RaceDirector {
             part.lastKnownLats = lastKnownLats
             part.lastKnownLons = lastKnownLons
             part.lastKnownTimes = lastKnownTimes
-            console.log(part)
             part.points.forEach(point => {
                 if (pointsToGeometry[point] === null || pointsToGeometry[point] === undefined) {
                     pointsToGeometry[point] = [part]
@@ -176,10 +175,10 @@ export default class RaceDirector {
             // The course is "frozen" 15 seconds before start up to 5 seconds after start.
             if ((message.receievedTime <= this.raceIdToStartTimes[message.id] - 15000) || (message.receievedTime >= this.raceIdToStartTimes[message.id] + 5000)) {
                 // this.raceIdToConsumers[message.id].forEach(consumer => {
-                    // consumer.send(JSON.stringify({ type: 'leg-update', leg: legs }))
-                    // consumer.send(JSON.stringify({ type: 'geometry', geometry: leg_geometry }))
-                    // fs.writeFileSync('pingfiles/legs.geojson', JSON.stringify(turf.featureCollection(legs)))
-                    // fs.writeFileSync('pingfiles/leggeometry.geojson', JSON.stringify(turf.featureCollection(leg_geometry)))
+                // consumer.send(JSON.stringify({ type: 'leg-update', leg: legs }))
+                // consumer.send(JSON.stringify({ type: 'geometry', geometry: leg_geometry }))
+                // fs.writeFileSync('pingfiles/legs.geojson', JSON.stringify(turf.featureCollection(legs)))
+                // fs.writeFileSync('pingfiles/leggeometry.geojson', JSON.stringify(turf.featureCollection(leg_geometry)))
                 // })
             }
 
@@ -190,7 +189,9 @@ export default class RaceDirector {
             if (this.raceIdToBoatTracks[message.id][message.deviceId] === null || this.raceIdToBoatTracks[message.id][message.deviceId] === undefined) {
                 this.raceIdToBoatTracks[message.id][message.deviceId] = []
             }
-            this.raceIdToBoatTracks[message.id][message.deviceId].push([message.content.lon, message.content.lat])
+
+            this.raceIdToBoatTracks[message.id][message.deviceId] = message.content.previousLatLong;
+            // this.raceIdToBoatTracks[message.id][message.deviceId].push([message.content.lon, message.content.lat])
             var track = null
             if (this.raceIdToBoatTracks[message.id][message.deviceId].length > 1) {
                 track = turf.lineString(this.raceIdToBoatTracks[message.id][message.deviceId])

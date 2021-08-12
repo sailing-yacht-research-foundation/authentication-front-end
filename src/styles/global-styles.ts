@@ -187,4 +187,12 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     width: 100%;
   }
+
+  .leaflet-marker-pane > * {
+    -webkit-transition: transform .3s linear;
+    -moz-transition: transform .3s linear;
+    -o-transition: transform .3s linear;
+    -ms-transition: transform .3s linear;
+    transition: transform .3s linear;
+  }
 `;

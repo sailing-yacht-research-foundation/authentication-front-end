@@ -29,6 +29,8 @@ export const Playback = (props) => {
 
     const [isPlaying, setIsPlaying] = useState<boolean>(true);
 
+    const progressBarContainerRef = React.createRef<HTMLDivElement>();
+
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
         if (elapsedTime > 0)
             return (elapsedTime / raceLength) * 100;
@@ -55,7 +57,12 @@ export const Playback = (props) => {
 
     const playAtClickedPosition = (e) => {
         let rect = e.target.getBoundingClientRect();
-        let progressWidth = e.target.offsetWidth;
+        let progressWidth = 0;
+        
+        if (progressBarContainerRef.current) {
+            progressWidth = progressBarContainerRef.current.offsetWidth;
+        }
+
         let x = e.clientX - rect.left; //x position within the element.
         let percentage = (x / progressWidth) * 100;
         let miliseconds = ((raceLength * percentage) / 100);
@@ -77,7 +84,7 @@ export const Playback = (props) => {
 
     return (
         <PlaybackWrapper>
-            <ProgressBar onClick={playAtClickedPosition}>
+            <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
                 <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
             </ProgressBar>
             <PlaybackLengthContainer>

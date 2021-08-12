@@ -38,7 +38,7 @@ class DeviceSimulator {
         }
 
         let trackPoint = this.tracks[index];
-        let message = {
+        let message: any = {
             type: 'ping',
             id: this.raceId,
             deviceId: this.deviceId,
@@ -47,13 +47,18 @@ class DeviceSimulator {
             content: {
                 lon: trackPoint[0],
                 lat: trackPoint[1],
-                time: trackPoint[3]
+                time: trackPoint[3],
+                previousLatLong: []
             },
             playerData: this.playerData,
             color: this.color ? this.color : 'white'
         }
 
-        // console.log(index, this.deviceId);
+        for(let i = index; i > (index - 70); i--) {
+            if (this.tracks[i] !== undefined) {
+                message.content.previousLatLong.unshift([this.tracks[i][0], this.tracks[i][1]]);
+            }   
+        }
 
         this.pingTimeout = setTimeout(() => {
             this.currentIndex = index;
@@ -102,7 +107,7 @@ class DeviceSimulator {
     findTrackIndexByTimeAndPing(time) {
         let success = false;
         for (let [index, trackPoint] of this.tracks.entries()) {
-            if (Number(trackPoint[3]) === time) {
+            if (Number(trackPoint[3]) === time || Number(trackPoint[3]) === (time + 1000) || Number(trackPoint[3]) === (time - 1000)) {
                 this.waitAndPing(index, trackPoint[3]);
                 success = true;
                 break;
@@ -110,6 +115,7 @@ class DeviceSimulator {
         }
 
         if (!success) {
+            if (this.type == 'boat') console.log('error', this.deviceId, time);
             this.waitAndPing(0, 0);
         }
     }
