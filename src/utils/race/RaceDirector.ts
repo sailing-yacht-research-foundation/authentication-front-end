@@ -101,9 +101,10 @@ export default class RaceDirector {
     }
 
     onPingMessage(message) {
-        message.recievedTime = (new Date()).getTime();
+        message.receievedTime = (new Date()).getTime();
         if (this.raceIdToCoursePoints[message.id][message.deviceId] !== null && this.raceIdToCoursePoints[message.id][message.deviceId] !== undefined) {
             // course object
+
             if ((message.receievedTime <= this.raceIdToStartTimes[message.id] - 15000) || (message.receievedTime >= this.raceIdToStartTimes[message.id] + 5000)) {
 
             }
@@ -174,12 +175,8 @@ export default class RaceDirector {
 
             // The course is "frozen" 15 seconds before start up to 5 seconds after start.
             if ((message.receievedTime <= this.raceIdToStartTimes[message.id] - 15000) || (message.receievedTime >= this.raceIdToStartTimes[message.id] + 5000)) {
-                // this.raceIdToConsumers[message.id].forEach(consumer => {
-                // consumer.send(JSON.stringify({ type: 'leg-update', leg: legs }))
-                // consumer.send(JSON.stringify({ type: 'geometry', geometry: leg_geometry }))
-                // fs.writeFileSync('pingfiles/legs.geojson', JSON.stringify(turf.featureCollection(legs)))
-                // fs.writeFileSync('pingfiles/leggeometry.geojson', JSON.stringify(turf.featureCollection(leg_geometry)))
-                // })
+                this.eventEmitter.emit('leg-update',JSON.stringify({ leg: legs }));
+                this.eventEmitter.emit('geometry',JSON.stringify({ geometry: leg_geometry }));
             }
 
 

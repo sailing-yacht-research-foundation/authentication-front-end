@@ -97,6 +97,26 @@ export const simulateThirdParameter = (geojson) => {
     return coords;
 }
 
+export const simulateThirdParameterForCourse = (coordinates) => {
+    let coords: any[] = [];
+    let index = 0;
+
+    if (coordinates.length > 2) {
+        coordinates.forEach(point => {
+            let p = [point[1], point[0], index % 360]
+            index += 10
+            coords.push(p)
+        });
+    } else {
+        let p = [coordinates[1], coordinates[0], index % 360]
+        index += 10
+        coords.push(p)
+    }
+
+
+    return coords;
+}
+
 export const sortTrackFirstPingTime = (tracks: any[]) => {
     tracks.sort(function (a, b) {
         if (a.first_ping_time == b.first_ping_time) return 0;
