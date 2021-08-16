@@ -7,12 +7,16 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helpers';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const FilterPane = (props) => {
 
     const { searchKeyWord, defaultFocus } = props;
 
     const searchInputRef = React.createRef<Input>();
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (defaultFocus) {
@@ -25,7 +29,7 @@ export const FilterPane = (props) => {
     return (
         <Wrapper {...props}>
             <FilterHeader>
-                <FilterTabTitle>Advanced Search</FilterTabTitle>
+                <FilterTabTitle>{t(translations.home_page.filter_tab.advanced_search)}</FilterTabTitle>
                 {props.closable && !isMobile() && <AiFillCloseCircle
                     onClick={props.close}
                     style={{ cursor: 'pointer' }}
@@ -46,7 +50,7 @@ export const FilterPane = (props) => {
                     participants: 6
                 }}>
                 <Form.Item
-                    label="Race Name"
+                    label={t(translations.home_page.filter_tab.race_name)}
                     name="name"
                     rules={[{ required: true }]}
                 >
@@ -56,7 +60,7 @@ export const FilterPane = (props) => {
                 <Row gutter={24}>
                     <Col xs={12} sm={12} md={12} lg={12}>
                         <Form.Item
-                            label="From Date"
+                            label={t(translations.home_page.filter_tab.from_date)}
                             name="from_date"
                             rules={[{ type: 'date' }]}
                         >
@@ -77,7 +81,7 @@ export const FilterPane = (props) => {
 
                     <Col xs={12} sm={12} md={12} lg={12}>
                         <Form.Item
-                            label="To date"
+                            label={t(translations.home_page.filter_tab.to_date)}
                             name="to_date"
                             rules={[{ type: 'date' }]}
                         >
@@ -99,7 +103,7 @@ export const FilterPane = (props) => {
 
                 <Form.Item>
                     <SyrfFormButton type="primary" htmlType="submit">
-                        Search
+                        {t(translations.home_page.filter_tab.search)}
                     </SyrfFormButton>
                 </Form.Item>
             </Form>

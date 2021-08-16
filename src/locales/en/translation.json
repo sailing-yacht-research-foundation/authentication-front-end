@@ -1,46 +1,71 @@
 {
   "home_page": {
+    "map_view_tab": {
+      "search_race_with_syrf": "Search races with SYRF",
+      "advanced_search": "Advanced search"
+    },
+    "nav": {
+      "create": "Create"
+    },
+    "filter_tab": {
+      "advanced_search": "Advanced search",
+      "race_name": "Race Name",
+      "from_date": "From Date",
+      "to_date": "To Date",
+      "search": "Search",
+      "filter_result": {
+        "start_searching_by_typing_something": "Start searching by typing something.",
+        "about_number_result": "About 100.000 results"
+      }
+    }
+  },
+  "about_page": {
     "nav": {
       "log_in": "Log In",
       "sign_up": "Sign Up",
       "user_dropdown": {
         "change_password": "Change Password",
         "log_out": "Log Out"
-      }
+      },
+      "about": "About"
     },
     "video_section": {
       "one_login": "One Login",
       "ultimate_potential": "Ultimate Potential",
-      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
       "login": "Log In",
       "signup": "Sign Up"
     },
     "benefit_carousel": {
       "slide_one": {
-        "title": "One password for all sailing apps and data",
-        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+        "title": "One password for all sailing apps and data:",
+        "description": "syrf.io allows third party developers to use your SYRF profile for authentication. This means you have one less password to remember for your favorite sailing apps."
       },
       "slide_two": {
-        "title": "You control who can access your sailing data",
-        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+        "title": "You control who can access your sailing data:",
+        "description": "syrf.io is like Google Drive for all of your sailing data. 3rd party apps (such as those from your favorite sailing organization) can request to import your data. You retain strict control over who does and doesn’t have access."
       },
       "slide_three": {
-        "title": "GDPR & CCPA Compliant",
-        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+        "title": "GDPR & CCPA Compliant:",
+        "description": "We take your privacy seriously. Our apps go above and beyond to ensure we only collect race related data and that your data is anonymized and protected. We never, EVER, sell your data to 3rd parties and our revenue model does not rely on personalized advertising. We only use cookies with your permission and you are free to delete your data at any time."
       },
       "slide_four": {
-        "title": "Organization independent",
-        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+        "title": "Organization independent:",
+        "description": "The sailing world is full of passionate groups of people. We decided to build tech that enables everyone, rather than hitching our wagon to any one organization in particular. By staying unaffiliated, SYRF is able to stay innovative and build tools for everyone."
       }
     },
     "partner_app_carousel": {
       "title": "Use with these innotive apps"
     },
     "footer": {
-      "title": "Are you a developer who wants to use My Sailing Profile?",
-      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
+      "title": "Are you a developer who wants to use SYRF.io?",
       "developer_button": "Developers",
-      "syrf_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit veritatis, in consequatur voluptatum velit ea aperiam dolore magni voluptates alias id delectus suscipit quae nulla! Delectus provident fuga doloribus vel.",
+      "developer": {
+        "description_title": "SYRF.io provides tools for:",
+        "item_1": "Authentication",
+        "item_2": "Data science",
+        "item_3": "Playback and streaming"
+      },
+      "syrf_description": "syrf.io is a project built by the Sailing Yacht Research Foundation. SYRF is the only non profit to focus on using science and technology to advance the sport of sailing. SYRF is what happens when you pair the world’s most accomplished and capable sailors with the world’s most accomplished and capable technologists.",
       "syrf_link": "SYRF",
       "policy_privacy_link": "Privacy Policy",
       "eula_link": "End User License Agreement",
@@ -68,61 +93,27 @@
     "leftpanel_description": "Your life on and off the water will never be the same again."
   },
   "signup_page": {
-    "email": {
-      "label": "Email",
-      "email_validate": "Your input must be an email",
-      "required_validate": "Email is required"
-    },
-    "password": {
-      "label": "Password",
-      "password_validation": "Your password must be at least 6 characters and max 15 characters",
-      "required_validation": "Password is required"
-    },
-    "name": {
-      "label": "Name",
-      "required_validation": "Name is required"
-    },
-    "locale": {
-      "label": "Locale",
-      "required_validation": "Locale is required"
-    },
-    "phone_number": {
-      "label": "Phone Number"
-    },
-    "address": {
-      "label": "Address"
-    },
-    "date_of_birth": {
-      "label": "Date Of Birth"
-    },
-    "sailing_number": {
-      "label": "Sailing Number"
-    },
-    "facebook": {
-      "label": "Facebook Profile",
-      "validation": "Your Facebook profile must be a valid URL"
-    },
-    "instagram": {
-      "label": "Instagram Profile",
-      "validation": "Your Instagram profile must be a valid URL"
-    },
-    "twitter": {
-      "label": "Twitter Profile",
-      "validation": "Your Twitter profile must be a valid URL"
-    },
-    "eula": {
-      "label": "Agree to %{eula}",
-      "validation": "You should accept our EULA"
-    },
-    "privacy_policy": {
-      "label": "Agree to %{privacy_policy}",
-      "validation": "You must agree to our privacy policy."
-    },
-    "acknowledge": {
-      "label": "Acknowledge that email provided will not be a shared email (one email per user).",
-      "validation": "You must acknowledge that email provided will not be a shared email."
-    },
-    "signup": "Sign Up"
+    "password": "Password",
+    "country": "Country",
+    "select_a_country": "Select a country",
+    "phone_number": "Phone Number",
+    "language": "Language",
+    "select_a_language": "Select a language",
+    "date_of_birth": "Date of Birth",
+    "you_should_accept_our_eula": "You should accept our EULA.",
+    "agree_to": "Agree to ",
+    "privacy_policy": "Privacy Policy",
+    "you_must_agree_to_our_privacy_policy": "You must agree to our Privacy Policy.",
+    "agree_that_my_provided_email_address_is_only_shared_by_me": "Agree that my provided email address is only used by me",
+    "you_must_acknowledge_that_email_provided_will_not_be_a_shared_email": "You must acknowledge that email provided will not be a shared email.",
+    "signup": "Sign Up",
+    "cannot_sign_you_up_at_the_moment": "Cannot sign you up at the moment.",
+    "signing_you_up": "Signing you up...",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "password_confirmation": "Password Confirmation",
+    "please_confirm_your_password": "Please confirm your password!",
+    "the_two_passwords_that_you_entered_do_not_match": "The two passwords that you entered do not match!"
   },
   "side_menu": {
     "deal": "Deals",
@@ -136,57 +127,66 @@
     "app_connection": "App Connections",
     "organizational_membership": "Organizational Memberships",
     "my_data": "My Data",
-    "test_data": "Test Data"
+    "test_data": "Test Data",
+    "my_races": "My Races",
+    "search": "Search"
   },
   "profile_page": {
     "update_profile": {
-      "email": {
-        "label": "Email",
-        "email_validate": "Your input must be an email",
-        "required_validate": "Email is required"
-      },
-      "name": {
-        "label": "Name",
-        "required_validation": "Name is required"
-      },
-      "phone_number": {
-        "label": "Phone Number"
-      },
-      "address": {
-        "label": "Address"
-      },
-      "date_of_birth": {
-        "label": "Date Of Birth"
-      },
-      "sailing_number": {
-        "label": "Sailing Number"
-      },
-      "facebook": {
-        "label": "Facebook Profile",
-        "validation": "Your Facebook profile must be a valid URL"
-      },
-      "instagram": {
-        "label": "Instagram Profile",
-        "validation": "Your Instagram profile must be a valid URL"
-      },
-      "twitter": {
-        "label": "Twitter Profile",
-        "validation": "Your Twitter profile must be a valid URL"
-      },
-      "update_profile": "Update Profile"
+      "email": "Email",
+      "name": "Name",
+      "phone_number": "Phone Number",
+      "address": "Address",
+      "date_of_birth": "Date of Birth",
+      "sailing_number": "Sailing Number",
+      "save": "Save",
+      "your_profile_has_been_successfully_updated": "Your profile has been successfully updated!",
+      "hey_your_phone_number_is_not_verified_you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number": "Hey {{name}}, your phone number is not verified, you will receive an sms or phone call to verify your phone number.",
+      "you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number": "You will receive an sms or phone call to verify your phone number.",
+      "updating_your_profile": "Updating your profile...",
+      "your_personal_details_will_never_be_shared_with_3rd_party_app": "* Your personal details will never be shared with 3rd party apps without your permission and will never be sold to advertisers.",
+      "email_change_confirmation": "Email change confirmation",
+      "hey_your_about_to_change_your_email": "Hey {{name}}, You're about to change your email (username). You have to make sure that the new changed email is your email otherwise you will not be able to login the next time. You will have to re-verify your email once again in the next login, do you really want to change your email?",
+      "your_phone_is_verified": "Your phone is verified",
+      "your_phone_is_not_verified": "Your phone is not verified",
+      "your_email_is": "Your email is {{verify_status}}.",
+      "verify": "Verify",
+      "private_user_details": "Private User Details",
+      "public_user_details": "Public User Details",
+      "search_places": "Search places....",
+      "world_sailing_number": "World Sailing Number",
+      "enter_phone_number": "Enter phone number",
+      "language": "Language",
+      "select_a_language": "Select a language",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "country": "Country",
+      "select_a_country": "Select a country",
+      "biography": "Biography",
+      "biography_description": "e.g. Olympic 29er champion and meteorology nerd.",
+      "please_verify_your_phone_number": "Please verify your phone number",
+      "code": "Code",
+      "enter_the_code_you_received": "Enter the code you received",
+      "could_not_receive_the_code":"Could not receive the code?",
+      "resend": "Resend",
+      "please_choose_an_image_to_crop": "Please choose an image to crop!",
+      "upload_profile_picture_successfully":"Upload profile picture successfully!",
+      "change_profile_picture": "Change profile picture",
+      "uploading": "Uploading....",
+      "we_hope_to_see_you_again": "We hope to see you again!",
+      "are_you_really_sure_you_want_to_delete_your_account": "Are you really sure you want to delete your account?",
+      "hey_your_going_to_delete_your_account": "Hey {{name}}, You're going to delete your account and all associated information. Your information will be lost and cannot be recovered. Are you sure you want to continue?",
+      "social_profiles_connection": "Social Profiles Connection",
+      "please_connect_to_provider_to_see_your_posts": "Please connect to {{provider_name}} to see your posts",
+      "danger_zone": "Danger Zone",
+      "delete_my_account": "Delete My Account",
+      "you_will_delete_your_account_along_with_all_associated_information": "You will delete your account along with all associated information.",
+      "permantly_delete_my_account": "Permantly delete my account",
+      "account_settings": "Account settings",
+      "password_security": "Password & Security"
     },
-    "change_password": {
-      "old_password": {
-        "title": "Old Password",
-        "requilred_validation": "Old password is required"
-      },
-      "new_password": {
-        "title": "New Password",
-        "requilred_validation": "New password is required",
-        "password_validate": "Your password must be at least 6 characters and max 15 characters"
-      },
-      "change_password": "Change Password"
-    }
+    "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
+    "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"
   },
   "privacy_page": {},
   "eulapage": {},
@@ -198,22 +198,32 @@
     "change_your_password": "Change Your Password",
     "old_password": "Old Password",
     "new_password": "New Password",
-    "change_password": "Change Password"
+    "confirm_new_password": "Confirm New Password",
+    "please_confirm_new_password": "Please confirm your new password!",
+    "change_password": "Change Password",
+    "the_two_passwords_that_you_entered_do_not_match": "The two passwords that you entered do not match!",
+    "password_changed_successfully": "Password changed successfully!"
   },
   "forgot_password_page": {
     "confirmation_code_sent": "Confirmation code sent!",
-    "your_password_has_been_changed_you_can_login_now": "Your password has been changed, you can login now",
+    "your_password_has_been_changed_you_can_login_now": "Your password has been changed, you can login now.",
     "recover_password": "Recover Password",
     "new_password": "New Password",
     "change_password": "Change Password",
     "could_not_receive_the_code": "Could not receive the code?",
-    "resend": "resend"
+    "resend": "resend",
+    "your_email": "Your Email",
+    "code": "Code",
+    "confirm_new_password": "Confirm New Password",
+    "please_confirm_new_password": "Please confirm your new password!",
+    "the_two_passwords_that_you_entered_do_not_match": "The two passwords that you entered do not match!"
   },
   "verify_account_page": {
     "confirmation_code_sent": "Confimation code sent!",
-    "verification_code": "Verification code",
-    "verify_my_account": "Verify my account",
-    "could_not_receive_the_code": "Could not receive the code",
-    "resend": "resend"
+    "verification_code": "Verification Code",
+    "verify_my_account": "Verify My Account",
+    "could_not_receive_the_code": "Could not receive the code?",
+    "resend": "resend",
+    "account_verified_please_login": "Account verified, please login!"
   }
 }

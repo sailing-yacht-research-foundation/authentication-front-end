@@ -16,27 +16,20 @@ export const VideoSection = (props) => {
     return (
         <Wrapper className="video-section">
             <Row style={{ marginTop: '88px' }}>
-                <Typography.Title className="text-white introduction-text">{t(translations.home_page.video_section.one_login)} <br /> {t(translations.home_page.video_section.ultimate_potential)}</Typography.Title>
-            </Row>
-            
-            <Row>
-                <p className="introduction-description">
-                {t(translations.home_page.video_section.description)}
-                </p>
+                <Typography.Title className="text-white introduction-text">{t(translations.about_page.video_section.one_login)} <br /> {t(translations.about_page.video_section.ultimate_potential)}</Typography.Title>
             </Row>
 
             <Row  style={{ marginTop: '40px' }}>
                 <Space size={15}>
                     <Col>
-                        <Button onClick={() => history.push('/signin')} className="syrf-button">{t(translations.home_page.video_section.login)}</Button>
+                        <Button onClick={() => history.push('/signin')} className="syrf-button">{t(translations.about_page.video_section.login)}</Button>
                     </Col>
                     
                     <Col>
-                        <Button onClick={() => history.push('/signup')} className="syrf-button-outline">{t(translations.home_page.video_section.signup)}</Button>
+                        <Button onClick={() => history.push('/signup')} className="syrf-button-outline">{t(translations.about_page.video_section.signup)}</Button>
                     </Col>
                 </Space>
             </Row>
-
         </Wrapper>
     );
 }
@@ -46,7 +39,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    min-height: 514px;
+    min-height: 414px;
     width: 100%;
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(${SailingBackground});
     background-size: cover;

@@ -9,6 +9,8 @@ import moment from 'moment';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { SyrfFormButton } from 'app/components/SyrfForm';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 const { Option } = Select;
 
@@ -26,6 +28,8 @@ export const SignupForm = () => {
 
     const history = useHistory();
 
+    const { t } = useTranslation();
+
     const onFinish = (values) => {
         const { email, password, locale, language, birthdate, first_name, last_name } = values;
 
@@ -35,7 +39,7 @@ export const SignupForm = () => {
             username: email,
             password: password,
             attributes: {
-                name: first_name + ' ' + last_name,
+                name: String(first_name) + ' ' + String(last_name),
                 locale: locale,
                 'custom:language': language,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
@@ -61,7 +65,7 @@ export const SignupForm = () => {
             if (err.code) {
                 toast.error(err.message)
             } else {
-                toast.error("Cannot sign you up at the moment.");
+                toast.error(t(translations.signup_page.cannot_sign_you_up_at_the_moment));
             }
         })
     }
@@ -83,7 +87,7 @@ export const SignupForm = () => {
     }
 
     return (
-        <Spin spinning={isSigningUp} tip="Signing you up...">
+        <Spin spinning={isSigningUp} tip={t(translations.signup_page.signing_you_up)}>
             <Form
                 layout={'vertical'}
                 name="basic"
@@ -108,7 +112,7 @@ export const SignupForm = () => {
                 <Row gutter={24}>
                     <Col xs={24} sm={24} md={12} lg={12}>
                         <Form.Item
-                            label="First Name"
+                            label={t(translations.signup_page.first_name)}
                             name="first_name"
                             rules={[{ required: true, max: 15 }]}
                         >
@@ -118,7 +122,7 @@ export const SignupForm = () => {
 
                     <Col xs={24} sm={24} md={12} lg={12}>
                         <Form.Item
-                            label="Last Name"
+                            label={t(translations.signup_page.last_name)}
                             name="last_name"
                             rules={[{ required: true, max: 15 }]}
                         >
@@ -128,7 +132,7 @@ export const SignupForm = () => {
                 </Row>
 
                 <Form.Item
-                    label="Password"
+                    label={t(translations.signup_page.password)}
                     name="password"
                     rules={[{ required: true, max: 16, min: 8 }]}
                 >
@@ -136,19 +140,19 @@ export const SignupForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Password Confirmation"
+                    label={t(translations.signup_page.password_confirmation)}
                     name="passwordConfirmation"
                     rules={[
                         {
                             required: true,
-                            message: 'Please confirm your password!',
+                            message: t(translations.signup_page.please_confirm_your_password),
                         },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
                                 if (!value || getFieldValue('password') === value) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                return Promise.reject(new Error(t(translations.signup_page.the_two_passwords_that_you_entered_do_not_match)));
                             },
                         }),
                     ]}
@@ -157,7 +161,7 @@ export const SignupForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Date Of Birth"
+                    label={t(translations.signup_page.date_of_birth)}
                     name="birthdate"
                     rules={[{ type: 'date', required: true }]}
                 >
@@ -186,11 +190,11 @@ export const SignupForm = () => {
                 <Divider />
 
                 <Form.Item
-                    label="Country"
+                    label={t(translations.signup_page.country)}
                     name="locale"
                     rules={[{ required: true }]}
                 >
-                    <Select placeholder={'Select a country'}
+                    <Select placeholder={t(translations.signup_page.select_a_country)}
                         showSearch
                         filterOption={(input, option) => {
                             if (option) {
@@ -208,11 +212,11 @@ export const SignupForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Language"
+                    label={t(translations.signup_page.language)}
                     name="language"
                     rules={[{ required: true }]}
                 >
-                    <Select placeholder={'Select a Language'}
+                    <Select placeholder={t(translations.signup_page.select_a_language)}
                         filterOption={(input, option) => {
                             if (option) {
                                 return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -233,7 +237,7 @@ export const SignupForm = () => {
                 <Form.Item name="eula_agree" valuePropName="checked" rules={[
                     {
                         validator: (_, value) =>
-                            value ? Promise.resolve() : Promise.reject(new Error('You should accept our EULA.')),
+                            value ? Promise.resolve() : Promise.reject(new Error(t(translations.signup_page.you_should_accept_our_eula))),
                     },
                 ]}>
                     <Checkbox>Agree to <Link to="eula">EULA</Link></Checkbox>
@@ -242,24 +246,24 @@ export const SignupForm = () => {
                 <Form.Item name="pp_agree" valuePropName="checked" rules={[
                     {
                         validator: (_, value) =>
-                            value ? Promise.resolve() : Promise.reject(new Error('You must agree to our privacy policy.')),
+                            value ? Promise.resolve() : Promise.reject(new Error(t(translations.signup_page.you_must_agree_to_our_privacy_policy))),
                     },
                 ]}>
-                    <Checkbox value={1}>Agree to <Link to="privacy-policy">Privacy policy</Link></Checkbox>
+                    <Checkbox value={1}>{t(translations.signup_page.agree_to)}  <Link to="privacy-policy">{t(translations.signup_page.privacy_policy)}</Link></Checkbox>
                 </Form.Item>
 
                 <Form.Item name="email_not_shared" valuePropName="checked" rules={[
                     {
                         validator: (_, value) =>
-                            value ? Promise.resolve() : Promise.reject(new Error('You must acknowledge that email provided will not be a shared email.')),
+                            value ? Promise.resolve() : Promise.reject(new Error(t(translations.signup_page.you_must_acknowledge_that_email_provided_will_not_be_a_shared_email))),
                     },
                 ]}>
-                    <Checkbox value={1}>Acknowledge that email provided will not be a shared email (one email per user).</Checkbox>
+                    <Checkbox value={1}>{t(translations.signup_page.agree_that_my_provided_email_address_is_only_shared_by_me)}</Checkbox>
                 </Form.Item>
 
                 <Form.Item>
                     <SyrfFormButton type="primary" htmlType="submit">
-                        Sign Up
+                    {t(translations.signup_page.signup)}
                     </SyrfFormButton>
                 </Form.Item>
             </Form>

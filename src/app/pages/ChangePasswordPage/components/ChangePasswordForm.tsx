@@ -29,7 +29,7 @@ export const ChangePasswordForm = (props) => {
         setIsChangingPassword(true);
         Auth.currentAuthenticatedUser().then(user => {
             Auth.changePassword(user, oldPassword, newPassword).then(response => {
-                toast.success('Password changed successfully');
+                toast.success(t(translations.change_password_page.password_changed_successfully));
                 form.resetFields();
                 setIsChangingPassword(false);
             }).catch(error => {
@@ -75,19 +75,19 @@ export const ChangePasswordForm = (props) => {
                         </Form.Item>
 
                         <Form.Item
-                            label={<SyrfFieldLabel>Re-type new password</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.change_password_page.confirm_new_password)}</SyrfFieldLabel>}
                             name="newPasswordConfirmation"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please confirm your new password!',
+                                    message: t(translations.change_password_page.please_confirm_new_password),
                                 },
                                 ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         if (!value || getFieldValue('newPassword') === value) {
                                             return Promise.resolve();
                                         }
-                                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                        return Promise.reject(new Error(t(translations.change_password_page.the_two_passwords_that_you_entered_do_not_match)));
                                     },
                                 }),
                             ]}

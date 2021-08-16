@@ -2,8 +2,12 @@ import React from 'react';
 import { Modal } from 'antd';
 import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const EditEmailChangeModal = (props) => {
+
+    const { t } = useTranslation();
 
     const { showEmailChangeAlertModal,
         formFieldsBeforeUpdate,
@@ -15,7 +19,7 @@ export const EditEmailChangeModal = (props) => {
         setFormFieldsBeforeUpdate } = props;
 
     return (
-        <Modal title="Email change confirmation"
+        <Modal title={t(translations.profile_page.update_profile.email_change_confirmation)}
             visible={showEmailChangeAlertModal}
             onOk={() => {
                 updateUserInfo(formFieldsBeforeUpdate);
@@ -29,9 +33,7 @@ export const EditEmailChangeModal = (props) => {
                 });
             }}>
             <EmailChangeMessageText>
-                Hey {getUserAttribute(authUser, 'name')}, You're about to change your email (username).
-                You have to make sure that the new changed email is your email otherwise you will not be able to login the next time.
-                You will have to re-verify your email once again in the next login, do you really want to change your email?
+                {t(translations.profile_page.update_profile.hey_your_about_to_change_your_email, { name: getUserAttribute(authUser, 'name') })}
             </EmailChangeMessageText>
         </Modal>
     )

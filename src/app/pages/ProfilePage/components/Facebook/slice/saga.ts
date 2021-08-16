@@ -9,6 +9,8 @@ import { Auth } from "aws-amplify";
 import { toast } from 'react-toastify';
 import { loginActions } from "app/pages/LoginPage/slice";
 import { getFeeds, exchangeToken } from "services/facebook";
+import { translations } from "locales/translations";
+import i18next from 'i18next';
 
 export function* getFacebookFeeds() {
     const user = yield select(selectUser);
@@ -43,7 +45,7 @@ export function updateUserFacebookToken(token) {
         }).then(() => {
             return {
                 success: true,
-                message: 'Successfully linked your Facebook account!'
+                message: i18next.t(translations.profile_page.successfully_linked_your_facebook_account)
             }
         }).catch(error => {
             return {

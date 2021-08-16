@@ -14,6 +14,8 @@ import moment from 'moment';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { FIELD_VALIDATE } from 'utils/helpers';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -28,6 +30,8 @@ export const PrivateUserInformation = (props) => {
 
     const { authUser, address, setAddress, setShowPhoneVerifyModal, sendPhoneVerification } = props;
 
+    const { t } = useTranslation();
+
     const renderLanguegesDropdownList = () => {
         const objectArray = Object.entries(languagesList);
 
@@ -41,34 +45,34 @@ export const PrivateUserInformation = (props) => {
         const userPhoneNumberExists = !!getUserAttribute(authUser, 'phone_number');
 
         if (type === FIELD_VALIDATE.email)
-            return <ItemVerifyMessage className={verified ? 'verified' : ''}>{`Your Email is ${verified ? '' : 'not'} verified`}</ItemVerifyMessage>;
+            return <ItemVerifyMessage className={verified ? 'verified' : ''}>{t(translations.profile_page.update_profile.your_email_is, { verify_status: (verified ? 'verified' : 'not verified') })}</ItemVerifyMessage>;
 
         if (userPhoneNumberExists) {
-            return verified ? (<ItemVerifyMessage className={'verified'}>{`Your Phone is verified`}</ItemVerifyMessage>) :
+            return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.update_profile.your_phone_is_verified)}</ItemVerifyMessage>) :
                 (
-                    <ItemVerifyMessage>{`Your Phone is not verified.`} <a href="/" onClick={(e) => {
+                    <ItemVerifyMessage>{t(translations.profile_page.update_profile.your_phone_is_not_verified)} <a href="/" onClick={(e) => {
                         e.preventDefault();
                         sendPhoneVerification();
                         setShowPhoneVerifyModal(true);
-                    }}>Verify</a></ItemVerifyMessage>
+                    }}>{t(translations.profile_page.update_profile.verify)}</a></ItemVerifyMessage>
                 )
         }
     }
 
     return (
         <Wrapper>
-            <SyrfFormTitle>Private User Details</SyrfFormTitle>
+            <SyrfFormTitle>{t(translations.profile_page.update_profile.private_user_details)}</SyrfFormTitle>
             <Form.Item
                 label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
                 name="email"
                 rules={[{ required: true, type: 'email' }]}
             >
-                <SyrfInputField disabled/>
+                <SyrfInputField disabled />
             </Form.Item>
             {renderVerifiedStatus(FIELD_VALIDATE.email)}
 
             <Form.Item
-                label={<SyrfFieldLabel>Address</SyrfFieldLabel>}
+                label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.address)}</SyrfFieldLabel>}
                 name="address"
             >
                 <PlacesAutocomplete
@@ -79,7 +83,7 @@ export const PrivateUserInformation = (props) => {
                         <>
                             <SyrfInputField
                                 {...getInputProps({
-                                    placeholder: 'Search Places ...',
+                                    placeholder: t(translations.profile_page.update_profile.search_places),
                                     className: 'location-search-input',
                                 })}
                                 value={address}
@@ -115,7 +119,7 @@ export const PrivateUserInformation = (props) => {
             <Row gutter={24}>
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
-                        label={<SyrfFieldLabel>Date Of Birth</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.date_of_birth)}</SyrfFieldLabel>}
                         name="birthdate"
                         rules={[{ type: 'date', required: true }]}
                     >
@@ -144,7 +148,7 @@ export const PrivateUserInformation = (props) => {
 
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
-                        label={<SyrfFieldLabel>World Sailing Number</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.world_sailing_number)}</SyrfFieldLabel>}
                         name="sailing_number"
                     >
                         <SyrfInputField />
@@ -155,25 +159,25 @@ export const PrivateUserInformation = (props) => {
             <Row gutter={24}>
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
-                        label={<SyrfFieldLabel>Phone Number</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.phone_number)}</SyrfFieldLabel>}
                         name="phone_number"
                         rules={[{ type: 'string' }]}
                     >
                         <SyrfPhoneInput
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
-                            placeholder="Enter phone number" />
+                            placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
                     </Form.Item>
                     {renderVerifiedStatus(FIELD_VALIDATE.phone)}
                 </Col>
 
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
-                        label={<SyrfFieldLabel>Language</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.language)}</SyrfFieldLabel>}
                         name="language"
                         rules={[{ required: true }]}
                     >
-                        <SyrfFormSelect placeholder={'Select a Language'}
+                        <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_language)}
                             showSearch
                             filterOption={(input, option) => {
                                 if (option) {
