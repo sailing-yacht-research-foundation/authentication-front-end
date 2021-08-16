@@ -5,6 +5,7 @@ import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
 import { GiSailboat } from 'react-icons/gi';
+import { useHistory } from 'react-router-dom';
 
 const races = [
     {
@@ -43,6 +44,8 @@ export const MapView = (props) => {
 
     const map = useMap();
 
+    const history = useHistory();
+
     useEffect(() => {
         initializeMapView();
         zoomToCurrentUserLocationIfAllowed();
@@ -79,6 +82,9 @@ export const MapView = (props) => {
                     iconSize: [20, 20],
                     className: 'myDivIcon'
                 })
+            })
+            .on('click', () => {
+                history.push('/playback?raceid=xxx_xxx_xxx');
             })
             .addTo(map);
         });
