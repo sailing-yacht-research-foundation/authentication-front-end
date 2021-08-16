@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { milisecondsToMinutes } from 'utils/helpers';
+import { debounce, milisecondsToMinutes } from 'utils/helpers';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
-import { BsFillSkipBackwardFill, BsFillSkipForwardFill, BsPlayFill, BsPauseFill } from 'react-icons/bs';
+import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
+import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { media } from 'styles/media';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectElapsedTime, selectRaceLength } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
@@ -13,6 +12,14 @@ import { usePlaybackSlice } from './slice';
 const buttonStyle = {
     fontSize: '25px',
     color: '#fff'
+}
+
+const playbackTime = {
+    forward: 5000,
+    backward: 5000,
+    fastForward: 15000,
+    fastBackward: 15000,
+    debounceTime: 1000
 }
 
 export const Playback = (props) => {
@@ -58,28 +65,28 @@ export const Playback = (props) => {
     const playAtClickedPosition = (e) => {
         let rect = e.target.getBoundingClientRect();
         let progressWidth = 0;
-        
+
         if (progressBarContainerRef.current) {
             progressWidth = progressBarContainerRef.current.offsetWidth;
         }
 
-        let x = e.clientX - rect.left; //x position within the element.
-        let percentage = (x / progressWidth) * 100;
-        let miliseconds = ((raceLength * percentage) / 100);
+        let clickedWidth = e.clientX - rect.left;
+        let clickedWidthInPercentage = (clickedWidth / progressWidth) * 100;
+        let newPlayTimeInMiliseconds = ((raceLength * clickedWidthInPercentage) / 100);
 
-        miliseconds = (Math.floor(miliseconds));
+        newPlayTimeInMiliseconds = (Math.floor(newPlayTimeInMiliseconds));
 
-        let stringMiliseconds = String(miliseconds).split('');
+        let newPlayTimeInMilisecondsInString = String(newPlayTimeInMiliseconds).split('');
 
-        stringMiliseconds.forEach((num, index)=> {
-            if (String(miliseconds).length - (index + 1) <= 2) {
-                stringMiliseconds[index] = '0';
+        newPlayTimeInMilisecondsInString.forEach((num, index) => {
+            if (String(newPlayTimeInMiliseconds).length - (index + 1) <= 2) {
+                newPlayTimeInMilisecondsInString[index] = '0';
             }
         });
 
-        let convertedMiliseconds = Number(stringMiliseconds.join(''));
-        dispatch(actions.setElapsedTime(convertedMiliseconds));
-        race.playAt(convertedMiliseconds);
+        let convertedPlayTimeInMiliseconds = Number(newPlayTimeInMilisecondsInString.join(''));
+        dispatch(actions.setElapsedTime(convertedPlayTimeInMiliseconds));
+        race.playAt(convertedPlayTimeInMiliseconds);
     }
 
     return (
@@ -92,20 +99,20 @@ export const Playback = (props) => {
                 <TimeText>{milisecondsToMinutes(raceLength)}</TimeText>
             </PlaybackLengthContainer>
             <PlayBackControlContainer>
-                <ButtonContainer>
-                    <BsFillSkipBackwardFill style={buttonStyle} />
+                <ButtonContainer onClick={() => (debounce(backward, playbackTime.debounceTime))(playbackTime.fastBackward)}>
+                    <MdReplay10 style={buttonStyle} />
                 </ButtonContainer>
-                <ButtonContainer onClick={() => backward(5000)}>
-                    <BiSkipPrevious style={buttonStyle} />
+                <ButtonContainer onClick={() => (debounce(backward, playbackTime.debounceTime))(playbackTime.backward)}>
+                    <MdReplay5 style={buttonStyle} />
                 </ButtonContainer>
                 <ButtonContainer onClick={pauseUnPauseRace}>
                     {isPlaying ? <BsPauseFill style={buttonStyle} /> : <BsPlayFill style={buttonStyle} />}
                 </ButtonContainer>
-                <ButtonContainer onClick={() => forward(5000)}>
-                    <BiSkipNext style={buttonStyle} />
+                <ButtonContainer onClick={() => (debounce(forward, playbackTime.debounceTime))(playbackTime.forward)}>
+                    <MdForward5 style={buttonStyle} />
                 </ButtonContainer>
-                <ButtonContainer>
-                    <BsFillSkipForwardFill style={buttonStyle} />
+                <ButtonContainer onClick={() => (debounce(forward, playbackTime.debounceTime))(playbackTime.fastForward)}>
+                    <MdForward10 style={buttonStyle} />
                 </ButtonContainer>
             </PlayBackControlContainer>
         </PlaybackWrapper>
@@ -117,7 +124,7 @@ const PlaybackWrapper = styled.div`
     width: 100%;
     height: 150px;
     background: #fff;
-    position: fixed;
+    position: absolute;
     border-top: 1px solid #eee;
     bottom: 0;
     display: flex;

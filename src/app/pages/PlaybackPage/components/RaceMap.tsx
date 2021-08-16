@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { usePlaybackSlice } from './slice';
 import { selectElapsedTime } from './slice/selectors';
+import MarkIcon from '../assets/mark.svg';
 
 require("leaflet.boatmarker");
 require('leaflet-hotline');
@@ -45,7 +46,8 @@ export const RaceMap = (props) => {
             deviceIdsToBoatMarkers: {},
             zoomedToRaceLocation: false,
             deviceMarker: null,
-            markerAttachedToMap: false
+            markerAttachedToMap: false,
+            deviceIdToElapsedTime: ''
         }
 
         ee.on('ping', function (data) {
@@ -60,7 +62,7 @@ export const RaceMap = (props) => {
                 weight: 1
             });
 
-            setRaceElapsedTime(receivedMessage);
+            setRaceElapsedTime(receivedMessage, mapVariable);
             zoomToRaceLocation(receivedMessage, mapVariable);
             removeAllRaceObjectLayers(mapVariable);
 
@@ -68,20 +70,14 @@ export const RaceMap = (props) => {
                 deviceMarker = L.boatMarker([receivedMessage.content.lat, receivedMessage.content.lon], {
                     color: receivedMessage.color, 	// color of the boat
                     idleCircle: false	// if set to true, the icon will draw a circle if
-                }).on('click', function () {
-                    var markerLayer = L.marker([receivedMessage.content.lat, receivedMessage.content.lon], { clickable: false })
-                        .bindPopup(ReactDOMServer.renderToString(<PlayerInfo playerLocation={{
-                            lat: receivedMessage.content.lat, long: receivedMessage.content.lon
-                        }} playerData={receivedMessage.playerData} />)).openPopup().setOpacity(0).addTo(map);
-                    markerLayer.openPopup();
-                });
-                deviceMarker.setHeading(heading);
+                }).bindPopup(ReactDOMServer.renderToString(<PlayerInfo playerLocation={{
+                    lat: receivedMessage.content.lat, long: receivedMessage.content.lon
+                }} playerData={receivedMessage.playerData} />)).openPopup();
             } else if (receivedMessage.deviceType === objectType.mark) {
                 deviceMarker = L.marker([receivedMessage.content.lat, receivedMessage.content.lon], {
-                    icon: L.divIcon({
-                        html: ReactDOMServer.renderToString(<CgFlag style={{ color: '#fff', fontSize: '35px' }} />),
-                        iconSize: [20, 20],
-                        className: 'myDivIcon'
+                    icon: new L.icon({
+                        iconUrl: MarkIcon,
+                        iconSize: [40, 40]
                     })
                 });
             }
@@ -96,7 +92,6 @@ export const RaceMap = (props) => {
                 if (receivedMessage.deviceType == objectType.boat) {
                     mapVariable.deviceIdsToBoatMarkers[deviceId].layer.setHeading(heading);
                 }
-                // console.log( mapVariable.deviceIdsToBoatMarkers[deviceId].layer);
             }
 
             Object.keys(mapVariable.deviceIdsToLayers).forEach(k => {
@@ -113,10 +108,17 @@ export const RaceMap = (props) => {
         elapsedTime.current = playbackElapsedTime;
     }, [playbackElapsedTime]);
 
-    const setRaceElapsedTime = (receivedMessage) => {
+    const setRaceElapsedTime = (receivedMessage, mapVariables) => {
+        if (elapsedTime.current > 0 && mapVariables.deviceIdToElapsedTime === receivedMessage.deviceId) {
+            elapsedTime.current += 1000;
+            dispatch(actions.setElapsedTime(elapsedTime.current));
+            return;
+        }
+
         if (receivedMessage.content.time > elapsedTime.current) {
             elapsedTime.current = receivedMessage.content.time;
             dispatch(actions.setElapsedTime(receivedMessage.content.time));
+            mapVariables.deviceIdToElapsedTime = receivedMessage.deviceId;
         }
     }
 

@@ -191,7 +191,6 @@ export default class RaceDirector {
             }
 
             this.raceIdToBoatTracks[message.id][message.deviceId] = message.content.previousLatLong;
-            // this.raceIdToBoatTracks[message.id][message.deviceId].push([message.content.lon, message.content.lat])
             var track = null
             if (this.raceIdToBoatTracks[message.id][message.deviceId].length > 1) {
                 track = turf.lineString(this.raceIdToBoatTracks[message.id][message.deviceId])
@@ -204,10 +203,18 @@ export default class RaceDirector {
                 this.raceIdToTrackInteractions[message.id][message.deviceId] = []
             }
 
+            if (track !== null) {
+                var options = { mutate: false, highQuality: true, tolerance: 0.00005 };
+
+                var simplified = turf.simplify(track, options);
+
+                message.simplified = simplified
+
+            }
+
             const distances: Distance[] = [];
             for (let courseIndex in this.raceIdToCourse[message.id].sequenced) {
                 var course = this.raceIdToCourse[message.id].sequenced[courseIndex]
-
                 if (course.geometry !== null && course.geometry !== undefined) {
 
                     if (course.geometry_type === 'point') {
@@ -222,11 +229,11 @@ export default class RaceDirector {
                                 console.log('Boat crossed line!');
                             }
 
-                            var options = { mutate: false, highQuality: true, tolerance: 0.00005 };
+                            // var options = { mutate: false, highQuality: true, tolerance: 0.00005 };
 
-                            var simplified = turf.simplify(track, options);
+                            // var simplified = turf.simplify(track, options);
 
-                            message.simplified = simplified
+                            // message.simplified = simplified
 
                         }
                         distances.push({ course_element: course, distance: turf.pointToLineDistance(point, course.geometry) });

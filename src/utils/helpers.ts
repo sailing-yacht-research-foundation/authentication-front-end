@@ -24,3 +24,16 @@ export const milisecondsToMinutes = (miliseconds) => {
     let seconds = ((miliseconds % 60000) / 1000).toFixed(0);
     return minutes + ":" + (Number(seconds) < 10 ? '0' : '') + seconds;
 }
+
+export const debounce = (callback, time) => {
+    let interval;
+    return (...args) => {
+      clearTimeout(interval);
+      interval = setTimeout(() => {
+        interval = null;
+  
+        // eslint-disable-next-line
+        callback(...args);
+      }, time);
+    };
+  }

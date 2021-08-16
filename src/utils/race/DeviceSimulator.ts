@@ -54,10 +54,10 @@ class DeviceSimulator {
             color: this.color ? this.color : 'white'
         }
 
-        for(let i = index; i > (index - 70); i--) {
+        for (let i = index; i > (index - 70); i--) {
             if (this.tracks[i] !== undefined) {
                 message.content.previousLatLong.unshift([this.tracks[i][0], this.tracks[i][1]]);
-            }   
+            }
         }
 
         this.pingTimeout = setTimeout(() => {
@@ -106,6 +106,7 @@ class DeviceSimulator {
 
     findTrackIndexByTimeAndPing(time) {
         let success = false;
+        
         for (let [index, trackPoint] of this.tracks.entries()) {
             if (Number(trackPoint[3]) === time || Number(trackPoint[3]) === (time + 1000) || Number(trackPoint[3]) === (time - 1000)) {
                 this.waitAndPing(index, trackPoint[3]);
