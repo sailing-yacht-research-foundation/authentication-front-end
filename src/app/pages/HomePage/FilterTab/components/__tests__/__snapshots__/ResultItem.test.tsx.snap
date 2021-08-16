@@ -11,7 +11,11 @@ exports[`<ResultItem /> should render and match the snapshot 1`] = `
     </Space>
   </styled.div>
   <styled.h3>
-    Race at Wales west coast
+    <Link
+      to="/playback?raceid=xxx_xxx_xxx"
+    >
+      Race at Wales west coast
+    </Link>
   </styled.h3>
   <styled.div>
     <styled.span>
