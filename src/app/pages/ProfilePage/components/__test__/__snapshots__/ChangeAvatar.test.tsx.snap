@@ -62,7 +62,7 @@ exports[`<ChangeAvatar /> should render to match the snapshot 1`] = `
   <Spin
     size="default"
     spinning={false}
-    tip="Uploading..."
+    tip="Uploading...."
     wrapperClassName=""
   >
     <styled.div>

@@ -14,6 +14,8 @@ import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getUserAttribute } from 'utils/user-utils';
 import InstagramPosts from './Instagram/components/InstagramPost';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 const FACEBOOK = {
     name: 'Facebook',
@@ -33,6 +35,8 @@ export const LinkToProviders = () => {
 
     const user = useSelector(selectUser);
 
+    const { t } = useTranslation();
+
     const [connectedProviders, setConnectedProviders] = useState({
         facebook: !!getUserAttribute(user, 'custom:fb_token'),
         instagram: !!getUserAttribute(user, 'custom:ig_token'),
@@ -51,22 +55,18 @@ export const LinkToProviders = () => {
         if (connectedProviders.facebook
             && selectedProvider.value === FACEBOOK.value) {
             return <FacebookPosts />
-        } else if (connectedProviders.instagram 
+        } else if (connectedProviders.instagram
             && selectedProvider.value === INSTAGRAM.value) {
             return <InstagramPosts />
         }
 
-        // if (connectedProviders.twitter) {
-        //     return <Twitte />
-        // }
-
-        return (<NotConnectedMessage>Please connect to {selectedProvider.name} to see your posts</NotConnectedMessage>);
+        return (<NotConnectedMessage>{t(translations.profile_page.update_profile.please_connect_to_provider_to_see_your_posts, { provider_name: selectedProvider.name })}</NotConnectedMessage>);
     }
 
     return (
         <>
             <SyrfFormWrapper style={{ marginTop: '33px' }}>
-                <SyrfFormTitle>Social Profiles Connection</SyrfFormTitle>
+                <SyrfFormTitle>{t(translations.profile_page.update_profile.social_profiles_connection)}</SyrfFormTitle>
                 <StyledRow justify="start" align="middle">
                     <FacebookIntegration
                         onClick={() => setSelectedProvider(FACEBOOK)}

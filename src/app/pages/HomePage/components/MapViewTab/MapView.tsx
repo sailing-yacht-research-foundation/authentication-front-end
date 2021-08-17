@@ -6,6 +6,7 @@ import * as L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
 import { GiSailboat } from 'react-icons/gi';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 const races = [
     {
@@ -46,6 +47,8 @@ const MAP_MOVE_TYPE = {
 export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     const map = useMap();
+
+    const history = useHistory();
 
     useEffect(() => {
         initializeMapView();
@@ -107,7 +110,10 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                     className: 'myDivIcon'
                 })
             })
-                .addTo(map);
+            .on('click', () => {
+                history.push('/playback?raceid=xxx_xxx_xxx');
+            })
+            .addTo(map);
         });
     }
 

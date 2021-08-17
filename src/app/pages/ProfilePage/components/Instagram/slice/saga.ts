@@ -9,6 +9,8 @@ import { Auth } from "aws-amplify";
 import { toast } from 'react-toastify';
 import { loginActions } from "app/pages/LoginPage/slice";
 import { getFeeds, exchangeTokenFromCode, exChangeLongLivedToken } from "services/instagram";
+import i18next from 'i18next';
+import { translations } from "locales/translations";
 
 export function* getInstagramFeeds() {
     const user = yield select(selectUser);
@@ -54,7 +56,7 @@ export function updateUserInstagramToken(token) {
         }).then(() => {
             return {
                 success: true,
-                message: 'Successfully linked your Instagram account!'
+                message: i18next.t(translations.profile_page.successfully_linked_your_instagram_account)
             }
         }).catch(error => {
             return {

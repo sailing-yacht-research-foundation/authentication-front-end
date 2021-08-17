@@ -33,12 +33,12 @@ export const SiderContent = (props) => {
         <Logo
           onClick={() => history.push('/')}
           style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px' }} />
-        <SyrfMenuItem title={'Search'} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
-          {'Search'}
+        <SyrfMenuItem title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
+          {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
-        <SyrfMenuItem title={'My Races'} key="11" onClick={() => history.push('/')} icon={<GiSailboat />}>
-          {'My Races'}
+        <SyrfMenuItem title={t(translations.side_menu.my_races)} key="11" onClick={() => history.push('/')} icon={<GiSailboat />}>
+          {t(translations.side_menu.my_races)}
         </SyrfMenuItem>
 
         <SyrfSubmenu key="sub2" icon={<UserOutlined />} title={t(translations.side_menu.profile.title)}>
