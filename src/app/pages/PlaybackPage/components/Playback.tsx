@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { debounce, milisecondsToMinutes } from 'utils/helpers';
+import { milisecondsToMinutes } from 'utils/helpers';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
-import { media } from 'styles/media';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectElapsedTime, selectRaceLength } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
+import { useEffect } from 'react';
 
 const buttonStyle = {
     fontSize: '25px',
@@ -19,7 +19,6 @@ const playbackTime = {
     backward: 5000,
     fastForward: 15000,
     fastBackward: 15000,
-    debounceTime: 1000
 }
 
 export const Playback = (props) => {
@@ -37,6 +36,14 @@ export const Playback = (props) => {
     const [isPlaying, setIsPlaying] = useState<boolean>(true);
 
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
+
+    useEffect(()=> {
+        if (elapsedTime >= raceLength) {
+            setIsPlaying(false);
+        } else {
+            setIsPlaying(true);
+        }
+    }, [elapsedTime, raceLength]);
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
         if (elapsedTime > 0)
@@ -99,19 +106,19 @@ export const Playback = (props) => {
                 <TimeText>{milisecondsToMinutes(raceLength)}</TimeText>
             </PlaybackLengthContainer>
             <PlayBackControlContainer>
-                <ButtonContainer onClick={() => (debounce(backward, playbackTime.debounceTime))(playbackTime.fastBackward)}>
+                <ButtonContainer onClick={() => backward(playbackTime.fastBackward)}>
                     <MdReplay10 style={buttonStyle} />
                 </ButtonContainer>
-                <ButtonContainer onClick={() => (debounce(backward, playbackTime.debounceTime))(playbackTime.backward)}>
+                <ButtonContainer onClick={() => backward(playbackTime.backward)}>
                     <MdReplay5 style={buttonStyle} />
                 </ButtonContainer>
                 <ButtonContainer onClick={pauseUnPauseRace}>
                     {isPlaying ? <BsPauseFill style={buttonStyle} /> : <BsPlayFill style={buttonStyle} />}
                 </ButtonContainer>
-                <ButtonContainer onClick={() => (debounce(forward, playbackTime.debounceTime))(playbackTime.forward)}>
+                <ButtonContainer onClick={() => forward(playbackTime.forward)}>
                     <MdForward5 style={buttonStyle} />
                 </ButtonContainer>
-                <ButtonContainer onClick={() => (debounce(forward, playbackTime.debounceTime))(playbackTime.fastForward)}>
+                <ButtonContainer onClick={() => forward(playbackTime.fastForward)}>
                     <MdForward10 style={buttonStyle} />
                 </ButtonContainer>
             </PlayBackControlContainer>
@@ -173,20 +180,4 @@ const PlaybackLengthContainer = styled.div`
 const TimeText = styled.span`
     color: ${StyleConstants.MAIN_TONE_COLOR};
     font-size: 14px;
-`;
-
-const Leaderboard = styled.div`
-    position: fixed;
-    z-index: 9999;
-    width: 100%;
-    bottom: 150px;
-
-    ${media.medium`
-        width: auto;
-    `}
-`;
-
-const LeaderboardToggleButton = styled.div`
-    position: absolute;
-    right: -10px;
 `;

@@ -80,6 +80,7 @@ export const simplifiedGeoJsonTrackToLastHeading = (geojson) => {
     let point2 = turf.point(secondLastPoint);
 
     let bearing = turf.bearing(point2, point1);
+    
     return bearing;
 }
 
@@ -119,7 +120,7 @@ export const simulateThirdParameterForCourse = (coordinates) => {
 
 export const sortTrackFirstPingTime = (tracks: any[]) => {
     tracks.sort(function (a, b) {
-        if (a.first_ping_time == b.first_ping_time) return 0;
+        if (a.first_ping_time === b.first_ping_time) return 0;
         return a.first_ping_time < b.first_ping_time ? -1 : 1;
     });
 }

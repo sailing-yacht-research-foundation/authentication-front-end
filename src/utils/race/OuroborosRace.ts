@@ -1,23 +1,27 @@
-import { EventEmitter } from "events"
-import DeviceSimulator from "./DeviceSimulator"
-import RaceDirector from "./RaceDirector"
+import { EventEmitter } from "events";
+import DeviceSimulator from "./DeviceSimulator";
+import { getLastTrackPingTime } from "./race-helper";
+import RaceDirector from "./RaceDirector";
 
 type DeviceID = {
     id: string;
 }
-
 class OuroborosRace {
     private devices: DeviceSimulator[];
+    private raceLength: number = 0;
+
     constructor(raceInformation, raceDirector: RaceDirector, eventEmiter: EventEmitter) {
         this.devices = [];
+        this.raceLength = getLastTrackPingTime(raceInformation.tracks);
+
         new Promise(function (resolve, reject) {
             let deviceIds: DeviceID[] = []
             raceInformation.tracks.forEach(track => {
-                deviceIds.push(track.id)
+                deviceIds.push(track.id);
             })
             const startTime = 2000;
-            raceDirector.setUpRace(JSON.stringify({ type: 'setup', id: raceInformation.id, course: raceInformation.course, devices: deviceIds, startTime: startTime }))
-            resolve('')
+            raceDirector.setUpRace(JSON.stringify({ type: 'setup', id: raceInformation.id, course: raceInformation.course, devices: deviceIds, startTime: startTime }));
+            resolve('');
         }).then(() => {
             const devices: DeviceSimulator[] = []
             raceInformation.tracks.forEach(track => {
@@ -26,7 +30,6 @@ class OuroborosRace {
                     competitor_sail_number: track.competitor_sail_number
                 }, raceDirector, eventEmiter))
             })
-            // Wait for all websocket connections to be ready before sending data.
             devices.forEach(device => {
                 device.waitAndPing(0, 0);
             });
@@ -47,14 +50,22 @@ class OuroborosRace {
     }
 
     backward(milliseconds) {
+        if (milliseconds < 0) milliseconds = 0;
+
         this.devices.forEach(device => {
             device.backward(milliseconds);
         });
     }
 
     forward(milliseconds) {
+        if (milliseconds > this.raceLength)
+            milliseconds = this.raceLength;
+
         this.devices.forEach(device => {
             device.forward(milliseconds);
+            
+            if (milliseconds >= this.raceLength)
+                device.stop();
         });
     }
 

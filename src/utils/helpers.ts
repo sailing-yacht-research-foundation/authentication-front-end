@@ -35,11 +35,23 @@ export const debounce = (callback, time) => {
         clearTimeout(interval);
         interval = setTimeout(() => {
             interval = null;
-
             // eslint-disable-next-line
             callback(...args);
         }, time);
     };
+}
+
+export const throttle = (callback, limit) => {
+    let waiting = false;
+    return (...args) => {
+        if (!waiting) {
+            callback(...args);
+            waiting = true;
+            setTimeout(function () {
+                waiting = false;
+            }, limit);
+        }
+    }
 }
 
 /**

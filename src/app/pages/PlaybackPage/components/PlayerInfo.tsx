@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const PlayerInfo = (props) => {
     const { competitor_name, competitor_sail_number } = props.playerData;
-    const { lat, long } = props.playerLocation;
 
     return (
         <div>
@@ -19,13 +18,6 @@ export const PlayerInfo = (props) => {
                     Sail number:
                 </RacerInfoTitle>
                 {competitor_sail_number}
-            </RacerInfoContainer>
-
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    Position:
-                </RacerInfoTitle>
-                ({lat}, {long})
             </RacerInfoContainer>
         </div>
     );

@@ -21,7 +21,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { EventEmitter } from 'events';
 import { selectRaceLength } from './components/slice/selectors';
 import { usePlaybackSlice } from './components/slice';
-import { useState } from 'react';
 
 const center = {
     lng: -125.688816,
@@ -47,7 +46,8 @@ export const PlaybackPage = (props) => {
         sortTrackFirstPingTime(tracks);
         calculateTrackPingTime(tracks);
         setRaceLength(tracks);
-        initRace(tracks);       
+        initRace(tracks);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const setRaceLength = (tracks) => {
@@ -67,7 +67,7 @@ export const PlaybackPage = (props) => {
     return (
         <Wrapper>
             <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
-                <RaceMap ee={ee} zoom={ZOOM} />
+                <RaceMap eventEmitter={ee} zoom={ZOOM} />
                 <Playback race={race} />
             </MapContainer>
         </Wrapper>
