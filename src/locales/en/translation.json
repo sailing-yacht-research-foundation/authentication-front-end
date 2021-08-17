@@ -2,7 +2,12 @@
   "home_page": {
     "map_view_tab": {
       "search_race_with_syrf": "Search races with SYRF",
-      "advanced_search": "Advanced search"
+      "advanced_search": "Advanced search",
+      "please_share_your_location_to_use_this_feature": "Please share your location to use this feature.",
+      "name": "Name:",
+      "location": "Location:",
+      "date": "Date:",
+      "my_location": "My location"
     },
     "nav": {
       "create": "Create"

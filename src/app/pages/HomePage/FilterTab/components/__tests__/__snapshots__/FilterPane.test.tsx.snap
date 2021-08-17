@@ -1,114 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<FilterPane /> should render and match the snapshot 1`] = `
-<styled.div>
-  <styled.div>
-    <styled.h4>
-      Advanced search
-    </styled.h4>
-    <Styled(AiFillCloseCircle)
-      color="#4F61A5"
-      size={22}
-      style={
-        Object {
-          "cursor": "pointer",
-        }
-      }
-    />
-  </styled.div>
-  <ForwardRef(InternalForm)
-    initialValues={
-      Object {
-        "name": "",
-        "participants": 6,
-      }
+<Provider
+  store={
+    Object {
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
     }
-    layout="vertical"
-    name="basic"
-  >
-    <FormItem
-      label="Race Name"
-      name="name"
-      rules={
-        Array [
-          Object {
-            "required": true,
-          },
-        ]
-      }
-    >
-      <Input
-        type="text"
-      />
-    </FormItem>
-    <Row
-      gutter={24}
-    >
-      <Col
-        lg={12}
-        md={12}
-        sm={12}
-        xs={12}
-      >
-        <FormItem
-          label="From Date"
-          name="from_date"
-          rules={
-            Array [
-              Object {
-                "type": "date",
-              },
-            ]
-          }
-        >
-          <Picker
-            dateRender={[Function]}
-            showToday={false}
-            style={
-              Object {
-                "width": "100%",
-              }
-            }
-          />
-        </FormItem>
-      </Col>
-      <Col
-        lg={12}
-        md={12}
-        sm={12}
-        xs={12}
-      >
-        <FormItem
-          label="To Date"
-          name="to_date"
-          rules={
-            Array [
-              Object {
-                "type": "date",
-              },
-            ]
-          }
-        >
-          <Picker
-            dateRender={[Function]}
-            showToday={false}
-            style={
-              Object {
-                "width": "100%",
-              }
-            }
-          />
-        </FormItem>
-      </Col>
-    </Row>
-    <FormItem>
-      <Styled(Button)
-        htmlType="submit"
-        type="primary"
-      >
-        Search
-      </Styled(Button)>
-    </FormItem>
-  </ForwardRef(InternalForm)>
-</styled.div>
+  }
+>
+  <FilterPane />
+</Provider>
 `;

@@ -1,20 +1,26 @@
 import 'leaflet/dist/leaflet.css';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useImperativeHandle } from 'react';
 import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
 import { GiSailboat } from 'react-icons/gi';
+import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectResults } from '../../slice/selectors';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 const markers: any[] = [];
 
-export const MapView = (props) => {
+const MAP_MOVE_TYPE = {
+    immediately: 'immediately',
+    animation: 'animation'
+}
 
-    const { zoom } = props;
+export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     const map = useMap();
 
@@ -22,9 +28,11 @@ export const MapView = (props) => {
 
     const results = useSelector(selectResults);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         initializeMapView();
-        zoomToCurrentUserLocationIfAllowed();
+        zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -34,14 +42,37 @@ export const MapView = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [results]);
 
-    const zoomToCurrentUserLocationIfAllowed = () => {
+    useImperativeHandle(ref, () => ({
+        zoomToCurrentUserLocationIfAllowed() {
+            zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.animation);
+        }
+    }));
+
+    /**
+     * Zoom to the location of current user
+     * @param type should be either type: immediately or animation
+     */
+    const zoomToCurrentUserLocationIfAllowed = (type: string) => {
         if (navigator.geolocation)
             navigator.geolocation.getCurrentPosition((position) => {
-                map.setView({
+                const params = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
-                }, zoom);
+                };
+
+                type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
+            }, error => {
+                handleLocationPermissionError(error, type);
             });
+    }
+
+    const handleLocationPermissionError = (error, type: string) => {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                if (type === MAP_MOVE_TYPE.animation)
+                    toast.error(t(translations.home_page.map_view_tab.please_share_your_location_to_use_this_feature))
+                break;
+        }
     }
 
     const initializeMapView = () => {
@@ -92,9 +123,9 @@ export const MapView = (props) => {
     const renderRacePopup = (race) => {
         return (
             <>
-                <div>Name: {race.name}</div>
-                <div>Location: {race.locationName}</div>
-                <div>Date: {moment(race.approximateStartTime).format('YYYY-MM-DD')}</div>
+                <div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>
+                <div>{t(translations.home_page.map_view_tab.location)} {race.locationName}</div>
+                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStartTime).format('YYYY-MM-DD')}</div>
             </>
         )
     }
@@ -103,4 +134,4 @@ export const MapView = (props) => {
         <>
         </>
     );
-}
+})

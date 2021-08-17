@@ -1,7 +1,7 @@
 import * as slice from '..';
 import { ContainerState } from '../types';
 
-describe('GithubRepoForm slice', () => {
+describe('Login slice', () => {
   let state: ContainerState;
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('GithubRepoForm slice', () => {
       slice.reducer(state, slice.loginActions.setIsAuthenticated(true)),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-        isAuthenticated: true
+        is_authenticated: true
     });
   });
 
@@ -46,7 +46,7 @@ describe('GithubRepoForm slice', () => {
       slice.reducer(state, slice.loginActions.setLogout()),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-      isAuthenticated: false,
+      is_authenticated: false,
       access_token: ''
     });
   });
