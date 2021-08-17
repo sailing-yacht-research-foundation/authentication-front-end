@@ -7,61 +7,50 @@ import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-
-const resultData = [
-    {
-        'name': 'Race at Italy west coast',
-        'date': '2021-07-21',
-        'time': '1:00:22',
-        'location': 'East Viginia'
-    },
-    {
-        'name': 'Race at US west coast',
-        'date': '2021-07-21',
-        'time': '1:00:22',
-        'location': 'South America'
-    },
-    {
-        'name': 'Race at Wales west coast',
-        'date': '2021-07-21',
-        'time': '1:00:22',
-        'location': 'South New Wales'
-    },
-    {
-        'name': 'Race at Wales west coast',
-        'date': '2021-07-21',
-        'time': '1:00:22',
-        'location': 'Florida Coast'
-    },
-    {
-        'name': 'Race at Wales west coast',
-        'date': '2021-07-21',
-        'time': '1:00:22',
-        'location': 'California Coast'
-    },
-    {
-        'name': 'Race at Wales west coast',
-        'date': '2021-07-21',
-        'time': '1:00:22',
-        'location': 'California Coast'
-    },
-    {
-        'name': 'Race at Wales west coast',
-        'date': '2021-07-21',
-        'time': '1:00:22',
-        'location': 'California Coast'
-    },
-    {
-        'name': 'Race at Wales west coast',
-        'date': '2021-07-21',
-        'time': '1:00:22',
-        'location': 'California Coast'
-    }
-];
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    selectFromDate,
+    selectIsSearching,
+    selectPage, selectResults,
+    selectSearchKeyword,
+    selectToDate,
+    selectTotal
+} from '../../slice/selectors';
+import { useHomeSlice } from '../../slice';
 
 export const FilterResult = () => {
 
     const { t } = useTranslation();
+
+    const results = useSelector(selectResults);
+
+    const isSearching = useSelector(selectIsSearching);
+
+    const total = useSelector(selectTotal);
+
+    const page = useSelector(selectPage);
+
+    const searchKeyword = useSelector(selectSearchKeyword);
+
+    const fromDate = useSelector(selectFromDate);
+
+    const toDate = useSelector(selectToDate);
+
+    const { actions } = useHomeSlice();
+
+    const dispatch = useDispatch();
+
+    const onPaginationChanged = (page) => {
+        const params: any = {};
+
+        params.page = page;
+        params.keyword = searchKeyword;
+
+        if (fromDate !== '') params.from_date = fromDate;
+        if (toDate !== '') params.to_date = toDate;
+
+        dispatch(actions.searchRaces(params));
+    }
 
     const renderResultByPage = (page: number) => {
         const defaultOptions = {
@@ -73,31 +62,37 @@ export const FilterResult = () => {
             }
         };
 
-        if (resultData.length === 0)
+        if (results.length === 0)
             return (
                 <LottieWrapper>
                     <Lottie
                         options={defaultOptions}
                         height={400}
                         width={400} />
-                    <LottieMessage>{t(translations.home_page.filter_tab.filter_result.start_searching_by_typing_something)}</LottieMessage>
+                    <LottieMessage>{isSearching ? t(translations.home_page.filter_tab.filter_result.searching) : t(translations.home_page.filter_tab.filter_result.start_searching_by_typing_something)}</LottieMessage>
                 </LottieWrapper>);
 
-        return resultData.map((result, index) => {
+        return results.map((result, index) => {
             return <ResultItem item={result} key={index} index={index} />
         });
     }
 
     return (
         <Wrapper>
-            <ResultWrapper>
-                <ResultCountText>{t(translations.home_page.filter_tab.filter_result.about_number_result)}</ResultCountText>
-                {renderResultByPage(1)}
-            </ResultWrapper>
-            {
-                resultData.length > 0 && <PaginationWrapper>
-                    <Pagination defaultCurrent={1} total={50} />
-                </PaginationWrapper>
+            {(results.length > 0 && !isSearching) ?
+                (<>
+                    <ResultWrapper>
+                        <ResultCountText>{t(translations.home_page.filter_tab.filter_result.about_number_result, { total: String(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })}</ResultCountText>
+                        {renderResultByPage(1)}
+                    </ResultWrapper>
+                    <PaginationWrapper>
+                        <Pagination defaultCurrent={page} onChange={onPaginationChanged} total={total} />
+                    </PaginationWrapper>
+                </>) : (
+                    <ResultWrapper>
+                        {renderResultByPage(1)}
+                    </ResultWrapper>
+                )
             }
         </Wrapper>
     )
@@ -140,6 +135,7 @@ const ResultWrapper = styled.div`
 
 const LottieWrapper = styled.div`
     text-align: center;
+    margin-top: 100px;
 `;
 
 const LottieMessage = styled.span`

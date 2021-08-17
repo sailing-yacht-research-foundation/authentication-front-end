@@ -15,9 +15,11 @@
       "search": "Search",
       "filter_result": {
         "start_searching_by_typing_something": "Start searching by typing something.",
-        "about_number_result": "About 100.000 results"
+        "about_number_result": "About 100.000 results",
+        "searching": "Searching...."
       }
-    }
+    },
+    "search_performed_no_result_found": "Searched for {{keyword}}, no result found."
   },
   "about_page": {
     "nav": {

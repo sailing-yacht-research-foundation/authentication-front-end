@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SERVICE_URL } from './serviceConstants';
+import { SERVICE_URL } from './service-constants';
 
 /**
  * Log the version of eula/policy when an authenticated user visit the eula or privacy policy page 

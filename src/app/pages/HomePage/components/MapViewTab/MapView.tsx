@@ -6,37 +6,11 @@ import * as L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
 import { GiSailboat } from 'react-icons/gi';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectResults } from '../../slice/selectors';
+import moment from 'moment';
 
-const races = [
-    {
-        latlng: {
-            lng: -343.167625,
-            lat: 38.001357
-        },
-        name: 'Race over here'
-    },
-    {
-        latlng: {
-            lng: -346.729520,
-            lat: 40.885278
-        },
-        name: 'Race over here'
-    },
-    {
-        latlng: {
-            lng: -355.527362,
-            lat: 41.944783
-        },
-        name: 'Race over here'
-    },
-    {
-        latlng: {
-            lng: -368.117287,
-            lat: 51.380010
-        },
-        name: 'Race over here'
-    }
-];
+const markers: any[] = [];
 
 export const MapView = (props) => {
 
@@ -46,12 +20,19 @@ export const MapView = (props) => {
 
     const history = useHistory();
 
+    const results = useSelector(selectResults);
+
     useEffect(() => {
         initializeMapView();
         zoomToCurrentUserLocationIfAllowed();
-        attachRaceMarkersToMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (results.length > 0)
+            attachRaceMarkersToMap();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [results]);
 
     const zoomToCurrentUserLocationIfAllowed = () => {
         if (navigator.geolocation)
@@ -75,19 +56,47 @@ export const MapView = (props) => {
     }
 
     const attachRaceMarkersToMap = () => {
-        races.forEach(race => {
-            L.marker(race.latlng, {
+        const resultMarkers: any[] = [];
+
+        markers.forEach((marker, index) => {
+            map.removeLayer(marker);
+            markers.splice(index, 1);
+        });
+
+        results.forEach(race => {
+            let marker = L.marker(L.latLng(race.lat, race.lon), {
                 icon: L.divIcon({
                     html: ReactDOMServer.renderToString(<GiSailboat style={{ color: '#fff', fontSize: '35px' }} />),
                     iconSize: [20, 20],
-                    className: 'myDivIcon'
+                    className: 'my-race'
                 })
             })
-            .on('click', () => {
-                history.push('/playback?raceid=xxx_xxx_xxx');
-            })
-            .addTo(map);
+                .bindPopup(ReactDOMServer.renderToString(renderRacePopup(race)))
+                .on('mouseover', () => {
+                    marker.openPopup();
+                })
+                .on('mouseout', () => {
+                    marker.closePopup();
+                })
+                .on('click', () => {
+                    history.push(`/playback?raceid=${race.id}`);
+                })
+                .addTo(map);
+            resultMarkers.push(marker);
+            markers.push(marker);
         });
+
+        map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
+    }
+
+    const renderRacePopup = (race) => {
+        return (
+            <>
+                <div>Name: {race.name}</div>
+                <div>Location: {race.locationName}</div>
+                <div>Date: {moment(race.approximateStartTime).format('YYYY-MM-DD')}</div>
+            </>
+        )
     }
 
     return (

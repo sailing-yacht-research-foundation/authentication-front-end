@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getUserAttribute } from 'utils/user-utils';
-import { SERVICE_URL } from './serviceConstants';
+import { SERVICE_URL } from './service-constants';
 
 export function getFeeds(user) {
     return axios.get('https://graph.facebook.com/me/feed?fields=attachments', {

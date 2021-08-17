@@ -5,6 +5,7 @@ import { InstagramState } from 'app/pages/ProfilePage/components/Instagram/slice
 import { SiderState } from 'app/components/SiderContent/slice/types';
 import { PrivacyPolicyState } from 'app/pages/PrivacyPolicyPage/slice/types';
 import { EULAState } from 'app/pages/EULAPage/slice/types';
+import { HomeState } from 'app/pages/HomePage/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -21,5 +22,6 @@ export interface RootState {
   sider?: SiderState;
   privacyPolicy?: PrivacyPolicyState;
   eula?: EULAState;
+  home?: HomeState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

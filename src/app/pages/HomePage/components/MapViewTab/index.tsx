@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 
 import React from 'react';
-import { Input } from 'antd';
+import { Input, Spin } from 'antd';
 import styled from 'styled-components';
 import { ReactComponent as SYRFLogo } from '../assets/logo-dark.svg';
 import { FilterPane } from '../../FilterTab/components/FilterPane';
@@ -11,6 +11,9 @@ import { MapView } from './MapView';
 import { StyleConstants } from 'styles/StyleConstants';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsSearching, selectSearchKeyword } from '../../slice/selectors';
+import { useHomeSlice } from '../../slice';
 
 const TAB_BAR_HEIGHT = '76px';
 
@@ -25,9 +28,20 @@ export const MapViewTab = () => {
 
     const [showSearchPanel, setShowSearchPanel] = React.useState<boolean>(false);
 
-    const [searchKeyword, setSearchKeyWord] = React.useState<string>('');
+    const searchKeyword = useSelector(selectSearchKeyword);
 
     const { t } = useTranslation();
+
+    const dispatch = useDispatch();
+
+    const { actions } = useHomeSlice();
+
+    const isSearching = useSelector(selectIsSearching);
+
+    const searchForRaces = (e) => {
+        if (e.keyCode === 13 || e.which === 13)
+            dispatch(actions.searchRaces({ keyword: searchKeyword }));
+    }
 
     return (
         <>
@@ -40,10 +54,12 @@ export const MapViewTab = () => {
                         type={'search'}
                         value={searchKeyword}
                         onChange={(e) => {
-                            setSearchKeyWord(e.target.value);
+                            dispatch(actions.setKeyword(e.target.value));
                         }}
+                        onKeyUp={searchForRaces}
                         placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                     <SearchBarLogo />
+                    <StyledSpin spinning={isSearching}></StyledSpin>
                 </SearchBarInnerWrapper>
                 <AdvancedSearchTextWrapper>
                     <a href="/" onClick={(e) => {
@@ -87,7 +103,8 @@ const StyledSearchBar = styled(Input)`
     box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
     padding-top: 10px;
     padding-bottom: 10px;
-    text-indent: 60px;
+    padding-left: 70px;
+    padding-right: 50px;
 
     ::placeholder {
         font - weight: 500;
@@ -120,4 +137,10 @@ const AdvancedSearchTextWrapper = styled.div`
     font-size: 12px;
     margin-left: 5px;
  }
+`;
+
+const StyledSpin = styled(Spin)`
+    position: absolute;
+    right: 15px;
+    top: 12px;
 `;

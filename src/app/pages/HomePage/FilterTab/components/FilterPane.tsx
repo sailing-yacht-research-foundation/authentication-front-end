@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Form, Input, DatePicker, Row, Col } from 'antd';
+import { Form, Input, DatePicker, Row, Col, Spin } from 'antd';
 import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
@@ -9,22 +9,44 @@ import { isMobile } from 'utils/helpers';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHomeSlice } from '../../slice';
+import moment from 'moment';
+import { selectIsSearching, selectSearchKeyword } from '../../slice/selectors';
 
 export const FilterPane = (props) => {
 
-    const { searchKeyWord, defaultFocus } = props;
+    const { defaultFocus } = props;
+
+    const searchKeyword = useSelector(selectSearchKeyword);
 
     const searchInputRef = React.createRef<Input>();
 
     const { t } = useTranslation();
 
+    const dispatch = useDispatch();
+
+    const { actions } = useHomeSlice();
+
+    const isSearching = useSelector(selectIsSearching);
+
     useEffect(() => {
-        if (defaultFocus) {
-            if (searchInputRef)
-                searchInputRef.current?.focus();
+        if (defaultFocus && searchInputRef) {
+            searchInputRef.current?.focus();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const onFormSubmit = (values) => {
+        const { name, from_date, to_date } = values;
+        const params: any = {};
+
+        params.keyword = name;
+        if (from_date) params.from_date = moment(from_date).format('YYYY-MM-DD');
+        if (to_date) params.to_date = moment(to_date).format('YYYY-MM-DD');
+
+        dispatch(actions.searchRaces(params));
+    }
 
     return (
         <Wrapper {...props}>
@@ -42,71 +64,81 @@ export const FilterPane = (props) => {
                     color={StyleConstants.MAIN_TONE_COLOR} />
             </FilterHeader>
 
-            <Form
-                layout={'vertical'}
-                name="basic"
-                initialValues={{
-                    name: searchKeyWord ? searchKeyWord : '',
-                    participants: 6
-                }}>
-                <Form.Item
-                    label={t(translations.home_page.filter_tab.race_name)}
-                    name="name"
-                    rules={[{ required: true }]}
-                >
-                    <Input ref={searchInputRef} />
-                </Form.Item>
+            <Spin spinning={isSearching}>
+                <Form
+                    layout={'vertical'}
+                    name="basic"
+                    onFinish={onFormSubmit}
+                    initialValues={{
+                        name: searchKeyword,
+                    }}>
+                    <Form.Item
+                        label={t(translations.home_page.filter_tab.race_name)}
+                        name="name"
+                        rules={[{ required: true }]}
+                    >
+                        <Input ref={searchInputRef}
+                            onChange={(e) => {
+                                dispatch(actions.setKeyword(e.target.value));
+                            }}
+                        />
+                    </Form.Item>
 
-                <Row gutter={24}>
-                    <Col xs={12} sm={12} md={12} lg={12}>
-                        <Form.Item
-                            label={t(translations.home_page.filter_tab.from_date)}
-                            name="from_date"
-                            rules={[{ type: 'date' }]}
-                        >
-                            <DatePicker
-                                ref="datePickerRef"
-                                showToday={false}
-                                style={{ width: '100%' }}
-                                dateRender={current => {
-                                    return (
-                                        <div className="ant-picker-cell-inner">
-                                            {current.date()}
-                                        </div>
-                                    );
-                                }}
-                            />
-                        </Form.Item>
-                    </Col>
+                    <Row gutter={24}>
+                        <Col xs={12} sm={12} md={12} lg={12}>
+                            <Form.Item
+                                label={t(translations.home_page.filter_tab.from_date)}
+                                name="from_date"
+                                rules={[{ type: 'date' }]}
+                            >
+                                <DatePicker
+                                    showToday={false}
+                                    style={{ width: '100%' }}
+                                    onChange={(e)=> {
+                                        if (e) dispatch(actions.setFromDate(e.format('YYYY-MM-DD')))
+                                    }}
+                                    dateRender={current => {
+                                        return (
+                                            <div className="ant-picker-cell-inner">
+                                                {current.date()}
+                                            </div>
+                                        );
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
 
-                    <Col xs={12} sm={12} md={12} lg={12}>
-                        <Form.Item
-                            label={t(translations.home_page.filter_tab.to_date)}
-                            name="to_date"
-                            rules={[{ type: 'date' }]}
-                        >
-                            <DatePicker
-                                ref="datePickerRef"
-                                showToday={false}
-                                style={{ width: '100%' }}
-                                dateRender={current => {
-                                    return (
-                                        <div className="ant-picker-cell-inner">
-                                            {current.date()}
-                                        </div>
-                                    );
-                                }}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
+                        <Col xs={12} sm={12} md={12} lg={12}>
+                            <Form.Item
+                                label={t(translations.home_page.filter_tab.to_date)}
+                                name="to_date"
+                                rules={[{ type: 'date' }]}
+                            >
+                                <DatePicker
+                                    showToday={false}
+                                    style={{ width: '100%' }}
+                                    onChange={(e)=> {
+                                        if (e) dispatch(actions.setToDate(e.format('YYYY-MM-DD')))
+                                    }}
+                                    dateRender={current => {
+                                        return (
+                                            <div className="ant-picker-cell-inner">
+                                                {current.date()}
+                                            </div>
+                                        );
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-                <Form.Item>
-                    <SyrfFormButton type="primary" htmlType="submit">
-                        {t(translations.home_page.filter_tab.search)}
-                    </SyrfFormButton>
-                </Form.Item>
-            </Form>
+                    <Form.Item>
+                        <SyrfFormButton type="primary" htmlType="submit">
+                            {t(translations.home_page.filter_tab.search)}
+                        </SyrfFormButton>
+                    </Form.Item>
+                </Form>
+            </Spin>
         </Wrapper>
     )
 }
