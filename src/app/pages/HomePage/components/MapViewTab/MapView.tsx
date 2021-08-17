@@ -1,10 +1,12 @@
 import 'leaflet/dist/leaflet.css';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useImperativeHandle } from 'react';
 import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
 import { GiSailboat } from 'react-icons/gi';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 const races = [
     {
@@ -37,27 +39,55 @@ const races = [
     }
 ];
 
-export const MapView = (props) => {
+const MAP_MOVE_TYPE = {
+    immediately: 'immediately',
+    animation: 'animation'
+}
 
-    const { zoom } = props;
+export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     const map = useMap();
 
+    const history = useHistory();
+
     useEffect(() => {
         initializeMapView();
-        zoomToCurrentUserLocationIfAllowed();
+        zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
         attachRaceMarkersToMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const zoomToCurrentUserLocationIfAllowed = () => {
+    useImperativeHandle(ref, () => ({
+        zoomToCurrentUserLocationIfAllowed() {
+            zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.animation);
+        }
+    }));
+
+    /**
+     * Zoom to the location of current user
+     * @param type should be either type: immediately or animation
+     */
+    const zoomToCurrentUserLocationIfAllowed = (type: string) => {
         if (navigator.geolocation)
             navigator.geolocation.getCurrentPosition((position) => {
-                map.setView({
+                const params = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
-                }, zoom);
+                };
+
+                type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
+            }, error => {
+                handleLocationPermissionError(error, type);
             });
+    }
+
+    const handleLocationPermissionError = (error, type: string) => {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                if (type === MAP_MOVE_TYPE.animation)
+                    toast.error("Please share your location to use this feature.")
+                break;
+        }
     }
 
     const initializeMapView = () => {
@@ -80,6 +110,9 @@ export const MapView = (props) => {
                     className: 'myDivIcon'
                 })
             })
+            .on('click', () => {
+                history.push('/playback?raceid=xxx_xxx_xxx');
+            })
             .addTo(map);
         });
     }
@@ -88,4 +121,4 @@ export const MapView = (props) => {
         <>
         </>
     );
-}
+})

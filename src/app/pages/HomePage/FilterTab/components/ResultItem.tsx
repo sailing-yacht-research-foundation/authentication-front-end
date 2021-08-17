@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { GiPositionMarker } from 'react-icons/gi';
 import { Space } from 'antd';
+import { Link } from 'react-router-dom';
 
 export const ResultItem = (props) => {
     const race = props.item;
@@ -14,7 +15,7 @@ export const ResultItem = (props) => {
                     {race.location}
                 </Space>
             </HeadDescriptionWrapper>
-            <Name>{race.name}</Name>
+            <Name><Link to="/playback?raceid=xxx_xxx_xxx">{race.name}</Link></Name>
             <DescriptionWrapper>
                 <DescriptionItem>
                     Team: 6

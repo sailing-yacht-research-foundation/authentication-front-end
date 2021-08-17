@@ -1,6 +1,18 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { usePrivacyPolicySlice } from '../slice';
 
 export const PrivacyPolicy = () => {
+
+  const dispatch = useDispatch();
+
+  const eulaActions = usePrivacyPolicySlice().actions;
+
+  React.useEffect(() => {
+    dispatch(eulaActions.signPolicyVersion('2021-07-28 00:00:00'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div style={{ minHeight: '100vh', marginTop: '100px', padding: '0 20px' }}>
       <h1>Privacy Policy for SYRF</h1>

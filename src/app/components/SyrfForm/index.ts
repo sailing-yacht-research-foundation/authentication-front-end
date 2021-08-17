@@ -1,8 +1,14 @@
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { Input, Button, Select } from 'antd';
+import { Input, Button, Select, InputNumber } from 'antd';
 import PhoneInput from 'react-phone-input-2';
 import { media } from 'styles/media';
+
+const inputStyle = `
+    border-radius: 10px;
+    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
+    height: 36px;
+`;
 
 export const SyrfFormWrapper = styled.div`
     background: #fff;
@@ -10,11 +16,15 @@ export const SyrfFormWrapper = styled.div`
     border-radius: 10px;
     width: 100%;
     padding-bottom: 30px;
-
     &.danger-zone {
         margin-top: 30px;
     }
-
+    
+    &.no-background {
+        background: none;
+        padding: 0;
+        padding-bottom: 30px;
+    }
     ${media.medium`
         width: 55%;
         padding: 50px 56px;
@@ -37,12 +47,10 @@ export const SyrfSubmitButton = styled(Button)`
 `
 
 export const SyrfInputField = styled(Input)`
-    border-radius: 10px;
-    border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
-    height: 36px;
-`;
+    ${inputStyle}
+`
 
-export const SyrfPasswordInputField = styled(Input)`
+export const SyrfPasswordInputField = styled(Input.Password)`
     border-radius: 10px;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
 `;
@@ -82,18 +90,25 @@ export const SyrfFormButton = styled(Button)`
     font-weight: 700;
     line-height: 19px;
     color: #fff;
+    :disabled {
+        background: #dddddd;
+    }
 `;
 
 export const SyrfFormSelect = styled(Select)`
     border-radius: 10px;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
     height: 36px;
-
     > div {
         border: none !important;
         background: transparent !important;
         box-shadow: none !important;
     }
+`;
+
+export const SyrfInputNumber = styled(InputNumber)`
+    ${inputStyle}
+    width: 100%;
 `;
 
 export const SyrfButtonTitle = styled.h4`
@@ -103,4 +118,8 @@ export const SyrfButtonTitle = styled.h4`
 export const SyrfButtonDescription = styled.span`
     font-size: 13px;
     color: #000000d9;
+`;
+
+export const SyrfTextArea = styled(Input.TextArea)`
+    ${inputStyle}
 `;

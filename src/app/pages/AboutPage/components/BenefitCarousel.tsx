@@ -29,8 +29,8 @@ export const BenefitCarousel = (props) => {
                 <CarouselInnerContainer className="carousel-inner-container">
                     <Row className="carousel-row">
                         <Col lg={12} md={24} xs={24} sm={24}>
-                            <CarouselText className="section-header-text">{t(translations.home_page.benefit_carousel.slide_one.title)}</CarouselText>
-                            <CarouselItemDescription>{t(translations.home_page.benefit_carousel.slide_one.description)}</CarouselItemDescription>
+                            <CarouselText className="section-header-text">{t(translations.about_page.benefit_carousel.slide_one.title)}</CarouselText>
+                            <CarouselItemDescription>{t(translations.about_page.benefit_carousel.slide_one.description)}</CarouselItemDescription>
                         </Col>
                         <Col lg={12} md={24} xs={24} sm={24}>
                             <CarouselImage className="carousel-image-container" style={{ backgroundImage: `url(${PasswordBg})`, ...backgroundProperties }} />
@@ -43,8 +43,8 @@ export const BenefitCarousel = (props) => {
                 <CarouselInnerContainer className="carousel-inner-container">
                     <Row className="carousel-row">
                         <Col lg={12} md={12} xs={24} sm={24}>
-                            <CarouselText className="section-header-text">{t(translations.home_page.benefit_carousel.slide_two.title)}</CarouselText>
-                            <CarouselItemDescription>{t(translations.home_page.benefit_carousel.slide_two.description)}</CarouselItemDescription>
+                            <CarouselText className="section-header-text">{t(translations.about_page.benefit_carousel.slide_two.title)}</CarouselText>
+                            <CarouselItemDescription>{t(translations.about_page.benefit_carousel.slide_two.description)}</CarouselItemDescription>
                         </Col>
                         <Col lg={12} md={12} xs={24} sm={24}>
                             <CarouselImage className="carousel-image-container" style={{ backgroundImage: `url(${AccessControlBg})`, ...backgroundProperties }} />
@@ -57,8 +57,8 @@ export const BenefitCarousel = (props) => {
                 <CarouselInnerContainer className="carousel-inner-container">
                     <Row className="carousel-row">
                         <Col lg={12} md={12} xs={24} sm={24}>
-                            <CarouselText className="section-header-text">{t(translations.home_page.benefit_carousel.slide_three.title)}</CarouselText>
-                            <CarouselItemDescription>{t(translations.home_page.benefit_carousel.slide_three.description)}</CarouselItemDescription>
+                            <CarouselText className="section-header-text">{t(translations.about_page.benefit_carousel.slide_three.title)}</CarouselText>
+                            <CarouselItemDescription>{t(translations.about_page.benefit_carousel.slide_three.description)}</CarouselItemDescription>
                         </Col>
                         <Col lg={12} md={12} xs={24} sm={24}>
                             <CarouselImage className="carousel-image-container" style={{ backgroundImage: `url(${GDPRBg})`, ...backgroundProperties }} />
@@ -71,8 +71,8 @@ export const BenefitCarousel = (props) => {
                 <CarouselInnerContainer className="carousel-inner-container">
                     <Row className="carousel-row">
                         <Col lg={12} md={12} xs={24} sm={24}>
-                            <CarouselText className="section-header-text">{t(translations.home_page.benefit_carousel.slide_four.title)}</CarouselText>
-                            <CarouselItemDescription>{t(translations.home_page.benefit_carousel.slide_four.description)}</CarouselItemDescription>
+                            <CarouselText className="section-header-text">{t(translations.about_page.benefit_carousel.slide_four.title)}</CarouselText>
+                            <CarouselItemDescription>{t(translations.about_page.benefit_carousel.slide_four.description)}</CarouselItemDescription>
                         </Col>
                         <Col lg={12} md={12} xs={24} sm={24}>
                             <CarouselImage className="carousel-image-container" style={{ backgroundImage: `url(${OrganizationBg})`, ...backgroundProperties }} />

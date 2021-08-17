@@ -12,7 +12,7 @@ exports[`<VerifyAccountForm /> should render and matches the snaphshot 1`] = `
   onFinish={[Function]}
 >
   <FormItem
-    label="Verification code"
+    label="Verification Code"
     name="code"
     rules={
       Array [
@@ -31,7 +31,7 @@ exports[`<VerifyAccountForm /> should render and matches the snaphshot 1`] = `
       htmlType="submit"
       type="primary"
     >
-      Verify my account
+      Verify My Account
     </Styled(Button)>
     <div
       style={
@@ -42,7 +42,8 @@ exports[`<VerifyAccountForm /> should render and matches the snaphshot 1`] = `
       }
     >
       <span>
-         Could not receive the code?   
+        Could not receive the code?
+           
         <a
           href="/"
           onClick={[Function]}

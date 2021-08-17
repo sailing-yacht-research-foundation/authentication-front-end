@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const DeleteUserModal = (props) => {
 
@@ -17,6 +19,8 @@ export const DeleteUserModal = (props) => {
     const history = useHistory();
 
     const loginActions = UseLoginSlice().actions;
+
+    const { t } = useTranslation();
 
     const deleteUser = () => {
         Auth
@@ -39,7 +43,7 @@ export const DeleteUserModal = (props) => {
         dispatch(loginActions.setLogout());
         history.push('/signin');
         Auth.signOut();
-        toast.info('We hope to see you again!');
+        toast.info(t(translations.profile_page.update_profile.we_hope_to_see_you_again));
         localStorage.removeItem('access_token');
     }
 
@@ -48,10 +52,9 @@ export const DeleteUserModal = (props) => {
             visible={showDeleteUserModal}
             onCancel={() => setShowDeleteUserModal(false)}
             onOk={deleteUser}
-            title="Are you really sure you want to delete your account?">
+            title={t(translations.profile_page.update_profile.are_you_really_sure_you_want_to_delete_your_account)}>
             <DeleteWarningMessageText>
-                Hey {getUserAttribute(authUser, 'name')}, You're going to delete your account and all information.
-                Your information will be lost and cannot be recovered. Are you sure you want to continue?
+                {t(translations.profile_page.update_profile.hey_your_going_to_delete_your_account, { name: getUserAttribute(authUser, 'name') })}
             </DeleteWarningMessageText>
         </Modal>
     );

@@ -15,14 +15,22 @@ export const Footer = (props) => {
         <Wrapper>
             <DeveloperSectionContainer>
                 <Typography.Title className="section-header-text">
-                    {t(translations.home_page.footer.title)}
+                    {t(translations.about_page.footer.title)}
                 </Typography.Title>
 
                 <DeveloperDescription>
-                    {t(translations.home_page.footer.description)}
+                {t(translations.about_page.footer.developer.description_title)}
+                    <FooterDeveloperBenefitList>
+                        <li>{t(translations.about_page.footer.developer.item_1)}</li>
+                        <li>{t(translations.about_page.footer.developer.item_2)}</li>
+                        <li>{t(translations.about_page.footer.developer.item_3)}</li>
+                    </FooterDeveloperBenefitList>
                 </DeveloperDescription>
-
-                <Button size={'large'} className="syrf-button" style={{ marginTop: '20px', marginBottom: '20px' }}>{t(translations.home_page.footer.developer_button)}</Button>
+                <Button size={'large'} onClick={() => {
+                    window.open('https://developers.syrf.io', '_blank');
+                }} className="syrf-button"
+                    style={{ marginTop: '20px', marginBottom: '20px' }}
+                >{t(translations.about_page.footer.developer_button)}</Button>
             </DeveloperSectionContainer>
 
             <SYRFFooterContainer>
@@ -35,8 +43,10 @@ export const Footer = (props) => {
                             span: 24
                         }}
                     >
-                        <Logo style={{ marginBottom: '15px' }}/>
-                        <SYRFDescription>{t(translations.home_page.footer.syrf_description)}</SYRFDescription>
+                        <Logo
+                            onClick={() => window.open('https://sailyachtresearch.org', '_blank')}
+                            style={{ marginBottom: '15px', cursor: 'pointer' }} />
+                        <SYRFDescription>{t(translations.about_page.footer.syrf_description)}</SYRFDescription>
                     </Col>
 
                     <Col
@@ -49,22 +59,22 @@ export const Footer = (props) => {
                         }}
                     >
                         <StyledRow justify="end" align="middle" style={{ marginTop: '50px' }}>
-                            <StyledLink to="/">SYRF</StyledLink>
+                            <StyledLink to={{ pathname: 'https://sailyachtresearch.org' }} target="_blank">SYRF</StyledLink>
                         </StyledRow>
 
                         <StyledRow justify="end" align="middle" style={{ marginTop: '10px' }}>
-                            <StyledLink to="privacy-policy">{t(translations.home_page.footer.policy_privacy_link)}</StyledLink>
+                            <StyledLink to="privacy-policy">{t(translations.about_page.footer.policy_privacy_link)}</StyledLink>
                         </StyledRow>
 
                         <StyledRow justify="end" align="middle" style={{ marginTop: '10px' }}>
-                            <StyledLink to="eula">{t(translations.home_page.footer.eula_link)}</StyledLink>
+                            <StyledLink to="eula">{t(translations.about_page.footer.eula_link)}</StyledLink>
                         </StyledRow>
                     </Col>
                 </Row>
 
                 <Divider />
 
-                <FooterTextCopyRight>{t(translations.home_page.footer.copyright)}</FooterTextCopyRight>
+                <FooterTextCopyRight>{t(translations.about_page.footer.copyright)}</FooterTextCopyRight>
             </SYRFFooterContainer>
         </Wrapper>
     )
@@ -159,4 +169,9 @@ const StyledRow = styled(Row)`
     ${media.small`
         justify-contents: center;
     `};
-`
+`;
+
+const FooterDeveloperBenefitList = styled.ul`
+    margin-top: 15px;
+    text-align: left;
+`; 

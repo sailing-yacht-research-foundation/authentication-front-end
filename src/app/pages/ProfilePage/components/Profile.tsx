@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import Auth from '@aws-amplify/auth';
-import { UpdateInfo } from './UpdateInfoForm';
+import { UpdateInfo } from './UpdateInfoForm/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { loginActions } from 'app/pages/LoginPage/slice';
 import { ProfileTabs } from './ProfileTabs';
-import { LinkToProviders } from './LinkToProviders';
 import { DeleteUserModal } from './DeleteUserModal';
 import { SyrfButtonDescription, SyrfButtonTitle, SyrfFormTitle, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { Row, Col, Button } from 'antd';
 import { media } from 'styles/media';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 export const Profile = () => {
 
@@ -20,13 +21,17 @@ export const Profile = () => {
 
     const dispatch = useDispatch();
 
+    const { t } = useTranslation();
+
     const cancelUpdateProfile = () => {
         getAuthorizedAuthUser();
     }
 
     const getAuthorizedAuthUser = () => {
-        Auth.currentAuthenticatedUser()
-            .then(user => dispatch(loginActions.setUser(JSON.parse(JSON.stringify(user)))))
+        Auth.currentAuthenticatedUser({ bypassCache: true })
+            .then(user => {
+                dispatch(loginActions.setUser(JSON.parse(JSON.stringify(user))))
+            })
             .catch(error => { });
     }
 
@@ -39,18 +44,18 @@ export const Profile = () => {
             />
             <ProfileTabs />
             <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
-            <LinkToProviders />
+             {/* <LinkToProviders /> Hide & comment this base on Jon's request of SNS-250 */}
             <SyrfFormWrapper className="danger-zone">
-                <SyrfFormTitle>Danger Zone</SyrfFormTitle>
+                <SyrfFormTitle>{t(translations.profile_page.update_profile.danger_zone)}</SyrfFormTitle>
                 <Row gutter={24}>
                     <Col xs={21} sm={24} md={12} lg={12}>
-                        <SyrfButtonTitle>Delete My account</SyrfButtonTitle>
-                        <SyrfButtonDescription>You will delete your account along with all information</SyrfButtonDescription>
+                        <SyrfButtonTitle>{t(translations.profile_page.update_profile.delete_my_account)}</SyrfButtonTitle>
+                        <SyrfButtonDescription>{t(translations.profile_page.update_profile.you_will_delete_your_account_along_with_all_associated_information)}</SyrfButtonDescription>
                     </Col>
                     <Col xs={24} sm={24} md={12} lg={12}>
                         <DeleteAccountButtonWrapper>
                             <Button danger onClick={() => setShowDeleteUserModal(true)}>
-                                Permantly delete my account
+                                {t(translations.profile_page.update_profile.permantly_delete_my_account)}
                             </Button>
                         </DeleteAccountButtonWrapper>
                     </Col>

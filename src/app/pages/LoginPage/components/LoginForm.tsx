@@ -48,16 +48,14 @@ export const LoginForm = (props) => {
         dispatch(actions.setIsAuthenticated(true));
         dispatch(actions.setUser(JSON.parse(JSON.stringify(user))));
         history.push('/');
+      } else {
+        redirectToVerifyAccountPage(email);
       }
     }).catch(error => {
       setIsSigningIn(false);
       if (error.code) {
         if (error.code === 'UserNotConfirmedException') {
-          history.push('/verify-account', {
-            state: {
-              email: email
-            }
-          });
+          redirectToVerifyAccountPage(email);
         } else {
           toast.error(error.message);
         }
@@ -65,6 +63,14 @@ export const LoginForm = (props) => {
         toast.error(t(translations.login_page.login_error));
       }
     })
+  }
+
+  const redirectToVerifyAccountPage = (email) => {
+    history.push('/verify-account', {
+      state: {
+        email: email
+      }
+    });
   }
 
   return (
@@ -129,7 +135,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding-bottom: 50px;
-
   ${media.medium`
     height: 100vh;
     padding-bottom: 0;
@@ -154,7 +159,6 @@ const FormWrapper = styled.div`
   padding-bottom: 30px;
   margin-top: 61px;
   width: 100%;
-
   ${media.medium`
   width: 460px;
   `};
@@ -185,7 +189,6 @@ const SyrfInputPassword = styled(Input.Password)`
   border-radius: 4px;
   border: none;
   height: 36px;
-
   > input {
     background: #F8F8F8 !important;
   }
@@ -235,10 +238,9 @@ const SyrfSignupButton = styled(Button)`
   font-weight: 700;
   line-height: 19px;
   color: #fff;
-
   &:hover {
     background: #DB6E1E;
     color: #fff;
     border-color: #DB6E1E;
   } 
-`
+`;

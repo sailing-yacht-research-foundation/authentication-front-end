@@ -1,39 +1,51 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleConstants } from 'styles/StyleConstants';
 import { Auth, Storage } from 'aws-amplify';
-import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
+import { getProfilePicture } from 'utils/user-utils';
 import { CameraFilled } from '@ant-design/icons';
-import { Image, Spin, Typography } from 'antd';
+import { Image, Spin, Modal } from 'antd';
 import { toast } from 'react-toastify';
-// import Resizer from "react-image-file-resizer";
 import styled from 'styled-components';
+import Avatar from 'react-avatar-edit';
+import { dataURLtoFile } from 'utils/helpers';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const ChangeAvatar = (props) => {
     const { authUser } = props;
 
-    const fileUploadRef = useRef<HTMLInputElement>(null);
-
     const [isUploadingProfilePicture, setIsUploadingProfilePicture] = useState<boolean>(false);
 
-    const onFileChanged = async (e) => {
-        e.preventDefault();
-        const file = e.target.files[0];
+    const [base64ConvertedURL, setBase64ConvertedURL] = React.useState<string>('');
+
+    const [cropAvatarModalVisible, setCropAvatarModalVisible] = useState<boolean>(false);
+
+    const { t } = useTranslation();
+
+    const onSubmitCroppedAvatar = async () => {
+        if (base64ConvertedURL === '') {
+            toast.error(t(translations.profile_page.update_profile.please_choose_an_image_to_crop));
+            return;
+        }
+
         const avatarFileName = `${(+ new Date())}-${String(authUser.username).substring(0, 8)}-profile-picture.png`;
+        const file = dataURLtoFile(base64ConvertedURL, avatarFileName);
 
         setIsUploadingProfilePicture(true);
+        setCropAvatarModalVisible(false);
 
         Storage.put(avatarFileName, file, {
             contentType: "image/png",
             level: 'public',
         })
             .then(result => {
-                setIsUploadingProfilePicture(false);
+                onAfterUploadingAvatar();
 
                 Auth.currentAuthenticatedUser().then(user => {
                     Auth.updateUserAttributes(user, {
                         'picture': avatarFileName
                     }).then(response => {
-                        toast.success('Upload avatar success');
+                        toast.success(t(translations.profile_page.update_profile.upload_profile_picture_successfully));
                         props.cancelUpdateProfile();
                     }).catch(error => {
                         toast.error(error.message);
@@ -44,28 +56,49 @@ export const ChangeAvatar = (props) => {
             })
             .catch(err => {
                 toast.error(err.message);
-                setIsUploadingProfilePicture(false);
+                onAfterUploadingAvatar();
             });
     }
 
-    const triggerChooseAvatar = () => {
-        if (fileUploadRef && fileUploadRef.current) fileUploadRef.current.click();
+    const onAvatarCropped = (convertedBase64ImageURL) => {
+        setBase64ConvertedURL(convertedBase64ImageURL)
+    }
+
+    const onClearCropper = () => {
+        setBase64ConvertedURL('');
+    }
+
+    const onAfterUploadingAvatar = () => {
+        setBase64ConvertedURL('');
+        setIsUploadingProfilePicture(false);
     }
 
     return (
         <>
-            <Spin spinning={isUploadingProfilePicture} tip="Uploading...">
+            <Modal
+                title={t(translations.profile_page.update_profile.change_profile_picture)}
+                bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
+                visible={cropAvatarModalVisible}
+                onOk={onSubmitCroppedAvatar}
+                onCancel={() => setCropAvatarModalVisible(false)}>
+                <Avatar
+                    onClose={onClearCropper}
+                    width={390}
+                    height={295}
+                    exportAsSquare={true}
+                    onCrop={onAvatarCropped}
+                />
+            </Modal>
+            <Spin spinning={isUploadingProfilePicture} tip={t(translations.profile_page.update_profile.uploading)}>
                 <Wrapper>
                     <AvatarHolder>
                         <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
                     </AvatarHolder>
                     <ChangeAvatarButton>
-                        <CameraFilled style={{ color: StyleConstants.MAIN_TONE_COLOR, fontSize: '25px' }} onClick={() => triggerChooseAvatar()} size={20} />
-                        <input ref={fileUploadRef} accept="image/png, image/jpeg" onChange={onFileChanged} hidden={true} type="file" />
+                        <CameraFilled style={{ color: StyleConstants.MAIN_TONE_COLOR, fontSize: '25px' }} onClick={() => setCropAvatarModalVisible(true)} size={20} />
                     </ChangeAvatarButton>
                 </Wrapper>
             </Spin>
-            <Typography.Title style={{ marginTop: '15px', textAlign: 'center' }} level={3}>{getUserAttribute(authUser, 'name')}</Typography.Title>
         </>
     )
 }
@@ -73,7 +106,7 @@ export const ChangeAvatar = (props) => {
 const Wrapper = styled.div`
     position: relative;
     width: 150px;
-`
+`;
 
 const ChangeAvatarButton = styled.div`
     position: absolute;
@@ -81,7 +114,7 @@ const ChangeAvatarButton = styled.div`
     bottom: 20px;
     z-index: 1;
     cursor: pointer;
-`
+`;
 
 const AvatarHolder = styled.div`
     width: 150px;
@@ -89,4 +122,4 @@ const AvatarHolder = styled.div`
     border-radius: 50%;
     overflow:hidden;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
-`
+`;

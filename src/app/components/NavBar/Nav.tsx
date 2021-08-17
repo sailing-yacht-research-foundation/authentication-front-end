@@ -42,7 +42,7 @@ export const Nav = () => {
             icon={<AiFillPlusCircle
               style={{ marginRight: '5px' }}
               size={18} />} type="primary">
-            Create
+            {t(translations.home_page.nav.create)}
           </StyledButtonCreate>
           <DropDownWrapper>
             <UserDropdown logout={logout} />
@@ -53,18 +53,18 @@ export const Nav = () => {
               <LinkStyled to="/" onClick={(e) => {
                 e.preventDefault();
                 logout();
-              }}>{t(translations.home_page.nav.user_dropdown.log_out)}</LinkStyled>
+              }}>{t(translations.about_page.nav.user_dropdown.log_out)}</LinkStyled>
             </Space>
           </MobileMenuWrapper>
         </>
       ) : (
         <>
-          <AboutLink to="/about">{'About Us'}</AboutLink>
+          <AboutLink to="/about">{t(translations.about_page.nav.about)}</AboutLink>
           <Space size={15}>
             <div>
-              <LinkStyled to="/signin">{t(translations.home_page.nav.log_in)}</LinkStyled>
+              <LinkStyled to="/signin">{t(translations.about_page.nav.log_in)}</LinkStyled>
               <span style={{ marginLeft: '5px', marginRight: '5px' }}>|</span>
-              <LinkStyled style={{ color: '#0C4983' }} to="/signup">{t(translations.home_page.nav.sign_up)}</LinkStyled>
+              <LinkStyled style={{ color: '#0C4983' }} to="/signup">{t(translations.about_page.nav.sign_up)}</LinkStyled>
             </div>
             <SelectLanguage />
           </Space>

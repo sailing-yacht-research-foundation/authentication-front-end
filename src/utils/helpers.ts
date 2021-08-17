@@ -1,3 +1,7 @@
+/**
+ * Check if is mobile
+ * @returns 
+ */
 export const isMobile = () => {
     let mobile = false;
     //eslint-disable-next-line
@@ -8,7 +12,7 @@ export const isMobile = () => {
 export const stringToColour = (str) => {
     let hash = 0;
     let colour = '#';
-    
+
     for (let i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
@@ -28,12 +32,74 @@ export const milisecondsToMinutes = (miliseconds) => {
 export const debounce = (callback, time) => {
     let interval;
     return (...args) => {
-      clearTimeout(interval);
-      interval = setTimeout(() => {
-        interval = null;
-  
-        // eslint-disable-next-line
-        callback(...args);
-      }, time);
+        clearTimeout(interval);
+        interval = setTimeout(() => {
+            interval = null;
+
+            // eslint-disable-next-line
+            callback(...args);
+        }, time);
     };
-  }
+}
+
+/**
+ * Remove all null properties to empty string
+ * @param object 
+ * @return modified object
+ */
+export const replaceObjectPropertiesFromNullToEmptyString = (object) => {
+    for (let key in object) {
+        if (object[key] === null)
+            object[key] = '';
+    }
+
+    return object;
+}
+
+/**
+ * Convert base64 url to a JS File Object
+ * @param dataurl 
+ * @param filename 
+ * @returns File file image
+ */
+export const dataURLtoFile = (dataurl, filename) => {
+
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+}
+
+/**
+ * Convert JS File image to base64
+ * @param file 
+ * @returns new Promise
+ */
+export const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+/**
+ * Format phone number to the right format
+ * @param phoneNumber
+ */
+export const removePlusFromPhoneNumber = (phoneNumber) => {
+    if (String(phoneNumber).includes('+')) return phoneNumber;
+
+    return '+' + phoneNumber;
+}
+
+export const FIELD_VALIDATE = {
+    phone: 'phone',
+    email: 'email'
+}

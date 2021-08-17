@@ -30,9 +30,17 @@ FRONTEND="{\
 PROVIDERS="{\
 \"awscloudformation\":$AWSCLOUDFORMATIONCONFIG\
 }"
+STORAGECONFIG="{\
+  \"region\": \"us-west-2\",\
+  \"bucketName\": \"syrfstorage154055-dev\"\
+}"
+CATEGORIES="{\
+  \"storage\":$STORAGECONFIG\
+}"
 
 amplify pull \
 --amplify $AMPLIFY \
 --frontend $FRONTEND \
 --providers $PROVIDERS \
+--categories $CATEGORIES \
 --yes

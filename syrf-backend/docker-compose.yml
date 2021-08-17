@@ -9,3 +9,33 @@ services:
       volumes:
         - .:/app
       restart: always
+      environment: 
+        - FACEBOOK_CLIENT_ID=4037107746377946
+        - FACEBOOK_CLIENT_SECRET=67138c6597ee8d614b23d1924bedd867
+        - INSTAGRAM_CLIENT_ID=478370613251328
+        - INSTAGRAM_CLIENT_SECRET=f86ebca2c9d0ec82de6f7dbf9c84fa81
+        - INSTAGRAM_REDIRECT_URL=https://syrf.dev/profile
+        - TWITTER_CLIENT_ID=
+        - TWITER_CLIENT_SECRET=
+        - DB=syrf_db
+        - DB_USER=syrf
+        - DB_PASSWORD=SJ2cc2ON72sXX
+        - DB_HOST=db
+      restart: always
+    db:
+      image: mariadb:10.6
+      volumes:
+        - ./volumes/db_volume:/var/lib/mysql
+      ports:
+        - ${DB_PORT}:3306
+      restart: always
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_USER=syrf
+        - MYSQL_PASSWORD=SJ2cc2ON72sXX
+        - MYSQL_DATABASE=syrf_db
+      ports:
+        - 3072:3306
+      restart: always
+    
+    

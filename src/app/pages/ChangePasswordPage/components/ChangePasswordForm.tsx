@@ -29,7 +29,7 @@ export const ChangePasswordForm = (props) => {
         setIsChangingPassword(true);
         Auth.currentAuthenticatedUser().then(user => {
             Auth.changePassword(user, oldPassword, newPassword).then(response => {
-                toast.success('Password changed successfully');
+                toast.success(t(translations.change_password_page.password_changed_successfully));
                 form.resetFields();
                 setIsChangingPassword(false);
             }).catch(error => {
@@ -70,6 +70,27 @@ export const ChangePasswordForm = (props) => {
                             label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                             name="newPassword"
                             rules={[{ required: true, max: 16, min: 8 }]}
+                        >
+                            <SyrfPasswordInputField />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.change_password_page.confirm_new_password)}</SyrfFieldLabel>}
+                            name="newPasswordConfirmation"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: t(translations.change_password_page.please_confirm_new_password),
+                                },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('newPassword') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error(t(translations.change_password_page.the_two_passwords_that_you_entered_do_not_match)));
+                                    },
+                                }),
+                            ]}
                         >
                             <SyrfPasswordInputField />
                         </Form.Item>

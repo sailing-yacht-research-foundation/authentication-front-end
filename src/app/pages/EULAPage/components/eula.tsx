@@ -1,7 +1,19 @@
 import React from 'react';
 import { Row } from 'antd';
+import { useDispatch } from 'react-redux';
+import { useEulaSlice } from '../slice';
 
 export const EULA = () => {
+
+  const dispatch = useDispatch();
+
+  const eulaActions = useEulaSlice().actions;
+
+  React.useEffect(() => {
+    dispatch(eulaActions.signEulaVersion('2021-07-28 00:00:00'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Row justify="center" align="middle" style={{ minHeight: '100vh', marginTop: '100px', padding: '0 20px' }}>
       <div id="placeholders">

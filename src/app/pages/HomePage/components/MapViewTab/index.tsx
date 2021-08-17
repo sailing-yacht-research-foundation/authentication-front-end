@@ -1,6 +1,6 @@
-// import 'leaflet/dist/leaflet.css';
+import 'leaflet/dist/leaflet.css';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Input } from 'antd';
 import styled from 'styled-components';
 import { ReactComponent as SYRFLogo } from '../assets/logo-dark.svg';
@@ -9,6 +9,13 @@ import { media } from 'styles/media';
 import { MapContainer, } from 'react-leaflet';
 import { MapView } from './MapView';
 import { StyleConstants } from 'styles/StyleConstants';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
+import { BiTargetLock } from 'react-icons/bi';
+
+type MapViewProps = {
+    zoomToCurrentUserLocationIfAllowed: () => void;
+}
 
 const TAB_BAR_HEIGHT = '76px';
 
@@ -25,10 +32,20 @@ export const MapViewTab = () => {
 
     const [searchKeyword, setSearchKeyWord] = React.useState<string>('');
 
+    const mapViewRef = useRef<MapViewProps>(null);
+
+    const { t } = useTranslation()
+
+    const zoomToUserLocation = () => {
+        if (null !== mapViewRef.current) {
+            mapViewRef.current.zoomToCurrentUserLocationIfAllowed();
+        }
+    }
+
     return (
-        <>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100wh' }} center={center} zoom={ZOOM}>
-                <MapView zoom={ZOOM} />
+        <Wrapper>
+            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
+                <MapView ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
             <SearchBarWrapper>
                 <SearchBarInnerWrapper>
@@ -38,14 +55,14 @@ export const MapViewTab = () => {
                         onChange={(e) => {
                             setSearchKeyWord(e.target.value);
                         }}
-                        placeholder={'Search races with SYRF'} />
+                        placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                     <SearchBarLogo />
                 </SearchBarInnerWrapper>
                 <AdvancedSearchTextWrapper>
                     <a href="/" onClick={(e) => {
                         e.preventDefault();
                         setShowSearchPanel(true);
-                    }}>Advanced search?</a>
+                    }}>{t(translations.home_page.map_view_tab.advanced_search)}</a>
                 </AdvancedSearchTextWrapper>
             </SearchBarWrapper>
             {showSearchPanel && <StyledSearchPane
@@ -53,9 +70,17 @@ export const MapViewTab = () => {
                 searchKeyWord={searchKeyword}
                 closable
                 close={() => setShowSearchPanel(false)} />}
-        </>
+            <MyLocationWrapper onClick={() => zoomToUserLocation()}>
+                <StyledMyLocationIcon />
+                <MyLocationText>My location</MyLocationText>
+            </MyLocationWrapper>
+        </Wrapper>
     )
 }
+
+const Wrapper = styled.div`
+    position: relative;
+`;
 
 const SearchBarWrapper = styled.div`
     position: absolute;
@@ -116,4 +141,33 @@ const AdvancedSearchTextWrapper = styled.div`
     font-size: 12px;
     margin-left: 5px;
  }
+`;
+
+const MyLocationWrapper = styled.div`
+    position: absolute;
+    bottom: 80px;
+    z-index: 999;
+    cursor: pointer;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    ${media.medium`
+        bottom: 20px;
+    `}
+`;
+
+const StyledMyLocationIcon = styled(BiTargetLock)`
+    color: #fff;
+    font-size: 30px;
+
+    ${media.medium`
+        font-size: 40px;
+    `}
+`;
+
+const MyLocationText = styled.span`
+    color: #fff;
+    font-size: 13px;
 `;

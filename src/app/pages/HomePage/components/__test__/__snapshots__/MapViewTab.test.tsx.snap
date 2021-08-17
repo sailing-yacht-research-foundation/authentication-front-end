@@ -1,81 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<MapViewTab /> should render and match the snapshot 1`] = `
-<React.Fragment>
-  <InteractiveMap
-    altitude={1.5}
-    asyncRender={false}
-    attributionControl={true}
-    bearing={0}
-    className=""
-    clickRadius={0}
-    container={<body />}
-    disableTokenWarning={false}
-    doubleClickZoom={true}
-    dragPan={true}
-    dragRotate={true}
-    getCursor={[Function]}
-    height="calc(100vh - 73px - 76px)"
-    keyboard={true}
-    latitude={37.8}
-    longitude={-122.4}
-    mapOptions={Object {}}
-    mapStyle="mapbox://styles/jweisbaum89/cki2dpc9a2s7919o8jqyh1gss"
-    mapboxApiAccessToken="no-token"
-    mapboxApiUrl="https://api.mapbox.com"
-    maxPitch={60}
-    maxZoom={24}
-    minPitch={0}
-    minZoom={0}
-    onClick={null}
-    onContextMenu={[Function]}
-    onError={[Function]}
-    onHover={null}
-    onLoad={[Function]}
-    onNativeClick={null}
-    onResize={[Function]}
-    onStateChange={[Function]}
-    onTransitionEnd={[Function]}
-    onTransitionInterrupt={[Function]}
-    onTransitionStart={[Function]}
-    onViewStateChange={null}
-    onViewportChange={[Function]}
-    pitch={0}
-    preserveDrawingBuffer={false}
-    preventStyleDiffing={false}
-    reuseMaps={false}
-    scrollZoom={true}
-    style={null}
-    touchAction="none"
-    touchRotate={false}
-    touchZoom={true}
-    transitionDuration={0}
-    transitionEasing={[Function]}
-    transitionInterpolator={
-      LinearInterpolator {
-        "around": undefined,
-        "propNames": Array [
-          "longitude",
-          "latitude",
-          "zoom",
-          "bearing",
-          "pitch",
-        ],
-      }
-    }
-    transitionInterruption={1}
-    visibilityConstraints={
+<styled.div>
+  <MapContainer
+    center={
       Object {
-        "maxPitch": 60,
-        "maxZoom": 24,
-        "minPitch": 0,
-        "minZoom": 0,
+        "lat": 37.8,
+        "lng": -122.4,
       }
     }
-    visible={true}
-    width="100vw"
-    zoom={14}
-  />
+    style={
+      Object {
+        "height": "calc(100vh - 73px - 76px)",
+        "width": "100%",
+      }
+    }
+    zoom={13}
+  >
+    <ForwardRef
+      zoom={13}
+    />
+  </MapContainer>
   <styled.div>
     <styled.div>
       <Styled(Input)
@@ -91,9 +36,17 @@ exports[`<MapViewTab /> should render and match the snapshot 1`] = `
         href="/"
         onClick={[Function]}
       >
-        Advanced search?
+        Advanced search
       </a>
     </styled.div>
   </styled.div>
-</React.Fragment>
+  <styled.div
+    onClick={[Function]}
+  >
+    <Styled(BiTargetLock) />
+    <styled.span>
+      My location
+    </styled.span>
+  </styled.div>
+</styled.div>
 `;

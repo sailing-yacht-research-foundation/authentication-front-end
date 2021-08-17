@@ -9,12 +9,16 @@ import { BsListUl } from 'react-icons/bs';
 import { isMobile } from 'utils/helpers';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { useSelector } from 'react-redux';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 const { TabPane } = Tabs;
 
 export const Main = () => {
 
     const isAuthenticated = useSelector(selectIsAuthenticated);
+
+    const { t } = useTranslation();
 
     return (
         <StyledTabs animated defaultActiveKey="1">
@@ -33,7 +37,7 @@ export const Main = () => {
                             style={{ marginRight: '5px' }}
                             size={18} />}
                         type="primary">
-                        Create
+                        {t(translations.home_page.nav.create)}
                     </Button>
                 </ButtonCreateContainer>
             }

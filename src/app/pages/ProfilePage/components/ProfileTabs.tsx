@@ -1,17 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { media } from 'styles/media';
 import { StyleConstants } from 'styles/StyleConstants';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const ProfileTabs = (props) => {
 
+    const { t } = useTranslation();
+
+    const location = useLocation();
+
     return (
         <Tabs>
-            <TabItem className="active" to="/profile">Account settings</TabItem>
-            <TabItem to="/profile">Notifications</TabItem>
-            <TabItem to="/profile">Membership Plan</TabItem>
-            <TabItem to="/profile/change-password">Password & Security</TabItem>
+            <TabItem className={location.pathname === '/profile' ? 'active' : ''} to="/profile">{t(translations.profile_page.update_profile.account_settings)}</TabItem>
+            <TabItem className={location.pathname === '/profile/change-password' ? 'active' : ''} to="/profile/change-password">{t(translations.profile_page.update_profile.password_security)}</TabItem>
         </Tabs>
     )
 }
@@ -26,7 +30,7 @@ const Tabs = styled.div`
         font-size: 24px;
         flex-direction: row;
     `}
-`
+`;
 
 const TabItem = styled(Link)`
     font-family: Roboto;
@@ -46,4 +50,4 @@ const TabItem = styled(Link)`
     &.active {
         color: ${StyleConstants.MAIN_TONE_COLOR};
     }
-`
+`;

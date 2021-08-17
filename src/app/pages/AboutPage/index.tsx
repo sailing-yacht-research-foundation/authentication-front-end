@@ -3,7 +3,6 @@ import styled from 'styled-components/macro';
 import { StyleConstants } from 'styles/StyleConstants';
 import { BenefitCarousel } from './components/BenefitCarousel';
 import { Footer } from './components/Footer';
-import { PartnerAppCarousel } from './components/PartnerAppCarousel';
 import { VideoSection } from './components/VideoSection';
 
 export function AboutPage() {
@@ -11,7 +10,6 @@ export function AboutPage() {
     <Wrapper>
       <VideoSection/>
       <BenefitCarousel/>
-      <PartnerAppCarousel/>
       <Footer/>
     </Wrapper>
   );

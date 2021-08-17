@@ -5,59 +5,63 @@ import { ResultItem } from './ResultItem';
 import { media } from 'styles/media';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
+
+const resultData = [
+    {
+        'name': 'Race at Italy west coast',
+        'date': '2021-07-21',
+        'time': '1:00:22',
+        'location': 'East Viginia'
+    },
+    {
+        'name': 'Race at US west coast',
+        'date': '2021-07-21',
+        'time': '1:00:22',
+        'location': 'South America'
+    },
+    {
+        'name': 'Race at Wales west coast',
+        'date': '2021-07-21',
+        'time': '1:00:22',
+        'location': 'South New Wales'
+    },
+    {
+        'name': 'Race at Wales west coast',
+        'date': '2021-07-21',
+        'time': '1:00:22',
+        'location': 'Florida Coast'
+    },
+    {
+        'name': 'Race at Wales west coast',
+        'date': '2021-07-21',
+        'time': '1:00:22',
+        'location': 'California Coast'
+    },
+    {
+        'name': 'Race at Wales west coast',
+        'date': '2021-07-21',
+        'time': '1:00:22',
+        'location': 'California Coast'
+    },
+    {
+        'name': 'Race at Wales west coast',
+        'date': '2021-07-21',
+        'time': '1:00:22',
+        'location': 'California Coast'
+    },
+    {
+        'name': 'Race at Wales west coast',
+        'date': '2021-07-21',
+        'time': '1:00:22',
+        'location': 'California Coast'
+    }
+];
 
 export const FilterResult = () => {
 
-    const resultData = [
-        {
-            'name': 'Race at Italy west coast',
-            'date': '2021-07-21',
-            'time': '1:00:22',
-            'location': 'East Viginia'
-        },
-        {
-            'name': 'Race at US west coast',
-            'date': '2021-07-21',
-            'time': '1:00:22',
-            'location': 'South America'
-        },
-        {
-            'name': 'Race at Wales west coast',
-            'date': '2021-07-21',
-            'time': '1:00:22',
-            'location': 'South New Wales'
-        },
-        {
-            'name': 'Race at Wales west coast',
-            'date': '2021-07-21',
-            'time': '1:00:22',
-            'location': 'Florida Coast'
-        },
-        {
-            'name': 'Race at Wales west coast',
-            'date': '2021-07-21',
-            'time': '1:00:22',
-            'location': 'California Coast'
-        },
-        {
-            'name': 'Race at Wales west coast',
-            'date': '2021-07-21',
-            'time': '1:00:22',
-            'location': 'California Coast'
-        },
-        {
-            'name': 'Race at Wales west coast',
-            'date': '2021-07-21',
-            'time': '1:00:22',
-            'location': 'California Coast'
-        },
-        {
-            'name': 'Race at Wales west coast',
-            'date': '2021-07-21',
-            'time': '1:00:22',
-            'location': 'California Coast'
-        }
-    ];
+    const { t } = useTranslation();
 
     const renderResultByPage = (page: number) => {
         const defaultOptions = {
@@ -76,7 +80,7 @@ export const FilterResult = () => {
                         options={defaultOptions}
                         height={400}
                         width={400} />
-                    <LottieMessage>Start searching by typing something.</LottieMessage>
+                    <LottieMessage>{t(translations.home_page.filter_tab.filter_result.start_searching_by_typing_something)}</LottieMessage>
                 </LottieWrapper>);
 
         return resultData.map((result, index) => {
@@ -87,7 +91,7 @@ export const FilterResult = () => {
     return (
         <Wrapper>
             <ResultWrapper>
-                <ResultCountText>About 100.000 results</ResultCountText>
+                <ResultCountText>{t(translations.home_page.filter_tab.filter_result.about_number_result)}</ResultCountText>
                 {renderResultByPage(1)}
             </ResultWrapper>
             {

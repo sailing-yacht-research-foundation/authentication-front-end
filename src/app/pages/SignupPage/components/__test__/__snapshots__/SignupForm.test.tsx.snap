@@ -38,21 +38,56 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
         type="text"
       />
     </FormItem>
-    <FormItem
-      label="Name"
-      name="name"
-      rules={
-        Array [
-          Object {
-            "required": true,
-          },
-        ]
-      }
+    <Row
+      gutter={24}
     >
-      <Input
-        type="text"
-      />
-    </FormItem>
+      <Col
+        lg={12}
+        md={12}
+        sm={24}
+        xs={24}
+      >
+        <FormItem
+          label="First Name"
+          name="first_name"
+          rules={
+            Array [
+              Object {
+                "max": 15,
+                "required": true,
+              },
+            ]
+          }
+        >
+          <Input
+            type="text"
+          />
+        </FormItem>
+      </Col>
+      <Col
+        lg={12}
+        md={12}
+        sm={24}
+        xs={24}
+      >
+        <FormItem
+          label="Last Name"
+          name="last_name"
+          rules={
+            Array [
+              Object {
+                "max": 15,
+                "required": true,
+              },
+            ]
+          }
+        >
+          <Input
+            type="text"
+          />
+        </FormItem>
+      </Col>
+    </Row>
     <FormItem
       label="Password"
       name="password"
@@ -92,7 +127,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
       />
     </FormItem>
     <FormItem
-      label="Date Of Birth"
+      label="Date of Birth"
       name="birthdate"
       rules={
         Array [
@@ -1416,7 +1451,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
     >
       <ForwardRef(InternalSelect)
         filterOption={[Function]}
-        placeholder="Select a Language"
+        placeholder="Select a language"
       >
         <Option
           value="zh"
@@ -1486,10 +1521,11 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
         value={1}
       >
         Agree to 
+          
         <Link
           to="privacy-policy"
         >
-          Privacy policy
+          Privacy Policy
         </Link>
       </Checkbox>
     </FormItem>
@@ -1507,7 +1543,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
       <Checkbox
         value={1}
       >
-        Acknowledge that email provided will not be a shared email (one email per user).
+        Agree that my provided email address is only used by me
       </Checkbox>
     </FormItem>
     <FormItem>
