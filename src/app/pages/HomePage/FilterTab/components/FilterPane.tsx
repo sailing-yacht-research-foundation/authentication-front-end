@@ -78,6 +78,7 @@ export const FilterPane = (props) => {
                         rules={[{ required: true }]}
                     >
                         <Input ref={searchInputRef}
+                            value={searchKeyword}
                             onChange={(e) => {
                                 dispatch(actions.setKeyword(e.target.value));
                             }}
