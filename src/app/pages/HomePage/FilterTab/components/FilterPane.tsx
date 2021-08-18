@@ -38,6 +38,8 @@ export const FilterPane = (props) => {
     }, []);
 
     const onFormSubmit = (values) => {
+        dispatch(actions.setResults([]));
+
         const { name, from_date, to_date } = values;
         const params: any = {};
 
