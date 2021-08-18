@@ -21,6 +21,7 @@ export function* searchRaces(params) {
     if (response.data) {
         if (response.data?.count === 0) {
             toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: searchKeyword }));
+            yield put(homeActions.setResults([]));
         } else {
             yield put(homeActions.setResults(response.data?.rows));
             yield put(homeActions.setTotal(response.data?.count));
