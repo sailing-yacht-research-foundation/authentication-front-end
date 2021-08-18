@@ -16,38 +16,42 @@ import { HiShare } from 'react-icons/hi';
 import { StyleConstants } from 'styles/StyleConstants';
 
 export const Share = () => {
+    const [isOpen, setIsOpen] = React.useState<boolean>(false);
+
     return (
         <ShareButtonWrapper>
-            <ButtonContainer style={{ width: '30px', height: '30px' }}>
+            <ButtonContainer style={{ width: '30px', height: '30px' }} onClick={() => setIsOpen(!isOpen)}>
                 <ShareButton />
             </ButtonContainer>
-            <ShareDropdown>
-                <ShareButtonItemWrapper>
-                    <EmailShareButton url="">
-                        <EmailIcon size={35} round={true} />
-                    </EmailShareButton>
-                </ShareButtonItemWrapper>
-                <ShareButtonItemWrapper>
-                    <FacebookShareButton url="">
-                        <FacebookIcon size={35} round={true} />
-                    </FacebookShareButton>
-                </ShareButtonItemWrapper>
-                <ShareButtonItemWrapper>
-                    <InstapaperShareButton url="">
-                        <InstapaperIcon size={35} round={true} />
-                    </InstapaperShareButton>
-                </ShareButtonItemWrapper>
-                <ShareButtonItemWrapper>
-                    <TwitterShareButton url="">
-                        <TwitterIcon size={35} round={true} />
-                    </TwitterShareButton>
-                </ShareButtonItemWrapper>
-                <ShareButtonItemWrapper>
-                    <WhatsappShareButton url="">
-                        <WhatsappIcon size={35} round={true} />
-                    </WhatsappShareButton>
-                </ShareButtonItemWrapper>
-            </ShareDropdown>
+            {
+                isOpen && <ShareDropdown>
+                    <ShareButtonItemWrapper>
+                        <EmailShareButton url="">
+                            <EmailIcon size={35} round={true} />
+                        </EmailShareButton>
+                    </ShareButtonItemWrapper>
+                    <ShareButtonItemWrapper>
+                        <FacebookShareButton url="">
+                            <FacebookIcon size={35} round={true} />
+                        </FacebookShareButton>
+                    </ShareButtonItemWrapper>
+                    <ShareButtonItemWrapper>
+                        <InstapaperShareButton url="">
+                            <InstapaperIcon size={35} round={true} />
+                        </InstapaperShareButton>
+                    </ShareButtonItemWrapper>
+                    <ShareButtonItemWrapper>
+                        <TwitterShareButton url="">
+                            <TwitterIcon size={35} round={true} />
+                        </TwitterShareButton>
+                    </ShareButtonItemWrapper>
+                    <ShareButtonItemWrapper>
+                        <WhatsappShareButton url="">
+                            <WhatsappIcon size={35} round={true} />
+                        </WhatsappShareButton>
+                    </ShareButtonItemWrapper>
+                </ShareDropdown>
+            }
         </ShareButtonWrapper>
     )
 }

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectElapsedTime, selectRaceLength } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
 import { useEffect } from 'react';
+import { Share } from './Share';
 
 const buttonStyle = {
     fontSize: '25px',
@@ -128,6 +129,7 @@ export const Playback = (props) => {
                     <MdForward10 style={buttonStyle} />
                 </ButtonContainer>
             </PlayBackControlContainer>
+            <Share/>
         </PlaybackWrapper>
     )
 }
