@@ -225,5 +225,9 @@
     "could_not_receive_the_code": "Could not receive the code?",
     "resend": "resend",
     "account_verified_please_login": "Account verified, please login!"
+  },
+  "playback_page": {
+    "competitor": "Competitor:",
+    "sail_number": "Sail number:"
   }
 }

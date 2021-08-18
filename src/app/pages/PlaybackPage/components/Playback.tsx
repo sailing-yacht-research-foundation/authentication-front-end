@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { milisecondsToMinutes } from 'utils/helpers';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -33,16 +33,17 @@ export const Playback = (props) => {
 
     const { actions } = usePlaybackSlice();
 
-    const [isPlaying, setIsPlaying] = useState<boolean>(true);
-
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
 
-    useEffect(()=> {
+    const [isPlaying, setIsPlaying] = React.useState<boolean>(true);
+
+    useEffect(() => {
         if (elapsedTime >= raceLength) {
-            setIsPlaying(false);
+            race.setIsPlaying(false);
         } else {
-            setIsPlaying(true);
+            race.setIsPlaying(true);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [elapsedTime, raceLength]);
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
@@ -52,9 +53,14 @@ export const Playback = (props) => {
         return 0;
     }
 
+    useEffect(() => {
+        setIsPlaying(race.getIsPlaying());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [race.getIsPlaying()]);
+
     const pauseUnPauseRace = () => {
-        setIsPlaying(!isPlaying);
-        race.pauseUnpauseAllPing()
+        race.pauseUnpauseAllPing(elapsedTime);
+        setIsPlaying(race.getIsPlaying());
     }
 
     const backward = (miliseconds) => {

@@ -31,7 +31,7 @@ const geometryType = {
 
 export const RaceMap = (props) => {
 
-    const { eventEmitter } = props;
+    const { eventEmitter, race } = props;
 
     const map = useMap();
 
@@ -188,15 +188,23 @@ export const RaceMap = (props) => {
         }
     }
 
-    const _startCountingElapsedTime = (mapVariable) => {
+    const _startCountingElapsedTime = (mapVariable) => {        
         if (!mapVariable.startCountingTime) {
             mapVariable.updateElapesedTimeInterval = setInterval(() => {
+                if (!race.isPlaying) {
+                    clearInterval(mapVariable.updateElapesedTimeInterval);
+                    mapVariable.startCountingTime = false;
+                    return;
+                }
+
                 elapsedTime.current += 1000;
                 dispatch(actions.setElapsedTime(elapsedTime.current));
 
                 if (elapsedTime.current >= raceLength) {
+                    race.setIsPlaying(false);
                     dispatch(actions.setElapsedTime(raceLength));
                     clearInterval(mapVariable.updateElapesedTimeInterval);
+                    mapVariable.startCountingTime = false;
                 }
             }, 1000);
         }

@@ -9,6 +9,7 @@ type DeviceID = {
 class OuroborosRace {
     private devices: DeviceSimulator[];
     private raceLength: number = 0;
+    private isPlaying = false;
 
     constructor(raceInformation, raceDirector: RaceDirector, eventEmiter: EventEmitter) {
         this.devices = [];
@@ -34,22 +35,32 @@ class OuroborosRace {
                 device.waitAndPing(0, 0);
             });
             this.devices = devices;
+            this.isPlaying = true;
         })
     }
 
-    pingDevicesAtTime(pingIndex, elapsedTime) {
-        this.devices.forEach(device => {
-            device.waitAndPing(pingIndex, elapsedTime);
-        });
-    }
+    pauseUnpauseAllPing(elapsedTime) {
+        this.setIsPlaying(!this.isPlaying);
 
-    pauseUnpauseAllPing() {
-        this.devices.forEach(device => {
-            device.pauseUnpausePing();
-        })
+        if (!this.isPlaying) {
+            this.devices.forEach(device => {
+                device.stop();
+            })
+        } else {
+            if (elapsedTime >= this.raceLength) {
+                this.setIsPlaying(false);
+                return;
+            }
+
+            this.devices.forEach(device => {
+                device.play();
+            })
+        }
     }
 
     backward(milliseconds) {
+        this.setIsPlaying(true);
+
         if (milliseconds < 0) milliseconds = 0;
 
         this.devices.forEach(device => {
@@ -58,21 +69,33 @@ class OuroborosRace {
     }
 
     forward(milliseconds) {
+        this.setIsPlaying(true);
+
         if (milliseconds > this.raceLength)
             milliseconds = this.raceLength;
 
         this.devices.forEach(device => {
             device.forward(milliseconds);
-            
+
             if (milliseconds >= this.raceLength)
                 device.stop();
         });
     }
 
     playAt(milliseconds) {
+        this.setIsPlaying(true);
+
         this.devices.forEach(device => {
             device.pingAtTime(milliseconds);
         });
+    }
+
+    setIsPlaying(status: boolean) {
+        this.isPlaying = status;
+    }
+
+    getIsPlaying() {
+        return this.isPlaying;
     }
 }
 

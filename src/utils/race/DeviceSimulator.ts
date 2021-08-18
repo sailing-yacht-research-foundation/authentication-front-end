@@ -19,7 +19,6 @@ class DeviceSimulator {
     private currentIndex: number;
     private elapsedTime: number;
     private pingTimeout: any;
-    private pausePing: boolean;
 
     constructor(tracks, raceId, deviceId, type, playerData, raceDirector, eventEmitter) {
         this.tracks = tracks
@@ -33,7 +32,6 @@ class DeviceSimulator {
         this.currentIndex = 0;
         this.elapsedTime = 0;
         this.pingTimeout = null;
-        this.pausePing = false;
     }
 
     waitAndPing(index, elapsedTime) {
@@ -83,18 +81,12 @@ class DeviceSimulator {
         this.eventEmitter.emit('ping', JSON.stringify(message));
     }
 
-    stop() {
-        clearTimeout(this.pingTimeout);
+    play() {
+        this.waitAndPing(this.currentIndex, this.elapsedTime);
     }
 
-    pauseUnpausePing() {
-        this.pausePing = !this.pausePing;
-
-        if (this.pausePing) {
-            clearTimeout(this.pingTimeout);
-        } else {
-            this.waitAndPing(this.currentIndex, this.elapsedTime);
-        }
+    stop() {
+        clearTimeout(this.pingTimeout);
     }
 
     backward(milliSeconds) {

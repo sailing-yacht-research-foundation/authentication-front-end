@@ -67,7 +67,7 @@ export const PlaybackPage = (props) => {
     return (
         <Wrapper>
             <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
-                <RaceMap eventEmitter={ee} zoom={ZOOM} />
+                <RaceMap race={race} eventEmitter={ee} zoom={ZOOM} />
                 <Playback race={race} />
             </MapContainer>
         </Wrapper>
