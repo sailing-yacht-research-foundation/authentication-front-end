@@ -232,5 +232,8 @@
     "could_not_receive_the_code": "Could not receive the code?",
     "resend": "resend",
     "account_verified_please_login": "Account verified, please login!"
+  },
+  "misc": {
+    "session_expired": "Session is expired and we renewed the session. Please try again!"
   }
 }

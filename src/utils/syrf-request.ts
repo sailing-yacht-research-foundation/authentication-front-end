@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { anonymousLogin, validateToken } from 'services/live-data-server/auth';
+import { toast } from 'react-toastify';
+import { anonymousLogin } from 'services/live-data-server/auth';
+import i18next from 'i18next';
+import { translations } from 'locales/translations';
 
 /**
  * Class Request
@@ -35,8 +38,10 @@ class Request {
     async onRequestFailure(err) {
         if (err.response && err.response?.status === 401) {
             let responseData = await anonymousLogin();
-            if (responseData['token'] !== undefined)
+            if (responseData['token'] !== undefined) {
                 localStorage.setItem('session_token', responseData['token']);
+                toast.info(i18next.t(translations.misc.session_expired));
+            }
         }
         throw err;
     }
