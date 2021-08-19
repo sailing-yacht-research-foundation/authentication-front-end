@@ -34,7 +34,7 @@ export const anonymousLogin = () => {
     }).then(response => {
         return {
             success: true,
-            token: response.data.token
+            token: response.data?.token
         }
     }).catch(error => {
         return {
@@ -45,5 +45,18 @@ export const anonymousLogin = () => {
 }
 
 export const validateToken = (token) => {
-
+    return axios.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/validate-token`, {
+        token: token,
+        renew: false
+    }).then(response => {
+        return {
+            success: true,
+            token: response.data.token
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    })
 }

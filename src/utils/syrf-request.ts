@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { anonymousLogin, validateToken } from 'services/live-data-server/auth';
 
 /**
  * Class Request
@@ -32,6 +33,11 @@ class Request {
     }
 
     async onRequestFailure(err) {
+        if (err.response && err.response?.status === 401) {
+            let responseData = await anonymousLogin();
+            if (responseData['token'] !== undefined)
+                localStorage.setItem('session_token', responseData['token']);
+        }
         throw err;
     }
 
