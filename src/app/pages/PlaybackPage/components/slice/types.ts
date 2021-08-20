@@ -4,7 +4,6 @@ import OuroborosRace from "utils/race/OuroborosRace";
 export interface PlaybackState {
     elapsedTime: number;
     raceLength: number;
-    race: any;
   }
   
   export type ContainerState = PlaybackState

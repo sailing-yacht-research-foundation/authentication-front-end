@@ -1,6 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import OuroborosRace from 'utils/race/OuroborosRace';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import playbackSaga from './saga';
 import { PlaybackState } from './types';
@@ -8,7 +7,6 @@ import { PlaybackState } from './types';
 export const initialState: PlaybackState = {
     elapsedTime: 0,
     raceLength: 0,
-    race: {},
 };
 
 const slice = createSlice({
@@ -20,9 +18,6 @@ const slice = createSlice({
         },
         setRaceLength(state, action: PayloadAction<number>) {
             state.raceLength = action.payload;
-        },
-        setRace(state, action: PayloadAction<OuroborosRace>) {
-            state.race = action.payload;
         }
     },
 });
