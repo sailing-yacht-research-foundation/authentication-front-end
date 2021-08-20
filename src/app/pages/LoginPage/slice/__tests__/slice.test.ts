@@ -1,7 +1,7 @@
 import * as slice from '..';
 import { ContainerState } from '../types';
 
-describe('GithubRepoForm slice', () => {
+describe('Login slice', () => {
   let state: ContainerState;
 
   beforeEach(() => {
