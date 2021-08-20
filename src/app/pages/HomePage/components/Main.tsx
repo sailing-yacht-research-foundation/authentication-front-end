@@ -20,8 +20,23 @@ export const Main = () => {
 
     const { t } = useTranslation();
 
+    React.useEffect(() => {
+
+    }, []);
+
+    const onTabChanged = (activeKey) => {
+        localStorage.setItem('homepage_active_tab', activeKey);
+    }
+
+    const getDefaultActiveTabs = () => {
+        return !!localStorage.getItem('homepage_active_tab') ? localStorage.getItem('homepage_active_tab') : '1';
+    }
+
     return (
-        <StyledTabs animated defaultActiveKey="1">
+        <StyledTabs<React.ElementType>
+            onChange={onTabChanged}
+            animated
+            defaultActiveKey={getDefaultActiveTabs()}>
             <TabPane tab={<FiMap />} key="1">
                 <MapViewTab />
             </TabPane>

@@ -34,10 +34,15 @@ In the project root, run
 ``npm install -g @aws-amplify/cli``
 
 Then run
-``amplify pull`` to pull the amplify backend and generate the aws-export.js file.
+``chmod +x ./amplify-pull-staging.sh`` and
+``./amplify-pull-staging.sh`` to pull amplify cognito backend
 
 The app will run at ``locahost:3002``
 
+You may see errors due to missing node_modules folder
+Please install yarn then install the modules using the following commands:
+``npm install -g yarn``
+``yarn install``
 ## Testing
 This project using Jest as default test engine, to run test please run:
 

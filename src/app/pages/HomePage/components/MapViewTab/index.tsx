@@ -37,7 +37,7 @@ export const MapViewTab = () => {
 
     const mapViewRef = useRef<MapViewProps>(null);
 
-    const { t } = useTranslation()
+    const { t } = useTranslation();
 
     const zoomToUserLocation = () => {
         if (null !== mapViewRef.current) {

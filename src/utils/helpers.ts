@@ -9,6 +9,51 @@ export const isMobile = () => {
     return mobile;
 }
 
+export const stringToColour = (str) => {
+    let hash = 0;
+    let colour = '#';
+
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    for (let i = 0; i < 3; i++) {
+        let value = (hash >> (i * 8)) & 0xFF;
+        colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
+}
+
+export const milisecondsToMinutes = (miliseconds) => {
+    let minutes = Math.floor(miliseconds / 60000);
+    let seconds = ((miliseconds % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (Number(seconds) < 10 ? '0' : '') + seconds;
+}
+
+export const debounce = (callback, time) => {
+    let interval;
+    return (...args) => {
+        clearTimeout(interval);
+        interval = setTimeout(() => {
+            interval = null;
+            // eslint-disable-next-line
+            callback(...args);
+        }, time);
+    };
+}
+
+export const throttle = (callback, limit) => {
+    let waiting = false;
+    return (...args) => {
+        if (!waiting) {
+            callback(...args);
+            waiting = true;
+            setTimeout(function () {
+                waiting = false;
+            }, limit);
+        }
+    }
+}
+
 /**
  * Remove all null properties to empty string
  * @param object 
@@ -19,7 +64,7 @@ export const replaceObjectPropertiesFromNullToEmptyString = (object) => {
         if (object[key] === null)
             object[key] = '';
     }
-    
+
     return object;
 }
 
@@ -30,18 +75,18 @@ export const replaceObjectPropertiesFromNullToEmptyString = (object) => {
  * @returns File file image
  */
 export const dataURLtoFile = (dataurl, filename) => {
- 
+
     var arr = dataurl.split(','),
         mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), 
-        n = bstr.length, 
+        bstr = atob(arr[1]),
+        n = bstr.length,
         u8arr = new Uint8Array(n);
-        
-    while(n--){
+
+    while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    
-    return new File([u8arr], filename, {type:mime});
+
+    return new File([u8arr], filename, { type: mime });
 }
 
 /**
