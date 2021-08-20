@@ -3,6 +3,7 @@ import { LoginState } from 'app/pages/LoginPage/slice/types';
 import { FacebookState } from 'app/pages/ProfilePage/components/Facebook/slice/types';
 import { InstagramState } from 'app/pages/ProfilePage/components/Instagram/slice/types';
 import { SiderState } from 'app/components/SiderContent/slice/types';
+import { PlaybackState } from 'app/pages/PlaybackPage/components/slice/types';
 import { PrivacyPolicyState } from 'app/pages/PrivacyPolicyPage/slice/types';
 import { EULAState } from 'app/pages/EULAPage/slice/types';
 import { HomeState } from 'app/pages/HomePage/slice/types';
@@ -20,6 +21,7 @@ export interface RootState {
   facebook?: FacebookState;
   instagram?: InstagramState;
   sider?: SiderState;
+  playback?: PlaybackState;
   privacyPolicy?: PrivacyPolicyState;
   eula?: EULAState;
   home?: HomeState;

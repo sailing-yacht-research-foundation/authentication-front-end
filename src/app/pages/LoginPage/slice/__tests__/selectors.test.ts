@@ -2,7 +2,7 @@ import * as selectors from '../selectors';
 import { RootState } from 'types';
 import { initialState } from '..';
 
-describe('GithubRepoForm selectors', () => {
+describe('Login selectors', () => {
   let state: RootState = {};
 
   beforeEach(() => {

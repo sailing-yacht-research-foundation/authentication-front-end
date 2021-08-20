@@ -62,11 +62,11 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
                 type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
             }, error => {
-                handleLocationPermissionError(error, type);
+                _handleLocationPermissionError(error, type);
             });
     }
 
-    const handleLocationPermissionError = (error, type: string) => {
+    const _handleLocationPermissionError = (error, type: string) => {
         switch (error.code) {
             case error.PERMISSION_DENIED:
                 if (type === MAP_MOVE_TYPE.animation)
@@ -79,6 +79,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
         new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
             attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img src="https://syrf.io/wp-content/themes/syrf/assets/svg/icon-github.svg"></img></a>',
             maxZoom: 18,
+            minZoom: 2,
             id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
             tileSize: 512,
             zoomOffset: -1,
