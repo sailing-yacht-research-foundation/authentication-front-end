@@ -1,1 +1,0 @@
-export const SERVICE_URL = process.env.REACT_APP_TOKEN_SERVICE_ENDPOINT;

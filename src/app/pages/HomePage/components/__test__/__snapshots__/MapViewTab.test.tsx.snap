@@ -1,52 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<MapViewTab /> should render and match the snapshot 1`] = `
-<styled.div>
-  <MapContainer
-    center={
-      Object {
-        "lat": 37.8,
-        "lng": -122.4,
-      }
+<Provider
+  store={
+    Object {
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
     }
-    style={
-      Object {
-        "height": "calc(100vh - 73px - 76px)",
-        "width": "100%",
-      }
-    }
-    zoom={13}
-  >
-    <ForwardRef
-      zoom={13}
-    />
-  </MapContainer>
-  <styled.div>
-    <styled.div>
-      <Styled(Input)
-        onChange={[Function]}
-        placeholder="Search races with SYRF"
-        type="search"
-        value=""
-      />
-      <Styled(Component) />
-    </styled.div>
-    <styled.div>
-      <a
-        href="/"
-        onClick={[Function]}
-      >
-        Advanced search
-      </a>
-    </styled.div>
-  </styled.div>
-  <styled.div
-    onClick={[Function]}
-  >
-    <Styled(BiTargetLock) />
-    <styled.span>
-      My location
-    </styled.span>
-  </styled.div>
-</styled.div>
+  }
+>
+  <MapViewTab />
+</Provider>
 `;

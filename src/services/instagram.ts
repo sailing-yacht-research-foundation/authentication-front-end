@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getUserAttribute } from 'utils/user-utils';
-import { SERVICE_URL } from './serviceConstants';
+import { SERVICE_URL } from './service-constants';
 
 export async function getFeeds(user) {
     return axios.get('https://graph.instagram.com/me/media?fields=id,caption,media_url', {

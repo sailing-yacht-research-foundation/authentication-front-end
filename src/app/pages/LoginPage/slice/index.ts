@@ -6,8 +6,9 @@ import { LoginState } from './types';
 
 export const initialState: LoginState = {
   user: {},
-  isAuthenticated: !!localStorage.getItem('access_token'),
-  access_token: !!localStorage.getItem('access_token') ? String(localStorage.getItem('access_token')) : ''
+  is_authenticated: !!localStorage.getItem('access_token'),
+  access_token: !!localStorage.getItem('access_token') ? String(localStorage.getItem('access_token')) : '',
+  syrf_authenticated: !!localStorage.getItem('session_token')
 };
 
 const slice = createSlice({
@@ -21,14 +22,18 @@ const slice = createSlice({
       state.access_token = action.payload;
       localStorage.setItem('access_token', action.payload);
     },
-    setIsAuthenticated(state, action: PayloadAction<Boolean>) {
-      state.isAuthenticated = action.payload;
+    setIsAuthenticated(state, action: PayloadAction<boolean>) {
+      state.is_authenticated = action.payload;
     },
     setLogout(state) {
-      state.isAuthenticated = false;
+      state.is_authenticated = false;
       state.access_token = '';
     },
     getUser() {},
+    syrfServiceAnonymousLogin() {},
+    setSYRFServiceAuthorized(state, action: PayloadAction<boolean>) {
+      state.syrf_authenticated = action.payload;
+    }
   },
 });
 
