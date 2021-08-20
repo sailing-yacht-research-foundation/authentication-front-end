@@ -135,7 +135,11 @@ const ResultWrapper = styled.div`
 
 const LottieWrapper = styled.div`
     text-align: center;
-    margin-top: 100px;
+    margin-top: 15px;
+
+    ${media.medium`
+        margin-top: 100px;
+    `}
 `;
 
 const LottieMessage = styled.span`
