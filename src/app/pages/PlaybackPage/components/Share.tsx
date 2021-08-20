@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-    EmailIcon,
-    EmailShareButton,
     FacebookIcon,
     FacebookShareButton,
     InstapaperIcon,
@@ -12,6 +10,7 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from "react-share";
+import { RiWechatFill } from 'react-icons/ri';
 import { HiShare } from 'react-icons/hi';
 import { StyleConstants } from 'styles/StyleConstants';
 
@@ -26,9 +25,10 @@ export const Share = () => {
             {
                 isOpen && <ShareDropdown>
                     <ShareButtonItemWrapper>
-                        <EmailShareButton url="">
-                            <EmailIcon size={35} round={true} />
-                        </EmailShareButton>
+                        <ShareButtonInnerWrapper style={{ background: 'green' }}>
+                            <RiWechatFill style={{ fontSize: '28px', color: '#fff' }}>
+                            </RiWechatFill>
+                        </ShareButtonInnerWrapper>
                     </ShareButtonItemWrapper>
                     <ShareButtonItemWrapper>
                         <FacebookShareButton url="">
@@ -95,4 +95,13 @@ const ButtonContainer = styled.div`
     border-radius: 50%;
     background: ${StyleConstants.MAIN_TONE_COLOR};
     margin: 0 10px;
+`;
+
+const ShareButtonInnerWrapper = styled.div`
+    width: 35px;
+    height:35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
 `;

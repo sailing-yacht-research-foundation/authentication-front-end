@@ -76,6 +76,10 @@ export const RaceMap = (props) => {
         eventEmitter.on('ping', function (data) {
             onReceivedDevicePing(data, mapVariable);
         });
+
+        return () => {
+            clearInterval(mapVariable.updateElapesedTimeInterval);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -182,7 +186,8 @@ export const RaceMap = (props) => {
             return L.marker([receivedMessage.content.lat, receivedMessage.content.lon], {
                 icon: new L.icon({
                     iconUrl: MarkIcon,
-                    iconSize: [40, 40]
+                    iconSize: [40, 40],
+                    iconAnchor: [14, 32], 
                 })
             });
         }
@@ -233,6 +238,7 @@ export const RaceMap = (props) => {
         new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
             attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img src="https://syrf.io/wp-content/themes/syrf/assets/svg/icon-github.svg"></img></a>',
             maxZoom: 18,
+            minZoom: 13,
             id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
             tileSize: 512,
             zoomOffset: -1,
