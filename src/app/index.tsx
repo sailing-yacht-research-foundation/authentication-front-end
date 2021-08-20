@@ -92,6 +92,7 @@ export function App(props) {
     if (isAuthenticated) {
       dispatch(loginActions.getUser());
     }
+    dispatch(loginActions.syrfServiceAnonymousLogin());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

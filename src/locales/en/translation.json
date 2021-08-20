@@ -2,7 +2,12 @@
   "home_page": {
     "map_view_tab": {
       "search_race_with_syrf": "Search races with SYRF",
-      "advanced_search": "Advanced search"
+      "advanced_search": "Advanced search",
+      "please_share_your_location_to_use_this_feature": "Please share your location to use this feature.",
+      "name": "Name:",
+      "location": "Location:",
+      "date": "Date:",
+      "my_location": "My location"
     },
     "nav": {
       "create": "Create"
@@ -14,10 +19,12 @@
       "to_date": "To Date",
       "search": "Search",
       "filter_result": {
-        "start_searching_by_typing_something": "Start searching by typing something.",
-        "about_number_result": "About 100.000 results"
+        "start_searching_by_typing_something": "Nothing to show here. Start searching by typing something.",
+        "about_number_result": "About {{total}} results",
+        "searching": "Searching...."
       }
-    }
+    },
+    "search_performed_no_result_found": "Searched for {{keyword}}, no result found."
   },
   "about_page": {
     "nav": {
@@ -225,6 +232,9 @@
     "could_not_receive_the_code": "Could not receive the code?",
     "resend": "resend",
     "account_verified_please_login": "Account verified, please login!"
+  },
+  "misc": {
+    "session_expired": "Session is expired and we renewed the session. Please try again!"
   },
   "playback_page": {
     "competitor": "Competitor:",

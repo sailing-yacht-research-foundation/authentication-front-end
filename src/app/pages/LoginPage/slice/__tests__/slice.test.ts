@@ -27,7 +27,7 @@ describe('Login slice', () => {
       slice.reducer(state, slice.loginActions.setIsAuthenticated(true)),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-        isAuthenticated: true
+        is_authenticated: true
     });
   });
 
@@ -46,7 +46,7 @@ describe('Login slice', () => {
       slice.reducer(state, slice.loginActions.setLogout()),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-      isAuthenticated: false,
+      is_authenticated: false,
       access_token: ''
     });
   });

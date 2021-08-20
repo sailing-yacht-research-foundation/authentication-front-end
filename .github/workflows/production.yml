@@ -1,14 +1,16 @@
 name: SYRF My Sailing Profile production
-on: [push] # tells github to run this on any push to the repository
+on:
+  push:
+    branches:
+      - main
 env:
   IMAGE_NAME: syrf_my_sailing_profile
 jobs:
- build-test-and-push-image-production:
+  build-test-and-push-image-production:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
       - name: Build image and test
@@ -31,13 +33,12 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
-          
- deploy-production:
+
+  deploy-production:
     runs-on: ubuntu-latest
     needs: [build-test-and-push-image-production]
-    if: github.ref == 'refs/heads/main'
     steps:
-    # Step 1
+      # Step 1
       - name: Connect to EC2 instance
         run: |
           eval $(ssh-agent -s)

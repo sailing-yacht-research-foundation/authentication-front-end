@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { GiPositionMarker } from 'react-icons/gi';
 import { Space } from 'antd';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 export const ResultItem = (props) => {
     const race = props.item;
@@ -12,25 +13,13 @@ export const ResultItem = (props) => {
             <HeadDescriptionWrapper>
                 <Space size={5}>
                     <GiPositionMarker />
-                    {race.location}
+                    {race.locationName}
                 </Space>
             </HeadDescriptionWrapper>
-            <Name><Link to="/playback?raceid=xxx_xxx_xxx">{race.name}</Link></Name>
+            <Name><Link to={`/playback?raceid=${race.id}`}>{race.name}</Link></Name>
             <DescriptionWrapper>
                 <DescriptionItem>
-                    Team: 6
-                </DescriptionItem>
-                •
-                <DescriptionItem>
-                    Length: 1:00:21
-                </DescriptionItem>
-                •
-                <DescriptionItem>
-                    Winner: Lübecker Yacht-Club
-                </DescriptionItem>
-                •
-                <DescriptionItem>
-                    07-01-2021
+                    {moment(race.approximateStartTime).format('YYYY-MM-DD')}
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>
