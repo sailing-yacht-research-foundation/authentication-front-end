@@ -23,7 +23,7 @@ describe('Login selectors', () => {
   it('should select isAuthenticated', () => {
     const isAuthenticated = false;
     state = {
-      login: { ...initialState, isAuthenticated: isAuthenticated },
+      login: { ...initialState, is_authenticated: isAuthenticated },
     };
     expect(selectors.selectIsAuthenticated(state)).toEqual(isAuthenticated);
   });

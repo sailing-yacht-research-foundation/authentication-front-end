@@ -52,7 +52,7 @@ export const FilterResult = () => {
         dispatch(actions.searchRaces(params));
     }
 
-    const renderResultByPage = (page: number) => {
+    const renderResult = () => {
         const defaultOptions = {
             loop: true,
             autoplay: true,
@@ -83,14 +83,14 @@ export const FilterResult = () => {
                 (<>
                     <ResultWrapper>
                         <ResultCountText>{t(translations.home_page.filter_tab.filter_result.about_number_result, { total: String(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })}</ResultCountText>
-                        {renderResultByPage(1)}
+                        {renderResult()}
                     </ResultWrapper>
                     <PaginationWrapper>
                         <Pagination defaultCurrent={page} onChange={onPaginationChanged} total={total} />
                     </PaginationWrapper>
                 </>) : (
                     <ResultWrapper>
-                        {renderResultByPage(1)}
+                        {renderResult()}
                     </ResultWrapper>
                 )
             }
@@ -135,7 +135,11 @@ const ResultWrapper = styled.div`
 
 const LottieWrapper = styled.div`
     text-align: center;
-    margin-top: 100px;
+    margin-top: 15px;
+
+    ${media.medium`
+        margin-top: 100px;
+    `}
 `;
 
 const LottieMessage = styled.span`
