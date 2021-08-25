@@ -31,6 +31,7 @@ import { EULAPage } from './pages/EULAPage/Loadable';
 import { DealsPage } from './pages/DealsPage/Loadable';
 import { AboutPage } from './pages/AboutPage/Loadable';
 import { PlaybackPage } from './pages/PlaybackPage/Loadable';
+import { CourseCreatePage } from './pages/CourseCreatePage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -141,6 +142,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/courses/create'} component={CourseCreatePage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Input, Form, Button, Spin } from 'antd';
-import { Auth } from 'aws-amplify';
+import Amplify, { Auth, Hub, API } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
 import { useHistory } from 'react-router';
@@ -43,11 +43,13 @@ export const LoginForm = (props) => {
     }).then(user => {
       setIsSigningIn(false);
 
+      let redirectBackParam = new URLSearchParams(history.location.search).get("redirect_back");
+
       if (user.attributes && user.attributes.email_verified) {
         dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
         dispatch(actions.setIsAuthenticated(true));
         dispatch(actions.setUser(JSON.parse(JSON.stringify(user))));
-        history.push('/');
+        redirectToApproriateLocation(redirectBackParam);
       } else {
         redirectToVerifyAccountPage(email);
       }
@@ -65,6 +67,14 @@ export const LoginForm = (props) => {
     })
   }
 
+  const redirectToApproriateLocation = (redirectBackParam) => {
+    if (redirectBackParam) {
+      history.push(redirectBackParam);
+    } else {
+      history.push('/');
+    }
+  }
+
   const redirectToVerifyAccountPage = (email) => {
     history.push('/verify-account', {
       state: {
@@ -77,7 +87,7 @@ export const LoginForm = (props) => {
     <Wrapper>
       <Spin spinning={isSigningIn} tip={t(translations.login_page.login_message)}>
         <Title>
-          <Logo/>
+          <Logo />
         </Title>
 
         <FormWrapper>

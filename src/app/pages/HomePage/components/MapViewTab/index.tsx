@@ -20,8 +20,6 @@ type MapViewProps = {
     zoomToCurrentUserLocationIfAllowed: () => void;
 }
 
-const TAB_BAR_HEIGHT = '76px';
-
 const center = {
     lng: -122.4,
     lat: 37.8
@@ -58,7 +56,7 @@ export const MapViewTab = () => {
 
     return (
         <Wrapper>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
+            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
                 <MapView ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
             <SearchBarWrapper>

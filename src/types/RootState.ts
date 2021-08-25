@@ -7,6 +7,7 @@ import { PlaybackState } from 'app/pages/PlaybackPage/components/slice/types';
 import { PrivacyPolicyState } from 'app/pages/PrivacyPolicyPage/slice/types';
 import { EULAState } from 'app/pages/EULAPage/slice/types';
 import { HomeState } from 'app/pages/HomePage/slice/types';
+import { CourseState } from 'app/pages/CourseCreatePage/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -25,5 +26,6 @@ export interface RootState {
   privacyPolicy?: PrivacyPolicyState;
   eula?: EULAState;
   home?: HomeState;
+  course?: CourseState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
