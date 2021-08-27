@@ -136,7 +136,8 @@
     "my_data": "My Data",
     "test_data": "Test Data",
     "my_races": "My Races",
-    "search": "Search"
+    "search": "Search",
+    "data": "Data"
   },
   "profile_page": {
     "update_profile": {
@@ -239,5 +240,8 @@
   "playback_page": {
     "competitor": "Competitor:",
     "sail_number": "Sail number:"
+  },
+  "data_page": {
+    "syrf_race_data": "Syrf Race Data"
   }
 }
