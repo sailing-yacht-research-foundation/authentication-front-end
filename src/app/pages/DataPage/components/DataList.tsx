@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { DataDetails } from './DataDetails';
 import i18next from 'i18next';
+import { media } from 'styles/media';
 
 const dataArray = [
     {
@@ -101,10 +102,6 @@ const ItemContainer = styled.div`
     margin-bottom: 15px;
     align-items: center;
 
-    :not(:first-child) {
-        border-top: 1px solid #eee;
-    }
-
     :not(:last-child) {
         border-bottom: 1px solid #eee;
     }
@@ -120,6 +117,11 @@ const ItemScreenshot = styled.div`
 const ItemInfoContainer = styled.div`
     display:flex;
     flex-direction: column;
+    padding-top: 15px;
+
+    ${media.medium`
+        padding-top: 0;
+    `}
 `;
 
 const ItemTitle = styled.h4`
