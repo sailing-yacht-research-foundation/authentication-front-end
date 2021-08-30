@@ -242,6 +242,16 @@
     "sail_number": "Sail number:"
   },
   "data_page": {
-    "syrf_race_data": "Syrf Race Data"
+    "syrf_race_data": "Syrf Race Data",
+    "races_start_as_points": "Race Starts as Points",
+    "an_animated_view_of_individual": "An animated view of individual races over the last few decades. Each dot is a unique race.",
+    "race_clusters": "Race Clusters",
+    "race_starts_grouped": "Race starts grouped into clusters based on the scale of the map view.",
+    "race_regions": "Race Regions",
+    "polygons_containing_races":"Polygons containing races for the last 20 years with a count of how many races occured in that region.",
+    "race_region_boxes": "Race Region Boxes",
+    "similar_to_racec_regions": "Similar to race regions, except this is a view of nice rectangular boxes that contain each region. Overlapping boxes have been combined.",
+    "yatch_club_density": "Yacht Club Density",
+    "hexbin_map_to_visualize": "3D Hexbin map to visualize the density of yacht clubs."
   }
 }

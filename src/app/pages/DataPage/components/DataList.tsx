@@ -4,35 +4,36 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { DataDetails } from './DataDetails';
+import i18next from 'i18next';
 
 const dataArray = [
     {
-        title: 'Race Starts as Points',
-        description: 'An animated view of individual races over the last few decades. Each dot is a unique race.',
+        title: i18next.t(translations.data_page.races_start_as_points),
+        description: i18next.t(translations.data_page.an_animated_view_of_individual),
         screenshotUrl: '/static-htmls/A_race_starts/screenshot.png',
         htmlUrl: '/static-htmls/A_race_starts/race_start_locations.html',
     },
     {
-        title: 'Race Clusters',
-        description: 'Race starts grouped into clusters based on the scale of the map view.',
+        title: i18next.t(translations.data_page.race_clusters),
+        description: i18next.t(translations.data_page.race_starts_grouped),
         screenshotUrl: '/static-htmls/B_race_clusters/screenshot.png',
         htmlUrl: '/static-htmls/B_race_clusters/race_clusters.html',
     },
     {
-        title: 'Race Regions',
-        description: 'Polygons containing races for the last 20 years with a count of how many races occured in that region.',
+        title: i18next.t(translations.data_page.race_regions),
+        description: i18next.t(translations.data_page.polygons_containing_races),
         screenshotUrl: '/static-htmls/C_regions/screenshot.png',
         htmlUrl: '/static-htmls/C_regions/sailing_regions.html',
     },
     {
-        title: 'Race Region Boxes',
-        description: 'Similar to race regions, except this is a view of nice rectangular boxes that contain each region. Overlapping boxes have been combined.',
+        title: i18next.t(translations.data_page.race_region_boxes),
+        description: i18next.t(translations.data_page.similar_to_racec_regions),
         screenshotUrl: '/static-htmls/D_region_boxes/screenshot.png',
         htmlUrl: '/static-htmls/D_region_boxes/boxes_around_regions.html',
     },
     {
-        title: 'Yacht Club Density',
-        description: '3D Hexbin map to visualize the density of yacht clubs.',
+        title: i18next.t(translations.data_page.yatch_club_density),
+        description: i18next.t(translations.data_page.hexbin_map_to_visualize),
         screenshotUrl: '/static-htmls/E_yacht_clubs/screenshot.png',
         htmlUrl: '/static-htmls/E_yacht_clubs/yacht_clubs.html',
     }
