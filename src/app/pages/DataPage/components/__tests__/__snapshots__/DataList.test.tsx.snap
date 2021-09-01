@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DataList /> should render the deals page and matchs the snapshot 1`] = `
+<React.Fragment>
+  <styled.div>
+    <styled.h2>
+      Syrf Race Data
+    </styled.h2>
+    <styled.div
+      onClick={[Function]}
+    >
+      <styled.div
+        style={
+          Object {
+            "background": "url(/static-htmls/A_race_starts/screenshot.png)",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.div>
+        <styled.h4>
+          Race Starts as Points
+        </styled.h4>
+        <styled.p>
+          An animated view of individual races over the last few decades. Each dot is a unique race.
+        </styled.p>
+      </styled.div>
+    </styled.div>
+    <styled.div
+      onClick={[Function]}
+    >
+      <styled.div
+        style={
+          Object {
+            "background": "url(/static-htmls/B_race_clusters/screenshot.png)",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.div>
+        <styled.h4>
+          Race Clusters
+        </styled.h4>
+        <styled.p>
+          Race starts grouped into clusters based on the scale of the map view.
+        </styled.p>
+      </styled.div>
+    </styled.div>
+    <styled.div
+      onClick={[Function]}
+    >
+      <styled.div
+        style={
+          Object {
+            "background": "url(/static-htmls/C_regions/screenshot.png)",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.div>
+        <styled.h4>
+          Race Regions
+        </styled.h4>
+        <styled.p>
+          Polygons containing races for the last 20 years with a count of how many races occured in that region.
+        </styled.p>
+      </styled.div>
+    </styled.div>
+    <styled.div
+      onClick={[Function]}
+    >
+      <styled.div
+        style={
+          Object {
+            "background": "url(/static-htmls/D_region_boxes/screenshot.png)",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.div>
+        <styled.h4>
+          Race Region Boxes
+        </styled.h4>
+        <styled.p>
+          Similar to race regions, except this is a view of nice rectangular boxes that contain each region. Overlapping boxes have been combined.
+        </styled.p>
+      </styled.div>
+    </styled.div>
+    <styled.div
+      onClick={[Function]}
+    >
+      <styled.div
+        style={
+          Object {
+            "background": "url(/static-htmls/E_yacht_clubs/screenshot.png)",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+          }
+        }
+      />
+      <styled.div>
+        <styled.h4>
+          Yacht Club Density
+        </styled.h4>
+        <styled.p>
+          3D Hexbin map to visualize the density of yacht clubs.
+        </styled.p>
+      </styled.div>
+    </styled.div>
+  </styled.div>
+</React.Fragment>
+`;
