@@ -14,10 +14,16 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ReactComponent as Logo } from '../assets/logo-dark.svg';
+import { login } from 'services/live-data-server/auth';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
 };
+
+const ERROR = {
+  WRONG_CREDENTIALS: 'WRONG_CREDENTIALS',
+  USER_DOES_NOT_EXIST: 'USER_DOES_NOT_EXIST'
+}
 
 export const LoginForm = (props) => {
   const { actions } = UseLoginSlice();
@@ -30,39 +36,33 @@ export const LoginForm = (props) => {
 
   const { t } = useTranslation();
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     const { email, password } = values;
 
     setIsSigningIn(true);
 
-    Auth.configure({ storage: localStorage });
+    const response: any = await login({ email: email, password: password });
 
-    Auth.signIn({
-      username: email,
-      password
-    }).then(user => {
-      setIsSigningIn(false);
-
-      if (user.attributes && user.attributes.email_verified) {
-        dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
+    if (response.success) {
+      if (response.user?.email_verified) {
+        dispatch(actions.setAccessToken(response.token));
         dispatch(actions.setIsAuthenticated(true));
-        dispatch(actions.setUser(JSON.parse(JSON.stringify(user))));
+        dispatch(actions.setUser(JSON.parse(JSON.stringify(response.user))));
         history.push('/');
       } else {
         redirectToVerifyAccountPage(email);
       }
-    }).catch(error => {
+    } else {
       setIsSigningIn(false);
-      if (error.code) {
-        if (error.code === 'UserNotConfirmedException') {
-          redirectToVerifyAccountPage(email);
-        } else {
-          toast.error(error.message);
-        }
-      } else {
-        toast.error(t(translations.login_page.login_error));
+      switch (response.error?.response?.data?.error_code) {
+        case ERROR.USER_DOES_NOT_EXIST:
+          toast.error('Wrong email or password');
+          break;
+        case ERROR.WRONG_CREDENTIALS:
+          toast.error('User does not exist');
+          break;
       }
-    })
+    }
   }
 
   const redirectToVerifyAccountPage = (email) => {
@@ -77,7 +77,7 @@ export const LoginForm = (props) => {
     <Wrapper>
       <Spin spinning={isSigningIn} tip={t(translations.login_page.login_message)}>
         <Title>
-          <Logo/>
+          <Logo />
         </Title>
 
         <FormWrapper>

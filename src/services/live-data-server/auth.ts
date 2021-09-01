@@ -10,14 +10,15 @@ if (uuid === null) {
         localStorage.setItem('uuid', uuid);
 }
 
-export const login = () => {
+export const login = ({ email, password }) => {
     return axios.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/login`, {
-        id: uuid,
-        devToken: SYRF_SERVER.DEV_TOKEN
+        email: email,
+        password: password,
     }).then(response => {
         return {
             success: true,
-            token: response.data.token
+            token: response.data.token,
+            user: response.data.user
         }
     }).catch(error => {
         return {
@@ -56,6 +57,38 @@ export const validateToken = (token) => {
     }).catch(error => {
         return {
             success: false,
+            error: error
+        }
+    })
+}
+
+export const register = (data) => {
+    return axios.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/register`, data)
+    .then(response => {
+        return {
+            success: true,
+            user: response.data.user
+        }
+    }).catch(error => {
+        return {
+            sucess: false,
+            error: error
+        }
+    })
+}
+
+export const verifyEmail = (data) => {
+    return axios.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/vefify-email`, {
+        code: data.code,
+        email: data.email
+    })
+    .then(response => {
+        return {
+            success: true,
+        }
+    }).catch(error => {
+        return {
+            sucess: false,
             error: error
         }
     })

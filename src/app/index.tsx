@@ -37,9 +37,6 @@ import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
 import { UseLoginSlice } from './pages/LoginPage/slice';
 
-import Amplify from 'aws-amplify';
-import config from '../aws-exports';
-
 import { SiderContent } from './components/SiderContent';
 import { Header } from './components/Header';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -47,8 +44,7 @@ import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
 
-const { Sider, Content } = Layout
-Amplify.configure(config);
+const { Sider, Content } = Layout;
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);

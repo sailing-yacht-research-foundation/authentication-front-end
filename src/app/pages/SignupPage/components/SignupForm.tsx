@@ -2,7 +2,6 @@ import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
 import { Input, Form, Select, Divider, DatePicker, Checkbox, Spin, Row, Col } from 'antd';
-import { Auth } from 'aws-amplify';
 import { languagesList, localesList } from 'utils/languages-util';
 import { toast } from 'react-toastify';
 import moment from 'moment';
@@ -11,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { SyrfFormButton } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { register } from 'services/live-data-server/auth';
 
 const { Option } = Select;
 
@@ -23,6 +23,10 @@ const disabledDates = [
     },
 ];
 
+const ERROR = {
+    USER_ALREADY_EXISTS: 'USER_ALREADY_EXISTS'
+}
+
 export const SignupForm = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
 
@@ -30,24 +34,26 @@ export const SignupForm = () => {
 
     const { t } = useTranslation();
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         const { email, password, locale, language, birthdate, first_name, last_name } = values;
 
         setIsSigningUp(true);
 
-        Auth.signUp({
+        const response: any = await register({
             username: email,
             password: password,
             attributes: {
                 name: String(first_name) + ' ' + String(last_name),
                 locale: locale,
-                'custom:language': language,
+                language: language,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
                 picture: String(Math.floor(Math.random() * 20) + 1),
-                'custom:first_name': first_name,
-                'custom:last_name': last_name
+                first_name: first_name,
+                last_name: last_name
             }
-        }).then(response => {
+        })
+
+        if (response.success) {
             let registerSuccess = !!response.user;
 
             setIsSigningUp(false);
@@ -59,15 +65,16 @@ export const SignupForm = () => {
                     }
                 });
             }
-        }).catch(err => {
+        } else {
             setIsSigningUp(false);
 
-            if (err.code) {
-                toast.error(err.message)
+            if (response.data?.error?.code) {
+                toast.error('User already exists');
             } else {
                 toast.error(t(translations.signup_page.cannot_sign_you_up_at_the_moment));
             }
-        })
+        }
+
     }
 
     const renderLocaleDropdownList = () => {
@@ -263,7 +270,7 @@ export const SignupForm = () => {
 
                 <Form.Item>
                     <SyrfFormButton type="primary" htmlType="submit">
-                    {t(translations.signup_page.signup)}
+                        {t(translations.signup_page.signup)}
                     </SyrfFormButton>
                 </Form.Item>
             </Form>

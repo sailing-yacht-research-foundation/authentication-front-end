@@ -12,6 +12,7 @@ import { Row, Col, Button } from 'antd';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { getUser } from 'services/live-data-server/user';
 
 export const Profile = () => {
 
@@ -27,12 +28,12 @@ export const Profile = () => {
         getAuthorizedAuthUser();
     }
 
-    const getAuthorizedAuthUser = () => {
-        Auth.currentAuthenticatedUser({ bypassCache: true })
-            .then(user => {
-                dispatch(loginActions.setUser(JSON.parse(JSON.stringify(user))))
-            })
-            .catch(error => { });
+    const getAuthorizedAuthUser = async () => {
+        const response: any = await getUser();
+
+        if (response.user) {
+            dispatch(loginActions.setUser(JSON.parse(JSON.stringify(response.user)))) 
+        }
     }
 
     return (
