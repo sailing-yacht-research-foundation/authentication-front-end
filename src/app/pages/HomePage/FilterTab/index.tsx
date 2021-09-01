@@ -13,7 +13,7 @@ export const FilterTab = () => {
     return (
         <Wrapper>
             <FilterResult />
-            {(showFilterPanel || !isMobile()) && <FilterPane close={() => setShowFilterPanel(false)} />}
+            {(showFilterPanel || !isMobile()) && <FilterPane limitResults close={() => setShowFilterPanel(false)} />}
             <ToggleFilterPane onClick={() => setShowFilterPanel(true)}>
                 <BsSearch size={25} color={StyleConstants.MAIN_TONE_COLOR} />
             </ToggleFilterPane>

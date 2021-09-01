@@ -17,8 +17,12 @@ describe('home Saga', () => {
     it('should set races if races are returned from server', () => {
         const response = {
             data: {
-                rows: [],
-                count: 1
+                hits: {
+                    hits:[],
+                    total: {
+                        value: 5
+                    }
+                }
             }
         };
 
@@ -47,12 +51,12 @@ describe('home Saga', () => {
 
         let putDescriptor = searchRaceIterator.next().value;
         expect(putDescriptor).toEqual(
-            put(slice.homeActions.setResults(response.data?.rows))
+            put(slice.homeActions.setResults(response.data?.hits.hits))
         );
 
         putDescriptor = searchRaceIterator.next().value;
         expect(putDescriptor).toEqual(
-            put(slice.homeActions.setTotal(response.data?.count))
+            put(slice.homeActions.setTotal(response.data?.hits.total.value))
         );
 
 
@@ -63,8 +67,12 @@ describe('home Saga', () => {
     it('should not set races if races if results count is zero', () => {
         const response = {
             data: {
-                rows: [],
-                count: 0
+                hits: {
+                    hits:[],
+                    total: {
+                        value: 0
+                    }
+                }
             }
         };
 

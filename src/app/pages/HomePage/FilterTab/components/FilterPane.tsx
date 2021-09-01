@@ -13,10 +13,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHomeSlice } from '../../slice';
 import moment from 'moment';
 import { selectIsSearching, selectSearchKeyword } from '../../slice/selectors';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export const FilterPane = (props) => {
 
-    const { defaultFocus } = props;
+    const { defaultFocus, limitResults } = props;
 
     const searchKeyword = useSelector(selectSearchKeyword);
 
@@ -30,6 +31,12 @@ export const FilterPane = (props) => {
 
     const isSearching = useSelector(selectIsSearching);
 
+    const location = useLocation();
+
+    const history = useHistory();
+
+    const [form] = Form.useForm();
+
     useEffect(() => {
         if (defaultFocus && searchInputRef) {
             searchInputRef.current?.focus();
@@ -37,17 +44,43 @@ export const FilterPane = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (location.search) {
+            const search = location.search.substring(1);
+            const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+
+            dispatch(actions.setKeyword(params.keyword ?? ''));
+            dispatch(actions.setFromDate(params.from_date ?? ''));
+            dispatch(actions.setToDate(params.to_date ?? ''));
+            dispatch(actions.searchRaces(params));
+
+            form.setFieldsValue({ // reset the email to the last state.
+                name: params.keyword,
+                from_date: params.from_date && moment(params.from_date).isValid() ? moment(params.from_date) : '',
+                to_date: params.to_date && moment(params.to_date).isValid() ? moment(params.to_date) : ''
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location]);
+
     const onFormSubmit = (values) => {
         dispatch(actions.setResults([]));
 
         const { name, from_date, to_date } = values;
         const params: any = {};
 
+        if (limitResults) params.size = 10;
+
         params.keyword = name;
         if (from_date) params.from_date = moment(from_date).format('YYYY-MM-DD');
         if (to_date) params.to_date = moment(to_date).format('YYYY-MM-DD');
 
-        dispatch(actions.searchRaces(params));
+        dispatch(actions.setPage(1));
+
+        history.push({
+            pathname: '/',
+            search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
+        });
     }
 
     return (
@@ -68,6 +101,7 @@ export const FilterPane = (props) => {
 
             <Spin spinning={isSearching}>
                 <Form
+                    form={form}
                     layout={'vertical'}
                     name="basic"
                     onFinish={onFormSubmit}
@@ -97,7 +131,7 @@ export const FilterPane = (props) => {
                                 <DatePicker
                                     showToday={false}
                                     style={{ width: '100%' }}
-                                    onChange={(e)=> {
+                                    onChange={(e) => {
                                         if (e) dispatch(actions.setFromDate(e.format('YYYY-MM-DD')))
                                     }}
                                     dateRender={current => {
@@ -120,7 +154,7 @@ export const FilterPane = (props) => {
                                 <DatePicker
                                     showToday={false}
                                     style={{ width: '100%' }}
-                                    onChange={(e)=> {
+                                    onChange={(e) => {
                                         if (e) dispatch(actions.setToDate(e.format('YYYY-MM-DD')))
                                     }}
                                     dateRender={current => {

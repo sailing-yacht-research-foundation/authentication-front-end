@@ -11,14 +11,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     selectFromDate,
     selectIsSearching,
-    selectPage, selectResults,
+    selectPage, selectPageSize, selectResults,
     selectSearchKeyword,
     selectToDate,
     selectTotal
 } from '../../slice/selectors';
 import { useHomeSlice } from '../../slice';
+import { useHistory, useLocation } from 'react-router-dom';
 
-export const FilterResult = () => {
+export const FilterResult = (props) => {
 
     const { t } = useTranslation();
 
@@ -36,20 +37,49 @@ export const FilterResult = () => {
 
     const toDate = useSelector(selectToDate);
 
+    const pageSize = useSelector(selectPageSize);
+
     const { actions } = useHomeSlice();
+
+    const history = useHistory();
+
+    const location = useLocation();
+
+    React.useEffect(() => {
+        if (location.search) {
+            const search = location.search.substring(1);
+            const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+
+            dispatch(actions.setPage(Number(params.page) ?? 1));
+            dispatch(actions.setPageSize(params.size ?? 10));
+            dispatch(actions.setKeyword(params.keyword));
+            dispatch(actions.setFromDate(params.from_date ?? ''));
+            dispatch(actions.setToDate(params.to_date ?? ''));
+            dispatch(actions.searchRaces(params));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location]);
 
     const dispatch = useDispatch();
 
-    const onPaginationChanged = (page) => {
+    const onPaginationPageChanged = (page, pageSize) => {
+        handleOnPaginationChanged(page, pageSize);
+    }
+
+    const handleOnPaginationChanged = (page, pageSize) => {
         const params: any = {};
 
         params.page = page;
+        params.size = pageSize;
         params.keyword = searchKeyword;
 
         if (fromDate !== '') params.from_date = fromDate;
         if (toDate !== '') params.to_date = toDate;
 
-        dispatch(actions.searchRaces(params));
+        history.push({
+            pathname: '/',
+            search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
+        });
     }
 
     const renderResult = () => {
@@ -86,7 +116,7 @@ export const FilterResult = () => {
                         {renderResult()}
                     </ResultWrapper>
                     <PaginationWrapper>
-                        <Pagination defaultCurrent={page} onChange={onPaginationChanged} total={total} />
+                        <Pagination defaultCurrent={page} current={page} onChange={onPaginationPageChanged} total={total} pageSize={pageSize} />
                     </PaginationWrapper>
                 </>) : (
                     <ResultWrapper>

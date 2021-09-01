@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-syrf-dev-154055-unauthRole",
       "StackName": "amplify-syrf-dev-154055",
       "StackId": "arn:aws:cloudformation:us-west-2:335855654610:stack/amplify-syrf-dev-154055/42bc1490-c37e-11eb-afde-02881debe6b9",
-      "AmplifyAppId": "d29rwzm6pkx02t"
+      "AmplifyAppId": "d29rwzm6pkx02t",
+      "AuthTriggerTemplateURL": ""
     },
     "categories": {
       "auth": {

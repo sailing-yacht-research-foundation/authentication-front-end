@@ -39,12 +39,6 @@ export const MapViewTab = () => {
 
     const { t } = useTranslation();
 
-    const zoomToUserLocation = () => {
-        if (null !== mapViewRef.current) {
-            mapViewRef.current.zoomToCurrentUserLocationIfAllowed();
-        }
-    }
-
     const dispatch = useDispatch();
 
     const { actions } = useHomeSlice();
@@ -54,6 +48,12 @@ export const MapViewTab = () => {
     const searchForRaces = (e) => {
         if (e.keyCode === 13 || e.which === 13)
             dispatch(actions.searchRaces({ keyword: searchKeyword }));
+    }
+
+    const zoomToUserLocation = () => {
+        if (null !== mapViewRef.current) {
+            mapViewRef.current.zoomToCurrentUserLocationIfAllowed();
+        }
     }
 
     return (

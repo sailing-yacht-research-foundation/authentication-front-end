@@ -96,7 +96,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
         });
 
         results.forEach(race => {
-            let marker = L.marker(L.latLng(race.lat, race.lon), {
+            let marker = L.marker(L.latLng(race._source?.approx_start_point?.coordinates[1], race._source?.approx_start_point?.coordinates[0]), {
                 icon: L.divIcon({
                     html: ReactDOMServer.renderToString(<GiSailboat style={{ color: '#fff', fontSize: '35px' }} />),
                     iconSize: [20, 20],
@@ -111,7 +111,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                     marker.closePopup();
                 })
                 .on('click', () => {
-                    history.push(`/playback?raceid=${race.id}`);
+                    history.push(`/playback?raceid=${race._id}`);
                 })
                 .addTo(map);
             resultMarkers.push(marker);
@@ -124,9 +124,9 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
     const renderRacePopup = (race) => {
         return (
             <>
-                <div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>
-                <div>{t(translations.home_page.map_view_tab.location)} {race.locationName}</div>
-                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStartTime).format('YYYY-MM-DD')}</div>
+                <div>{t(translations.home_page.map_view_tab.name)} {race._source.name}</div>
+                <div>{t(translations.home_page.map_view_tab.location)} {race._source.start_country}</div>
+                <div>{t(translations.home_page.map_view_tab.date)} {moment(race._source.approx_start_time_ms).format('YYYY-MM-DD')}</div>
             </>
         )
     }
