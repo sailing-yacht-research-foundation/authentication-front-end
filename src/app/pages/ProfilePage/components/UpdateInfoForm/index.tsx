@@ -64,7 +64,7 @@ export const UpdateInfo = (props) => {
         }
     }
 
-    const updateUserInfo = ({
+    const updateUserInfo = async ({
         email,
         phone_number,
         sailing_number,
@@ -79,7 +79,7 @@ export const UpdateInfo = (props) => {
 
         setIsUpdatingProfile(true);
 
-        const response: any = updateProfile({
+        const response: any = await updateProfile({
             phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
             address: address,
             birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),

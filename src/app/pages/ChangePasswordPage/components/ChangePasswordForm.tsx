@@ -24,12 +24,12 @@ export const ChangePasswordForm = (props) => {
 
     const [isChangingPassword, setIsChangingPassword] = useState<boolean>(false);
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         const { oldPassword, newPassword } = values;
 
         setIsChangingPassword(true);
 
-        const response: any = changePassword(newPassword);
+        const response: any = await changePassword(newPassword);
 
         if (response.success) {
             toast.success(t(translations.change_password_page.password_changed_successfully));
