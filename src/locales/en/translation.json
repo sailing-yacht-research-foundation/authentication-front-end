@@ -120,7 +120,8 @@
     "last_name": "Last Name",
     "password_confirmation": "Password Confirmation",
     "please_confirm_your_password": "Please confirm your password!",
-    "the_two_passwords_that_you_entered_do_not_match": "The two passwords that you entered do not match!"
+    "the_two_passwords_that_you_entered_do_not_match": "The two passwords that you entered do not match!",
+    "user_already_exists": "User already exists"
   },
   "side_menu": {
     "deal": "Deals",

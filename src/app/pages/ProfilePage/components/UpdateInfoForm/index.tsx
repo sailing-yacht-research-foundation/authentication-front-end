@@ -16,6 +16,7 @@ import { EditEmailChangeModal } from './EditEmailChangeModal';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { updateProfile } from 'services/live-data-server/user';
 
 const defaultFormFields = {
     email: '',
@@ -78,32 +79,27 @@ export const UpdateInfo = (props) => {
 
         setIsUpdatingProfile(true);
 
-        Auth.currentAuthenticatedUser().then(user => {
-            Auth.updateUserAttributes(user, {
-                email: email,
-                phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
-                address: address,
-                birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
-                locale: country,
-                'custom:sailing_number': sailing_number,
-                'custom:language': language,
-                'custom:share_social': share_social ? 'y' : '', // y stands for yes
-                'custom:first_name': first_name,
-                'custom:last_name': last_name,
-                'custom:bio': bio,
-                name: String(first_name) + ' ' + String(last_name)
-            }).then(response => {
-                onUpdateProfileSuccess();
-            }).catch(error => {
-                toast.error(error.message);
-                setIsUpdatingProfile(false);
-                setFormFieldsBeforeUpdate(defaultFormFields);
-            })
-        }).catch(error => {
-            toast.error(error.message);
+        const response: any = updateProfile({
+            phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
+            address: address,
+            birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
+            locale: country,
+            'custom:sailing_number': sailing_number,
+            'custom:language': language,
+            'custom:share_social': share_social ? 'y' : '', // y stands for yes
+            'custom:first_name': first_name,
+            'custom:last_name': last_name,
+            'custom:bio': bio,
+            name: String(first_name) + ' ' + String(last_name)
+        });
+
+        if (response.sucess) {
+            onUpdateProfileSuccess();
+        } else {
+            toast.error(response.error.message);
             setIsUpdatingProfile(false);
             setFormFieldsBeforeUpdate(defaultFormFields);
-        })
+        }
     }
 
     const onUpdateProfileSuccess = () => {

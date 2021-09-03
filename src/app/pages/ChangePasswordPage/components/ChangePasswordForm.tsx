@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { changePassword } from 'services/live-data-server/user';
 
 export const ChangePasswordForm = (props) => {
 
@@ -27,19 +28,17 @@ export const ChangePasswordForm = (props) => {
         const { oldPassword, newPassword } = values;
 
         setIsChangingPassword(true);
-        Auth.currentAuthenticatedUser().then(user => {
-            Auth.changePassword(user, oldPassword, newPassword).then(response => {
-                toast.success(t(translations.change_password_page.password_changed_successfully));
-                form.resetFields();
-                setIsChangingPassword(false);
-            }).catch(error => {
-                toast.error(error.message);
-                setIsChangingPassword(false);
-            })
-        }).catch(error => {
-            toast.error(error.message);
+
+        const response: any = changePassword(newPassword);
+
+        if (response.success) {
+            toast.success(t(translations.change_password_page.password_changed_successfully));
+            form.resetFields();
             setIsChangingPassword(false);
-        })
+        } else if (response.error){
+            toast.error(response.error.message);
+            setIsChangingPassword(false);
+        }
     }
 
     return (

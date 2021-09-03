@@ -3,7 +3,7 @@ import syrfRequest from "utils/syrf-request";
 
 
 export const getUser = () => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/user`)
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/profile`)
     .then(response => {
         return {
             success: true,
@@ -17,8 +17,8 @@ export const getUser = () => {
     })
 } 
 
-export const updateProfile = (userId, data) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/${userId}/update-profile`, data)
+export const updateProfile = (data) => {
+    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`, data)
     .then(response => {
         return {
             success: true,
@@ -33,7 +33,7 @@ export const updateProfile = (userId, data) => {
 }
 
 export const deleteUser = (userId, data) => {
-    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/${userId}/delete/`)
+    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/delete/`)
     .then(response => {
         return {
             success: true
@@ -46,8 +46,12 @@ export const deleteUser = (userId, data) => {
     })
 }
 
-export const changePassword = (userId, data) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/${userId}/change-password/`, data)
+export const changePassword = (password) => {
+    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/reset-password/`, {
+        value: password,
+        temporary: false,
+        type: 'password'
+    })
     .then(response => {
         return {
             success: true

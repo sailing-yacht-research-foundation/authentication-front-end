@@ -69,7 +69,7 @@ export const SignupForm = () => {
             setIsSigningUp(false);
 
             if (response.data?.error?.code) {
-                toast.error('User already exists');
+                toast.error(t(translations.signup_page.user_already_exists));
             } else {
                 toast.error(t(translations.signup_page.cannot_sign_you_up_at_the_moment));
             }
