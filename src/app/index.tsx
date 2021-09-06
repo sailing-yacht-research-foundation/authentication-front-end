@@ -33,6 +33,8 @@ import { AboutPage } from './pages/AboutPage/Loadable';
 import { PlaybackPage } from './pages/PlaybackPage/Loadable';
 import { CourseCreatePage } from './pages/CourseCreatePage/Loadable';
 import { DataPage } from './pages/DataPage/Loadable';
+import { MyRacePage } from './pages/MyRacePage/Loadable';
+import { MyRacePageCreateUpdatePage } from './pages/MyRaceCreateUpdatePage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -48,6 +50,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
+
 
 const { Sider, Content } = Layout
 Amplify.configure(config);
@@ -142,6 +145,9 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races'} component={MyRacePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races/create'} component={MyRacePageCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races/update'} component={MyRacePageCreateUpdatePage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <Route exact path={process.env.PUBLIC_URL + '/courses/create'} component={CourseCreatePage} />

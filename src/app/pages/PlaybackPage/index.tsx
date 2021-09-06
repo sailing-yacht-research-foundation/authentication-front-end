@@ -23,6 +23,7 @@ import { selectRaceLength } from './components/slice/selectors';
 import { usePlaybackSlice } from './components/slice';
 import { IoCaretBack } from 'react-icons/io5';
 import { useHistory } from 'react-router-dom';
+import { Wrapper } from 'app/components/SyrfGeneral';
 
 const center = {
     lng: -125.688816,
@@ -91,10 +92,6 @@ export const PlaybackPage = (props) => {
         </Wrapper>
     );
 }
-
-const Wrapper = styled.div`
-  margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
-`;
 
 const GoBackButton = styled.div`
     position: absolute;

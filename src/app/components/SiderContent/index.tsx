@@ -38,7 +38,7 @@ export const SiderContent = (props) => {
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
-        <SyrfMenuItem title={t(translations.side_menu.my_races)} key="11" onClick={() => history.push('/')} icon={<GiSailboat />}>
+        <SyrfMenuItem title={t(translations.side_menu.my_races)} onClick={() => history.push('/my-races')} key="11" icon={<GiSailboat />}>
           {t(translations.side_menu.my_races)}
         </SyrfMenuItem>
 

@@ -253,5 +253,8 @@
     "similar_to_racec_regions": "Similar to race regions, except this is a view of nice rectangular boxes that contain each region. Overlapping boxes have been combined.",
     "yatch_club_density": "Yacht Club Density",
     "hexbin_map_to_visualize": "3D Hexbin map to visualize the density of yacht clubs."
+  },
+  "my_race_list_page": {
+    "you_dont_have_any_race": "You do not have any races at the moment, please create one."
   }
 }
