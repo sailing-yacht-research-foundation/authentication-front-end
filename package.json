@@ -59,6 +59,7 @@
     "react-helmet-async": "1.0.6",
     "react-i18next": "11.7.2",
     "react-icons": "^4.2.0",
+    "react-iframe": "^1.8.0",
     "react-image-file-resizer": "^0.4.4",
     "react-instagram-login": "^1.4.0",
     "react-leaflet": "^3.2.1",
