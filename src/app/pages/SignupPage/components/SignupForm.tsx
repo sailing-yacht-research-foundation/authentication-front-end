@@ -23,10 +23,6 @@ const disabledDates = [
     },
 ];
 
-const ERROR = {
-    USER_ALREADY_EXISTS: 'USER_ALREADY_EXISTS'
-}
-
 export const SignupForm = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
 
@@ -40,41 +36,32 @@ export const SignupForm = () => {
         setIsSigningUp(true);
 
         const response: any = await register({
+            firstName: first_name,
+            lastName: last_name,
             username: email,
-            password: password,
+            email: email,
             attributes: {
-                name: String(first_name) + ' ' + String(last_name),
                 locale: locale,
                 language: language,
                 birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
                 picture: String(Math.floor(Math.random() * 20) + 1),
-                first_name: first_name,
-                last_name: last_name
-            }
-        })
+            },
+            enabled: true,
+            credentials: [{ type: "password", value: password, temporary: false }]
+        });
 
         if (response.success) {
-            let registerSuccess = !!response.user;
-
             setIsSigningUp(false);
-
-            if (registerSuccess) {
-                history.push('/verify-account', {
-                    state: {
-                        email: response.user?.getUsername()
-                    }
-                });
-            }
+            history.push('/signin');
+            toast.info(t(translations.signup_page.register_success));
         } else {
             setIsSigningUp(false);
-
-            if (response.data?.error?.code) {
+            if (response.error?.response?.status === 409) {
                 toast.error(t(translations.signup_page.user_already_exists));
             } else {
                 toast.error(t(translations.signup_page.cannot_sign_you_up_at_the_moment));
             }
         }
-
     }
 
     const renderLocaleDropdownList = () => {

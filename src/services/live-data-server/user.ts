@@ -7,7 +7,7 @@ export const getUser = () => {
     .then(response => {
         return {
             success: true,
-            user: response.data.user
+            user: response.data
         }
     }).catch(error => {
         return {
@@ -22,7 +22,7 @@ export const updateProfile = (data) => {
     .then(response => {
         return {
             success: true,
-            user: response.data.user
+            user: response.data
         }
     }).catch(error => {
         return {
@@ -32,8 +32,8 @@ export const updateProfile = (data) => {
     })
 }
 
-export const deleteUser = (userId, data) => {
-    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/delete/`)
+export const deleteUserAccount = () => {
+    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`)
     .then(response => {
         return {
             success: true

@@ -18,7 +18,7 @@ export const selectIsAuthenticated = createSelector(
 
 export const selectAccessToken = createSelector(
   [selectDomain],
-  loginState => loginState.access_token,
+  loginState => loginState.session_token,
 );
 
 export const selectIsSyrfServiceAuthenticated = createSelector(

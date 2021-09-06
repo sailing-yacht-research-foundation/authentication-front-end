@@ -37,7 +37,7 @@ describe('Login slice', () => {
       slice.reducer(state, slice.loginActions.setAccessToken(accessToken)),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-      access_token: accessToken
+      session_token: accessToken
     });
   });
 
@@ -47,7 +47,7 @@ describe('Login slice', () => {
     ).toEqual<ContainerState>({
       ...slice.initialState,
       is_authenticated: false,
-      access_token: ''
+      session_token: ''
     });
   });
 });

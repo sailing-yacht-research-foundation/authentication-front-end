@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Input, Form, Button, Spin } from 'antd';
-import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
 import { useHistory } from 'react-router';
@@ -20,9 +19,10 @@ const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
 };
 
-const ERROR = {
-  WRONG_CREDENTIALS: 'WRONG_CREDENTIALS',
-  USER_DOES_NOT_EXIST: 'USER_DOES_NOT_EXIST'
+const ERRORS = { // only have strings from server to compare for now.
+  WRONG_CREDENTIALS: 'Invalid user credentials',
+  USER_IS_DISABLED: 'E012',
+  NEED_VERIFICATION: 'Account is not fully set up'
 }
 
 export const LoginForm = (props) => {
@@ -44,33 +44,28 @@ export const LoginForm = (props) => {
     const response: any = await login({ email: email, password: password });
 
     if (response.success) {
+      dispatch(actions.setAccessToken(response.token));
+      dispatch(actions.getUser());
       if (response.user?.email_verified) {
-        dispatch(actions.setAccessToken(response.token));
         dispatch(actions.setIsAuthenticated(true));
-        dispatch(actions.setUser(JSON.parse(JSON.stringify(response.user))));
+        localStorage.removeItem('is_guest');
         history.push('/');
       } else {
-        redirectToVerifyAccountPage(email);
+        toast.info(t(translations.login_page.please_verify_your_account));
       }
     } else {
       setIsSigningIn(false);
-      switch (response.error?.response?.data?.error_code) {
-        case ERROR.USER_DOES_NOT_EXIST:
-          toast.error('Wrong email or password');
+      switch (response.error?.response?.data?.message) {
+        case ERRORS.WRONG_CREDENTIALS:
+          toast.error(t(translations.login_page.credentials_are_not_correct));
           break;
-        case ERROR.WRONG_CREDENTIALS:
-          toast.error('User does not exist');
+        case ERRORS.NEED_VERIFICATION:
+          toast.info(t(translations.login_page.please_verify_your_account));
           break;
+        default:
+          toast.info(t(translations.login_page.cannot_login_at_the_moment));
       }
     }
-  }
-
-  const redirectToVerifyAccountPage = (email) => {
-    history.push('/verify-account', {
-      state: {
-        email: email
-      }
-    });
   }
 
   return (

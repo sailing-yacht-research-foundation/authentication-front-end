@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Form, Spin } from 'antd';
-import { Auth } from 'aws-amplify';
 import { toast } from 'react-toastify';
 import {
     SyrfFormWrapper,
@@ -25,7 +24,7 @@ export const ChangePasswordForm = (props) => {
     const [isChangingPassword, setIsChangingPassword] = useState<boolean>(false);
 
     const onFinish = async (values) => {
-        const { oldPassword, newPassword } = values;
+        const { newPassword } = values;
 
         setIsChangingPassword(true);
 
@@ -35,8 +34,8 @@ export const ChangePasswordForm = (props) => {
             toast.success(t(translations.change_password_page.password_changed_successfully));
             form.resetFields();
             setIsChangingPassword(false);
-        } else if (response.error){
-            toast.error(response.error.message);
+        } else {
+            toast.error(t(translations.change_password_page.cannot_change_your_password_at_the_moment));
             setIsChangingPassword(false);
         }
     }
@@ -57,14 +56,6 @@ export const ChangePasswordForm = (props) => {
                             oldPassword: '',
                         }}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.change_password_page.old_password)}</SyrfFieldLabel>}
-                            name="oldPassword"
-                            rules={[{ required: true, max: 16, min: 8 }]}
-                        >
-                            <SyrfPasswordInputField />
-                        </Form.Item>
-
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                             name="newPassword"

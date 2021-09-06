@@ -8,7 +8,7 @@ import NoAvatar from 'app/components/NavBar/assets/no-avatar.png';
  */
 export const getUserAttribute = (user, attribute: string) => {
     if (user && user.attributes && user.attributes[attribute]) {
-        return user.attributes[attribute];
+        return user.attributes[attribute][0];
     }
 
     return null;
@@ -36,5 +36,5 @@ export const getProfilePicture = (user) => {
  * @returns 
  */
 export const checkForVerifiedField = (user, field) => {
-    return field === 'email' ? user.attributes?.email_verified : user.attributes?.phone_number_verified;
+    return field === 'email' ? user.emailVerified : user.attributes?.phoneNumberVerified;
 }
