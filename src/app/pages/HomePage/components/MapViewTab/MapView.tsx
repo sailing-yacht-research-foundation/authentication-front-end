@@ -8,12 +8,12 @@ import { GiSailboat } from 'react-icons/gi';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectResults } from '../../slice/selectors';
+import { selectMapResults } from '../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
-const markers: any[] = [];
+let markers: any[] = [];
 
 const MAP_MOVE_TYPE = {
     immediately: 'immediately',
@@ -26,7 +26,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     const history = useHistory();
 
-    const results = useSelector(selectResults);
+    const results = useSelector(selectMapResults);
 
     const { t } = useTranslation();
 
@@ -37,8 +37,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
     }, []);
 
     useEffect(() => {
-        if (results.length > 0)
-            attachRaceMarkersToMap();
+        attachRaceMarkersToMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [results]);
 
@@ -92,8 +91,8 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
         markers.forEach((marker, index) => {
             map.removeLayer(marker);
-            markers.splice(index, 1);
         });
+        markers = [];
 
         results.forEach(race => {
             let marker = L.marker(L.latLng(race._source?.approx_start_point?.coordinates[1], race._source?.approx_start_point?.coordinates[0]), {
@@ -118,7 +117,8 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
             markers.push(marker);
         });
 
-        map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
+        if (resultMarkers.length > 0)
+            map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
     }
 
     const renderRacePopup = (race) => {

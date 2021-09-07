@@ -10,7 +10,9 @@ import i18next from 'i18next';
 import { translations } from "locales/translations";
 import { selectSearchKeyword } from "./selectors";
 
-export function* searchRaces(params) {
+export function* searchRaces(action) {
+    const params = action.payload;
+
     yield put(homeActions.setIsSearching(true));
 
     const response = yield call(search, params);
@@ -21,9 +23,16 @@ export function* searchRaces(params) {
     if (response.data) {
         if (response.data?.hits?.total?.value === 0) {
             toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: searchKeyword }));
+            yield put(homeActions.setMapResults([]));
+            yield put(homeActions.setResults([]));
         } else {
-            yield put(homeActions.setResults(response.data?.hits?.hits));
             yield put(homeActions.setTotal(response.data?.hits.total?.value));
+            if (params.get_all) {
+                yield put(homeActions.setMapResults(response.data?.hits?.hits));
+                yield put(homeActions.setResults(response.data?.hits?.hits.slice(0, 10)));
+            } else {
+                yield put(homeActions.setResults(response.data?.hits?.hits));
+            }
         }
     }
 }

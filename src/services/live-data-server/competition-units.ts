@@ -2,13 +2,12 @@ import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
 import syrfRequest from 'utils/syrf-request';
 
-export const search = (action) => {
+export const search = (params) => {
     const query: any = {
         bool: {
             must: []
         }
     };
-    const params = action.payload;
 
     query.bool.must.push({
         match_phrase: {
@@ -40,13 +39,17 @@ export const search = (action) => {
         });
     }
 
-    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, {
+    const searchParams: any = {
         track_total_hits: true,
         query: query,
-        from: params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 1,
-        size: params.size ?? 10,
-    }).then(response => {
-        console.log(response);
+    };
+
+    if (!params.get_all) {
+        searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 1;
+        searchParams.size = params.size ?? 10;
+    }
+
+    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
         return {
             success: true,
             data: response.data

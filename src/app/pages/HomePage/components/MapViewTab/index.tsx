@@ -47,7 +47,7 @@ export const MapViewTab = () => {
 
     const searchForRaces = (e) => {
         if (e.keyCode === 13 || e.which === 13)
-            dispatch(actions.searchRaces({ keyword: searchKeyword }));
+            dispatch(actions.searchRaces({ keyword: searchKeyword, get_all: true }));
     }
 
     const zoomToUserLocation = () => {
