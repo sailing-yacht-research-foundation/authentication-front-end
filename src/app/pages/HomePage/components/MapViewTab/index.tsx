@@ -84,6 +84,7 @@ export const MapViewTab = () => {
             {showSearchPanel && <StyledSearchPane
                 defaultFocus
                 searchKeyWord={searchKeyword}
+                getAll
                 closable
                 close={() => setShowSearchPanel(false)} />}
             <MyLocationWrapper onClick={() => zoomToUserLocation()}>

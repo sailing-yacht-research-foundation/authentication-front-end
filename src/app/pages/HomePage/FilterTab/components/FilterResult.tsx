@@ -45,25 +45,22 @@ export const FilterResult = (props) => {
 
     const location = useLocation();
 
-    React.useEffect(() => {
-        if (location.search) {
-            const search = location.search.substring(1);
-            const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
-
-            dispatch(actions.setPage(Number(params.page) ?? 1));
-            dispatch(actions.setPageSize(params.size ?? 10));
-            dispatch(actions.setKeyword(params.keyword));
-            dispatch(actions.setFromDate(params.from_date ?? ''));
-            dispatch(actions.setToDate(params.to_date ?? ''));
-            dispatch(actions.searchRaces(params));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location]);
-
     const dispatch = useDispatch();
 
     const onPaginationPageChanged = (page, pageSize) => {
         handleOnPaginationChanged(page, pageSize);
+    }
+
+    const searchRacesOnEnter = () => {
+        if (location.search) {
+            const search = location.search.substring(1);
+            const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+
+            dispatch(actions.setKeyword(params.keyword ?? ''));
+            dispatch(actions.setFromDate(params.from_date ?? ''));
+            dispatch(actions.setToDate(params.to_date ?? ''));
+            dispatch(actions.searchRaces(params));
+        }
     }
 
     const handleOnPaginationChanged = (page, pageSize) => {
@@ -76,11 +73,22 @@ export const FilterResult = (props) => {
         if (fromDate !== '') params.from_date = fromDate;
         if (toDate !== '') params.to_date = toDate;
 
+        dispatch(actions.setPage(Number(params.page) ?? 1));
+        dispatch(actions.setPageSize(params.size ?? 10));
+        dispatch(actions.setKeyword(params.keyword));
+        dispatch(actions.setFromDate(params.from_date ?? ''));
+        dispatch(actions.setToDate(params.to_date ?? ''));
+        dispatch(actions.searchRaces(params));
+
         history.push({
             pathname: '/',
             search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
         });
     }
+
+    React.useEffect(() => {
+        searchRacesOnEnter();
+    }, []);
 
     const renderResult = () => {
         const defaultOptions = {

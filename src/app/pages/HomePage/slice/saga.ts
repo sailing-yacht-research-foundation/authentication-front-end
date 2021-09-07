@@ -27,8 +27,8 @@ export function* searchRaces(action) {
             yield put(homeActions.setResults([]));
         } else {
             yield put(homeActions.setTotal(response.data?.hits.total?.value));
+            yield put(homeActions.setMapResults(response.data?.hits?.hits));
             if (params.get_all) {
-                yield put(homeActions.setMapResults(response.data?.hits?.hits));
                 yield put(homeActions.setResults(response.data?.hits?.hits.slice(0, 10)));
             } else {
                 yield put(homeActions.setResults(response.data?.hits?.hits));

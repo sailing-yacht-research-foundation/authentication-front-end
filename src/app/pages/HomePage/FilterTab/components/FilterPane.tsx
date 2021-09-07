@@ -17,7 +17,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 export const FilterPane = (props) => {
 
-    const { defaultFocus, limitResults } = props;
+    const { defaultFocus, limitResults, getAll } = props;
 
     const searchKeyword = useSelector(selectSearchKeyword);
 
@@ -41,18 +41,14 @@ export const FilterPane = (props) => {
         if (defaultFocus && searchInputRef) {
             searchInputRef.current?.focus();
         }
+        setFormValueOnEnter();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        if (location.search) {
+    const setFormValueOnEnter = () => {
+        if (location.search && !getAll) {
             const search = location.search.substring(1);
             const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
-
-            dispatch(actions.setKeyword(params.keyword ?? ''));
-            dispatch(actions.setFromDate(params.from_date ?? ''));
-            dispatch(actions.setToDate(params.to_date ?? ''));
-            dispatch(actions.searchRaces(params));
 
             form.setFieldsValue({ // reset the email to the last state.
                 name: params.keyword,
@@ -60,8 +56,7 @@ export const FilterPane = (props) => {
                 to_date: params.to_date && moment(params.to_date).isValid() ? moment(params.to_date) : ''
             });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location]);
+    }
 
     const onFormSubmit = (values) => {
         dispatch(actions.setResults([]));
@@ -76,6 +71,10 @@ export const FilterPane = (props) => {
         if (to_date) params.to_date = moment(to_date).format('YYYY-MM-DD');
 
         dispatch(actions.setPage(1));
+        dispatch(actions.setKeyword(params.keyword ?? ''));
+        dispatch(actions.setFromDate(params.from_date ?? ''));
+        dispatch(actions.setToDate(params.to_date ?? ''));
+        dispatch(actions.searchRaces({...params, get_all: getAll}));
 
         history.push({
             pathname: '/',
