@@ -24,13 +24,7 @@ import { usePlaybackSlice } from './components/slice';
 import { IoCaretBack } from 'react-icons/io5';
 import { useHistory } from 'react-router-dom';
 import { Wrapper } from 'app/components/SyrfGeneral';
-
-const center = {
-    lng: -125.688816,
-    lat: 47.822007
-}
-
-const ZOOM = 13;
+import { MAP_DEFAULT_VALUE } from 'utils/helpers';
 
 let ee;
 
@@ -82,8 +76,8 @@ export const PlaybackPage = (props) => {
 
     return (
         <Wrapper>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
-                <RaceMap race={race} eventEmitter={ee} zoom={ZOOM} />
+            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
+                <RaceMap race={race} eventEmitter={ee} zoom={MAP_DEFAULT_VALUE.ZOOM} />
                 <Playback race={race} />
                 {history.action !== 'POP' && <GoBackButton onClick={() => history.goBack()}>
                     <IoCaretBack />
@@ -99,7 +93,7 @@ const GoBackButton = styled.div`
     left: 12px;
     width: 30px;
     height: 30px;
-    z-index: 9999;
+    z-index: 9998;
     background: #f4f4f4;
     display: flex;
     justify-content: center;

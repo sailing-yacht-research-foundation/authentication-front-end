@@ -27,7 +27,7 @@ export const SyrfFormWrapper = styled.div`
     }
     ${media.medium`
         width: 55%;
-        padding: 50px 56px;
+        padding: 30px 56px;
     `}
 `;
 

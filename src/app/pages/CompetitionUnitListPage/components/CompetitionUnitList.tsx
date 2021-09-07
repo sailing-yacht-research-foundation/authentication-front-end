@@ -1,9 +1,6 @@
 import React from 'react';
-import { Table, Tag, Space, Button, Spin } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectIsChangingPage, selectResults } from '../slice/selectors';
-import { selectPage, selectTotal } from 'app/pages/MyRacePage/slice/selectors';
-import styled from 'styled-components';
+import { Table, Space, Spin } from 'antd';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
@@ -13,7 +10,9 @@ import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderC
 import { useHistory } from 'react-router';
 import { useMyRaceListSlice } from '../slice';
 import moment from 'moment';
-import { DeleteRaceModal } from './DeleteRaceModal';
+import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
+import { getAllCompetitionUnits } from 'services/live-data-server/competition-units';
+import { Link } from 'react-router-dom';
 
 const defaultOptions = {
     loop: true,
@@ -24,26 +23,27 @@ const defaultOptions = {
     }
 };
 
-export const MyRaces = () => {
+export const CompetitionUnitList = () => {
 
     const columns = [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: text => <a>{text}</a>,
+            render: (text, record) => <Link to={`/my-races/${record.calendarEventId}/competition-units/${record.id}/update`}>{text}</Link>,
             width: '20%',
         },
         {
-            title: 'Location',
-            dataIndex: 'locationName',
-            key: 'location',
+            title: 'Start Time',
+            dataIndex: 'startTime',
+            key: 'startTime',
+            render: (value) => moment(value).format('YYYY-MM-DD'),
             width: '20%',
         },
         {
-            title: 'Start Date',
-            dataIndex: 'approximateStartTime',
-            key: 'start_date',
+            title: 'Approximate Start',
+            dataIndex: 'approximateStart',
+            key: 'approximateStart',
             render: (value) => moment(value).format('YYYY-MM-DD'),
             width: '20%',
         },
@@ -60,7 +60,7 @@ export const MyRaces = () => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-races/${record.id}/update`)
+                        history.push(`/my-races/${record.calendarEventId}/competition-units/${record.id}/update`);
                     }} type="primary">Update</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>Delete</BorderedButton>
                 </Space>
@@ -69,65 +69,75 @@ export const MyRaces = () => {
         },
     ];
 
-    const results = useSelector(selectResults);
-
-    const page = useSelector(selectPage);
-
-    const total = useSelector(selectTotal);
+    const [pagination, setPagination] = React.useState<any>({
+        page: 1,
+        total: 0,
+        rows: []
+    });
 
     const { t } = useTranslation();
 
     const history = useHistory();
 
-    const dispatch = useDispatch();
-
-    const { actions } = useMyRaceListSlice();
-
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [race, setRace] = React.useState<any>({});
+    const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
 
-    const isChangingPage = useSelector(selectIsChangingPage);
+    const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        dispatch(actions.getRaces(1));
+        getAll(1);
     }, []);
 
+    const getAll = async (page) => {
+        setIsChangingPage(true);
+        const response = await getAllCompetitionUnits(pagination.page);
+        setIsChangingPage(false);
+
+        if (response.success) {
+            setPagination({
+                ...pagination,
+                rows: response.data?.rows,
+                page: page
+            });
+        }
+    }
+
     const onPaginationChanged = (page) => {
-        dispatch(actions.getRaces(page));
+        getAll(page);
     }
 
-    const showDeleteRaceModal = (race) => {
+    const showDeleteRaceModal = (competitionUnit) => {
         setShowDeleteModal(true);
-        setRace(race);
+        setCompetitionUnit(competitionUnit);
     }
 
-    const onRaceDeleted = () => {
-        dispatch(actions.getRaces(page));
+    const onCompetitionUnitDeleted = () => {
+        getAll(pagination.page);
     }
 
     return (
         <>
-            <DeleteRaceModal
-                race={race}
-                onRaceDeleted={onRaceDeleted}
+            <DeleteCompetitionUnitModal
+                competitionUnit={competitionUnit}
+                onCompetitionUnitDeleted={onCompetitionUnitDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainer>
-                <PageHeaderText>My Races</PageHeaderText>
-                <CreateButton onClick={() => history.push("/my-races/create")} icon={<AiFillPlusCircle
+                <PageHeaderText>Competition Units</PageHeaderText>
+                <CreateButton onClick={() => history.push("/competition-units/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
-                    size={18} />}>Create a new Race</CreateButton>
+                    size={18} />}>Create a competition unit</CreateButton>
             </PageHeaderContainer>
-            {results.length > 0 ? (
+            {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
                         <Table scroll={{ x: "max-content" }} columns={columns}
-                            dataSource={results} pagination={{
+                            dataSource={pagination.rows} pagination={{
                                 defaultPageSize: 10,
-                                current: page,
-                                total: total,
+                                current: pagination.page,
+                                total: pagination.total,
                                 onChange: onPaginationChanged
                             }} />
                     </TableWrapper>
@@ -140,7 +150,7 @@ export const MyRaces = () => {
                         width={400} />
                     <CreateButton icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/my-races/create")}>Create</CreateButton>
+                        size={18} />} onClick={() => history.push("/competition-units/create")}>Create</CreateButton>
                     <LottieMessage>{t(translations.my_race_list_page.you_dont_have_any_race)}</LottieMessage>
                 </LottieWrapper>)}
         </>

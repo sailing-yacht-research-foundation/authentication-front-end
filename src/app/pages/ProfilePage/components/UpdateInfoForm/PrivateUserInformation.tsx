@@ -90,7 +90,6 @@ export const PrivateUserInformation = (props) => {
                             />
                             {suggestions.length > 0 && <StyledPLaceDropdown>
                                 {suggestions.map((suggestion) => {
-                                    console.log();
                                     const className = suggestion.active
                                         ? 'suggestion-item--active'
                                         : 'suggestion-item';

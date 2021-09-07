@@ -35,6 +35,8 @@ import { CourseCreatePage } from './pages/CourseCreatePage/Loadable';
 import { DataPage } from './pages/DataPage/Loadable';
 import { MyRacePage } from './pages/MyRacePage/Loadable';
 import { MyRacePageCreateUpdatePage } from './pages/MyRaceCreateUpdatePage/Loadable';
+import { CompetitionUnitCreateUpdatePage } from './pages/CompetitionUnitCreateUpdatePage/Loadable';
+import { CompetitionUnitListPage } from './pages/CompetitionUnitListPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -147,7 +149,11 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races'} component={MyRacePage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races/create'} component={MyRacePageCreateUpdatePage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races/update'} component={MyRacePageCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races/:raceId/update/'} component={MyRacePageCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races/:raceId/competition-units/create'} component={CompetitionUnitCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races/:raceId/competition-units/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/competition-units/create'} component={CompetitionUnitCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/competition-units'} component={CompetitionUnitListPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <Route exact path={process.env.PUBLIC_URL + '/courses/create'} component={CourseCreatePage} />

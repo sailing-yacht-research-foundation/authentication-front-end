@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SelectLanguage } from './components/SelectLanguage';
 import { UserDropdown } from './components/UserDropdown';
 import { Link } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { Space, Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { CreateButton } from '../SyrfGeneral';
 
 export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);
@@ -37,13 +38,12 @@ export const Nav = () => {
       {isAuthenenticated ? (
         <>
           <StyledButtonCreate
+            type="primary"
             shape="round"
-            size={'large'}
-            icon={<AiFillPlusCircle
-              style={{ marginRight: '5px' }}
-              size={18} />} type="primary">
-            {t(translations.home_page.nav.create)}
-          </StyledButtonCreate>
+            size="large"
+            onClick={() => history.push("/my-races/create")} icon={<AiFillPlusCircle
+            style={{ marginRight: '5px' }}
+            size={18} />}>Create</StyledButtonCreate>
           <DropDownWrapper>
             <UserDropdown logout={logout} />
             <SelectLanguage />

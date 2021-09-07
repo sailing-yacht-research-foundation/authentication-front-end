@@ -161,6 +161,7 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 10px;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
     height: 36px;
+    width: 100%;
   }
 
   .phone-number-input {
