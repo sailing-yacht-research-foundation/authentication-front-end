@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DataDetails /> should render the deals page and matchs the snapshot 1`] = `
+<styled.div>
+  <styled.div>
+    <styled.div
+      onClick={[Function]}
+    >
+      <IoIosArrowBack
+        style={
+          Object {
+            "color": "#1890ff",
+            "fontSize": "40px",
+          }
+        }
+      />
+    </styled.div>
+    <styled.div>
+      <styled.h2>
+        Yacht Club Density
+      </styled.h2>
+      <styled.p>
+        3D Hexbin map to visualize the density of yacht clubs.
+      </styled.p>
+    </styled.div>
+  </styled.div>
+  <styled.div>
+    <Iframe
+      height="100%"
+      url="/static-htmls/E_yacht_clubs/yacht_clubs.html"
+      width="100%"
+    />
+  </styled.div>
+</styled.div>
+`;

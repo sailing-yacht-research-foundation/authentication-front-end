@@ -31,6 +31,7 @@ import { EULAPage } from './pages/EULAPage/Loadable';
 import { DealsPage } from './pages/DealsPage/Loadable';
 import { AboutPage } from './pages/AboutPage/Loadable';
 import { PlaybackPage } from './pages/PlaybackPage/Loadable';
+import { DataPage } from './pages/DataPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -136,6 +137,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <Route component={NotFoundPage} />
