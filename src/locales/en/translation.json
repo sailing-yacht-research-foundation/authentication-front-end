@@ -199,7 +199,9 @@
       "permantly_delete_my_account": "Permantly delete my account",
       "account_settings": "Account settings",
       "password_security": "Password & Security",
-      "problem_updating_profile": "There are problem updating your profile."
+      "problem_updating_profile": "There are problem updating your profile.",
+      "error_happened_when_upload_profile_picture": "An error happened when uploading your profile picture",
+      "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file."
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!",

@@ -63,3 +63,22 @@ export const changePassword = (password) => {
         }
     });
 }
+
+export const uploadAvatar = (formData) => {
+    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/avatar-upload`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    .then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            sucess: false,
+            error: error
+        }
+    }); 
+}

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
 import styled from 'styled-components';
-import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
@@ -35,9 +34,8 @@ export const DeleteUserModal = (props) => {
     const onUserDeleted = () => {
         dispatch(loginActions.setLogout());
         history.push('/signin');
-        Auth.signOut();
         toast.info(t(translations.profile_page.update_profile.we_hope_to_see_you_again));
-        localStorage.removeItem('access_token');
+        localStorage.removeItem('session_token');
     }
 
     return (

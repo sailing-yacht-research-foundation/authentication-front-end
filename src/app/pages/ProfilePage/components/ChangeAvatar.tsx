@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleConstants } from 'styles/StyleConstants';
-import { Auth, Storage } from 'aws-amplify';
-import { getProfilePicture } from 'utils/user-utils';
+import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
 import { CameraFilled } from '@ant-design/icons';
 import { Image, Spin, Modal } from 'antd';
 import { toast } from 'react-toastify';
@@ -10,6 +9,7 @@ import Avatar from 'react-avatar-edit';
 import { dataURLtoFile } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { updateProfile, uploadAvatar } from 'services/live-data-server/user';
 
 export const ChangeAvatar = (props) => {
     const { authUser } = props;
@@ -29,35 +29,44 @@ export const ChangeAvatar = (props) => {
         }
 
         const avatarFileName = `${(+ new Date())}-${String(authUser.username).substring(0, 8)}-profile-picture.png`;
-        const file = dataURLtoFile(base64ConvertedURL, avatarFileName);
+        let file = dataURLtoFile(base64ConvertedURL, avatarFileName);
 
         setIsUploadingProfilePicture(true);
         setCropAvatarModalVisible(false);
 
-        Storage.put(avatarFileName, file, {
-            contentType: "image/png",
-            level: 'public',
-        })
-            .then(result => {
-                onAfterUploadingAvatar();
+        const formData = new FormData();
+        formData.append("image", file);
+        const response = await uploadAvatar(formData);
 
-                Auth.currentAuthenticatedUser().then(user => {
-                    Auth.updateUserAttributes(user, {
-                        'picture': avatarFileName
-                    }).then(response => {
-                        toast.success(t(translations.profile_page.update_profile.upload_profile_picture_successfully));
-                        props.cancelUpdateProfile();
-                    }).catch(error => {
-                        toast.error(error.message);
-                    })
-                }).catch(error => {
-                    toast.error(error.message);
-                })
-            })
-            .catch(err => {
-                toast.error(err.message);
-                onAfterUploadingAvatar();
-            });
+        onAfterUploadingAvatar();
+
+        if (response.success) {
+            const avatarUrl = response.data?.url;
+            if (authUser.attributes) {
+                const userData = {
+                    firstName: authUser.firstName,
+                    lastName: authUser.lastName,
+                    attributes: {
+                        picture: avatarUrl,
+                        language: getUserAttribute(authUser,'language'),
+                        locale: getUserAttribute(authUser,'locale'),
+                        bio: getUserAttribute(authUser,'bio'),
+                        sailing_number: getUserAttribute(authUser,'sailing_number'),
+                        birthdate: getUserAttribute(authUser,'birthdate'),
+                        address: getUserAttribute(authUser,'address'),
+                        phone_number: getUserAttribute(authUser,'phone_number'),
+                    }
+                }
+                await updateProfile(userData);
+                props.cancelUpdateProfile();
+            }
+            toast.success(t(translations.profile_page.update_profile.upload_profile_picture_successfully));
+        } else {
+            if (response.error?.response && response.error?.response?.status === 400) // file too large
+                toast.error(t(translations.profile_page.update_profile.your_file_is_too_large_please_choose_another));
+            else
+                toast.error(t(translations.profile_page.update_profile.error_happened_when_upload_profile_picture));
+        }
     }
 
     const onAvatarCropped = (convertedBase64ImageURL) => {

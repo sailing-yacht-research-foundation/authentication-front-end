@@ -24,7 +24,7 @@ export const getProfilePicture = (user) => {
 
     if (picture && !isNaN(picture)) return `/default-avatars/avatar-${picture}.png`;
 
-    if (picture) return process.env.REACT_APP_BUCKET_URL + picture;
+    if (picture) return picture;
 
     return NoAvatar;
 }
