@@ -92,6 +92,10 @@ export const MyRaceForm = () => {
 
             history.push(`/my-races/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
+            setCoordinates({
+                lat: lat,
+                lng: lon
+            });
         } else {
             toast.error(t(translations.my_race_create_update_page.an_error_happened_when_saving_race));
         }
@@ -121,7 +125,7 @@ export const MyRaceForm = () => {
                 setRace(response.data);
                 setCoordinates({
                     lat: response.data.lat,
-                    lon: response.data.lon
+                    lng: response.data.lon
                 })
             } else {
                 history.push('/404');
@@ -211,7 +215,6 @@ export const MyRaceForm = () => {
 
                         {(mode === MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
                         {mode === MODE.CREATE && <LocationPicker coordinates={MAP_DEFAULT_VALUE.CENTER} onChoosedLocation={onChoosedLocation} />}
-
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
