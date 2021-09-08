@@ -88,6 +88,7 @@ export const FilterResult = (props) => {
 
     React.useEffect(() => {
         searchRacesOnEnter();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const renderResult = () => {

@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { list } from 'services/live-data-server/event-calendars';
+import { search } from 'services/live-data-server/competition-units';
 import * as slice from '..';
 
 import homeSaga, { searchRaces } from '../saga';
@@ -11,14 +11,18 @@ describe('home Saga', () => {
     // We have to test twice, once for a successful load and once for an unsuccessful one
     // so we do all the stuff that happens beforehand automatically in the beforeEach
     beforeEach(() => {
-        searchRaceIterator = searchRaces({ keyword: 'east' });
+        searchRaceIterator = searchRaces({
+            payload: {
+                keyword: 'east'
+            }
+        });
     });
 
     it('should set races if races are returned from server', () => {
         const response = {
             data: {
                 hits: {
-                    hits:[],
+                    hits: [],
                     total: {
                         value: 5
                     }
@@ -34,9 +38,10 @@ describe('home Saga', () => {
             put(slice.homeActions.setIsSearching(true)),
         );
 
-        const callDescriptor = searchRaceIterator.next().value;
+        const callDescriptor = searchRaceIterator.next(params).value;
+
         expect(callDescriptor).toEqual(
-            call(list, params),
+            call(search, params),
         );
 
         const selectDescriptor = searchRaceIterator.next(response).value;
@@ -51,14 +56,18 @@ describe('home Saga', () => {
 
         let putDescriptor = searchRaceIterator.next().value;
         expect(putDescriptor).toEqual(
-            put(slice.homeActions.setResults(response.data?.hits.hits))
+            put(slice.homeActions.setTotal(response.data?.hits.total.value))
         );
 
         putDescriptor = searchRaceIterator.next().value;
         expect(putDescriptor).toEqual(
-            put(slice.homeActions.setTotal(response.data?.hits.total.value))
+            put(slice.homeActions.setMapResults(response.data?.hits.hits))
         );
 
+        putDescriptor = searchRaceIterator.next().value;
+        expect(putDescriptor).toEqual(
+            put(slice.homeActions.setResults(response.data?.hits.hits))
+        );
 
         const iteration = searchRaceIterator.next();
         expect(iteration.done).toBe(true);
@@ -68,7 +77,7 @@ describe('home Saga', () => {
         const response = {
             data: {
                 hits: {
-                    hits:[],
+                    hits: [],
                     total: {
                         value: 0
                     }
@@ -84,9 +93,9 @@ describe('home Saga', () => {
             put(slice.homeActions.setIsSearching(true)),
         );
 
-        const callDescriptor = searchRaceIterator.next().value;
+        const callDescriptor = searchRaceIterator.next(params).value;
         expect(callDescriptor).toEqual(
-            call(list, params),
+            call(search, params),
         );
 
         const selectDescriptor = searchRaceIterator.next(response).value;
@@ -99,17 +108,28 @@ describe('home Saga', () => {
             put(slice.homeActions.setIsSearching(false)),
         );
 
+        searchRacePutDescriptor = searchRaceIterator.next().value;
+        expect(searchRacePutDescriptor).toEqual(
+            put(slice.homeActions.setMapResults([])),
+        );
+
+        searchRacePutDescriptor = searchRaceIterator.next().value;
+        expect(searchRacePutDescriptor).toEqual(
+            put(slice.homeActions.setResults([])),
+        );
+
+
         const iteration = searchRaceIterator.next();
         expect(iteration.done).toBe(true);
     });
 });
 
 describe('home Saga Init', () => {
-  const homeIterator = homeSaga();
-  it('should start task to watch for searchRaces action', () => {
-    const takeLatestDescriptor = homeIterator.next().value;
-    expect(takeLatestDescriptor).toEqual(
-      takeLatest(slice.homeActions.searchRaces.type, searchRaces),
-    );
-  });
+    const homeIterator = homeSaga();
+    it('should start task to watch for searchRaces action', () => {
+        const takeLatestDescriptor = homeIterator.next().value;
+        expect(takeLatestDescriptor).toEqual(
+            takeLatest(slice.homeActions.searchRaces.type, searchRaces),
+        );
+    });
 });
