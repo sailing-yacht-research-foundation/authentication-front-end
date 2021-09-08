@@ -31,7 +31,7 @@ import { EULAPage } from './pages/EULAPage/Loadable';
 import { DealsPage } from './pages/DealsPage/Loadable';
 import { AboutPage } from './pages/AboutPage/Loadable';
 import { PlaybackPage } from './pages/PlaybackPage/Loadable';
-import { CourseCreatePage } from './pages/CourseCreatePage/Loadable';
+import { CourseCreatePage } from './pages/CourseCreateUpdatePage/Loadable';
 import { DataPage } from './pages/DataPage/Loadable';
 import { MyRacePage } from './pages/MyRacePage/Loadable';
 import { MyRacePageCreateUpdatePage } from './pages/MyRaceCreateUpdatePage/Loadable';
@@ -154,9 +154,10 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-races/:raceId/competition-units/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/competition-units/create'} component={CompetitionUnitCreateUpdatePage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/competition-units'} component={CompetitionUnitListPage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/competition-units/:competitionUnitId/courses/create'} component={CourseCreatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/competition-units/:competitionUnitId/courses/:courseId/update'} component={CourseCreatePage} />
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/courses/create'} component={CourseCreatePage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

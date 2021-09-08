@@ -1,9 +1,10 @@
 import React from 'react';
-import { Modal, Form } from 'antd';
+import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { deleteCompetitionUnit } from 'services/live-data-server/competition-units';
+import { translations } from 'locales/translations';
 
 export const DeleteCompetitionUnitModal = (props) => {
 
@@ -16,30 +17,30 @@ export const DeleteCompetitionUnitModal = (props) => {
         onCompetitionUnitDeleted
     } = props;
 
-    const performDeleteRace = async () => {
+    const performDeleteCompetitionUnit = async () => {
         const response = await deleteCompetitionUnit(competitionUnit.calendarEventId, competitionUnit.id);
 
         setShowDeleteModal(false);
 
         if (response.success) {
-            toast.success('Successfully deleted ' +  competitionUnit.name);
+            toast.success(t(translations.delete_competition_unit_modal.successfully_deleted, { name: competitionUnit.name }));
             onCompetitionUnitDeleted();
         } else {
-            toast.error('An unexpected error happened when deleting your competition unit');
+            toast.error(t(translations.delete_competition_unit_modal.an_unexpected_error));
         }
     }
 
     return (
         <Modal
-            title={'Are you sure you want to delete this competition unit?'}
+            title={t(translations.delete_competition_unit_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
             onOk={() => {
-                performDeleteRace();
+                performDeleteCompetitionUnit();
             }}
             onCancel={() => {
                 setShowDeleteModal(false);
             }}>
-            <ModalMessage>You will delete this competition unit along with all associated information, are you sure you want to continue?</ModalMessage>
+            <ModalMessage>{t(translations.delete_competition_unit_modal.you_will_delete)}</ModalMessage>
         </Modal>
     )
 }

@@ -7,7 +7,7 @@ import { PlaybackState } from 'app/pages/PlaybackPage/components/slice/types';
 import { PrivacyPolicyState } from 'app/pages/PrivacyPolicyPage/slice/types';
 import { EULAState } from 'app/pages/EULAPage/slice/types';
 import { HomeState } from 'app/pages/HomePage/slice/types';
-import { CourseState } from 'app/pages/CourseCreatePage/slice/types';
+import { CourseState } from 'app/pages/CourseCreateUpdatePage/slice/types';
 import { MyRaceListState } from 'app/pages/MyRacePage/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 

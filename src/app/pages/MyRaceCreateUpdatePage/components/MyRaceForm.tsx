@@ -1,9 +1,9 @@
 import 'leaflet/dist/leaflet.css';
 
 import React from 'react';
-import { Spin, Form, Input, DatePicker, Row, Col, Divider, Switch, TimePicker } from 'antd';
-import { CreateButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
-import { SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
+import { Spin, Form, DatePicker, Row, Col, Divider, Switch, TimePicker, Space } from 'antd';
+import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { LocationPicker } from './LocationPicker';
@@ -15,6 +15,10 @@ import { toast } from 'react-toastify';
 import { BsCardList } from 'react-icons/bs';
 import { CompetitionUnitList } from './CompetitionUnitList';
 import { MAP_DEFAULT_VALUE } from 'utils/helpers';
+import { BiTrash } from 'react-icons/bi';
+import { DeleteRaceModal } from 'app/pages/MyRacePage/components/DeleteRaceModal';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 const MODE = {
     CREATE: 'create',
@@ -31,11 +35,17 @@ export const MyRaceForm = () => {
 
     const [isSavingRace, setIsSavingRace] = React.useState<boolean>(false);
 
+    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
     const { raceId } = useParams<{ raceId: string }>();
 
-    const [coordinates, setCoordinates] = React.useState<any>({})
+    const [coordinates, setCoordinates] = React.useState<any>({});
+
+    const [race, setRace] = React.useState<any>({});
+
+    const { t } = useTranslation();
 
     const onFinish = async (values) => {
         const { name, locationName, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime } = values;
@@ -74,15 +84,16 @@ export const MyRaceForm = () => {
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success('Created a new race with name: ' + response.data?.name);
+                toast.success(t(translations.my_race_create_update_page.created_a_new_race, { name: response.data?.name }));
+                setRace(response.data);
             } else {
-                toast.success('Successfully updated your race: ' + response.data?.name);
+                toast.success(t(translations.my_race_create_update_page.successfully_update_race, { name: response.data?.name }));
             }
 
             history.push(`/my-races/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
-            toast.error('An error happened when saving your race.');
+            toast.error(t(translations.my_race_create_update_page.an_error_happened_when_saving_race));
         }
     }
 
@@ -107,6 +118,7 @@ export const MyRaceForm = () => {
                     startDate: moment(response.data?.approximateStartTime),
                     startTime: moment(response.data?.approximateStartTime)
                 });
+                setRace(response.data);
                 setCoordinates({
                     lat: response.data.lat,
                     lon: response.data.lon
@@ -119,15 +131,35 @@ export const MyRaceForm = () => {
 
     React.useEffect(() => {
         initModeAndData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const onRaceDeleted = () => {
+        history.push('/my-races');
+    }
 
     return (
         <Wrapper>
+            <DeleteRaceModal
+                race={race}
+                onRaceDeleted={onRaceDeleted}
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+            />
             <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageHeaderText>{mode == MODE.UPDATE ? 'Update your race' : 'Create a new race'}</PageHeaderText>
-                <CreateButton onClick={() => history.push("/my-races")} icon={<BsCardList
-                    style={{ marginRight: '5px' }}
-                    size={18} />}>View all</CreateButton>
+                <PageHeaderText>{mode === MODE.UPDATE ?
+                    t(translations.my_race_create_update_page.update_your_race)
+                    : t(translations.my_race_create_update_page.create_a_new_race)}
+                </PageHeaderText>
+                <Space size={10}>
+                    <CreateButton onClick={() => history.push("/my-races")} icon={<BsCardList
+                        style={{ marginRight: '5px' }}
+                        size={18} />}>{t(translations.my_race_create_update_page.view_all)}</CreateButton>
+                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                        style={{ marginRight: '5px' }}
+                        size={18} />}>{t(translations.my_race_create_update_page.delete)}</DeleteButton>}
+
+                </Space>
             </PageHeaderContainer>
             <SyrfFormWrapper>
                 <Spin spinning={isSavingRace}>
@@ -138,7 +170,7 @@ export const MyRaceForm = () => {
                         onFinish={onFinish}
                     >
                         <Form.Item
-                            label="Name"
+                            label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
                             rules={[{ required: true }]}
                         >
@@ -148,7 +180,7 @@ export const MyRaceForm = () => {
                         <Divider />
 
                         <Form.Item
-                            label="Location name"
+                            label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.location_name)}</SyrfFieldLabel>}
                             name="locationName"
                             rules={[{ required: true }]}
                         >
@@ -158,7 +190,7 @@ export const MyRaceForm = () => {
                         <Row gutter={24}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={'Longitude'}
+                                    label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.longitude)}</SyrfFieldLabel>}
                                     name="lon"
                                     rules={[{ required: true }]}
                                 >
@@ -168,7 +200,7 @@ export const MyRaceForm = () => {
 
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={'Latitude'}
+                                    label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.latitude)}</SyrfFieldLabel>}
                                     name="lat"
                                     rules={[{ required: true }]}
                                 >
@@ -177,13 +209,13 @@ export const MyRaceForm = () => {
                             </Col>
                         </Row>
 
-                        {(mode == MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
-                        {mode == MODE.CREATE && <LocationPicker coordinates={MAP_DEFAULT_VALUE.CENTER} onChoosedLocation={onChoosedLocation} />}
+                        {(mode === MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
+                        {mode === MODE.CREATE && <LocationPicker coordinates={MAP_DEFAULT_VALUE.CENTER} onChoosedLocation={onChoosedLocation} />}
 
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={'Start Date'}
+                                    label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
                                     rules={[{ type: 'date', required: true }]}
                                 >
@@ -204,7 +236,7 @@ export const MyRaceForm = () => {
 
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={'Start Time'}
+                                    label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
                                     rules={[{ required: true }]}
                                 >
@@ -214,7 +246,7 @@ export const MyRaceForm = () => {
                         </Row>
 
                         <Form.Item
-                            label="External URL"
+                            label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.external_url)}</SyrfFieldLabel>}
                             name="externalUrl"
                             rules={[{ type: 'url' }]}
                         >
@@ -227,7 +259,7 @@ export const MyRaceForm = () => {
 
                         <Form.Item>
                             <SyrfFormButton type="primary" htmlType="submit">
-                                Save Race
+                                {t(translations.my_race_create_update_page.save_race)}
                             </SyrfFormButton>
                         </Form.Item>
                     </Form>

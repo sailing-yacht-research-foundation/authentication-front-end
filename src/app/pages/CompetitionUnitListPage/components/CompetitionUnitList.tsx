@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table, Space, Spin } from 'antd';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
@@ -8,7 +7,6 @@ import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
-import { useMyRaceListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { getAllCompetitionUnits } from 'services/live-data-server/competition-units';
@@ -25,44 +23,46 @@ const defaultOptions = {
 
 export const CompetitionUnitList = () => {
 
+    const { t } = useTranslation();
+
     const columns = [
         {
-            title: 'Name',
+            title: t(translations.competition_unit_list_page.name),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => <Link to={`/my-races/${record.calendarEventId}/competition-units/${record.id}/update`}>{text}</Link>,
             width: '20%',
         },
         {
-            title: 'Start Time',
+            title: t(translations.competition_unit_list_page.start_time),
             dataIndex: 'startTime',
             key: 'startTime',
             render: (value) => moment(value).format('YYYY-MM-DD'),
             width: '20%',
         },
         {
-            title: 'Approximate Start',
+            title: t(translations.competition_unit_list_page.approximate_start),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
             render: (value) => moment(value).format('YYYY-MM-DD'),
             width: '20%',
         },
         {
-            title: 'Created Date',
+            title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
             render: (value) => moment(value).format('YYYY-MM-DD'),
             width: '20%',
         },
         {
-            title: 'Action',
+            title: t(translations.competition_unit_list_page.action),
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
                         history.push(`/my-races/${record.calendarEventId}/competition-units/${record.id}/update`);
-                    }} type="primary">Update</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>Delete</BorderedButton>
+                    }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>
             ),
             width: '20%',
@@ -75,8 +75,6 @@ export const CompetitionUnitList = () => {
         rows: []
     });
 
-    const { t } = useTranslation();
-
     const history = useHistory();
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
@@ -87,6 +85,7 @@ export const CompetitionUnitList = () => {
 
     React.useEffect(() => {
         getAll(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getAll = async (page) => {
@@ -125,10 +124,10 @@ export const CompetitionUnitList = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainer>
-                <PageHeaderText>Competition Units</PageHeaderText>
+                <PageHeaderText>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderText>
                 <CreateButton onClick={() => history.push("/competition-units/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
-                    size={18} />}>Create a competition unit</CreateButton>
+                    size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
             </PageHeaderContainer>
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
@@ -151,7 +150,7 @@ export const CompetitionUnitList = () => {
                     <CreateButton icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />} onClick={() => history.push("/competition-units/create")}>Create</CreateButton>
-                    <LottieMessage>{t(translations.my_race_list_page.you_dont_have_any_race)}</LottieMessage>
+                    <LottieMessage>{t(translations.competition_unit_list_page.you_dont_have_any_competition_unit)}</LottieMessage>
                 </LottieWrapper>)}
         </>
     )

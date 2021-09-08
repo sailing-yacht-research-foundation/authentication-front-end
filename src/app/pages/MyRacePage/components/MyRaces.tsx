@@ -1,9 +1,8 @@
 import React from 'react';
-import { Table, Tag, Space, Button, Spin } from 'antd';
+import { Table, Space, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsChangingPage, selectResults } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyRacePage/slice/selectors';
-import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
@@ -26,29 +25,31 @@ const defaultOptions = {
 
 export const MyRaces = () => {
 
+    const { t } = useTranslation();
+
     const columns = [
         {
-            title: 'Name',
+            title: t(translations.my_race_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: text => <a>{text}</a>,
+            render: text => text,
             width: '20%',
         },
         {
-            title: 'Location',
+            title: t(translations.my_race_list_page.location),
             dataIndex: 'locationName',
             key: 'location',
             width: '20%',
         },
         {
-            title: 'Start Date',
+            title: t(translations.my_race_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
             render: (value) => moment(value).format('YYYY-MM-DD'),
             width: '20%',
         },
         {
-            title: 'Created Date',
+            title: t(translations.my_race_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
             render: (value) => moment(value).format('YYYY-MM-DD'),
@@ -61,8 +62,8 @@ export const MyRaces = () => {
                 <Space size="middle">
                     <BorderedButton onClick={() => {
                         history.push(`/my-races/${record.id}/update`)
-                    }} type="primary">Update</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>Delete</BorderedButton>
+                    }} type="primary">{t(translations.my_race_list_page.update)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_race_list_page.delete)}</BorderedButton>
                 </Space>
             ),
             width: '20%',
@@ -74,8 +75,6 @@ export const MyRaces = () => {
     const page = useSelector(selectPage);
 
     const total = useSelector(selectTotal);
-
-    const { t } = useTranslation();
 
     const history = useHistory();
 
@@ -91,6 +90,7 @@ export const MyRaces = () => {
 
     React.useEffect(() => {
         dispatch(actions.getRaces(1));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onPaginationChanged = (page) => {
@@ -115,10 +115,10 @@ export const MyRaces = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainer>
-                <PageHeaderText>My Races</PageHeaderText>
+                <PageHeaderText>{t(translations.my_race_list_page.my_races)}</PageHeaderText>
                 <CreateButton onClick={() => history.push("/my-races/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
-                    size={18} />}>Create a new Race</CreateButton>
+                    size={18} />}>{t(translations.my_race_list_page.create_a_new_race)}</CreateButton>
             </PageHeaderContainer>
             {results.length > 0 ? (
                 <Spin spinning={isChangingPage}>
@@ -140,7 +140,7 @@ export const MyRaces = () => {
                         width={400} />
                     <CreateButton icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/my-races/create")}>Create</CreateButton>
+                        size={18} />} onClick={() => history.push("/my-races/create")}>{t(translations.my_race_list_page.create)}</CreateButton>
                     <LottieMessage>{t(translations.my_race_list_page.you_dont_have_any_race)}</LottieMessage>
                 </LottieWrapper>)}
         </>

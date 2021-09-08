@@ -1,7 +1,7 @@
 import React from 'react';
-import { Spin, Form, Divider, DatePicker, Switch, Row, Col, TimePicker } from 'antd';
-import { SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { CreateButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
+import { Spin, Form, Divider, DatePicker, Switch, Row, Col, TimePicker, Space } from 'antd';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
+import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
 import { BsCardList } from 'react-icons/bs';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -11,6 +11,13 @@ import moment from 'moment';
 import { create, update, get } from 'services/live-data-server/competition-units';
 import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';
+import { CoursesList } from './CoursesList';
+import Select from 'rc-select';
+import { getAll } from 'services/live-data-server/event-calendars';
+import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
+import { BiTrash } from 'react-icons/bi';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 const MODE = {
     UPDATE: 'update',
@@ -19,6 +26,8 @@ const MODE = {
 
 export const CompetitionUnitForm = () => {
     const history = useHistory();
+
+    const { t } = useTranslation();
 
     const location = useLocation();
 
@@ -32,9 +41,16 @@ export const CompetitionUnitForm = () => {
 
     const [boundingBoxCoordinates, setBoundingBoxCoordinates] = React.useState([]);
 
+    const [races, setRaces] = React.useState<any[]>([]);
+
+    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
+    const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
+
     const onFinish = async (values) => {
-        const { name, startDate, startTime, isCompeleted } = values;
+        let { name, startDate, startTime, isCompleted, calendarEventId } = values;
         let response;
+        calendarEventId = raceId ? raceId : calendarEventId;
 
         setIsSaving(true);
 
@@ -42,47 +58,48 @@ export const CompetitionUnitForm = () => {
             name: name,
             startTime: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")),
             approximateStart: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")),
-            isCompleted: true,
+            isCompleted: isCompleted,
             boundingBox: boundingBoxCoordinates.length > 0 ?
                 {
                     "type": "Polygon",
                     "coordinates": [...boundingBoxCoordinates]
                 }
                 : null,
-            calendarEventId: raceId
+            calendarEventId: calendarEventId
         };
 
         if (mode === MODE.CREATE)
-            response = await create(raceId, data);
+            response = await create(calendarEventId, data);
         else
-            response = await update(raceId, competitionUnitId, data);
+            response = await update(calendarEventId, competitionUnitId, data);
 
 
         setIsSaving(false);
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success('Created a new competition unit with name: ' + response.data?.name);
+                toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data?.name }));
+                setCompetitionUnit(response.data);
             } else {
-                toast.success('Successfully updated your competition unit: ' + response.data?.name);
+                toast.success(t(translations.competition_unit_create_update_page.successfully_updated_competition_unit, { name: response.data?.name }));
             }
 
-            history.push(`/my-races/${raceId}/competition-units/${response.data?.id}/update`);
+            history.push(`/my-races/${calendarEventId}/competition-units/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
-            toast.error('An error happened when saving your race.');
+            toast.error(t(translations.competition_unit_create_update_page.an_error_happened));
         }
     }
 
     const initModeAndData = async () => {
         if (location.pathname.includes(MODE.UPDATE)) {
             setMode(MODE.UPDATE);
-
             setIsSaving(true);
             const response = await get(raceId, competitionUnitId);
             setIsSaving(false);
 
             if (response.success) {
+                setCompetitionUnit(response.data);
                 form.setFieldsValue({
                     ...response.data,
                     startDate: moment(response.data?.approximateStartTime),
@@ -96,21 +113,53 @@ export const CompetitionUnitForm = () => {
         }
     }
 
+    const getAllRaces = async () => {
+        const response = await getAll();
+
+        if (response.success) {
+            setRaces(response.data.rows);
+        }
+    }
+
     const onCoordinatesRecevied = (coordinates) => {
         setBoundingBoxCoordinates(coordinates);
     }
 
+    const renderRacesDropdownList = () => {
+        return races.map((race) => {
+            return <Select.Option key={race.id} value={race.id}>{race.name}</Select.Option>
+        });
+    }
+
+    const onCompetitionUnitDeleted = () => {
+        history.push('/competition-units');
+    }
+
     React.useEffect(() => {
         initModeAndData();
+        getAllRaces();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <Wrapper>
+            <DeleteCompetitionUnitModal
+                competitionUnit={competitionUnit}
+                onCompetitionUnitDeleted={onCompetitionUnitDeleted}
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+            />
             <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageHeaderText>{mode == MODE.UPDATE ? 'Update your competiton unit' : 'Create a new competition unit'}</PageHeaderText>
-                <CreateButton onClick={() => history.push("/my-races")} icon={<BsCardList
-                    style={{ marginRight: '5px' }}
-                    size={18} />}>View all competition units</CreateButton>
+                <PageHeaderText>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeaderText>
+                <Space size={10}>
+                    <CreateButton onClick={() => history.push("/competition-units")} icon={<BsCardList
+                        style={{ marginRight: '5px' }}
+                        size={18} />}>{t(translations.competition_unit_create_update_page.view_all_competition_units)}</CreateButton>
+                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                        style={{ marginRight: '5px' }}
+                        size={18} />}>{t(translations.competition_unit_create_update_page.delete)}</DeleteButton>}
+
+                </Space>
             </PageHeaderContainer>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
@@ -121,19 +170,40 @@ export const CompetitionUnitForm = () => {
                         onFinish={onFinish}
                     >
                         <Form.Item
-                            label="Name"
+                            label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField />
                         </Form.Item>
+                        {
+                            !raceId && <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.race_id)}</SyrfFieldLabel>}
+                                name="calendarEventId"
+                                rules={[{ required: true }]}
+                            >
+                                <SyrfFormSelect placeholder={'Select a race'}
+                                    showSearch
+                                    filterOption={(input, option) => {
+                                        if (option) {
+                                            return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+
+                                        return false;
+                                    }}
+                                >
+                                    {renderRacesDropdownList()}
+                                </SyrfFormSelect>
+                            </Form.Item>
+                        }
 
                         <Divider />
 
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={'Start Date'}
+                                    label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
                                     rules={[{ type: 'date', required: true }]}
                                 >
@@ -154,7 +224,7 @@ export const CompetitionUnitForm = () => {
 
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={'Start Time'}
+                                    label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
                                     rules={[{ required: true }]}
                                 >
@@ -165,23 +235,25 @@ export const CompetitionUnitForm = () => {
 
                         <BoundingBoxPicker coordinates={boundingBoxCoordinates} onCoordinatesRecevied={onCoordinatesRecevied} />
 
-                        <Form.Item label="Is completed?" name="isCompleted" valuePropName="checked" initialValue={false}>
+                        <Form.Item label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.is_completed)}</SyrfFieldLabel>} name="isCompleted" valuePropName="checked" initialValue={false}>
                             <Switch />
                         </Form.Item>
 
                         <Form.Item>
                             <SyrfFormButton type="primary" htmlType="submit">
-                                Save Competition Unit
+                                {t(translations.competition_unit_create_update_page.save_competition_unit)}
                             </SyrfFormButton>
                         </Form.Item>
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
 
-            <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                {/* <CompetitionUnitList /> */}
-            </SyrfFormWrapper>
-        </Wrapper>
+            {
+                mode === MODE.UPDATE && <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                    <CoursesList competitionUnitId={competitionUnitId} />
+                </SyrfFormWrapper>
+            }
+        </Wrapper >
     )
 }
 

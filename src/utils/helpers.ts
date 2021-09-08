@@ -1,3 +1,5 @@
+import * as L from 'leaflet';
+
 /**
  * Check if is mobile
  * @returns 
@@ -121,5 +123,20 @@ export const MAP_DEFAULT_VALUE = {
     CENTER: {
         lng: -122.4,
         lat: 37.8
+    }
+}
+
+/**
+ * Add a layer to leaflet draw layer
+ * @param sourceLayer 
+ * @param targetGroup 
+ */
+export const addNonGroupLayers = (sourceLayer, targetGroup) => {
+    if (sourceLayer instanceof L.LayerGroup) {
+        sourceLayer.eachLayer(function (layer) {
+            addNonGroupLayers(layer, targetGroup);
+        });
+    } else {
+        targetGroup.addLayer(sourceLayer);
     }
 }

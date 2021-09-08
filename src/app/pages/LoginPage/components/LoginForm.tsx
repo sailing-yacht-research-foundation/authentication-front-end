@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Input, Form, Button, Spin } from 'antd';
-import Amplify, { Auth, Hub, API } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
 import { useHistory } from 'react-router';

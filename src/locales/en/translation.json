@@ -137,7 +137,9 @@
     "test_data": "Test Data",
     "my_races": "My Races",
     "search": "Search",
-    "data": "Data"
+    "data": "Data",
+    "races": "Races",
+    "competition_units": "Competition Units"
   },
   "profile_page": {
     "update_profile": {
@@ -255,6 +257,104 @@
     "hexbin_map_to_visualize": "3D Hexbin map to visualize the density of yacht clubs."
   },
   "my_race_list_page": {
-    "you_dont_have_any_race": "You do not have any races at the moment, please create one."
+    "you_dont_have_any_race": "You do not have any races at the moment, please create one.",
+    "name": "Name",
+    "location": "Location",
+    "start_date": "Start Date",
+    "created_date":"Created Date",
+    "action": "Action",
+    "update": "Update",
+    "delete": "Delete",
+    "my_races": "My Races",
+    "create_a_new_race": "Create A New Race",
+    "create": "Create"
+  },
+  "competition_unit_list_page": {
+    "name": "Name",
+    "location": "Location",
+    "start_date": "Start Date",
+    "created_date": "Created Date",
+    "action": "Action",
+    "update": "Update",
+    "delete": "Delete",
+    "competition_units": "Competition Units",
+    "create": "Create",
+    "start_time": "Start Time",
+    "approximate_start": "Approximate Start",
+    "you_dont_have_any_competition_unit": "You don't have any competition units, please create one."
+  },
+  "competition_unit_create_update_page": {
+    "created_a_new_competition_unit": "Created a new competition unit with name: {{name}}.",
+    "successfully_updated_competition_unit": "Successfully updated your competition unit: {{name}}",
+    "an_error_happened": "An error happened when saving your competition unit.",
+    "view_all_competition_units": "View all",
+    "delete": "Delete",
+    "name": "Name",
+    "race_id": "Race Id",
+    "start_date": "Start Date",
+    "start_time": "Start Time",
+    "save_competition_unit": "Save competition unit",
+    "is_completed": "Is Completed",
+    "please_create_a_bounding_box": "Please create a bounding box by drawing on the map.",
+    "update_your_competition_unit": "Update your competiton unit",
+    "create_a_new_competition_unit": "Create a new competition unit"
+  },
+  "my_race_create_update_page": {
+    "created_a_new_race": "Created a new race with name {{name}}.",
+    "successfully_update_race": "Successfully updated your race: {{name}}.",
+    "an_error_happened_when_saving_race": "An error happened when saving your race.",
+    "update_your_race": "Update Your Race",
+    "create_a_new_race": "Create A New Race",
+    "view_all": "View all",
+    "delete": "Delete",
+    "name":"Name",
+    "location_name": "Location Name",
+    "start_date": "Start Date",
+    "start_time": "Start Time",
+    "external_url": "External URL",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "save_race":"Save Race",
+    "please_choose_a_location": "Please choose a location by clicking on the map"
+  },
+  "course_list": {
+    "course": "Course",
+    "create": "Create",
+    "update": "Update",
+    "created_date": "Created Date",
+    "has_geometry": "Has Geometry",
+    "yes": "Yes",
+    "no": "No",
+    "action": "Action",
+    "delete": "Delete"
+  },
+  "delete_race_modal": {
+    "successfully_deleted": "Successfully deleted race {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your race",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this race?",
+    "you_will_delete": "You will delete this race along with all associated information, are you sure you want to continue?"
+  },
+  "delete_competition_unit_modal": {
+    "successfully_deleted": "Successfully deleted competition unit {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your competition unit",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this competition unit?",
+    "you_will_delete": "You will delete this competition unit along with all associated information, are you sure you want to continue?"
+  },
+  "delete_course_modal": {
+    "successfully_deleted": "Successfully deleted course.",
+    "an_unexpected_error": "An unexpected error happened when deleting your course",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this course?",
+    "you_will_delete": "You will delete this course along with all associated information, are you sure you want to continue?"
+  },
+  "course_create_update_page": {
+    "you_cannot_create_course": "You cannot save the course because You have not added any geometries",
+    "successfully_created_your_course": "Successfully saved your course.",
+    "an_unexpected_error": "An unexpected error happened when saving your course.",
+    "enter_geometry_name": "Enter geometry name",
+    "geometry_name": "Geometry Name",
+    "input_a_name_for_this_geometry": "Input a name for this geometry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving..."
   }
 }

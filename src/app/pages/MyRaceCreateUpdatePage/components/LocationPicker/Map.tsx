@@ -21,13 +21,13 @@ export const Map = (props) => {
 
     const setMarker = (coordinates) => {
         if (marker) map.removeLayer(marker);
-            marker = new L.marker(coordinates, {
-                icon: L.divIcon({
-                    html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#fff', fontSize: '35px' }} />),
-                    iconSize: [20, 20],
-                    className: 'my-race'
-                })
-            }).addTo(map);
+        marker = new L.marker(coordinates, {
+            icon: L.divIcon({
+                html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#fff', fontSize: '35px' }} />),
+                iconSize: [20, 20],
+                className: 'my-race'
+            })
+        }).addTo(map);
     }
 
     const initializeMapView = () => {
@@ -47,8 +47,9 @@ export const Map = (props) => {
     React.useEffect(() => {
         initializeMapView();
         initMapClickEvent();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     return (
         <>
         </>

@@ -13,7 +13,6 @@ import { Space, Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { CreateButton } from '../SyrfGeneral';
 
 export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);

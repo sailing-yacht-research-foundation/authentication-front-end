@@ -31,6 +31,14 @@ export const CreateButton = styled(Button)`
     border-color: #40a9ff;
 `;
 
+export const DeleteButton = styled(Button)`
+    margin: 10px 0;
+    border-radius: 5px;
+    color: red;
+    border-color: red;
+`;
+
+
 export const LottieWrapper = styled.div`
     text-align: center;
     margin-top: 15px;

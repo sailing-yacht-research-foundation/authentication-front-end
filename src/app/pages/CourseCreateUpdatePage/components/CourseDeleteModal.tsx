@@ -3,45 +3,44 @@ import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { deleteRace } from 'services/live-data-server/event-calendars';
+import { deleteCourse } from 'services/live-data-server/courses';
 import { translations } from 'locales/translations';
 
-export const DeleteRaceModal = (props) => {
+export const CourseDeleteModal = (props) => {
 
     const { t } = useTranslation();
 
-    const { onRaceDeleted } = props;
-
     const {
-        race,
+        course,
         showDeleteModal,
-        setShowDeleteModal
+        setShowDeleteModal,
+        onCourseDeleted
     } = props;
 
-    const performDeleteRace = async () => {
-        const response = await deleteRace(race.id);
+    const performDeleteCourse = async () => {
+        const response = await deleteCourse(course.id);
 
         setShowDeleteModal(false);
 
         if (response.success) {
-            toast.success(t(translations.delete_race_modal.successfully_deleted, { name: race.name }));
-            onRaceDeleted();
+            toast.success(t(translations.delete_course_modal.successfully_deleted));
+            onCourseDeleted();
         } else {
-            toast.error(t(translations.delete_race_modal.an_unexpected_error));
+            toast.error(t(translations.delete_course_modal.an_unexpected_error));
         }
     }
 
     return (
         <Modal
-            title={t(translations.delete_race_modal.are_you_sure_you_want_to_delete)}
+            title={t(translations.delete_course_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
             onOk={() => {
-                performDeleteRace();
+                performDeleteCourse();
             }}
             onCancel={() => {
                 setShowDeleteModal(false);
             }}>
-            <ModalMessage>{t(translations.delete_race_modal.you_will_delete)}</ModalMessage>
+            <ModalMessage>{t(translations.delete_course_modal.you_will_delete)}</ModalMessage>
         </Modal>
     )
 }

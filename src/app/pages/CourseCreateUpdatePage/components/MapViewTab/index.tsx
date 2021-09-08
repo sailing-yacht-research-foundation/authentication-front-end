@@ -9,7 +9,7 @@ export const MapViewTab = () => {
 
     return (
         <Wrapper>
-            <MapContainer style={{ height: `calc(101vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: 'calc(100%)' }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
+            <MapContainer style={{ height: `calc(101vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: 'calc(100%)' }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <MapView />
             </MapContainer>
         </Wrapper>

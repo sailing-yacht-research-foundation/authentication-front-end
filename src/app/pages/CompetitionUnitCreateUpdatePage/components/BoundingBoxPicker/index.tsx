@@ -6,17 +6,21 @@ import { MapContainer } from 'react-leaflet';
 import { MAP_DEFAULT_VALUE } from 'utils/helpers';
 import { Map } from './Map';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const BoundingBoxPicker = (props) => {
 
     const { onCoordinatesRecevied, coordinates } = props;
+
+    const { t } = useTranslation();
 
     return (
         <Wrapper>
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <Map coordinates={coordinates}  onCoordinatesRecevied={onCoordinatesRecevied} zoom={MAP_DEFAULT_VALUE.ZOOM} />
             </MapContainer>
-            <PickerDescription>Please create a bounding box by drawing on the map</PickerDescription>
+            <PickerDescription>{t(translations.competition_unit_create_update_page.please_create_a_bounding_box)}</PickerDescription>
         </Wrapper>
     )
 }

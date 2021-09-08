@@ -15,10 +15,10 @@ export const list = () => {
     });
 }
 
-export const create = (data) => {
+export const create = (competitionUnitId, courseSequencedGeometries) => {
     return syrfService.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/courses`, {
-        competitionUnitId: data.competitionUnitId,
-        courseSequencedGeometries: data.courseSequencedGeometries
+        courseSequencedGeometries: courseSequencedGeometries,
+        competitionUnitId: competitionUnitId
     }).then(response => {
         return {
             success: true,
@@ -46,10 +46,10 @@ export const deleteCourse = (courseId) => {
     });
 }
 
-export const update = (courseId, data) => {
+export const update = (competitionUnitId, courseId, courseSequencedGeometries) => {
     return syrfService.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/courses/${courseId}`, {
-        competitionUnitId: data.competitionUnitId,
-        courseSequencedGeometries: data.courseSequencedGeometries
+        courseSequencedGeometries: courseSequencedGeometries,
+        competitionUnitId: competitionUnitId
     }).then(response => {
         return {
             success: true,
@@ -61,4 +61,48 @@ export const update = (courseId, data) => {
             error: error
         }
     });
+}
+
+export const updateCourseGeometry = (courseId, courseSequencedGeometries) => {
+    console.log(courseSequencedGeometries);
+    return syrfService.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/courses/${courseId}/sequenced`, courseSequencedGeometries).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
+
+export const getByCompetitionUnit = (competitionUnitId) => {
+    return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/course`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
+
+export const getById = (courseId) => {
+    return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/courses/${courseId}`)
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        });
 }

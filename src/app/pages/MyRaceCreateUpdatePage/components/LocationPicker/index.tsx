@@ -2,12 +2,16 @@ import React from 'react';
 import { MapContainer } from 'react-leaflet';
 import { Map } from './Map';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 const DEFAULT_ZOOM = 1;
 
 export const LocationPicker = (props) => {
 
     const { onChoosedLocation, coordinates } = props;
+
+    const { t } = useTranslation();
 
     const onMapClicked = (latitude, longitude) => {
         onChoosedLocation(latitude, longitude);
@@ -18,7 +22,7 @@ export const LocationPicker = (props) => {
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
                 <Map coordinates={coordinates} onMapClicked={onMapClicked} zoom={DEFAULT_ZOOM} />
             </MapContainer>
-            <PickerDescription>Please choose a location by clicking on the map</PickerDescription>
+            <PickerDescription>{t(translations.my_race_create_update_page.please_choose_a_location)}</PickerDescription>
         </Wrapper>
     )
 }

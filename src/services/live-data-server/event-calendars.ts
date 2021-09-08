@@ -35,6 +35,21 @@ export const search = (action) => {
     });
 }
 
+export const getAll = () => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events`)
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        })
+}
+
 export const getMany = (page) => {
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events`, {
         params: {

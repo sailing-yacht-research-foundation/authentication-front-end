@@ -1,38 +1,37 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import { Space, Spin, Table } from 'antd';
-import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderText, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
+import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
 
 export const CompetitionUnitList = (props) => {
+
+    const { t } = useTranslation();
 
     const { raceId } = props;
 
     const columns = [
         {
-            title: 'Name',
+            title: t(translations.competition_unit_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: text => <a>{text}</a>,
+            render: text => text,
             width: '20%',
         },
         {
-            title: 'Location',
-            dataIndex: 'locationName',
-            key: 'location',
-            width: '20%',
-        },
-        {
-            title: 'Start Date',
+            title: t(translations.competition_unit_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
             render: (value) => moment(value).format('YYYY-MM-DD'),
             width: '20%',
         },
         {
-            title: 'Created Date',
+            title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
             render: (value) => moment(value).format('YYYY-MM-DD'),
@@ -45,8 +44,8 @@ export const CompetitionUnitList = (props) => {
                 <Space size="middle">
                     <BorderedButton onClick={() => {
                         history.push(`/my-races/${record.id}/update`)
-                    }} type="primary">Update</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>Delete</BorderedButton>
+                    }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>
             ),
             width: '20%',
@@ -59,13 +58,13 @@ export const CompetitionUnitList = (props) => {
         rows: []
     });
 
+    const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const history = useHistory();
 
-    const showDeleteRaceModal = (competitionUnit) => {
-
-    }
+    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
     const getAll = async (page) => {
         setIsLoading(true);
@@ -81,32 +80,50 @@ export const CompetitionUnitList = (props) => {
         }
     }
 
+    const showDeleteCompetitionUnitModal = (competitionUnit) => {
+        setShowDeleteModal(true);
+        setCompetitionUnit(competitionUnit);
+    }
+
     const onPaginationChanged = (page) => {
         getAll(page);
     }
-    
+
+    const onCompetitionUnitDeleted = () => {
+        getAll(pagination.page);
+    }
+
     React.useEffect(() => {
         getAll(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <Spin spinning={isLoading}>
-            <PageHeaderContainer>
-                <PageHeaderTextSmall>Competition Units</PageHeaderTextSmall>
-                <CreateButton onClick={() => history.push(`/my-races/${raceId}/competition-units/create`)} icon={<AiFillPlusCircle
-                    style={{ marginRight: '5px' }}
-                    size={18} />}>Create</CreateButton>
-            </PageHeaderContainer>
-            <TableWrapper>
-                <Table columns={columns}
-                    scroll={{ x: "max-content" }}
-                    dataSource={pagination.rows} pagination={{
-                        defaultPageSize: 10,
-                        current: pagination.page,
-                        total: pagination.total,
-                        onChange: onPaginationChanged
-                    }} />
-            </TableWrapper>
-        </Spin>
+        <>
+            <DeleteCompetitionUnitModal
+                competitionUnit={competitionUnit}
+                onCompetitionUnitDeleted={onCompetitionUnitDeleted}
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+            />
+            <Spin spinning={isLoading}>
+                <PageHeaderContainer>
+                    <PageHeaderTextSmall>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderTextSmall>
+                    <CreateButton onClick={() => history.push(`/my-races/${raceId}/competition-units/create`)} icon={<AiFillPlusCircle
+                        style={{ marginRight: '5px' }}
+                        size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
+                </PageHeaderContainer>
+                <TableWrapper>
+                    <Table columns={columns}
+                        scroll={{ x: "max-content" }}
+                        dataSource={pagination.rows} pagination={{
+                            defaultPageSize: 10,
+                            current: pagination.page,
+                            total: pagination.total,
+                            onChange: onPaginationChanged
+                        }} />
+                </TableWrapper>
+            </Spin>
+        </>
     )
 }

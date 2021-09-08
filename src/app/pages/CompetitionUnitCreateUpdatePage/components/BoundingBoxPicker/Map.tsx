@@ -1,6 +1,7 @@
 import React from 'react';
 import * as L from 'leaflet';
 import { useMap } from 'react-leaflet';
+import { addNonGroupLayers } from 'utils/helpers';
 
 require('leaflet-draw');
 
@@ -18,6 +19,7 @@ export const Map = (props) => {
 
     React.useEffect(() => {
         initPolygonShapeOnCompetitionUnitUpdate();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coordinates]);
 
     const initPolygonShapeOnCompetitionUnitUpdate = () => {
@@ -111,21 +113,12 @@ export const Map = (props) => {
         });
     }
 
-    const addNonGroupLayers = (sourceLayer, targetGroup) => {
-        if (sourceLayer instanceof L.LayerGroup) {
-            sourceLayer.eachLayer(function (layer) {
-                addNonGroupLayers(layer, targetGroup);
-            });
-        } else {
-            targetGroup.addLayer(sourceLayer);
-        }
-    }
-
     React.useEffect(() => {
         initializeMapView();
         registerOnSavedEvent();
         registerOnLayerDeletedEvent();
         registerOnGeometryCreatedEvent();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
