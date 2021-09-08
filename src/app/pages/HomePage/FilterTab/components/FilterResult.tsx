@@ -60,6 +60,7 @@ export const FilterResult = (props) => {
             dispatch(actions.setFromDate(params.from_date ?? ''));
             dispatch(actions.setToDate(params.to_date ?? ''));
             dispatch(actions.searchRaces(params));
+            dispatch(actions.searchRaces({...params, get_all: true }));
         }
     }
 

@@ -3,7 +3,7 @@
  */
 
 import { homeActions } from ".";
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { search } from "services/live-data-server/competition-units";
 import { toast } from "react-toastify";
 import i18next from 'i18next';
@@ -38,5 +38,5 @@ export function* searchRaces(action) {
 }
 
 export default function* homeSaga() {
-    yield takeLatest(homeActions.searchRaces.type, searchRaces);
+    yield takeEvery(homeActions.searchRaces.type, searchRaces);
 }

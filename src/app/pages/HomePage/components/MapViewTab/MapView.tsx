@@ -32,7 +32,8 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     useEffect(() => {
         initializeMapView();
-        zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
+        if (results.length === 0) // no results and focus on user location
+            zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
