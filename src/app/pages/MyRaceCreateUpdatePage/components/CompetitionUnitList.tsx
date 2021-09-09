@@ -43,7 +43,7 @@ export const CompetitionUnitList = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-races/${record.id}/update`)
+                        history.push(`/my-races/${record.calendarEventId}/competition-units/${record.id}/update`)
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>
