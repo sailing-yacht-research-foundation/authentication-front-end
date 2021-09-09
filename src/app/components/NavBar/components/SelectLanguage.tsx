@@ -25,9 +25,12 @@ export const SelectLanguage = (props) => {
 
     const { actions } = UseLoginSlice();
 
+    const [initedUserLanguage, setInitedUserLanguage] = useState<boolean>(false);
+
     React.useEffect(() => {
-        if (user && user.attributes) {
+        if (user && user.attributes && !initedUserLanguage) {
             changeLanguage(user.attributes?.language[0] ?? 'en');
+            setInitedUserLanguage(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
