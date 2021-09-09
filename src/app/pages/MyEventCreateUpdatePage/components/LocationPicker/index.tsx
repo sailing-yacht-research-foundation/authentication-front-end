@@ -22,7 +22,7 @@ export const LocationPicker = (props) => {
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
                 <Map coordinates={coordinates} onMapClicked={onMapClicked} zoom={DEFAULT_ZOOM} />
             </MapContainer>
-            <PickerDescription>{t(translations.my_race_create_update_page.please_choose_a_location)}</PickerDescription>
+            <PickerDescription>{t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
         </Wrapper>
     )
 }

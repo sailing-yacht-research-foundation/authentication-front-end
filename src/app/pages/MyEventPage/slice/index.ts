@@ -1,10 +1,10 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import myRaceListSaga from './saga';
-import { MyRaceListState } from './types';
+import myEventListSaga from './saga';
+import { MyEventListState } from './types';
 
-export const initialState: MyRaceListState = {
+export const initialState: MyEventListState = {
   page: 1,
   results: [],
   total: 0,
@@ -12,7 +12,7 @@ export const initialState: MyRaceListState = {
 };
 
 const slice = createSlice({
-  name: 'myRaceList',
+  name: 'myEventList',
   initialState,
   reducers: {
     setResults(state, action: PayloadAction<any[]>) {
@@ -35,6 +35,6 @@ export const { actions: myRaceListActions, reducer } = slice;
 
 export const useMyRaceListSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: myRaceListSaga });
+  useInjectSaga({ key: slice.name, saga: myEventListSaga });
   return { actions: slice.actions };
 };

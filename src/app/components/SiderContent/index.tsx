@@ -29,7 +29,7 @@ export const SiderContent = (props) => {
 
   const items = [
     { key: '1', paths: ['/', '/search'] },
-    { key: '13', paths: ['/my-races'], subMenuKey: 'races' },
+    { key: '13', paths: ['/my-events'], subMenuKey: 'races' },
     { key: '14', paths: ['/competition-units'], subMenuKey: 'races' },
     { key: '12', paths: ['/data'] },
     { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
@@ -80,7 +80,7 @@ export const SiderContent = (props) => {
         </SyrfMenuItem>
 
         <SyrfSubmenu key="races" icon={<FaFlagCheckered style={{ marginRight: '10px' }} />} title={t(translations.side_menu.my_races)}>
-          <SyrfMenuItem title={t(translations.side_menu.races)} key="13" icon={<FaFlagCheckered />} onClick={() => history.push('/my-races')}>{t(translations.side_menu.races)}</SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.events)} key="13" icon={<FaFlagCheckered />} onClick={() => history.push('/my-events')}>{t(translations.side_menu.events)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<GiSailboat />} onClick={() => history.push('/competition-units')} key="14">{t(translations.side_menu.competition_units)}</SyrfMenuItem>
         </SyrfSubmenu>
 

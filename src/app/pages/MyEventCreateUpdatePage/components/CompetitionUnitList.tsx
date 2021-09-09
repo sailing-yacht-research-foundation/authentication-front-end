@@ -13,7 +13,7 @@ export const CompetitionUnitList = (props) => {
 
     const { t } = useTranslation();
 
-    const { raceId } = props;
+    const { eventId } = props;
 
     const columns = [
         {
@@ -43,7 +43,7 @@ export const CompetitionUnitList = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-races/${record.calendarEventId}/competition-units/${record.id}/update`)
+                        history.push(`/my-events/${record.calendarEventId}/competition-units/${record.id}/update`)
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>
@@ -68,7 +68,7 @@ export const CompetitionUnitList = (props) => {
 
     const getAll = async (page) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventId(raceId, pagination.page);
+        const response = await getAllByCalendarEventId(eventId, pagination.page);
         setIsLoading(false);
 
         if (response.success) {
@@ -109,7 +109,7 @@ export const CompetitionUnitList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/my-races/${raceId}/competition-units/create`)} icon={<AiFillPlusCircle
+                    <CreateButton onClick={() => history.push(`/my-events/${eventId}/competition-units/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
                 </PageHeaderContainer>

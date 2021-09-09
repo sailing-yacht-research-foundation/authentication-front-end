@@ -37,7 +37,7 @@ export const CompetitionUnitForm = () => {
 
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
-    const { raceId, competitionUnitId } = useParams<{ raceId: string, competitionUnitId: string }>();
+    const { eventId, competitionUnitId } = useParams<{ eventId: string, competitionUnitId: string }>();
 
     const [boundingBoxCoordinates, setBoundingBoxCoordinates] = React.useState([]);
 
@@ -50,7 +50,7 @@ export const CompetitionUnitForm = () => {
     const onFinish = async (values) => {
         let { name, startDate, startTime, isCompleted, calendarEventId } = values;
         let response;
-        calendarEventId = raceId ? raceId : calendarEventId;
+        calendarEventId = eventId ? eventId : calendarEventId;
 
         setIsSaving(true);
 
@@ -84,7 +84,7 @@ export const CompetitionUnitForm = () => {
                 toast.success(t(translations.competition_unit_create_update_page.successfully_updated_competition_unit, { name: response.data?.name }));
             }
 
-            history.push(`/my-races/${calendarEventId}/competition-units/${response.data?.id}/update`);
+            history.push(`/my-events/${calendarEventId}/competition-units/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
             toast.error(t(translations.competition_unit_create_update_page.an_error_happened));
@@ -95,7 +95,7 @@ export const CompetitionUnitForm = () => {
         if (location.pathname.includes(MODE.UPDATE)) {
             setMode(MODE.UPDATE);
             setIsSaving(true);
-            const response = await get(raceId, competitionUnitId);
+            const response = await get(eventId, competitionUnitId);
             setIsSaving(false);
 
             if (response.success) {
@@ -177,12 +177,12 @@ export const CompetitionUnitForm = () => {
                             <SyrfInputField />
                         </Form.Item>
                         {
-                            !raceId && <Form.Item
-                                label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.race_id)}</SyrfFieldLabel>}
+                            !eventId && <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.event_id)}</SyrfFieldLabel>}
                                 name="calendarEventId"
                                 rules={[{ required: true }]}
                             >
-                                <SyrfFormSelect placeholder={'Select a race'}
+                                <SyrfFormSelect placeholder={t(translations.competition_unit_create_update_page.select_an_event)}
                                     showSearch
                                     filterOption={(input, option) => {
                                         if (option) {

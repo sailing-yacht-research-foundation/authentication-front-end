@@ -22,6 +22,6 @@ export function* getRaces(action) {
     }
 }
 
-export default function* myRaceListSaga() {
+export default function* myEventListSaga() {
     yield takeLatest(myRaceListActions.getRaces.type, getRaces);
 }

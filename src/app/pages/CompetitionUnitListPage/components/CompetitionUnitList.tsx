@@ -30,7 +30,7 @@ export const CompetitionUnitList = () => {
             title: t(translations.competition_unit_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => <Link to={`/my-races/${record.calendarEventId}/competition-units/${record.id}/update`}>{text}</Link>,
+            render: (text, record) => <Link to={`/my-events/${record.calendarEventId}/competition-units/${record.id}/update`}>{text}</Link>,
             width: '20%',
         },
         {
@@ -60,7 +60,7 @@ export const CompetitionUnitList = () => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-races/${record.calendarEventId}/competition-units/${record.id}/update`);
+                        history.push(`/my-events/${record.calendarEventId}/competition-units/${record.id}/update`);
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>

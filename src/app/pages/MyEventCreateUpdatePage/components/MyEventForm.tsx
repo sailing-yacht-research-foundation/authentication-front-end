@@ -16,7 +16,7 @@ import { BsCardList } from 'react-icons/bs';
 import { CompetitionUnitList } from './CompetitionUnitList';
 import { MAP_DEFAULT_VALUE } from 'utils/helpers';
 import { BiTrash } from 'react-icons/bi';
-import { DeleteRaceModal } from 'app/pages/MyRacePage/components/DeleteRaceModal';
+import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
@@ -25,7 +25,7 @@ const MODE = {
     UPDATE: 'update'
 }
 
-export const MyRaceForm = () => {
+export const MyEventForm = () => {
 
     const history = useHistory();
 
@@ -39,7 +39,7 @@ export const MyRaceForm = () => {
 
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
-    const { raceId } = useParams<{ raceId: string }>();
+    const { eventId } = useParams<{ eventId: string }>();
 
     const [coordinates, setCoordinates] = React.useState<any>({});
 
@@ -78,26 +78,26 @@ export const MyRaceForm = () => {
         if (mode === MODE.CREATE)
             response = await create(data);
         else
-            response = await update(raceId, data);
+            response = await update(eventId, data);
 
         setIsSavingRace(false);
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success(t(translations.my_race_create_update_page.created_a_new_race, { name: response.data?.name }));
+                toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
                 setRace(response.data);
             } else {
-                toast.success(t(translations.my_race_create_update_page.successfully_update_race, { name: response.data?.name }));
+                toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
             }
 
-            history.push(`/my-races/${response.data?.id}/update`);
+            history.push(`/my-events/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
             setCoordinates({
                 lat: lat,
                 lng: lon
             });
         } else {
-            toast.error(t(translations.my_race_create_update_page.an_error_happened_when_saving_race));
+            toast.error(t(translations.my_event_create_update_page.an_error_happened_when_saving_event));
         }
     }
 
@@ -113,7 +113,7 @@ export const MyRaceForm = () => {
             setMode(MODE.UPDATE);
 
             setIsSavingRace(true);
-            const response = await get(raceId);
+            const response = await get(eventId);
             setIsSavingRace(false);
 
             if (response.success) {
@@ -139,7 +139,7 @@ export const MyRaceForm = () => {
     }, []);
 
     const onRaceDeleted = () => {
-        history.push('/my-races');
+        history.push('/my-events');
     }
 
     return (
@@ -152,16 +152,16 @@ export const MyRaceForm = () => {
             />
             <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageHeaderText>{mode === MODE.UPDATE ?
-                    t(translations.my_race_create_update_page.update_your_race)
-                    : t(translations.my_race_create_update_page.create_a_new_race)}
+                    t(translations.my_event_create_update_page.update_your_event)
+                    : t(translations.my_event_create_update_page.create_a_new_event)}
                 </PageHeaderText>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/my-races")} icon={<BsCardList
+                    <CreateButton onClick={() => history.push("/my-events")} icon={<BsCardList
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.my_race_create_update_page.view_all)}</CreateButton>
+                        size={18} />}>{t(translations.my_event_create_update_page.view_all)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.my_race_create_update_page.delete)}</DeleteButton>}
+                        size={18} />}>{t(translations.my_event_create_update_page.delete)}</DeleteButton>}
 
                 </Space>
             </PageHeaderContainer>
@@ -174,7 +174,7 @@ export const MyRaceForm = () => {
                         onFinish={onFinish}
                     >
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
                             rules={[{ required: true }]}
                         >
@@ -184,7 +184,7 @@ export const MyRaceForm = () => {
                         <Divider />
 
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.location_name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.location_name)}</SyrfFieldLabel>}
                             name="locationName"
                             rules={[{ required: true }]}
                         >
@@ -194,7 +194,7 @@ export const MyRaceForm = () => {
                         <Row gutter={24}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.longitude)}</SyrfFieldLabel>}
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.longitude)}</SyrfFieldLabel>}
                                     name="lon"
                                     rules={[{ required: true }]}
                                 >
@@ -204,7 +204,7 @@ export const MyRaceForm = () => {
 
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.latitude)}</SyrfFieldLabel>}
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.latitude)}</SyrfFieldLabel>}
                                     name="lat"
                                     rules={[{ required: true }]}
                                 >
@@ -218,7 +218,7 @@ export const MyRaceForm = () => {
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.start_date)}</SyrfFieldLabel>}
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
                                     rules={[{ type: 'date', required: true }]}
                                 >
@@ -239,7 +239,7 @@ export const MyRaceForm = () => {
 
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.start_time)}</SyrfFieldLabel>}
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
                                     rules={[{ required: true }]}
                                 >
@@ -249,7 +249,7 @@ export const MyRaceForm = () => {
                         </Row>
 
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_race_create_update_page.external_url)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
                             name="externalUrl"
                             rules={[{ type: 'url' }]}
                         >
@@ -262,7 +262,7 @@ export const MyRaceForm = () => {
 
                         <Form.Item>
                             <SyrfFormButton type="primary" htmlType="submit">
-                                {t(translations.my_race_create_update_page.save_race)}
+                                {t(translations.my_event_create_update_page.save_event)}
                             </SyrfFormButton>
                         </Form.Item>
                     </Form>
@@ -271,7 +271,7 @@ export const MyRaceForm = () => {
 
             {
                 mode === MODE.UPDATE && <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                    <CompetitionUnitList raceId={raceId} />
+                    <CompetitionUnitList eventId={eventId} />
                 </SyrfFormWrapper>
             }
         </Wrapper>

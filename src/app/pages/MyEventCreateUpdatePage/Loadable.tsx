@@ -6,9 +6,9 @@
  import { lazyLoad } from 'utils/loadable';
  import { LoadingIndicator } from 'app/components/LoadingIndicator';
  
- export const MyRacePageCreateUpdatePage = lazyLoad(
+ export const MyEventCreateUpdatePage = lazyLoad(
    () => import('./index'),
-   module => module.MyRacePageCreateUpdatePage,
+   module => module.MyEventCreateUpdatePage,
    {
      fallback: <LoadingIndicator />,
    },

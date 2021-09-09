@@ -1,8 +1,8 @@
 import { Wrapper } from 'app/components/SyrfGeneral';
 import * as React from 'react';
-import { MyRaces } from './components/MyRaces';
+import { MyRaces } from './components/MyEvents';
 
-export function MyRacePage() {
+export function MyEventPage() {
     return (
         <>
             <Wrapper>

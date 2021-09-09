@@ -24,16 +24,16 @@ export const DeleteRaceModal = (props) => {
         setShowDeleteModal(false);
 
         if (response.success) {
-            toast.success(t(translations.delete_race_modal.successfully_deleted, { name: race.name }));
+            toast.success(t(translations.delete_event_modal.successfully_deleted, { name: race.name }));
             onRaceDeleted();
         } else {
-            toast.error(t(translations.delete_race_modal.an_unexpected_error));
+            toast.error(t(translations.delete_event_modal.an_unexpected_error));
         }
     }
 
     return (
         <Modal
-            title={t(translations.delete_race_modal.are_you_sure_you_want_to_delete)}
+            title={t(translations.delete_event_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
             onOk={() => {
                 performDeleteRace();
@@ -41,7 +41,7 @@ export const DeleteRaceModal = (props) => {
             onCancel={() => {
                 setShowDeleteModal(false);
             }}>
-            <ModalMessage>{t(translations.delete_race_modal.you_will_delete)}</ModalMessage>
+            <ModalMessage>{t(translations.delete_event_modal.you_will_delete)}</ModalMessage>
         </Modal>
     )
 }

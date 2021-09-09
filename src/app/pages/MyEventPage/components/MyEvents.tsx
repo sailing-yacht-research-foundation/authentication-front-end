@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Space, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsChangingPage, selectResults } from '../slice/selectors';
-import { selectPage, selectTotal } from 'app/pages/MyRacePage/slice/selectors';
+import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
@@ -12,7 +12,7 @@ import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderC
 import { useHistory } from 'react-router';
 import { useMyRaceListSlice } from '../slice';
 import moment from 'moment';
-import { DeleteRaceModal } from './DeleteRaceModal';
+import { DeleteRaceModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
 
 const defaultOptions = {
@@ -30,27 +30,27 @@ export const MyRaces = () => {
 
     const columns = [
         {
-            title: t(translations.my_race_list_page.name),
+            title: t(translations.my_event_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => <Link to={`/my-races/${record.id}/update`}>{text}</Link>,
+            render: (text, record) => <Link to={`/my-events/${record.id}/update`}>{text}</Link>,
             width: '20%',
         },
         {
-            title: t(translations.my_race_list_page.location),
+            title: t(translations.my_event_list_page.location),
             dataIndex: 'locationName',
             key: 'location',
             width: '20%',
         },
         {
-            title: t(translations.my_race_list_page.start_date),
+            title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
             render: (value) => moment(value).format('YYYY-MM-DD'),
             width: '20%',
         },
         {
-            title: t(translations.my_race_list_page.created_date),
+            title: t(translations.my_event_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
             render: (value) => moment(value).format('YYYY-MM-DD'),
@@ -62,9 +62,9 @@ export const MyRaces = () => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-races/${record.id}/update`)
-                    }} type="primary">{t(translations.my_race_list_page.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_race_list_page.delete)}</BorderedButton>
+                        history.push(`/my-events/${record.id}/update`)
+                    }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
                 </Space>
             ),
             width: '20%',
@@ -116,10 +116,10 @@ export const MyRaces = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainer>
-                <PageHeaderText>{t(translations.my_race_list_page.my_races)}</PageHeaderText>
-                <CreateButton onClick={() => history.push("/my-races/create")} icon={<AiFillPlusCircle
+                <PageHeaderText>{t(translations.my_event_list_page.my_events)}</PageHeaderText>
+                <CreateButton onClick={() => history.push("/my-events/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
-                    size={18} />}>{t(translations.my_race_list_page.create_a_new_race)}</CreateButton>
+                    size={18} />}>{t(translations.my_event_list_page.create_a_new_event)}</CreateButton>
             </PageHeaderContainer>
             {results.length > 0 ? (
                 <Spin spinning={isChangingPage}>
@@ -141,8 +141,8 @@ export const MyRaces = () => {
                         width={400} />
                     <CreateButton icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/my-races/create")}>{t(translations.my_race_list_page.create)}</CreateButton>
-                    <LottieMessage>{t(translations.my_race_list_page.you_dont_have_any_race)}</LottieMessage>
+                        size={18} />} onClick={() => history.push("/my-events/create")}>{t(translations.my_event_list_page.create)}</CreateButton>
+                    <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_event)}</LottieMessage>
                 </LottieWrapper>)}
         </>
     )
