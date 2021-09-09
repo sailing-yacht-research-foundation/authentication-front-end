@@ -13,6 +13,7 @@ import { useHistory } from 'react-router';
 import { useMyRaceListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteRaceModal } from './DeleteRaceModal';
+import { Link } from 'react-router-dom';
 
 const defaultOptions = {
     loop: true,
@@ -32,7 +33,7 @@ export const MyRaces = () => {
             title: t(translations.my_race_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: text => text,
+            render: (text, record) => <Link to={`/my-races/${record.id}/update`}>{text}</Link>,
             width: '20%',
         },
         {
