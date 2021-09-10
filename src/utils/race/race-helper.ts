@@ -84,6 +84,13 @@ export const simplifiedGeoJsonTrackToLastHeading = (geojson) => {
     return bearing;
 }
 
+export const generateLastHeading = (coordinate1, coordinate2) => {
+    const point1 = turf.point(coordinate1);
+    const point2 = turf.point(coordinate2);
+
+    return turf.bearing(point1, point2);
+}
+
 export const simulateThirdParameter = (geojson) => {
     let coords: any[] = [];
     let index = 0;
