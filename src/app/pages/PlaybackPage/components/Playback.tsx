@@ -38,14 +38,14 @@ export const Playback = (props) => {
 
     const [isPlaying, setIsPlaying] = React.useState<boolean>(true);
 
-    useEffect(() => {
-        if (elapsedTime >= raceLength) {
-            race.setIsPlaying(false);
-        } else {
-            race.setIsPlaying(true);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [elapsedTime, raceLength]);
+    // useEffect(() => {
+    //     if (elapsedTime >= raceLength) {
+    //         race?.setIsPlaying(false);
+    //     } else {
+    //         race?.setIsPlaying(true);
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [elapsedTime, raceLength]);
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
         if (elapsedTime > 0)
@@ -54,26 +54,26 @@ export const Playback = (props) => {
         return 0;
     }
 
-    useEffect(() => {
-        setIsPlaying(race.getIsPlaying());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [race.getIsPlaying()]);
+    // useEffect(() => {
+    //     setIsPlaying(race?.getIsPlaying());
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [race?.getIsPlaying()]);
 
     const pauseUnPauseRace = () => {
-        race.pauseUnpauseAllPing(elapsedTime);
-        setIsPlaying(race.getIsPlaying());
+        // race.pauseUnpauseAllPing(elapsedTime);
+        // setIsPlaying(race.getIsPlaying());
     }
 
     const backward = (miliseconds) => {
         let backwardTime = elapsedTime - miliseconds;
         dispatch(actions.setElapsedTime(backwardTime > 0 ? backwardTime : 0));
-        race.backward(miliseconds);
+        // race.backward(miliseconds);
     }
 
     const forward = (miliseconds) => {
         let forwardTime = elapsedTime + miliseconds;
         dispatch(actions.setElapsedTime(forwardTime > raceLength ? raceLength : forwardTime));
-        race.forward(miliseconds);
+        // race.forward(miliseconds);
     }
 
     const playAtClickedPosition = (e) => {
@@ -100,7 +100,7 @@ export const Playback = (props) => {
 
         let convertedPlayTimeInMiliseconds = Number(newPlayTimeInMilisecondsInString.join(''));
         dispatch(actions.setElapsedTime(convertedPlayTimeInMiliseconds));
-        race.playAt(convertedPlayTimeInMiliseconds);
+        // race.playAt(convertedPlayTimeInMiliseconds);
     }
 
     return (
