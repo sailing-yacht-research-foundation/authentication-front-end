@@ -7,6 +7,7 @@ export interface PlaybackState {
     competitionUnitId?: string;
     competitionUnitDetail?: any;
     vesselParticipants?: any[];
+    isPlaying?: boolean;
   }
   
   export type ContainerState = PlaybackState

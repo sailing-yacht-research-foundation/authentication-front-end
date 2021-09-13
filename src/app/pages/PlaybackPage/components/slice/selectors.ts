@@ -30,3 +30,8 @@ export const selectVesselParticipants = createSelector(
   [selectDomain],
   (playbackState) => playbackState.vesselParticipants
 );
+
+export const selectIsPlaying = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.isPlaying
+);
