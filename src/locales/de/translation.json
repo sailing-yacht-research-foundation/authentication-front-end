@@ -237,7 +237,7 @@
     "sail_number": "Sail number:"
   },
   "data_page": {
-    "syrf_race_data": "Syrf Race Data",
+    "syrf_race_data": "SYRF Race Data",
     "races_start_as_points": "Race Starts as Points",
     "an_animated_view_of_individual": "An animated view of individual races over the last few decades. Each dot is a unique race.",
     "race_clusters": "Race Clusters",

@@ -4,7 +4,7 @@ import React, { useEffect, useImperativeHandle } from 'react';
 import { useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
-import { GiSailboat } from 'react-icons/gi';
+import { GoPrimitiveDot } from 'react-icons/go';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -98,7 +98,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
         results.forEach(race => {
             let marker = L.marker(L.latLng(race.lat, race.lon), {
                 icon: L.divIcon({
-                    html: ReactDOMServer.renderToString(<GiSailboat style={{ color: '#fff', fontSize: '35px' }} />),
+                    html: ReactDOMServer.renderToString(<GoPrimitiveDot style={{ color: '#fff', fontSize: '35px' }} />),
                     iconSize: [20, 20],
                     className: 'my-race'
                 })
@@ -126,7 +126,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
             <>
                 <div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>
                 <div>{t(translations.home_page.map_view_tab.location)} {race.locationName}</div>
-                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStartTime).format('YYYY-MM-DD')}</div>
+                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStartTime).format('MMM. D, YYYY')}</div>
             </>
         )
     }

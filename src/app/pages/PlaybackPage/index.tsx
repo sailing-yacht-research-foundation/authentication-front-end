@@ -23,6 +23,7 @@ import { selectRaceLength } from './components/slice/selectors';
 import { usePlaybackSlice } from './components/slice';
 import { IoCaretBack } from 'react-icons/io5';
 import { useHistory } from 'react-router-dom';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const center = {
     lng: -125.688816,
@@ -30,6 +31,8 @@ const center = {
 }
 
 const ZOOM = 13;
+
+const HEADER_HEIGHT = '97px';
 
 let ee;
 
@@ -81,12 +84,18 @@ export const PlaybackPage = (props) => {
 
     return (
         <Wrapper>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
+            <PageHeadContainer>
+                {history.action !== 'POP' && <GobackButton onClick={() => history.goBack()}>
+                    <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                </GobackButton>}
+                <PageInfoContainer>
+                    <PageHeading>{'Race name'}</PageHeading> {/** Adding race here, will replace when we have the live data */}
+                    <PageDescription>{'Race description'}</PageDescription>
+                </PageInfoContainer>
+            </PageHeadContainer>
+            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${HEADER_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
                 <RaceMap race={race} eventEmitter={ee} zoom={ZOOM} />
                 <Playback race={race} />
-                {history.action !== 'POP' && <GoBackButton onClick={() => history.goBack()}>
-                    <IoCaretBack />
-                </GoBackButton>}
             </MapContainer>
         </Wrapper>
     );
@@ -96,17 +105,28 @@ const Wrapper = styled.div`
   margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
 `;
 
-const GoBackButton = styled.div`
-    position: absolute;
-    top: 90px;
-    left: 12px;
-    width: 30px;
-    height: 30px;
-    z-index: 9999;
-    background: #f4f4f4;
+const PageHeading = styled.h2`
+    padding: 20px 15px;
+    padding-bottom: 0px;
+`;
+
+const PageHeadContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const PageInfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const PageDescription = styled.p`
+    padding: 0 15px;
+`;
+
+const GobackButton = styled.div`
     display: flex;
     justify-content: center;
-    align-items:center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.65);
-    border-radius: 2px;
+    align-items: center;
+    cursor: pointer;
 `;

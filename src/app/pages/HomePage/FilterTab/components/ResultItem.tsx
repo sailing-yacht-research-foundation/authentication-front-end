@@ -19,7 +19,7 @@ export const ResultItem = (props) => {
             <Name><Link to={`/playback?raceid=${race.id}`}>{race.name}</Link></Name>
             <DescriptionWrapper>
                 <DescriptionItem>
-                    {moment(race.approximateStartTime).format('YYYY-MM-DD')}
+                    {moment(race.approximateStartTime).format('MMM. D, YYYY')}
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>

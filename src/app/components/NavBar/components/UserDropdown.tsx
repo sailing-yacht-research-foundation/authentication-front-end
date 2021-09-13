@@ -16,9 +16,6 @@ export const UserDropdown = (props) => {
 
     const menu = (
         <Menu>
-            <Menu.Item key="1" onClick={() => history.push('/profile')} icon={<UserOutlined />}>
-                Update Profile
-            </Menu.Item>
             <Menu.Item onClick={() => props.logout()} key="2" icon={<LockOutlined />}>
                 Sign Out
             </Menu.Item>
@@ -31,7 +28,7 @@ export const UserDropdown = (props) => {
                 <AvatarWrapper>
                     <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
                 </AvatarWrapper>
-                <UserNameWrapper>
+                <UserNameWrapper onClick={() => history.push('/profile')}>
                     <UserName className="ant-dropdown-link">{getUserAttribute(authUser, 'name')}</UserName>
                     <DownOutlined />
                 </UserNameWrapper>
@@ -59,6 +56,7 @@ const UserNameWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `;
 
 const UserName = styled.span`
