@@ -4,15 +4,9 @@ import { useMap } from "react-leaflet";
 import ReactDOMServer from "react-dom/server";
 import { PlayerInfo } from "./PlayerInfo";
 import {
-  simplifiedGeoJsonTrackToLastHeading,
-  simulateThirdParameter,
-  simulateThirdParameterForCourse,
-  toSimplifiedGeoJson,
+  formatCoordinatesObjectToArray,
+  generateLastArray,
 } from "utils/race/race-helper";
-import { useDispatch, useSelector } from "react-redux";
-import { usePlaybackSlice } from "./slice";
-import { selectElapsedTime, selectRaceLength } from "./slice/selectors";
-import MarkIcon from "../assets/mark.svg";
 
 require("leaflet.boatmarker");
 require("leaflet-hotline");
@@ -24,29 +18,19 @@ const objectType = {
   leg: "leg",
 };
 
-const geometryType = {
-  line: "LineString",
-  point: "Point",
-};
-
 export const StreamingRaceMap = (props) => {
   const { emitter } = props;
-  const dispatch = useDispatch();
 
   const map = useMap();
-  const { actions } = usePlaybackSlice();
 
-  const elapsedTime = useRef(0);
   const raceStatus = useRef<any>({
-    boats: {},
+    boats: {}, // layers
+    legs: {}, // layers
     isMarkersAttached: false,
+    isLegsAttached: false,
     isParticipantsDataAvailable: false,
     zoomedToRaceLocation: false,
   });
-
-  const playbackElapsedTime = useSelector(selectElapsedTime);
-
-  const raceLength = useSelector(selectRaceLength);
 
   useEffect(() => {
     initializeMapView();
@@ -55,11 +39,6 @@ export const StreamingRaceMap = (props) => {
     if (emitter) {
       emitter.on("ping", (participants) => {
         if (!participants?.length) return;
-        else
-          raceStatus.current = {
-            ...current,
-            isParticipantsDataAvailable: true,
-          };
 
         // Zoom to location
         if (!current.zoomedToRaceLocation) {
@@ -86,6 +65,40 @@ export const StreamingRaceMap = (props) => {
 
           current.boats = _attachMarkersToMap(current.boats);
           current.isMarkersAttached = true;
+        }
+      });
+
+      emitter.on('leg-update', (participants) => {
+        if (!participants.length) return;
+        const participantsCpy = [...participants];
+
+        // Legs
+        if (current.isLegsAttached) {
+          _removeLegLayersFromMap(current.legs);
+          current.isLegsAttached = false;
+        };
+
+        // Generate legs coordinate
+        const legsData = {};
+        participantsCpy.forEach((participant) => {
+          const generatedCoordinates = generateLastArray(participant.positions, 80);
+          const formattedCoordinates = formatCoordinatesObjectToArray(generatedCoordinates);
+          legsData[participant.id] = {
+            coordinates: formattedCoordinates,
+            color: participant.color
+          };
+        });
+
+        // Attach legs to map
+        if (!current.isLegsAttached) {
+          const newLegs = {};
+          Object.keys(legsData).forEach((key) => {
+            const { coordinates, color } = legsData[key];
+            newLegs[key] = _attachPolylineToMap(coordinates, color);
+          });
+
+          current.legs = newLegs;
+          current.isLegsAttached = true;
         }
       });
     }
@@ -119,6 +132,12 @@ export const StreamingRaceMap = (props) => {
       } catch (e) {}
     });
   };
+
+  const _removeLegLayersFromMap = (legLayers) => {
+    Object.keys(legLayers).forEach(key => {
+      map.removeLayer(legLayers[key]);
+    });    
+  }
 
   const _initLayerAndSetLocationAndHeadingForBoat = (
     participants,
@@ -163,6 +182,13 @@ export const StreamingRaceMap = (props) => {
     return localBoats;
   };
 
+  const _attachPolylineToMap = (coordinates, color) => {
+    return L.polyline(coordinates).setStyle({
+        weight: 1,
+        color
+    }).addTo(map);
+  }
+
   const _zoomToRaceLocation = (participant, mapVariable) => {
     if (!mapVariable.zoomedToRaceLocation) {
         if (!participant?.lastPosition?.lat || !participant?.lastPosition?.lon) return false;
@@ -184,7 +210,7 @@ export const StreamingRaceMap = (props) => {
         attribution:
           '<a href="https://www.github.com/sailing-yacht-research-foundation"><img src="https://syrf.io/wp-content/themes/syrf/assets/svg/icon-github.svg"></img></a>',
         maxZoom: 18,
-        minZoom: 0,
+        minZoom: 13,
         id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",
         tileSize: 512,
         zoomOffset: -1,
