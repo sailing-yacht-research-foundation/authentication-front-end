@@ -1,27 +1,25 @@
 import 'leaflet/dist/leaflet.css';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { message } from 'antd';
+import queryString from 'querystring';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { MapContainer, useMap } from 'react-leaflet';
+import { MapContainer } from 'react-leaflet';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { Playback } from './components/Playback';
-import OuroborosRace from 'utils/race/OuroborosRace';
 import {
-    collectTrackDataFromGeoJson,
-    getLastTrackPingTime,
-    calculateTrackPingTime,
-    sortTrackFirstPingTime,
     generateLastHeading
 } from 'utils/race/race-helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { EventEmitter } from 'events';
-import { selectCompetitionUnitDetail, selectCompetitionUnitId, selectRaceLength, selectVesselParticipants } from './components/slice/selectors';
+import { selectCompetitionUnitDetail, selectCompetitionUnitId, selectElapsedTime, selectIsPlaying, selectVesselParticipants } from './components/slice/selectors';
 import { usePlaybackSlice } from './components/slice';
-import { IoCaretBack } from 'react-icons/io5';
-import { useHistory } from 'react-router-dom';
 import { StreamingRaceMap } from './components/StreamingRaceMap';
 import { stringToColour } from 'utils/helpers';
+import { useLocation } from 'react-router';
+import { selectSessionToken } from '../LoginPage/slice/selectors';
+
 
 const center = {
     lng: -125.688816,
@@ -30,28 +28,23 @@ const center = {
 
 const ZOOM = 13;
 
-let ee;
-
-let race: OuroborosRace;
-
-const streamUrl = 'wss://streaming-server-dev.syrf.io/authenticate?session_token=';
-const defaultSessionToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODI0OTYzLTlkYmUtNDExYy05MmQyLTUxZjVkNTFjOWZiOSIsInJvbGUiOiJhbm9ueW1vdXMiLCJpc3N1ZWRBdCI6MTYzMDU3NTk3NzM1NCwiZGV2VG9rZW5JZCI6IjQ0YjA2YTY4LTJiNDMtNGRiYS1iNmYxLTgyNmJjMWNiYjJmNCIsImlhdCI6MTYzMDU3NTk3N30.-KiOjyRe-9VOFFdboWw4aM79Z08Glx-9wWPDJEGjf8E';
-const defaultCompetitionUnitId = "bd80854f-802b-4bbe-a9cf-fba6d6f13ba6";
-
 export const PlaybackPage = (props) => {
-    const [socketUrl, setSocketUrl] = useState(`${streamUrl}${defaultSessionToken}`);
-    const [eventEmitter, setEventEmitter] = useState(new EventEmitter())
+    const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
+    const [socketUrl, setSocketUrl] = useState(streamUrl);
+    const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
+    const location = useLocation();    
+    const parsedQueryString: any = queryString.parse(location.search.includes('?') ? location.search.substring(1) : location.search);
 
     const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const dispatch = useDispatch();
-
-    
-    const raceLength = useSelector(selectRaceLength);
-    
+        
     const messageHistory = useRef<any[]>([]);
     const competitionUnitId = useSelector(selectCompetitionUnitId);
     const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
     const vesselParticipants = useSelector(selectVesselParticipants);
+    const isPlaying = useSelector(selectIsPlaying);
+    const elapsedTime = useSelector(selectElapsedTime);
+    const sessionToken = useSelector(selectSessionToken);
     
     const groupedPosition = useRef<any>({});
     const receivedPositionData = useRef<boolean>(false);
@@ -60,10 +53,9 @@ export const PlaybackPage = (props) => {
     
     const currentTimeRef = useRef<number>(0);
     const currentElapsedTimeRef = useRef<number>(0);
+    const isPlayingRef = useRef<any>(false);
 
     const { actions } = usePlaybackSlice();
-
-    const history = useHistory();
 
     const connectionStatus = {
         [ReadyState.CONNECTING]: 'connecting',
@@ -74,20 +66,11 @@ export const PlaybackPage = (props) => {
       }[readyState];
 
     useEffect(() => {
-        // const tracks = collectTrackDataFromGeoJson(TrackData, MarkData);
-        // sortTrackFirstPingTime(tracks);
-        // calculateTrackPingTime(tracks);
-        // setRaceLength(tracks);
-        // initRace(tracks);
-
         return () => {
-            if (ee) {
-                ee.removeAllListeners();
-                ee.off('ping', () => { });
-                ee.off('leg-update', () => { });
-                ee.off('geometry', () => { });
-                ee = null;
-    
+            if (eventEmitter) {
+                eventEmitter.removeAllListeners();
+                eventEmitter.off('ping', () => { });
+                eventEmitter.off('leg-update', () => { });    
             }
             dispatch(actions.setElapsedTime(0));
             dispatch(actions.setRaceLength(0));
@@ -95,16 +78,22 @@ export const PlaybackPage = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
+    // Set socket url
+    useEffect(() => {
+        if (sessionToken) setSocketUrl(`${streamUrl}/authenticate?session_token=${sessionToken}`)
+    }, [sessionToken])
+
     // Set competition unit id
     useEffect(() => {
         tracksData.current = {};
-        dispatch(actions.setCompetitionUnitId(defaultCompetitionUnitId));
+        if (parsedQueryString.competitionUnitId) dispatch(actions.setCompetitionUnitId(parsedQueryString.competitionUnitId));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Get competition unit detail
     useEffect(() => {
-        if (competitionUnitId) dispatch(actions.getCompetitionUnitDetail({ id: defaultCompetitionUnitId}));
+        if (competitionUnitId) dispatch(actions.getCompetitionUnitDetail({ id: competitionUnitId }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [competitionUnitId]);
 
@@ -140,6 +129,7 @@ export const PlaybackPage = (props) => {
         }
     }, [vesselParticipants]);
 
+    // Manage last message from websocket
     useEffect(() => {
         if (lastMessage) {
             const parsedData = JSON.parse(lastMessage.data);
@@ -148,18 +138,32 @@ export const PlaybackPage = (props) => {
         }
     }, [lastMessage])
 
+    // Manage subscription of websocket
     useEffect(() => {
         if (connectionStatus === 'open') {
+            message.success('Connected!')
+            dispatch(actions.setIsPlaying(true));
             sendJsonMessage({
                 action: 'subscribe',
                 data: {
-                    competitionUnitId: defaultCompetitionUnitId
+                    competitionUnitId: competitionUnitId
                 }
             })
         }
+
+        if (connectionStatus === 'connecting') {
+            dispatch(actions.setIsPlaying(false));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [connectionStatus, competitionUnitId])
+
+    // Manage message of websocket status
+    useEffect(() => {
+        if (connectionStatus === 'open') message.success('Connected!');
+        if (connectionStatus === 'connecting') message.info('Connecting...');
     }, [connectionStatus])
 
+    // Normalize data every 1 second
     useEffect(() => {
         const interval = setInterval(() => {
             handleNormalizeTracksData();
@@ -171,36 +175,43 @@ export const PlaybackPage = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    // Send last positions every 1 second
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const currentNormalizedPositions = normalizedPositions.current;
+            const currentIsPlaying = isPlayingRef.current;
+            handleEmitRaceEvent(currentNormalizedPositions, currentIsPlaying, eventEmitter);
+        }, 1000)
+
+        return () => {
+            clearInterval(interval);
+        }
+    }, [])
+
+    useEffect(() => {
+        isPlayingRef.current = isPlaying;
+    }, [isPlaying])
+
+    useEffect(() => {
+        currentElapsedTimeRef.current = elapsedTime;
+    }, [elapsedTime])
+
     const handleSetRaceLengthStreaming = (currentLength) => {
         dispatch(actions.setRaceLength(currentLength));
     }
 
+    const handleSetElapsedTime = (elapsedTime) => {
+        dispatch(actions.setElapsedTime(elapsedTime));
+    }
+
+    // Noramalize data
     const handleNormalizeTracksData = () => {
         const grouped = groupedPosition.current;
+        const currentIsPlaying = isPlayingRef.current;
         const groupedVesselCount = Object.keys(grouped)?.length > 0 ;
 
         if (!groupedVesselCount) return;
         if (!receivedPositionData.current) return;
-
-        if (!ee) ee = new EventEmitter();
-
-        // Let's normalize the participant data!
-        // The reason would be, we couldn't control the interval of the receieved data for each boat
-        // from the websocket stream (boat A could have 40 position but boat B could have 30 position).
-        
-        // This normalization purpose is to make sure that every boat have same amount of position in certain time.
-        // By doing this, we could receieve a state where all of the boat have same amount of data.
-
-        // I personaly think this will reduce the complexity of managing the position.
-
-        // DATA FORMAT
-        // [..., BOAT: { id, identity, color, positions (normalized positions), lastPosition (default last positions) }, ...]
-        // Please bear in mind, this normalization only for the boat (participant), we will make a different setup
-        // for the tracks soon.
-
-        // Positions purpose is to draw historical related rendering (probably such as leg or playback)
-        // lastPosition is the most updated position. Just make it so we could easily manage the code.
-
 
         const currentNormalizedPositions = normalizedPositions.current;
         const currentTime = currentTimeRef.current;
@@ -216,18 +227,43 @@ export const PlaybackPage = (props) => {
             };
         });
 
-        if (currentNormalizedPositions && !!currentNormalizedPositions?.length && ee) {
-            eventEmitter.emit('ping', currentNormalizedPositions)
-        }
-
         // Add the current time ref
         currentTimeRef.current += 1000;
 
         // Stop when receieve no more data
-        receivedPositionData.current = false;
+        if (receivedPositionData.current) {
+            receivedPositionData.current = false;
+            handleSetRaceLengthStreaming(currentTimeRef.current);
+        }
+    }
 
-        // Set the race length
-        handleSetRaceLengthStreaming(currentTimeRef.current);
+    // Emit race event
+    const handleEmitRaceEvent = (normalizedPositions, currentIsPlaying, eventEmitter) => {
+        // Reject incomplete data
+        if(!normalizedPositions || !normalizedPositions?.length || !eventEmitter || !currentIsPlaying) return;
+        
+        const currentTime = currentTimeRef.current;
+        const currentElapsedTime = currentElapsedTimeRef.current;
+        const currentPositions = normalizedPositions.map((boat) => {
+            const positions = boat.positions.filter((pos) => pos.time <= currentElapsedTime);
+            const lastPosition = positions[positions.length - 1];
+            return {...boat, positions, lastPosition};
+        });
+
+        // Emit latest event
+        eventEmitter.emit('ping', currentPositions);
+        eventEmitter.emit('leg-update', currentPositions);
+
+        if (currentElapsedTime < currentTime) {
+            let nextElapsedTime = currentElapsedTimeRef.current + 1000;
+            if (nextElapsedTime > currentTime) nextElapsedTime = currentTime;
+
+            currentElapsedTimeRef.current = nextElapsedTime;
+            handleSetElapsedTime(nextElapsedTime);
+        };
+
+
+
     }
 
     const handleAddPosition = (data) => {
@@ -264,11 +300,7 @@ export const PlaybackPage = (props) => {
     return (
         <Wrapper>
             <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
-                {/* <RaceMap race={race} eventEmitter={ee} zoom={ZOOM} /> */}
-                <Playback race={race} />
-                {/* {history.action !== 'POP' && <GoBackButton onClick={() => history.goBack()}> */}
-                {/* <IoCaretBack /> */}
-                {/* </GoBackButton>} */}
+                <Playback />
                 <StreamingRaceMap emitter={eventEmitter} />
             </MapContainer>
         </Wrapper>
