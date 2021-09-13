@@ -3,6 +3,7 @@
  */
 
 import { all, call, put, select, takeLatest } from "@redux-saga/core/effects";
+import { message } from "antd";
 import { getCompetitionUnitById } from "services/live-data-server/competition-unit";
 import { getVesselParticipantGroupById } from "services/live-data-server/vessel-participant-group";
 import { playbackActions } from ".";
@@ -12,8 +13,13 @@ export function* getCompetitionUnitDetail({ type, payload }) {
   const { id } = payload;
 
   const result = yield call(getCompetitionUnitById, id);
-  yield put(playbackActions.setCompetitionUnitId(id));
-  yield put(playbackActions.setCompetitionUnitDetail(result.data));
+
+  if (result.success) {
+    yield put(playbackActions.setCompetitionUnitId(id));
+    yield put(playbackActions.setCompetitionUnitDetail(result.data));
+  } else {
+    message.error('Competition unit id not found!')
+  }
 }
 
 export function* getVesselParticipants() {
