@@ -46,14 +46,14 @@ export const MyRaces = () => {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
-            render: (value) => moment(value).format('YYYY-MM-DD'),
+            render: (value) => moment(value).format('MMM. D, YYYY [at] h:mm A z'),
             width: '20%',
         },
         {
             title: t(translations.my_event_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
-            render: (value) => moment(value).format('YYYY-MM-DD'),
+            render: (value) => moment(value).format('MMM. D, YYYY'),
             width: '20%',
         },
         {

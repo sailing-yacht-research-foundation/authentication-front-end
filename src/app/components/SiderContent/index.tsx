@@ -11,7 +11,8 @@ import {
   BellOutlined,
   SettingOutlined,
   ProfileOutlined,
-  SearchOutlined
+  SearchOutlined,
+  CalendarOutlined
 } from '@ant-design/icons';
 import { useHistory, useLocation } from 'react-router';
 import styled from 'styled-components';
@@ -29,8 +30,8 @@ export const SiderContent = (props) => {
 
   const items = [
     { key: '1', paths: ['/', '/search'] },
-    { key: '13', paths: ['/my-events'], subMenuKey: 'races' },
-    { key: '14', paths: ['/competition-units'], subMenuKey: 'races' },
+    { key: '13', paths: ['/my-events'], subMenuKey: 'events' },
+    { key: '14', paths: ['/my-races'], subMenuKey: 'events' },
     { key: '12', paths: ['/data'] },
     { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
     { key: '8', paths: ['/profile/change-password'], subMenuKey: 'profile' },
@@ -62,8 +63,6 @@ export const SiderContent = (props) => {
       setOpenKey(item.subMenuKey ?? '');
     }
     setRenderedDefaultActive(true);
-
-    console.log(item);
   }
 
   return (
@@ -79,9 +78,9 @@ export const SiderContent = (props) => {
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
-        <SyrfSubmenu key="races" icon={<FaFlagCheckered style={{ marginRight: '10px' }} />} title={t(translations.side_menu.my_races)}>
-          <SyrfMenuItem title={t(translations.side_menu.events)} key="13" icon={<FaFlagCheckered />} onClick={() => history.push('/my-events')}>{t(translations.side_menu.events)}</SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<GiSailboat />} onClick={() => history.push('/competition-units')} key="14">{t(translations.side_menu.competition_units)}</SyrfMenuItem>
+        <SyrfSubmenu key="events" icon={<CalendarOutlined style={{ marginRight: '10px' }} />} title={t(translations.side_menu.my_events)}>
+          <SyrfMenuItem title={t(translations.side_menu.events)} key="13" icon={<CalendarOutlined />} onClick={() => history.push('/my-events')}>{t(translations.side_menu.events)}</SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<FaFlagCheckered />} onClick={() => history.push('/my-races')} key="14">{t(translations.side_menu.competition_units)}</SyrfMenuItem>
         </SyrfSubmenu>
 
         <SyrfMenuItem key="12" onClick={() => history.push('/data')} title={t(translations.side_menu.data)} icon={<GoDatabase />}>

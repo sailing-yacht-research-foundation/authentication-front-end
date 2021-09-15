@@ -319,7 +319,7 @@ export const MapView = () => {
                 toast.error(t(translations.course_create_update_page.an_unexpected_error));
             }
 
-            history.push(`/competition-units/${competitionUnitId}/courses/${response.data?.id}/update`);
+            history.push(`/my-races`);
         }
     }
 

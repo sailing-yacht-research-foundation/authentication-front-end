@@ -27,14 +27,14 @@ export const CompetitionUnitList = (props) => {
             title: t(translations.competition_unit_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
-            render: (value) => moment(value).format('YYYY-MM-DD'),
+            render: (value) => moment(value).format('MMM. D, YYYY [at] h:mm A z'),
             width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
-            render: (value) => moment(value).format('YYYY-MM-DD'),
+            render: (value) => moment(value).format('MMM. D, YYYY'),
             width: '20%',
         },
         {
@@ -43,7 +43,7 @@ export const CompetitionUnitList = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-events/${record.calendarEventId}/competition-units/${record.id}/update`)
+                        history.push(`/my-events/${record.calendarEventId}/my-races/${record.id}/update`)
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>
@@ -109,7 +109,7 @@ export const CompetitionUnitList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/my-events/${eventId}/competition-units/create`)} icon={<AiFillPlusCircle
+                    <CreateButton onClick={() => history.push(`/my-events/${eventId}/my-races/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
                 </PageHeaderContainer>

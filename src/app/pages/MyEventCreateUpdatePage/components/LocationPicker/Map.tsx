@@ -25,6 +25,7 @@ export const Map = (props) => {
             icon: L.divIcon({
                 html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#fff', fontSize: '35px' }} />),
                 iconSize: [20, 20],
+                iconAnchor: [18, 42], 
                 className: 'my-race'
             })
         }).addTo(map);

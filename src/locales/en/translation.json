@@ -1,7 +1,7 @@
 {
   "home_page": {
     "map_view_tab": {
-      "search_race_with_syrf": "Search races with SYRF",
+      "search_race_with_syrf": "Search events or races with SYRF",
       "advanced_search": "Advanced search",
       "please_share_your_location_to_use_this_feature": "Please share your location to use this feature.",
       "name": "Name:",
@@ -135,7 +135,7 @@
     "organizational_membership": "Organizational Memberships",
     "my_data": "My Data",
     "test_data": "Test Data",
-    "my_races": "My Races",
+    "my_events": "My Events",
     "search": "Search",
     "data": "Data",
     "events": "Events",
@@ -298,7 +298,9 @@
     "please_create_a_bounding_box": "Please create a bounding box by drawing on the map.",
     "update_your_competition_unit": "Update your race",
     "create_a_new_competition_unit": "Create a new race",
-    "select_an_event": "Select an event"
+    "select_an_event": "Select an event",
+    "create_a_private_polygon": "Create a private polygon",
+    "positions_outside_of_this_polygon_is": "Positions outside of this polygon may be discarded if they don’t appear relevant to the race."
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -316,7 +318,8 @@
     "longitude": "Longitude",
     "latitude": "Latitude",
     "save_event":"Save event",
-    "please_choose_a_location": "Please choose a location by clicking on the map"
+    "please_choose_a_location": "Please choose a location by clicking on the map",
+    "events_are_regattas":"Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies."
   },
   "course_list": {
     "course": "Course",
@@ -354,7 +357,7 @@
     "enter_geometry_name": "Enter geometry name",
     "geometry_name": "Geometry Name",
     "input_a_name_for_this_geometry": "Input a name for this geometry",
-    "cancel": "Cancel",
+    "cancel": "Go back",
     "save": "Save",
     "saving": "Saving..."
   }

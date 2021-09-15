@@ -17,8 +17,10 @@ export const BoundingBoxPicker = (props) => {
 
     return (
         <Wrapper>
+            <BoundingBoxPickerHeading>{t(translations.competition_unit_create_update_page.create_a_private_polygon)}</BoundingBoxPickerHeading>
+            <BoundingPickerDescription>{t(translations.competition_unit_create_update_page.positions_outside_of_this_polygon_is)}</BoundingPickerDescription>
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
-                <Map coordinates={coordinates}  onCoordinatesRecevied={onCoordinatesRecevied} zoom={MAP_DEFAULT_VALUE.ZOOM} />
+                <Map coordinates={coordinates} onCoordinatesRecevied={onCoordinatesRecevied} zoom={MAP_DEFAULT_VALUE.ZOOM} />
             </MapContainer>
             <PickerDescription>{t(translations.competition_unit_create_update_page.please_create_a_bounding_box)}</PickerDescription>
         </Wrapper>
@@ -30,6 +32,7 @@ const Wrapper = styled.div`
     height: 450px;
     padding: 30px 0;
     z-index: -1;
+    margin-bottom: 100px;
 `;
 
 const PickerDescription = styled.div`
@@ -37,4 +40,12 @@ const PickerDescription = styled.div`
     margin: 5px 0;
     font-size: 13px;
     color: #70757a;
+`;
+
+const BoundingBoxPickerHeading = styled.h3`
+    
+`;
+
+const BoundingPickerDescription = styled.p`
+
 `;

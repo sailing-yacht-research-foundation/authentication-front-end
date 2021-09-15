@@ -30,28 +30,28 @@ export const CompetitionUnitList = () => {
             title: t(translations.competition_unit_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => <Link to={`/my-events/${record.calendarEventId}/competition-units/${record.id}/update`}>{text}</Link>,
+            render: (text, record) => <Link to={`/my-events/${record.calendarEventId}/my-races/${record.id}/update`}>{text}</Link>,
             width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.start_time),
             dataIndex: 'startTime',
             key: 'startTime',
-            render: (value) => moment(value).format('YYYY-MM-DD'),
+            render: (value) => moment(value).format('MMM. D, YYYY [at] h:mm A z'),
             width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.approximate_start),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
-            render: (value) => moment(value).format('YYYY-MM-DD'),
+            render: (value) => moment(value).format('MMM. D, YYYY [at] h:mm A z'),
             width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
-            render: (value) => moment(value).format('YYYY-MM-DD'),
+            render: (value) => moment(value).format('MMM. D, YYYY'),
             width: '20%',
         },
         {
@@ -60,7 +60,7 @@ export const CompetitionUnitList = () => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-events/${record.calendarEventId}/competition-units/${record.id}/update`);
+                        history.push(`/my-events/${record.calendarEventId}/my-races/${record.id}/update`);
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>
@@ -125,9 +125,6 @@ export const CompetitionUnitList = () => {
             />
             <PageHeaderContainer>
                 <PageHeaderText>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderText>
-                <CreateButton onClick={() => history.push("/competition-units/create")} icon={<AiFillPlusCircle
-                    style={{ marginRight: '5px' }}
-                    size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
             </PageHeaderContainer>
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
@@ -149,7 +146,7 @@ export const CompetitionUnitList = () => {
                         width={400} />
                     <CreateButton icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/competition-units/create")}>Create</CreateButton>
+                        size={18} />} onClick={() => history.push("/my-races/create")}>Create</CreateButton>
                     <LottieMessage>{t(translations.competition_unit_list_page.you_dont_have_any_competition_unit)}</LottieMessage>
                 </LottieWrapper>)}
         </>

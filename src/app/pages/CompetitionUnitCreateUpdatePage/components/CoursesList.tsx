@@ -22,7 +22,7 @@ export const CoursesList = (props) => {
             title: t(translations.course_list.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
-            render: (value) => moment(value).format('YYYY-MM-DD'),
+            render: (value) => moment(value).format('MMM. D, YYYY'),
         },
         {
             title: t(translations.course_list.has_geometry),
@@ -34,7 +34,7 @@ export const CoursesList = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/competition-units/${record.competitionUnitId}/courses/${record.id}/update`)
+                        history.push(`/my-races/${record.competitionUnitId}/courses/${record.id}/update`)
                     }} type="primary">{t(translations.course_list.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => setShowCourseDeleteModal(true)}>{t(translations.course_list.delete)}</BorderedButton>
                 </Space>
@@ -82,7 +82,7 @@ export const CoursesList = (props) => {
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.course_list.course)}</PageHeaderTextSmall>
                     {
-                        !course.id && <CreateButton onClick={() => history.push(`/competition-units/${competitionUnitId}/courses/create`)} icon={<AiFillPlusCircle
+                        !course.id && <CreateButton onClick={() => history.push(`/my-races/${competitionUnitId}/courses/create`)} icon={<AiFillPlusCircle
                             style={{ marginRight: '5px' }}
                             size={18} />}>{t(translations.course_list.create)}</CreateButton>
                     }

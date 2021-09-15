@@ -47,6 +47,10 @@ export const CompetitionUnitForm = () => {
 
     const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
 
+    const [formChanged, setFormChanged] = React.useState<boolean>(false);
+
+    const courseListRef = React.useRef<any>();
+
     const onFinish = async (values) => {
         let { name, startDate, startTime, isCompleted, calendarEventId } = values;
         let response;
@@ -84,8 +88,9 @@ export const CompetitionUnitForm = () => {
                 toast.success(t(translations.competition_unit_create_update_page.successfully_updated_competition_unit, { name: response.data?.name }));
             }
 
-            history.push(`/my-events/${calendarEventId}/competition-units/${response.data?.id}/update`);
+            history.push(`/my-events/${calendarEventId}/my-races/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
+            if (courseListRef) courseListRef.current?.scrollIntoView({ behavior: 'smooth' });
         } else {
             toast.error(t(translations.competition_unit_create_update_page.an_error_happened));
         }
@@ -132,7 +137,7 @@ export const CompetitionUnitForm = () => {
     }
 
     const onCompetitionUnitDeleted = () => {
-        history.push('/competition-units');
+        history.push('/my-races');
     }
 
     React.useEffect(() => {
@@ -152,7 +157,7 @@ export const CompetitionUnitForm = () => {
             <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageHeaderText>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeaderText>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/competition-units")} icon={<BsCardList
+                    <CreateButton onClick={() => history.push("/my-races")} icon={<BsCardList
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.competition_unit_create_update_page.view_all_competition_units)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
@@ -168,6 +173,7 @@ export const CompetitionUnitForm = () => {
                         name="basic"
                         form={form}
                         onFinish={onFinish}
+                        onValuesChange={() => setFormChanged(true)}
                     >
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.name)}</SyrfFieldLabel>}
@@ -235,12 +241,8 @@ export const CompetitionUnitForm = () => {
 
                         <BoundingBoxPicker coordinates={boundingBoxCoordinates} onCoordinatesRecevied={onCoordinatesRecevied} />
 
-                        <Form.Item label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.is_completed)}</SyrfFieldLabel>} name="isCompleted" valuePropName="checked" initialValue={false}>
-                            <Switch />
-                        </Form.Item>
-
                         <Form.Item>
-                            <SyrfFormButton type="primary" htmlType="submit">
+                            <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
                                 {t(translations.competition_unit_create_update_page.save_competition_unit)}
                             </SyrfFormButton>
                         </Form.Item>
@@ -249,7 +251,7 @@ export const CompetitionUnitForm = () => {
             </SyrfFormWrapper>
 
             {
-                mode === MODE.UPDATE && <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                mode === MODE.UPDATE && <SyrfFormWrapper ref={courseListRef} style={{ marginTop: '30px' }}>
                     <CoursesList competitionUnitId={competitionUnitId} />
                 </SyrfFormWrapper>
             }

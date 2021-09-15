@@ -64,7 +64,6 @@ export const update = (competitionUnitId, courseId, courseSequencedGeometries) =
 }
 
 export const updateCourseGeometry = (courseId, courseSequencedGeometries) => {
-    console.log(courseSequencedGeometries);
     return syrfService.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/courses/${courseId}/sequenced`, courseSequencedGeometries).then(response => {
         return {
             success: true,

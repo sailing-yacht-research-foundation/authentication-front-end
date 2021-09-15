@@ -47,6 +47,10 @@ export const MyEventForm = () => {
 
     const { t } = useTranslation();
 
+    const raceListRef = React.useRef<any>();
+
+    const [formChanged, setFormChanged] = React.useState<boolean>(false);
+
     const onFinish = async (values) => {
         const { name, locationName, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime } = values;
         let response;
@@ -96,6 +100,8 @@ export const MyEventForm = () => {
                 lat: lat,
                 lng: lon
             });
+
+            if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
         } else {
             toast.error(t(translations.my_event_create_update_page.an_error_happened_when_saving_event));
         }
@@ -151,10 +157,12 @@ export const MyEventForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageHeaderText>{mode === MODE.UPDATE ?
-                    t(translations.my_event_create_update_page.update_your_event)
-                    : t(translations.my_event_create_update_page.create_a_new_event)}
-                </PageHeaderText>
+                <PageInfoContainer>
+                    <PageHeading>{mode === MODE.UPDATE ?
+                        t(translations.my_event_create_update_page.update_your_event)
+                        : t(translations.my_event_create_update_page.create_a_new_event)}</PageHeading>
+                    <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
+                </PageInfoContainer>
                 <Space size={10}>
                     <CreateButton onClick={() => history.push("/my-events")} icon={<BsCardList
                         style={{ marginRight: '5px' }}
@@ -168,6 +176,7 @@ export const MyEventForm = () => {
             <SyrfFormWrapper>
                 <Spin spinning={isSavingRace}>
                     <Form
+                        onValuesChange={() => setFormChanged(true)}
                         layout={'vertical'}
                         name="basic"
                         form={form}
@@ -261,7 +270,7 @@ export const MyEventForm = () => {
                         </Form.Item>
 
                         <Form.Item>
-                            <SyrfFormButton type="primary" htmlType="submit">
+                            <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
                                 {t(translations.my_event_create_update_page.save_event)}
                             </SyrfFormButton>
                         </Form.Item>
@@ -270,7 +279,7 @@ export const MyEventForm = () => {
             </SyrfFormWrapper>
 
             {
-                mode === MODE.UPDATE && <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                mode === MODE.UPDATE && <SyrfFormWrapper ref={raceListRef} style={{ marginTop: '30px' }}>
                     <CompetitionUnitList eventId={eventId} />
                 </SyrfFormWrapper>
             }
@@ -285,4 +294,18 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 100%;
     margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
+`;
+
+const PageInfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const PageDescription = styled.p`
+    padding: 0 15px;
+`;
+
+const PageHeading = styled.h2`
+    padding: 20px 15px;
+    padding-bottom: 0px;
 `;
