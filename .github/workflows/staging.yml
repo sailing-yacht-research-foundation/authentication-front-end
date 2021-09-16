@@ -2,7 +2,7 @@ name: SYRF My Sailing Profile develop
 on:
   push:
     branches:
-      - feature/SNS-324
+      - develop
 env:
   IMAGE_NAME: syrf_my_sailing_profile
 jobs:
