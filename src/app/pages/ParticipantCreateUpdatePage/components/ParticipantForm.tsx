@@ -2,24 +2,25 @@ import React from 'react';
 import { Spin, Form, Divider, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
-import { BsCardList } from 'react-icons/bs';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
-import { create, update, get } from 'services/live-data-server/vessels';
+import { create, update, get } from 'services/live-data-server/participants';
 import { toast } from 'react-toastify';
-import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVesselModal';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { DeleteParticipantModal } from './DeleteParticipantForm';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const MODE = {
     UPDATE: 'update',
     CREATE: 'create'
 }
 
-export const VesselForm = () => {
+export const ParticipantForm = () => {
+
     const history = useHistory();
 
     const { t } = useTranslation();
@@ -32,26 +33,26 @@ export const VesselForm = () => {
 
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
-    const { id } = useParams<{ id: string }>();
+    const { eventId, id } = useParams<{ eventId: string, id: string }>();
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [vessel, setVessel] = React.useState<any>({});
+    const [participant, setParticipant] = React.useState<any>({});
 
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
-        let { publicName, globalId, vesselId, lengthInMeters } = values;
+        let { publicName, participantId, calendarEventId } = values;
         let response;
+        calendarEventId = eventId ? eventId : calendarEventId;
 
         setIsSaving(true);
 
         const data = {
             publicName: publicName,
-            globalId: globalId,
-            vesselId: vesselId,
-            lengthInMeters: lengthInMeters,
-            orcJsonPolars: {}
+            participantId: participantId,
+            calendarEventId: calendarEventId,
+            userProfileId: null
         };
 
         if (mode === MODE.CREATE)
@@ -64,16 +65,20 @@ export const VesselForm = () => {
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success(t(translations.vessel_create_update_page.created_a_new_vessel, { name: response.data?.publicName }));
-                setVessel(response.data);
+                toast.success(t(translations.participant_unit_create_update_page.created_a_new_participant, { name: response.data?.name }));
+                setParticipant(response.data);
             } else {
-                toast.success(t(translations.vessel_create_update_page.successfully_updated_vessel, { name: response.data?.publicName }));
+                toast.success(t(translations.participant_unit_create_update_page.successfully_updated_participant, { name: response.data?.name }));
             }
 
-            history.push(`/vessels/${response.data?.id}/update`);
+            if (eventId) {
+                history.push(`/my-events/${eventId}/update`);
+            } else {
+                history.push(`/my-events`);
+            }
             setMode(MODE.UPDATE);
         } else {
-            toast.error(t(translations.vessel_create_update_page.an_error_happened));
+            toast.error(t(translations.participant_unit_create_update_page.an_error_happened));
         }
     }
 
@@ -85,9 +90,9 @@ export const VesselForm = () => {
             setIsSaving(false);
 
             if (response.success) {
-                setVessel(response.data);
+                setParticipant(response.data);
                 form.setFieldsValue({
-                    ...response.data
+                    ...response.data,
                 });
             } else {
                 history.push('/404');
@@ -95,8 +100,8 @@ export const VesselForm = () => {
         }
     }
 
-    const onVesselDeleted = () => {
-        history.push('/vessels');
+    const onParticipantDeleted = () => {
+        history.push(`/my-events/${participant.calendarEventId}/update`);
     }
 
     React.useEffect(() => {
@@ -106,21 +111,27 @@ export const VesselForm = () => {
 
     return (
         <Wrapper>
-            <DeleteVesselModal
-                vessel={vessel}
-                onVesselDeleted={onVesselDeleted}
+            <DeleteParticipantModal
+                participant={participant}
+                onParticipantDeleted={onParticipantDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageHeaderText>{mode === MODE.UPDATE ? t(translations.vessel_create_update_page.update_your_vessel) : t(translations.vessel_create_update_page.create_a_new_vessel)}</PageHeaderText>
+                <PageHeaderText>{mode === MODE.UPDATE ? t(translations.participant_unit_create_update_page.update_participant) : t(translations.participant_unit_create_update_page.create_a_new_participant)}</PageHeaderText>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/vessels")} icon={<BsCardList
+                    <CreateButton onClick={() => {
+                        if (eventId) {
+                            history.push(`/my-events/${eventId}/update`);
+                        } else {
+                            history.push(`/my-events`);
+                        }
+                    }} icon={<IoIosArrowBack
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.vessel_create_update_page.view_all_vessels)}</CreateButton>
+                        size={18} />}>{t(translations.participant_unit_create_update_page.back_to_race)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.vessel_create_update_page.delete)}</DeleteButton>}
+                        size={18} />}>{t(translations.participant_unit_create_update_page.delete)}</DeleteButton>}
 
                 </Space>
             </PageHeaderContainer>
@@ -134,7 +145,7 @@ export const VesselForm = () => {
                         onValuesChange={() => setFormChanged(true)}
                     >
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.public_name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.public_name)}</SyrfFieldLabel>}
                             name="publicName"
                             rules={[{ required: true }]}
                         >
@@ -142,35 +153,9 @@ export const VesselForm = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.vessel_id)}</SyrfFieldLabel>}
-                            name="vesselId"
+                            label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.participant_id)}</SyrfFieldLabel>}
+                            name="participantId"
                             rules={[{ required: true }]}
-                        >
-                            <SyrfInputField />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.global_id)}</SyrfFieldLabel>}
-                            name="globalId"
-                            rules={[{ required: true }]}
-                        >
-                            <SyrfInputField />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.length_in_meters)}</SyrfFieldLabel>}
-                            name="lengthInMeters"
-                            rules={[() => ({
-                                validator(_, value) {
-                                  if (!value) {
-                                    return Promise.reject();
-                                  }
-                                  if (isNaN(value)) {
-                                    return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
-                                  }
-                                  return Promise.resolve();
-                                },
-                              }),]}
                         >
                             <SyrfInputField />
                         </Form.Item>
@@ -179,7 +164,7 @@ export const VesselForm = () => {
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
-                                {t(translations.vessel_create_update_page.save_vessel)}
+                                {t(translations.participant_unit_create_update_page.save_participant)}
                             </SyrfFormButton>
                         </Form.Item>
                     </Form>

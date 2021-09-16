@@ -358,6 +358,12 @@
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this course?",
     "you_will_delete": "You will delete this course along with all associated information, are you sure you want to continue?"
   },
+  "delete_participant_modal": {
+    "successfully_deleted": "Successfully deleted participant {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your participant",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this participant?",
+    "you_will_delete": "You will delete this participant along with all associated information, are you sure you want to continue?"
+  },
   "course_create_update_page": {
     "you_cannot_create_course": "You cannot save the course because You have not added any geometries",
     "successfully_created_your_course": "Successfully saved your course.",
@@ -397,5 +403,26 @@
     "update_your_vessel": "Update your vessel",
     "create_a_new_vessel": "Create a new vessel",
     "length_in_meters_must_be_a_number": "Length In Meters must be a number."
+  },
+  "participant_list": {
+    "participants": "Participants",
+    "create": "Create",
+    "participant_id": "Participant ID",
+    "delete": "Delete",
+    "update": "Update",
+    "public_name": "Public Name",
+    "action": "Action"
+  },
+  "participant_unit_create_update_page": {
+    "created_a_new_participant": "Created a new participant with name: {{name}}.",
+    "successfully_updated_participant": "Successfully updated your participant: {{name}}",
+    "an_error_happened": "An error happened when saving your participant.",
+    "back_to_race": "Back to race",
+    "delete": "Delete",
+    "public_name": "Name",
+    "participant_id": "Participant ID",
+    "save_participant": "Save Participant",
+    "update_participant": "Update Participant",
+    "create_a_new_participant": "Create a new participant"
   }
 }

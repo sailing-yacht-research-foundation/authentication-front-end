@@ -105,7 +105,8 @@ export const VesselList = () => {
             setPagination({
                 ...pagination,
                 rows: response.data?.rows,
-                page: page
+                page: page,
+                total: response.data?.count
             });
         }
     }

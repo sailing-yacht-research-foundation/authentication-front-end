@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 
 import React from 'react';
 import { Spin, Form, DatePicker, Row, Col, Divider, Switch, TimePicker, Space } from 'antd';
-import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
+import { CreateButton, DeleteButton, PageHeaderContainer } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -19,6 +19,7 @@ import { BiTrash } from 'react-icons/bi';
 import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { ParticipantList } from './ParticipantList';
 
 const MODE = {
     CREATE: 'create',
@@ -52,7 +53,7 @@ export const MyEventForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
-        const { name, locationName, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime } = values;
+        const { name, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime } = values;
         let response;
         let currentDate = moment();
 
@@ -64,7 +65,6 @@ export const MyEventForm = () => {
 
         const data = {
             name: name,
-            locationName: locationName,
             externalUrl: externalUrl,
             lon: lon,
             lat: lat,
@@ -192,14 +192,6 @@ export const MyEventForm = () => {
 
                         <Divider />
 
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.location_name)}</SyrfFieldLabel>}
-                            name="locationName"
-                            rules={[{ required: true }]}
-                        >
-                            <SyrfInputField />
-                        </Form.Item>
-
                         <Row gutter={24}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
@@ -279,9 +271,17 @@ export const MyEventForm = () => {
             </SyrfFormWrapper>
 
             {
-                mode === MODE.UPDATE && <SyrfFormWrapper ref={raceListRef} style={{ marginTop: '30px' }}>
-                    <CompetitionUnitList eventId={eventId} />
-                </SyrfFormWrapper>
+                mode === MODE.UPDATE && (
+                    <>
+                        <SyrfFormWrapper ref={raceListRef} style={{ marginTop: '30px' }}>
+                            <CompetitionUnitList eventId={eventId} />
+                        </SyrfFormWrapper>
+
+                        <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                            <ParticipantList eventId={eventId} />
+                        </SyrfFormWrapper>
+                    </>
+                )
             }
         </Wrapper>
     )

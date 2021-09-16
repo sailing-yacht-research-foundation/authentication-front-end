@@ -39,6 +39,7 @@ import { CompetitionUnitCreateUpdatePage } from './pages/CompetitionUnitCreateUp
 import { CompetitionUnitListPage } from './pages/CompetitionUnitListPage/Loadable';
 import { VesselListPage } from './pages/VesselListPage/Loadable';
 import { VesselCreateUpdatePage } from './pages/VesselCreateUpdatePage/Loadable';
+import { ParticipantCreateUpdatePage } from './pages/ParticipantCreateUpdatePage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -54,7 +55,6 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
-
 
 const { Sider, Content } = Layout
 Amplify.configure(config);
@@ -161,6 +161,8 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/vessels/'} component={VesselListPage} />
               <Route exact path={process.env.PUBLIC_URL + '/vessels/create'} component={VesselCreateUpdatePage} />
               <Route exact path={process.env.PUBLIC_URL + '/vessels/:id/update'} component={VesselCreateUpdatePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/my-events/:eventId/participants/create'} component={ParticipantCreateUpdatePage}/>
+              <Route exact path={process.env.PUBLIC_URL + '/my-events/:eventId/participants/:id/update'} component={ParticipantCreateUpdatePage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <Route component={NotFoundPage} />

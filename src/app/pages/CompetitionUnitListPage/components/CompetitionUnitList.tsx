@@ -97,7 +97,8 @@ export const CompetitionUnitList = () => {
             setPagination({
                 ...pagination,
                 rows: response.data?.rows,
-                page: page
+                page: page,
+                total: response.data?.count
             });
         }
     }

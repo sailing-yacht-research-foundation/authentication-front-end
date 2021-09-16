@@ -4,12 +4,12 @@ import { Space, Spin, Table } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
+import { getAllByCalendarEventId } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
+import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
 
-export const CompetitionUnitList = (props) => {
+export const ParticipantList = (props) => {
 
     const { t } = useTranslation();
 
@@ -17,35 +17,28 @@ export const CompetitionUnitList = (props) => {
 
     const columns = [
         {
-            title: t(translations.competition_unit_list_page.name),
-            dataIndex: 'name',
-            key: 'name',
+            title: t(translations.participant_list.public_name),
+            dataIndex: 'publicName',
+            key: 'publicName',
             render: text => text,
             width: '20%',
         },
         {
-            title: t(translations.competition_unit_list_page.start_date),
-            dataIndex: 'approximateStartTime',
-            key: 'start_date',
-            render: (value) => moment(value).format('MMM. D, YYYY [at] h:mm A z'),
+            title: t(translations.participant_list.participant_id),
+            dataIndex: 'participantId',
+            key: 'participantId',
+            render: text => text,
             width: '20%',
         },
         {
-            title: t(translations.competition_unit_list_page.created_date),
-            dataIndex: 'created_at',
-            key: 'created_at',
-            render: (value) => moment(value).format('MMM. D, YYYY'),
-            width: '20%',
-        },
-        {
-            title: 'Action',
+            title: t(translations.participant_list.action),
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-events/${record.calendarEventId}/my-races/${record.id}/update`)
-                    }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                        history.push(`/my-events/${record.calendarEventId}/participants/${record.id}/update`)
+                    }} type="primary">{t(translations.participant_list.update)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDetelteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
                 </Space>
             ),
             width: '20%',
@@ -58,7 +51,7 @@ export const CompetitionUnitList = (props) => {
         rows: []
     });
 
-    const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
+    const [participant, setParticipant] = React.useState<any>({});
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -81,16 +74,16 @@ export const CompetitionUnitList = (props) => {
         }
     }
 
-    const showDeleteCompetitionUnitModal = (competitionUnit) => {
+    const showDetelteParticipanModal = (participant) => {
         setShowDeleteModal(true);
-        setCompetitionUnit(competitionUnit);
+        setParticipant(participant);
     }
 
     const onPaginationChanged = (page) => {
         getAll(page);
     }
 
-    const onCompetitionUnitDeleted = () => {
+    const onParticipantDeleted = () => {
         getAll(pagination.page);
     }
 
@@ -101,18 +94,18 @@ export const CompetitionUnitList = (props) => {
 
     return (
         <>
-            <DeleteCompetitionUnitModal
-                competitionUnit={competitionUnit}
-                onCompetitionUnitDeleted={onCompetitionUnitDeleted}
+            <DeleteParticipantModal
+                participant={participant}
+                onParticipantDeleted={onParticipantDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
-                    <PageHeaderTextSmall>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/my-events/${eventId}/my-races/create`)} icon={<AiFillPlusCircle
+                    <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
+                    <CreateButton onClick={() => history.push(`/my-events/${eventId}/participants/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
+                        size={18} />}>{t(translations.participant_list.create)}</CreateButton>
                 </PageHeaderContainer>
                 <TableWrapper>
                     <Table columns={columns}
