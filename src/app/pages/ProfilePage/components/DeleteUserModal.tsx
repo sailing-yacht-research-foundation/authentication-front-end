@@ -35,7 +35,6 @@ export const DeleteUserModal = (props) => {
         dispatch(loginActions.setLogout());
         history.push('/signin');
         toast.info(t(translations.profile_page.update_profile.we_hope_to_see_you_again));
-        localStorage.removeItem('session_token');
     }
 
     return (

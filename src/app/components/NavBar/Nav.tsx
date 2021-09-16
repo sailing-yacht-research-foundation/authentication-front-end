@@ -27,7 +27,6 @@ export const Nav = () => {
   const logout = () => {
     dispatch(loginActions.setLogout());
     history.push('/signin');
-    localStorage.removeItem('session_token');
   }
 
   return (

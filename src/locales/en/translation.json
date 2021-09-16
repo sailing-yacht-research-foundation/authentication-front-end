@@ -186,10 +186,10 @@
       "please_verify_your_phone_number": "Please verify your phone number",
       "code": "Code",
       "enter_the_code_you_received": "Enter the code you received",
-      "could_not_receive_the_code":"Could not receive the code?",
+      "could_not_receive_the_code": "Could not receive the code?",
       "resend": "Resend",
       "please_choose_an_image_to_crop": "Please choose an image to crop!",
-      "upload_profile_picture_successfully":"Upload profile picture successfully!",
+      "upload_profile_picture_successfully": "Upload profile picture successfully!",
       "change_profile_picture": "Change profile picture",
       "uploading": "Uploading....",
       "we_hope_to_see_you_again": "We hope to see you again!",
@@ -270,7 +270,7 @@
     "race_clusters": "Race Clusters",
     "race_starts_grouped": "Race starts grouped into clusters based on the scale of the map view.",
     "race_regions": "Race Regions",
-    "polygons_containing_races":"Polygons containing races for the last 20 years with a count of how many races occured in that region.",
+    "polygons_containing_races": "Polygons containing races for the last 20 years with a count of how many races occured in that region.",
     "race_region_boxes": "Race Region Boxes",
     "similar_to_racec_regions": "Similar to race regions, except this is a view of nice rectangular boxes that contain each region. Overlapping boxes have been combined.",
     "yatch_club_density": "Yacht Club Density",
@@ -281,7 +281,7 @@
     "name": "Name",
     "location": "Location",
     "start_date": "Start Date",
-    "created_date":"Created Date",
+    "created_date": "Created Date",
     "action": "Action",
     "update": "Update",
     "delete": "Delete",
@@ -303,7 +303,8 @@
     "create": "Create",
     "start_time": "Start Time",
     "approximate_start": "Approximate Start",
-    "you_dont_have_any_competition_unit": "You don't have any races, please create one."
+    "you_dont_have_any_competition_unit": "You don't have any races, please create one.",
+    "event_name": "Event Name"
   },
   "competition_unit_create_update_page": {
     "created_a_new_competition_unit": "Created a new race with name: {{name}}.",
@@ -332,16 +333,16 @@
     "create_a_new_event": "Create A New Event",
     "view_all": "View all",
     "delete": "Delete",
-    "name":"Name",
+    "name": "Name",
     "location_name": "Location Name",
     "start_date": "Start Date",
     "start_time": "Start Time",
     "external_url": "External URL",
     "longitude": "Longitude",
     "latitude": "Latitude",
-    "save_event":"Save event",
+    "save_event": "Save event",
     "please_choose_a_location": "Please choose a location by clicking on the map",
-    "events_are_regattas":"Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies."
+    "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies."
   },
   "course_list": {
     "course": "Course",
@@ -391,9 +392,17 @@
     "enter_geometry_name": "Enter geometry name",
     "geometry_name": "Geometry Name",
     "input_a_name_for_this_geometry": "Input a name for this geometry",
-    "cancel": "Go back",
+    "cancel": "Back",
     "save": "Save",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "draw_buttons": {
+      "polyline": "Add a start, finish or a gate line.",
+      "polygon": "Add a polygon",
+      "rectangle": "Add a rectangle",
+      "circle": "Add a circle",
+      "marker": "Add a mark.",
+      "circlemarker": "Add a circlemarker"
+    }
   },
   "vessel_list_page": {
     "public_name": "Public Name",

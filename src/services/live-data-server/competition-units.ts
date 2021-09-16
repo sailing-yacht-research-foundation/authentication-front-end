@@ -18,7 +18,8 @@ export const create = (calendarEventId, data) => {
 }
 
 export const getAllByCalendarEventId = (calendarEventId, page) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
+    let userId: any = localStorage.getItem('user_id');
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
         }
@@ -37,7 +38,8 @@ export const getAllByCalendarEventId = (calendarEventId, page) => {
 }
 
 export const getAllCompetitionUnits = (page) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units`, {
+    let userId: any = localStorage.getItem('user_id');
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
         }

@@ -36,7 +36,8 @@ export const search = (action) => {
 }
 
 export const getAll = () => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events`)
+    let userId: any = localStorage.getItem('user_id');
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`)
         .then(response => {
             return {
                 success: true,
@@ -50,8 +51,9 @@ export const getAll = () => {
         })
 }
 
-export const getMany = (page, user) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${user && user.id ? `?createdById_eq=${user.id}` : ''}`, {
+export const getMany = (page) => {
+    let userId: any = localStorage.getItem('user_id');
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
         }

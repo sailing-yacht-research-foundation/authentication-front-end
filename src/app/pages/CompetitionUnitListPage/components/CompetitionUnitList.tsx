@@ -11,6 +11,7 @@ import moment from 'moment';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { getAllCompetitionUnits } from 'services/live-data-server/competition-units';
 import { Link } from 'react-router-dom';
+import { renderEmptyValue, stringToColour } from 'utils/helpers';
 
 const defaultOptions = {
     loop: true,
@@ -21,9 +22,24 @@ const defaultOptions = {
     }
 };
 
+const classLists = [
+    'volcano-1',
+    'volcano-2',
+    'volcano-3',
+    'volcano-4',
+    'volcano-5',
+    'volcano-6',
+    'volcano-7',
+    'volcano-8',
+    'volcano-9',
+    'volcano-10'
+];
+
 export const CompetitionUnitList = () => {
 
     const { t } = useTranslation();
+
+    const raceColors = React.useRef({});
 
     const columns = [
         {
@@ -31,6 +47,13 @@ export const CompetitionUnitList = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => <Link to={`/my-events/${record.calendarEventId}/my-races/${record.id}/update`}>{text}</Link>,
+            width: '20%',
+        },
+        {
+            title: t(translations.competition_unit_list_page.event_name),
+            dataIndex: 'eventName',
+            key: 'eventName',
+            render: (text) => renderEmptyValue(text),
             width: '20%',
         },
         {
@@ -116,6 +139,19 @@ export const CompetitionUnitList = () => {
         getAll(pagination.page);
     }
 
+
+    const groupRowColorByEventName = () => {
+        pagination.rows.forEach(row => {
+            if (!raceColors.current[`${row.eventName}`])
+                raceColors.current[`${row.eventName}`] = `volcano-${Math.floor(Math.random() * (5 - 1 + 1) + 1)}`;
+        });
+    }
+
+    React.useEffect(() => {
+        groupRowColorByEventName();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pagination.rows]);
+
     return (
         <>
             <DeleteCompetitionUnitModal
@@ -131,6 +167,7 @@ export const CompetitionUnitList = () => {
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
                         <Table scroll={{ x: "max-content" }} columns={columns}
+                            rowClassName={(record) => raceColors.current[`${record.eventName}`]}
                             dataSource={pagination.rows} pagination={{
                                 defaultPageSize: 10,
                                 current: pagination.page,
@@ -145,9 +182,6 @@ export const CompetitionUnitList = () => {
                         options={defaultOptions}
                         height={400}
                         width={400} />
-                    <CreateButton icon={<AiFillPlusCircle
-                        style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/my-races/create")}>Create</CreateButton>
                     <LottieMessage>{t(translations.competition_unit_list_page.you_dont_have_any_competition_unit)}</LottieMessage>
                 </LottieWrapper>)}
         </>

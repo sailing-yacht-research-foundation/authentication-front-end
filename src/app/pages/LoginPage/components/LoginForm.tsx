@@ -49,6 +49,7 @@ export const LoginForm = (props) => {
       if (response.user?.email_verified) {
         dispatch(actions.setIsAuthenticated(true));
         localStorage.removeItem('is_guest');
+        localStorage.setItem('user_id', response.user.id);
         history.push('/');
       } else {
         toast.info(t(translations.login_page.please_verify_your_account));

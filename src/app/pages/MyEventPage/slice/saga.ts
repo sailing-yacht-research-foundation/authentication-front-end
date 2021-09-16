@@ -8,11 +8,9 @@ import { getMany } from "services/live-data-server/event-calendars";
 import { myEventListActions } from ".";
 
 export function* getEvents(action) {
-    const user = yield select(selectUser);
-
     yield put(myEventListActions.setIsChangingPage(true));
 
-    const response = yield call(getMany, action.payload, user);
+    const response = yield call(getMany, action.payload);
 
     yield put(myEventListActions.setIsChangingPage(false));
     yield put(myEventListActions.setPage(action.payload));

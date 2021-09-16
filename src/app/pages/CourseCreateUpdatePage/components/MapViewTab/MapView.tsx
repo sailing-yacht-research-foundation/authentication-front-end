@@ -22,6 +22,7 @@ import { HiSave } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 require('leaflet-draw');
 
@@ -48,6 +49,15 @@ const GEOMETRY_TYPE = {
 const MODE = {
     CREATE: 'create',
     UPDATE: 'update'
+};
+
+L.drawLocal.draw.toolbar.buttons = {
+    polyline: i18next.t(translations.course_create_update_page.draw_buttons.polyline),
+    polygon: i18next.t(translations.course_create_update_page.draw_buttons.polygon),
+    rectangle:i18next.t(translations.course_create_update_page.draw_buttons.rectangle),
+    circle: i18next.t(translations.course_create_update_page.draw_buttons.circle),
+    marker:  i18next.t(translations.course_create_update_page.draw_buttons.marker),
+    circlemarker:  i18next.t(translations.course_create_update_page.draw_buttons.circlemarker)
 };
 
 export const MapView = () => {
