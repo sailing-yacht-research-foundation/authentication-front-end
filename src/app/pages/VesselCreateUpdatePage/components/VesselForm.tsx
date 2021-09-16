@@ -11,8 +11,6 @@ import moment from 'moment';
 import { create, update, get } from 'services/live-data-server/vessels';
 import { toast } from 'react-toastify';
 import { ParticipantList } from './ParticipantList';
-import Select from 'rc-select';
-import { getAll } from 'services/live-data-server/event-calendars';
 import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVesselModal';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
@@ -36,9 +34,7 @@ export const VesselForm = () => {
 
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
-    const { vesselId } = useParams<{ vesselId: string }>();
-
-    const [races, setRaces] = React.useState<any[]>([]);
+    const { id } = useParams<{ id: string }>();
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
@@ -58,13 +54,14 @@ export const VesselForm = () => {
             publicName: publicName,
             globalId: globalId,
             vesselId: vesselId,
-            lengthInMeters: lengthInMeters
+            lengthInMeters: lengthInMeters,
+            orcJsonPolars: {}
         };
 
         if (mode === MODE.CREATE)
             response = await create(data);
         else
-            response = await update(vesselId, data);
+            response = await update(id, data);
 
 
         setIsSaving(false);
@@ -77,7 +74,7 @@ export const VesselForm = () => {
                 toast.success(t(translations.vessel_create_update_page.successfully_updated_vessel, { name: response.data?.publicName }));
             }
 
-            history.push(`/vessel/${response.data?.id}/update`);
+            history.push(`/vessels/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
             if (participantRef) participantRef.current?.scrollIntoView({ behavior: 'smooth' });
         } else {
@@ -89,7 +86,7 @@ export const VesselForm = () => {
         if (location.pathname.includes(MODE.UPDATE)) {
             setMode(MODE.UPDATE);
             setIsSaving(true);
-            const response = await get(vesselId);
+            const response = await get(id);
             setIsSaving(false);
 
             if (response.success) {
@@ -102,12 +99,13 @@ export const VesselForm = () => {
             }
         }
     }
-    
+
     const onVesselDeleted = () => {
         history.push('/vessels');
     }
 
     React.useEffect(() => {
+        console.log('i was here');
         initModeAndData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -123,7 +121,7 @@ export const VesselForm = () => {
             <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageHeaderText>{mode === MODE.UPDATE ? t(translations.vessel_create_update_page.update_your_vessel) : t(translations.vessel_create_update_page.create_a_new_vessel)}</PageHeaderText>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/my-races")} icon={<BsCardList
+                    <CreateButton onClick={() => history.push("/vessels")} icon={<BsCardList
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.vessel_create_update_page.view_all_vessels)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
@@ -168,7 +166,17 @@ export const VesselForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.length_in_meters)}</SyrfFieldLabel>}
                             name="lengthInMeters"
-                            rules={[{ type: 'number' }]}
+                            rules={[() => ({
+                                validator(_, value) {
+                                  if (!value) {
+                                    return Promise.reject();
+                                  }
+                                  if (isNaN(value)) {
+                                    return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
+                                  }
+                                  return Promise.resolve();
+                                },
+                              }),]}
                         >
                             <SyrfInputField />
                         </Form.Item>

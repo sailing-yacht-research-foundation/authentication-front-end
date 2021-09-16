@@ -395,6 +395,7 @@
     "save_vessel": "Save Vessel",
     "is_completed": "Is Completed",
     "update_your_vessel": "Update your vessel",
-    "create_a_new_vessel": "Create a new vessel"
+    "create_a_new_vessel": "Create a new vessel",
+    "length_in_meters_must_be_a_number": "Length In Meters must be a number."
   }
 }

@@ -160,6 +160,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/my-races/:competitionUnitId/courses/:courseId/update'} component={CourseCreatePage} />
               <Route exact path={process.env.PUBLIC_URL + '/vessels/'} component={VesselListPage} />
               <Route exact path={process.env.PUBLIC_URL + '/vessels/create'} component={VesselCreateUpdatePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/vessels/:id/update'} component={VesselCreateUpdatePage} />
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <Route component={NotFoundPage} />

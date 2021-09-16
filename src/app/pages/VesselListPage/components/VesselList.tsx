@@ -43,8 +43,8 @@ export const VesselList = () => {
         },
         {
             title: t(translations.vessel_list_page.vessel_id),
-            dataIndex: 'approximateStart',
-            key: 'approximateStart',
+            dataIndex: 'vesselId',
+            key: 'vesselId',
             render: (value) => renderEmptyValue(value),
             width: '20%',
         },
@@ -87,7 +87,7 @@ export const VesselList = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [vessels, setVessel] = React.useState<any>({});
+    const [vessel, setVessel] = React.useState<any>({});
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
@@ -126,8 +126,8 @@ export const VesselList = () => {
     return (
         <>
             <DeleteVesselModal
-                vessels={vessels}
-                onVesslDeleted={onVesselDeleted}
+                vessel={vessel}
+                onVesselDeleted={onVesselDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
