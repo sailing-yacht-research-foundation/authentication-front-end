@@ -30,6 +30,7 @@ const slice = createSlice({
       state.session_token = '';
       localStorage.removeItem('user');
       localStorage.removeItem('session_token');
+      localStorage.removeItem('user_id');
     },
     getUser() {},
     syrfServiceAnonymousLogin() {},
