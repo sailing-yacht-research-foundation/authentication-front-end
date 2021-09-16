@@ -28,8 +28,8 @@ export function* syrfServiceAnonymousLogin() {
     const response = yield call(anonymousLogin);
 
     if (response.success) {
-        localStorage.setItem('session_token', response.token);
         yield put(loginActions.setSYRFServiceAuthorized(true));
+        yield put(loginActions.setSessionToken(response.token));
     }
 }
 
