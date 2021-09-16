@@ -57,18 +57,18 @@ jobs:
             docker pull \$IMAGE_ID:\$VERSION
             docker container rm -f syrf_my_sailing_profile || true
             docker run -d -e REACT_APP_FACEBOOK_CLIENT_ID='' \
-            REACT_APP_FACEBOOK_CLIENT_ID='' \
-            REACT_APP_TWITTER_CLIENT_ID='' \
-            REACT_APP_INSTAGRAM_CLIENT_ID='' \
-            REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io' \
-            REACT_APP_ENV='production' \
-            REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}' \
-            REACT_APP_SYRF_API_URL='' \
-            REACT_APP_SYRF_API_VERSION='/v1' \
-            REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_PRO_TOKEN }}' \
-            REACT_APP_KEY_CLOAK_API_URL='https://auth.syrf.io' \
-            REACT_APP_KEY_CLOAK_REALM_NAME='syrf' \
-            REACT_APP_KEY_CLOAK_CLIENT_ID='SyrfWebApp' \
+            -e REACT_APP_FACEBOOK_CLIENT_ID='' \
+            -e REACT_APP_TWITTER_CLIENT_ID='' \
+            -e REACT_APP_INSTAGRAM_CLIENT_ID='' \
+            -e REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io' \
+            -e REACT_APP_ENV='production' \
+            -e REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}' \
+            -e REACT_APP_SYRF_API_URL='' \
+            -e REACT_APP_SYRF_API_VERSION='/v1' \
+            -e REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_PRO_TOKEN }}' \
+            -e REACT_APP_KEY_CLOAK_API_URL='https://auth.syrf.io' \
+            -e REACT_APP_KEY_CLOAK_REALM_NAME='syrf' \
+            -e REACT_APP_KEY_CLOAK_CLIENT_ID='SyrfWebApp' \
             REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='' \
             -p 3002:80 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
           EOF

@@ -6,37 +6,37 @@ on:
 env:
   IMAGE_NAME: syrf_my_sailing_profile
 jobs:
-  build-test-and-push-image-staging:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build image and test
-        run: docker build . --file Dockerfile-staging --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-      - name: Log in to registry
-        # This is where you will update the PAT to GITHUB_TOKEN
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Push image
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+  # build-test-and-push-image-staging:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read
+  #     packages: write
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Build image and test
+  #       run: docker build . --file Dockerfile-staging --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+  #     - name: Log in to registry
+  #       # This is where you will update the PAT to GITHUB_TOKEN
+  #       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  #     - name: Push image
+  #       run: |
+  #         IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+  #         # Change all uppercase to lowercase
+  #         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+  #         # Strip git ref prefix from version
+  #         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+  #         # Strip "v" prefix from tag name
+  #         [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+  #         # Use Docker `latest` tag convention
+  #         [ "$VERSION" == "master" ] && VERSION=latest
+  #         echo IMAGE_ID=$IMAGE_ID
+  #         echo VERSION=$VERSION
+  #         docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+  #         docker push $IMAGE_ID:$VERSION
 
   deploy-staging:
     runs-on: ubuntu-latest
-    needs: [build-test-and-push-image-staging]
+    # needs: [build-test-and-push-image-staging]
     steps:
       # Step 1
       - name: Connect to EC2 instance
@@ -57,18 +57,18 @@ jobs:
             docker pull \$IMAGE_ID:\$VERSION
             docker container rm -f syrf_my_sailing_profile || true
             docker run -d -e REACT_APP_FACEBOOK_CLIENT_ID='' \
-            REACT_APP_FACEBOOK_CLIENT_ID='' \
-            REACT_APP_TWITTER_CLIENT_ID='' \
-            REACT_APP_INSTAGRAM_CLIENT_ID='' \
-            REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io' \
-            REACT_APP_ENV='staging' \
-            REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}' \
-            REACT_APP_SYRF_API_URL='https://liveserver-dev.syrf.io' \
-            REACT_APP_SYRF_API_VERSION='/v1' \
-            REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_DEV_TOKEN }}' \
-            REACT_APP_KEY_CLOAK_API_URL='https://auth.syrf.io' \
-            REACT_APP_KEY_CLOAK_REALM_NAME='syrf' \
-            REACT_APP_KEY_CLOAK_CLIENT_ID='SyrfWebApp' \
-            REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='wss://streaming-server-dev.syrf.io' \
+            -e REACT_APP_FACEBOOK_CLIENT_ID='' \
+            -e REACT_APP_TWITTER_CLIENT_ID='' \
+            -e REACT_APP_INSTAGRAM_CLIENT_ID='' \
+            -e REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io' \
+            -e REACT_APP_ENV='staging' \
+            -e REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}' \
+            -e REACT_APP_SYRF_API_URL='https://liveserver-dev.syrf.io' \
+            -e REACT_APP_SYRF_API_VERSION='/v1' \
+            -e REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_DEV_TOKEN }}' \
+            -e REACT_APP_KEY_CLOAK_API_URL='https://auth.syrf.io' \
+            -e REACT_APP_KEY_CLOAK_REALM_NAME='syrf' \
+            -e REACT_APP_KEY_CLOAK_CLIENT_ID='SyrfWebApp' \
+            -e REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='wss://streaming-server-dev.syrf.io' \
             -p 3002:80 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
           EOF
