@@ -61,11 +61,6 @@ describe('home Saga', () => {
 
         putDescriptor = searchRaceIterator.next().value;
         expect(putDescriptor).toEqual(
-            put(slice.homeActions.setMapResults(response.data?.hits.hits))
-        );
-
-        putDescriptor = searchRaceIterator.next().value;
-        expect(putDescriptor).toEqual(
             put(slice.homeActions.setResults(response.data?.hits.hits))
         );
 
@@ -110,14 +105,13 @@ describe('home Saga', () => {
 
         searchRacePutDescriptor = searchRaceIterator.next().value;
         expect(searchRacePutDescriptor).toEqual(
-            put(slice.homeActions.setMapResults([])),
-        );
-
-        searchRacePutDescriptor = searchRaceIterator.next().value;
-        expect(searchRacePutDescriptor).toEqual(
             put(slice.homeActions.setResults([])),
         );
 
+        let putDescriptor = searchRaceIterator.next().value;
+        expect(putDescriptor).toEqual(
+            put(slice.homeActions.setTotal(0))
+        );
 
         const iteration = searchRaceIterator.next();
         expect(iteration.done).toBe(true);

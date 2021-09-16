@@ -8,7 +8,7 @@ import { GiSailboat } from 'react-icons/gi';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectMapResults } from '../../slice/selectors';
+import { selectResults } from '../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -26,7 +26,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     const history = useHistory();
 
-    const results = useSelector(selectMapResults);
+    const results = useSelector(selectResults);
 
     const { t } = useTranslation();
 

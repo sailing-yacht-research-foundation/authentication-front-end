@@ -23,16 +23,11 @@ export function* searchRaces(action) {
     if (response.data) {
         if (response.data?.hits?.total?.value === 0) {
             toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: searchKeyword }));
-            yield put(homeActions.setMapResults([]));
             yield put(homeActions.setResults([]));
+            yield put(homeActions.setTotal(0));
         } else {
             yield put(homeActions.setTotal(response.data?.hits.total?.value));
-            yield put(homeActions.setMapResults(response.data?.hits?.hits));
-            if (params.get_all) {
-                yield put(homeActions.setResults(response.data?.hits?.hits.slice(0, 10)));
-            } else {
-                yield put(homeActions.setResults(response.data?.hits?.hits));
-            }
+            yield put(homeActions.setResults(response.data?.hits?.hits));
         }
     }
 }

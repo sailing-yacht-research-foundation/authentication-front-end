@@ -7,19 +7,16 @@ import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
-    selectFromDate,
     selectIsSearching,
     selectPage, selectPageSize, selectResults,
-    selectSearchKeyword,
-    selectToDate,
     selectTotal
 } from '../../slice/selectors';
-import { useHomeSlice } from '../../slice';
-import { useHistory, useLocation } from 'react-router-dom';
 
 export const FilterResult = (props) => {
+
+    const { onPaginationPageChanged } = props; 
 
     const { t } = useTranslation();
 
@@ -31,66 +28,7 @@ export const FilterResult = (props) => {
 
     const page = useSelector(selectPage);
 
-    const searchKeyword = useSelector(selectSearchKeyword);
-
-    const fromDate = useSelector(selectFromDate);
-
-    const toDate = useSelector(selectToDate);
-
     const pageSize = useSelector(selectPageSize);
-
-    const { actions } = useHomeSlice();
-
-    const history = useHistory();
-
-    const location = useLocation();
-
-    const dispatch = useDispatch();
-
-    const onPaginationPageChanged = (page, pageSize) => {
-        handleOnPaginationChanged(page, pageSize);
-    }
-
-    const searchRacesOnEnter = () => {
-        if (location.search) {
-            const search = location.search.substring(1);
-            const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
-
-            dispatch(actions.setKeyword(params.keyword ?? ''));
-            dispatch(actions.setFromDate(params.from_date ?? ''));
-            dispatch(actions.setToDate(params.to_date ?? ''));
-            dispatch(actions.searchRaces(params));
-            dispatch(actions.searchRaces({...params, get_all: true }));
-        }
-    }
-
-    const handleOnPaginationChanged = (page, pageSize) => {
-        const params: any = {};
-
-        params.page = page;
-        params.size = pageSize;
-        params.keyword = searchKeyword;
-
-        if (fromDate !== '') params.from_date = fromDate;
-        if (toDate !== '') params.to_date = toDate;
-
-        dispatch(actions.setPage(Number(params.page) ?? 1));
-        dispatch(actions.setPageSize(params.size ?? 10));
-        dispatch(actions.setKeyword(params.keyword));
-        dispatch(actions.setFromDate(params.from_date ?? ''));
-        dispatch(actions.setToDate(params.to_date ?? ''));
-        dispatch(actions.searchRaces(params));
-
-        history.push({
-            pathname: '/',
-            search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
-        });
-    }
-
-    React.useEffect(() => {
-        searchRacesOnEnter();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     const renderResult = () => {
         const defaultOptions = {

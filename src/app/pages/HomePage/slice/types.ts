@@ -8,7 +8,6 @@ export interface HomeState {
     is_searching: boolean;
     total: number;
     page_size: number;
-    map_results: any[];
   }
   
   export type ContainerState = HomeState

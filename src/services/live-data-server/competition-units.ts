@@ -44,16 +44,8 @@ export const search = (params) => {
     };
 
     searchParams._source = ["id","name","approx_start_point", "start_country", "approx_start_time_ms"]; // only the fields we need
-    if (!params.get_all) {
-        searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 1;
-        searchParams.size = params.size ?? 10;
-    } else {
-        // 150 is for total results show on map, 
-        // i think it's fine for now because if we increase the number higher it will take very long time to perform the request
-        // also if we don't limit the results and when they're more than 1000 probaly the browser will be crashed.
-        searchParams.size = 150; 
-        searchParams.from = 0;
-    }
+    searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 1;
+    searchParams.size = params.size ?? 10;
 
     return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
         return {

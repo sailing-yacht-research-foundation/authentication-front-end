@@ -9,11 +9,10 @@ export const initialState: HomeState = {
  to_date: '',
  keyword: '',
  results: [],
- map_results: [],
  page: 1,
  total: 0,
  is_searching: false,
- page_size: 10,
+ page_size: 10
 };
 
 const slice = createSlice({
@@ -44,9 +43,6 @@ const slice = createSlice({
     },
     setPageSize(state, action: PayloadAction<number>) {
       state.page_size = action.payload;
-    },
-    setMapResults(state, action: PayloadAction<any[]>) {
-      state.map_results = action.payload;
     }
   },
 });

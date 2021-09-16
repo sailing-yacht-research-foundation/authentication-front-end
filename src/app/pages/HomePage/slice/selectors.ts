@@ -45,8 +45,3 @@ export const selectPageSize = createSelector(
   [selectDomain],
   homeState => homeState.page_size,
 );
-
-export const selectMapResults = createSelector(
-  [selectDomain],
-  homeState => homeState.map_results,
-);

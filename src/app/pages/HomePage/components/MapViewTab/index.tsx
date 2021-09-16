@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 
 import React, { useRef } from 'react';
-import { Input, Spin } from 'antd';
+import { Input, Pagination, Spin } from 'antd';
 import styled from 'styled-components';
 import { ReactComponent as SYRFLogo } from '../assets/logo-dark.svg';
 import { FilterPane } from '../../FilterTab/components/FilterPane';
@@ -12,9 +12,10 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsSearching, selectSearchKeyword } from '../../slice/selectors';
+import { selectIsSearching, selectPage, selectPageSize, selectResults, selectSearchKeyword, selectTotal } from '../../slice/selectors';
 import { useHomeSlice } from '../../slice';
 import { BiTargetLock } from 'react-icons/bi';
+import { useHistory } from 'react-router';
 
 type MapViewProps = {
     zoomToCurrentUserLocationIfAllowed: () => void;
@@ -29,7 +30,9 @@ const center = {
 
 const ZOOM = 13;
 
-export const MapViewTab = () => {
+export const MapViewTab = (props) => {
+
+    const { onPaginationPageChanged } = props;
 
     const [showSearchPanel, setShowSearchPanel] = React.useState<boolean>(false);
 
@@ -45,9 +48,32 @@ export const MapViewTab = () => {
 
     const isSearching = useSelector(selectIsSearching);
 
+    const total = useSelector(selectTotal);
+
+    const page = useSelector(selectPage);
+
+    const pageSize = useSelector(selectPageSize);
+
+    const results = useSelector(selectResults);
+
+    const history = useHistory();
+
     const searchForRaces = (e) => {
-        if (e.keyCode === 13 || e.which === 13)
-            dispatch(actions.searchRaces({ keyword: searchKeyword, get_all: true }));
+        if (e.keyCode === 13 || e.which === 13) {
+            const params: any = {};
+            params.keyword = searchKeyword;
+
+            dispatch(actions.setPage(1));
+            dispatch(actions.setKeyword(params.keyword ?? ''));
+            dispatch(actions.setFromDate(''));
+            dispatch(actions.setToDate(''));
+            dispatch(actions.searchRaces(params));
+    
+            history.push({
+                pathname: '/',
+                search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
+            });
+        }
     }
 
     const zoomToUserLocation = () => {
@@ -61,6 +87,11 @@ export const MapViewTab = () => {
             <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${TAB_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
                 <MapView ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
+            {
+                results.length > 0 && <PaginationWrapper>
+                    <Pagination defaultCurrent={1} current={page} onChange={onPaginationPageChanged} total={total} pageSize={pageSize} />
+                </PaginationWrapper>
+            }
             <SearchBarWrapper>
                 <SearchBarInnerWrapper>
                     <StyledSearchBar
@@ -84,7 +115,6 @@ export const MapViewTab = () => {
             {showSearchPanel && <StyledSearchPane
                 defaultFocus
                 searchKeyWord={searchKeyword}
-                getAll
                 closable
                 close={() => setShowSearchPanel(false)} />}
             <MyLocationWrapper onClick={() => zoomToUserLocation()}>
@@ -105,12 +135,14 @@ const SearchBarWrapper = styled.div`
     left: 0;
     right: 0;
     margin: 0 auto;
-    width: 530px;
+    width: 570px;
     max-width: 80%;
     z-index: 998;
 `;
 
-const SearchBarInnerWrapper = styled.div``;
+const SearchBarInnerWrapper = styled.div`
+    position: relative;
+`;
 
 const SearchBarLogo = styled(SYRFLogo)`
     position: absolute;
@@ -147,7 +179,7 @@ const StyledSearchPane = styled(FilterPane)`
 
     ${media.medium`
         height: 300px;
-        width: 530px;
+        width: 570px;
     `}
 `;
 
@@ -194,4 +226,16 @@ const StyledMyLocationIcon = styled(BiTargetLock)`
 const MyLocationText = styled.span`
     color: #fff;
     font-size: 13px;
+`;
+
+const PaginationWrapper = styled.div`
+    position: absolute;
+    bottom: 200px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 570px;
+    max-width: 98%;
+    z-index: 999;
+    text-align: center;
 `;
