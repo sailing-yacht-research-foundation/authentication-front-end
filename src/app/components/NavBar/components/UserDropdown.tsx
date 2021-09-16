@@ -5,8 +5,10 @@ import { DownOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
+import { getProfilePicture } from 'utils/user-utils';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const UserDropdown = (props) => {
 
@@ -14,13 +16,15 @@ export const UserDropdown = (props) => {
 
     const authUser = useSelector(selectUser);
 
+    const { t } = useTranslation();
+
     const menu = (
         <Menu>
             <Menu.Item key="1" onClick={() => history.push('/profile')} icon={<UserOutlined />}>
-                Update Profile
+                {t(translations.home_page.nav.update_profile)}
             </Menu.Item>
             <Menu.Item onClick={() => props.logout()} key="2" icon={<LockOutlined />}>
-                Sign Out
+                {t(translations.home_page.nav.logout)}
             </Menu.Item>
         </Menu>
     );
@@ -32,7 +36,7 @@ export const UserDropdown = (props) => {
                     <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
                 </AvatarWrapper>
                 <UserNameWrapper>
-                    <UserName className="ant-dropdown-link">{getUserAttribute(authUser, 'name')}</UserName>
+                    <UserName className="ant-dropdown-link">{authUser.firstName} {authUser.lastName}</UserName>
                     <DownOutlined />
                 </UserNameWrapper>
             </UserDropdownWrapper>

@@ -24,7 +24,9 @@ SYRF Node Service is for getting and exchanging access token from Facebook, Inst
     └── README.md
 
 ## Installation
-From the command line run:
+First, please copy the .env-example to .env and fillout all the variables needed. Please contact the team if you dont have the variables.
+
+Then, from the command line run:
 
 ```bash
 docker-compose up -d

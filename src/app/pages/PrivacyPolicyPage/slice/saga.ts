@@ -2,25 +2,25 @@
  * Root saga manages watcher lifecycle
  */
 
-import Auth from "@aws-amplify/auth";
 import { privacyPolicyActions } from ".";
-import { call, takeLatest } from 'redux-saga/effects';
+import { call, takeLatest, select } from 'redux-saga/effects';
 import { logVersion } from "services/versioning";
-import { getUserAttribute } from "utils/user-utils";
+import { getUser } from "services/live-data-server/user";
+import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 
 export function* signPrivacyPolicyVersion(version) {
-    const user = yield call(getAuthorizedUser);
-    if (user) yield call(logVersion, getUserAttribute(user, 'email'), 'privacy', version);
+    const isAuthenticated = yield select(selectIsAuthenticated);
+
+    if (!isAuthenticated) return;
+
+    const response = yield call(getAuthorizedUser);
+    if (response.user) yield call(logVersion, response.user?.email, 'privacy', version);
 }
 
 async function getAuthorizedUser() {
-    return await Auth.currentAuthenticatedUser().then(user => {
-        return user;
-    }).catch(error => {
-        return null;
-    });
+    return getUser();
 }
 
-export default function* loginSaga() {
+export default function* privacyPolicySaga() {
     yield takeLatest(privacyPolicyActions.signPolicyVersion.type, signPrivacyPolicyVersion);
 }

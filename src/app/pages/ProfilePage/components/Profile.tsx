@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Auth from '@aws-amplify/auth';
 import { UpdateInfo } from './UpdateInfoForm/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
@@ -27,12 +26,8 @@ export const Profile = () => {
         getAuthorizedAuthUser();
     }
 
-    const getAuthorizedAuthUser = () => {
-        Auth.currentAuthenticatedUser({ bypassCache: true })
-            .then(user => {
-                dispatch(loginActions.setUser(JSON.parse(JSON.stringify(user))))
-            })
-            .catch(error => { });
+    const getAuthorizedAuthUser = async () => {
+        dispatch(loginActions.getUser());
     }
 
     return (
@@ -43,7 +38,7 @@ export const Profile = () => {
                 authUser={authUser}
             />
             <ProfileTabs />
-            <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
+            { authUser.username && <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} /> }
              {/* <LinkToProviders /> Hide & comment this base on Jon's request of SNS-250 */}
             <SyrfFormWrapper className="danger-zone">
                 <SyrfFormTitle>{t(translations.profile_page.update_profile.danger_zone)}</SyrfFormTitle>

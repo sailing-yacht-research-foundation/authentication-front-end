@@ -4,12 +4,12 @@ import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { useDispatch, useSelector } from 'react-redux';
 import { getUserAttribute } from 'utils/user-utils';
-import Auth from '@aws-amplify/auth';
-import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import { languagesList } from 'utils/languages-util';
 import { useState } from 'react';
+import { updateProfile } from 'services/live-data-server/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 
 export const SelectLanguage = (props) => {
 
@@ -19,36 +19,52 @@ export const SelectLanguage = (props) => {
 
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
-    const { actions } = UseLoginSlice();
+    const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
 
     const dispatch = useDispatch();
 
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
+    const { actions } = UseLoginSlice();
+
+    const [initedUserLanguage, setInitedUserLanguage] = useState<boolean>(false);
 
     React.useEffect(() => {
-        changeLanguage(getUserAttribute(user, 'custom:language'));
+        if (user && user.attributes && !initedUserLanguage) {
+            changeLanguage(user.attributes?.language[0] ?? 'en');
+            setInitedUserLanguage(true);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [user]);
 
-    const changeLanguage = (lng) => {
+    const changeLanguage = async (lng) => {
         i18n.changeLanguage(lng);
         setSelectedLanguage(lng);
-        Auth.currentAuthenticatedUser().then(user => {
-            Auth.updateUserAttributes(user, {
-                'custom:language': lng,
-            }).then(response => {
-                Auth.currentAuthenticatedUser()
-                    .then(user => dispatch(actions.setUser(JSON.parse(JSON.stringify(user)))))
-                    .catch(error => { });
-            }).catch(error => { })
-        }).catch(error => {
-        })
+
+        if (isAuthenticated && user.attributes) {
+            const userData = {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                attributes: {
+                    picture: getUserAttribute(user,'picture'),
+                    language: lng,
+                    locale: getUserAttribute(user,'locale'),
+                    bio: getUserAttribute(user,'bio'),
+                    sailing_number: getUserAttribute(user,'sailing_number'),
+                    birthdate: getUserAttribute(user,'birthdate'),
+                    address: getUserAttribute(user,'address'),
+                    phone_number: getUserAttribute(user,'phone_number'),
+                }
+            }
+            await updateProfile(userData);
+            dispatch(actions.getUser());
+        }
     }
 
     const renderSelectedLanguage = (lng) => {
         if (isAuthenticated) {
-            if (lng && languagesList[lng])
+            if (lng && languagesList[lng]){
                 return languagesList[lng].nativeName;
+            }
+
 
             return languagesList['en'].nativeName;
         }
@@ -113,7 +129,7 @@ export const SelectLanguage = (props) => {
     return (
         <Dropdown overlay={menu}>
             <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
-                {renderSelectedLanguage(getUserAttribute(user, 'custom:language'))} <DownOutlined />
+                {renderSelectedLanguage(getUserAttribute(user, 'language'))} <DownOutlined />
             </a>
         </Dropdown>
     )

@@ -50,11 +50,7 @@ export const PrivateUserInformation = (props) => {
         if (userPhoneNumberExists) {
             return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.update_profile.your_phone_is_verified)}</ItemVerifyMessage>) :
                 (
-                    <ItemVerifyMessage>{t(translations.profile_page.update_profile.your_phone_is_not_verified)} <a href="/" onClick={(e) => {
-                        e.preventDefault();
-                        sendPhoneVerification();
-                        setShowPhoneVerifyModal(true);
-                    }}>{t(translations.profile_page.update_profile.verify)}</a></ItemVerifyMessage>
+                    <ItemVerifyMessage>{t(translations.profile_page.update_profile.your_phone_is_not_verified)}</ItemVerifyMessage>
                 )
         }
     }
