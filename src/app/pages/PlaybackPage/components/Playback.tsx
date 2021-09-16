@@ -5,9 +5,8 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectElapsedTime, selectRaceLength } from './slice/selectors';
+import { selectElapsedTime, selectIsPlaying, selectRaceLength } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
-import { useEffect } from 'react';
 import { Share } from './Share';
 
 const buttonStyle = {
@@ -24,28 +23,15 @@ const playbackTime = {
 
 export const Playback = (props) => {
 
-    const { race } = props;
-
     const elapsedTime = useSelector(selectElapsedTime);
-
     const raceLength = useSelector(selectRaceLength);
+    const isPlaying = useSelector(selectIsPlaying);
 
     const dispatch = useDispatch();
 
     const { actions } = usePlaybackSlice();
 
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
-
-    const [isPlaying, setIsPlaying] = React.useState<boolean>(true);
-
-    useEffect(() => {
-        if (elapsedTime >= raceLength) {
-            race.setIsPlaying(false);
-        } else {
-            race.setIsPlaying(true);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [elapsedTime, raceLength]);
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
         if (elapsedTime > 0)
@@ -54,26 +40,18 @@ export const Playback = (props) => {
         return 0;
     }
 
-    useEffect(() => {
-        setIsPlaying(race.getIsPlaying());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [race.getIsPlaying()]);
-
     const pauseUnPauseRace = () => {
-        race.pauseUnpauseAllPing(elapsedTime);
-        setIsPlaying(race.getIsPlaying());
+        dispatch(actions.setIsPlaying(!isPlaying));
     }
 
     const backward = (miliseconds) => {
         let backwardTime = elapsedTime - miliseconds;
         dispatch(actions.setElapsedTime(backwardTime > 0 ? backwardTime : 0));
-        race.backward(miliseconds);
     }
 
     const forward = (miliseconds) => {
         let forwardTime = elapsedTime + miliseconds;
         dispatch(actions.setElapsedTime(forwardTime > raceLength ? raceLength : forwardTime));
-        race.forward(miliseconds);
     }
 
     const playAtClickedPosition = (e) => {
@@ -100,7 +78,6 @@ export const Playback = (props) => {
 
         let convertedPlayTimeInMiliseconds = Number(newPlayTimeInMilisecondsInString.join(''));
         dispatch(actions.setElapsedTime(convertedPlayTimeInMiliseconds));
-        race.playAt(convertedPlayTimeInMiliseconds);
     }
 
     return (
@@ -157,6 +134,8 @@ const ProgressedBar = styled.div`
     width: 25%;
     background: ${StyleConstants.MAIN_TONE_COLOR};
     height: 100%;
+    transition: width 0.2s;
+
 `;
 
 const PlayBackControlContainer = styled.div`

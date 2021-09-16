@@ -7,6 +7,10 @@ import { PlaybackState } from './types';
 export const initialState: PlaybackState = {
     elapsedTime: 0,
     raceLength: 0,
+    competitionUnitId: '',
+    competitionUnitDetail: {},
+    vesselParticipants: [],
+    isPlaying: false,
 };
 
 const slice = createSlice({
@@ -18,7 +22,21 @@ const slice = createSlice({
         },
         setRaceLength(state, action: PayloadAction<number>) {
             state.raceLength = action.payload;
-        }
+        },
+        setCompetitionUnitId(state, action: PayloadAction<string>) {
+            state.competitionUnitId = action.payload;
+        },
+        setCompetitionUnitDetail(state, action: PayloadAction<any>) {
+            state.competitionUnitDetail = action.payload;
+        },
+        setVesselParticipants(state, action: PayloadAction<any>) {
+            state.vesselParticipants = action.payload
+        },
+        setIsPlaying(state, action: PayloadAction<any>) {
+            state.isPlaying = action.payload;
+        },
+        getCompetitionUnitDetail(state, action: PayloadAction<any>){},
+        getVesselParticipants(state, action: PayloadAction<any>){}
     },
 });
 
