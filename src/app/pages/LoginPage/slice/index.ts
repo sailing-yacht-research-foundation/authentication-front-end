@@ -8,7 +8,8 @@ export const initialState: LoginState = {
   user: {},
   is_authenticated: !!localStorage.getItem('access_token'),
   access_token: !!localStorage.getItem('access_token') ? String(localStorage.getItem('access_token')) : '',
-  syrf_authenticated: !!localStorage.getItem('session_token')
+  session_token: !!localStorage.getItem('session_token') ? String(localStorage.getItem('session_token')) : '',
+  syrf_authenticated: !!localStorage.getItem('session_token'),
 };
 
 const slice = createSlice({
@@ -21,6 +22,10 @@ const slice = createSlice({
     setAccessToken(state, action: PayloadAction<string>) {
       state.access_token = action.payload;
       localStorage.setItem('access_token', action.payload);
+    },
+    setSessionToken(state, action: PayloadAction<string>) {
+      state.session_token = action.payload;
+      localStorage.setItem('session_token', action.payload);
     },
     setIsAuthenticated(state, action: PayloadAction<boolean>) {
       state.is_authenticated = action.payload;
