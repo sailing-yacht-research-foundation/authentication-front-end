@@ -14,7 +14,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build image and test
-        run: docker build . --file Dockerfile-production --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        run: docker build . --file Dockerfile-production --tag $IMAGE_NAME \ 
+          --build-arg REACT_APP_FACEBOOK_CLIENT_ID='' \
+          --build-arg REACT_APP_FACEBOOK_CLIENT_ID='' \
+          --build-arg REACT_APP_TWITTER_CLIENT_ID='' \
+          --build-arg REACT_APP_INSTAGRAM_CLIENT_ID='' \
+          --build-arg REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io' \
+          --build-arg REACT_APP_ENV='production' \
+          --build-arg REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}' \
+          --build-arg REACT_APP_SYRF_API_URL='' \
+          --build-arg REACT_APP_SYRF_API_VERSION='/v1' \
+          --build-arg REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_PRO_TOKEN }}' \
+          --build-arg REACT_APP_KEY_CLOAK_API_URL='https://auth.syrf.io' \
+          --build-arg REACT_APP_KEY_CLOAK_REALM_NAME='syrf' \
+          --build-arg REACT_APP_KEY_CLOAK_CLIENT_ID='SyrfWebApp' \
+          --build-arg REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='' \
+          --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to registry
         # This is where you will update the PAT to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -56,19 +71,5 @@ jobs:
             echo VERSION=\$VERSION
             docker pull \$IMAGE_ID:\$VERSION
             docker container rm -f syrf_my_sailing_profile || true
-            docker run -d -e REACT_APP_FACEBOOK_CLIENT_ID='' \
-            -e REACT_APP_FACEBOOK_CLIENT_ID='' \
-            -e REACT_APP_TWITTER_CLIENT_ID='' \
-            -e REACT_APP_INSTAGRAM_CLIENT_ID='' \
-            -e REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io' \
-            -e REACT_APP_ENV='production' \
-            -e REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}' \
-            -e REACT_APP_SYRF_API_URL='' \
-            -e REACT_APP_SYRF_API_VERSION='/v1' \
-            -e REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_PRO_TOKEN }}' \
-            -e REACT_APP_KEY_CLOAK_API_URL='https://auth.syrf.io' \
-            -e REACT_APP_KEY_CLOAK_REALM_NAME='syrf' \
-            -e REACT_APP_KEY_CLOAK_CLIENT_ID='SyrfWebApp' \
-            REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='' \
-            -p 3002:80 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
+            docker run -d -p 3002:80 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
           EOF
