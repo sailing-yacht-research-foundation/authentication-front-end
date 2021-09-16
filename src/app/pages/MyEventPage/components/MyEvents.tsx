@@ -10,10 +10,11 @@ import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
-import { useMyRaceListSlice } from '../slice';
+import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteRaceModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
+import { renderEmptyValue } from 'utils/helpers';
 
 const defaultOptions = {
     loop: true,
@@ -37,9 +38,17 @@ export const MyRaces = () => {
             width: '20%',
         },
         {
-            title: t(translations.my_event_list_page.location),
+            title: t(translations.my_event_list_page.city),
             dataIndex: 'locationName',
             key: 'location',
+            render: (text) => renderEmptyValue(text),
+            width: '20%',
+        },
+        {
+            title: t(translations.my_event_list_page.country),
+            dataIndex: 'locationName',
+            key: 'location',
+            render: (text) => renderEmptyValue(text),
             width: '20%',
         },
         {
@@ -81,7 +90,7 @@ export const MyRaces = () => {
 
     const dispatch = useDispatch();
 
-    const { actions } = useMyRaceListSlice();
+    const { actions } = useMyEventListSlice();
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
@@ -90,12 +99,12 @@ export const MyRaces = () => {
     const isChangingPage = useSelector(selectIsChangingPage);
 
     React.useEffect(() => {
-        dispatch(actions.getRaces(1));
+        dispatch(actions.getEvents(1));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onPaginationChanged = (page) => {
-        dispatch(actions.getRaces(page));
+        dispatch(actions.getEvents(page));
     }
 
     const showDeleteRaceModal = (race) => {
@@ -104,7 +113,7 @@ export const MyRaces = () => {
     }
 
     const onRaceDeleted = () => {
-        dispatch(actions.getRaces(page));
+        dispatch(actions.getEvents(page));
     }
 
     return (

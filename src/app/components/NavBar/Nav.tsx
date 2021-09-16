@@ -8,7 +8,6 @@ import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { media } from 'styles/media';
 import { useHistory } from 'react-router';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
-import Auth from '@aws-amplify/auth';
 import { Space, Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -28,8 +27,7 @@ export const Nav = () => {
   const logout = () => {
     dispatch(loginActions.setLogout());
     history.push('/signin');
-    Auth.signOut();
-    localStorage.removeItem('access_token');
+    localStorage.removeItem('session_token');
   }
 
   return (

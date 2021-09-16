@@ -50,8 +50,8 @@ export const getAll = () => {
         })
 }
 
-export const getMany = (page) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events`, {
+export const getMany = (page, user) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${user && user.id ? `?createdById_eq=${user.id}` : ''}`, {
         params: {
             page: page
         }

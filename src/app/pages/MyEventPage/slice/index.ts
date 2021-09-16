@@ -21,7 +21,7 @@ const slice = createSlice({
     setTotal(state, action: PayloadAction<number>) {
       state.total = action.payload;
     },
-    getRaces(state, page) { },
+    getEvents(state, page) { },
     setPage(state, action: PayloadAction<number>) {
       state.page = action.payload;
     },
@@ -31,9 +31,9 @@ const slice = createSlice({
   },
 });
 
-export const { actions: myRaceListActions, reducer } = slice;
+export const { actions: myEventListActions, reducer } = slice;
 
-export const useMyRaceListSlice = () => {
+export const useMyEventListSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   useInjectSaga({ key: slice.name, saga: myEventListSaga });
   return { actions: slice.actions };

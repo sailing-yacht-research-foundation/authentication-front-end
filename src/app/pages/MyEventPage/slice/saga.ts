@@ -2,26 +2,29 @@
  * Root saga manages watcher lifecycle
  */
 
-import { call, put, takeLatest } from "@redux-saga/core/effects";
+import { call, put, takeLatest, select } from "@redux-saga/core/effects";
+import { selectUser } from "app/pages/LoginPage/slice/selectors";
 import { getMany } from "services/live-data-server/event-calendars";
-import { myRaceListActions } from ".";
+import { myEventListActions } from ".";
 
-export function* getRaces(action) {
-    yield put(myRaceListActions.setIsChangingPage(true));
+export function* getEvents(action) {
+    const user = yield select(selectUser);
 
-    const response = yield call(getMany, action.payload);
+    yield put(myEventListActions.setIsChangingPage(true));
 
-    yield put(myRaceListActions.setIsChangingPage(false));
-    yield put(myRaceListActions.setPage(action.payload));
+    const response = yield call(getMany, action.payload, user);
+
+    yield put(myEventListActions.setIsChangingPage(false));
+    yield put(myEventListActions.setPage(action.payload));
 
     if (response.success) {
         if (response.data?.count > 0) {
-            yield put(myRaceListActions.setResults(response.data?.rows));
-            yield put(myRaceListActions.setTotal(response.data?.count));
+            yield put(myEventListActions.setResults(response.data?.rows));
+            yield put(myEventListActions.setTotal(response.data?.count));
         }
     }
 }
 
 export default function* myEventListSaga() {
-    yield takeLatest(myRaceListActions.getRaces.type, getRaces);
+    yield takeLatest(myEventListActions.getEvents.type, getEvents);
 }

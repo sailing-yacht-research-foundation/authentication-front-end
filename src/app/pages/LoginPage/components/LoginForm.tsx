@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Input, Form, Button, Spin } from 'antd';
-import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
 import { useHistory } from 'react-router';
@@ -14,10 +13,17 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ReactComponent as Logo } from '../assets/logo-dark.svg';
+import { login } from 'services/live-data-server/auth';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
 };
+
+const ERRORS = { // only have strings from server to compare for now.
+  WRONG_CREDENTIALS: 'Invalid user credentials',
+  USER_IS_DISABLED: 'E012',
+  NEED_VERIFICATION: 'Account is not fully set up'
+}
 
 export const LoginForm = (props) => {
   const { actions } = UseLoginSlice();
@@ -30,57 +36,36 @@ export const LoginForm = (props) => {
 
   const { t } = useTranslation();
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     const { email, password } = values;
 
     setIsSigningIn(true);
 
-    Auth.configure({ storage: localStorage });
+    const response: any = await login({ email: email, password: password });
 
-    Auth.signIn({
-      username: email,
-      password
-    }).then(user => {
-      setIsSigningIn(false);
-
-      let redirectBackParam = new URLSearchParams(history.location.search).get("redirect_back");
-
-      if (user.attributes && user.attributes.email_verified) {
-        dispatch(actions.setAccessToken(user.signInUserSession?.accessToken?.jwtToken));
+    if (response.success) {
+      dispatch(actions.setSessionToken(response.token));
+      dispatch(actions.getUser());
+      if (response.user?.email_verified) {
         dispatch(actions.setIsAuthenticated(true));
-        dispatch(actions.setUser(JSON.parse(JSON.stringify(user))));
-        redirectToApproriateLocation(redirectBackParam);
+        localStorage.removeItem('is_guest');
+        history.push('/');
       } else {
-        redirectToVerifyAccountPage(email);
+        toast.info(t(translations.login_page.please_verify_your_account));
       }
-    }).catch(error => {
-      setIsSigningIn(false);
-      if (error.code) {
-        if (error.code === 'UserNotConfirmedException') {
-          redirectToVerifyAccountPage(email);
-        } else {
-          toast.error(error.message);
-        }
-      } else {
-        toast.error(t(translations.login_page.login_error));
-      }
-    })
-  }
-
-  const redirectToApproriateLocation = (redirectBackParam) => {
-    if (redirectBackParam) {
-      history.push(redirectBackParam);
     } else {
-      history.push('/');
-    }
-  }
-
-  const redirectToVerifyAccountPage = (email) => {
-    history.push('/verify-account', {
-      state: {
-        email: email
+      setIsSigningIn(false);
+      switch (response.error?.response?.data?.message) {
+        case ERRORS.WRONG_CREDENTIALS:
+          toast.error(t(translations.login_page.credentials_are_not_correct));
+          break;
+        case ERRORS.NEED_VERIFICATION:
+          toast.info(t(translations.login_page.please_verify_your_account));
+          break;
+        default:
+          toast.info(t(translations.login_page.cannot_login_at_the_moment));
       }
-    });
+    }
   }
 
   return (

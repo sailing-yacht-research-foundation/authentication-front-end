@@ -46,7 +46,7 @@ ReactDOM.render(
     <ThemeProvider>
       <HelmetProvider>
         <React.StrictMode>
-          <App/>
+          <App />
         </React.StrictMode>
       </HelmetProvider>
     </ThemeProvider>
