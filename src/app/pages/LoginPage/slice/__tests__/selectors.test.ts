@@ -10,7 +10,7 @@ describe('Login selectors', () => {
   });
 
   it('should select the initial state', () => {
-    expect(selectors.selectAccessToken(state)).toEqual("");
+    expect(selectors.selectSessionToken(state)).toEqual("");
   });
 
   it('should select user', () => {
