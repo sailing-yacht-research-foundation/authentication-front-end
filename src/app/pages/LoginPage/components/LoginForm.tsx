@@ -44,7 +44,7 @@ export const LoginForm = (props) => {
     const response: any = await login({ email: email, password: password });
 
     if (response.success) {
-      dispatch(actions.setAccessToken(response.token));
+      dispatch(actions.setSessionToken(response.token));
       dispatch(actions.getUser());
       if (response.user?.email_verified) {
         dispatch(actions.setIsAuthenticated(true));

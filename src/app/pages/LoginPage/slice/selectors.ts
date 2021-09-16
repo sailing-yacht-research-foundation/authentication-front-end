@@ -1,27 +1,27 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { createSelector } from "@reduxjs/toolkit";
 
-import { RootState } from 'types';
-import { initialState } from '.';
+import { RootState } from "types";
+import { initialState } from ".";
 
 // First select the relevant part from the state
 const selectDomain = (state: RootState) => state.login || initialState;
 
 export const selectUser = createSelector(
   [selectDomain],
-  loginState => loginState.user,
+  (loginState) => loginState.user
 );
 
 export const selectIsAuthenticated = createSelector(
   [selectDomain],
-  loginState => loginState.is_authenticated,
-);
-
-export const selectAccessToken = createSelector(
-  [selectDomain],
-  loginState => loginState.session_token,
+  (loginState) => loginState.is_authenticated
 );
 
 export const selectIsSyrfServiceAuthenticated = createSelector(
   [selectDomain],
-  loginState => loginState.syrf_authenticated,
+  (loginState) => loginState.syrf_authenticated
+);
+
+export const selectSessionToken = createSelector(
+  [selectDomain],
+  (loginState) => loginState.session_token
 );

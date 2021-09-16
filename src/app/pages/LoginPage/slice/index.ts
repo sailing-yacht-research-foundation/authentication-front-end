@@ -18,7 +18,7 @@ const slice = createSlice({
     setUser(state, action: PayloadAction<any>) {
       state.user = action.payload;
     },
-    setAccessToken(state, action: PayloadAction<string>) {
+    setSessionToken(state, action: PayloadAction<string>) {
       state.session_token = action.payload;
       localStorage.setItem('session_token', action.payload);
     },
