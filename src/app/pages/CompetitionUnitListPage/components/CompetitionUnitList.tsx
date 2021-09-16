@@ -142,8 +142,8 @@ export const CompetitionUnitList = () => {
 
     const groupRowColorByEventName = () => {
         pagination.rows.forEach(row => {
-            if (!raceColors.current[`${row.eventName}`])
-                raceColors.current[`${row.eventName}`] = `volcano-${Math.floor(Math.random() * (5 - 1 + 1) + 1)}`;
+            if (!raceColors.current[`${row.calendarEventId}`])
+                raceColors.current[`${row.calendarEventId}`] = `volcano-${Math.floor(Math.random() * (5 - 1 + 1) + 1)}`;
         });
     }
 
@@ -167,7 +167,7 @@ export const CompetitionUnitList = () => {
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
                         <Table scroll={{ x: "max-content" }} columns={columns}
-                            rowClassName={(record) => raceColors.current[`${record.eventName}`]}
+                            rowClassName={(record) => raceColors.current[`${record.calendarEventId}`]}
                             dataSource={pagination.rows} pagination={{
                                 defaultPageSize: 10,
                                 current: pagination.page,
