@@ -4,7 +4,7 @@
 
 import { all, call, put, select, takeLatest } from "@redux-saga/core/effects";
 import { message } from "antd";
-import { getCompetitionUnitById } from "services/live-data-server/competition-unit";
+import { getCompetitionUnitById } from "services/live-data-server/competition-units";
 import { getVesselParticipantGroupById } from "services/live-data-server/vessel-participant-group";
 import { playbackActions } from ".";
 import { selectCompetitionUnitDetail } from "./selectors";

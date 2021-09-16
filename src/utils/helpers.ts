@@ -1,4 +1,6 @@
+import i18next from 'i18next';
 import * as L from 'leaflet';
+import { translations } from 'locales/translations';
 
 /**
  * Check if is mobile
@@ -139,4 +141,15 @@ export const addNonGroupLayers = (sourceLayer, targetGroup) => {
     } else {
         targetGroup.addLayer(sourceLayer);
     }
+}
+
+/**
+ * Render not available text if the value is empty
+ * @param value
+ * @return string
+ */
+export const renderEmptyValue = (value) => {
+    if (value) return value;
+
+    return i18next.t(translations.misc.not_available);
 }

@@ -139,7 +139,8 @@
     "search": "Search",
     "data": "Data",
     "events": "Events",
-    "competition_units": "Races"
+    "competition_units": "Races",
+    "vessels": "Vessels"
   },
   "profile_page": {
     "update_profile": {
@@ -237,7 +238,8 @@
     "account_verified_please_login": "Account verified, please login!"
   },
   "misc": {
-    "session_expired": "Session is expired and we renewed the session. Please try again!"
+    "session_expired": "Session is expired and we renewed the session. Please try again!",
+    "not_available": "Not Available"
   },
   "playback_page": {
     "competitor": "Competitor:",
@@ -344,6 +346,12 @@
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this race?",
     "you_will_delete": "You will delete this race along with all associated information, are you sure you want to continue?"
   },
+  "delete_vessel_modal": {
+    "successfully_deleted": "Successfully deleted vessel {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your vessel",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this vessel?",
+    "you_will_delete": "You will delete this vessel along with all associated information, are you sure you want to continue?"
+  },
   "delete_course_modal": {
     "successfully_deleted": "Successfully deleted course.",
     "an_unexpected_error": "An unexpected error happened when deleting your course",
@@ -360,5 +368,33 @@
     "cancel": "Go back",
     "save": "Save",
     "saving": "Saving..."
+  },
+  "vessel_list_page": {
+    "public_name": "Public Name",
+    "length_in_meters": "Length In Meters",
+    "vessel_id": "Vessel ID",
+    "global_id": "Global ID",
+    "created_date": "Created Date",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "you_dont_have_any_vessels": "You do not have any vessels, please create one.",
+    "vessels": "Vessels",
+    "create_a_new_vessel": "Create a new Vessel"
+  },
+  "vessel_create_update_page": {
+    "created_a_new_vessel": "Created a new vessel with name: {{name}}.",
+    "successfully_updated_vessel": "Successfully updated your vessel: {{name}}",
+    "an_error_happened": "An error happened when saving your vessel.",
+    "view_all_vessels": "View all",
+    "delete": "Delete",
+    "public_name": "Name",
+    "global_id": "Global ID",
+    "vessel_id": "Vessel ID",
+    "length_in_meters": "Length In Meters",
+    "save_vessel": "Save Vessel",
+    "is_completed": "Is Completed",
+    "update_your_vessel": "Update your vessel",
+    "create_a_new_vessel": "Create a new vessel"
   }
 }

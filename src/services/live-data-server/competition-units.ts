@@ -100,3 +100,33 @@ export const deleteCompetitionUnit = (calendarEventId, competitionUnitId) => {
             }
         })
 }
+
+export const getCompetitionUnitList = () => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units`, {
+    }).then(response => {
+        return {
+          success: true,
+          data: response.data
+        }
+    }).catch(error => {
+      return {
+        success: false,
+        error: error
+      }
+    });
+  }
+  
+  export const getCompetitionUnitById = (id) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}`, {
+    }).then(response => {
+        return {
+          success: true,
+          data: response.data
+        }
+    }).catch(error => {
+      return {
+        success: false,
+        error: error
+      }
+    });
+  };
