@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SelectLanguage } from './components/SelectLanguage';
 import { UserDropdown } from './components/UserDropdown';
 import { Link } from 'react-router-dom';
@@ -27,21 +27,12 @@ export const Nav = () => {
   const logout = () => {
     dispatch(loginActions.setLogout());
     history.push('/signin');
-    localStorage.removeItem('session_token');
   }
 
   return (
     <Wrapper>
       {isAuthenenticated ? (
         <>
-          <StyledButtonCreate
-            shape="round"
-            size={'large'}
-            icon={<AiFillPlusCircle
-              style={{ marginRight: '5px' }}
-              size={18} />} type="primary">
-            {t(translations.home_page.nav.create)}
-          </StyledButtonCreate>
           <DropDownWrapper>
             <UserDropdown logout={logout} />
             <SelectLanguage />
@@ -57,6 +48,13 @@ export const Nav = () => {
         </>
       ) : (
         <>
+          <StyledButtonCreate
+            type="primary"
+            shape="round"
+            size="large"
+            onClick={() => history.push("/my-events/create")} icon={<AiFillPlusCircle
+              style={{ marginRight: '5px' }}
+              size={18} />}>Create</StyledButtonCreate>
           <AboutLink to="/about">{t(translations.about_page.nav.about)}</AboutLink>
           <Space size={15}>
             <div>

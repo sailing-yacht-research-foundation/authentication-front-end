@@ -20,10 +20,6 @@ export const Main = () => {
 
     const { t } = useTranslation();
 
-    React.useEffect(() => {
-
-    }, []);
-
     const onTabChanged = (activeKey) => {
         localStorage.setItem('homepage_active_tab', activeKey);
     }

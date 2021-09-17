@@ -18,7 +18,6 @@ export function* getAuthUser() {
     else { // the user is not authenticated, or the user is deleted.
         yield put(loginActions.setLogout());
         toast.info(i18next.t(translations.app.your_session_is_expired));
-        localStorage.removeItem('session_token');
     }
 }
 

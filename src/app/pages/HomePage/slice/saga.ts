@@ -4,7 +4,7 @@
 
 import { homeActions } from ".";
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { list } from "services/live-data-server/event-calendars";
+import { search } from "services/live-data-server/event-calendars";
 import { toast } from "react-toastify";
 import i18next from 'i18next';
 import { translations } from "locales/translations";
@@ -13,7 +13,7 @@ import { selectSearchKeyword } from "./selectors";
 export function* searchRaces(params) {
     yield put(homeActions.setIsSearching(true));
 
-    const response = yield call(list, params);
+    const response = yield call(search, params);
     const searchKeyword = yield select(selectSearchKeyword);
 
     yield put(homeActions.setIsSearching(false));

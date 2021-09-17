@@ -112,7 +112,7 @@ export const Playback = (props) => {
 }
 
 const PlaybackWrapper = styled.div`
-    z-index: 999999999;
+    z-index: 9998;
     width: 100%;
     height: 150px;
     background: #fff;
