@@ -60,8 +60,8 @@ export const CompetitionUnitForm = () => {
 
         const data = {
             name: name,
-            startTime: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")),
-            approximateStart: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")),
+            startTime: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc(),
+            approximateStart: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc(),
             isCompleted: isCompleted,
             boundingBox: boundingBoxCoordinates.length > 0 ?
                 {

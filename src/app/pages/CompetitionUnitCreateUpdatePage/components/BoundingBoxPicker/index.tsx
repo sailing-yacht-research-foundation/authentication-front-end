@@ -3,7 +3,7 @@ import 'leaflet-draw/dist/leaflet.draw-src.css';
 
 import React from 'react';
 import { MapContainer } from 'react-leaflet';
-import { MAP_DEFAULT_VALUE } from 'utils/helpers';
+import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { Map } from './Map';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';

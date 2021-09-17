@@ -17,7 +17,7 @@ import { selectCompetitionUnitDetail, selectCompetitionUnitId, selectElapsedTime
 import { usePlaybackSlice } from './components/slice';
 import { IoCaretBack } from 'react-icons/io5';
 import { Wrapper } from 'app/components/SyrfGeneral';
-import { MAP_DEFAULT_VALUE } from 'utils/helpers';
+import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { StreamingRaceMap } from './components/StreamingRaceMap';
 import { stringToColour } from 'utils/helpers';
 import { useHistory, useLocation } from 'react-router';

@@ -115,19 +115,6 @@ export const removePlusFromPhoneNumber = (phoneNumber) => {
     return '+' + phoneNumber;
 }
 
-export const FIELD_VALIDATE = {
-    phone: 'phone',
-    email: 'email'
-}
-
-export const MAP_DEFAULT_VALUE = {
-    ZOOM: 13,
-    CENTER: {
-        lng: -122.4,
-        lat: 37.8
-    }
-}
-
 /**
  * Add a layer to leaflet draw layer
  * @param sourceLayer 

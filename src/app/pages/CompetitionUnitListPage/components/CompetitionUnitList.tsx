@@ -12,6 +12,7 @@ import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { getAllCompetitionUnits } from 'services/live-data-server/competition-units';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue, stringToColour } from 'utils/helpers';
+import { TIME_FORMAT } from 'utils/constants';
 
 const defaultOptions = {
     loop: true,
@@ -60,21 +61,21 @@ export const CompetitionUnitList = () => {
             title: t(translations.competition_unit_list_page.start_time),
             dataIndex: 'startTime',
             key: 'startTime',
-            render: (value) => moment(value).format('MMM. D, YYYY [at] h:mm A z'),
+            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
             width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.approximate_start),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
-            render: (value) => moment(value).format('MMM. D, YYYY [at] h:mm A z'),
+            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
             width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
-            render: (value) => moment(value).format('MMM. D, YYYY'),
+            render: (value) => moment(value).format(TIME_FORMAT.date_text),
             width: '20%',
         },
         {

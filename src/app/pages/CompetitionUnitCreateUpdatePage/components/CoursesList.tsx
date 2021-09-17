@@ -8,6 +8,7 @@ import { getByCompetitionUnit } from 'services/live-data-server/courses';
 import { CourseDeleteModal } from 'app/pages/CourseCreateUpdatePage/components/CourseDeleteModal';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { TIME_FORMAT } from 'utils/constants';
 
 export const CoursesList = (props) => {
 
@@ -22,7 +23,7 @@ export const CoursesList = (props) => {
             title: t(translations.course_list.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
-            render: (value) => moment(value).format('MMM. D, YYYY'),
+            render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
             title: t(translations.course_list.has_geometry),

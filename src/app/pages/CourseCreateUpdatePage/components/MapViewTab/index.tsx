@@ -2,7 +2,7 @@ import React from 'react';
 import { MapContainer } from 'react-leaflet';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { MAP_DEFAULT_VALUE } from 'utils/helpers';
+import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { MapView } from './MapView';
 
 export const MapViewTab = () => {

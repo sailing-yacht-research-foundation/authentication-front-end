@@ -60,6 +60,8 @@ L.drawLocal.draw.toolbar.buttons = {
     circlemarker:  i18next.t(translations.course_create_update_page.draw_buttons.circlemarker)
 };
 
+let drawControl;
+
 export const MapView = () => {
 
     const map = useMap();
@@ -102,7 +104,7 @@ export const MapView = () => {
         }).addTo(map);
 
         const drawnItems = L.featureGroup().addTo(map);
-        map.addControl(new L.Control.Draw({
+        drawControl = new L.Control.Draw({
             edit: {
                 featureGroup: drawnItems,
                 poly: {
@@ -125,7 +127,8 @@ export const MapView = () => {
                     })
                 }
             }
-        }));
+        });
+        map.addControl(drawControl);
 
         return drawnItems;
     }
@@ -297,7 +300,7 @@ export const MapView = () => {
         });
     }
 
-    const submitAndsetMarketName = () => {
+    const submitAndSetMarkerName = () => {
         geometryNameForm
             .validateFields()
             .then(values => {
@@ -306,6 +309,7 @@ export const MapView = () => {
                 setShowGeometryNamePopup(false);
             })
             .catch(info => {
+                // no UI/UX throw here so leave this blank for now, just need the validation.
             });
     }
 
@@ -333,15 +337,19 @@ export const MapView = () => {
         }
     }
 
+    const cancelDraw = () => {
+        setShowGeometryNamePopup(false);
+        map.removeControl(drawControl);
+        map.addControl(drawControl);
+    }
+
     return (
         <>
             <Modal
                 title={t(translations.course_create_update_page.enter_geometry_name)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
-                cancelButtonProps={{ style: { display: 'none' } }}
-                onOk={submitAndsetMarketName}
-                closable={false}
-                keyboard={false}
+                onOk={submitAndSetMarkerName}
+                onCancel={cancelDraw}
                 visible={showGeometryNamePopup}>
                 <Form
                     form={geometryNameForm}
@@ -363,7 +371,6 @@ export const MapView = () => {
                         />
                     </Form.Item>
                 </Form>
-
             </Modal>
             {history.action !== 'POP' && <CancelButton icon={<IoIosArrowBack
                 style={{ marginRight: '5px' }}

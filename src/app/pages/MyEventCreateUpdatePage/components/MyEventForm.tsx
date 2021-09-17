@@ -14,7 +14,7 @@ import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { BsCardList } from 'react-icons/bs';
 import { CompetitionUnitList } from './CompetitionUnitList';
-import { MAP_DEFAULT_VALUE } from 'utils/helpers';
+import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { BiTrash } from 'react-icons/bi';
 import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { useTranslation } from 'react-i18next';
@@ -68,13 +68,13 @@ export const MyEventForm = () => {
             externalUrl: externalUrl,
             lon: lon,
             lat: lat,
-            approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")) : moment().format("YYYY-MM-DD HH:mm:ss"),
-            startDay: startDate.format('DD'),
-            startMonth: startDate.format('MM'),
-            startYear: startDate.format('YYYY'),
-            endDay: currentDate.format('DD'),
-            endMonth: currentDate.format('MM'),
-            endYear: currentDate.format('YYYY'),
+            approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
+            startDay: startDate.utc().format('DD'),
+            startMonth: startDate.utc().format('MM'),
+            startYear: startDate.utc().format('YYYY'),
+            endDay: currentDate.utc().format('DD'),
+            endMonth: currentDate.utc().format('MM'),
+            endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
             isPrivate: isPrivate
         };

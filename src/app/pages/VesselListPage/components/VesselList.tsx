@@ -12,6 +12,7 @@ import { DeleteVesselModal } from './DeleteVesselModal';
 import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue } from 'utils/helpers';
+import { TIME_FORMAT } from 'utils/constants';
 
 const defaultOptions = {
     loop: true,
@@ -59,7 +60,7 @@ export const VesselList = () => {
             title: t(translations.vessel_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
-            render: (value) => moment(value).format('MMM. D, YYYY'),
+            render: (value) => moment(value).format(TIME_FORMAT.date_text),
             width: '20%',
         },
         {

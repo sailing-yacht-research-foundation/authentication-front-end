@@ -396,11 +396,11 @@
     "save": "Save",
     "saving": "Saving...",
     "draw_buttons": {
-      "polyline": "Add a start, finish or gate line",
+      "polyline": "Add a start, finish or a gate line.",
       "polygon": "Add a polygon",
       "rectangle": "Add a rectangle",
       "circle": "Add a circle",
-      "marker": "Add a mark",
+      "marker": "Add a mark.",
       "circlemarker": "Add a circlemarker"
     }
   },

@@ -15,6 +15,7 @@ import moment from 'moment';
 import { DeleteRaceModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue } from 'utils/helpers';
+import { TIME_FORMAT } from 'utils/constants';
 
 const defaultOptions = {
     loop: true,
@@ -55,14 +56,14 @@ export const MyRaces = () => {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
-            render: (value) => moment(value).format('MMM. D, YYYY [at] h:mm A z'),
+            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
             width: '20%',
         },
         {
             title: t(translations.my_event_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
-            render: (value) => moment(value).format('MMM. D, YYYY'),
+            render: (value) => moment(value).format(TIME_FORMAT.date_text),
             width: '20%',
         },
         {
