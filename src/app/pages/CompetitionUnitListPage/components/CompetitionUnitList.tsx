@@ -23,18 +23,8 @@ const defaultOptions = {
     }
 };
 
-const classLists = [
-    'volcano-1',
-    'volcano-2',
-    'volcano-3',
-    'volcano-4',
-    'volcano-5',
-    'volcano-6',
-    'volcano-7',
-    'volcano-8',
-    'volcano-9',
-    'volcano-10'
-];
+const userId = localStorage.getItem('user_id');
+const uuid = localStorage.getItem('uuid');
 
 export const CompetitionUnitList = () => {
 
@@ -47,49 +37,50 @@ export const CompetitionUnitList = () => {
             title: t(translations.competition_unit_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => <Link to={`/my-events/${record.calendarEventId}/my-races/${record.id}/update`}>{text}</Link>,
-            width: '20%',
+            render: (text, record) => {
+                if (userId && userId === record.createdById || uuid === record.createdById)
+                    return <Link to={`/my-events/${record.calendarEventId}/my-races/${record.id}/update`}>{text}</Link>;
+                return text;
+            }
         },
         {
             title: t(translations.competition_unit_list_page.event_name),
             dataIndex: 'eventName',
             key: 'eventName',
             render: (text) => renderEmptyValue(text),
-            width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.start_time),
             dataIndex: 'startTime',
             key: 'startTime',
             render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
-            width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.approximate_start),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
             render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
-            width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
-            width: '20%',
         },
         {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
-            render: (text, record) => (
-                <Space size="middle">
-                    <BorderedButton onClick={() => {
-                        history.push(`/my-events/${record.calendarEventId}/my-races/${record.id}/update`);
-                    }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
-                </Space>
-            ),
-            width: '20%',
+            render: (text, record) => {
+                if (userId && userId === record.createdById || uuid === record.createdById)
+                    return <Space size="middle">
+                        <BorderedButton onClick={() => {
+                            history.push(`/my-events/${record.calendarEventId}/my-races/${record.id}/update`);
+                        }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
+                        <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                    </Space>;
+                
+                return <></>;
+            }
         },
     ];
 

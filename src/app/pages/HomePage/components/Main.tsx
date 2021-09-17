@@ -40,7 +40,7 @@ export const Main = () => {
                 <FilterTab />
             </TabPane>
             {
-                (isMobile() || !isAuthenticated) && <ButtonCreateContainer>
+                (isMobile() && !isAuthenticated) && <ButtonCreateContainer>
                     <Button
                         shape="round"
                         size={'large'}

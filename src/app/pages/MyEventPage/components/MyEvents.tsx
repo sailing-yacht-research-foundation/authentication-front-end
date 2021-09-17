@@ -26,6 +26,9 @@ const defaultOptions = {
     }
 };
 
+const userId = localStorage.getItem('user_id');
+const uuid = localStorage.getItem('uuid');
+
 export const MyRaces = () => {
 
     const { t } = useTranslation();
@@ -35,49 +38,51 @@ export const MyRaces = () => {
             title: t(translations.my_event_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => <Link to={`/my-events/${record.id}/update`}>{text}</Link>,
-            width: '20%',
+            render: (text, record) => {
+                if (userId && userId === record.createdById || uuid === record.createdById)
+                    return <Link to={`/my-events/${record.id}/update`}>{text}</Link>;
+
+                return text;
+            },
         },
         {
             title: t(translations.my_event_list_page.city),
             dataIndex: 'locationName',
             key: 'location',
             render: (text) => renderEmptyValue(text),
-            width: '20%',
         },
         {
             title: t(translations.my_event_list_page.country),
             dataIndex: 'locationName',
             key: 'location',
             render: (text) => renderEmptyValue(text),
-            width: '20%',
         },
         {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
             render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
-            width: '20%',
         },
         {
             title: t(translations.my_event_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
-            width: '20%',
         },
         {
             title: 'Action',
             key: 'action',
-            render: (text, record) => (
-                <Space size="middle">
-                    <BorderedButton onClick={() => {
-                        history.push(`/my-events/${record.id}/update`)
-                    }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
-                </Space>
-            ),
-            width: '20%',
+            render: (text, record) => {
+                if (userId && record.createdById === userId || uuid === record.createdById)
+                    return <Space size="middle">
+                        <BorderedButton onClick={() => {
+                            history.push(`/my-events/${record.id}/update`)
+                        }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
+                        <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
+                    </Space>;
+
+                return <></>;
+            }
         },
     ];
 
