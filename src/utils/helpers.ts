@@ -1,3 +1,6 @@
+import i18next from "i18next";
+import { translations } from "locales/translations";
+
 /**
  * Check if is mobile
  * @returns 
@@ -114,4 +117,15 @@ export const removePlusFromPhoneNumber = (phoneNumber) => {
 export const FIELD_VALIDATE = {
     phone: 'phone',
     email: 'email'
+}
+
+/**
+ * Render not available text if the value is empty
+ * @param value
+ * @return string
+ */
+ export const renderEmptyValue = (value) => {
+    if (value) return value;
+
+    return i18next.t(translations.misc.not_available);
 }

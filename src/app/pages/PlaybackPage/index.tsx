@@ -22,7 +22,6 @@ import { stringToColour } from 'utils/helpers';
 import { useLocation } from 'react-router';
 import { selectSessionToken } from '../LoginPage/slice/selectors';
 
-
 const center = {
     lng: -125.688816,
     lat: 47.822007

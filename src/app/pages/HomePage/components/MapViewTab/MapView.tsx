@@ -1,4 +1,5 @@
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
 import React, { useEffect, useImperativeHandle } from 'react';
 import { useMap } from 'react-leaflet';
@@ -12,8 +13,11 @@ import { selectResults } from '../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { renderEmptyValue } from 'utils/helpers';
 
-const markers: any[] = [];
+require('leaflet.markercluster');
+
+let markerCluster;
 
 const MAP_MOVE_TYPE = {
     immediately: 'immediately',
@@ -90,10 +94,8 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
     const attachRaceMarkersToMap = () => {
         const resultMarkers: any[] = [];
 
-        markers.forEach((marker, index) => {
-            map.removeLayer(marker);
-            markers.splice(index, 1);
-        });
+        if (markerCluster) map.removeLayer(markerCluster);
+        markerCluster = L.markerClusterGroup();
 
         results.forEach(race => {
             let marker = L.marker(L.latLng(race.lat, race.lon), {
@@ -115,9 +117,10 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                 })
                 .addTo(map);
             resultMarkers.push(marker);
-            markers.push(marker);
+            markerCluster.addLayer(marker);
         });
 
+        map.addLayer(markerCluster);
         map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
     }
 
@@ -127,6 +130,10 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                 <div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>
                 <div>{t(translations.home_page.map_view_tab.location)} {race.locationName}</div>
                 <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStartTime).format('MMM. D, YYYY')}</div>
+                <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race.eventName)}</div>
+                <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race.description)}</div>
+                <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race.city)}</div>
+                <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race.country)}</div>
             </>
         )
     }
