@@ -38,9 +38,6 @@ import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
 import { selectIsSiderToggled } from './components/SiderContent/slice/selectors';
 import { UseLoginSlice } from './pages/LoginPage/slice';
 
-import Amplify from 'aws-amplify';
-import config from '../aws-exports';
-
 import { SiderContent } from './components/SiderContent';
 import { Header } from './components/Header';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -48,8 +45,7 @@ import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
 
-const { Sider, Content } = Layout
-Amplify.configure(config);
+const { Sider, Content } = Layout;
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -92,8 +88,9 @@ export function App(props) {
   React.useEffect(() => {
     if (isAuthenticated) {
       dispatch(loginActions.getUser());
+    } else {
+      dispatch(loginActions.syrfServiceAnonymousLogin());
     }
-    dispatch(loginActions.syrfServiceAnonymousLogin());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -133,7 +130,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
-              <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
+              <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />

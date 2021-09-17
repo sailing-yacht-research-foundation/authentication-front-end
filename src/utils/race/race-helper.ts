@@ -84,6 +84,43 @@ export const simplifiedGeoJsonTrackToLastHeading = (geojson) => {
     return bearing;
 }
 
+export const generateLastHeading = (coordinate1, coordinate2) => {
+    const point1 = turf.point(coordinate1);
+    const point2 = turf.point(coordinate2);
+
+    return turf.bearing(point1, point2);
+}
+
+export const generateLastArray = (arrayData: any[], maxSize: number) => {
+    const result: any[] = []
+
+    // Positions length
+    let length = arrayData.length;
+    
+    // Limit
+    let limit = length - maxSize;
+    if (length - maxSize < 0) limit = 0;
+
+    // Select latest positions
+    for (let index = length - 1; index >= limit; index--) {
+        result.push(arrayData[index]);
+    };
+
+    return result;
+}
+
+export const formatCoordinatesObjectToArray = (coordinatesObject: {lat: number; lon: number}[]) => {
+    // result: [..., [lat, lon], ...]    
+    const result: any[] = [];
+
+    for (let index = 0; index < coordinatesObject.length; index++) {
+        const coord = coordinatesObject[index];
+        if (coord.lat && coord.lon) result.push([coord.lat, coord.lon]);
+    }
+    
+    return result;
+}
+
 export const simulateThirdParameter = (geojson) => {
     let coords: any[] = [];
     let index = 0;

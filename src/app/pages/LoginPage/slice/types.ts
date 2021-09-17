@@ -1,8 +1,8 @@
 /* --- STATE --- */
 export interface LoginState {
-  user: Object,
+  user: any,
   is_authenticated: boolean,
-  access_token: string,
+  session_token: string,
   syrf_authenticated: boolean;
 }
 

@@ -2,23 +2,24 @@
  * Root saga manages watcher lifecycle
  */
 
-import Auth from "@aws-amplify/auth";
 import { eulaActions } from ".";
-import { call, takeLatest } from 'redux-saga/effects';
+import { call, takeLatest, select } from 'redux-saga/effects';
 import { logVersion } from "services/versioning";
-import { getUserAttribute } from "utils/user-utils";
+import { getUser } from "services/live-data-server/user";
+import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 
 export function* signEulaVersion(version) {
-    const user = yield call(getAuthorizedUser);
-    if (user) yield call(logVersion, getUserAttribute(user, 'email'), 'eula', version);
+    const isAuthenticated = yield select(selectIsAuthenticated);
+
+    if (!isAuthenticated) return;
+
+    const response = yield call(getAuthorizedUser);
+    
+    if (response.user) yield call(logVersion, response.user?.email, 'eula', version);
 }
 
 function getAuthorizedUser() {
-    return Auth.currentAuthenticatedUser().then(user => {
-        return user;
-    }).catch(error => {
-        return null;
-    });
+    return getUser();
 }
 
 export default function* loginSaga() {

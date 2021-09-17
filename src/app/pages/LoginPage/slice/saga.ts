@@ -2,20 +2,23 @@
  * Root saga manages watcher lifecycle
  */
 
-import Auth from "@aws-amplify/auth";
 import { loginActions } from ".";
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { anonymousLogin } from "services/live-data-server/auth";
 import { selectIsSyrfServiceAuthenticated } from "./selectors";
+import { getUser } from "services/live-data-server/user";
+import { toast } from "react-toastify";
+import { translations } from "locales/translations";
+import i18next from "i18next";
 
 export function* getAuthUser() {
-    const user = yield call(getAuthorizedUser);
-    if (user)
-        yield put(loginActions.setUser(JSON.parse(JSON.stringify(user))));
+    const response = yield call(getAuthorizedUser);
+    if (response.success)
+        yield put(loginActions.setUser(JSON.parse(JSON.stringify(response.user))));
     else { // the user is not authenticated, or the user is deleted.
         yield put(loginActions.setLogout());
-        localStorage.removeItem('access_token');
-        window.location.reload();
+        toast.info(i18next.t(translations.app.your_session_is_expired));
+        localStorage.removeItem('session_token');
     }
 }
 
@@ -28,17 +31,14 @@ export function* syrfServiceAnonymousLogin() {
     const response = yield call(anonymousLogin);
 
     if (response.success) {
-        localStorage.setItem('session_token', response.token);
+        localStorage.setItem('is_guest', '1');
         yield put(loginActions.setSYRFServiceAuthorized(true));
+        yield put(loginActions.setSessionToken(response.token));
     }
 }
 
 function getAuthorizedUser() {
-    return Auth.currentAuthenticatedUser().then(user => {
-        return user;
-    }).catch(error => {
-        return null;
-    });
+    return getUser();
 }
 
 export default function* loginSaga() {

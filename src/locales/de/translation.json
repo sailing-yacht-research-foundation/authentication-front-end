@@ -3,6 +3,7 @@
     "map_view_tab": {
       "search_race_with_syrf": "Search races with SYRF",
       "advanced_search": "Advanced search",
+      "please_share_your_location_to_use_this_feature": "Please share your location to use this feature.",
       "name": "Name:",
       "location": "Location:",
       "date": "Date:",
@@ -18,8 +19,8 @@
       "to_date": "To Date",
       "search": "Search",
       "filter_result": {
-        "start_searching_by_typing_something": "Start searching by typing something.",
-        "about_number_result": "About 100.000 results",
+        "start_searching_by_typing_something": "Nothing to show here. Start searching by typing something.",
+        "about_number_result": "About {{total}} results",
         "searching": "Searching...."
       }
     },
@@ -96,7 +97,11 @@
     "dont_have_account": "Don't have an account?",
     "signup": "Sign Up",
     "leftpanel_title": "Get ready. It’s about to get real.",
-    "leftpanel_description": "Your life on and off the water will never be the same again."
+    "leftpanel_description": "Your life on and off the water will never be the same again.",
+    "please_verify_your_account": "Please verify your account.",
+    "user_does_not_exist": "User does not exist",
+    "credentials_are_not_correct": "Invalid credentials, please check your email and password.",
+    "cannot_login_at_the_moment": "We cannot log you in at the moment."
   },
   "signup_page": {
     "password": "Password",
@@ -119,7 +124,9 @@
     "last_name": "Last Name",
     "password_confirmation": "Password Confirmation",
     "please_confirm_your_password": "Please confirm your password!",
-    "the_two_passwords_that_you_entered_do_not_match": "The two passwords that you entered do not match!"
+    "the_two_passwords_that_you_entered_do_not_match": "The two passwords that you entered do not match!",
+    "user_already_exists": "User already exists",
+    "register_success": "Thank for becoming a member of SYRF, you can login now!"
   },
   "side_menu": {
     "deal": "Deals",
@@ -173,10 +180,10 @@
       "please_verify_your_phone_number": "Please verify your phone number",
       "code": "Code",
       "enter_the_code_you_received": "Enter the code you received",
-      "could_not_receive_the_code": "Could not receive the code?",
+      "could_not_receive_the_code":"Could not receive the code?",
       "resend": "Resend",
       "please_choose_an_image_to_crop": "Please choose an image to crop!",
-      "upload_profile_picture_successfully": "Upload profile picture successfully!",
+      "upload_profile_picture_successfully":"Upload profile picture successfully!",
       "change_profile_picture": "Change profile picture",
       "uploading": "Uploading....",
       "we_hope_to_see_you_again": "We hope to see you again!",
@@ -231,6 +238,9 @@
     "could_not_receive_the_code": "Could not receive the code?",
     "resend": "resend",
     "account_verified_please_login": "Account verified, please login!"
+  },
+  "misc": {
+    "session_expired": "Session is expired and we renewed the session. Please try again!"
   },
   "playback_page": {
     "competitor": "Competitor:",
