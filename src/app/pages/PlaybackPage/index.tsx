@@ -266,9 +266,6 @@ export const PlaybackPage = (props) => {
             currentElapsedTimeRef.current = nextElapsedTime;
             handleSetElapsedTime(nextElapsedTime);
         };
-
-
-
     }
 
     const handleAddPosition = (data) => {
