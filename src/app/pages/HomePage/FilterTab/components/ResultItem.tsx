@@ -22,19 +22,19 @@ export const ResultItem = (props) => {
                 </Space>
             </HeadDescriptionWrapper>
             <Name><Link to={`/playback?raceid=${race.id}`}>{race.name}</Link></Name>
-            <Description>{ race.description ? race.description : t(translations.home_page.filter_tab.filter_result.no_description) }</Description>
+            <Description>{race.description ? race.description : t(translations.home_page.filter_tab.filter_result.no_description)}</Description>
             <DescriptionWrapper>
                 <DescriptionItem>
-                    {moment(race.approximateStartTime).format('MMM. D, YYYY')}
+                    {t(translations.home_page.filter_tab.filter_result.date)} {moment(race.approximateStartTime).format('MMM. D, YYYY')}
                 </DescriptionItem>
                 <DescriptionItem>
-                    {renderEmptyValue(race.eventName)}
+                    {t(translations.home_page.filter_tab.filter_result.event_name)}  {renderEmptyValue(race.eventName)}
                 </DescriptionItem>
                 <DescriptionItem>
-                    {renderEmptyValue(race.city)}
+                    {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race.city)}
                 </DescriptionItem>
                 <DescriptionItem>
-                    {renderEmptyValue(race.country)}
+                    {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race.country)}
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>
