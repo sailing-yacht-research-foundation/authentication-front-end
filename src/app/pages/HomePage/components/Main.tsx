@@ -11,10 +11,13 @@ import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { useSelector } from 'react-redux';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 
 const { TabPane } = Tabs;
 
 export const Main = () => {
+
+    const history = useHistory();
 
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
@@ -48,6 +51,7 @@ export const Main = () => {
                     <Button
                         shape="round"
                         size={'large'}
+                        onClick={() => history.push("/my-events/create")}
                         icon={<AiFillPlusCircle
                             style={{ marginRight: '5px' }}
                             size={18} />}
