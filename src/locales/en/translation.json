@@ -27,7 +27,8 @@
       "filter_result": {
         "start_searching_by_typing_something": "Nothing to show here. Start searching by typing something.",
         "about_number_result": "About {{total}} results",
-        "searching": "Searching...."
+        "searching": "Searching....",
+        "no_description": "No description provided."
       }
     },
     "search_performed_no_result_found": "Searched for {{keyword}}, no result found."

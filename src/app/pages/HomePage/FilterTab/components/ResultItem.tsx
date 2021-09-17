@@ -4,9 +4,14 @@ import { GiPositionMarker } from 'react-icons/gi';
 import { Space } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { renderEmptyValue } from 'utils/helpers';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const ResultItem = (props) => {
     const race = props.item;
+
+    const { t } = useTranslation();
 
     return (
         <Wrapper key={props.index}>
@@ -17,9 +22,19 @@ export const ResultItem = (props) => {
                 </Space>
             </HeadDescriptionWrapper>
             <Name><Link to={`/playback?raceid=${race.id}`}>{race.name}</Link></Name>
+            <Description>{ race.description ? race.description : t(translations.home_page.filter_tab.filter_result.no_description) }</Description>
             <DescriptionWrapper>
                 <DescriptionItem>
                     {moment(race.approximateStartTime).format('MMM. D, YYYY')}
+                </DescriptionItem>
+                <DescriptionItem>
+                    {renderEmptyValue(race.eventName)}
+                </DescriptionItem>
+                <DescriptionItem>
+                    {renderEmptyValue(race.city)}
+                </DescriptionItem>
+                <DescriptionItem>
+                    {renderEmptyValue(race.country)}
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>
@@ -47,6 +62,7 @@ const HeadDescriptionWrapper = styled.div`
 const DescriptionWrapper = styled.div``;
 
 const DescriptionItem = styled.span`
+    color: #70757a;
     :first-child {
         margin-right: 10px;
     }
@@ -54,4 +70,8 @@ const DescriptionItem = styled.span`
     :not(:first-child) {
         margin: 0 5px;
     }
+`;
+
+const Description = styled.p`
+    font-size: 13px;
 `;
