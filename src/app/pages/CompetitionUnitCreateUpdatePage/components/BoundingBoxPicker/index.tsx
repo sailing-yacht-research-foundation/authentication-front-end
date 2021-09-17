@@ -22,7 +22,6 @@ export const BoundingBoxPicker = (props) => {
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <Map coordinates={coordinates} onCoordinatesRecevied={onCoordinatesRecevied} zoom={MAP_DEFAULT_VALUE.ZOOM} />
             </MapContainer>
-            <PickerDescription>{t(translations.competition_unit_create_update_page.please_create_a_bounding_box)}</PickerDescription>
         </Wrapper>
     )
 }

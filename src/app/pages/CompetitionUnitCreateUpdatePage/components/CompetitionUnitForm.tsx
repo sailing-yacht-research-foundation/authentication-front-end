@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider, DatePicker, Switch, Row, Col, TimePicker, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
+import { CreateButton, DeleteButton, PageHeaderContainerResponsive, PageHeaderText } from 'app/components/SyrfGeneral';
 import { BsCardList } from 'react-icons/bs';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -154,7 +154,7 @@ export const CompetitionUnitForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
+            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageHeaderText>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeaderText>
                 <Space size={10}>
                     <CreateButton onClick={() => history.push("/my-races")} icon={<BsCardList
@@ -165,7 +165,7 @@ export const CompetitionUnitForm = () => {
                         size={18} />}>{t(translations.competition_unit_create_update_page.delete)}</DeleteButton>}
 
                 </Space>
-            </PageHeaderContainer>
+            </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
                     <Form

@@ -93,6 +93,6 @@ const LottieWrapper = styled.div`
     `}
 `;
 
-const LottieMessage = styled.span`
+const LottieMessage = styled.p`
    color: #70757a;
 `;

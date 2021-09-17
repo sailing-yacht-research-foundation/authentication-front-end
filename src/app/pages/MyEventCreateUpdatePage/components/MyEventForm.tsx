@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 
 import React from 'react';
 import { Spin, Form, DatePicker, Row, Col, Divider, Switch, TimePicker, Space } from 'antd';
-import { CreateButton, DeleteButton, PageHeaderContainer } from 'app/components/SyrfGeneral';
+import { CreateButton, DeleteButton, PageHeaderContainerResponsive } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -156,7 +156,7 @@ export const MyEventForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
+            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoContainer>
                     <PageHeading>{mode === MODE.UPDATE ?
                         t(translations.my_event_create_update_page.update_your_event)
@@ -172,7 +172,7 @@ export const MyEventForm = () => {
                         size={18} />}>{t(translations.my_event_create_update_page.delete)}</DeleteButton>}
 
                 </Space>
-            </PageHeaderContainer>
+            </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSavingRace}>
                     <Form

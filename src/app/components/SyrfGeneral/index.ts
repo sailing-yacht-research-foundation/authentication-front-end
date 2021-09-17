@@ -11,6 +11,39 @@ export const PageHeaderContainer = styled.div`
     padding: 30px 15px;
 `;
 
+export const PageHeaderContainerResponsive = styled.div`
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 30px 15px;
+
+    ${media.medium`
+        display: flex;
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: center;
+
+        & > h2 {
+            align-self: center;
+        }
+
+        & .ant-space {
+            align-self: center;
+        }
+    `}
+   
+    & > h2 {
+        align-self: flex-start;
+    }
+
+    & .ant-space {
+        align-self: flex-end;
+    }
+    
+    & button {
+        align-self: flex-end;
+    }
+`;
+
 export const PageHeaderText = styled.h2`
     margin: 0;
     padding: 0;

@@ -8,7 +8,7 @@ import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderContainerResponsive, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
@@ -130,12 +130,12 @@ export const MyRaces = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer>
+            <PageHeaderContainerResponsive>
                 <PageHeaderText>{t(translations.my_event_list_page.my_events)}</PageHeaderText>
                 <CreateButton onClick={() => history.push("/my-events/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
                     size={18} />}>{t(translations.my_event_list_page.create_a_new_event)}</CreateButton>
-            </PageHeaderContainer>
+            </PageHeaderContainerResponsive>
             {results.length > 0 ? (
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
