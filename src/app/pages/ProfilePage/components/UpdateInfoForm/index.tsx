@@ -16,6 +16,7 @@ import { EditEmailChangeModal } from './EditEmailChangeModal';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { updateProfile } from 'services/live-data-server/user';
 
 const defaultFormFields = {
     email: '',
@@ -25,7 +26,6 @@ const defaultFormFields = {
     birthdate: '',
     language: '',
     country: '',
-    share_social: ''
 };
 
 export const UpdateInfo = (props) => {
@@ -53,24 +53,15 @@ export const UpdateInfo = (props) => {
 
     const onFinish = (values) => {
         values = replaceObjectPropertiesFromNullToEmptyString(values);
-        const { email } = values;
-
-        if (checkForEmailChanged(email)) {
-            setShowEmailChangeAlertModal(true);
-            setFormFieldsBeforeUpdate(values);
-        } else {
-            updateUserInfo(values);
-        }
+        updateUserInfo(values);
     }
 
-    const updateUserInfo = ({
-        email,
+    const updateUserInfo = async ({
         phone_number,
         sailing_number,
         birthdate,
         language,
         country,
-        share_social,
         bio,
         first_name,
         last_name,
@@ -78,39 +69,34 @@ export const UpdateInfo = (props) => {
 
         setIsUpdatingProfile(true);
 
-        Auth.currentAuthenticatedUser().then(user => {
-            Auth.updateUserAttributes(user, {
-                email: email,
-                phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
-                address: address,
-                birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
+        const response: any = await updateProfile({
+            firstName: first_name,
+            lastName: last_name,
+            attributes: {
+                language: language,
                 locale: country,
-                'custom:sailing_number': sailing_number,
-                'custom:language': language,
-                'custom:share_social': share_social ? 'y' : '', // y stands for yes
-                'custom:first_name': first_name,
-                'custom:last_name': last_name,
-                'custom:bio': bio,
-                name: String(first_name) + ' ' + String(last_name)
-            }).then(response => {
-                onUpdateProfileSuccess();
-            }).catch(error => {
-                toast.error(error.message);
-                setIsUpdatingProfile(false);
-                setFormFieldsBeforeUpdate(defaultFormFields);
-            })
-        }).catch(error => {
-            toast.error(error.message);
+                bio: bio,
+                sailing_number: sailing_number,
+                birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
+                address: address,
+                phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
+                picture: getUserAttribute(authUser, 'picture')
+            }
+        });
+
+        if (response.success) {
+            onUpdateProfileSuccess();
+        } else {
+            toast.error(t(translations.profile_page.update_profile.problem_updating_profile));
             setIsUpdatingProfile(false);
             setFormFieldsBeforeUpdate(defaultFormFields);
-        })
+        }
     }
 
     const onUpdateProfileSuccess = () => {
         setIsUpdatingProfile(false);
         toast.success(t(translations.profile_page.update_profile.your_profile_has_been_successfully_updated));
         props.cancelUpdateProfile();
-        checkPhoneVerifyStatus();
         setFormFieldsBeforeUpdate(defaultFormFields);
         setFormHasBeenChanged(false);
     }
@@ -123,13 +109,6 @@ export const UpdateInfo = (props) => {
         }).catch((error) => {
             toast.error(error.message);
         })
-    }
-
-    const checkForEmailChanged = (email) => {
-        const oldEmail = getUserAttribute(authUser, 'email');
-        const newEmail = email;
-
-        return oldEmail !== newEmail;
     }
 
     const showPhoneVerifyModalWithMessage = (message: string) => {
@@ -175,20 +154,19 @@ export const UpdateInfo = (props) => {
                         layout="vertical"
                         name="basic"
                         initialValues={{
-                            email: getUserAttribute(authUser, 'email'),
-                            last_name: getUserAttribute(authUser, 'custom:last_name'),
-                            first_name: getUserAttribute(authUser, 'custom:first_name'),
-                            bio: getUserAttribute(authUser, 'custom:bio'),
+                            email: authUser.email,
+                            last_name: authUser.lastName,
+                            first_name: authUser.firstName,
+                            bio: getUserAttribute(authUser, 'bio'),
                             phone_number: getUserAttribute(authUser, 'phone_number'),
                             address: getUserAttribute(authUser, 'address'),
                             birthdate: !!getUserAttribute(authUser, 'birthdate') ? moment(getUserAttribute(authUser, 'birthdate')) : moment('2002-01-01 00:00:00').utcOffset('+0000'),
-                            sailing_number: getUserAttribute(authUser, 'custom:sailing_number'),
-                            facebook: getUserAttribute(authUser, 'custom:facebook'),
-                            instagram: getUserAttribute(authUser, 'custom:instagram'),
-                            twitter: getUserAttribute(authUser, 'custom:twitter'),
-                            language: getUserAttribute(authUser, 'custom:language'),
-                            country: getUserAttribute(authUser, 'locale'),
-                            share_social: !!getUserAttribute(authUser, 'custom:share_social'),
+                            sailing_number: getUserAttribute(authUser, 'sailing_number'),
+                            facebook: getUserAttribute(authUser, 'facebook'),
+                            instagram: getUserAttribute(authUser, 'instagram'),
+                            twitter: getUserAttribute(authUser, 'twitter'),
+                            language: getUserAttribute(authUser, 'language'),
+                            country: getUserAttribute(authUser, 'locale')
                         }}
                         onFinish={onFinish}
                     >

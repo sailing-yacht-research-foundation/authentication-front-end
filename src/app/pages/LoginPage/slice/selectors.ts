@@ -16,11 +16,6 @@ export const selectIsAuthenticated = createSelector(
   (loginState) => loginState.is_authenticated
 );
 
-export const selectAccessToken = createSelector(
-  [selectDomain],
-  (loginState) => loginState.access_token
-);
-
 export const selectIsSyrfServiceAuthenticated = createSelector(
   [selectDomain],
   (loginState) => loginState.syrf_authenticated

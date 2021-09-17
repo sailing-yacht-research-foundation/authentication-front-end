@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Form, Spin } from 'antd';
-import { Auth } from 'aws-amplify';
 import { toast } from 'react-toastify';
 import {
     SyrfFormWrapper,
@@ -14,6 +13,7 @@ import { useState } from 'react';
 import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { changePassword } from 'services/live-data-server/user';
 
 export const ChangePasswordForm = (props) => {
 
@@ -23,23 +23,21 @@ export const ChangePasswordForm = (props) => {
 
     const [isChangingPassword, setIsChangingPassword] = useState<boolean>(false);
 
-    const onFinish = (values) => {
-        const { oldPassword, newPassword } = values;
+    const onFinish = async (values) => {
+        const { newPassword } = values;
 
         setIsChangingPassword(true);
-        Auth.currentAuthenticatedUser().then(user => {
-            Auth.changePassword(user, oldPassword, newPassword).then(response => {
-                toast.success(t(translations.change_password_page.password_changed_successfully));
-                form.resetFields();
-                setIsChangingPassword(false);
-            }).catch(error => {
-                toast.error(error.message);
-                setIsChangingPassword(false);
-            })
-        }).catch(error => {
-            toast.error(error.message);
+
+        const response: any = await changePassword(newPassword);
+
+        if (response.success) {
+            toast.success(t(translations.change_password_page.password_changed_successfully));
+            form.resetFields();
             setIsChangingPassword(false);
-        })
+        } else {
+            toast.error(t(translations.change_password_page.cannot_change_your_password_at_the_moment));
+            setIsChangingPassword(false);
+        }
     }
 
     return (
@@ -58,14 +56,6 @@ export const ChangePasswordForm = (props) => {
                             oldPassword: '',
                         }}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.change_password_page.old_password)}</SyrfFieldLabel>}
-                            name="oldPassword"
-                            rules={[{ required: true, max: 16, min: 8 }]}
-                        >
-                            <SyrfPasswordInputField />
-                        </Form.Item>
-
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                             name="newPassword"

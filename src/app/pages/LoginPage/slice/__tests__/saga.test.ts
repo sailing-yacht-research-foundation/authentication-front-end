@@ -15,8 +15,11 @@ describe('login Saga', () => {
   });
 
   it('should set user if user is returned from call', () => {
-    const user = {};
-    const putDescriptor = getAuthUserIterator.next(user).value;
+    const response = {
+      success: true,
+      user: {}
+    };
+    const putDescriptor = getAuthUserIterator.next(response).value;
     expect(putDescriptor).toEqual(
       put(slice.loginActions.setUser({})),
     );

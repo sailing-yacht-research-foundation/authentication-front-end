@@ -31,13 +31,13 @@ describe('Login slice', () => {
     });
   });
 
-  it('should handle setAccessToken', () => {
-    const accessToken = "";
+  it('should handle setSessionToken', () => {
+    const sessionToken = "";
     expect(
-      slice.reducer(state, slice.loginActions.setAccessToken(accessToken)),
+      slice.reducer(state, slice.loginActions.setSessionToken(sessionToken)),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-      access_token: accessToken
+      session_token: sessionToken
     });
   });
 
@@ -47,7 +47,7 @@ describe('Login slice', () => {
     ).toEqual<ContainerState>({
       ...slice.initialState,
       is_authenticated: false,
-      access_token: ''
+      session_token: ''
     });
   });
 });

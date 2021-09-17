@@ -27,7 +27,9 @@ A React app for Sailors & Developers to access their sailing profile.
     └── README.md
 
 ## Installation
-In the project root, run
+First, please copy the .env-example to .env and fillout all the variables needed. Please contact the team if you dont have the variables.
+
+Then in the project root, run
 ``docker-compose up``
 
 ### Install amplify

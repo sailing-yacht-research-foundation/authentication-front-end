@@ -6,22 +6,17 @@ import { LoginState } from './types';
 
 export const initialState: LoginState = {
   user: {},
-  is_authenticated: !!localStorage.getItem('access_token'),
-  access_token: !!localStorage.getItem('access_token') ? String(localStorage.getItem('access_token')) : '',
+  is_authenticated: !!localStorage.getItem('session_token') && !localStorage.getItem('is_guest'),
   session_token: !!localStorage.getItem('session_token') ? String(localStorage.getItem('session_token')) : '',
-  syrf_authenticated: !!localStorage.getItem('session_token'),
+  syrf_authenticated: !!localStorage.getItem('session_token') && !!localStorage.getItem('is_guest')
 };
 
 const slice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<Object>) {
+    setUser(state, action: PayloadAction<any>) {
       state.user = action.payload;
-    },
-    setAccessToken(state, action: PayloadAction<string>) {
-      state.access_token = action.payload;
-      localStorage.setItem('access_token', action.payload);
     },
     setSessionToken(state, action: PayloadAction<string>) {
       state.session_token = action.payload;
@@ -32,7 +27,7 @@ const slice = createSlice({
     },
     setLogout(state) {
       state.is_authenticated = false;
-      state.access_token = '';
+      state.session_token = '';
     },
     getUser() {},
     syrfServiceAnonymousLogin() {},
