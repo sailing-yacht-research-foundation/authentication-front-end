@@ -7,19 +7,17 @@ import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
-    selectFromDate,
     selectIsSearching,
-    selectPage, selectResults,
-    selectSearchKeyword,
-    selectToDate,
+    selectPage, selectPageSize, selectResults,
     selectTotal
 } from '../../slice/selectors';
-import { useHomeSlice } from '../../slice';
 import { LottieMessage, LottieWrapper } from 'app/components/SyrfGeneral';
 
-export const FilterResult = () => {
+export const FilterResult = (props) => {
+
+    const { onPaginationPageChanged } = props; 
 
     const { t } = useTranslation();
 
@@ -31,27 +29,7 @@ export const FilterResult = () => {
 
     const page = useSelector(selectPage);
 
-    const searchKeyword = useSelector(selectSearchKeyword);
-
-    const fromDate = useSelector(selectFromDate);
-
-    const toDate = useSelector(selectToDate);
-
-    const { actions } = useHomeSlice();
-
-    const dispatch = useDispatch();
-
-    const onPaginationChanged = (page) => {
-        const params: any = {};
-
-        params.page = page;
-        params.keyword = searchKeyword;
-
-        if (fromDate !== '') params.from_date = fromDate;
-        if (toDate !== '') params.to_date = toDate;
-
-        dispatch(actions.searchRaces(params));
-    }
+    const pageSize = useSelector(selectPageSize);
 
     const renderResult = () => {
         const defaultOptions = {
@@ -87,7 +65,7 @@ export const FilterResult = () => {
                         {renderResult()}
                     </ResultWrapper>
                     <PaginationWrapper>
-                        <Pagination defaultCurrent={page} onChange={onPaginationChanged} total={total} />
+                        <Pagination defaultCurrent={page} current={page} onChange={onPaginationPageChanged} total={total} pageSize={pageSize} />
                     </PaginationWrapper>
                 </>) : (
                     <ResultWrapper>

@@ -7,13 +7,15 @@ import { BsSearch } from 'react-icons/bs';
 import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helpers';
 
-export const FilterTab = () => {
+export const FilterTab = (props) => {
     const [showFilterPanel, setShowFilterPanel] = React.useState<boolean>(false);
+
+    const { onPaginationPageChanged } = props; 
 
     return (
         <Wrapper>
-            <FilterResult />
-            {(showFilterPanel || !isMobile()) && <FilterPane close={() => setShowFilterPanel(false)} />}
+            <FilterResult onPaginationPageChanged={onPaginationPageChanged} />
+            {(showFilterPanel || !isMobile()) && <FilterPane limitResults close={() => setShowFilterPanel(false)} />}
             <ToggleFilterPane onClick={() => setShowFilterPanel(true)}>
                 <BsSearch size={25} color={StyleConstants.MAIN_TONE_COLOR} />
             </ToggleFilterPane>

@@ -49,8 +49,8 @@ export const DataList = () => {
     const { t } = useTranslation();
 
     const renderDataItem = () => {
-        return dataArray.map(data => {
-            return <ItemContainer onClick={e => renderDataDetail(data)}>
+        return dataArray.map((data, index) => {
+            return <ItemContainer key={index} onClick={e => renderDataDetail(data)}>
                 <ItemScreenshot style={{ background: `url(${data.screenshotUrl})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
                 <ItemInfoContainer>
                     <ItemTitle>{data.title}</ItemTitle>
