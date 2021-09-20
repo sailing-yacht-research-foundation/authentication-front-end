@@ -40,7 +40,6 @@ class Request {
             let responseData = await anonymousLogin();
             if (responseData['token'] !== undefined) {
                 localStorage.setItem('session_token', responseData['token']);
-                toast.info(i18next.t(translations.misc.session_expired));
             }
         }
         throw err;

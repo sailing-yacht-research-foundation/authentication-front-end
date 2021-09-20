@@ -93,12 +93,6 @@ export const GlobalStyle = createGlobalStyle`
     border-color: #599DF9;
   }
 
-  .syrf-button:hover {
-    // color: #fff;
-    // background-color: #ba5d19;
-    // border: 2px solid #ba5d19;
-  }
-
   .syrf-button-outline {
     color: #fff;
     background-color: transparent;
@@ -161,6 +155,7 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 10px;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
     height: 36px;
+    width: 100%;
   }
 
   .phone-number-input {
@@ -196,5 +191,21 @@ export const GlobalStyle = createGlobalStyle`
     -o-transition: transform .3s linear;
     -ms-transition: transform .3s linear;
     transition: transform .3s linear;
+  }
+
+  .volcano-1 {
+    background-color: #fff2e8;
+  }
+  .volcano-2 {
+    background-color: #ffd8bf;
+  }
+  .volcano-3 {
+    background-color: #ffbb96;
+  }
+  .volcano-4 {
+    background-color: #ff9c6e;
+  }
+  .volcano-5 {
+    background-color: #ff7a45;
   }
 `;

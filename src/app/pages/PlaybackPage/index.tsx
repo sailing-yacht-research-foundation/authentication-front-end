@@ -15,18 +15,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { EventEmitter } from 'events';
 import { selectCompetitionUnitDetail, selectCompetitionUnitId, selectElapsedTime, selectIsPlaying, selectVesselParticipants } from './components/slice/selectors';
 import { usePlaybackSlice } from './components/slice';
+import { IoCaretBack } from 'react-icons/io5';
+import { Wrapper } from 'app/components/SyrfGeneral';
+import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { StreamingRaceMap } from './components/StreamingRaceMap';
 import { stringToColour } from 'utils/helpers';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { selectSessionToken } from '../LoginPage/slice/selectors';
-
-
-const center = {
-    lng: -125.688816,
-    lat: 47.822007
-}
-
-const ZOOM = 13;
 
 export const PlaybackPage = (props) => {
     const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -56,6 +51,8 @@ export const PlaybackPage = (props) => {
     const isPlayingRef = useRef<any>(false);
 
     const { actions } = usePlaybackSlice();
+
+    const history = useHistory();
 
     const connectionStatus = {
         [ReadyState.CONNECTING]: 'connecting',
@@ -299,17 +296,16 @@ export const PlaybackPage = (props) => {
 
     return (
         <Wrapper>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
+            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <Playback />
                 <StreamingRaceMap emitter={eventEmitter} />
+                {history.action !== 'POP' && <GoBackButton onClick={() => history.goBack()}>
+                    <IoCaretBack />
+                </GoBackButton>}
             </MapContainer>
         </Wrapper>
     );
 }
-
-const Wrapper = styled.div`
-  margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
-`;
 
 const GoBackButton = styled.div`
     position: absolute;
@@ -317,7 +313,7 @@ const GoBackButton = styled.div`
     left: 12px;
     width: 30px;
     height: 30px;
-    z-index: 9999;
+    z-index: 9998;
     background: #f4f4f4;
     display: flex;
     justify-content: center;

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';
 import Auth from '@aws-amplify/auth';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
-import { FIELD_VALIDATE, removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helpers';
+import { removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helpers';
 import { PrivateUserInformation } from './PrivateUserInformation';
 import { toast } from 'react-toastify';
 import { PublicUserInformation } from './PublicUserInformation';
@@ -17,6 +17,7 @@ import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { updateProfile } from 'services/live-data-server/user';
+import { FIELD_VALIDATE } from 'utils/constants';
 
 const defaultFormFields = {
     email: '',
