@@ -18,8 +18,6 @@ import { GiSailboat } from 'react-icons/gi';
 import { FaFlagCheckered } from 'react-icons/fa';
 import { GoDatabase } from 'react-icons/go';
 
-
-
 export const SiderContent = (props) => {
 
   const items = [
