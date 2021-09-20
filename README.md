@@ -32,13 +32,6 @@ First, please copy the .env-example to .env and fillout all the variables needed
 Then in the project root, run
 ``docker-compose up``
 
-### Install amplify
-``npm install -g @aws-amplify/cli``
-
-Then run
-``chmod +x ./amplify-pull-staging.sh`` and
-``./amplify-pull-staging.sh`` to pull amplify cognito backend
-
 The app will run at ``locahost:3002``
 
 You may see errors due to missing node_modules folder
