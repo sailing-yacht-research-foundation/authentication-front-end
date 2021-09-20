@@ -35,7 +35,7 @@ export const ResultItem = (props) => {
                 {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race._source.city)}
                 </DescriptionItem>
                 <DescriptionItem>
-                {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race._source.country)}
+                {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race._source.start_country)}
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>
