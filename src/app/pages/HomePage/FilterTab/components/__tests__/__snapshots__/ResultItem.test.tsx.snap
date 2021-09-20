@@ -19,7 +19,7 @@ exports[`<ResultItem /> should render and match the snapshot 1`] = `
   </styled.h3>
   <styled.div>
     <styled.span>
-      2021-09-16
+      2017-06-23
     </styled.span>
   </styled.div>
 </styled.div>
