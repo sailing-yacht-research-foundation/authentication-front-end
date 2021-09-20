@@ -1,18 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { Menu, Dropdown, Image } from 'antd';
-import { DownOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
+import { DownOutlined, LockOutlined } from '@ant-design/icons';
 
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getProfilePicture } from 'utils/user-utils';
-import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
 export const UserDropdown = (props) => {
-
-    const history = useHistory();
 
     const authUser = useSelector(selectUser);
 

@@ -84,7 +84,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     const initializeMapView = () => {
         new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
-            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img src="https://syrf.io/wp-content/themes/syrf/assets/svg/icon-github.svg"></img></a>',
+            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
             maxZoom: 18,
             minZoom: 2,
             id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
@@ -109,33 +109,42 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
         markerCluster = L.markerClusterGroup();
 
         results.forEach(race => {
-            let marker = L.marker(L.latLng(race._source?.approx_start_point?.coordinates[1], race._source?.approx_start_point?.coordinates[0]), {
-                icon: L.divIcon({
-                    html: ReactDOMServer.renderToString(<GoPrimitiveDot style={{ color: '#fff', fontSize: '35px' }} />),
-                    iconSize: [20, 20],
-                    className: 'my-race'
-                })
-            })
-                .bindPopup(ReactDOMServer.renderToString(renderRacePopup(race)))
-                .on('mouseover', () => {
-                    marker.openPopup();
-                })
-                .on('mouseout', () => {
-                    marker.closePopup();
-                })
-                .on('click', () => {
-                    history.push(`/playback?raceid=${race._id}`);
-                })
-                .addTo(map);
-            resultMarkers.push(marker);
-            markers.push(marker);
+            const marker = createResultMarker(race);
+            if (marker) {
+                resultMarkers.push(marker);
+                markers.push(marker);
+            }
         });
-        
+
         if (resultMarkers.length > 0) {
             markerCluster.addLayers(resultMarkers);
             map.addLayer(markerCluster);
             map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
         }
+    }
+
+    const createResultMarker = (race) => {
+        if (typeof race._source?.approx_start_point?.coordinates[1] === 'undefined') return; // not rendering result with no longlat.
+        let marker = L.marker(L.latLng(race._source?.approx_start_point?.coordinates[1], race._source?.approx_start_point?.coordinates[0]), {
+            icon: L.divIcon({
+                html: ReactDOMServer.renderToString(<GoPrimitiveDot style={{ color: '#fff', fontSize: '35px' }} />),
+                iconSize: [20, 20],
+                className: 'my-race'
+            })
+        })
+            .bindPopup(ReactDOMServer.renderToString(renderRacePopup(race)))
+            .on('mouseover', () => {
+                marker.openPopup();
+            })
+            .on('mouseout', () => {
+                marker.closePopup();
+            })
+            .on('click', () => {
+                history.push(`/playback?raceid=${race._id}`);
+            })
+            .addTo(map);
+
+        return marker;
     }
 
     const renderRacePopup = (race) => {

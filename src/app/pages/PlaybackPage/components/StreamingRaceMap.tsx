@@ -42,7 +42,7 @@ export const StreamingRaceMap = (props) => {
 
         // Zoom to location
         if (!current.zoomedToRaceLocation) {
-            current.zoomedToRaceLocation = _zoomToRaceLocation(participants[0], current);
+          current.zoomedToRaceLocation = _zoomToRaceLocation(participants[0], current);
         }
 
         // Remove all race object layers
@@ -102,6 +102,7 @@ export const StreamingRaceMap = (props) => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const _initializeBoatMarker = (participant) => {
@@ -129,14 +130,14 @@ export const StreamingRaceMap = (props) => {
     participants.forEach((participant) => {
       try {
         map.removeLayer(participant.id);
-      } catch (e) {}
+      } catch (e) { }
     });
   };
 
   const _removeLegLayersFromMap = (legLayers) => {
     Object.keys(legLayers).forEach(key => {
       map.removeLayer(legLayers[key]);
-    });    
+    });
   }
 
   const _initLayerAndSetLocationAndHeadingForBoat = (
@@ -184,22 +185,22 @@ export const StreamingRaceMap = (props) => {
 
   const _attachPolylineToMap = (coordinates, color) => {
     return L.polyline(coordinates).setStyle({
-        weight: 1,
-        color
+      weight: 1,
+      color
     }).addTo(map);
   }
 
   const _zoomToRaceLocation = (participant, mapVariable) => {
     if (!mapVariable.zoomedToRaceLocation) {
-        if (!participant?.lastPosition?.lat || !participant?.lastPosition?.lon) return false;
-        map.setView(
-            {
-            lat: participant.lastPosition.lat,
-            lng: participant.lastPosition.lon,
-            },
-            18
-        );
-        return true;
+      if (!participant?.lastPosition?.lat || !participant?.lastPosition?.lon) return false;
+      map.setView(
+        {
+          lat: participant.lastPosition.lat,
+          lng: participant.lastPosition.lon,
+        },
+        18
+      );
+      return true;
     }
   };
 
@@ -208,7 +209,7 @@ export const StreamingRaceMap = (props) => {
       `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`,
       {
         attribution:
-          '<a href="https://www.github.com/sailing-yacht-research-foundation"><img src="https://syrf.io/wp-content/themes/syrf/assets/svg/icon-github.svg"></img></a>',
+          '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
         maxZoom: 18,
         minZoom: 13,
         id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",

@@ -79,6 +79,7 @@ export const PlaybackPage = (props) => {
     // Set socket url
     useEffect(() => {
         if (sessionToken) setSocketUrl(`${streamUrl}/authenticate?session_token=${sessionToken}`)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sessionToken])
 
     // Set competition unit id
