@@ -52,7 +52,7 @@ export const Nav = () => {
             type="primary"
             shape="round"
             size="large"
-            onClick={() => history.push("/my-events/create")} icon={<AiFillPlusCircle
+            onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
               style={{ marginRight: '5px' }}
               size={18} />}>Create</StyledButtonCreate>
           <AboutLink to="/about">{t(translations.about_page.nav.about)}</AboutLink>

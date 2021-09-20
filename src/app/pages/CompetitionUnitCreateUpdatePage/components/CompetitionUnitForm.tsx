@@ -88,7 +88,7 @@ export const CompetitionUnitForm = () => {
                 toast.success(t(translations.competition_unit_create_update_page.successfully_updated_competition_unit, { name: response.data?.name }));
             }
 
-            history.push(`/my-events/${calendarEventId}/my-races/${response.data?.id}/update`);
+            history.push(`/events/${calendarEventId}/races/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
             if (courseListRef) courseListRef.current?.scrollIntoView({ behavior: 'smooth' });
         } else {
@@ -137,7 +137,7 @@ export const CompetitionUnitForm = () => {
     }
 
     const onCompetitionUnitDeleted = () => {
-        history.push('/my-races');
+        history.push('/races');
     }
 
     React.useEffect(() => {
@@ -157,7 +157,7 @@ export const CompetitionUnitForm = () => {
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageHeaderText>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeaderText>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/my-races")} icon={<BsCardList
+                    <CreateButton onClick={() => history.push("/races")} icon={<BsCardList
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.competition_unit_create_update_page.view_all_competition_units)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash

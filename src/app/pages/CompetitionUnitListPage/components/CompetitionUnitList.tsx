@@ -39,7 +39,7 @@ export const CompetitionUnitList = () => {
             key: 'name',
             render: (text, record) => {
                 if (userId && userId === record.createdById || uuid === record.createdById)
-                    return <Link to={`/my-events/${record.calendarEventId}/my-races/${record.id}/update`}>{text}</Link>;
+                    return <Link to={`/events/${record.calendarEventId}/races/${record.id}/update`}>{text}</Link>;
                 return text;
             }
         },
@@ -74,7 +74,7 @@ export const CompetitionUnitList = () => {
                 if (userId && userId === record.createdById || uuid === record.createdById)
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
-                            history.push(`/my-events/${record.calendarEventId}/my-races/${record.id}/update`);
+                            history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
                         }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                         <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                     </Space>;

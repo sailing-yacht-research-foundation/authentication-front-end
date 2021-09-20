@@ -94,7 +94,7 @@ export const MyEventForm = () => {
                 toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
             }
 
-            history.push(`/my-events/${response.data?.id}/update`);
+            history.push(`/events/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
             setCoordinates({
                 lat: lat,
@@ -145,7 +145,7 @@ export const MyEventForm = () => {
     }, []);
 
     const onRaceDeleted = () => {
-        history.push('/my-events');
+        history.push('/events');
     }
 
     return (
@@ -164,7 +164,7 @@ export const MyEventForm = () => {
                     <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
                 </PageInfoContainer>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/my-events")} icon={<BsCardList
+                    <CreateButton onClick={() => history.push("/events")} icon={<BsCardList
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.my_event_create_update_page.view_all)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash

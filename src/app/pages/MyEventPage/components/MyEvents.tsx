@@ -40,7 +40,7 @@ export const MyRaces = () => {
             key: 'name',
             render: (text, record) => {
                 if (userId && userId === record.createdById || uuid === record.createdById)
-                    return <Link to={`/my-events/${record.id}/update`}>{text}</Link>;
+                    return <Link to={`/events/${record.id}/update`}>{text}</Link>;
 
                 return text;
             },
@@ -76,7 +76,7 @@ export const MyRaces = () => {
                 if (userId && record.createdById === userId || uuid === record.createdById)
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
-                            history.push(`/my-events/${record.id}/update`)
+                            history.push(`/events/${record.id}/update`)
                         }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
                         <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
                     </Space>;
@@ -132,7 +132,7 @@ export const MyRaces = () => {
             />
             <PageHeaderContainerResponsive>
                 <PageHeaderText>{t(translations.my_event_list_page.my_events)}</PageHeaderText>
-                <CreateButton onClick={() => history.push("/my-events/create")} icon={<AiFillPlusCircle
+                <CreateButton onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
                     size={18} />}>{t(translations.my_event_list_page.create_a_new_event)}</CreateButton>
             </PageHeaderContainerResponsive>
@@ -156,7 +156,7 @@ export const MyRaces = () => {
                         width={400} />
                     <CreateButton icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/my-events/create")}>{t(translations.my_event_list_page.create)}</CreateButton>
+                        size={18} />} onClick={() => history.push("/events/create")}>{t(translations.my_event_list_page.create)}</CreateButton>
                     <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_event)}</LottieMessage>
                 </LottieWrapper>)}
         </>
