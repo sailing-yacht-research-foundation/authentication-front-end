@@ -36,7 +36,7 @@ export const ParticipantList = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-events/${record.calendarEventId}/participants/${record.id}/update`)
+                        history.push(`/events/${record.calendarEventId}/participants/${record.id}/update`)
                     }} type="primary">{t(translations.participant_list.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDetelteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
                 </Space>
@@ -103,7 +103,7 @@ export const ParticipantList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/my-events/${eventId}/participants/create`)} icon={<AiFillPlusCircle
+                    <CreateButton onClick={() => history.push(`/events/${eventId}/participants/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.participant_list.create)}</CreateButton>
                 </PageHeaderContainer>

@@ -333,7 +333,7 @@ export const MapView = () => {
                 toast.error(t(translations.course_create_update_page.an_unexpected_error));
             }
 
-            history.push(`/my-races`);
+            history.push(`/races`);
         }
     }
 

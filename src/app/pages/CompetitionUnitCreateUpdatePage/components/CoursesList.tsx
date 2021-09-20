@@ -35,7 +35,7 @@ export const CoursesList = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-races/${record.competitionUnitId}/courses/${record.id}/update`)
+                        history.push(`/races/${record.competitionUnitId}/courses/${record.id}/update`)
                     }} type="primary">{t(translations.course_list.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => setShowCourseDeleteModal(true)}>{t(translations.course_list.delete)}</BorderedButton>
                 </Space>
@@ -83,7 +83,7 @@ export const CoursesList = (props) => {
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.course_list.course)}</PageHeaderTextSmall>
                     {
-                        !course.id && <CreateButton onClick={() => history.push(`/my-races/${competitionUnitId}/courses/create`)} icon={<AiFillPlusCircle
+                        !course.id && <CreateButton onClick={() => history.push(`/races/${competitionUnitId}/courses/create`)} icon={<AiFillPlusCircle
                             style={{ marginRight: '5px' }}
                             size={18} />}>{t(translations.course_list.create)}</CreateButton>
                     }

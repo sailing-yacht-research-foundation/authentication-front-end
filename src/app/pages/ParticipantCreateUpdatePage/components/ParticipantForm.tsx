@@ -72,9 +72,9 @@ export const ParticipantForm = () => {
             }
 
             if (eventId) {
-                history.push(`/my-events/${eventId}/update`);
+                history.push(`/events/${eventId}/update`);
             } else {
-                history.push(`/my-events`);
+                history.push(`/events`);
             }
             setMode(MODE.UPDATE);
         } else {
@@ -101,7 +101,7 @@ export const ParticipantForm = () => {
     }
 
     const onParticipantDeleted = () => {
-        history.push(`/my-events/${participant.calendarEventId}/update`);
+        history.push(`/events/${participant.calendarEventId}/update`);
     }
 
     React.useEffect(() => {
@@ -122,9 +122,9 @@ export const ParticipantForm = () => {
                 <Space size={10}>
                     <CreateButton onClick={() => {
                         if (eventId) {
-                            history.push(`/my-events/${eventId}/update`);
+                            history.push(`/events/${eventId}/update`);
                         } else {
-                            history.push(`/my-events`);
+                            history.push(`/events`);
                         }
                     }} icon={<IoIosArrowBack
                         style={{ marginRight: '5px' }}

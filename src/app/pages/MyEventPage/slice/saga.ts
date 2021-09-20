@@ -19,6 +19,9 @@ export function* getEvents(action) {
         if (response.data?.count > 0) {
             yield put(myEventListActions.setResults(response.data?.rows));
             yield put(myEventListActions.setTotal(response.data?.count));
+        } else {
+            yield put(myEventListActions.setResults([]));
+            yield put(myEventListActions.setTotal(0));
         }
     }
 }
