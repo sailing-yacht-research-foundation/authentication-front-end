@@ -22,8 +22,8 @@ export const SiderContent = (props) => {
 
   const items = [
     { key: '1', paths: ['/', '/search'] },
-    { key: '13', paths: ['/my-events'], subMenuKey: 'events' },
-    { key: '14', paths: ['/my-races'], subMenuKey: 'events' },
+    { key: '13', paths: ['/events'], subMenuKey: 'events' },
+    { key: '14', paths: ['/races'], subMenuKey: 'events' },
     { key: '15', paths: ['/vessels'], subMenuKey: 'events' },
     { key: '12', paths: ['/data'] },
     { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
@@ -72,8 +72,8 @@ export const SiderContent = (props) => {
         </SyrfMenuItem>
 
         <SyrfSubmenu key="events" icon={<CalendarOutlined style={{ marginRight: '10px' }} />} title={t(translations.side_menu.my_events)}>
-          <SyrfMenuItem title={t(translations.side_menu.events)} key="13" icon={<CalendarOutlined />} onClick={() => history.push('/my-events')}>{t(translations.side_menu.events)}</SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<FaFlagCheckered />} onClick={() => history.push('/my-races')} key="14">{t(translations.side_menu.competition_units)}</SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.events)} key="13" icon={<CalendarOutlined />} onClick={() => history.push('/events')}>{t(translations.side_menu.events)}</SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<FaFlagCheckered />} onClick={() => history.push('/races')} key="14">{t(translations.side_menu.competition_units)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<GiSailboat />} onClick={() => history.push('/vessels')} key="15">{t(translations.side_menu.vessels)}</SyrfMenuItem>
         </SyrfSubmenu>
 

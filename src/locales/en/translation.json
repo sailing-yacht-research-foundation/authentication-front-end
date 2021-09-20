@@ -155,9 +155,9 @@
     "my_events": "My Events",
     "search": "Search",
     "data": "Data",
-    "events": "Events",
-    "competition_units": "Races",
-    "vessels": "Vessels"
+    "events": "My Events",
+    "competition_units": "My Races",
+    "vessels": "My Vessels"
   },
   "profile_page": {
     "update_profile": {
@@ -294,7 +294,7 @@
     "action": "Action",
     "update": "Update",
     "delete": "Delete",
-    "my_events": "My Events",
+    "my_events": "Events",
     "create_a_new_event": "Create A New Event",
     "create": "Create",
     "city": "City",

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
+import { CreateButton, DeleteButton, PageHeaderContainerResponsive, PageHeaderText } from 'app/components/SyrfGeneral';
 import { BsCardList } from 'react-icons/bs';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -112,7 +112,7 @@ export const VesselForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
+            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageHeaderText>{mode === MODE.UPDATE ? t(translations.vessel_create_update_page.update_your_vessel) : t(translations.vessel_create_update_page.create_a_new_vessel)}</PageHeaderText>
                 <Space size={10}>
                     <CreateButton onClick={() => history.push("/vessels")} icon={<BsCardList
@@ -123,7 +123,7 @@ export const VesselForm = () => {
                         size={18} />}>{t(translations.vessel_create_update_page.delete)}</DeleteButton>}
 
                 </Space>
-            </PageHeaderContainer>
+            </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
                     <Form

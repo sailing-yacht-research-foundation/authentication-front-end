@@ -44,7 +44,7 @@ export const CompetitionUnitList = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/my-events/${record.calendarEventId}/my-races/${record.id}/update`)
+                        history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>
@@ -111,7 +111,7 @@ export const CompetitionUnitList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/my-events/${eventId}/my-races/create`)} icon={<AiFillPlusCircle
+                    <CreateButton onClick={() => history.push(`/events/${eventId}/races/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
                 </PageHeaderContainer>

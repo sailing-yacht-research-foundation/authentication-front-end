@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 
 import React from 'react';
 import { Spin, Form, DatePicker, Row, Col, Divider, Switch, TimePicker, Space } from 'antd';
-import { CreateButton, DeleteButton, PageHeaderContainer } from 'app/components/SyrfGeneral';
+import { CreateButton, DeleteButton, PageHeaderContainerResponsive } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -94,7 +94,7 @@ export const MyEventForm = () => {
                 toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
             }
 
-            history.push(`/my-events/${response.data?.id}/update`);
+            history.push(`/events/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
             setCoordinates({
                 lat: lat,
@@ -145,7 +145,7 @@ export const MyEventForm = () => {
     }, []);
 
     const onRaceDeleted = () => {
-        history.push('/my-events');
+        history.push('/events');
     }
 
     return (
@@ -156,7 +156,7 @@ export const MyEventForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
+            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoContainer>
                     <PageHeading>{mode === MODE.UPDATE ?
                         t(translations.my_event_create_update_page.update_your_event)
@@ -164,7 +164,7 @@ export const MyEventForm = () => {
                     <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
                 </PageInfoContainer>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/my-events")} icon={<BsCardList
+                    <CreateButton onClick={() => history.push("/events")} icon={<BsCardList
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.my_event_create_update_page.view_all)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
@@ -172,7 +172,7 @@ export const MyEventForm = () => {
                         size={18} />}>{t(translations.my_event_create_update_page.delete)}</DeleteButton>}
 
                 </Space>
-            </PageHeaderContainer>
+            </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSavingRace}>
                     <Form
