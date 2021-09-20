@@ -22,20 +22,20 @@ export const ResultItem = (props) => {
                     {race._source.start_country}
                 </Space>
             </HeadDescriptionWrapper>
-            <Name><Link to={`/playback?raceid=${race.id}`}>{race.name}</Link></Name>
-            <Description>{race.description ? race.description : t(translations.home_page.filter_tab.filter_result.no_description)}</Description>
+            <Name><Link to={`/playback?raceid=${race._id}`}>{race._source.name}</Link></Name>
+            <Description>{ race._source?.description ? race._source?.description : t(translations.home_page.filter_tab.filter_result.no_description) }</Description>
             <DescriptionWrapper>
                 <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.date)} {moment(race.approximateStartTime).format(TIME_FORMAT.date_text)}
+                {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}
                 </DescriptionItem>
                 <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.event_name)}  {renderEmptyValue(race.eventName)}
+                {t(translations.home_page.filter_tab.filter_result.event_name)} {renderEmptyValue(race._source.event_name)}
                 </DescriptionItem>
                 <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race.city)}
+                {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race._source.city)}
                 </DescriptionItem>
                 <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race.country)}
+                {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race._source.country)}
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>
