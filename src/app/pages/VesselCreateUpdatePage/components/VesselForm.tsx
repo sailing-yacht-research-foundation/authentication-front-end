@@ -112,11 +112,7 @@ export const VesselForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-<<<<<<< HEAD
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-=======
-            <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
->>>>>>> develop
                 <PageHeaderText>{mode === MODE.UPDATE ? t(translations.vessel_create_update_page.update_your_vessel) : t(translations.vessel_create_update_page.create_a_new_vessel)}</PageHeaderText>
                 <Space size={10}>
                     <CreateButton onClick={() => history.push("/vessels")} icon={<BsCardList
@@ -127,11 +123,7 @@ export const VesselForm = () => {
                         size={18} />}>{t(translations.vessel_create_update_page.delete)}</DeleteButton>}
 
                 </Space>
-<<<<<<< HEAD
             </PageHeaderContainerResponsive>
-=======
-            </PageHeaderContainer>
->>>>>>> develop
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
                     <Form
