@@ -13,7 +13,7 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import moment from 'moment';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { FIELD_VALIDATE } from 'utils/helpers';
+import { FIELD_VALIDATE } from 'utils/constants';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 
@@ -86,7 +86,6 @@ export const PrivateUserInformation = (props) => {
                             />
                             {suggestions.length > 0 && <StyledPLaceDropdown>
                                 {suggestions.map((suggestion) => {
-                                    console.log();
                                     const className = suggestion.active
                                         ? 'suggestion-item--active'
                                         : 'suggestion-item';

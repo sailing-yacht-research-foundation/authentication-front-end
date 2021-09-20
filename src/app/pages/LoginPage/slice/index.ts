@@ -28,6 +28,9 @@ const slice = createSlice({
     setLogout(state) {
       state.is_authenticated = false;
       state.session_token = '';
+      localStorage.removeItem('user');
+      localStorage.removeItem('session_token');
+      localStorage.removeItem('user_id');
     },
     getUser() {},
     syrfServiceAnonymousLogin() {},

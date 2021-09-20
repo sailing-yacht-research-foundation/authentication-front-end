@@ -3,34 +3,69 @@ import { Menu } from 'antd';
 import { ReactComponent as Logo } from './assets/logo-light.svg';
 import {
   UserOutlined,
-  CrownOutlined,
-  HeatMapOutlined,
-  SlidersOutlined,
-  ApiOutlined,
   LockOutlined,
-  BellOutlined,
-  SettingOutlined,
   ProfileOutlined,
-  SearchOutlined
+  SearchOutlined,
+  CalendarOutlined
 } from '@ant-design/icons';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { media } from 'styles/media';
 import { GiSailboat } from 'react-icons/gi';
+import { FaFlagCheckered } from 'react-icons/fa';
 import { GoDatabase } from 'react-icons/go';
+
+
 
 export const SiderContent = (props) => {
 
+  const items = [
+    { key: '1', paths: ['/', '/search'] },
+    { key: '13', paths: ['/my-events'], subMenuKey: 'events' },
+    { key: '14', paths: ['/my-races'], subMenuKey: 'events' },
+    { key: '15', paths: ['/vessels'], subMenuKey: 'events' },
+    { key: '12', paths: ['/data'] },
+    { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
+    { key: '8', paths: ['/profile/change-password'], subMenuKey: 'profile' },
+  ];
+
   const history = useHistory();
+
+  const location = useLocation();
+
+  const [selectedKey, setSelectedKey] = React.useState<string>('1');
+
+  const [openKey, setOpenKey] = React.useState('');
+
+  const [renderedDefaultActive, setRenderedDefaultActive] = React.useState<boolean>(false);
 
   const { t } = useTranslation();
 
+  React.useEffect(() => {
+    renderDefaultSelectedRoute();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
+
+  const renderDefaultSelectedRoute = () => {
+    const item = items.filter(item => {
+      return item.paths!.indexOf(location.pathname) !== -1
+    })[0];
+    if (item) {
+      setSelectedKey(item.key);
+      setOpenKey(item.subMenuKey ?? '');
+    }
+    setRenderedDefaultActive(true);
+  }
+
   return (
     <SiderWrapper>
-      <SyrfMenu mode="inline" defaultSelectedKeys={['1']}>
+      {renderedDefaultActive && <SyrfMenu
+        defaultSelectedKeys={[selectedKey]}
+        mode="inline"
+        defaultOpenKeys={[openKey]}>
         <Logo
           onClick={() => history.push('/')}
           style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px' }} />
@@ -38,15 +73,17 @@ export const SiderContent = (props) => {
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
-        <SyrfMenuItem title={t(translations.side_menu.my_races)} key="11" onClick={() => history.push('/')} icon={<GiSailboat />}>
-          {t(translations.side_menu.my_races)}
-        </SyrfMenuItem>
+        <SyrfSubmenu key="events" icon={<CalendarOutlined style={{ marginRight: '10px' }} />} title={t(translations.side_menu.my_events)}>
+          <SyrfMenuItem title={t(translations.side_menu.events)} key="13" icon={<CalendarOutlined />} onClick={() => history.push('/my-events')}>{t(translations.side_menu.events)}</SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<FaFlagCheckered />} onClick={() => history.push('/my-races')} key="14">{t(translations.side_menu.competition_units)}</SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<GiSailboat />} onClick={() => history.push('/vessels')} key="15">{t(translations.side_menu.vessels)}</SyrfMenuItem>
+        </SyrfSubmenu>
 
         <SyrfMenuItem key="12" onClick={() => history.push('/data')} title={t(translations.side_menu.data)} icon={<GoDatabase />}>
           {t(translations.side_menu.data)}
         </SyrfMenuItem>
 
-        <SyrfSubmenu key="sub2" icon={<UserOutlined />} title={t(translations.side_menu.profile.title)}>
+        <SyrfSubmenu key="profile" icon={<UserOutlined />} title={t(translations.side_menu.profile.title)}>
           <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />} onClick={() => history.push('/profile')}>{t(translations.side_menu.profile.name)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} onClick={() => history.push('/profile/change-password')} key="8">{t(translations.side_menu.profile.change_password)}</SyrfMenuItem>
           {/* <SyrfMenuItem title={t(translations.side_menu.profile.notification_setting)} icon={<BellOutlined />} onClick={() => history.push('/profile')} key="9">{t(translations.side_menu.profile.notification_setting)}</SyrfMenuItem>
@@ -68,7 +105,7 @@ export const SiderContent = (props) => {
         <SyrfMenuItem key="6" title={t(translations.side_menu.test_data)} icon={<SlidersOutlined />}>
           {t(translations.side_menu.test_data)}
         </SyrfMenuItem> hide this because of task SNS-393 */}
-      </SyrfMenu>
+      </SyrfMenu>}
     </SiderWrapper>
   )
 }

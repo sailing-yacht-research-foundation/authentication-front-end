@@ -17,6 +17,7 @@ import {
     selectTotal
 } from '../../slice/selectors';
 import { useHomeSlice } from '../../slice';
+import { LottieMessage, LottieWrapper } from 'app/components/SyrfGeneral';
 
 export const FilterResult = () => {
 
@@ -131,17 +132,4 @@ const ResultWrapper = styled.div`
     ${media.medium`
         width: 70%;
     `}
-`;
-
-const LottieWrapper = styled.div`
-    text-align: center;
-    margin-top: 15px;
-
-    ${media.medium`
-        margin-top: 100px;
-    `}
-`;
-
-const LottieMessage = styled.span`
-   color: #70757a;
 `;

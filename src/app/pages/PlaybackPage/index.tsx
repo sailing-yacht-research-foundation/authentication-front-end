@@ -15,21 +15,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { EventEmitter } from 'events';
 import { selectCompetitionUnitDetail, selectCompetitionUnitId, selectElapsedTime, selectIsPlaying, selectVesselParticipants } from './components/slice/selectors';
 import { usePlaybackSlice } from './components/slice';
-import { useHistory } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
+import { Wrapper } from 'app/components/SyrfGeneral';
+import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { StreamingRaceMap } from './components/StreamingRaceMap';
 import { stringToColour } from 'utils/helpers';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { selectSessionToken } from '../LoginPage/slice/selectors';
-
-const center = {
-    lng: -125.688816,
-    lat: 47.822007
-}
-
-const ZOOM = 13;
-
-const HEADER_HEIGHT = '97px';
 
 export const PlaybackPage = (props) => {
     const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -310,7 +302,7 @@ export const PlaybackPage = (props) => {
                     <PageDescription>{'Race description'}</PageDescription>
                 </PageInfoContainer>
             </PageHeadContainer>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${HEADER_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
+            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <Playback />
                 <StreamingRaceMap emitter={eventEmitter} />
             </MapContainer>
@@ -318,9 +310,6 @@ export const PlaybackPage = (props) => {
     );
 }
 
-const Wrapper = styled.div`
-  margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
-`;
 
 const PageHeading = styled.h2`
     padding: 20px 15px;

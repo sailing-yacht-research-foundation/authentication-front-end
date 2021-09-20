@@ -1,7 +1,7 @@
 {
   "home_page": {
     "map_view_tab": {
-      "search_race_with_syrf": "Search races with SYRF",
+      "search_race_with_syrf": "Search events or races with SYRF",
       "advanced_search": "Advanced search",
       "please_share_your_location_to_use_this_feature": "Please share your location to use this feature.",
       "name": "Name:",
@@ -152,9 +152,12 @@
     "organizational_membership": "Organizational Memberships",
     "my_data": "My Data",
     "test_data": "Test Data",
-    "my_races": "My Races",
+    "my_events": "My Events",
     "search": "Search",
-    "data": "Data"
+    "data": "Data",
+    "events": "Events",
+    "competition_units": "Races",
+    "vessels": "Vessels"
   },
   "profile_page": {
     "update_profile": {
@@ -192,10 +195,10 @@
       "please_verify_your_phone_number": "Please verify your phone number",
       "code": "Code",
       "enter_the_code_you_received": "Enter the code you received",
-      "could_not_receive_the_code":"Could not receive the code?",
+      "could_not_receive_the_code": "Could not receive the code?",
       "resend": "Resend",
       "please_choose_an_image_to_crop": "Please choose an image to crop!",
-      "upload_profile_picture_successfully":"Upload profile picture successfully!",
+      "upload_profile_picture_successfully": "Upload profile picture successfully!",
       "change_profile_picture": "Change profile picture",
       "uploading": "Uploading....",
       "we_hope_to_see_you_again": "We hope to see you again!",
@@ -276,10 +279,188 @@
     "race_clusters": "Race Clusters",
     "race_starts_grouped": "Race starts grouped into clusters based on the scale of the map view.",
     "race_regions": "Race Regions",
-    "polygons_containing_races":"Polygons containing races for the last 20 years with a count of how many races occured in that region.",
+    "polygons_containing_races": "Polygons containing races for the last 20 years with a count of how many races occured in that region.",
     "race_region_boxes": "Race Region Boxes",
     "similar_to_racec_regions": "Similar to race regions, except this is a view of nice rectangular boxes that contain each region. Overlapping boxes have been combined.",
     "yatch_club_density": "Yacht Club Density",
     "hexbin_map_to_visualize": "3D Hexbin map to visualize the density of yacht clubs."
+  },
+  "my_event_list_page": {
+    "you_dont_have_any_event": "You do not have any events at the moment, please create one.",
+    "name": "Name",
+    "location": "Location",
+    "start_date": "Start Date",
+    "created_date": "Created Date",
+    "action": "Action",
+    "update": "Update",
+    "delete": "Delete",
+    "my_events": "My Events",
+    "create_a_new_event": "Create A New Event",
+    "create": "Create",
+    "city": "City",
+    "country": "Country"
+  },
+  "competition_unit_list_page": {
+    "name": "Name",
+    "location": "Location",
+    "start_date": "Start Date",
+    "created_date": "Created Date",
+    "action": "Action",
+    "update": "Update",
+    "delete": "Delete",
+    "competition_units": "Races",
+    "create": "Create",
+    "start_time": "Start Time",
+    "approximate_start": "Approximate Start",
+    "you_dont_have_any_competition_unit": "You don't have any races, please create one.",
+    "event_name": "Event Name"
+  },
+  "competition_unit_create_update_page": {
+    "created_a_new_competition_unit": "Created a new race with name: {{name}}.",
+    "successfully_updated_competition_unit": "Successfully updated your race: {{name}}",
+    "an_error_happened": "An error happened when saving your race.",
+    "view_all_competition_units": "View all",
+    "delete": "Delete",
+    "name": "Name",
+    "event_id": "Event Id",
+    "start_date": "Start Date",
+    "start_time": "Start Time",
+    "save_competition_unit": "Save Race",
+    "is_completed": "Is Completed",
+    "please_create_a_bounding_box": "Please create a bounding box by drawing on the map.",
+    "update_your_competition_unit": "Update your race",
+    "create_a_new_competition_unit": "Create a new race",
+    "select_an_event": "Select an event",
+    "create_a_private_polygon": "Create a private polygon",
+    "positions_outside_of_this_polygon_is": "Positions outside of this polygon may be discarded if they don’t appear relevant to the race."
+  },
+  "my_event_create_update_page": {
+    "created_a_new_event": "Created a new event with name {{name}}.",
+    "successfully_update_event": "Successfully updated your event: {{name}}.",
+    "an_error_happened_when_saving_event": "An error happened when saving your event.",
+    "update_your_event": "Update Your Event",
+    "create_a_new_event": "Create A New Event",
+    "view_all": "View all",
+    "delete": "Delete",
+    "name": "Name",
+    "location_name": "Location Name",
+    "start_date": "Start Date",
+    "start_time": "Start Time",
+    "external_url": "External URL",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "save_event": "Save event",
+    "please_choose_a_location": "Please choose a location by clicking on the map",
+    "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies."
+  },
+  "course_list": {
+    "course": "Course",
+    "create": "Create",
+    "update": "Update",
+    "created_date": "Created Date",
+    "has_geometry": "Has Geometry",
+    "yes": "Yes",
+    "no": "No",
+    "action": "Action",
+    "delete": "Delete"
+  },
+  "delete_event_modal": {
+    "successfully_deleted": "Successfully deleted event {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your event",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this event?",
+    "you_will_delete": "You will delete this event along with all associated information, are you sure you want to continue?"
+  },
+  "delete_competition_unit_modal": {
+    "successfully_deleted": "Successfully deleted race {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your race",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this race?",
+    "you_will_delete": "You will delete this race along with all associated information, are you sure you want to continue?"
+  },
+  "delete_vessel_modal": {
+    "successfully_deleted": "Successfully deleted vessel {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your vessel",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this vessel?",
+    "you_will_delete": "You will delete this vessel along with all associated information, are you sure you want to continue?"
+  },
+  "delete_course_modal": {
+    "successfully_deleted": "Successfully deleted course.",
+    "an_unexpected_error": "An unexpected error happened when deleting your course",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this course?",
+    "you_will_delete": "You will delete this course along with all associated information, are you sure you want to continue?"
+  },
+  "delete_participant_modal": {
+    "successfully_deleted": "Successfully deleted participant {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your participant",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this participant?",
+    "you_will_delete": "You will delete this participant along with all associated information, are you sure you want to continue?"
+  },
+  "course_create_update_page": {
+    "you_cannot_create_course": "You cannot save the course because You have not added any geometries",
+    "successfully_created_your_course": "Successfully saved your course.",
+    "an_unexpected_error": "An unexpected error happened when saving your course.",
+    "enter_geometry_name": "Enter geometry name",
+    "geometry_name": "Geometry Name",
+    "input_a_name_for_this_geometry": "Input a name for this geometry",
+    "cancel": "Back",
+    "save": "Save",
+    "saving": "Saving...",
+    "draw_buttons": {
+      "polyline": "Add a start, finish or a gate line.",
+      "polygon": "Add a polygon",
+      "rectangle": "Add a rectangle",
+      "circle": "Add a circle",
+      "marker": "Add a mark.",
+      "circlemarker": "Add a circlemarker"
+    }
+  },
+  "vessel_list_page": {
+    "public_name": "Public Name",
+    "length_in_meters": "Length In Meters",
+    "vessel_id": "Vessel ID",
+    "global_id": "Global ID",
+    "created_date": "Created Date",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "you_dont_have_any_vessels": "You do not have any vessels, please create one.",
+    "vessels": "Vessels",
+    "create_a_new_vessel": "Create a new Vessel"
+  },
+  "vessel_create_update_page": {
+    "created_a_new_vessel": "Created a new vessel with name: {{name}}.",
+    "successfully_updated_vessel": "Successfully updated your vessel: {{name}}",
+    "an_error_happened": "An error happened when saving your vessel.",
+    "view_all_vessels": "View all",
+    "delete": "Delete",
+    "public_name": "Name",
+    "global_id": "Global ID",
+    "vessel_id": "Vessel ID",
+    "length_in_meters": "Length In Meters",
+    "save_vessel": "Save Vessel",
+    "is_completed": "Is Completed",
+    "update_your_vessel": "Update your vessel",
+    "create_a_new_vessel": "Create a new vessel",
+    "length_in_meters_must_be_a_number": "Length In Meters must be a number."
+  },
+  "participant_list": {
+    "participants": "Participants",
+    "create": "Create",
+    "participant_id": "Participant ID",
+    "delete": "Delete",
+    "update": "Update",
+    "public_name": "Public Name",
+    "action": "Action"
+  },
+  "participant_unit_create_update_page": {
+    "created_a_new_participant": "Created a new participant with name: {{name}}.",
+    "successfully_updated_participant": "Successfully updated your participant: {{name}}",
+    "an_error_happened": "An error happened when saving your participant.",
+    "back_to_race": "Back to race",
+    "delete": "Delete",
+    "public_name": "Name",
+    "participant_id": "Participant ID",
+    "save_participant": "Save Participant",
+    "update_participant": "Update Participant",
+    "create_a_new_participant": "Create a new participant"
   }
 }

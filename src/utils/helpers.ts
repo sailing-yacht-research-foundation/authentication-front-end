@@ -1,5 +1,6 @@
-import i18next from "i18next";
-import { translations } from "locales/translations";
+import i18next from 'i18next';
+import * as L from 'leaflet';
+import { translations } from 'locales/translations';
 
 /**
  * Check if is mobile
@@ -114,9 +115,19 @@ export const removePlusFromPhoneNumber = (phoneNumber) => {
     return '+' + phoneNumber;
 }
 
-export const FIELD_VALIDATE = {
-    phone: 'phone',
-    email: 'email'
+/**
+ * Add a layer to leaflet draw layer
+ * @param sourceLayer 
+ * @param targetGroup 
+ */
+export const addNonGroupLayers = (sourceLayer, targetGroup) => {
+    if (sourceLayer instanceof L.LayerGroup) {
+        sourceLayer.eachLayer(function (layer) {
+            addNonGroupLayers(layer, targetGroup);
+        });
+    } else {
+        targetGroup.addLayer(sourceLayer);
+    }
 }
 
 /**
@@ -124,7 +135,7 @@ export const FIELD_VALIDATE = {
  * @param value
  * @return string
  */
- export const renderEmptyValue = (value) => {
+export const renderEmptyValue = (value) => {
     if (value) return value;
 
     return i18next.t(translations.misc.not_available);
