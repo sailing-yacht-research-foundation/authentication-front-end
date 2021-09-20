@@ -39,4 +39,9 @@ export const selectFromDate = createSelector(
 export const selectToDate = createSelector(
   [selectDomain],
   homeState => homeState.to_date,
-); 
+);
+
+export const selectPageSize = createSelector(
+  [selectDomain],
+  homeState => homeState.page_size,
+);

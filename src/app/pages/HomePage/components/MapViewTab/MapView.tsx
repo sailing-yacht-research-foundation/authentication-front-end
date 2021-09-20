@@ -19,6 +19,7 @@ import { TIME_FORMAT } from 'utils/constants';
 require('leaflet.markercluster');
 
 let markerCluster;
+let markers: any[] = [];
 
 const MAP_MOVE_TYPE = {
     immediately: 'immediately',
@@ -37,13 +38,13 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
     useEffect(() => {
         initializeMapView();
-        zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
+        if (results.length === 0) // no results and focus on user location
+            zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (results.length > 0)
-            attachRaceMarkersToMap();
+        attachRaceMarkersToMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [results]);
 
@@ -97,9 +98,13 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
         if (markerCluster) map.removeLayer(markerCluster);
         markerCluster = L.markerClusterGroup();
+        markers.forEach((marker, index) => {
+            map.removeLayer(marker);
+        });
+        markers = [];
 
         results.forEach(race => {
-            let marker = L.marker(L.latLng(race.lat, race.lon), {
+            let marker = L.marker(L.latLng(race._source?.approx_start_point?.coordinates[1], race._source?.approx_start_point?.coordinates[0]), {
                 icon: L.divIcon({
                     html: ReactDOMServer.renderToString(<GoPrimitiveDot style={{ color: '#fff', fontSize: '35px' }} />),
                     iconSize: [20, 20],
@@ -114,7 +119,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                     marker.closePopup();
                 })
                 .on('click', () => {
-                    history.push(`/playback?raceid=${race.id}`);
+                    history.push(`/playback?raceid=${race._id}`);
                 })
                 .addTo(map);
             resultMarkers.push(marker);
@@ -122,19 +127,17 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
         });
 
         map.addLayer(markerCluster);
-        map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
+
+        if (resultMarkers.length > 0)
+            map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
     }
 
     const renderRacePopup = (race) => {
         return (
             <>
-                <div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>
-                <div>{t(translations.home_page.map_view_tab.location)} {race.locationName}</div>
-                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStartTime).format(TIME_FORMAT.date_text)}</div>
-                <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race.eventName)}</div>
-                <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race.description)}</div>
-                <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race.city)}</div>
-                <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race.country)}</div>
+                <div>{t(translations.home_page.map_view_tab.name)} {race._source.name}</div>
+                <div>{t(translations.home_page.map_view_tab.location)} {race._source.start_country}</div>
+                <div>{t(translations.home_page.map_view_tab.date)} {moment(race._source.approx_start_time_ms).format('YYYY-MM-DD')}</div>
             </>
         )
     }

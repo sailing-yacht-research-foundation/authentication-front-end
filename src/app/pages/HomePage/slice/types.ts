@@ -7,6 +7,7 @@ export interface HomeState {
     page: number;
     is_searching: boolean;
     total: number;
+    page_size: number;
   }
   
   export type ContainerState = HomeState

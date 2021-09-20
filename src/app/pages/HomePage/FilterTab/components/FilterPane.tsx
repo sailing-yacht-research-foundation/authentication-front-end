@@ -12,12 +12,13 @@ import { translations } from 'locales/translations';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHomeSlice } from '../../slice';
 import moment from 'moment';
-import { selectIsSearching, selectSearchKeyword } from '../../slice/selectors';
+import { selectIsSearching, selectFromDate, selectSearchKeyword, selectToDate } from '../../slice/selectors';
 import { TIME_FORMAT } from 'utils/constants';
+import { useHistory } from 'react-router-dom';
 
 export const FilterPane = (props) => {
 
-    const { defaultFocus } = props;
+    const { defaultFocus, limitResults } = props;
 
     const searchKeyword = useSelector(selectSearchKeyword);
 
@@ -30,6 +31,14 @@ export const FilterPane = (props) => {
     const { actions } = useHomeSlice();
 
     const isSearching = useSelector(selectIsSearching);
+
+    const history = useHistory();
+
+    const [form] = Form.useForm();
+
+    const fromDate = useSelector(selectFromDate);
+
+    const toDate = useSelector(selectToDate);
 
     useEffect(() => {
         if (defaultFocus && searchInputRef) {
@@ -44,12 +53,32 @@ export const FilterPane = (props) => {
         const { name, from_date, to_date } = values;
         const params: any = {};
 
+        if (limitResults) params.size = 10;
+
         params.keyword = name;
         if (from_date) params.from_date = moment(from_date).format(TIME_FORMAT.number);
         if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
 
+        dispatch(actions.setPage(1));
+        dispatch(actions.setKeyword(params.keyword ?? ''));
+        dispatch(actions.setFromDate(params.from_date ?? ''));
+        dispatch(actions.setToDate(params.to_date ?? ''));
         dispatch(actions.searchRaces(params));
+
+        history.push({
+            pathname: '/',
+            search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
+        });
     }
+
+    React.useEffect(() => {
+        form.setFieldsValue({ // reset the email to the last state.
+            name: searchKeyword,
+            from_date: fromDate && moment(fromDate).isValid() ? moment(fromDate) : '',
+            to_date: toDate && moment(toDate).isValid() ? moment(toDate) : ''
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchKeyword, fromDate, toDate]);
 
     return (
         <Wrapper {...props}>
@@ -69,6 +98,7 @@ export const FilterPane = (props) => {
 
             <Spin spinning={isSearching}>
                 <Form
+                    form={form}
                     layout={'vertical'}
                     name="basic"
                     onFinish={onFormSubmit}
@@ -82,9 +112,6 @@ export const FilterPane = (props) => {
                     >
                         <Input ref={searchInputRef}
                             value={searchKeyword}
-                            onChange={(e) => {
-                                dispatch(actions.setKeyword(e.target.value));
-                            }}
                         />
                     </Form.Item>
 
@@ -98,9 +125,6 @@ export const FilterPane = (props) => {
                                 <DatePicker
                                     showToday={false}
                                     style={{ width: '100%' }}
-                                    onChange={(e)=> {
-                                        if (e) dispatch(actions.setFromDate(e.format('YYYY-MM-DD')))
-                                    }}
                                     dateRender={current => {
                                         return (
                                             <div className="ant-picker-cell-inner">
@@ -121,9 +145,6 @@ export const FilterPane = (props) => {
                                 <DatePicker
                                     showToday={false}
                                     style={{ width: '100%' }}
-                                    onChange={(e)=> {
-                                        if (e) dispatch(actions.setToDate(e.format('YYYY-MM-DD')))
-                                    }}
                                     dateRender={current => {
                                         return (
                                             <div className="ant-picker-cell-inner">
