@@ -42,7 +42,7 @@ export const StreamingRaceMap = (props) => {
 
         // Zoom to location
         if (!current.zoomedToRaceLocation) {
-            current.zoomedToRaceLocation = _zoomToRaceLocation(participants[0], current);
+          current.zoomedToRaceLocation = _zoomToRaceLocation(participants[0], current);
         }
 
         // Remove all race object layers
@@ -102,6 +102,7 @@ export const StreamingRaceMap = (props) => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const _initializeBoatMarker = (participant) => {
@@ -129,14 +130,14 @@ export const StreamingRaceMap = (props) => {
     participants.forEach((participant) => {
       try {
         map.removeLayer(participant.id);
-      } catch (e) {}
+      } catch (e) { }
     });
   };
 
   const _removeLegLayersFromMap = (legLayers) => {
     Object.keys(legLayers).forEach(key => {
       map.removeLayer(legLayers[key]);
-    });    
+    });
   }
 
   const _initLayerAndSetLocationAndHeadingForBoat = (
@@ -184,22 +185,22 @@ export const StreamingRaceMap = (props) => {
 
   const _attachPolylineToMap = (coordinates, color) => {
     return L.polyline(coordinates).setStyle({
-        weight: 1,
-        color
+      weight: 1,
+      color
     }).addTo(map);
   }
 
   const _zoomToRaceLocation = (participant, mapVariable) => {
     if (!mapVariable.zoomedToRaceLocation) {
-        if (!participant?.lastPosition?.lat || !participant?.lastPosition?.lon) return false;
-        map.setView(
-            {
-            lat: participant.lastPosition.lat,
-            lng: participant.lastPosition.lon,
-            },
-            18
-        );
-        return true;
+      if (!participant?.lastPosition?.lat || !participant?.lastPosition?.lon) return false;
+      map.setView(
+        {
+          lat: participant.lastPosition.lat,
+          lng: participant.lastPosition.lon,
+        },
+        18
+      );
+      return true;
     }
   };
 

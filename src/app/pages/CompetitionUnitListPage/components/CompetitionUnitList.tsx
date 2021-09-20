@@ -4,14 +4,13 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
-import { AiFillPlusCircle } from 'react-icons/ai';
-import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import moment from 'moment';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { getAllCompetitionUnits } from 'services/live-data-server/competition-units';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue, stringToColour } from 'utils/helpers';
+import { renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 
 const defaultOptions = {
@@ -38,7 +37,7 @@ export const CompetitionUnitList = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                if (userId && userId === record.createdById || uuid === record.createdById)
+                if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Link to={`/events/${record.calendarEventId}/races/${record.id}/update`}>{text}</Link>;
                 return text;
             }
@@ -71,7 +70,7 @@ export const CompetitionUnitList = () => {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
             render: (text, record) => {
-                if (userId && userId === record.createdById || uuid === record.createdById)
+                if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);

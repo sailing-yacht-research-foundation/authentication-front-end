@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Form, Spin } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
-import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';
+import { getUserAttribute } from 'utils/user-utils';
 import Auth from '@aws-amplify/auth';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helpers';
@@ -17,7 +17,7 @@ import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { updateProfile } from 'services/live-data-server/user';
-import { FIELD_VALIDATE, TIME_FORMAT } from 'utils/constants';
+import { TIME_FORMAT } from 'utils/constants';
 
 const defaultFormFields = {
     email: '',
@@ -101,23 +101,7 @@ export const UpdateInfo = (props) => {
         setFormFieldsBeforeUpdate(defaultFormFields);
         setFormHasBeenChanged(false);
     }
-
-    const checkPhoneVerifyStatus = () => {
-        Auth.currentAuthenticatedUser().then(user => {
-            if (!!getUserAttribute(user, 'phone_number') && !checkForVerifiedField(user, FIELD_VALIDATE.phone)) { // user inputed phone and it's not verified
-                showPhoneVerifyModalWithMessage(t(translations.profile_page.update_profile.hey_your_phone_number_is_not_verified_you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number, { name: getUserAttribute(user, 'name') }));
-            }
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
-
-    const showPhoneVerifyModalWithMessage = (message: string) => {
-        setPhoneVerifyModalMessage(message);
-        setShowPhoneVerifyModal(true);
-        sendPhoneVerification();
-    }
-
+    
     const sendPhoneVerification = () => {
         Auth.verifyCurrentUserAttribute('phone_number').then(() => {
             toast.success(t(translations.profile_page.update_profile.you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number));

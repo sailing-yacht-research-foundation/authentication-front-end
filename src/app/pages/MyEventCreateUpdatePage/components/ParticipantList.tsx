@@ -2,7 +2,6 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import { Space, Spin, Table } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
-import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventId } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';

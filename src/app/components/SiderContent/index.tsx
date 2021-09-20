@@ -17,8 +17,11 @@ import { media } from 'styles/media';
 import { GiSailboat } from 'react-icons/gi';
 import { FaFlagCheckered } from 'react-icons/fa';
 import { GoDatabase } from 'react-icons/go';
+import { isMobile } from 'utils/helpers';
 
 export const SiderContent = (props) => {
+
+  const { toggled } = props;
 
   const items = [
     { key: '1', paths: ['/', '/search'] },
@@ -40,7 +43,7 @@ export const SiderContent = (props) => {
 
   const [renderedDefaultActive, setRenderedDefaultActive] = React.useState<boolean>(false);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation();;
 
   React.useEffect(() => {
     renderDefaultSelectedRoute();
@@ -59,7 +62,7 @@ export const SiderContent = (props) => {
   }
 
   return (
-    <SiderWrapper>
+    <SiderWrapper style={{ width: toggled && !isMobile() ?  '100%' : 'auto' }}>
       {renderedDefaultActive && <SyrfMenu
         defaultSelectedKeys={[selectedKey]}
         mode="inline"
@@ -113,7 +116,7 @@ const SiderWrapper = styled.div`
   width: 256px;
 
   ${media.medium`
-    width: 100%;
+    width: auto;
     max-width: 256px;
   `}
 

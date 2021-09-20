@@ -109,33 +109,42 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
         markerCluster = L.markerClusterGroup();
 
         results.forEach(race => {
-            let marker = L.marker(L.latLng(race._source?.approx_start_point?.coordinates[1], race._source?.approx_start_point?.coordinates[0]), {
-                icon: L.divIcon({
-                    html: ReactDOMServer.renderToString(<GoPrimitiveDot style={{ color: '#fff', fontSize: '35px' }} />),
-                    iconSize: [20, 20],
-                    className: 'my-race'
-                })
-            })
-                .bindPopup(ReactDOMServer.renderToString(renderRacePopup(race)))
-                .on('mouseover', () => {
-                    marker.openPopup();
-                })
-                .on('mouseout', () => {
-                    marker.closePopup();
-                })
-                .on('click', () => {
-                    history.push(`/playback?raceid=${race._id}`);
-                })
-                .addTo(map);
-            resultMarkers.push(marker);
-            markers.push(marker);
+            const marker = createResultMarker(race);
+            if (marker) {
+                resultMarkers.push(marker);
+                markers.push(marker);
+            }
         });
-        
+
         if (resultMarkers.length > 0) {
             markerCluster.addLayers(resultMarkers);
             map.addLayer(markerCluster);
             map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
         }
+    }
+
+    const createResultMarker = (race) => {
+        if (typeof race._source?.approx_start_point?.coordinates[1] === 'undefined') return; // not rendering result with no longlat.
+        let marker = L.marker(L.latLng(race._source?.approx_start_point?.coordinates[1], race._source?.approx_start_point?.coordinates[0]), {
+            icon: L.divIcon({
+                html: ReactDOMServer.renderToString(<GoPrimitiveDot style={{ color: '#fff', fontSize: '35px' }} />),
+                iconSize: [20, 20],
+                className: 'my-race'
+            })
+        })
+            .bindPopup(ReactDOMServer.renderToString(renderRacePopup(race)))
+            .on('mouseover', () => {
+                marker.openPopup();
+            })
+            .on('mouseout', () => {
+                marker.closePopup();
+            })
+            .on('click', () => {
+                history.push(`/playback?raceid=${race._id}`);
+            })
+            .addTo(map);
+
+        return marker;
     }
 
     const renderRacePopup = (race) => {
