@@ -5,6 +5,7 @@ exports[`<FilterTab /> should render and match the snapshot 1`] = `
   <FilterResult />
   <FilterPane
     close={[Function]}
+    limitResults={true}
   />
   <styled.div
     onClick={[Function]}

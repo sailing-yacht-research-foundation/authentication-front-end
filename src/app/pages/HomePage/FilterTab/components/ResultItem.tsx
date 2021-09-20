@@ -13,13 +13,13 @@ export const ResultItem = (props) => {
             <HeadDescriptionWrapper>
                 <Space size={5}>
                     <GiPositionMarker />
-                    {race.locationName}
+                    {race._source.start_country}
                 </Space>
             </HeadDescriptionWrapper>
-            <Name><Link to={`/playback?raceid=${race.id}`}>{race.name}</Link></Name>
+            <Name><Link to={`/playback?raceid=${race._id}`}>{race._source.name}</Link></Name>
             <DescriptionWrapper>
                 <DescriptionItem>
-                    {moment(race.approximateStartTime).format('YYYY-MM-DD')}
+                {moment(race._source.approx_start_time_ms).format('YYYY-MM-DD')}
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>

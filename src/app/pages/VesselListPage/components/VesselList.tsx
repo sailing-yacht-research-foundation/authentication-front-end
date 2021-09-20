@@ -13,7 +13,6 @@ import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
-import { GiReturnArrow } from 'react-icons/gi';
 
 const defaultOptions = {
     loop: true,
@@ -24,9 +23,12 @@ const defaultOptions = {
     }
 };
 
+<<<<<<< HEAD
 const userId = localStorage.getItem('user_id');
 const uuid = localStorage.getItem('uuid');
 
+=======
+>>>>>>> develop
 export const VesselList = () => {
 
     const { t } = useTranslation();
@@ -36,39 +38,61 @@ export const VesselList = () => {
             title: t(translations.vessel_list_page.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
+<<<<<<< HEAD
             render: (text, record) => {
                 if (userId && userId === record.createdById || uuid === record.createdById)
                     return <Link to={`/vessels/${record.id}/update`}>{text}</Link>;
                 return text;
             },
+=======
+            render: (text, record) => <Link to={`/vessels/${record.id}/update`}>{text}</Link>,
+            width: '20%',
+>>>>>>> develop
         },
         {
             title: t(translations.vessel_list_page.length_in_meters),
             dataIndex: 'lengthInMeters',
             key: 'lengthInMeters',
             render: (value) => renderEmptyValue(value),
+<<<<<<< HEAD
+=======
+            width: '20%',
+>>>>>>> develop
         },
         {
             title: t(translations.vessel_list_page.vessel_id),
             dataIndex: 'vesselId',
             key: 'vesselId',
             render: (value) => renderEmptyValue(value),
+<<<<<<< HEAD
+=======
+            width: '20%',
+>>>>>>> develop
         },
         {
             title: t(translations.vessel_list_page.global_id),
             dataIndex: 'globalId',
             key: 'globalId',
             render: (value) => renderEmptyValue(value),
+<<<<<<< HEAD
+=======
+            width: '20%',
+>>>>>>> develop
         },
         {
             title: t(translations.vessel_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
+<<<<<<< HEAD
+=======
+            width: '20%',
+>>>>>>> develop
         },
         {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
+<<<<<<< HEAD
             render: (text, record) => {
                 if (userId && userId === record.createdById || uuid === record.createdById)
                     return <Space size="middle">
@@ -80,6 +104,16 @@ export const VesselList = () => {
 
                 return <></>;
             },
+=======
+            render: (text, record) => (
+                <Space size="middle">
+                    <BorderedButton onClick={() => {
+                        history.push(`/vessels/${record.id}/update`);
+                    }} type="primary">{t(translations.vessel_list_page.update)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
+                </Space>
+            ),
+>>>>>>> develop
             width: '20%',
         },
     ];
