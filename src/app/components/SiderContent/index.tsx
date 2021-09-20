@@ -43,7 +43,7 @@ export const SiderContent = (props) => {
 
   const [renderedDefaultActive, setRenderedDefaultActive] = React.useState<boolean>(false);
 
-  const { t } = useTranslation();;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     renderDefaultSelectedRoute();
