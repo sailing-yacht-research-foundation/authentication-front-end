@@ -4,7 +4,7 @@ exports[`<DataList /> should render the deals page and matchs the snapshot 1`] =
 <React.Fragment>
   <styled.div>
     <styled.h2>
-      Syrf Race Data
+      SYRF Race Data
     </styled.h2>
     <styled.div
       onClick={[Function]}

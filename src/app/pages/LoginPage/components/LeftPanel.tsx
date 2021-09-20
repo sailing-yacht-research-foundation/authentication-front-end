@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import BG from '../assets/sail.webp';
-import PartnerLogo from '../assets/dummy-logo.svg';
+import Handicap from '../assets/sport-logos/Handicap-sailing.svg';
+import KiteSurfing from '../assets/sport-logos/kitesurfing.svg';
+import OneDesign from '../assets/sport-logos/One-design.svg';
+import WindSurfing from '../assets/sport-logos/windsurfing.svg';
+import Winging from '../assets/sport-logos/Winging.svg';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
@@ -17,11 +21,11 @@ export const LeftPanel = () => {
             </Description>
 
             <PartnerPlaceHolder>
-                <PartnerLogoImage src={PartnerLogo}/>
-                <PartnerLogoImage src={PartnerLogo}/>
-                <PartnerLogoImage src={PartnerLogo}/>
-                <PartnerLogoImage src={PartnerLogo}/>
-                <PartnerLogoImage src={PartnerLogo}/>
+                <PartnerLogoImage src={Handicap}/>
+                <PartnerLogoImage src={KiteSurfing}/>
+                <PartnerLogoImage src={OneDesign}/>
+                <PartnerLogoImage src={WindSurfing}/>
+                <PartnerLogoImage src={Winging}/>
             </PartnerPlaceHolder>
         </Wrapper>
     )

@@ -12,7 +12,8 @@ import { translations } from 'locales/translations';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHomeSlice } from '../../slice';
 import moment from 'moment';
-import { selectFromDate, selectIsSearching, selectSearchKeyword, selectToDate } from '../../slice/selectors';
+import { selectIsSearching, selectFromDate, selectSearchKeyword, selectToDate } from '../../slice/selectors';
+import { TIME_FORMAT } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 
 export const FilterPane = (props) => {
@@ -55,8 +56,8 @@ export const FilterPane = (props) => {
         if (limitResults) params.size = 10;
 
         params.keyword = name;
-        if (from_date) params.from_date = moment(from_date).format('YYYY-MM-DD');
-        if (to_date) params.to_date = moment(to_date).format('YYYY-MM-DD');
+        if (from_date) params.from_date = moment(from_date).format(TIME_FORMAT.number);
+        if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
 
         dispatch(actions.setPage(1));
         dispatch(actions.setKeyword(params.keyword ?? ''));

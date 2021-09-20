@@ -20,9 +20,6 @@ export const UserDropdown = (props) => {
 
     const menu = (
         <Menu>
-            <Menu.Item key="1" onClick={() => history.push('/profile')} icon={<UserOutlined />}>
-                {t(translations.home_page.nav.update_profile)}
-            </Menu.Item>
             <Menu.Item onClick={() => props.logout()} key="2" icon={<LockOutlined />}>
                 {t(translations.home_page.nav.logout)}
             </Menu.Item>
@@ -63,6 +60,7 @@ const UserNameWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `;
 
 const UserName = styled.span`

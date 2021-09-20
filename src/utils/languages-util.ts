@@ -17,11 +17,15 @@ export const languagesList = {
     },
     "es":{
         "name":"Spanish; Castilian",
-        "nativeName":"español"
+        "nativeName":"Español"
     },
     "it":{
         "name":"Italian",
         "nativeName":"Italiano"
+    },
+    "fr":{
+        "name":"French",
+        "nativeName":"Français"
     },
 }
 

@@ -48,6 +48,7 @@
     "leaflet-draw": "^1.0.4",
     "leaflet-hotline": "^0.4.0",
     "leaflet.boatmarker": "^1.1.5",
+    "leaflet.markercluster": "^1.5.1",
     "lint-staged": "10.3.0",
     "mapbox-gl-leaflet": "^0.0.15",
     "moment": "^2.29.1",

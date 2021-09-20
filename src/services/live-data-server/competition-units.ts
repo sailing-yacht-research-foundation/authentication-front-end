@@ -44,7 +44,7 @@ export const search = (params) => {
     };
 
     searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms"]; // only the fields we need
-    searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 1;
+    searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
     return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {

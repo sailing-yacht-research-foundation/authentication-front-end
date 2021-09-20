@@ -1476,12 +1476,17 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
         <Option
           value="es"
         >
-          español
+          Español
         </Option>
         <Option
           value="it"
         >
           Italiano
+        </Option>
+        <Option
+          value="fr"
+        >
+          Français
         </Option>
       </ForwardRef(InternalSelect)>
     </FormItem>

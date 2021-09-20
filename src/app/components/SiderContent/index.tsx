@@ -3,13 +3,7 @@ import { Menu } from 'antd';
 import { ReactComponent as Logo } from './assets/logo-light.svg';
 import {
   UserOutlined,
-  CrownOutlined,
-  HeatMapOutlined,
-  SlidersOutlined,
-  ApiOutlined,
   LockOutlined,
-  BellOutlined,
-  SettingOutlined,
   ProfileOutlined,
   SearchOutlined,
   CalendarOutlined
@@ -23,8 +17,6 @@ import { media } from 'styles/media';
 import { GiSailboat } from 'react-icons/gi';
 import { FaFlagCheckered } from 'react-icons/fa';
 import { GoDatabase } from 'react-icons/go';
-
-
 
 export const SiderContent = (props) => {
 
@@ -92,10 +84,10 @@ export const SiderContent = (props) => {
         <SyrfSubmenu key="profile" icon={<UserOutlined />} title={t(translations.side_menu.profile.title)}>
           <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />} onClick={() => history.push('/profile')}>{t(translations.side_menu.profile.name)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} onClick={() => history.push('/profile/change-password')} key="8">{t(translations.side_menu.profile.change_password)}</SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.notification_setting)} icon={<BellOutlined />} onClick={() => history.push('/profile')} key="9">{t(translations.side_menu.profile.notification_setting)}</SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.profile_setting)} icon={<SettingOutlined />} onClick={() => history.push('/profile')} key="10">{t(translations.side_menu.profile.profile_setting)}</SyrfMenuItem>
+          {/* <SyrfMenuItem title={t(translations.side_menu.profile.notification_setting)} icon={<BellOutlined />} onClick={() => history.push('/profile')} key="9">{t(translations.side_menu.profile.notification_setting)}</SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.profile.profile_setting)} icon={<SettingOutlined />} onClick={() => history.push('/profile')} key="10">{t(translations.side_menu.profile.profile_setting)}</SyrfMenuItem> hide this because of task SNS-393 */}  
         </SyrfSubmenu>
-
+{/* 
         <SyrfMenuItem key="3" title={t(translations.side_menu.app_connection)} icon={<ApiOutlined />}>
           {t(translations.side_menu.app_connection)}
         </SyrfMenuItem>
@@ -110,7 +102,7 @@ export const SiderContent = (props) => {
 
         <SyrfMenuItem key="6" title={t(translations.side_menu.test_data)} icon={<SlidersOutlined />}>
           {t(translations.side_menu.test_data)}
-        </SyrfMenuItem>
+        </SyrfMenuItem> hide this because of task SNS-393 */}
       </SyrfMenu>}
     </SiderWrapper>
   )
@@ -121,7 +113,7 @@ const SiderWrapper = styled.div`
   width: 256px;
 
   ${media.medium`
-    width: auto;
+    width: 100%;
     max-width: 256px;
   `}
 
@@ -149,4 +141,5 @@ const SyrfSubmenu = styled(Menu.SubMenu)`
 const SyrfMenuItem = styled(Menu.Item)`
     height: 50px !important;
     line-height: 50px !important;
+    width: 100%;
 `;

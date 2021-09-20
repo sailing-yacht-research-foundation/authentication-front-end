@@ -17,7 +17,7 @@ import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { updateProfile } from 'services/live-data-server/user';
-import { FIELD_VALIDATE } from 'utils/constants';
+import { FIELD_VALIDATE, TIME_FORMAT } from 'utils/constants';
 
 const defaultFormFields = {
     email: '',
@@ -78,7 +78,7 @@ export const UpdateInfo = (props) => {
                 locale: country,
                 bio: bio,
                 sailing_number: sailing_number,
-                birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
+                birthdate: birthdate ? birthdate.format(TIME_FORMAT.number) : moment('2002-01-01').format(TIME_FORMAT.number),
                 address: address,
                 phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
                 picture: getUserAttribute(authUser, 'picture')
