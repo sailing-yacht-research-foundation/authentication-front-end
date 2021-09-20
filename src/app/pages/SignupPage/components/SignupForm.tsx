@@ -11,6 +11,7 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { register } from 'services/live-data-server/auth';
+import { TIME_FORMAT } from 'utils/constants';
 
 const { Option } = Select;
 
@@ -43,7 +44,7 @@ export const SignupForm = () => {
             attributes: {
                 locale: locale,
                 language: language,
-                birthdate: birthdate ? birthdate.format("YYYY-MM-DD") : moment('2002-01-01').format("YYYY-MM-DD"),
+                birthdate: birthdate ? birthdate.format(TIME_FORMAT.number) : moment('2002-01-01').format(TIME_FORMAT.number),
                 picture: String(Math.floor(Math.random() * 20) + 1),
             },
             enabled: true,

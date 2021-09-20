@@ -14,6 +14,7 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { renderEmptyValue } from 'utils/helpers';
+import { TIME_FORMAT } from 'utils/constants';
 
 require('leaflet.markercluster');
 
@@ -129,7 +130,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
             <>
                 <div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>
                 <div>{t(translations.home_page.map_view_tab.location)} {race.locationName}</div>
-                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStartTime).format('MMM. D, YYYY')}</div>
+                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStartTime).format(TIME_FORMAT.date_text)}</div>
                 <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race.eventName)}</div>
                 <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race.description)}</div>
                 <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race.city)}</div>

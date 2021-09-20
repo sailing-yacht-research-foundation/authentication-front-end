@@ -7,6 +7,7 @@ import moment from 'moment';
 import { renderEmptyValue } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { TIME_FORMAT } from 'utils/constants';
 
 export const ResultItem = (props) => {
     const race = props.item;
@@ -25,7 +26,7 @@ export const ResultItem = (props) => {
             <Description>{race.description ? race.description : t(translations.home_page.filter_tab.filter_result.no_description)}</Description>
             <DescriptionWrapper>
                 <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.date)} {moment(race.approximateStartTime).format('MMM. D, YYYY')}
+                    {t(translations.home_page.filter_tab.filter_result.date)} {moment(race.approximateStartTime).format(TIME_FORMAT.date_text)}
                 </DescriptionItem>
                 <DescriptionItem>
                     {t(translations.home_page.filter_tab.filter_result.event_name)}  {renderEmptyValue(race.eventName)}
