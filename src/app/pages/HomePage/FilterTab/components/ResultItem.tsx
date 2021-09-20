@@ -22,7 +22,6 @@ export const ResultItem = (props) => {
                     {race._source.start_country}
                 </Space>
             </HeadDescriptionWrapper>
-<<<<<<< HEAD
             <Name><Link to={`/playback?raceid=${race.id}`}>{race.name}</Link></Name>
             <Description>{race.description ? race.description : t(translations.home_page.filter_tab.filter_result.no_description)}</Description>
             <DescriptionWrapper>
@@ -37,12 +36,6 @@ export const ResultItem = (props) => {
                 </DescriptionItem>
                 <DescriptionItem>
                     {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race.country)}
-=======
-            <Name><Link to={`/playback?raceid=${race._id}`}>{race._source.name}</Link></Name>
-            <DescriptionWrapper>
-                <DescriptionItem>
-                {moment(race._source.approx_start_time_ms).format('YYYY-MM-DD')}
->>>>>>> develop
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>

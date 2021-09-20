@@ -19,6 +19,7 @@ import { TIME_FORMAT } from 'utils/constants';
 require('leaflet.markercluster');
 
 let markerCluster;
+
 let markers: any[] = [];
 
 const MAP_MOVE_TYPE = {
@@ -96,12 +97,16 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
     const attachRaceMarkersToMap = () => {
         const resultMarkers: any[] = [];
 
-        if (markerCluster) map.removeLayer(markerCluster);
+        if (markerCluster) {
+            markerCluster.removeLayers(markers);
+            map.removeLayer(markerCluster);
+            markers.forEach((marker, index) => {
+                map.removeLayer(marker);
+            });
+            markers = [];
+        }
+
         markerCluster = L.markerClusterGroup();
-        markers.forEach((marker, index) => {
-            map.removeLayer(marker);
-        });
-        markers = [];
 
         results.forEach(race => {
             let marker = L.marker(L.latLng(race._source?.approx_start_point?.coordinates[1], race._source?.approx_start_point?.coordinates[0]), {
@@ -123,13 +128,14 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                 })
                 .addTo(map);
             resultMarkers.push(marker);
-            markerCluster.addLayer(marker);
+            markers.push(marker);
         });
-
-        map.addLayer(markerCluster);
-
-        if (resultMarkers.length > 0)
+        
+        if (resultMarkers.length > 0) {
+            markerCluster.addLayers(resultMarkers);
+            map.addLayer(markerCluster);
             map.fitBounds((new L.featureGroup(resultMarkers)).getBounds()); // zoom to the results location
+        }
     }
 
     const renderRacePopup = (race) => {
@@ -137,7 +143,11 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
             <>
                 <div>{t(translations.home_page.map_view_tab.name)} {race._source.name}</div>
                 <div>{t(translations.home_page.map_view_tab.location)} {race._source.start_country}</div>
-                <div>{t(translations.home_page.map_view_tab.date)} {moment(race._source.approx_start_time_ms).format('YYYY-MM-DD')}</div>
+                <div>{t(translations.home_page.map_view_tab.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}</div>
+                <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race._source.event_name)}</div>
+                <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race._source.description)}</div>
+                <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race._source.city)}</div>
+                <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race._source.country)}</div>
             </>
         )
     }
