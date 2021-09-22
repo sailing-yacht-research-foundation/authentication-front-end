@@ -462,5 +462,26 @@
     "save_participant": "Save Participant",
     "update_participant": "Update Participant",
     "create_a_new_participant": "Create a new participant"
+  },
+  "vessel_participant_group_create_update_page": {
+    "created_a_new_group": "Created a new Vessel participant group with name: {{name}}.",
+    "successfully_updated_group": "Successfully Vessel participant group: {{name}}",
+    "an_error_happened": "An error happened when saving your Vessel participant group.",
+    "view_all_groups": "View all groups",
+    "delete": "Delete",
+    "group_id": "Vessel participant group ID",
+    "save_group": "Save Group",
+    "update_group": "Update Group",
+    "create_a_new_group": "Create a new Vessel participant group"
+  },
+  "vessel_participant_group_list_page": {
+    "group_id": "Group ID",
+    "created_date": "Created Date",
+    "action": "Action",
+    "update": "Update",
+    "delete": "Delete",
+    "vessel_participant_groups": "Vessel Participant Groups",
+    "create": "Create",
+    "you_dont_have_any_vessel_participant_group": "You don't have any vessel participant group, please create one."
   }
 }
