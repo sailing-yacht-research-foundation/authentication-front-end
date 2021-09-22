@@ -1,9 +1,5 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { anonymousLogin } from 'services/live-data-server/auth';
-import i18next from 'i18next';
-import { translations } from 'locales/translations';
-
 /**
  * Class Request
  * For interacting with SYRF relative APIs

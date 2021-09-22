@@ -34,13 +34,6 @@ const Wrapper = styled.div`
     margin-bottom: 100px;
 `;
 
-const PickerDescription = styled.div`
-    text-align: right;
-    margin: 5px 0;
-    font-size: 13px;
-    color: #70757a;
-`;
-
 const BoundingBoxPickerHeading = styled.h3`
     
 `;

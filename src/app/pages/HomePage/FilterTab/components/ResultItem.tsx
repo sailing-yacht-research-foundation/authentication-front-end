@@ -4,9 +4,15 @@ import { GiPositionMarker } from 'react-icons/gi';
 import { Space } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { renderEmptyValue } from 'utils/helpers';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
+import { TIME_FORMAT } from 'utils/constants';
 
 export const ResultItem = (props) => {
     const race = props.item;
+
+    const { t } = useTranslation();
 
     return (
         <Wrapper key={props.index}>
@@ -17,9 +23,19 @@ export const ResultItem = (props) => {
                 </Space>
             </HeadDescriptionWrapper>
             <Name><Link to={`/playback?raceid=${race._id}`}>{race._source.name}</Link></Name>
+            <Description>{ race._source?.description ? race._source?.description : t(translations.home_page.filter_tab.filter_result.no_description) }</Description>
             <DescriptionWrapper>
                 <DescriptionItem>
-                {moment(race._source.approx_start_time_ms).format('YYYY-MM-DD')}
+                {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}
+                </DescriptionItem>
+                <DescriptionItem>
+                {t(translations.home_page.filter_tab.filter_result.event_name)} {renderEmptyValue(race._source.event_name)}
+                </DescriptionItem>
+                <DescriptionItem>
+                {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race._source.city)}
+                </DescriptionItem>
+                <DescriptionItem>
+                {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race._source.start_country)}
                 </DescriptionItem>
             </DescriptionWrapper>
         </Wrapper>
@@ -47,6 +63,7 @@ const HeadDescriptionWrapper = styled.div`
 const DescriptionWrapper = styled.div``;
 
 const DescriptionItem = styled.span`
+    color: #70757a;
     :first-child {
         margin-right: 10px;
     }
@@ -54,4 +71,8 @@ const DescriptionItem = styled.span`
     :not(:first-child) {
         margin: 0 5px;
     }
+`;
+
+const Description = styled.p`
+    font-size: 13px;
 `;

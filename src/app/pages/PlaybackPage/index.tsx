@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { EventEmitter } from 'events';
 import { selectCompetitionUnitDetail, selectCompetitionUnitId, selectElapsedTime, selectIsPlaying, selectVesselParticipants } from './components/slice/selectors';
 import { usePlaybackSlice } from './components/slice';
-import { IoCaretBack } from 'react-icons/io5';
+import { IoIosArrowBack } from 'react-icons/io';
 import { Wrapper } from 'app/components/SyrfGeneral';
 import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { StreamingRaceMap } from './components/StreamingRaceMap';
@@ -27,12 +27,12 @@ export const PlaybackPage = (props) => {
     const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
     const [socketUrl, setSocketUrl] = useState(streamUrl);
     const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
-    const location = useLocation();    
+    const location = useLocation();
     const parsedQueryString: any = queryString.parse(location.search.includes('?') ? location.search.substring(1) : location.search);
 
     const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const dispatch = useDispatch();
-        
+
     const messageHistory = useRef<any[]>([]);
     const competitionUnitId = useSelector(selectCompetitionUnitId);
     const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
@@ -40,12 +40,12 @@ export const PlaybackPage = (props) => {
     const isPlaying = useSelector(selectIsPlaying);
     const elapsedTime = useSelector(selectElapsedTime);
     const sessionToken = useSelector(selectSessionToken);
-    
+
     const groupedPosition = useRef<any>({});
     const receivedPositionData = useRef<boolean>(false);
     const tracksData = useRef<any>([]);
     const normalizedPositions = useRef<any[]>([]);
-    
+
     const currentTimeRef = useRef<number>(0);
     const currentElapsedTimeRef = useRef<number>(0);
     const isPlayingRef = useRef<any>(false);
@@ -60,14 +60,14 @@ export const PlaybackPage = (props) => {
         [ReadyState.CLOSING]: 'closing',
         [ReadyState.CLOSED]: 'closed',
         [ReadyState.UNINSTANTIATED]: 'uninstantiated',
-      }[readyState];
+    }[readyState];
 
     useEffect(() => {
         return () => {
             if (eventEmitter) {
                 eventEmitter.removeAllListeners();
                 eventEmitter.off('ping', () => { });
-                eventEmitter.off('leg-update', () => { });    
+                eventEmitter.off('leg-update', () => { });
             }
             dispatch(actions.setElapsedTime(0));
             dispatch(actions.setRaceLength(0));
@@ -79,6 +79,7 @@ export const PlaybackPage = (props) => {
     // Set socket url
     useEffect(() => {
         if (sessionToken) setSocketUrl(`${streamUrl}/authenticate?session_token=${sessionToken}`)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sessionToken])
 
     // Set competition unit id
@@ -109,8 +110,8 @@ export const PlaybackPage = (props) => {
             const participantTracks: any[] = [];
             vesselParticipants.forEach((vessParticipant) => {
                 const { id } = vessParticipant;
-                groupedResult[id] = {...vessParticipant, positions: currentValue?.[id]?.positions || []};
-            
+                groupedResult[id] = { ...vessParticipant, positions: currentValue?.[id]?.positions || [] };
+
                 const data = {
                     type: 'boat',
                     track: [],
@@ -205,7 +206,7 @@ export const PlaybackPage = (props) => {
     const handleNormalizeTracksData = () => {
         const grouped = groupedPosition.current;
         const currentIsPlaying = isPlayingRef.current;
-        const groupedVesselCount = Object.keys(grouped)?.length > 0 ;
+        const groupedVesselCount = Object.keys(grouped)?.length > 0;
 
         if (!groupedVesselCount) return;
         if (!receivedPositionData.current) return;
@@ -214,13 +215,13 @@ export const PlaybackPage = (props) => {
         const currentTime = currentTimeRef.current;
 
         Object.keys(grouped).forEach((key) => {
-            const {id, lastPosition, vessel, vesselParticipantId} = grouped[key];
+            const { id, lastPosition, vessel, vesselParticipantId } = grouped[key];
             const isExist = currentNormalizedPositions.filter((nP) => nP.id === id);
             if (!isExist.length) {
-                currentNormalizedPositions.push({ id, deviceType: 'boat', positions: [ {...lastPosition, time: currentTime} ], lastPosition, vesselParticipantId, participant: { competitor_name: vessel.publicName, competitor_sail_number: vessel.id }, color: stringToColour(vesselParticipantId) });
+                currentNormalizedPositions.push({ id, deviceType: 'boat', positions: [{ ...lastPosition, time: currentTime }], lastPosition, vesselParticipantId, participant: { competitor_name: vessel.publicName, competitor_sail_number: vessel.id }, color: stringToColour(vesselParticipantId) });
             } else {
-                isExist[0].positions.push({...lastPosition, time: currentTime});
-                isExist[0].lastPosition = {...lastPosition, time: currentTime};
+                isExist[0].positions.push({ ...lastPosition, time: currentTime });
+                isExist[0].lastPosition = { ...lastPosition, time: currentTime };
             };
         });
 
@@ -237,14 +238,14 @@ export const PlaybackPage = (props) => {
     // Emit race event
     const handleEmitRaceEvent = (normalizedPositions, currentIsPlaying, eventEmitter) => {
         // Reject incomplete data
-        if(!normalizedPositions || !normalizedPositions?.length || !eventEmitter || !currentIsPlaying) return;
-        
+        if (!normalizedPositions || !normalizedPositions?.length || !eventEmitter || !currentIsPlaying) return;
+
         const currentTime = currentTimeRef.current;
         const currentElapsedTime = currentElapsedTimeRef.current;
         const currentPositions = normalizedPositions.map((boat) => {
             const positions = boat.positions.filter((pos) => pos.time <= currentElapsedTime);
             const lastPosition = positions[positions.length - 1];
-            return {...boat, positions, lastPosition};
+            return { ...boat, positions, lastPosition };
         });
 
         // Emit latest event
@@ -258,15 +259,12 @@ export const PlaybackPage = (props) => {
             currentElapsedTimeRef.current = nextElapsedTime;
             handleSetElapsedTime(nextElapsedTime);
         };
-
-
-
     }
 
     const handleAddPosition = (data) => {
         messageHistory.current.push(data);
 
-        const { raceData, lat,lon, elapsedTime  } = data;
+        const { raceData, lat, lon, elapsedTime } = data;
         const { vesselParticipantId } = raceData;
 
         // Reject vessel participant id
@@ -277,47 +275,65 @@ export const PlaybackPage = (props) => {
         if (!currentGroupedPosition || !currentGroupedPosition?.id) return;
 
         // Get current available positions of each grouped positions
-        const currentPositions = [ ...(currentGroupedPosition?.positions || [])];
-        
+        const currentPositions = [...(currentGroupedPosition?.positions || [])];
+
         // Generate heading
         const positionLength = currentPositions.length;
-        const previousCoordinate = positionLength >= 2 ? [currentPositions[positionLength-2].lon, currentPositions[positionLength-2].lat] : [lon, lat];
+        const previousCoordinate = positionLength >= 2 ? [currentPositions[positionLength - 2].lon, currentPositions[positionLength - 2].lat] : [lon, lat];
         const heading = generateLastHeading(previousCoordinate, [lon, lat]);
 
         // Save data
-        currentPositions.push({lat, lon, heading});
+        currentPositions.push({ lat, lon, heading });
         currentGroupedPosition.positions = currentPositions;
         currentGroupedPosition.lastPosition = { lat, lon, heading };
 
         groupedPosition.current[vesselParticipantId] = currentGroupedPosition;
-        
+
         if (!receivedPositionData.current) receivedPositionData.current = true;
     };
 
     return (
         <Wrapper>
+            <PageHeadContainer>
+                {history.action !== 'POP' && <GobackButton onClick={() => history.goBack()}>
+                    <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                </GobackButton>}
+                <PageInfoContainer>
+                    <PageHeading>{'Race name'}</PageHeading> {/** Adding race here, will replace when we have the live data */}
+                    <PageDescription>{'Race description'}</PageDescription>
+                </PageInfoContainer>
+            </PageHeadContainer>
             <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: '100%' }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <Playback />
                 <StreamingRaceMap emitter={eventEmitter} />
-                {history.action !== 'POP' && <GoBackButton onClick={() => history.goBack()}>
-                    <IoCaretBack />
-                </GoBackButton>}
             </MapContainer>
         </Wrapper>
     );
 }
 
-const GoBackButton = styled.div`
-    position: absolute;
-    top: 90px;
-    left: 12px;
-    width: 30px;
-    height: 30px;
-    z-index: 9998;
-    background: #f4f4f4;
+
+const PageHeading = styled.h2`
+    padding: 20px 15px;
+    padding-bottom: 0px;
+`;
+
+const PageHeadContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const PageInfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const PageDescription = styled.p`
+    padding: 0 15px;
+`;
+
+const GobackButton = styled.div`
     display: flex;
     justify-content: center;
-    align-items:center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.65);
-    border-radius: 2px;
+    align-items: center;
+    cursor: pointer;
 `;

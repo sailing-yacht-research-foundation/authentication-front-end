@@ -36,7 +36,7 @@ export const VesselList = () => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
-                if (userId && userId === record.createdById || uuid === record.createdById)
+                if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Link to={`/vessels/${record.id}/update`}>{text}</Link>;
                 return text;
             },
@@ -69,7 +69,7 @@ export const VesselList = () => {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
             render: (text, record) => {
-                if (userId && userId === record.createdById || uuid === record.createdById)
+                if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
                             history.push(`/vessels/${record.id}/update`);

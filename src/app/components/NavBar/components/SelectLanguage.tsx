@@ -113,7 +113,7 @@ export const SelectLanguage = (props) => {
                 <a rel="noopener noreferrer" href="/#" onClick={(e) => {
                     setLanguague(e, 'es');
                 }}>
-                    español
+                    Español
                 </a>
             </Menu.Item>
             <Menu.Item>
@@ -121,6 +121,13 @@ export const SelectLanguage = (props) => {
                     setLanguague(e, 'it');
                 }}>
                     Italiano
+                </a>
+            </Menu.Item>
+            <Menu.Item>
+                <a rel="noopener noreferrer" href="/#" onClick={(e) => {
+                    setLanguague(e, 'fr');
+                }}>
+                    Français
                 </a>
             </Menu.Item>
         </Menu>

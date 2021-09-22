@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, DatePicker, Switch, Row, Col, TimePicker, Space } from 'antd';
+import { Spin, Form, Divider, DatePicker, Row, Col, TimePicker, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import { CreateButton, DeleteButton, PageHeaderContainerResponsive, PageHeaderText } from 'app/components/SyrfGeneral';
 import { BsCardList } from 'react-icons/bs';

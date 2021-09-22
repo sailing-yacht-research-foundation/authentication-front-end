@@ -60,6 +60,7 @@ export const MapViewTab = (props) => {
         if (e.keyCode === 13 || e.which === 13) {
             const params: any = {};
             params.keyword = searchKeyword;
+            params.size = pageSize;
 
             dispatch(actions.setPage(1));
             dispatch(actions.setKeyword(params.keyword ?? ''));

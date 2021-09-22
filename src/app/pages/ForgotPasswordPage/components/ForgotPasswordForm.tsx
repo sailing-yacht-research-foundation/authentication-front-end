@@ -95,4 +95,5 @@ const LottieWrapper = styled.div`
 
 const LottieMessage = styled.p`
    color: #70757a;
+   padding: 0 20px;
 `;

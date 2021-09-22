@@ -39,7 +39,11 @@ export const MyRaces = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
+<<<<<<< HEAD
                 if (userId && userId === record.createdById || uuid === record.createdById)
+=======
+                if ((userId && userId === record.createdById) || (uuid === record.createdById))
+>>>>>>> develop
                     return <Link to={`/events/${record.id}/update`}>{text}</Link>;
 
                 return text;
@@ -73,7 +77,11 @@ export const MyRaces = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => {
+<<<<<<< HEAD
                 if (userId && record.createdById === userId || uuid === record.createdById)
+=======
+                if ((userId && record.createdById === userId) || (uuid === record.createdById))
+>>>>>>> develop
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
                             history.push(`/events/${record.id}/update`)

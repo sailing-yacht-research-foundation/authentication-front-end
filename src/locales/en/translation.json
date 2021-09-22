@@ -7,7 +7,11 @@
       "name": "Name:",
       "location": "Location:",
       "date": "Date:",
-      "my_location": "My location"
+      "my_location": "My location",
+      "event_name": "Event name:",
+      "description": "Description:",
+      "city": "City:",
+      "country": "Country:"
     },
     "nav": {
       "create": "Create",
@@ -23,7 +27,12 @@
       "filter_result": {
         "start_searching_by_typing_something": "Nothing to show here. Start searching by typing something.",
         "about_number_result": "About {{total}} results",
-        "searching": "Searching...."
+        "searching": "Searching....",
+        "no_description": "No description provided.",
+        "city": "City:",
+        "country": "Country:",
+        "event_name": "Event:",
+        "date": "Date:"
       }
     },
     "search_performed_no_result_found": "Searched for {{keyword}}, no result found."
@@ -264,7 +273,7 @@
     "your_session_is_expired": "Your session is expired, please login again."
   },
   "data_page": {
-    "syrf_race_data": "Syrf Race Data",
+    "syrf_race_data": "SYRF Race Data",
     "races_start_as_points": "Race Starts as Points",
     "an_animated_view_of_individual": "An animated view of individual races over the last few decades. Each dot is a unique race.",
     "race_clusters": "Race Clusters",

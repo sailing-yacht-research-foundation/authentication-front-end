@@ -28,7 +28,7 @@ const disabledDates = [
 
 export const PrivateUserInformation = (props) => {
 
-    const { authUser, address, setAddress, setShowPhoneVerifyModal, sendPhoneVerification } = props;
+    const { authUser, address, setAddress } = props;
 
     const { t } = useTranslation();
 

@@ -2,8 +2,7 @@
  * Root saga manages watcher lifecycle
  */
 
-import { call, put, takeLatest, select } from "@redux-saga/core/effects";
-import { selectUser } from "app/pages/LoginPage/slice/selectors";
+import { call, put, takeLatest } from "@redux-saga/core/effects";
 import { getMany } from "services/live-data-server/event-calendars";
 import { myEventListActions } from ".";
 

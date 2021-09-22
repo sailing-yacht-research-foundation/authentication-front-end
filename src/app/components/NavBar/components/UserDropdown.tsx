@@ -1,18 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import { Menu, Dropdown, Image } from 'antd';
-import { DownOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
+import { DownOutlined, LockOutlined } from '@ant-design/icons';
 
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getProfilePicture } from 'utils/user-utils';
-import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
 export const UserDropdown = (props) => {
-
-    const history = useHistory();
 
     const authUser = useSelector(selectUser);
 
@@ -20,9 +17,6 @@ export const UserDropdown = (props) => {
 
     const menu = (
         <Menu>
-            <Menu.Item key="1" onClick={() => history.push('/profile')} icon={<UserOutlined />}>
-                {t(translations.home_page.nav.update_profile)}
-            </Menu.Item>
             <Menu.Item onClick={() => props.logout()} key="2" icon={<LockOutlined />}>
                 {t(translations.home_page.nav.logout)}
             </Menu.Item>
@@ -63,6 +57,7 @@ const UserNameWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `;
 
 const UserName = styled.span`
