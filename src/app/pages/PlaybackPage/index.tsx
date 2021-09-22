@@ -1,6 +1,6 @@
 import "leaflet/dist/leaflet.css";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { message } from "antd";
 import queryString from "querystring";
 import useWebSocket, { ReadyState } from "react-use-websocket";
@@ -66,6 +66,11 @@ export const PlaybackPage = (props) => {
     const currentElapsedTimeRef = useRef<number>(0);
     const isPlayingRef = useRef<any>(false);
 
+    const headerInfoElementRef = useRef<any>();
+    const mapContainerElementRef = useRef<any>();
+    const mapElementRef = useRef<any>();
+    const scrapedContainerElementRef = useRef<any>();
+
     const { actions } = usePlaybackSlice();
 
     const history = useHistory();
@@ -100,8 +105,8 @@ export const PlaybackPage = (props) => {
     // Init detail
     useEffect(() => {
         tracksData.current = {};
-        if (parsedQueryString.searchRaceId) {
-            dispatch(actions.getSearchRaceDetail({ searchRaceId: parsedQueryString.searchRaceId }));
+        if (parsedQueryString.raceId) {
+            dispatch(actions.getSearchRaceDetail({ searchRaceId: parsedQueryString.raceId }));
             dispatch(actions.setPlaybackType(PlaybackTypes.SCRAPEDRACE));
         } else if (parsedQueryString.competitionUnitId) {
             dispatch(actions.setCompetitionUnitId(parsedQueryString.competitionUnitId));
@@ -234,6 +239,31 @@ export const PlaybackPage = (props) => {
         }
     }, [competitionUnitDetail, searchRaceData, playbackType]);
 
+    useEffect(() => {
+        const handleResize = () => {
+            const { current } = headerInfoElementRef;
+            if (!current) return;
+            const headerElDimension = current.getBoundingClientRect();
+            const headerElHeight = headerElDimension.height;
+            const windowHeight = window.innerHeight;
+            const navbarHeight = 73;
+
+            const contentHeight = windowHeight - navbarHeight - headerElHeight;
+
+            if (mapContainerElementRef.current) {
+                mapContainerElementRef.current.style.height = `${contentHeight}px`;
+                if (mapElementRef.current) mapElementRef.current._container.style.height = `100%`;
+            }
+            if (scrapedContainerElementRef.current)
+                scrapedContainerElementRef.current.style.height = `${contentHeight}px`;
+        };
+
+        setTimeout(() => {
+            handleResize();
+        }, 200);
+        window.addEventListener("resize", handleResize);
+    }, []);
+
     const handleSetRaceLengthStreaming = (currentLength) => {
         dispatch(actions.setRaceLength(currentLength));
     };
@@ -358,22 +388,25 @@ export const PlaybackPage = (props) => {
                         <IoIosArrowBack style={{ fontSize: "40px", color: "#1890ff" }} />
                     </GobackButton>
                 )}
-                <PageInfoContainer>
-                    <PageHeading>{raceIdentity.name}</PageHeading>{" "}
-                    <PageDescription>{raceIdentity.description}</PageDescription>
-                </PageInfoContainer>
+                <div ref={headerInfoElementRef}>
+                    <PageInfoContainer>
+                        <PageHeading>{raceIdentity.name}</PageHeading>{" "}
+                        <PageDescription>{raceIdentity.description}</PageDescription>
+                    </PageInfoContainer>
+                </div>
             </PageHeadContainer>
 
             {playbackType === PlaybackTypes.STREAMINGRACE && (
-                <div style={{ display: "flex" }}>
+                <div ref={mapContainerElementRef} style={{ display: "flex" }}>
                     <MapContainer
                         style={{
-                            height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`,
+                            height: "100vh",
                             width: "100%",
                             position: "relative",
                         }}
                         center={MAP_DEFAULT_VALUE.CENTER}
                         zoom={MAP_DEFAULT_VALUE.ZOOM}
+                        whenCreated={(mapInstance: any) => (mapElementRef.current = mapInstance)}
                     >
                         <LeaderboardContainer
                             style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}
@@ -387,7 +420,7 @@ export const PlaybackPage = (props) => {
             )}
 
             {playbackType === PlaybackTypes.SCRAPEDRACE && (
-                <div style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT})`, width: "100%" }}>
+                <div style={{ width: "100%" }}>
                     <iframe
                         title={searchRaceData.name}
                         style={{ height: "100%", width: "100%" }}
@@ -400,8 +433,9 @@ export const PlaybackPage = (props) => {
 };
 
 const PageHeading = styled.h2`
-    padding: 20px 15px;
+    padding: 8px 16px;
     padding-bottom: 0px;
+    margin-bottom: 0px;
 `;
 
 const PageHeadContainer = styled.div`
@@ -416,7 +450,8 @@ const PageInfoContainer = styled.div`
 `;
 
 const PageDescription = styled.p`
-    padding: 0 15px;
+    padding: 0 16px;
+    margin-bottom: 8px;
 `;
 
 const GobackButton = styled.div`
