@@ -1,4 +1,4 @@
-import OuroborosRace from "utils/race/OuroborosRace";
+import { PlaybackTypes } from "types/Playback";
 
 /* --- STATE --- */
 export interface PlaybackState {
@@ -8,7 +8,9 @@ export interface PlaybackState {
     competitionUnitDetail?: any;
     vesselParticipants?: any[];
     isPlaying?: boolean;
-  }
-  
-  export type ContainerState = PlaybackState
-  
+    searchRaceId?: string;
+    searchRaceDetail?: any;
+    playbackType?: PlaybackTypes;
+}
+
+export type ContainerState = PlaybackState;
