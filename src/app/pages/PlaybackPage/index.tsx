@@ -1,12 +1,11 @@
 import "leaflet/dist/leaflet.css";
 
-import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { message } from "antd";
 import queryString from "querystring";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MapContainer } from "react-leaflet";
 import styled from "styled-components";
-import { StyleConstants } from "styles/StyleConstants";
 import { Playback } from "./components/Playback";
 import { generateLastHeading } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
@@ -112,6 +111,11 @@ export const PlaybackPage = (props) => {
             dispatch(actions.setCompetitionUnitId(parsedQueryString.competitionUnitId));
             dispatch(actions.setPlaybackType(PlaybackTypes.STREAMINGRACE));
         }
+
+        return () => {
+            dispatch(actions.setSearchRaceId(""));
+            dispatch(actions.setSearchRaceDetail({}));
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -385,11 +389,20 @@ export const PlaybackPage = (props) => {
         setParticipantsData(normalizedPosition);
     };
 
+    const handleHistoryGoBack = () => {
+        history.goBack();
+        const currentPathname = history.location.pathname;
+
+        setTimeout(() => {
+            if (currentPathname === window.location.pathname) history.goBack();
+        }, 100);
+    };
+
     return (
         <Wrapper>
             <PageHeadContainer>
                 {history.action !== "POP" && (
-                    <GobackButton onClick={() => history.goBack()}>
+                    <GobackButton onClick={handleHistoryGoBack}>
                         <IoIosArrowBack style={{ fontSize: "40px", color: "#1890ff" }} />
                     </GobackButton>
                 )}
@@ -427,7 +440,7 @@ export const PlaybackPage = (props) => {
             {playbackType === PlaybackTypes.SCRAPEDRACE && (
                 <div style={{ width: "100%" }} ref={scrapedContainerElementRef}>
                     <iframe
-                        title={searchRaceData.name}
+                        title={searchRaceData?.name}
                         style={{ height: "100%", width: "100%" }}
                         src={searchRaceData?.url}
                     ></iframe>
