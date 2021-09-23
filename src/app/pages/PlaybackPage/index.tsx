@@ -105,8 +105,8 @@ export const PlaybackPage = (props) => {
     // Init detail
     useEffect(() => {
         tracksData.current = {};
-        if (parsedQueryString.raceId) {
-            dispatch(actions.getSearchRaceDetail({ searchRaceId: parsedQueryString.raceId }));
+        if (parsedQueryString.raceid) {
+            dispatch(actions.getSearchRaceDetail({ searchRaceId: parsedQueryString.raceid }));
             dispatch(actions.setPlaybackType(PlaybackTypes.SCRAPEDRACE));
         } else if (parsedQueryString.competitionUnitId) {
             dispatch(actions.setCompetitionUnitId(parsedQueryString.competitionUnitId));
