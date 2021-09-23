@@ -420,7 +420,7 @@ export const PlaybackPage = (props) => {
             )}
 
             {playbackType === PlaybackTypes.SCRAPEDRACE && (
-                <div style={{ width: "100%" }}>
+                <div style={{ width: "100%" }} ref={scrapedContainerElementRef}>
                     <iframe
                         title={searchRaceData.name}
                         style={{ height: "100%", width: "100%" }}
