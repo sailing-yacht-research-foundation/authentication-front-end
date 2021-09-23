@@ -240,29 +240,17 @@ export const PlaybackPage = (props) => {
     }, [competitionUnitDetail, searchRaceData, playbackType]);
 
     useEffect(() => {
-        const handleResize = () => {
-            const { current } = headerInfoElementRef;
-            if (!current) return;
-            const headerElDimension = current.getBoundingClientRect();
-            const headerElHeight = headerElDimension.height;
-            const windowHeight = window.innerHeight;
-            const navbarHeight = 73;
-
-            const contentHeight = windowHeight - navbarHeight - headerElHeight;
-
-            if (mapContainerElementRef.current) {
-                mapContainerElementRef.current.style.height = `${contentHeight}px`;
-                if (mapElementRef.current) mapElementRef.current._container.style.height = `100%`;
-            }
-            if (scrapedContainerElementRef.current)
-                scrapedContainerElementRef.current.style.height = `${contentHeight}px`;
-        };
-
         setTimeout(() => {
             handleResize();
         }, 200);
         window.addEventListener("resize", handleResize);
     }, []);
+
+    useEffect(() => {
+        setTimeout(() => {
+            handleResize();
+        }, 200);
+    }, [raceIdentity]);
 
     const handleSetRaceLengthStreaming = (currentLength) => {
         dispatch(actions.setRaceLength(currentLength));
@@ -270,6 +258,23 @@ export const PlaybackPage = (props) => {
 
     const handleSetElapsedTime = (elapsedTime) => {
         dispatch(actions.setElapsedTime(elapsedTime));
+    };
+
+    const handleResize = () => {
+        const { current } = headerInfoElementRef;
+        if (!current) return;
+        const headerElDimension = current.getBoundingClientRect();
+        const headerElHeight = headerElDimension.height;
+        const windowHeight = window.innerHeight;
+        const navbarHeight = 73;
+
+        const contentHeight = windowHeight - navbarHeight - headerElHeight;
+
+        if (mapContainerElementRef.current) {
+            mapContainerElementRef.current.style.height = `${contentHeight}px`;
+            if (mapElementRef.current) mapElementRef.current._container.style.height = `100%`;
+        }
+        if (scrapedContainerElementRef.current) scrapedContainerElementRef.current.style.height = `${contentHeight}px`;
     };
 
     // Noramalize data
