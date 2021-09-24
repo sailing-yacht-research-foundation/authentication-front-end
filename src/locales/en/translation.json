@@ -298,7 +298,8 @@
     "create_a_new_event": "Create A New Event",
     "create": "Create",
     "city": "City",
-    "country": "Country"
+    "country": "Country",
+    "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies."
   },
   "competition_unit_list_page": {
     "name": "Name",
@@ -331,8 +332,9 @@
     "update_your_competition_unit": "Update your race",
     "create_a_new_competition_unit": "Create a new race",
     "select_an_event": "Select an event",
-    "create_a_private_polygon": "Create a private polygon",
-    "positions_outside_of_this_polygon_is": "Positions outside of this polygon may be discarded if they don’t appear relevant to the race."
+    "create_a_private_polygon": "Create a privacy polygon",
+    "positions_outside_of_this_polygon_is": "Positions outside of this polygon may be discarded if they don’t appear relevant to the race.",
+    "description": "Description"
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -351,7 +353,8 @@
     "latitude": "Latitude",
     "save_event": "Save event",
     "please_choose_a_location": "Please choose a location by clicking on the map",
-    "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies."
+    "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
+    "description": "Description"
   },
   "course_list": {
     "course": "Course",
@@ -411,7 +414,10 @@
       "circle": "Add a circle",
       "marker": "Add a mark.",
       "circlemarker": "Add a circlemarker"
-    }
+    },
+    "create_a_new_course": "Create a new course",
+    "update_course": "Update course",
+    "delete": "Delete"
   },
   "vessel_list_page": {
     "public_name": "Public Name",
@@ -424,7 +430,8 @@
     "delete": "Delete",
     "you_dont_have_any_vessels": "You do not have any vessels, please create one.",
     "vessels": "Vessels",
-    "create_a_new_vessel": "Create a new Vessel"
+    "create_a_new_vessel": "Create a new Vessel",
+    "vessel_are_yatchs": "vessels are yachts, dinghies, boards, or other vehicles that you sail on the water."
   },
   "vessel_create_update_page": {
     "created_a_new_vessel": "Created a new vessel with name: {{name}}.",
@@ -440,7 +447,8 @@
     "is_completed": "Is Completed",
     "update_your_vessel": "Update your vessel",
     "create_a_new_vessel": "Create a new vessel",
-    "length_in_meters_must_be_a_number": "Length In Meters must be a number."
+    "length_in_meters_must_be_a_number": "Length In Meters must be a number.",
+    "vessel_are_yatchs": "vessels are yachts, dinghies, boards, or other vehicles that you sail on the water."
   },
   "participant_list": {
     "participants": "Participants",
@@ -462,5 +470,14 @@
     "save_participant": "Save Participant",
     "update_participant": "Update Participant",
     "create_a_new_participant": "Create a new participant"
+  },
+  "event_detail_page": {
+    "organized_by": "Organized By",
+    "about_this_event": "About this event",
+    "races_in_this_event": "{{number_of_races}} races in this event",
+    "people_are_going_to_this_event": "{{participants_count}} people are going to this event.",
+    "attend_this_event": "Attend this event",
+    "invite_friends": "Invite friends",
+    "update_this_event": "Edit this event"
   }
 }

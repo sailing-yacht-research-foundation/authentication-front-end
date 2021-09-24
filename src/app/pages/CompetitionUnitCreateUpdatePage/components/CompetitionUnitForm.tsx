@@ -1,8 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider, DatePicker, Row, Col, TimePicker, Space } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { CreateButton, DeleteButton, PageHeaderContainerResponsive, PageHeaderText } from 'app/components/SyrfGeneral';
-import { BsCardList } from 'react-icons/bs';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
+import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -18,13 +17,11 @@ import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/co
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-
-const MODE = {
-    UPDATE: 'update',
-    CREATE: 'create'
-}
+import { IoIosArrowBack } from 'react-icons/io';
+import { MODE } from 'utils/constants';
 
 export const CompetitionUnitForm = () => {
+
     const history = useHistory();
 
     const { t } = useTranslation();
@@ -52,7 +49,7 @@ export const CompetitionUnitForm = () => {
     const courseListRef = React.useRef<any>();
 
     const onFinish = async (values) => {
-        let { name, startDate, startTime, isCompleted, calendarEventId } = values;
+        let { name, startDate, startTime, isCompleted, calendarEventId, description } = values;
         let response;
         calendarEventId = eventId ? eventId : calendarEventId;
 
@@ -63,6 +60,7 @@ export const CompetitionUnitForm = () => {
             startTime: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc(),
             approximateStart: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc(),
             isCompleted: isCompleted,
+            description: description,
             boundingBox: boundingBoxCoordinates.length > 0 ?
                 {
                     "type": "Polygon",
@@ -146,6 +144,11 @@ export const CompetitionUnitForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const goBack = () => {
+        if (history.action !== 'POP') history.goBack();
+        else history.push('/races');
+    }
+
     return (
         <Wrapper>
             <DeleteCompetitionUnitModal
@@ -155,11 +158,15 @@ export const CompetitionUnitForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageHeaderText>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeaderText>
+                <PageInfoOutterWrapper>
+                    <GobackButton onClick={() => goBack()}>
+                        <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                    </GobackButton>
+                    <PageInfoContainer>
+                        <PageHeading>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeading>
+                    </PageInfoContainer>
+                </PageInfoOutterWrapper>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/races")} icon={<BsCardList
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.competition_unit_create_update_page.view_all_competition_units)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.competition_unit_create_update_page.delete)}</DeleteButton>}
@@ -182,6 +189,15 @@ export const CompetitionUnitForm = () => {
                         >
                             <SyrfInputField />
                         </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
+                            name="description"
+                            rules={[{ required: true }]}
+                        >
+                            <SyrfTextArea />
+                        </Form.Item>
+                        
                         {
                             !eventId && <Form.Item
                                 label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.event_id)}</SyrfFieldLabel>}

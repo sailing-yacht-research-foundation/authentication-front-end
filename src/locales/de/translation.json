@@ -322,7 +322,7 @@
     "update_your_competition_unit": "Update your race",
     "create_a_new_competition_unit": "Create a new race",
     "select_an_event": "Select an event",
-    "create_a_private_polygon": "Create a private polygon",
+    "create_a_private_polygon": "Create a privacy polygon",
     "positions_outside_of_this_polygon_is": "Positions outside of this polygon may be discarded if they don’t appear relevant to the race."
   },
   "my_event_create_update_page": {

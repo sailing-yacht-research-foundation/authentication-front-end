@@ -7,22 +7,21 @@ import * as L from 'leaflet';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { Modal, Form, Button } from 'antd';
+import { Modal, Form } from 'antd';
 import { SyrfFieldLabel, SyrfInputField } from 'app/components/SyrfForm';
 import { useCourseSlice } from '../../slice';
 import { selectCourseSequencedGeometries } from '../../slice/selectors';
-import styled from 'styled-components';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { create, getById, updateCourseGeometry } from 'services/live-data-server/courses';
 import { addNonGroupLayers } from 'utils/helpers';
 import ReactDOMServer from 'react-dom/server';
-import { HiSave } from 'react-icons/hi';
-import { IoIosArrowBack } from 'react-icons/io';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
+import { CourseDeleteModal } from '../CourseDeleteModal';
+import { MODE } from 'utils/constants';
 
 require('leaflet-draw');
 
@@ -46,23 +45,18 @@ const GEOMETRY_TYPE = {
     polygon: 'Polygon'
 };
 
-const MODE = {
-    CREATE: 'create',
-    UPDATE: 'update'
-};
-
 L.drawLocal.draw.toolbar.buttons = {
     polyline: i18next.t(translations.course_create_update_page.draw_buttons.polyline),
     polygon: i18next.t(translations.course_create_update_page.draw_buttons.polygon),
-    rectangle:i18next.t(translations.course_create_update_page.draw_buttons.rectangle),
+    rectangle: i18next.t(translations.course_create_update_page.draw_buttons.rectangle),
     circle: i18next.t(translations.course_create_update_page.draw_buttons.circle),
-    marker:  i18next.t(translations.course_create_update_page.draw_buttons.marker),
-    circlemarker:  i18next.t(translations.course_create_update_page.draw_buttons.circlemarker)
+    marker: i18next.t(translations.course_create_update_page.draw_buttons.marker),
+    circlemarker: i18next.t(translations.course_create_update_page.draw_buttons.circlemarker)
 };
 
 let drawControl;
 
-export const MapView = () => {
+export const MapView = React.forwardRef((props, ref) => {
 
     const map = useMap();
 
@@ -90,7 +84,23 @@ export const MapView = () => {
 
     const { competitionUnitId, courseId } = useParams<{ competitionUnitId: string, courseId: string }>();
 
+    const [course, setCourse] = React.useState<any>({});
+
     const { t } = useTranslation();
+
+    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
+    React.useImperativeHandle(ref, () => ({
+        saveCourse() {
+            saveCourse();
+        },
+        deleteCourse() {
+            setShowDeleteModal(true);
+        },
+        goBack() {
+            goBack();
+        }
+    }));
 
     const initializeMapView = () => {
         new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
@@ -150,6 +160,7 @@ export const MapView = () => {
             const response = await getById(courseId);
 
             if (response.success) {
+                setCourse(response.data);
                 const courseSequencedGeometriesData = response.data?.courseSequencedGeometries;
                 if (courseSequencedGeometriesData.length > 0) {
                     mutableCouseSequencedGeometries.current = courseSequencedGeometriesData;
@@ -343,8 +354,23 @@ export const MapView = () => {
         map.addControl(drawControl);
     }
 
+    const goBack = () => {
+        if (history.action !== 'POP') history.goBack();
+        else history.push('/races');
+    }
+
+    const onCourseDeleted = () => {
+        goBack();
+    }
+
     return (
         <>
+            <CourseDeleteModal
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+                onCourseDeleted={onCourseDeleted}
+                course={course}
+            />
             <Modal
                 title={t(translations.course_create_update_page.enter_geometry_name)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
@@ -372,36 +398,6 @@ export const MapView = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-            {history.action !== 'POP' && <CancelButton icon={<IoIosArrowBack
-                style={{ marginRight: '5px' }}
-                size={18} />} onClick={() => history.goBack()}>
-                {t(translations.course_create_update_page.cancel)}
-            </CancelButton>}
-            <SaveButton icon={<HiSave
-                style={{ marginRight: '5px' }}
-                size={18} />} type="primary" onClick={saveCourse}>
-                {t(translations.course_create_update_page.save)}
-            </SaveButton>
         </>
     );
-}
-
-const SaveButton = styled(Button)`
-    position: absolute;
-    top: 20px;
-    right: 50px;
-    transform: translateX(50%);
-    z-index: 9999;
-    border-radius: 5px;
-    width: 90;
-`;
-
-const CancelButton = styled(Button)`
-    position: absolute;
-    top: 20px;
-    right: 150px;
-    transform: translateX(50%);
-    z-index: 9999;
-    border-radius: 5px;
-    width: 90px;
-`;
+});

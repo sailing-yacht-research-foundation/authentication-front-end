@@ -13,11 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from './DeleteParticipantForm';
 import { IoIosArrowBack } from 'react-icons/io';
-
-const MODE = {
-    UPDATE: 'update',
-    CREATE: 'create'
-}
+import { MODE } from 'utils/constants';
 
 export const ParticipantForm = () => {
 

@@ -27,6 +27,10 @@ export const PageHeaderContainerResponsive = styled.div`
         }
 
         & .ant-space {
+            align-self: center !important;
+        }
+
+        & button {
             align-self: center;
         }
     `}
@@ -102,3 +106,29 @@ export const BorderedButton = styled(Button)`
 export const TableWrapper = styled.div`
     margin: 15px;
 `;
+
+export const PageInfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const PageDescription = styled.p`
+    padding: 0 15px;
+`;
+
+export const PageHeading = styled.h2`
+    padding: 10px 15px;
+    padding-bottom: 0px;
+`;
+
+export const PageInfoOutterWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+export const GobackButton = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+`; 

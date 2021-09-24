@@ -40,6 +40,7 @@ import { CompetitionUnitListPage } from './pages/CompetitionUnitListPage/Loadabl
 import { VesselListPage } from './pages/VesselListPage/Loadable';
 import { VesselCreateUpdatePage } from './pages/VesselCreateUpdatePage/Loadable';
 import { ParticipantCreateUpdatePage } from './pages/ParticipantCreateUpdatePage/Loadable';
+import { EventDetailPage } from './pages/EventDetailPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -148,6 +149,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
               <Route exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage}/>
+              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage}/>
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage}/>
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage}/>

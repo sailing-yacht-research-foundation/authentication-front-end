@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
 import { TIME_FORMAT } from 'utils/constants';
+import { Link } from 'react-router-dom';
 
 export const CompetitionUnitList = (props) => {
 
@@ -21,14 +22,14 @@ export const CompetitionUnitList = (props) => {
             title: t(translations.competition_unit_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: text => text,
+            render: (text, record) => {
+                return <Link to={`/playback/?raceId=${record.calendarEventId}`}>{text}</Link>;
+            },
             width: '20%',
         },
         {
-            title: t(translations.competition_unit_list_page.start_date),
-            dataIndex: 'approximateStartTime',
-            key: 'start_date',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
+            title: t(translations.competition_unit_list_page.event_name),
+            render: (text, record) => <Link to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>,
             width: '20%',
         },
         {

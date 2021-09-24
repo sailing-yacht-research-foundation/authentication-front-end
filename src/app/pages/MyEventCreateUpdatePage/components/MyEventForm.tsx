@@ -1,9 +1,7 @@
-import 'leaflet/dist/leaflet.css';
-
 import React from 'react';
 import { Spin, Form, DatePicker, Row, Col, Divider, Switch, TimePicker, Space } from 'antd';
-import { CreateButton, DeleteButton, PageHeaderContainerResponsive } from 'app/components/SyrfGeneral';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
+import { DeleteButton, PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { LocationPicker } from './LocationPicker';
@@ -12,7 +10,6 @@ import { create, get, update } from 'services/live-data-server/event-calendars';
 import moment from 'moment';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { BsCardList } from 'react-icons/bs';
 import { CompetitionUnitList } from './CompetitionUnitList';
 import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { BiTrash } from 'react-icons/bi';
@@ -20,11 +17,8 @@ import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventMod
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ParticipantList } from './ParticipantList';
-
-const MODE = {
-    CREATE: 'create',
-    UPDATE: 'update'
-}
+import { IoIosArrowBack } from 'react-icons/io';
+import { MODE } from 'utils/constants';
 
 export const MyEventForm = () => {
 
@@ -53,7 +47,7 @@ export const MyEventForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
-        const { name, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime } = values;
+        const { name, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime, description } = values;
         let response;
         let currentDate = moment();
 
@@ -68,6 +62,7 @@ export const MyEventForm = () => {
             externalUrl: externalUrl,
             lon: lon,
             lat: lat,
+            description: description,
             approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
             startDay: startDate.utc().format('DD'),
             startMonth: startDate.utc().format('MM'),
@@ -132,7 +127,7 @@ export const MyEventForm = () => {
                 setCoordinates({
                     lat: response.data.lat,
                     lng: response.data.lon
-                })
+                });
             } else {
                 history.push('/404');
             }
@@ -157,16 +152,18 @@ export const MyEventForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageInfoContainer>
-                    <PageHeading>{mode === MODE.UPDATE ?
-                        t(translations.my_event_create_update_page.update_your_event)
-                        : t(translations.my_event_create_update_page.create_a_new_event)}</PageHeading>
-                    <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
-                </PageInfoContainer>
+                <PageInfoOutterWrapper>
+                    <GobackButton onClick={() => history.push("/events")}>
+                        <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                    </GobackButton>
+                    <PageInfoContainer>
+                        <PageHeading>{mode === MODE.UPDATE ?
+                            t(translations.my_event_create_update_page.update_your_event)
+                            : t(translations.my_event_create_update_page.create_a_new_event)}</PageHeading>
+                        <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
+                    </PageInfoContainer>
+                </PageInfoOutterWrapper>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/events")} icon={<BsCardList
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.my_event_create_update_page.view_all)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.my_event_create_update_page.delete)}</DeleteButton>}
@@ -188,6 +185,14 @@ export const MyEventForm = () => {
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
+                            name="description"
+                            rules={[{ required: true }]}
+                        >
+                            <SyrfTextArea />
                         </Form.Item>
 
                         <Divider />
@@ -257,10 +262,6 @@ export const MyEventForm = () => {
                             <SyrfInputField />
                         </Form.Item>
 
-                        <Form.Item label="Is private?" name="isPrivate" valuePropName="checked" initialValue={false}>
-                            <Switch />
-                        </Form.Item>
-
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
                                 {t(translations.my_event_create_update_page.save_event)}
@@ -294,18 +295,4 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 100%;
     margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
-`;
-
-const PageInfoContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const PageDescription = styled.p`
-    padding: 0 15px;
-`;
-
-const PageHeading = styled.h2`
-    padding: 20px 15px;
-    padding-bottom: 0px;
 `;
