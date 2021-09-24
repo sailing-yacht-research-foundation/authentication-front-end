@@ -101,7 +101,7 @@ export const Main = () => {
                     <Button
                         shape="round"
                         size={'large'}
-                        onClick={() => history.push("/my-events/create")}
+                        onClick={() => history.push("/events/create")}
                         icon={<AiFillPlusCircle
                             style={{ marginRight: '5px' }}
                             size={18} />}
