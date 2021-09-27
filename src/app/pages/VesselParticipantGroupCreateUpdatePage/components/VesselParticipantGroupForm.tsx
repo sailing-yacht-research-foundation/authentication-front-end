@@ -12,6 +12,8 @@ import { toast } from 'react-toastify';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { VesselList } from './VesselList';
+import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 
 const MODE = {
     UPDATE: 'update',
@@ -39,14 +41,17 @@ export const VesselParticipantGroupForm = () => {
 
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
+    const { eventId } = useParams<{ eventId: string}>();
+
     const onFinish = async (values) => {
-        let { vesselParticipantGroupId } = values;
+        let { name } = values;
         let response;
 
         setIsSaving(true);
 
         const data = {
-            vesselParticipantGroupId: vesselParticipantGroupId
+            name: name,
+            calendarEventId: eventId
         };
 
         if (mode === MODE.CREATE)
@@ -65,7 +70,7 @@ export const VesselParticipantGroupForm = () => {
                 toast.success(t(translations.vessel_participant_group_create_update_page.successfully_updated_group));
             }
 
-            history.push(`/vessel-participant-groups/${response.data?.id}/update`);
+            history.push(`/events/${eventId}/vessel-participant-groups/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
             toast.error(t(translations.vessel_participant_group_create_update_page.an_error_happened));
@@ -90,7 +95,7 @@ export const VesselParticipantGroupForm = () => {
         }
     }
 
-    const onVesselDeleted = () => {
+    const onGroupDeleted = () => {
         history.push('/vessel-participant-groups');
     }
 
@@ -101,12 +106,12 @@ export const VesselParticipantGroupForm = () => {
 
     return (
         <Wrapper>
-            {/* <DeleteVesselModal
-                vessel={vessel}
-                onVesselDeleted={onVesselDeleted}
+            <DeleteVesselParticipantGroupModal
+                group={group}
+                onGroupDeleted={onGroupDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
-            /> */}
+            />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageHeaderText>{mode === MODE.UPDATE ? t(translations.vessel_participant_group_create_update_page.update_group) : t(translations.vessel_participant_group_create_update_page.create_a_new_group)}</PageHeaderText>
                 <Space size={10}>
@@ -129,8 +134,8 @@ export const VesselParticipantGroupForm = () => {
                         onValuesChange={() => setFormChanged(true)}
                     >
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.group_id)}</SyrfFieldLabel>}
-                            name="vesselParticipantGroupId"
+                            label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
+                            name="name"
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField />
@@ -146,6 +151,12 @@ export const VesselParticipantGroupForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
+
+            {mode === MODE.UPDATE &&
+                <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                    <VesselList group={group}/>
+                </SyrfFormWrapper>
+            }
         </Wrapper >
     )
 }

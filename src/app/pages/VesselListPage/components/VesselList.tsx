@@ -48,12 +48,6 @@ export const VesselList = () => {
             render: (value) => renderEmptyValue(value),
         },
         {
-            title: t(translations.vessel_list_page.vessel_id),
-            dataIndex: 'vesselId',
-            key: 'vesselId',
-            render: (value) => renderEmptyValue(value),
-        },
-        {
             title: t(translations.vessel_list_page.global_id),
             dataIndex: 'globalId',
             key: 'globalId',

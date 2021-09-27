@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
-import { BorderedButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderContainerResponsive, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import moment from 'moment';
 import { DeleteVesselParticipantGroupModal } from './DeleteVesselParticipantGroupModal';
 import { getAllVesselParticipantGroups } from 'services/live-data-server/vessel-participant-group';
-import { Link } from 'react-router-dom';
 import { TIME_FORMAT } from 'utils/constants';
+import { AiFillPlusCircle } from 'react-icons/ai';
 
 const defaultOptions = {
     loop: true,
@@ -28,13 +28,11 @@ export const VesselParticipantGroupList = () => {
 
     const { t } = useTranslation();
 
-    const raceColors = React.useRef({});
-
     const columns = [
         {
-            title: t(translations.vessel_participant_group_list_page.group_id),
-            dataIndex: 'vesselParticipantGroupId',
-            key: 'vesselParticipantGroupId',
+            title: t(translations.vessel_participant_group_list_page.name),
+            dataIndex: 'name',
+            key: 'name',
             render: (value) => value
         },
         {
@@ -51,11 +49,11 @@ export const VesselParticipantGroupList = () => {
                 if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
-                            history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
+                            history.push(`/vessel-participant-groups/${record.id}/update`);
                         }} type="primary">{t(translations.vessel_participant_group_list_page.update)}</BorderedButton>
-                        <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.vessel_participant_group_list_page.delete)}</BorderedButton>
+                        <BorderedButton danger onClick={() => showDeleteGroupModal(record)}>{t(translations.vessel_participant_group_list_page.delete)}</BorderedButton>
                     </Space>;
-                
+
                 return <></>;
             }
         },
@@ -71,7 +69,7 @@ export const VesselParticipantGroupList = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
+    const [group, setGroup] = React.useState<any>({});
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
@@ -99,44 +97,38 @@ export const VesselParticipantGroupList = () => {
         getAll(page);
     }
 
-    const showDeleteRaceModal = (competitionUnit) => {
+    const showDeleteGroupModal = (group) => {
         setShowDeleteModal(true);
-        setCompetitionUnit(competitionUnit);
+        setGroup(group);
     }
 
-    const onCompetitionUnitDeleted = () => {
+    const onGroupDeleted = () => {
         getAll(pagination.page);
     }
 
-
-    const groupRowColorByEventName = () => {
-        pagination.rows.forEach(row => {
-            if (!raceColors.current[`${row.calendarEventId}`])
-                raceColors.current[`${row.calendarEventId}`] = `volcano-${Math.floor(Math.random() * (5 - 1 + 1) + 1)}`;
-        });
-    }
-
     React.useEffect(() => {
-        groupRowColorByEventName();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pagination.rows]);
 
     return (
         <>
             <DeleteVesselParticipantGroupModal
-                competitionUnit={competitionUnit}
-                onCompetitionUnitDeleted={onCompetitionUnitDeleted}
+                group={group}
+                onGroupDeleted={onGroupDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer>
+
+            <PageHeaderContainerResponsive>
                 <PageHeaderText>{t(translations.vessel_participant_group_list_page.vessel_participant_groups)}</PageHeaderText>
-            </PageHeaderContainer>
+                <CreateButton onClick={() => history.push("/vessel-participant-groups/create")} icon={<AiFillPlusCircle
+                    style={{ marginRight: '5px' }}
+                    size={18} />}>{t(translations.vessel_participant_group_list_page.create_a_new_group)}</CreateButton>
+            </PageHeaderContainerResponsive>
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
                         <Table scroll={{ x: "max-content" }} columns={columns}
-                            rowClassName={(record) => raceColors.current[`${record.calendarEventId}`]}
                             dataSource={pagination.rows} pagination={{
                                 defaultPageSize: 10,
                                 current: pagination.page,

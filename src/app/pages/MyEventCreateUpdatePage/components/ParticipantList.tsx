@@ -7,6 +7,8 @@ import { getAllByCalendarEventId } from 'services/live-data-server/participants'
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
+import styled from 'styled-components';
+import { AssignVesselParticipantModal } from './AssignVesselParticipantModal';
 
 export const ParticipantList = (props) => {
 
@@ -20,27 +22,23 @@ export const ParticipantList = (props) => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: text => text,
-            width: '20%',
-        },
-        {
-            title: t(translations.participant_list.participant_id),
-            dataIndex: 'participantId',
-            key: 'participantId',
-            render: text => text,
-            width: '20%',
+            width: '50%',
         },
         {
             title: t(translations.participant_list.action),
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
+                    <AssignButton onClick={() => {
+                        showAssignParticipantModal(record);
+                    }} type="primary">{t(translations.participant_list.assign)}</AssignButton>
                     <BorderedButton onClick={() => {
                         history.push(`/events/${record.calendarEventId}/participants/${record.id}/update`)
                     }} type="primary">{t(translations.participant_list.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDetelteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDeleteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
                 </Space>
             ),
-            width: '20%',
+            width: '50%',
         },
     ];
 
@@ -58,6 +56,8 @@ export const ParticipantList = (props) => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
+    const [showAssignModal, setShowAssignModal] = React.useState<boolean>(false);
+
     const getAll = async (page) => {
         setIsLoading(true);
         const response = await getAllByCalendarEventId(eventId, pagination.page);
@@ -73,7 +73,7 @@ export const ParticipantList = (props) => {
         }
     }
 
-    const showDetelteParticipanModal = (participant) => {
+    const showDeleteParticipanModal = (participant) => {
         setShowDeleteModal(true);
         setParticipant(participant);
     }
@@ -84,6 +84,11 @@ export const ParticipantList = (props) => {
 
     const onParticipantDeleted = () => {
         getAll(pagination.page);
+    }
+
+    const showAssignParticipantModal = (participant) => {
+        setShowAssignModal(true);
+        setParticipant(participant);
     }
 
     React.useEffect(() => {
@@ -98,6 +103,11 @@ export const ParticipantList = (props) => {
                 onParticipantDeleted={onParticipantDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
+            />
+            <AssignVesselParticipantModal 
+                participant={participant}
+                showAssignModal={showAssignModal}
+                setShowAssignModal={setShowAssignModal}
             />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
@@ -120,3 +130,13 @@ export const ParticipantList = (props) => {
         </>
     )
 }
+
+const AssignButton = styled(BorderedButton)`
+    background: orange;
+    border: 1px solid #fff;
+
+    :hover, :focus {
+        background: orange;
+        border: 1px solid #fff;
+    }
+`;

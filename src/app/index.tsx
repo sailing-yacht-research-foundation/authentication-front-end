@@ -41,7 +41,6 @@ import { VesselListPage } from './pages/VesselListPage/Loadable';
 import { VesselCreateUpdatePage } from './pages/VesselCreateUpdatePage/Loadable';
 import { ParticipantCreateUpdatePage } from './pages/ParticipantCreateUpdatePage/Loadable';
 import { VesselParticipantGroupPage } from './pages/VesselParticipantGroupCreateUpdatePage/Loadable';
-import { VesselParticipantGroupListPage } from './pages/VesselParticipantGroupListPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -163,9 +162,8 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/vessels/:id/update'} component={VesselCreateUpdatePage} />
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/participants/create'} component={ParticipantCreateUpdatePage}/>
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/participants/:id/update'} component={ParticipantCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/vessel-participant-groups/create'} component={VesselParticipantGroupPage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/vessel-participant-groups/:id/update'} component={VesselParticipantGroupPage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/vessel-participant-groups'} component={VesselParticipantGroupListPage}/>
+              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/vessel-participant-groups/create'} component={VesselParticipantGroupPage}/>
+              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/vessel-participant-groups/:id/update'} component={VesselParticipantGroupPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <Route component={NotFoundPage} />

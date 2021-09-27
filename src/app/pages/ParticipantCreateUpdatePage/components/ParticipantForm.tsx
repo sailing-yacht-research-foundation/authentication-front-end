@@ -42,7 +42,7 @@ export const ParticipantForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
-        let { publicName, participantId, calendarEventId } = values;
+        let { publicName, calendarEventId } = values;
         let response;
         calendarEventId = eventId ? eventId : calendarEventId;
 
@@ -50,7 +50,6 @@ export const ParticipantForm = () => {
 
         const data = {
             publicName: publicName,
-            participantId: participantId,
             calendarEventId: calendarEventId,
             userProfileId: null
         };
@@ -65,10 +64,10 @@ export const ParticipantForm = () => {
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success(t(translations.participant_unit_create_update_page.created_a_new_participant, { name: response.data?.name }));
+                toast.success(t(translations.participant_unit_create_update_page.created_a_new_participant, { name: response.data?.publicName }));
                 setParticipant(response.data);
             } else {
-                toast.success(t(translations.participant_unit_create_update_page.successfully_updated_participant, { name: response.data?.name }));
+                toast.success(t(translations.participant_unit_create_update_page.successfully_updated_participant, { name: response.data?.publicName }));
             }
 
             if (eventId) {
@@ -147,14 +146,6 @@ export const ParticipantForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.public_name)}</SyrfFieldLabel>}
                             name="publicName"
-                            rules={[{ required: true }]}
-                        >
-                            <SyrfInputField />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.participant_id)}</SyrfFieldLabel>}
-                            name="participantId"
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField />
