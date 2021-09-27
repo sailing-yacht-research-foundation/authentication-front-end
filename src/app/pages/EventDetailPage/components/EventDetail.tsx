@@ -130,11 +130,6 @@ const EventActions = styled.div`
     text-align: right;
 `;
 
-const Attendants = styled.div`
-    margin-top: 10px;
-    font-size: 13px;
-`;
-
 const ShareButton = styled(Button)`
     color: #40a9ff;
     border-color: #40a9ff;

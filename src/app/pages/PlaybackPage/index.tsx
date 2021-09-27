@@ -86,8 +86,8 @@ export const PlaybackPage = (props) => {
         return () => {
             if (eventEmitter) {
                 eventEmitter.removeAllListeners();
-                eventEmitter.off("ping", () => {});
-                eventEmitter.off("leg-update", () => {});
+                eventEmitter.off("ping", () => { });
+                eventEmitter.off("leg-update", () => { });
             }
             dispatch(actions.setElapsedTime(0));
             dispatch(actions.setRaceLength(0));
@@ -213,6 +213,7 @@ export const PlaybackPage = (props) => {
         return () => {
             clearInterval(interval);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
