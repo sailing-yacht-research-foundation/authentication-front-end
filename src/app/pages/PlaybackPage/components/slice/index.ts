@@ -1,20 +1,24 @@
-import { PayloadAction } from '@reduxjs/toolkit';
-import { createSlice } from 'utils/@reduxjs/toolkit';
-import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import playbackSaga from './saga';
-import { PlaybackState } from './types';
+import { PayloadAction } from "@reduxjs/toolkit";
+import { PlaybackTypes } from "types/Playback";
+import { createSlice } from "utils/@reduxjs/toolkit";
+import { useInjectReducer, useInjectSaga } from "utils/redux-injectors";
+import playbackSaga from "./saga";
+import { PlaybackState } from "./types";
 
 export const initialState: PlaybackState = {
     elapsedTime: 0,
     raceLength: 0,
-    competitionUnitId: '',
+    competitionUnitId: "",
     competitionUnitDetail: {},
     vesselParticipants: [],
     isPlaying: false,
+    searchRaceId: "",
+    searchRaceDetail: "",
+    playbackType: PlaybackTypes.STREAMINGRACE,
 };
 
 const slice = createSlice({
-    name: 'playback',
+    name: "playback",
     initialState,
     reducers: {
         setElapsedTime(state, action: PayloadAction<number>) {
@@ -30,13 +34,23 @@ const slice = createSlice({
             state.competitionUnitDetail = action.payload;
         },
         setVesselParticipants(state, action: PayloadAction<any>) {
-            state.vesselParticipants = action.payload
+            state.vesselParticipants = action.payload;
         },
         setIsPlaying(state, action: PayloadAction<any>) {
             state.isPlaying = action.payload;
         },
-        getCompetitionUnitDetail(state, action: PayloadAction<any>){},
-        getVesselParticipants(state, action: PayloadAction<any>){}
+        setSearchRaceId(state, action: PayloadAction<any>) {
+            state.searchRaceId = action.payload;
+        },
+        setSearchRaceDetail(state, action: PayloadAction<any>) {
+            state.searchRaceDetail = action.payload;
+        },
+        setPlaybackType(state, action: PayloadAction<PlaybackTypes>) {
+            state.playbackType = action.payload;
+        },
+        getCompetitionUnitDetail(state, action: PayloadAction<any>) {},
+        getVesselParticipants(state, action: PayloadAction<any>) {},
+        getSearchRaceDetail(state, action: PayloadAction<any>) {},
     },
 });
 

@@ -35,3 +35,18 @@ export const selectIsPlaying = createSelector(
   [selectDomain],
   (playbackState) => playbackState.isPlaying
 );
+
+export const selectSearchRaceId = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.searchRaceId
+)
+
+export const selectSearchRaceDetail = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.searchRaceDetail
+)
+
+export const selectPlaybackType = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.playbackType
+)
