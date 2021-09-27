@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderText } from 'app/components/SyrfGeneral';
+import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -113,24 +113,28 @@ export const ParticipantForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageHeaderText>{mode === MODE.UPDATE ? t(translations.participant_unit_create_update_page.update_participant) : t(translations.participant_unit_create_update_page.create_a_new_participant)}</PageHeaderText>
-                <Space size={10}>
-                    <CreateButton onClick={() => {
+            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
+                <PageInfoOutterWrapper>
+                    <GobackButton onClick={() => {
                         if (eventId) {
                             history.push(`/events/${eventId}/update`);
                         } else {
                             history.push(`/events`);
                         }
-                    }} icon={<IoIosArrowBack
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.participant_unit_create_update_page.back_to_race)}</CreateButton>
+                    }}>
+                        <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                    </GobackButton>
+                    <PageInfoContainer>
+                        <PageHeading>{mode === MODE.UPDATE ? t(translations.participant_unit_create_update_page.update_participant) : t(translations.participant_unit_create_update_page.create_a_new_participant)}</PageHeading>
+                    </PageInfoContainer>
+                </PageInfoOutterWrapper>
+                <Space size={10}>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.participant_unit_create_update_page.delete)}</DeleteButton>}
 
                 </Space>
-            </PageHeaderContainer>
+            </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
                     <Form

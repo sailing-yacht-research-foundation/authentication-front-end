@@ -19,6 +19,10 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
+import { renderTimezoneInUTCOffset } from 'utils/helpers';
+
+const { getTimeZones } = require("@vvo/tzdb");
+const timeZones = getTimeZones();
 
 export const CompetitionUnitForm = () => {
 
@@ -49,7 +53,7 @@ export const CompetitionUnitForm = () => {
     const courseListRef = React.useRef<any>();
 
     const onFinish = async (values) => {
-        let { name, startDate, startTime, isCompleted, calendarEventId, description } = values;
+        let { name, startDate, startTime, isCompleted, calendarEventId, description, approximateStart_zone } = values;
         let response;
         calendarEventId = eventId ? eventId : calendarEventId;
 
@@ -67,7 +71,8 @@ export const CompetitionUnitForm = () => {
                     "coordinates": [...boundingBoxCoordinates]
                 }
                 : null,
-            calendarEventId: calendarEventId
+            calendarEventId: calendarEventId,
+            approximateStart_zone: approximateStart_zone
         };
 
         if (mode === MODE.CREATE)
@@ -149,6 +154,12 @@ export const CompetitionUnitForm = () => {
         else history.push('/races');
     }
 
+    const renderTimezoneDropdownList = () => {
+        return timeZones.map((timezone, index) => {
+            return <Select.Option key={index} value={timezone.name}>{timezone.name + ' ' + renderTimezoneInUTCOffset(timezone.name)}</Select.Option>
+        });
+    }
+
     return (
         <Wrapper>
             <DeleteCompetitionUnitModal
@@ -197,7 +208,7 @@ export const CompetitionUnitForm = () => {
                         >
                             <SyrfTextArea />
                         </Form.Item>
-                        
+
                         {
                             !eventId && <Form.Item
                                 label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.event_id)}</SyrfFieldLabel>}
@@ -223,7 +234,7 @@ export const CompetitionUnitForm = () => {
                         <Divider />
 
                         <Row gutter={12}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
@@ -244,13 +255,37 @@ export const CompetitionUnitForm = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col xs={24} sm={24} md={12} lg={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
                                     rules={[{ required: true }]}
                                 >
                                     <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.timezone)}</SyrfFieldLabel>}
+                                    name="approximateStart_zone"
+                                    rules={[{ required: true }]}
+                                >
+                                    <SyrfFormSelect placeholder={t(translations.competition_unit_create_update_page.timezone)}
+                                        showSearch
+                                        filterOption={(input, option) => {
+                                            if (option) {
+                                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+
+                                            return false;
+                                        }}
+                                    >
+                                        {
+                                            renderTimezoneDropdownList()
+                                        }
+                                    </SyrfFormSelect>
                                 </Form.Item>
                             </Col>
                         </Row>

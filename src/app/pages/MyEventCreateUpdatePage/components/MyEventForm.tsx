@@ -1,13 +1,13 @@
 import React from 'react';
-import { Spin, Form, DatePicker, Row, Col, Divider, Switch, TimePicker, Space } from 'antd';
+import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Space } from 'antd';
 import { DeleteButton, PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { LocationPicker } from './LocationPicker';
 import { useForm } from 'antd/lib/form/Form';
 import { create, get, update } from 'services/live-data-server/event-calendars';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { CompetitionUnitList } from './CompetitionUnitList';
@@ -19,6 +19,10 @@ import { translations } from 'locales/translations';
 import { ParticipantList } from './ParticipantList';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
+import { renderTimezoneInUTCOffset } from 'utils/helpers';
+
+const { getTimeZones } = require("@vvo/tzdb");
+const timeZones = getTimeZones();
 
 export const MyEventForm = () => {
 
@@ -47,7 +51,7 @@ export const MyEventForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
-        const { name, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime, description } = values;
+        const { name, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime, description, approximateStartTime_zone } = values;
         let response;
         let currentDate = moment();
 
@@ -71,7 +75,8 @@ export const MyEventForm = () => {
             endMonth: currentDate.utc().format('MM'),
             endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
-            isPrivate: isPrivate
+            isPrivate: isPrivate,
+            approximateStartTime_zone: approximateStartTime_zone,
         };
 
         if (mode === MODE.CREATE)
@@ -141,6 +146,12 @@ export const MyEventForm = () => {
 
     const onRaceDeleted = () => {
         history.push('/events');
+    }
+
+    const renderTimezoneDropdownList = () => {
+        return timeZones.map((timezone, index) => {
+            return <Select.Option key={index} value={timezone.name}>{timezone.name + ' ' + renderTimezoneInUTCOffset(timezone.name)}</Select.Option>
+        });
     }
 
     return (
@@ -222,7 +233,7 @@ export const MyEventForm = () => {
                         {(mode === MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
                         {mode === MODE.CREATE && <LocationPicker coordinates={MAP_DEFAULT_VALUE.CENTER} onChoosedLocation={onChoosedLocation} />}
                         <Row gutter={12}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
@@ -243,13 +254,37 @@ export const MyEventForm = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col xs={24} sm={24} md={12} lg={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
                                     rules={[{ required: true }]}
                                 >
                                     <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.timezone)}</SyrfFieldLabel>}
+                                    name="approximateStartTime_zone"
+                                    rules={[{ required: true }]}
+                                >
+                                    <SyrfFormSelect placeholder={t(translations.my_event_create_update_page.timezone)}
+                                        showSearch
+                                        filterOption={(input, option) => {
+                                            if (option) {
+                                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+
+                                            return false;
+                                        }}
+                                    >
+                                        {
+                                            renderTimezoneDropdownList()
+                                        }
+                                    </SyrfFormSelect>
                                 </Form.Item>
                             </Col>
                         </Row>

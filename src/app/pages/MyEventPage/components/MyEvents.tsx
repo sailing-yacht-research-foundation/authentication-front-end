@@ -8,13 +8,13 @@ import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeaderText, PageHeading, PageInfoContainer, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteRaceModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue } from 'utils/helpers';
+import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 
 const defaultOptions = {
@@ -58,7 +58,7 @@ export const MyEvents = () => {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
+            render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time) + ' ' + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
         },
         {
             title: t(translations.my_event_list_page.created_date),

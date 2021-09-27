@@ -6,8 +6,9 @@ import { getAllByCalendarEventId } from 'services/live-data-server/competition-u
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
+import { Link } from 'react-router-dom';
 
-export const EventList = (props) => {
+export const RaceList = (props) => {
 
     const { t } = useTranslation();
 
@@ -18,7 +19,9 @@ export const EventList = (props) => {
             title: t(translations.competition_unit_list_page.name),
             dataIndex: 'name',
             key: 'name',
-            render: text => text,
+            render: (text, record) => {
+                return <Link to={`/playback/?raceId=${record.calendarEventId}`}>{text}</Link>;
+            },
             width: '33%'
         },
         {

@@ -334,7 +334,8 @@
     "select_an_event": "Select an event",
     "create_a_private_polygon": "Create a privacy polygon",
     "positions_outside_of_this_polygon_is": "Positions outside of this polygon may be discarded if they don’t appear relevant to the race.",
-    "description": "Description"
+    "description": "Description",
+    "timezone": "Time zone"
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -354,7 +355,8 @@
     "save_event": "Save event",
     "please_choose_a_location": "Please choose a location by clicking on the map",
     "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
-    "description": "Description"
+    "description": "Description",
+    "timezone": "Time zone"
   },
   "course_list": {
     "course": "Course",

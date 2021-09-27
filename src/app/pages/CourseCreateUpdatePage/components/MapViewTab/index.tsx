@@ -1,14 +1,12 @@
 import { Button, Space } from 'antd';
-import { CreateButton, DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
-import { useEffect } from 'hoist-non-react-statics/node_modules/@types/react';
+import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BiSave, BiTrash } from 'react-icons/bi';
-import { HiSave } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MapContainer } from 'react-leaflet';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { MAP_DEFAULT_VALUE } from 'utils/constants';
@@ -18,8 +16,6 @@ import { MODE } from 'utils/constants';
 const NAV_HEIGHT = '125px';
 
 export const MapViewTab = () => {
-
-    const history = useHistory();
 
     const { t } = useTranslation();
 
@@ -32,6 +28,7 @@ export const MapViewTab = () => {
     React.useEffect(() => {
         if (location.pathname.includes(MODE.UPDATE))
             setMode(MODE.UPDATE);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
