@@ -81,7 +81,6 @@ export const EventDetail = () => {
                         }
                         <ShareButton shape="round" icon={<FiUserPlus style={{ marginRight: '5px' }} />}>{t(translations.event_detail_page.invite_friends)}</ShareButton>
                     </Space>
-                    <Attendants>{t(translations.event_detail_page.people_are_going_to_this_event, { participants_count: 233 })}</Attendants>
                 </EventActions>
             </PageHeaderContainerResponsive>
 
