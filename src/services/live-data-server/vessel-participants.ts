@@ -1,8 +1,27 @@
 import { SYRF_SERVER } from "services/service-constants";
 import syrfService from 'utils/syrf-request';
 
+const userId: any = localStorage.getItem('user_id');
+
+export const getManyByEventId = (eventId, page) => {
+    return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants${!!userId ? `?createdById_eq=${userId}` : ''}&eventId_eq=${eventId}`, {
+        params: {
+            page: page
+        }
+    }).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
+
 export const getMany = (page) => {
-    const userId: any = localStorage.getItem('user_id');
     return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page

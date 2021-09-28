@@ -53,6 +53,12 @@ export const AssignVesselParticipantModal = (props) => {
         getMany(page);
     }
 
+    const getVesselParticipantByEventId = (eventId) => {
+        setIsLoading(true);
+        // const response = await get
+        setIsLoading(false);
+    }
+
     return (
         <Modal title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_groups)}
             visible={showAssignModal}

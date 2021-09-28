@@ -2,6 +2,8 @@ import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
 import syrfRequest from 'utils/syrf-request';
 
+const userId: any = localStorage.getItem('user_id');
+
 export const search = (params) => {
     const query: any = {
         bool: {
@@ -77,7 +79,6 @@ export const create = (calendarEventId, data) => {
 }
 
 export const getAllByCalendarEventId = (calendarEventId, page) => {
-    let userId: any = localStorage.getItem('user_id');
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
@@ -97,7 +98,6 @@ export const getAllByCalendarEventId = (calendarEventId, page) => {
 }
 
 export const getAllCompetitionUnits = (page) => {
-    let userId: any = localStorage.getItem('user_id');
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
