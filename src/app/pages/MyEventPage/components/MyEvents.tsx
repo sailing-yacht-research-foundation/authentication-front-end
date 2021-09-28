@@ -26,7 +26,6 @@ const defaultOptions = {
     }
 };
 
-const userId = localStorage.getItem('user_id');
 const uuid = localStorage.getItem('uuid');
 
 export const MyEvents = () => {
@@ -72,6 +71,7 @@ export const MyEvents = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => {
+                const userId = localStorage.getItem('user_id');
                 if ((userId && record.createdById === userId) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton onClick={() => {

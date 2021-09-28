@@ -16,7 +16,7 @@ import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/co
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { getAllVesselParticipantGroups, getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
+import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';

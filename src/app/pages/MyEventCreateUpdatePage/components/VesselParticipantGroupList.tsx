@@ -10,9 +10,6 @@ import { translations } from 'locales/translations';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { TIME_FORMAT } from 'utils/constants';
 
-const userId = localStorage.getItem('user_id');
-const uuid = localStorage.getItem('uuid');
-
 export const VesselParticipantGroupList = (props) => {
 
     const { t } = useTranslation();
@@ -37,15 +34,12 @@ export const VesselParticipantGroupList = (props) => {
             key: 'action',
             width: '20%',
             render: (text, record) => {
-                if ((userId && userId === record.createdById) || (uuid === record.createdById))
-                    return <Space size="middle">
-                        <BorderedButton onClick={() => {
-                            history.push(`/events/${eventId}/vessel-participant-groups/${record.id}/update`);
-                        }} type="primary">{t(translations.vessel_participant_group_list_page.update)}</BorderedButton>
-                        <BorderedButton danger onClick={() => showDeleteGroupModal(record)}>{t(translations.vessel_participant_group_list_page.delete)}</BorderedButton>
-                    </Space>;
-
-                return <></>;
+                return <Space size="middle">
+                    <BorderedButton onClick={() => {
+                        history.push(`/events/${eventId}/vessel-participant-groups/${record.id}/update`);
+                    }} type="primary">{t(translations.vessel_participant_group_list_page.update)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDeleteGroupModal(record)}>{t(translations.vessel_participant_group_list_page.delete)}</BorderedButton>
+                </Space>;
             }
         },
     ];

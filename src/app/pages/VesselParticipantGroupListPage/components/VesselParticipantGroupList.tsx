@@ -21,7 +21,6 @@ const defaultOptions = {
     }
 };
 
-const userId = localStorage.getItem('user_id');
 const uuid = localStorage.getItem('uuid');
 
 export const VesselParticipantGroupList = () => {
@@ -46,6 +45,7 @@ export const VesselParticipantGroupList = () => {
             key: 'action',
             width: '20%',
             render: (text, record) => {
+                const userId = localStorage.getItem('user_id');
                 if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton onClick={() => {

@@ -494,7 +494,7 @@
     "add_to_group": "Add To Group",
     "delete_from_group": "Delete From Group",
     "successfully_added_to_group": "Successfully added this vessel to the group.",
-    "successfully_removed_vessel_from_the_group": "Successfully remove vessel from the group.",
+    "successfully_removed_vessel_from_the_group": "Successfully removed vessel from the group.",
     "an_error_happened_when_adding_vessel_to_this_group": "An error happended when adding vessel to the group",
     "an_error_happened_when_removing_vessel_from_this_group": "An error happened when removing vessel from this group"
   },

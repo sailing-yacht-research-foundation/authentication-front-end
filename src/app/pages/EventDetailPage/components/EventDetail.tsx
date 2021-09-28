@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
 
-const userId = localStorage.getItem('user_id');
+let userId;
 
 export const EventDetail = () => {
 
@@ -33,6 +33,7 @@ export const EventDetail = () => {
 
     React.useEffect(() => {
         fetchEvent();
+        userId = localStorage.getItem('user_id'); // get userId everytime the component renders.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -66,7 +67,7 @@ export const EventDetail = () => {
             <PageHeaderContainerResponsive>
                 <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
                     <EventTitle>{event.name}</EventTitle>
-                    <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost>{event.createdBy?.name}</EventHost></EventHoldBy>
+                    {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost>{event.createdBy?.name}</EventHost></EventHoldBy>}
                     <EventDate>{moment(event.startTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
                 </EventHeaderInfoContainer>
                 <EventActions>
