@@ -17,9 +17,6 @@ exports[`<ResultItem /> should render and match the snapshot 1`] = `
       Race at Wales west coast
     </Link>
   </styled.h3>
-  <styled.p>
-    No description provided.
-  </styled.p>
   <styled.div>
     <styled.span>
       Date:
@@ -27,7 +24,7 @@ exports[`<ResultItem /> should render and match the snapshot 1`] = `
       Jun. 23, 2017
     </styled.span>
     <styled.span>
-      Event
+      Event:
        
       Not Available
     </styled.span>
@@ -39,7 +36,7 @@ exports[`<ResultItem /> should render and match the snapshot 1`] = `
     <styled.span>
       Country:
        
-      Not Available
+      California Coast
     </styled.span>
   </styled.div>
 </styled.div>
