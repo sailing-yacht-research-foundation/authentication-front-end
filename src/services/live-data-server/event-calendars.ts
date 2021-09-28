@@ -1,9 +1,8 @@
 import { SYRF_SERVER } from 'services/service-constants';
 import syrfRequest from 'utils/syrf-request';
 
-const userId: any = localStorage.getItem('user_id');
-
 export const getAll = () => {
+    const userId: any = localStorage.getItem('user_id');
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`)
         .then(response => {
             return {
@@ -19,6 +18,7 @@ export const getAll = () => {
 }
 
 export const getMany = (page) => {
+    const userId: any = localStorage.getItem('user_id');
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
