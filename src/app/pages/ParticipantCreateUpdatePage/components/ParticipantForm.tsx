@@ -47,6 +47,7 @@ export const ParticipantForm = () => {
         const data = {
             publicName: publicName,
             calendarEventId: calendarEventId,
+            participantId: '',
             userProfileId: null
         };
 

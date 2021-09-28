@@ -520,7 +520,11 @@
     "vessel_name": "Vessel Name",
     "assign": "Assign",
     "unassign": "Unassign",
-    "assign_vessel_to_vessel_groups" : "Assign participant to vessel groups"
+    "assign_vessel_to_vessel_groups" : "Assign participant to vessel groups",
+    "successfully_register": "Successfully registered this participant to the group.",
+    "an_error_happended_when_registering": "An error happened when registering the participant to the group",
+    "successfully_unregister": "Successfully unregistered this participant to the group.",
+    "an_error_happended_when_ungistering": "An error happened when unregistering the participant to the group."
   },
   "event_detail_page": {
     "organized_by": "Organized By",

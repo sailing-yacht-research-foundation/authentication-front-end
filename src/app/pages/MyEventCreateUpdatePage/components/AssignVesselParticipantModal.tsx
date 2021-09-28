@@ -33,7 +33,7 @@ export const AssignVesselParticipantModal = (props) => {
             render: (value, record) => {
                 return record.group?.name
             },
-            width: '20%',
+            width: '33%',
         },
         {
             title: t(translations.assign_vessel_participant_modal.vessel_name),
@@ -42,10 +42,10 @@ export const AssignVesselParticipantModal = (props) => {
             render: (value, record) => {
                 return record.vessel?.publicName
             },
-            width: '20%',
+            width: '33%',
         },
         {
-            title: 'Action',
+            title: t(translations.assign_vessel_participant_modal.action),
             key: 'action',
             render: (text, record) => {
                 if (checkIfParticipantExistsOnVesselParticipant(record.participants)) {
@@ -58,7 +58,7 @@ export const AssignVesselParticipantModal = (props) => {
                     assignParticipantToVesselParticipant(record.id);
                 }} type="primary">{t(translations.assign_vessel_participant_modal.assign)}</BorderedButton>;
             },
-            width: '20%',
+            width: '33%',
         },
     ];
 

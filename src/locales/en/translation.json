@@ -524,7 +524,8 @@
     "successfully_register": "Successfully registered this participant to the group.",
     "an_error_happended_when_registering": "An error happened when registering the participant to the group",
     "successfully_unregister": "Successfully unregistered this participant to the group.",
-    "an_error_happended_when_ungistering": "An error happened when unregistering the participant to the group."
+    "an_error_happended_when_ungistering": "An error happened when unregistering the participant to the group.",
+    "action": "Action"
   },
   "event_detail_page": {
     "organized_by": "Organized By",

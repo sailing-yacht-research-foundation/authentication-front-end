@@ -117,7 +117,6 @@ export function App(props) {
       return (
         <StyledSider
           collapsible
-          className="fadeIn"
           onCollapse={onSiderCollapsed}
           width={256}
           style={{

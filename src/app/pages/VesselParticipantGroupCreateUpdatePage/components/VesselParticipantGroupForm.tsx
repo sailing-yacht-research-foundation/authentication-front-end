@@ -14,11 +14,7 @@ import { translations } from 'locales/translations';
 import { VesselList } from './VesselList';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { IoIosArrowBack } from 'react-icons/io';
-
-const MODE = {
-    UPDATE: 'update',
-    CREATE: 'create'
-}
+import { MODE } from 'utils/constants';
 
 export const VesselParticipantGroupForm = () => {
     const history = useHistory();
@@ -58,7 +54,6 @@ export const VesselParticipantGroupForm = () => {
             response = await create(data);
         else
             response = await update(id, data);
-
 
         setIsSaving(false);
 

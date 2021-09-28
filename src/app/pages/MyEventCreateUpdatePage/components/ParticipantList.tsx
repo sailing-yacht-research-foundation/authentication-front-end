@@ -133,11 +133,11 @@ export const ParticipantList = (props) => {
 }
 
 const AssignButton = styled(BorderedButton)`
-    background: orange;
+    background: #DC6E1E;
     border: 1px solid #fff;
 
     :hover, :focus {
-        background: orange;
+        background: #DC6E1E;
         border: 1px solid #fff;
     }
 `;

@@ -208,9 +208,4 @@ export const GlobalStyle = createGlobalStyle`
   .volcano-5 {
     background-color: #ff7a45;
   }
-
-  .fadeIn {
-    opacity: 1;
-    transition: opacity 1s; 
-  }
 `;
