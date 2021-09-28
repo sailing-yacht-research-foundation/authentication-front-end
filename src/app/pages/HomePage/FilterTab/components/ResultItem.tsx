@@ -23,7 +23,7 @@ export const ResultItem = (props) => {
                 </Space>
             </HeadDescriptionWrapper>
             <Name><Link to={`/playback?raceid=${race._id}`}>{race._source.name}</Link></Name>
-            {race._source?.description && <Description>{race._source?.description}</Description>}
+            {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
             <DescriptionWrapper>
                 <DescriptionItem>
                     {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}
