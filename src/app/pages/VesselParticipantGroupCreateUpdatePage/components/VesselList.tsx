@@ -69,7 +69,9 @@ export const VesselList = (props) => {
 
 
     const getAllUserVesselParticipants = async () => {
+        setIsLoading(true);
         const response = await getManyVesselParticipants(undefined);
+        setIsLoading(false);
 
         if (response.success) {
             setVesselParticipants(response.data?.rows);

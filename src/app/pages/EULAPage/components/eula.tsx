@@ -1,5 +1,4 @@
 import React from 'react';
-import { Row } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useEulaSlice } from '../slice';
 

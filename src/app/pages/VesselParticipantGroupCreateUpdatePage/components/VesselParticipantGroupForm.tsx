@@ -1,8 +1,7 @@
 import React from 'react';
-import { Spin, Form, Divider, Space } from 'antd';
+import { Spin, Form, Divider } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { CreateButton, DeleteButton, PageHeaderContainerResponsive, PageHeaderText } from 'app/components/SyrfGeneral';
-import { BsCardList } from 'react-icons/bs';
+import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -14,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { VesselList } from './VesselList';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const MODE = {
     UPDATE: 'update',
@@ -41,7 +41,7 @@ export const VesselParticipantGroupForm = () => {
 
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
-    const { eventId } = useParams<{ eventId: string}>();
+    const { eventId } = useParams<{ eventId: string }>();
 
     const onFinish = async (values) => {
         let { name } = values;
@@ -113,16 +113,19 @@ export const VesselParticipantGroupForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageHeaderText>{mode === MODE.UPDATE ? t(translations.vessel_participant_group_create_update_page.update_group) : t(translations.vessel_participant_group_create_update_page.create_a_new_group)}</PageHeaderText>
-                <Space size={10}>
-                    <CreateButton onClick={() => history.push("/vessel-participant-groups")} icon={<BsCardList
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.vessel_participant_group_create_update_page.view_all_groups)}</CreateButton>
-                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.vessel_participant_group_create_update_page.delete)}</DeleteButton>}
-
-                </Space>
+                <PageInfoOutterWrapper>
+                    <GobackButton onClick={() => {
+                        history.push(`/events/${eventId}/update`);
+                    }}>
+                        <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                    </GobackButton>
+                    <PageInfoContainer>
+                        <PageHeading>{mode === MODE.UPDATE ? t(translations.vessel_participant_group_create_update_page.update_group) : t(translations.vessel_participant_group_create_update_page.create_a_new_group)}</PageHeading>
+                    </PageInfoContainer>
+                </PageInfoOutterWrapper>
+                {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                    style={{ marginRight: '5px' }}
+                    size={18} />}>{t(translations.vessel_participant_group_create_update_page.delete)}</DeleteButton>}
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
@@ -154,7 +157,7 @@ export const VesselParticipantGroupForm = () => {
 
             {mode === MODE.UPDATE &&
                 <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                    <VesselList group={group}/>
+                    <VesselList group={group} />
                 </SyrfFormWrapper>
             }
         </Wrapper >

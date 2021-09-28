@@ -1,11 +1,10 @@
 import React from 'react';
-import { Modal, Space, Spin, Table } from 'antd';
+import { Modal, Spin, Table } from 'antd';
 import { BorderedButton, DeleteButton, TableWrapper } from 'app/components/SyrfGeneral';
-import { BiTrash } from 'react-icons/bi';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { getManyByEventId } from 'services/live-data-server/vessel-participants';
-import { getAllByVesselParticipantId, registerParticipantsToVesselParticipant, unregisterParticipantFromVesselParticipant } from 'services/live-data-server/participants';
+import { registerParticipantsToVesselParticipant, unregisterParticipantFromVesselParticipant } from 'services/live-data-server/participants';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { media } from 'styles/media';
@@ -49,16 +48,15 @@ export const AssignVesselParticipantModal = (props) => {
             title: 'Action',
             key: 'action',
             render: (text, record) => {
-                return <>
-                    <BorderedButton onClick={() => {
-                        assignParticipantToVesselParticipant(record.id);
-                    }} type="primary">Assign</BorderedButton>
-                    <DeleteButton onClick={() => {
+                if (checkIfParticipantExistsOnVesselParticipant(record.participants)) {
+                    return <DeleteButton onClick={() => {
                         removeParticipantFromVesselParticipant(record.id);
-                    }} danger icon={<BiTrash
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.assign_vessel_participant_modal.unassign)}</DeleteButton>
-                </>
+                    }} danger>{t(translations.assign_vessel_participant_modal.unassign)}</DeleteButton>;
+                }
+
+                return <BorderedButton onClick={() => {
+                    assignParticipantToVesselParticipant(record.id);
+                }} type="primary">{t(translations.assign_vessel_participant_modal.assign)}</BorderedButton>;
             },
             width: '20%',
         },
@@ -68,14 +66,10 @@ export const AssignVesselParticipantModal = (props) => {
         getVesselParticipantByEventId(page);
     }
 
-    const checkIfParticipantExistsOnVesselParticipant = async (vesselParticipantId) => {
-        const response = await getAllByVesselParticipantId(vesselParticipantId);
-
-        if (response.success) {
-            return response.data?.includes(participant.id);
-        }
-
-        return false;
+    const checkIfParticipantExistsOnVesselParticipant = (participants) => {
+        return participants.filter(p => {
+            return p.id === participant.id
+        }).length > 0;
     }
 
     const getVesselParticipantByEventId = async (page) => {
@@ -97,9 +91,10 @@ export const AssignVesselParticipantModal = (props) => {
         const response = await registerParticipantsToVesselParticipant(vesselParticipantId, [participant.id]);
 
         if (response.success) {
-            toast.success('Successfully registered this participant to the group');
+            toast.success(t(translations.assign_vessel_participant_modal.successfully_register));
+            getVesselParticipantByEventId(pagination.page);
         } else {
-            toast.error('An error happened when registering the participant to the group');
+            toast.error(t(translations.assign_vessel_participant_modal.an_error_happended_when_registering));
         }
     }
 
@@ -107,14 +102,16 @@ export const AssignVesselParticipantModal = (props) => {
         const response = await unregisterParticipantFromVesselParticipant(vesselParticipantId, participant.id);
 
         if (response.success) {
-            toast.success('Successfully unregistered this participant to the group');
+            toast.success(t(translations.assign_vessel_participant_modal.successfully_unregister));
+            getVesselParticipantByEventId(pagination.page);
         } else {
-            toast.error('An error happened when unregistering the participant to the group');
+            toast.error(t(translations.assign_vessel_participant_modal.an_error_happended_when_ungistering));
         }
     }
 
     React.useEffect(() => {
         getVesselParticipantByEventId(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
