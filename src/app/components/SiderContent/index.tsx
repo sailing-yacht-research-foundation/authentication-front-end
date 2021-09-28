@@ -62,7 +62,7 @@ export const SiderContent = (props) => {
   }
 
   return (
-    <SiderWrapper style={{ width: toggled && !isMobile() ?  '100%' : 'auto' }}>
+    <SiderWrapper style={{ width: (toggled && !isMobile()) ?  '100%' : 'auto' }}>
       {renderedDefaultActive && <SyrfMenu
         defaultSelectedKeys={[selectedKey]}
         mode="inline"
@@ -144,5 +144,9 @@ const SyrfSubmenu = styled(Menu.SubMenu)`
 const SyrfMenuItem = styled(Menu.Item)`
     height: 50px !important;
     line-height: 50px !important;
-    width: 100%;
+    width: 256px !important;
+
+    ${media.medium`
+      width: auto !important;
+    `}
 `;

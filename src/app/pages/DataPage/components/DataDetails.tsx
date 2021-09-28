@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Iframe from 'react-iframe'
 import { StyleConstants } from 'styles/StyleConstants';
 import { IoIosArrowBack } from 'react-icons/io';
+import { GobackButton, PageDescription, PageHeading } from 'app/components/SyrfGeneral';
 
 export const DataDetails = (props) => {
     const { data, goBack } = props;
@@ -25,10 +26,6 @@ export const DataDetails = (props) => {
     )
 }
 
-const PageHeading = styled.h2`
-    padding: 20px 15px;
-    padding-bottom: 0px;
-`;
 
 const PageHeadContainer = styled.div`
     display: flex;
@@ -40,21 +37,10 @@ const PageInfoContainer = styled.div`
     flex-direction: column;
 `;
 
-const PageDescription = styled.p`
-    padding: 0 15px;
-`;
-
 const Wrapper = styled.div`
  margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
 `;
 
 const IframeContainer = styled.div`
     height: 83vh;
-`;
-
-const GobackButton = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
 `;

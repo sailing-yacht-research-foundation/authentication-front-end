@@ -8,13 +8,13 @@ import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderContainerResponsive, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteRaceModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue } from 'utils/helpers';
+import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 
 const defaultOptions = {
@@ -29,7 +29,7 @@ const defaultOptions = {
 const userId = localStorage.getItem('user_id');
 const uuid = localStorage.getItem('uuid');
 
-export const MyRaces = () => {
+export const MyEvents = () => {
 
     const { t } = useTranslation();
 
@@ -39,10 +39,7 @@ export const MyRaces = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                if ((userId && userId === record.createdById) || (uuid === record.createdById))
-                    return <Link to={`/events/${record.id}/update`}>{text}</Link>;
-
-                return text;
+                    return <Link to={`/events/${record.id}`}>{text}</Link>;
             },
         },
         {
@@ -61,7 +58,7 @@ export const MyRaces = () => {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
+            render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time) + ' ' + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
         },
         {
             title: t(translations.my_event_list_page.created_date),
@@ -130,8 +127,11 @@ export const MyRaces = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainerResponsive>
-                <PageHeaderText>{t(translations.my_event_list_page.my_events)}</PageHeaderText>
+            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
+                <PageInfoContainer>
+                    <PageHeading>{t(translations.my_event_list_page.my_events)}</PageHeading>
+                    <PageDescription>{t(translations.my_event_list_page.events_are_regattas)}</PageDescription>
+                </PageInfoContainer>
                 <CreateButton onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
                     size={18} />}>{t(translations.my_event_list_page.create_a_new_event)}</CreateButton>

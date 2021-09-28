@@ -17,3 +17,8 @@ export const TIME_FORMAT = {
     date_text_with_time: 'MMM. D, YYYY [at] h:mm A z',
     date_text: 'MMM. D, YYYY'
 }
+
+export const MODE = {
+    CREATE: 'create',
+    UPDATE: 'update'
+};
