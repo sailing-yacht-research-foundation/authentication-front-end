@@ -1,12 +1,18 @@
 import React from 'react';
 import { Modal, Space, Spin, Table } from 'antd';
-import { DeleteButton, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, DeleteButton, TableWrapper } from 'app/components/SyrfGeneral';
 import { BiTrash } from 'react-icons/bi';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { getMany } from 'services/live-data-server/vessel-participants';
+import { getManyByEventId } from 'services/live-data-server/vessel-participants';
+import { getAllByVesselParticipantId, registerParticipantsToVesselParticipant, unregisterParticipantFromVesselParticipant } from 'services/live-data-server/participants';
+import { toast } from 'react-toastify';
+import styled from 'styled-components';
+import { media } from 'styles/media';
 
 export const AssignVesselParticipantModal = (props) => {
+
+    const { eventId } = props;
 
     const { t } = useTranslation();
 
@@ -23,46 +29,98 @@ export const AssignVesselParticipantModal = (props) => {
     const columns = [
         {
             title: t(translations.assign_vessel_participant_modal.group_name),
-            dataIndex: 'name',
-            key: 'name',
-            render: text => text,
+            dataIndex: 'groupName',
+            key: 'groupName',
+            render: (value, record) => {
+                return record.group?.name
+            },
             width: '20%',
         },
         {
             title: t(translations.assign_vessel_participant_modal.vessel_name),
-            dataIndex: 'approximateStartTime',
-            key: 'start_date',
-            render: (value) => value,
+            dataIndex: 'vesselName',
+            key: 'vesselName',
+            render: (value, record) => {
+                return record.vessel?.publicName
+            },
             width: '20%',
         },
         {
             title: 'Action',
             key: 'action',
-            render: (text, record) => (
-                <Space size="middle">
-                    <DeleteButton onClick={() => { }} danger icon={<BiTrash
+            render: (text, record) => {
+                return <>
+                    <BorderedButton onClick={() => {
+                        assignParticipantToVesselParticipant(record.id);
+                    }} type="primary">Assign</BorderedButton>
+                    <DeleteButton onClick={() => {
+                        removeParticipantFromVesselParticipant(record.id);
+                    }} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.assign_vessel_participant_modal.unassign)}</DeleteButton>
-                </Space>
-            ),
+                </>
+            },
             width: '20%',
         },
     ];
 
     const onPaginationChanged = (page) => {
-        getMany(page);
+        getVesselParticipantByEventId(page);
     }
 
-    const getVesselParticipantByEventId = (eventId) => {
-        setIsLoading(true);
-        // const response = await get
-        setIsLoading(false);
+    const checkIfParticipantExistsOnVesselParticipant = async (vesselParticipantId) => {
+        const response = await getAllByVesselParticipantId(vesselParticipantId);
+
+        if (response.success) {
+            return response.data?.includes(participant.id);
+        }
+
+        return false;
     }
+
+    const getVesselParticipantByEventId = async (page) => {
+        setIsLoading(true);
+        const response = await getManyByEventId(eventId, page);
+        setIsLoading(false);
+
+        if (response.success) {
+            setPagination({
+                ...pagination,
+                rows: response.data?.rows,
+                page: page,
+                total: response.data?.count
+            });
+        }
+    }
+
+    const assignParticipantToVesselParticipant = async (vesselParticipantId) => {
+        const response = await registerParticipantsToVesselParticipant(vesselParticipantId, [participant.id]);
+
+        if (response.success) {
+            toast.success('Successfully registered this participant to the group');
+        } else {
+            toast.error('An error happened when registering the participant to the group');
+        }
+    }
+
+    const removeParticipantFromVesselParticipant = async (vesselParticipantId) => {
+        const response = await unregisterParticipantFromVesselParticipant(vesselParticipantId, participant.id);
+
+        if (response.success) {
+            toast.success('Successfully unregistered this participant to the group');
+        } else {
+            toast.error('An error happened when unregistering the participant to the group');
+        }
+    }
+
+    React.useEffect(() => {
+        getVesselParticipantByEventId(1);
+    }, []);
 
     return (
-        <Modal title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_groups)}
+        <StyledModal title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_groups)}
             visible={showAssignModal}
-            onCancel={()=>setShowAssignModal(false)}
+            onCancel={() => setShowAssignModal(false)}
             okButtonProps={{
                 style: {
                     display: 'none'
@@ -79,9 +137,25 @@ export const AssignVesselParticipantModal = (props) => {
                             total: pagination.total,
                             onChange: onPaginationChanged
                         }}
-                       />
+                    />
                 </TableWrapper>
             </Spin>
-        </Modal>
+        </StyledModal>
     )
 }
+
+const StyledModal = styled(Modal)`
+    width: 100% !important;
+
+    .ant-modal-content {
+        width: 100%;
+    }
+
+    ${media.medium`
+        width: 1000px !important;
+
+        .ant-modal-content {
+            width: 1000px;
+        }
+    `}
+`;

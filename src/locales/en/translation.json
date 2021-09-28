@@ -271,7 +271,8 @@
     "sail_number": "Sail number:"
   },
   "app": {
-    "your_session_is_expired": "Your session is expired, please login again."
+    "your_session_is_expired": "Your session is expired, please login again.",
+    "error_happened": "Service is unavailable"
   },
   "data_page": {
     "syrf_race_data": "SYRF Race Data",

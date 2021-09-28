@@ -17,7 +17,7 @@ export const getAllByCalendarEventId = (calendarEventId, page) => {
                 success: false,
                 error: error
             }
-        })
+        });
 }
 
 export const get = (id) => {
@@ -32,7 +32,7 @@ export const get = (id) => {
                 success: false,
                 error: error
             }
-        })
+        });
 }
 
 export const create = (data) => {
@@ -48,7 +48,7 @@ export const create = (data) => {
             success: false,
             error: error
         }
-    })
+    });
 }
 
 export const update = (id, data) => {
@@ -64,7 +64,7 @@ export const update = (id, data) => {
             success: false,
             error: error
         }
-    })
+    });
 }
 
 export const deleteParticipant = (id) => {
@@ -78,5 +78,52 @@ export const deleteParticipant = (id) => {
             success: false,
             error: error
         }
+    });
+}
+
+export const getAllByVesselParticipantId = (vesselParticipantId) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants/${vesselParticipantId}/participants`)
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        });
+}
+
+export const registerParticipantsToVesselParticipant = (vesselParticipantId, participants: any[]) => {
+    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants/${vesselParticipantId}/participants`, {
+        participantIds: participants
     })
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        });
+}
+
+export const unregisterParticipantFromVesselParticipant = (vesselParticipantId, participantId) => {
+    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants/${vesselParticipantId}/participants/${participantId}`)
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        });
 }

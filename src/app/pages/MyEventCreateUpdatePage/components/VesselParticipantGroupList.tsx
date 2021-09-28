@@ -40,7 +40,7 @@ export const VesselParticipantGroupList = (props) => {
                 if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
-                            history.push(`/vessel-participant-groups/${record.id}/update`);
+                            history.push(`/events/${eventId}/vessel-participant-groups/${record.id}/update`);
                         }} type="primary">{t(translations.vessel_participant_group_list_page.update)}</BorderedButton>
                         <BorderedButton danger onClick={() => showDeleteGroupModal(record)}>{t(translations.vessel_participant_group_list_page.delete)}</BorderedButton>
                     </Space>;

@@ -4,7 +4,7 @@ import syrfService from 'utils/syrf-request';
 const userId: any = localStorage.getItem('user_id');
 
 export const getManyByEventId = (eventId, page) => {
-    return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants${!!userId ? `?createdById_eq=${userId}` : ''}&eventId_eq=${eventId}`, {
+    return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/vessel-participants${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
         }

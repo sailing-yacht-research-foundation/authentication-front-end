@@ -107,6 +107,7 @@ export const ParticipantList = (props) => {
             <AssignVesselParticipantModal 
                 participant={participant}
                 showAssignModal={showAssignModal}
+                eventId={eventId}
                 setShowAssignModal={setShowAssignModal}
             />
             <Spin spinning={isLoading}>
