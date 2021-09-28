@@ -20,7 +20,7 @@ export const LocationPicker = (props) => {
     }
 
     return (
-        <Wrapper style={{height: height ? height : '450px'}}>
+        <Wrapper style={{height: height || '450px'}}>
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
                 <Map coordinates={coordinates} onMapClicked={onMapClicked} zoom={zoom ? zoom : DEFAULT_ZOOM} />
             </MapContainer>
