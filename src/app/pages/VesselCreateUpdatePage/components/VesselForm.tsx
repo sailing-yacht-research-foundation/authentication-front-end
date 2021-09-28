@@ -1,8 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { CreateButton, DeleteButton, PageHeaderContainerResponsive, PageHeaderText } from 'app/components/SyrfGeneral';
-import { BsCardList } from 'react-icons/bs';
+import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -13,11 +12,8 @@ import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVes
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-
-const MODE = {
-    UPDATE: 'update',
-    CREATE: 'create'
-}
+import { MODE } from 'utils/constants';
+import { IoIosArrowBack } from 'react-icons/io';
 
 export const VesselForm = () => {
     const history = useHistory();
@@ -112,11 +108,16 @@ export const VesselForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageHeaderText>{mode === MODE.UPDATE ? t(translations.vessel_create_update_page.update_your_vessel) : t(translations.vessel_create_update_page.create_a_new_vessel)}</PageHeaderText>
+                <PageInfoOutterWrapper>
+                    <GobackButton onClick={() => history.push("/vessels")}>
+                        <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                    </GobackButton>
+                    <PageInfoContainer>
+                        <PageHeading>{mode === MODE.UPDATE ? t(translations.vessel_create_update_page.update_your_vessel) : t(translations.vessel_create_update_page.create_a_new_vessel)}</PageHeading>
+                        <PageDescription>{t(translations.vessel_create_update_page.vessel_are_yatchs)}</PageDescription>
+                    </PageInfoContainer>
+                </PageInfoOutterWrapper>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/vessels")} icon={<BsCardList
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.vessel_create_update_page.view_all_vessels)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.vessel_create_update_page.delete)}</DeleteButton>}
@@ -153,15 +154,15 @@ export const VesselForm = () => {
                             name="lengthInMeters"
                             rules={[() => ({
                                 validator(_, value) {
-                                  if (!value) {
-                                    return Promise.reject();
-                                  }
-                                  if (isNaN(value)) {
-                                    return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
-                                  }
-                                  return Promise.resolve();
+                                    if (!value) {
+                                        return Promise.reject();
+                                    }
+                                    if (isNaN(value)) {
+                                        return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
+                                    }
+                                    return Promise.resolve();
                                 },
-                              }),]}
+                            }),]}
                         >
                             <SyrfInputField />
                         </Form.Item>

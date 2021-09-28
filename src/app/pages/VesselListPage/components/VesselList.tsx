@@ -5,7 +5,17 @@ import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
+import {
+    BorderedButton,
+    CreateButton,
+    LottieMessage,
+    LottieWrapper,
+    PageInfoContainer,
+    PageHeaderContainerResponsive,
+    TableWrapper,
+    PageHeading,
+    PageDescription
+} from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import moment from 'moment';
 import { DeleteVesselModal } from './DeleteVesselModal';
@@ -132,12 +142,15 @@ export const VesselList = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer>
-                <PageHeaderText>{t(translations.vessel_list_page.vessels)}</PageHeaderText>
+            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
+                <PageInfoContainer>
+                    <PageHeading>{t(translations.vessel_list_page.vessels)}</PageHeading>
+                    <PageDescription>{t(translations.vessel_list_page.vessel_are_yatchs)}</PageDescription>
+                </PageInfoContainer>
                 <CreateButton onClick={() => history.push("/vessels/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
                     size={18} />}>{t(translations.vessel_list_page.create_a_new_vessel)}</CreateButton>
-            </PageHeaderContainer>
+            </PageHeaderContainerResponsive>
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>

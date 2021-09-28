@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
+import moment from 'moment-timezone';
 
 /**
  * Check if is mobile
@@ -139,4 +140,14 @@ export const renderEmptyValue = (value) => {
     if (value) return value;
 
     return i18next.t(translations.misc.not_available);
+}
+
+export const renderTimezoneInUTCOffset = (timezone) => {
+    if (!timezone) return '';
+    
+    const offset = moment.tz(timezone).utcOffset() /  60;
+
+    if (offset > 0) return '+' + offset;
+
+    return offset;
 }

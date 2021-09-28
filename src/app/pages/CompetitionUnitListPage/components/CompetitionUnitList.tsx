@@ -10,7 +10,6 @@ import moment from 'moment';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { getAllCompetitionUnits } from 'services/live-data-server/competition-units';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 
 const defaultOptions = {
@@ -37,28 +36,14 @@ export const CompetitionUnitList = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                if ((userId && userId === record.createdById) || (uuid === record.createdById))
-                    return <Link to={`/events/${record.calendarEventId}/races/${record.id}/update`}>{text}</Link>;
-                return text;
+                return <Link to={`/playback/?raceId=${record.calendarEventId}`}>{text}</Link>;
             }
         },
         {
             title: t(translations.competition_unit_list_page.event_name),
             dataIndex: 'eventName',
             key: 'eventName',
-            render: (text) => renderEmptyValue(text),
-        },
-        {
-            title: t(translations.competition_unit_list_page.start_time),
-            dataIndex: 'startTime',
-            key: 'startTime',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
-        },
-        {
-            title: t(translations.competition_unit_list_page.approximate_start),
-            dataIndex: 'approximateStart',
-            key: 'approximateStart',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
+            render: (text, record) => <Link to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>,
         },
         {
             title: t(translations.competition_unit_list_page.created_date),
@@ -69,6 +54,7 @@ export const CompetitionUnitList = () => {
         {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
+            width: '20%',
             render: (text, record) => {
                 if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
@@ -77,7 +63,7 @@ export const CompetitionUnitList = () => {
                         }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                         <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                     </Space>;
-                
+
                 return <></>;
             }
         },

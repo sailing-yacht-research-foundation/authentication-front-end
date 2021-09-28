@@ -1,3 +1,5 @@
+import 'leaflet/dist/leaflet.css';
+
 import React from 'react';
 import { MapContainer } from 'react-leaflet';
 import { Map } from './Map';
@@ -9,7 +11,7 @@ const DEFAULT_ZOOM = 1;
 
 export const LocationPicker = (props) => {
 
-    const { onChoosedLocation, coordinates } = props;
+    const { onChoosedLocation, coordinates, zoom, height, locationDescription } = props;
 
     const { t } = useTranslation();
 
@@ -18,11 +20,11 @@ export const LocationPicker = (props) => {
     }
 
     return (
-        <Wrapper>
+        <Wrapper style={{height: height || '450px'}}>
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
-                <Map coordinates={coordinates} onMapClicked={onMapClicked} zoom={DEFAULT_ZOOM} />
+                <Map coordinates={coordinates} onMapClicked={onMapClicked} zoom={zoom ? zoom : DEFAULT_ZOOM} />
             </MapContainer>
-            <PickerDescription>{t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
+            <PickerDescription>{ locationDescription ? locationDescription : t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
         </Wrapper>
     )
 }

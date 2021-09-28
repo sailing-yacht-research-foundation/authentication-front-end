@@ -1,18 +1,15 @@
-import 'leaflet/dist/leaflet.css';
-
 import React from 'react';
-import { Spin, Form, DatePicker, Row, Col, Divider, Switch, TimePicker, Space } from 'antd';
-import { CreateButton, DeleteButton, PageHeaderContainerResponsive } from 'app/components/SyrfGeneral';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
+import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Space } from 'antd';
+import { DeleteButton, PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { LocationPicker } from './LocationPicker';
 import { useForm } from 'antd/lib/form/Form';
 import { create, get, update } from 'services/live-data-server/event-calendars';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { BsCardList } from 'react-icons/bs';
 import { CompetitionUnitList } from './CompetitionUnitList';
 import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { BiTrash } from 'react-icons/bi';
@@ -21,11 +18,12 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ParticipantList } from './ParticipantList';
 import { VesselParticipantGroupList } from './VesselParticipantGroupList';
+import { IoIosArrowBack } from 'react-icons/io';
+import { MODE } from 'utils/constants';
+import { renderTimezoneInUTCOffset } from 'utils/helpers';
 
-const MODE = {
-    CREATE: 'create',
-    UPDATE: 'update'
-}
+const { getTimeZones } = require("@vvo/tzdb");
+const timeZones = getTimeZones();
 
 export const MyEventForm = () => {
 
@@ -54,7 +52,7 @@ export const MyEventForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
-        const { name, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime } = values;
+        const { name, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime, description, approximateStartTime_zone } = values;
         let response;
         let currentDate = moment();
 
@@ -69,6 +67,7 @@ export const MyEventForm = () => {
             externalUrl: externalUrl,
             lon: lon,
             lat: lat,
+            description: description,
             approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
             startDay: startDate.utc().format('DD'),
             startMonth: startDate.utc().format('MM'),
@@ -77,7 +76,8 @@ export const MyEventForm = () => {
             endMonth: currentDate.utc().format('MM'),
             endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
-            isPrivate: isPrivate
+            isPrivate: isPrivate,
+            approximateStartTime_zone: approximateStartTime_zone,
         };
 
         if (mode === MODE.CREATE)
@@ -133,7 +133,7 @@ export const MyEventForm = () => {
                 setCoordinates({
                     lat: response.data.lat,
                     lng: response.data.lon
-                })
+                });
             } else {
                 history.push('/404');
             }
@@ -149,6 +149,12 @@ export const MyEventForm = () => {
         history.push('/events');
     }
 
+    const renderTimezoneDropdownList = () => {
+        return timeZones.map((timezone, index) => {
+            return <Select.Option key={index} value={timezone.name}>{timezone.name + ' ' + renderTimezoneInUTCOffset(timezone.name)}</Select.Option>
+        });
+    }
+
     return (
         <Wrapper>
             <DeleteRaceModal
@@ -158,16 +164,18 @@ export const MyEventForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageInfoContainer>
-                    <PageHeading>{mode === MODE.UPDATE ?
-                        t(translations.my_event_create_update_page.update_your_event)
-                        : t(translations.my_event_create_update_page.create_a_new_event)}</PageHeading>
-                    <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
-                </PageInfoContainer>
+                <PageInfoOutterWrapper>
+                    <GobackButton onClick={() => history.push("/events")}>
+                        <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                    </GobackButton>
+                    <PageInfoContainer>
+                        <PageHeading>{mode === MODE.UPDATE ?
+                            t(translations.my_event_create_update_page.update_your_event)
+                            : t(translations.my_event_create_update_page.create_a_new_event)}</PageHeading>
+                        <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
+                    </PageInfoContainer>
+                </PageInfoOutterWrapper>
                 <Space size={10}>
-                    <CreateButton onClick={() => history.push("/events")} icon={<BsCardList
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.my_event_create_update_page.view_all)}</CreateButton>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.my_event_create_update_page.delete)}</DeleteButton>}
@@ -189,6 +197,14 @@ export const MyEventForm = () => {
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
+                            name="description"
+                            rules={[{ required: true }]}
+                        >
+                            <SyrfTextArea />
                         </Form.Item>
 
                         <Divider />
@@ -218,7 +234,7 @@ export const MyEventForm = () => {
                         {(mode === MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
                         {mode === MODE.CREATE && <LocationPicker coordinates={MAP_DEFAULT_VALUE.CENTER} onChoosedLocation={onChoosedLocation} />}
                         <Row gutter={12}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
@@ -239,13 +255,37 @@ export const MyEventForm = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col xs={24} sm={24} md={12} lg={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
                                     rules={[{ required: true }]}
                                 >
                                     <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.timezone)}</SyrfFieldLabel>}
+                                    name="approximateStartTime_zone"
+                                    rules={[{ required: true }]}
+                                >
+                                    <SyrfFormSelect placeholder={t(translations.my_event_create_update_page.timezone)}
+                                        showSearch
+                                        filterOption={(input, option) => {
+                                            if (option) {
+                                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+
+                                            return false;
+                                        }}
+                                    >
+                                        {
+                                            renderTimezoneDropdownList()
+                                        }
+                                    </SyrfFormSelect>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -256,10 +296,6 @@ export const MyEventForm = () => {
                             rules={[{ type: 'url' }]}
                         >
                             <SyrfInputField />
-                        </Form.Item>
-
-                        <Form.Item label="Is private?" name="isPrivate" valuePropName="checked" initialValue={false}>
-                            <Switch />
                         </Form.Item>
 
                         <Form.Item>
@@ -299,18 +335,4 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 100%;
     margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
-`;
-
-const PageInfoContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const PageDescription = styled.p`
-    padding: 0 15px;
-`;
-
-const PageHeading = styled.h2`
-    padding: 20px 15px;
-    padding-bottom: 0px;
 `;
