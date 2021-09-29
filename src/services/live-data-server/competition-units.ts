@@ -43,7 +43,7 @@ export const search = (params) => {
         query: query,
     };
 
-    searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms"]; // only the fields we need
+    searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
@@ -77,7 +77,7 @@ export const create = (calendarEventId, data) => {
 }
 
 export const getAllByCalendarEventId = (calendarEventId, page) => {
-    let userId: any = localStorage.getItem('user_id');
+    const userId: any = localStorage.getItem('user_id');
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
@@ -97,7 +97,7 @@ export const getAllByCalendarEventId = (calendarEventId, page) => {
 }
 
 export const getAllCompetitionUnits = (page) => {
-    let userId: any = localStorage.getItem('user_id');
+    const userId: any = localStorage.getItem('user_id');
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page

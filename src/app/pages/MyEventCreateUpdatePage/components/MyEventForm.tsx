@@ -17,6 +17,7 @@ import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventMod
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ParticipantList } from './ParticipantList';
+import { VesselParticipantGroupList } from './VesselParticipantGroupList';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
@@ -311,6 +312,10 @@ export const MyEventForm = () => {
                     <>
                         <SyrfFormWrapper ref={raceListRef} style={{ marginTop: '30px' }}>
                             <CompetitionUnitList eventId={eventId} />
+                        </SyrfFormWrapper>
+
+                        <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                            <VesselParticipantGroupList eventId={eventId} />
                         </SyrfFormWrapper>
 
                         <SyrfFormWrapper style={{ marginTop: '30px' }}>

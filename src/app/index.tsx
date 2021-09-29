@@ -40,6 +40,7 @@ import { CompetitionUnitListPage } from './pages/CompetitionUnitListPage/Loadabl
 import { VesselListPage } from './pages/VesselListPage/Loadable';
 import { VesselCreateUpdatePage } from './pages/VesselCreateUpdatePage/Loadable';
 import { ParticipantCreateUpdatePage } from './pages/ParticipantCreateUpdatePage/Loadable';
+import { VesselParticipantGroupPage } from './pages/VesselParticipantGroupCreateUpdatePage/Loadable';
 import { EventDetailPage } from './pages/EventDetailPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -162,6 +163,8 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/vessels/:id/update'} component={VesselCreateUpdatePage} />
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/participants/create'} component={ParticipantCreateUpdatePage}/>
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/participants/:id/update'} component={ParticipantCreateUpdatePage}/>
+              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/vessel-participant-groups/create'} component={VesselParticipantGroupPage}/>
+              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/vessel-participant-groups/:id/update'} component={VesselParticipantGroupPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <Route component={NotFoundPage} />

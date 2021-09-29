@@ -154,7 +154,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
                 <div>{t(translations.home_page.map_view_tab.location)} {race._source.start_country}</div>
                 <div>{t(translations.home_page.map_view_tab.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}</div>
                 <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race._source.event_name)}</div>
-                <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race._source.description)}</div>
+                <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race._source.event_description)}</div>
                 <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race._source.city)}</div>
                 <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race._source.start_country)}</div>
             </>

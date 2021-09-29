@@ -2,7 +2,7 @@ import { SYRF_SERVER } from 'services/service-constants';
 import syrfRequest from 'utils/syrf-request';
 
 export const getMany = (page) => {
-    let userId: any = localStorage.getItem('user_id');
+    const userId: any = localStorage.getItem('user_id');
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page

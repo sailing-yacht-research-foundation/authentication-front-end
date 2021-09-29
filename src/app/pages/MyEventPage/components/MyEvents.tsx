@@ -26,7 +26,6 @@ const defaultOptions = {
     }
 };
 
-const userId = localStorage.getItem('user_id');
 const uuid = localStorage.getItem('uuid');
 
 export const MyEvents = () => {
@@ -39,7 +38,7 @@ export const MyEvents = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                    return <Link to={`/events/${record.id}`}>{text}</Link>;
+                return <Link to={`/events/${record.id}`}>{text}</Link>;
             },
         },
         {
@@ -58,7 +57,9 @@ export const MyEvents = () => {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
-            render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time) + ' ' + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
+            render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time)
+                + ' ' + record.approximateStartTime_zone + ' '
+                + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
         },
         {
             title: t(translations.my_event_list_page.created_date),
@@ -70,6 +71,7 @@ export const MyEvents = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => {
+                const userId = localStorage.getItem('user_id');
                 if ((userId && record.createdById === userId) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton onClick={() => {

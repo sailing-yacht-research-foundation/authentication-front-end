@@ -1,22 +1,22 @@
 import React from 'react';
-import { Spin, Form, Divider, Space } from 'antd';
+import { Spin, Form, Divider } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
-import { create, update, get } from 'services/live-data-server/participants';
+import { create, update, getVesselParticipantGroupById } from 'services/live-data-server/vessel-participant-group';
 import { toast } from 'react-toastify';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { DeleteParticipantModal } from './DeleteParticipantForm';
+import { VesselList } from './VesselList';
+import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 
-export const ParticipantForm = () => {
-
+export const VesselParticipantGroupForm = () => {
     const history = useHistory();
 
     const { t } = useTranslation();
@@ -29,26 +29,25 @@ export const ParticipantForm = () => {
 
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
-    const { eventId, id } = useParams<{ eventId: string, id: string }>();
+    const { id } = useParams<{ id: string }>();
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [participant, setParticipant] = React.useState<any>({});
+    const [group, setGroup] = React.useState<any>({});
 
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
+    const { eventId } = useParams<{ eventId: string }>();
+
     const onFinish = async (values) => {
-        let { publicName, calendarEventId } = values;
+        let { name } = values;
         let response;
-        calendarEventId = eventId || calendarEventId;
 
         setIsSaving(true);
 
         const data = {
-            publicName: publicName,
-            calendarEventId: calendarEventId,
-            participantId: '',
-            userProfileId: null
+            name: name,
+            calendarEventId: eventId
         };
 
         if (mode === MODE.CREATE)
@@ -56,25 +55,20 @@ export const ParticipantForm = () => {
         else
             response = await update(id, data);
 
-
         setIsSaving(false);
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success(t(translations.participant_unit_create_update_page.created_a_new_participant, { name: response.data?.publicName }));
-                setParticipant(response.data);
+                toast.success(t(translations.vessel_participant_group_create_update_page.created_a_new_group));
+                setGroup(response.data);
             } else {
-                toast.success(t(translations.participant_unit_create_update_page.successfully_updated_participant, { name: response.data?.publicName }));
+                toast.success(t(translations.vessel_participant_group_create_update_page.successfully_updated_group));
             }
 
-            if (eventId) {
-                history.push(`/events/${eventId}/update`);
-            } else {
-                history.push(`/events`);
-            }
+            history.push(`/events/${eventId}/vessel-participant-groups/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
-            toast.error(t(translations.participant_unit_create_update_page.an_error_happened));
+            toast.error(t(translations.vessel_participant_group_create_update_page.an_error_happened));
         }
     }
 
@@ -82,13 +76,13 @@ export const ParticipantForm = () => {
         if (location.pathname.includes(MODE.UPDATE)) {
             setMode(MODE.UPDATE);
             setIsSaving(true);
-            const response = await get(id);
+            const response = await getVesselParticipantGroupById(id);
             setIsSaving(false);
 
             if (response.success) {
-                setParticipant(response.data);
+                setGroup(response.data);
                 form.setFieldsValue({
-                    ...response.data,
+                    ...response.data
                 });
             } else {
                 history.push('/404');
@@ -96,8 +90,8 @@ export const ParticipantForm = () => {
         }
     }
 
-    const onParticipantDeleted = () => {
-        history.push(`/events/${participant.calendarEventId}/update`);
+    const onGroupDeleted = () => {
+        history.push('/vessel-participant-groups');
     }
 
     React.useEffect(() => {
@@ -107,33 +101,26 @@ export const ParticipantForm = () => {
 
     return (
         <Wrapper>
-            <DeleteParticipantModal
-                participant={participant}
-                onParticipantDeleted={onParticipantDeleted}
+            <DeleteVesselParticipantGroupModal
+                group={group}
+                onGroupDeleted={onGroupDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => {
-                        if (eventId) {
-                            history.push(`/events/${eventId}/update`);
-                        } else {
-                            history.push(`/events`);
-                        }
+                        history.push(`/events/${eventId}/update`);
                     }}>
                         <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
                     </GobackButton>
                     <PageInfoContainer>
-                        <PageHeading>{mode === MODE.UPDATE ? t(translations.participant_unit_create_update_page.update_participant) : t(translations.participant_unit_create_update_page.create_a_new_participant)}</PageHeading>
+                        <PageHeading>{mode === MODE.UPDATE ? t(translations.vessel_participant_group_create_update_page.update_group) : t(translations.vessel_participant_group_create_update_page.create_a_new_group)}</PageHeading>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                <Space size={10}>
-                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.participant_unit_create_update_page.delete)}</DeleteButton>}
-
-                </Space>
+                {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                    style={{ marginRight: '5px' }}
+                    size={18} />}>{t(translations.vessel_participant_group_create_update_page.delete)}</DeleteButton>}
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
@@ -145,8 +132,8 @@ export const ParticipantForm = () => {
                         onValuesChange={() => setFormChanged(true)}
                     >
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.public_name)}</SyrfFieldLabel>}
-                            name="publicName"
+                            label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
+                            name="name"
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField />
@@ -156,12 +143,18 @@ export const ParticipantForm = () => {
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
-                                {t(translations.participant_unit_create_update_page.save_participant)}
+                                {t(translations.vessel_participant_group_create_update_page.save_group)}
                             </SyrfFormButton>
                         </Form.Item>
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
+
+            {mode === MODE.UPDATE &&
+                <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                    <VesselList group={group} />
+                </SyrfFormWrapper>
+            }
         </Wrapper >
     )
 }

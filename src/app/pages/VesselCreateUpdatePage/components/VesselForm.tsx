@@ -37,7 +37,7 @@ export const VesselForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
-        let { publicName, globalId, vesselId, lengthInMeters } = values;
+        let { publicName, globalId, lengthInMeters } = values;
         let response;
 
         setIsSaving(true);
@@ -45,7 +45,6 @@ export const VesselForm = () => {
         const data = {
             publicName: publicName,
             globalId: globalId,
-            vesselId: vesselId,
             lengthInMeters: lengthInMeters,
             orcJsonPolars: {}
         };
@@ -137,14 +136,6 @@ export const VesselForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.public_name)}</SyrfFieldLabel>}
                             name="publicName"
-                            rules={[{ required: true }]}
-                        >
-                            <SyrfInputField />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.vessel_id)}</SyrfFieldLabel>}
-                            name="vesselId"
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField />

@@ -157,7 +157,8 @@
     "data": "Data",
     "events": "My Events",
     "competition_units": "My Races",
-    "vessels": "My Vessels"
+    "vessels": "My Vessels",
+    "vessel_participant_groups": "Vessel Participant Groups"
   },
   "profile_page": {
     "update_profile": {
@@ -270,7 +271,8 @@
     "sail_number": "Sail number:"
   },
   "app": {
-    "your_session_is_expired": "Your session is expired, please login again."
+    "your_session_is_expired": "Your session is expired, please login again.",
+    "error_happened": "Service is unavailable"
   },
   "data_page": {
     "syrf_race_data": "SYRF Race Data",
@@ -334,6 +336,9 @@
     "select_an_event": "Select an event",
     "create_a_private_polygon": "Create a privacy polygon",
     "positions_outside_of_this_polygon_is": "Positions outside of this polygon may be discarded if they don’t appear relevant to the race.",
+    "vessel_group": "Vessel Group",
+    "select_a_group": "Select a Vessel participant group",
+    "vessel_participant_group_is_a_set": "Vessel participant group is a set of vessel participants. This is optional.",
     "description": "Description",
     "timezone": "Time zone"
   },
@@ -355,6 +360,7 @@
     "save_event": "Save event",
     "please_choose_a_location": "Please choose a location by clicking on the map",
     "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
+    "Vessel_participant_groups": "Vessel Groups",
     "description": "Description",
     "timezone": "Time zone"
   },
@@ -459,7 +465,8 @@
     "delete": "Delete",
     "update": "Update",
     "public_name": "Public Name",
-    "action": "Action"
+    "action": "Action",
+    "assign": "Assign"
   },
   "participant_unit_create_update_page": {
     "created_a_new_participant": "Created a new participant with name: {{name}}.",
@@ -472,6 +479,53 @@
     "save_participant": "Save Participant",
     "update_participant": "Update Participant",
     "create_a_new_participant": "Create a new participant"
+  },
+  "vessel_participant_group_create_update_page": {
+    "created_a_new_group": "Created a new Vessel participant group with name",
+    "successfully_updated_group": "Successfully Vessel participant group}",
+    "an_error_happened": "An error happened when saving your Vessel participant group.",
+    "view_all_groups": "View all groups",
+    "delete": "Delete",
+    "name": "Vessel participant group name",
+    "save_group": "Save Group",
+    "update_group": "Update Group",
+    "create_a_new_group": "Create a new Vessel participant group",
+    "vessels": "Vessels",
+    "add_to_group": "Add To Group",
+    "delete_from_group": "Delete From Group",
+    "successfully_added_to_group": "Successfully added this vessel to the group.",
+    "successfully_removed_vessel_from_the_group": "Successfully removed vessel from the group.",
+    "an_error_happened_when_adding_vessel_to_this_group": "An error happended when adding vessel to the group",
+    "an_error_happened_when_removing_vessel_from_this_group": "An error happened when removing vessel from this group"
+  },
+  "vessel_participant_group_list_page": {
+    "created_date": "Created Date",
+    "action": "Action",
+    "update": "Update",
+    "delete": "Delete",
+    "vessel_participant_groups": "Vessel Participant Groups",
+    "create": "Create",
+    "you_dont_have_any_vessel_participant_group": "You don't have any vessel participant group, please create one.",
+    "name": "Group Name",
+    "create_a_new_group": "Create a new Vessel participant group"
+  },
+  "delete_vessel_participant_group_modal": {
+    "successfully_deleted": "Successfully deleted this group",
+    "an_unexpected_error": "An unexpected error happened when deleting your group",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this group?",
+    "you_will_delete": "You will delete this group along with all associated information, are you sure you want to continue?"
+  },
+  "assign_vessel_participant_modal": {
+    "group_name": "Group Name",
+    "vessel_name": "Vessel Name",
+    "assign": "Assign",
+    "unassign": "Unassign",
+    "assign_vessel_to_vessel_groups" : "Assign participant to vessel groups",
+    "successfully_register": "Successfully registered this participant to the group.",
+    "an_error_happended_when_registering": "An error happened when registering the participant to the group",
+    "successfully_unregister": "Successfully unregistered this participant to the group.",
+    "an_error_happended_when_ungistering": "An error happened when unregistering the participant to the group.",
+    "action": "Action"
   },
   "event_detail_page": {
     "organized_by": "Organized By",

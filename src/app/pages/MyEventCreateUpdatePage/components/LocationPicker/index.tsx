@@ -20,11 +20,11 @@ export const LocationPicker = (props) => {
     }
 
     return (
-        <Wrapper style={{height: height || '450px'}}>
+        <Wrapper style={{ height: height || '450px' }}>
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
-                <Map coordinates={coordinates} onMapClicked={onMapClicked} zoom={zoom ? zoom : DEFAULT_ZOOM} />
+                <Map coordinates={coordinates} onMapClicked={onMapClicked} zoom={zoom || DEFAULT_ZOOM} />
             </MapContainer>
-            <PickerDescription>{ locationDescription ? locationDescription : t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
+            <PickerDescription>{locationDescription || t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
         </Wrapper>
     )
 }

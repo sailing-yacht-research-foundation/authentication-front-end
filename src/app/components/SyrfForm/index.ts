@@ -123,3 +123,8 @@ export const SyrfButtonDescription = styled.span`
 export const SyrfTextArea = styled(Input.TextArea)`
     ${inputStyle}
 `;
+
+export const SyrFieldDescription = styled.span`
+    font-size: 13px;
+    color: #00000073;
+`;

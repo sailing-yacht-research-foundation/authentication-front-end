@@ -1,6 +1,6 @@
 import React from 'react';
 import { Spin, Form, Divider, DatePicker, Row, Col, TimePicker, Space } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea, SyrFieldDescription } from 'app/components/SyrfForm';
 import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -12,11 +12,11 @@ import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';
 import { CoursesList } from './CoursesList';
 import Select from 'rc-select';
-import { getAll } from 'services/live-data-server/event-calendars';
 import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
@@ -42,8 +42,6 @@ export const CompetitionUnitForm = () => {
 
     const [boundingBoxCoordinates, setBoundingBoxCoordinates] = React.useState([]);
 
-    const [races, setRaces] = React.useState<any[]>([]);
-
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
     const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
@@ -52,10 +50,12 @@ export const CompetitionUnitForm = () => {
 
     const courseListRef = React.useRef<any>();
 
+    const [groups, setGroups] = React.useState<any[]>([]);
+
     const onFinish = async (values) => {
-        let { name, startDate, startTime, isCompleted, calendarEventId, description, approximateStart_zone } = values;
+        let { name, startDate, startTime, isCompleted, calendarEventId, vesselParticipantGroupId, description, approximateStart_zone } = values;
         let response;
-        calendarEventId = eventId ? eventId : calendarEventId;
+        calendarEventId = eventId || calendarEventId;
 
         setIsSaving(true);
 
@@ -64,6 +64,7 @@ export const CompetitionUnitForm = () => {
             startTime: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc(),
             approximateStart: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc(),
             isCompleted: isCompleted,
+            vesselParticipantGroupId: vesselParticipantGroupId,
             description: description,
             boundingBox: boundingBoxCoordinates.length > 0 ?
                 {
@@ -121,11 +122,11 @@ export const CompetitionUnitForm = () => {
         }
     }
 
-    const getAllRaces = async () => {
-        const response = await getAll();
+    const getAllUserVesselGroups = async () => {
+        const response = await getVesselParticipantGroupsByEventId(eventId, -1);
 
         if (response.success) {
-            setRaces(response.data.rows);
+            setGroups(response.data.rows);
         }
     }
 
@@ -133,9 +134,9 @@ export const CompetitionUnitForm = () => {
         setBoundingBoxCoordinates(coordinates);
     }
 
-    const renderRacesDropdownList = () => {
-        return races.map((race) => {
-            return <Select.Option key={race.id} value={race.id}>{race.name}</Select.Option>
+    const renderVesselParticipantGroupList = () => {
+        return groups.map((group) => {
+            return <Select.Option key={group.id} value={group.id}>{group.name}</Select.Option>
         });
     }
 
@@ -145,7 +146,7 @@ export const CompetitionUnitForm = () => {
 
     React.useEffect(() => {
         initModeAndData();
-        getAllRaces();
+        getAllUserVesselGroups();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -209,28 +210,6 @@ export const CompetitionUnitForm = () => {
                             <SyrfTextArea />
                         </Form.Item>
 
-                        {
-                            !eventId && <Form.Item
-                                label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.event_id)}</SyrfFieldLabel>}
-                                name="calendarEventId"
-                                rules={[{ required: true }]}
-                            >
-                                <SyrfFormSelect placeholder={t(translations.competition_unit_create_update_page.select_an_event)}
-                                    showSearch
-                                    filterOption={(input, option) => {
-                                        if (option) {
-                                            return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-
-                                        return false;
-                                    }}
-                                >
-                                    {renderRacesDropdownList()}
-                                </SyrfFormSelect>
-                            </Form.Item>
-                        }
-
                         <Divider />
 
                         <Row gutter={12}>
@@ -292,6 +271,16 @@ export const CompetitionUnitForm = () => {
 
                         <BoundingBoxPicker coordinates={boundingBoxCoordinates} onCoordinatesRecevied={onCoordinatesRecevied} />
 
+                        <Form.Item
+                            style={{ marginBottom: '10px' }}
+                            label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.vessel_group)}</SyrfFieldLabel>}
+                            name="vesselParticipantGroupId"
+                            help={<SyrFieldDescription>{t(translations.competition_unit_create_update_page.vessel_participant_group_is_a_set)}</SyrFieldDescription>}
+                        >
+                            <SyrfFormSelect placeholder={t(translations.competition_unit_create_update_page.select_a_group)}>
+                                {renderVesselParticipantGroupList()}
+                            </SyrfFormSelect>
+                        </Form.Item>
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
                                 {t(translations.competition_unit_create_update_page.save_competition_unit)}
