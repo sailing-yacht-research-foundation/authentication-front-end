@@ -35,7 +35,6 @@ export const CoursesList = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
-                        console.log(record);
                         history.push(`/races/${competitionUnitId}/courses/${record.id}/update`)
                     }} type="primary">{t(translations.course_list.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => setShowCourseDeleteModal(true)}>{t(translations.course_list.delete)}</BorderedButton>
