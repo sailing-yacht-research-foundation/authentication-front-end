@@ -110,9 +110,10 @@ export const AssignVesselParticipantModal = (props) => {
     }
 
     React.useEffect(() => {
-        getVesselParticipantByEventId(1);
+        if (showAssignModal)
+            getVesselParticipantByEventId(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [showAssignModal]);
 
     return (
         <StyledModal title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_groups)}
