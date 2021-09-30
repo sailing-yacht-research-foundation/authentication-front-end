@@ -1,5 +1,3 @@
-import "leaflet/dist/leaflet.css";
-
 import React, { useEffect, useRef, useState } from "react";
 import queryString from "querystring";
 import styled from "styled-components";

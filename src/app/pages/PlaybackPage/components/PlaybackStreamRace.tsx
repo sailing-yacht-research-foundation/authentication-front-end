@@ -2,7 +2,6 @@ import "leaflet/dist/leaflet.css";
 
 import React, { useEffect, useRef, useState } from "react";
 import { message } from "antd";
-import queryString from "querystring";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MapContainer } from "react-leaflet";
 import styled from "styled-components";
@@ -21,7 +20,6 @@ import { usePlaybackSlice } from "./slice";
 import { MAP_DEFAULT_VALUE } from "utils/constants";
 import { StreamingRaceMap } from "./StreamingRaceMap";
 import { stringToColour } from "utils/helpers";
-import { useLocation } from "react-router";
 import { selectSessionToken } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
 

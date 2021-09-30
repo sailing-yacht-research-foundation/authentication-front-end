@@ -1,5 +1,3 @@
-import "leaflet/dist/leaflet.css";
-
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectSearchRaceDetail } from "./slice/selectors";
