@@ -83,7 +83,7 @@ export const MapViewTab = (props) => {
 
     return (
         <Wrapper>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
+            <MapContainer style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={center} zoom={ZOOM}>
                 <MapView ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
             {
@@ -130,7 +130,7 @@ const Wrapper = styled.div`
 
 const SearchBarWrapper = styled.div`
     position: absolute;
-    bottom: 110px;
+    bottom: 50px;
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -160,7 +160,9 @@ const StyledSearchBar = styled(Input)`
     padding-right: 50px;
 
     ::placeholder {
-        font - weight: 500;
+        font-weight: 500;
+        text-overflow:ellipsis;
+        font-size: 13px;
     }
 `;
 
@@ -200,7 +202,7 @@ const StyledSpin = styled(Spin)`
 
 const MyLocationWrapper = styled.div`
     position: absolute;
-    bottom: 80px;
+    bottom: 20px;
     z-index: 999;
     cursor: pointer;
     left: 10px;

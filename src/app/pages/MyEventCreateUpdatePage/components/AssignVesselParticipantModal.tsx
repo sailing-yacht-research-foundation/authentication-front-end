@@ -116,7 +116,7 @@ export const AssignVesselParticipantModal = (props) => {
     }, [showAssignModal]);
 
     return (
-        <StyledModal title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_groups)}
+        <StyledModal title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_group)}
             visible={showAssignModal}
             onCancel={() => setShowAssignModal(false)}
             okButtonProps={{

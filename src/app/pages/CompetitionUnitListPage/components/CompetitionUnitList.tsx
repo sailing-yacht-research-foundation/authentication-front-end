@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
-import { BorderedButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import moment from 'moment';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
@@ -35,7 +35,7 @@ export const CompetitionUnitList = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/playback/?raceId=${record.calendarEventId}`}>{text}</Link>;
+                return <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             }
         },
         {
@@ -137,9 +137,15 @@ export const CompetitionUnitList = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <PageHeaderContainer>
-                <PageHeaderText>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderText>
-            </PageHeaderContainer>
+
+            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
+                <PageInfoOutterWrapper>
+                    <PageInfoContainer>
+                        <PageHeading>{t(translations.competition_unit_list_page.competition_units)}</PageHeading>
+                        <PageDescription>{t(translations.competition_unit_list_page.race_configurations_pair_classes_to_courses)}</PageDescription>
+                    </PageInfoContainer>
+                </PageInfoOutterWrapper>
+            </PageHeaderContainerResponsive>
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>

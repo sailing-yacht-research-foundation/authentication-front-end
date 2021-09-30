@@ -190,6 +190,12 @@ export const MyEventForm = () => {
                         name="basic"
                         form={form}
                         onFinish={onFinish}
+                        initialValues={{
+                            startDate: moment(),
+                            startTime: moment('09:00:00', 'HH:mm:ss'),
+                            externalUrl: 'https://',
+                            approximateStartTime_zone: 'America/Scoresbysund'
+                        }}
                     >
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.name)}</SyrfFieldLabel>}
@@ -202,7 +208,6 @@ export const MyEventForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
-                            rules={[{ required: true }]}
                         >
                             <SyrfTextArea />
                         </Form.Item>

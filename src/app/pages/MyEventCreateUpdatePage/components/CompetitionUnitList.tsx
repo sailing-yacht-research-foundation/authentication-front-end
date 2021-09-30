@@ -23,13 +23,8 @@ export const CompetitionUnitList = (props) => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/playback/?raceId=${record.calendarEventId}`}>{text}</Link>;
+                return <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             },
-            width: '20%',
-        },
-        {
-            title: t(translations.competition_unit_list_page.event_name),
-            render: (text, record) => <Link to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>,
             width: '20%',
         },
         {

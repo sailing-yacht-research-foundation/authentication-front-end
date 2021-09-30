@@ -2,13 +2,14 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import { Space, Spin, Table } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
-import { AiFillPlusCircle } from 'react-icons/ai';
+import { AiFillCopy, AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventId } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
 import styled from 'styled-components';
 import { AssignVesselParticipantModal } from './AssignVesselParticipantModal';
+import { toast } from 'react-toastify';
 
 export const ParticipantList = (props) => {
 
@@ -22,6 +23,15 @@ export const ParticipantList = (props) => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: text => text,
+            width: '50%',
+        },
+        {
+            title: t(translations.participant_list.tracker_url),
+            dataIndex: 'trackerUrl',
+            key: 'trackerUrl',
+            render: text => {
+                return <CreateButton onClick={()=> copyToClipboard(text)} icon={<AiFillCopy style={{ marginRight: '10px' }} />}>Copy</CreateButton>
+            },
             width: '50%',
         },
         {
@@ -96,6 +106,15 @@ export const ParticipantList = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const copyToClipboard = (text) => {
+        let input = document.createElement('input');
+        document.body.appendChild(input);
+        input.value = text;
+        input.select();
+        document.execCommand('copy', false);
+        toast.info(t(translations.participant_list.copied_to_clipboard));
+    }
+
     return (
         <>
             <DeleteParticipantModal
@@ -104,7 +123,7 @@ export const ParticipantList = (props) => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <AssignVesselParticipantModal 
+            <AssignVesselParticipantModal
                 participant={participant}
                 showAssignModal={showAssignModal}
                 eventId={eventId}

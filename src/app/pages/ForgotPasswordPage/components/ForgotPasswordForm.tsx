@@ -8,7 +8,7 @@ import { sendForgotPassword } from 'services/live-data-server/auth';
 import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { media } from 'styles/media';
-import EmailSent from '../assets/email-sent.json'
+import EmailSent from '../assets/email-sent.json';
 
 const defaultLottieOptions = {
   loop: true,

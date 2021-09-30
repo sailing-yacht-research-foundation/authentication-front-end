@@ -157,7 +157,7 @@
     "data": "Data",
     "events": "My Events",
     "competition_units": "My Races",
-    "vessels": "My Vessels",
+    "vessels": "Boats",
     "vessel_participant_groups": "Vessel Participant Groups"
   },
   "profile_page": {
@@ -436,27 +436,27 @@
     "create": "Create",
     "update": "Update",
     "delete": "Delete",
-    "you_dont_have_any_vessels": "You do not have any vessels, please create one.",
-    "vessels": "Vessels",
-    "create_a_new_vessel": "Create a new Vessel",
-    "vessel_are_yatchs": "vessels are yachts, dinghies, boards, or other vehicles that you sail on the water."
+    "you_dont_have_any_vessels": "You do not have any boats, please create one.",
+    "vessels": "Boats",
+    "create_a_new_vessel": "Create a new boat",
+    "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water."
   },
   "vessel_create_update_page": {
-    "created_a_new_vessel": "Created a new vessel with name: {{name}}.",
-    "successfully_updated_vessel": "Successfully updated your vessel: {{name}}",
-    "an_error_happened": "An error happened when saving your vessel.",
+    "created_a_new_vessel": "Created a new boat with name: {{name}}.",
+    "successfully_updated_vessel": "Successfully updated your boat: {{name}}",
+    "an_error_happened": "An error happened when saving your boat.",
     "view_all_vessels": "View all",
     "delete": "Delete",
     "public_name": "Name",
     "global_id": "Global ID",
     "vessel_id": "Vessel ID",
     "length_in_meters": "Length In Meters",
-    "save_vessel": "Save Vessel",
+    "save_vessel": "Save Boat",
     "is_completed": "Is Completed",
-    "update_your_vessel": "Update your vessel",
-    "create_a_new_vessel": "Create a new vessel",
+    "update_your_vessel": "Update your boat",
+    "create_a_new_vessel": "Create a new boat",
     "length_in_meters_must_be_a_number": "Length In Meters must be a number.",
-    "vessel_are_yatchs": "vessels are yachts, dinghies, boards, or other vehicles that you sail on the water."
+    "vessel_are_yatchs": "Vessels are yachts, dinghies, boards, or other vehicles that you sail on the water."
   },
   "participant_list": {
     "participants": "Participants",
@@ -520,7 +520,7 @@
     "vessel_name": "Vessel Name",
     "assign": "Assign",
     "unassign": "Unassign",
-    "assign_vessel_to_vessel_groups" : "Assign participant to vessel group",
+    "assign_vessel_to_vessel_group" : "Assign participant to vessel group",
     "successfully_register": "Successfully registered this participant to the group.",
     "an_error_happended_when_registering": "An error happened when registering the participant to the group",
     "successfully_unregister": "Successfully unregistered this participant to the group.",
@@ -529,7 +529,7 @@
   "event_detail_page": {
     "organized_by": "Organized By",
     "about_this_event": "About this event",
-    "races_in_this_event": "{{number_of_races}} races in this event",
+    "races": "Races",
     "people_are_going_to_this_event": "{{participants_count}} people are going to this event.",
     "attend_this_event": "Attend this event",
     "invite_friends": "Invite friends",

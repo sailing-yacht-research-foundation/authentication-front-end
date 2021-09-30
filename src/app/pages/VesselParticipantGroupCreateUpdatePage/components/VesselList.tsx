@@ -25,7 +25,7 @@ export const VesselList = (props) => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
-                return <Link to={`/vessels/${record.id}/update`}>{text}</Link>;
+                return <Link to={`/boats/${record.id}/update`}>{text}</Link>;
             },
         },
         {

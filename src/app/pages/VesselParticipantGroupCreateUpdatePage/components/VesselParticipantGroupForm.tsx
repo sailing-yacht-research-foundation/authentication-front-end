@@ -91,7 +91,7 @@ export const VesselParticipantGroupForm = () => {
     }
 
     const onGroupDeleted = () => {
-        history.push('/vessel-participant-groups');
+        history.push(`/events/${eventId}/update`);
     }
 
     React.useEffect(() => {

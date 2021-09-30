@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -126,6 +126,7 @@ export const ParticipantForm = () => {
                     </GobackButton>
                     <PageInfoContainer>
                         <PageHeading>{mode === MODE.UPDATE ? t(translations.participant_unit_create_update_page.update_participant) : t(translations.participant_unit_create_update_page.create_a_new_participant)}</PageHeading>
+                        <PageDescription>{t(translations.participant_unit_create_update_page.participants_are_human_sailors)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>

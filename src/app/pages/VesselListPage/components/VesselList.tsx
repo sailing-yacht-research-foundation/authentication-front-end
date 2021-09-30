@@ -47,7 +47,7 @@ export const VesselList = () => {
             render: (text, record) => {
                 const userId = localStorage.getItem('user_id');
                 if ((userId && userId === record.createdById) || (uuid === record.createdById))
-                    return <Link to={`/vessels/${record.id}/update`}>{text}</Link>;
+                    return <Link to={`/boats/${record.id}/update`}>{text}</Link>;
                 return text;
             },
         },
@@ -55,12 +55,6 @@ export const VesselList = () => {
             title: t(translations.vessel_list_page.length_in_meters),
             dataIndex: 'lengthInMeters',
             key: 'lengthInMeters',
-            render: (value) => renderEmptyValue(value),
-        },
-        {
-            title: t(translations.vessel_list_page.global_id),
-            dataIndex: 'globalId',
-            key: 'globalId',
             render: (value) => renderEmptyValue(value),
         },
         {
@@ -77,7 +71,7 @@ export const VesselList = () => {
                 if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
-                            history.push(`/vessels/${record.id}/update`);
+                            history.push(`/boats/${record.id}/update`);
                         }} type="primary">{t(translations.vessel_list_page.update)}</BorderedButton>
                         <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
                     </Space>;
@@ -148,7 +142,7 @@ export const VesselList = () => {
                     <PageHeading>{t(translations.vessel_list_page.vessels)}</PageHeading>
                     <PageDescription>{t(translations.vessel_list_page.vessel_are_yatchs)}</PageDescription>
                 </PageInfoContainer>
-                <CreateButton onClick={() => history.push("/vessels/create")} icon={<AiFillPlusCircle
+                <CreateButton onClick={() => history.push("/boats/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
                     size={18} />}>{t(translations.vessel_list_page.create_a_new_vessel)}</CreateButton>
             </PageHeaderContainerResponsive>
@@ -172,7 +166,7 @@ export const VesselList = () => {
                         width={400} />
                     <CreateButton icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/vessels/create")}>{t(translations.vessel_list_page.create)}</CreateButton>
+                        size={18} />} onClick={() => history.push("/boats/create")}>{t(translations.vessel_list_page.create)}</CreateButton>
                     <LottieMessage>{t(translations.vessel_list_page.you_dont_have_any_vessels)}</LottieMessage>
                 </LottieWrapper>)}
         </>

@@ -37,14 +37,13 @@ export const VesselForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
-        let { publicName, globalId, lengthInMeters } = values;
+        let { publicName, lengthInMeters } = values;
         let response;
 
         setIsSaving(true);
 
         const data = {
             publicName: publicName,
-            globalId: globalId,
             lengthInMeters: lengthInMeters,
             orcJsonPolars: {}
         };
@@ -65,7 +64,7 @@ export const VesselForm = () => {
                 toast.success(t(translations.vessel_create_update_page.successfully_updated_vessel, { name: response.data?.publicName }));
             }
 
-            history.push(`/vessels/${response.data?.id}/update`);
+            history.push(`/boats/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
             toast.error(t(translations.vessel_create_update_page.an_error_happened));
@@ -91,7 +90,7 @@ export const VesselForm = () => {
     }
 
     const onVesselDeleted = () => {
-        history.push('/vessels');
+        history.push('/boats');
     }
 
     React.useEffect(() => {
@@ -109,7 +108,7 @@ export const VesselForm = () => {
             />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
-                    <GobackButton onClick={() => history.push("/vessels")}>
+                    <GobackButton onClick={() => history.push("/boats")}>
                         <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
                     </GobackButton>
                     <PageInfoContainer>
@@ -136,14 +135,6 @@ export const VesselForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.public_name)}</SyrfFieldLabel>}
                             name="publicName"
-                            rules={[{ required: true }]}
-                        >
-                            <SyrfInputField />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.global_id)}</SyrfFieldLabel>}
-                            name="globalId"
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField />

@@ -92,9 +92,7 @@ export const CompetitionUnitForm = () => {
                 toast.success(t(translations.competition_unit_create_update_page.successfully_updated_competition_unit, { name: response.data?.name }));
             }
 
-            history.push(`/events/${calendarEventId}/races/${response.data?.id}/update`);
-            setMode(MODE.UPDATE);
-            if (courseListRef) courseListRef.current?.scrollIntoView({ behavior: 'smooth' });
+            goBack();
         } else {
             toast.error(t(translations.competition_unit_create_update_page.an_error_happened));
         }
@@ -141,7 +139,7 @@ export const CompetitionUnitForm = () => {
     }
 
     const onCompetitionUnitDeleted = () => {
-        history.push('/races');
+        goBack();
     }
 
     React.useEffect(() => {
@@ -193,6 +191,11 @@ export const CompetitionUnitForm = () => {
                         form={form}
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
+                        initialValues={{
+                            startDate: moment(),
+                            startTime: moment('09:00:00', 'HH:mm:ss'),
+                            approximateStart_zone: 'America/Scoresbysund'
+                        }}
                     >
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.name)}</SyrfFieldLabel>}
@@ -205,7 +208,6 @@ export const CompetitionUnitForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
-                            rules={[{ required: true }]}
                         >
                             <SyrfTextArea />
                         </Form.Item>

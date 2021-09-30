@@ -20,7 +20,7 @@ export const DataDetails = (props) => {
                 </PageInfoContainer>
             </PageHeadContainer>
             <IframeContainer>
-                <Iframe width={'100%'} height={'100%'} url={data.htmlUrl}></Iframe>
+                <Iframe width={'100%'} height={`100%`} url={data.htmlUrl}></Iframe>
             </IframeContainer>
         </Wrapper>
     )
@@ -42,5 +42,5 @@ const Wrapper = styled.div`
 `;
 
 const IframeContainer = styled.div`
-    height: 83vh;
+    height: calc(${window.innerHeight}px - 17vh);
 `;
