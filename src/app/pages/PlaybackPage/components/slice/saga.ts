@@ -80,6 +80,11 @@ export function* getRaceData({ type, payload }) {
       return yield put(playbackActions.setPlaybackType(PlaybackTypes.INSECURESCRAPEDRACE));
     }
 
+    if (raceDetail._source?.source === "SYRF") {
+      yield put(playbackActions.setPlaybackType(PlaybackTypes.RACENOTFOUND));
+      return message.error("Race not found!");
+    }
+
     yield put(playbackActions.setPlaybackType(PlaybackTypes.SCRAPEDRACE));
   }
 

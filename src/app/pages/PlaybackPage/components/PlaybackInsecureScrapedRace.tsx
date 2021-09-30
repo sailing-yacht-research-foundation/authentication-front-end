@@ -10,10 +10,21 @@ export const PlaybackInsecureScrapedRace = (props) => {
   const searchRaceData = useSelector(selectSearchRaceDetail);
 
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", padding: '16px' }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "16px",
+      }}
+    >
       <h2 style={{ maxWidth: "800px", textAlign: "center" }}>
         {t(translations.playback_page.insecure_scraped_unfortunately)},&nbsp;
-        {urlToCompany(searchRaceData.url) || t(translations.playback_page.insecure_scraped_thisrace)}{" "}
+        {searchRaceData.source ||
+          urlToCompany(searchRaceData.url) ||
+          t(translations.playback_page.insecure_scraped_thisrace)}{" "}
         {t(translations.playback_page.insecure_scraped_nothttps)}
         &nbsp; <br /> <br />
         <a href={searchRaceData.url} rel="noreferrer" target="_blank">

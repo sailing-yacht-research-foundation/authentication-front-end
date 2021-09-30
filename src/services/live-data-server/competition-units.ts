@@ -201,7 +201,7 @@ export const searchScrapedRaceById = (id: string) => {
         },
     };
     
-    searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "url"];
+    searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "url", "source"];
 
     return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
         return {
