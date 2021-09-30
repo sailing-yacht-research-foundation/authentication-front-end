@@ -14,7 +14,7 @@ export const initialState: PlaybackState = {
     isPlaying: false,
     searchRaceId: "",
     searchRaceDetail: "",
-    playbackType: PlaybackTypes.STREAMINGRACE,
+    playbackType: PlaybackTypes.RACELOADING,
 };
 
 const slice = createSlice({
@@ -51,6 +51,7 @@ const slice = createSlice({
         getCompetitionUnitDetail(state, action: PayloadAction<any>) {},
         getVesselParticipants(state, action: PayloadAction<any>) {},
         getSearchRaceDetail(state, action: PayloadAction<any>) {},
+        getRaceData(state, action: PayloadAction<any>) {},
     },
 });
 

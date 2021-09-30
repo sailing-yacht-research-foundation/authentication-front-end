@@ -1,5 +1,8 @@
 export enum PlaybackTypes {
-    STREAMINGRACE = "streamingRace",
-    SCRAPEDRACE = "scrapedRace",
-    OLDRACE = "oldRace",
+  STREAMINGRACE = "streamingRace",
+  SCRAPEDRACE = "scrapedRace",
+  INSECURESCRAPEDRACE= "insecureScrapedRace",
+  OLDRACE = "oldRace",
+  RACENOTFOUND = 'raceNotFound',
+  RACELOADING = 'raceLoading'
 }

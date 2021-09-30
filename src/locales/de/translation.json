@@ -268,7 +268,14 @@
   },
   "playback_page": {
     "competitor": "Competitor:",
-    "sail_number": "Sail number:"
+    "sail_number": "Sail number:",
+    "getting_race_data": "Getting race data...",
+    "race_not_found": "Race not found",
+    "insecure_scraped_unfortunately": "Unfortunately",
+    "insecure_scraped_thisrace": "THIS RACE",
+    "insecure_scraped_nothttps": "does not use HTTPS, the standard way to protect users on the internet.",
+    "insecure_scraped_clickhere": "Click here",
+    "insecure_scraped_viewinsecureplayer": "if you want to view their insecure player in a new tab."
   },
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",
