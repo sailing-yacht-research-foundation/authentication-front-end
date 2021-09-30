@@ -31,10 +31,6 @@ export const PlaybackStreamRace = (props) => {
   const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
   const [participantsData, setParticipantsData] = useState([]);
   const [raceIdentity, setRaceIdentity] = useState({ name: "Race name", description: "Race description" });
-  const location = useLocation();
-  const parsedQueryString: any = queryString.parse(
-    location.search.includes("?") ? location.search.substring(1) : location.search
-  );
 
   const dispatch = useDispatch();
 
@@ -87,19 +83,6 @@ export const PlaybackStreamRace = (props) => {
     if (sessionToken) setSocketUrl(`${streamUrl}/authenticate?session_token=${sessionToken}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionToken]);
-
-  // Init detail
-  useEffect(() => {
-    tracksData.current = {};
-
-    if (parsedQueryString.raceId) dispatch(actions.getRaceData({ raceId: parsedQueryString.raceId }));
-
-    return () => {
-      dispatch(actions.setSearchRaceId(""));
-      dispatch(actions.setSearchRaceDetail({}));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Get competition unit detail
   useEffect(() => {

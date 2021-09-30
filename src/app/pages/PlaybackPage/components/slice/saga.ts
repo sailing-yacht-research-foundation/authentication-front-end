@@ -61,7 +61,7 @@ export function* getRaceData({ type, payload }) {
   if (competitionUnitResult.success) {
     yield put(playbackActions.setCompetitionUnitId(raceId));
     yield put(playbackActions.setCompetitionUnitDetail(competitionUnitResult.data));
-    yield put(playbackActions.setPlaybackType(PlaybackTypes.STREAMINGRACE));
+    return yield put(playbackActions.setPlaybackType(PlaybackTypes.STREAMINGRACE));
   }
 
   // Search race result
