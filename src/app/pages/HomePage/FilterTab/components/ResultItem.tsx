@@ -22,7 +22,7 @@ export const ResultItem = (props) => {
                     {race._source.start_country}
                 </Space>
             </HeadDescriptionWrapper>
-            <Name><Link to={`/playback?raceid=${race._id}`}>{race._source.name}</Link></Name>
+            <Name><Link to={`/playback?raceId=${race._id}`}>{race._source.name}</Link></Name>
             {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
             <DescriptionWrapper>
                 <DescriptionItem>
