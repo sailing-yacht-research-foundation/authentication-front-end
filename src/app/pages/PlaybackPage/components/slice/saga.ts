@@ -69,7 +69,10 @@ export function* getRaceData({ type, payload }) {
     yield put(playbackActions.setSearchRaceId(raceId));
 
     const raceDetail = searchRaceDetailResult.data?.hits?.hits?.[0];
-    if (!raceDetail) return message.error("Race not found!");
+    if (!raceDetail) {
+      yield put(playbackActions.setPlaybackType(PlaybackTypes.RACENOTFOUND));
+      return message.error("Race not found!");
+    }
 
     yield put(playbackActions.setSearchRaceDetail(raceDetail._source));
 
