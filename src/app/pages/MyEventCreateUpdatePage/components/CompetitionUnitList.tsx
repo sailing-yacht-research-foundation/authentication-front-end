@@ -23,7 +23,7 @@ export const CompetitionUnitList = (props) => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/playback/?raceId=${record.calendarEventId}`}>{text}</Link>;
+                return <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             },
             width: '20%',
         },
