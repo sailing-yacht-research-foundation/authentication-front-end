@@ -5,9 +5,3 @@ export const SYRF_SERVER = {
     API_VERSION: process.env.REACT_APP_SYRF_API_VERSION,
     DEV_TOKEN: process.env.REACT_APP_SYRF_API_DEV_TOKEN
 }
-
-export const KEYCLOAK = {
-    ISSUER_URL: process.env.REACT_APP_KEY_CLOAK_API_URL,
-    REALM_NAME: process.env.REACT_APP_KEY_CLOAK_REALM_NAME,
-    CLIENT_ID: process.env.REACT_APP_KEY_CLOAK_CLIENT_ID
-}
