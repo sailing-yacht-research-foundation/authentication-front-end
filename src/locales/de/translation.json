@@ -158,7 +158,8 @@
     "events": "My Events",
     "competition_units": "My Races",
     "vessels": "My Vessels",
-    "vessel_participant_groups": "Vessel Participant Groups"
+    "vessel_participant_groups": "Vessel Participant Groups",
+    "my_tracks": "My Tracks"
   },
   "profile_page": {
     "update_profile": {
@@ -501,7 +502,7 @@
     "add_to_group": "Add To Group",
     "delete_from_group": "Delete From Group",
     "successfully_added_to_group": "Successfully added this vessel to the group.",
-    "successfully_removed_vessel_from_the_group": "Successfully remove vessel from the group.",
+    "successfully_removed_vessel_from_the_group": "Successfully removed vessel from the group.",
     "an_error_happened_when_adding_vessel_to_this_group": "An error happended when adding vessel to the group",
     "an_error_happened_when_removing_vessel_from_this_group": "An error happened when removing vessel from this group"
   },
@@ -527,11 +528,12 @@
     "vessel_name": "Vessel Name",
     "assign": "Assign",
     "unassign": "Unassign",
-    "assign_vessel_to_vessel_groups" : "Assign participant to vessel group",
+    "assign_vessel_to_vessel_groups": "Assign participant to vessel groups",
     "successfully_register": "Successfully registered this participant to the group.",
     "an_error_happended_when_registering": "An error happened when registering the participant to the group",
     "successfully_unregister": "Successfully unregistered this participant to the group.",
-    "an_error_happended_when_ungistering": "An error happened when unregistering the participant to the group."
+    "an_error_happended_when_ungistering": "An error happened when unregistering the participant to the group.",
+    "action": "Action"
   },
   "event_detail_page": {
     "organized_by": "Organized By",
@@ -541,5 +543,13 @@
     "attend_this_event": "Attend this event",
     "invite_friends": "Invite friends",
     "update_this_event": "Edit this event"
+  },
+  "my_tracks_page": {
+    "my_tracks": "My Tracks",
+    "name":"Name",
+    "type": "Type",
+    "created_date": "Created Date",
+    "track_now": "Track Now",
+    "event_track": "Event Track"
   }
 }

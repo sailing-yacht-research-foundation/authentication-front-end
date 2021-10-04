@@ -158,7 +158,8 @@
     "events": "My Events",
     "competition_units": "My Races",
     "vessels": "My Vessels",
-    "vessel_participant_groups": "Vessel Participant Groups"
+    "vessel_participant_groups": "Vessel Participant Groups",
+    "my_tracks": "My Tracks"
   },
   "profile_page": {
     "update_profile": {
@@ -542,5 +543,14 @@
     "attend_this_event": "Attend this event",
     "invite_friends": "Invite friends",
     "update_this_event": "Edit this event"
+  },
+  "my_tracks_page": {
+    "my_tracks": "My Tracks",
+    "name":"Name",
+    "type": "Type",
+    "created_date": "Created Date",
+    "track_now": "Track Now",
+    "event_track": "Event Track",
+    "you_dont_have_any_tracks": "You don't have any tracks. Start tracking by using our app."
   }
 }
