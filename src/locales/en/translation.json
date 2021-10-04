@@ -550,6 +550,7 @@
     "type": "Type",
     "created_date": "Created Date",
     "track_now": "Track Now",
-    "event_track": "Event Track"
+    "event_track": "Event Track",
+    "you_dont_have_any_tracks": "You don't have any tracks. Start tracking by using our app."
   }
 }

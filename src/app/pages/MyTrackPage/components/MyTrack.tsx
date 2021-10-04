@@ -2,23 +2,22 @@ import React from 'react';
 import { Table, Space, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
-// import NoResult from '../assets/no-results.json';
+import NoResult from '../assets/no-results.json';
 import { translations } from 'locales/translations';
-import { BorderedButton, LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
-import { useHistory } from 'react-router';
+import { LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { getAllTracks } from 'services/live-data-server/my-tracks';
 import { Link } from 'react-router-dom';
 import { TIME_FORMAT } from 'utils/constants';
 
-// const defaultOptions = {
-//     loop: true,
-//     autoplay: true,
-//     animationData: NoResult,
-//     rendererSettings: {
-//         preserveAspectRatio: 'xMidYMid slice'
-//     }
-// };
+const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: NoResult,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
 
 export const MyTrack = () => {
 
@@ -100,11 +99,11 @@ export const MyTrack = () => {
                 </Spin>
             )
                 : (<LottieWrapper>
-                    {/* <Lottie
+                    <Lottie
                         options={defaultOptions}
                         height={400}
                         width={400} />
-                    <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_competition_unit)}</LottieMessage> */}
+                    <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
                 </LottieWrapper>)}
         </>
     )
