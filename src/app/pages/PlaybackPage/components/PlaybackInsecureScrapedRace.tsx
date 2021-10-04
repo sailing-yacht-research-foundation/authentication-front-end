@@ -4,6 +4,18 @@ import { selectSearchRaceDetail } from "./slice/selectors";
 import { urlToCompany } from "utils/url-to-company-map";
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
+import { LottieWrapper } from "app/components/SyrfGeneral";
+import Lottie from "react-lottie";
+import Insecure from '../assets/insecure.json'
+
+const defaultOptions = {
+  loop: false,
+  autoplay: true,
+  animationData: Insecure,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid",
+  },
+};
 
 export const PlaybackInsecureScrapedRace = (props) => {
   const { t } = useTranslation();
@@ -20,18 +32,22 @@ export const PlaybackInsecureScrapedRace = (props) => {
         padding: "16px",
       }}
     >
-      <h2 style={{ maxWidth: "800px", textAlign: "center" }}>
-        {t(translations.playback_page.insecure_scraped_unfortunately)},&nbsp;
-        {searchRaceData.source ||
-          urlToCompany(searchRaceData.url) ||
-          t(translations.playback_page.insecure_scraped_thisrace)}{" "}
-        {t(translations.playback_page.insecure_scraped_nothttps)}
-        &nbsp; <br /> <br />
-        <a href={searchRaceData.url} rel="noreferrer" target="_blank">
-          {t(translations.playback_page.insecure_scraped_clickhere)}
-        </a>
-        &nbsp;{t(translations.playback_page.insecure_scraped_viewinsecureplayer)}
-      </h2>
+
+      <LottieWrapper style={{marginTop:'-40px'}}>
+        <Lottie options={defaultOptions} height={280} width={280} />
+        <h4 style={{ maxWidth: "800px", textAlign: "center", marginTop:'15px' }}>
+          {t(translations.playback_page.insecure_scraped_unfortunately)},&nbsp;
+          {searchRaceData.source ||
+            urlToCompany(searchRaceData.url) ||
+            t(translations.playback_page.insecure_scraped_thisrace)}{" "}
+          {t(translations.playback_page.insecure_scraped_nothttps)}
+          &nbsp; <br /> <br />
+          <a href={searchRaceData.url} rel="noreferrer" target="_blank">
+            {t(translations.playback_page.insecure_scraped_clickhere)}
+          </a>
+          &nbsp;{t(translations.playback_page.insecure_scraped_viewinsecureplayer)}
+        </h4>
+      </LottieWrapper>
     </div>
   );
 };

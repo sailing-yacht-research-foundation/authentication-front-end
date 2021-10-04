@@ -14,6 +14,7 @@ import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from './DeleteParticipantForm';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
+import { VesselParticipantList } from './VesselParticipantList';
 
 export const ParticipantForm = () => {
 
@@ -148,7 +149,7 @@ export const ParticipantForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.public_name)}</SyrfFieldLabel>}
                             name="publicName"
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, max: 100 }]}
                         >
                             <SyrfInputField />
                         </Form.Item>
@@ -163,6 +164,12 @@ export const ParticipantForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
+
+            {
+                mode === MODE.UPDATE && <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                    <VesselParticipantList participant={participant} eventId={eventId} />
+                </SyrfFormWrapper>
+            }
         </Wrapper >
     )
 }

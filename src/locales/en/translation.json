@@ -344,7 +344,8 @@
     "select_a_group": "Select a Class",
     "vessel_participant_group_is_a_set": "Classes/regattas are groups of boats that are scored together and go around the same course at the same time.",
     "description": "Description",
-    "timezone": "Time Zone"
+    "timezone": "Time Zone",
+    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses."
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -366,7 +367,8 @@
     "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
     "Vessel_participant_groups": "Classes",
     "description": "Description",
-    "timezone": "Time zone"
+    "timezone": "Time Zone",
+    "location": "Location"
   },
   "course_list": {
     "course": "Course",
@@ -484,7 +486,8 @@
     "save_participant": "Save Competitor",
     "update_participant": "Update Competitor",
     "create_a_new_participant": "Create a new competitor",
-    "participants_are_human_sailors": "Competitors are human sailors who compete in races."
+    "participants_are_human_sailors": "Competitors are human sailors who compete in races.",
+    "assign_competitor_to_class_and_vessel" : "Assign competitor to class and vessel"
   },
   "vessel_participant_group_create_update_page": {
     "created_a_new_group": "Created a new class with name",
@@ -531,7 +534,8 @@
     "an_error_happended_when_registering": "An error happened when registering the competitor to the class",
     "successfully_unregister": "Successfully unregistered this competitor to the class.",
     "an_error_happended_when_ungistering": "An error happened when unregistering the competitor to the class.",
-    "action": "Action"
+    "action": "Action",
+    "competitor_already_assigned": "Competitior already assigned!"
   },
   "event_detail_page": {
     "organized_by": "Organized By",

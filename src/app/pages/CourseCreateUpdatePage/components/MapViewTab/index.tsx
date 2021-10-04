@@ -25,9 +25,28 @@ export const MapViewTab = () => {
 
     const location = useLocation();
 
+    const mapContainerRef = React.useRef<any>();
+
+    const handleResize = () => {
+        window.addEventListener('resize', performResize);
+    }
+
+    const performResize = () => {
+        const navBarHeight = 73;
+        const tabBarHeight = 150;
+        if (mapContainerRef.current) {
+            mapContainerRef.current._container.style.height = `${window.innerHeight - navBarHeight - tabBarHeight}px`;
+        }
+    }
+
     React.useEffect(() => {
+        handleResize();
         if (location.pathname.includes(MODE.UPDATE))
             setMode(MODE.UPDATE);
+
+        return () => {
+            window.removeEventListener('resize', performResize);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -53,7 +72,7 @@ export const MapViewTab = () => {
 
                 </Space>
             </PageHeaderContainerResponsive>
-            <MapContainer style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${NAV_HEIGHT})`, width: 'calc(100%)', zIndex: 1 }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
+            <MapContainer whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${NAV_HEIGHT})`, width: 'calc(100%)', zIndex: 1 }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <MapView ref={mapViewRef} />
             </MapContainer>
         </Wrapper>

@@ -45,3 +45,8 @@ export const selectPageSize = createSelector(
   [selectDomain],
   homeState => homeState.page_size,
 );
+
+export const selectShowAdvancedSearch = createSelector(
+  [selectDomain],
+  homeState => homeState.show_advanced_search,
+);

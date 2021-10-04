@@ -12,7 +12,8 @@ export const initialState: HomeState = {
  page: 1,
  total: 0,
  is_searching: false,
- page_size: 10
+ page_size: 10,
+ show_advanced_search: false
 };
 
 const slice = createSlice({
@@ -43,6 +44,9 @@ const slice = createSlice({
     },
     setPageSize(state, action: PayloadAction<number>) {
       state.page_size = action.payload;
+    },
+    setShowAdvancedSearch(state, action: PayloadAction<boolean>) {
+      state.show_advanced_search = action.payload;
     }
   },
 });

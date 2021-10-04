@@ -45,7 +45,6 @@ export const PlaybackStreamRace = (props) => {
 
   const groupedPosition = useRef<any>({});
   const receivedPositionData = useRef<boolean>(false);
-  const tracksData = useRef<any>([]);
   const normalizedPositions = useRef<any[]>([]);
 
   const currentTimeRef = useRef<number>(0);
@@ -224,7 +223,6 @@ export const PlaybackStreamRace = (props) => {
   // Noramalize data
   const handleNormalizeTracksData = () => {
     const grouped = groupedPosition.current;
-    const currentIsPlaying = isPlayingRef.current;
     const groupedVesselCount = Object.keys(grouped)?.length > 0;
 
     if (!groupedVesselCount) return;
@@ -294,7 +292,7 @@ export const PlaybackStreamRace = (props) => {
   const handleAddPosition = (data) => {
     messageHistory.current.push(data);
 
-    const { raceData, lat, lon, elapsedTime } = data;
+    const { raceData, lat, lon } = data;
     const { vesselParticipantId } = raceData;
 
     // Reject vessel participant id

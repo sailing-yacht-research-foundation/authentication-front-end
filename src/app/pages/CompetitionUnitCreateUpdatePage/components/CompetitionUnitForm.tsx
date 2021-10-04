@@ -1,13 +1,14 @@
 import React from 'react';
 import { Spin, Form, Divider, DatePicker, Row, Col, TimePicker, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea, SyrFieldDescription } from 'app/components/SyrfForm';
-import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
 import moment from 'moment';
-import { create, update, get } from 'services/live-data-server/competition-units';
+import { create, update, get, getAllByCalendarEventId } from 'services/live-data-server/competition-units';
+import { get as getEventById } from 'services/live-data-server/event-calendars';
 import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';
 import { CoursesList } from './CoursesList';
@@ -117,14 +118,28 @@ export const CompetitionUnitForm = () => {
             } else {
                 history.push('/404');
             }
+        } else {
+            setDefaultNameForRace();
+            setDefaultTimeForRace();
         }
+    }
+
+    const setDefaultClassForRace = (vesselGroups) => {
+        if (location.pathname.includes(MODE.UPDATE)) return;
+
+        const defaultVesselGroup = vesselGroups[vesselGroups.length - 1];
+
+        if (defaultVesselGroup)
+            form.setFieldsValue({ vesselParticipantGroupId: defaultVesselGroup.id });
     }
 
     const getAllUserVesselGroups = async () => {
         const response = await getVesselParticipantGroupsByEventId(eventId, -1);
 
         if (response.success) {
-            setGroups(response.data.rows);
+            const vesselGroups = response.data?.rows;
+            setGroups(vesselGroups);
+            setDefaultClassForRace(vesselGroups);
         }
     }
 
@@ -140,6 +155,22 @@ export const CompetitionUnitForm = () => {
 
     const onCompetitionUnitDeleted = () => {
         goBack();
+    }
+
+    const setDefaultNameForRace = async () => {
+        const response = await getAllByCalendarEventId(eventId, 1);
+
+        if (response.success) {
+            form.setFieldsValue({ name: 'R' + ((Number(response.data?.count) + 1) || 1) });
+        }
+    }
+
+    const setDefaultTimeForRace = async () => {
+        const response = await getEventById(eventId);
+
+        if (response.success) {
+            form.setFieldsValue({ startDate: moment(response.data?.approximateStartTime) });
+        }
     }
 
     React.useEffect(() => {
@@ -174,6 +205,7 @@ export const CompetitionUnitForm = () => {
                     </GobackButton>
                     <PageInfoContainer>
                         <PageHeading>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeading>
+                        <PageDescription>{ t(translations.competition_unit_create_update_page.race_configurations_pair_classes_to_courses) }</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
@@ -192,20 +224,20 @@ export const CompetitionUnitForm = () => {
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
                         initialValues={{
-                            startDate: moment(),
                             startTime: moment('09:00:00', 'HH:mm:ss'),
-                            approximateStart_zone: 'America/Scoresbysund'
+                            approximateStart_zone: 'Etc/UTC'
                         }}
                     >
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, max: 255 }]}
                         >
                             <SyrfInputField />
                         </Form.Item>
 
                         <Form.Item
+                            rules={[{ max: 255 }]}
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
                         >

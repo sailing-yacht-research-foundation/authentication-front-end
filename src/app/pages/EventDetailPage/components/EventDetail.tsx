@@ -6,7 +6,6 @@ import { FaCalendarPlus, FaSave } from 'react-icons/fa';
 import { FiUserPlus } from 'react-icons/fi';
 import styled from 'styled-components';
 import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
-import SailCover from '../assets/sail-banner.jpg';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
 import { get } from 'services/live-data-server/event-calendars';
@@ -110,15 +109,7 @@ export const EventDetail = () => {
     );
 }
 
-const SailBanner = styled.img`
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-`;
-
-const EventTitle = styled.h2`
-
-`;
+const EventTitle = styled.h2``;
 
 const EventDate = styled.p`
  font-size: 13px;

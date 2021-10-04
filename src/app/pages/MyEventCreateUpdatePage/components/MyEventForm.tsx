@@ -7,6 +7,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { LocationPicker } from './LocationPicker';
 import { useForm } from 'antd/lib/form/Form';
 import { create, get, update } from 'services/live-data-server/event-calendars';
+import { create as createVesselParticipantGroup } from 'services/live-data-server/vessel-participant-group';
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
@@ -20,7 +21,10 @@ import { ParticipantList } from './ParticipantList';
 import { VesselParticipantGroupList } from './VesselParticipantGroupList';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
-import { renderTimezoneInUTCOffset } from 'utils/helpers';
+import { debounce, renderTimezoneInUTCOffset } from 'utils/helpers';
+import Geocode from "react-geocode";
+
+Geocode.setApiKey('AIzaSyBTSPSpUY-DgnIMdVL_CRh_cC6_ckCOILs');
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
@@ -51,8 +55,11 @@ export const MyEventForm = () => {
 
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debounceAddressTyping = React.useCallback(debounce((value) => getLocationFromAddress(value), 1000), []);
+
     const onFinish = async (values) => {
-        const { name, startDate, externalUrl, lon, lat, endDate, isPrivate, startTime, description, approximateStartTime_zone } = values;
+        const { name, startDate, externalUrl, lon, lat, endDate, startTime, description, approximateStartTime_zone } = values;
         let response;
         let currentDate = moment();
 
@@ -76,7 +83,6 @@ export const MyEventForm = () => {
             endMonth: currentDate.utc().format('MM'),
             endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
-            isPrivate: isPrivate,
             approximateStartTime_zone: approximateStartTime_zone,
         };
 
@@ -88,24 +94,38 @@ export const MyEventForm = () => {
         setIsSavingRace(false);
 
         if (response.success) {
-            if (mode === MODE.CREATE) {
-                toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
-                setRace(response.data);
-            } else {
-                toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
-            }
-
-            history.push(`/events/${response.data?.id}/update`);
-            setMode(MODE.UPDATE);
-            setCoordinates({
-                lat: lat,
-                lng: lon
-            });
-
-            if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
+            onEventSaved(response, lat, lon);
         } else {
             toast.error(t(translations.my_event_create_update_page.an_error_happened_when_saving_event));
         }
+    }
+
+    const onEventSaved = (response, lat, lon) => {
+        if (mode === MODE.CREATE) {
+            toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
+            setRace(response.data);
+            createDefaultVesselParticipantGroup(response.data?.id);
+        } else {
+            toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
+        }
+
+        history.push(`/events/${response.data?.id}/update`);
+        setMode(MODE.UPDATE);
+        setCoordinates({
+            lat: lat,
+            lng: lon
+        });
+
+        if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const createDefaultVesselParticipantGroup = async (eventId) => {
+        const data = {
+            name: 'Default Class',
+            calendarEventId: eventId
+        };
+
+        await createVesselParticipantGroup(data);
     }
 
     const onChoosedLocation = (lat, lon) => {
@@ -113,6 +133,15 @@ export const MyEventForm = () => {
             lat: lat,
             lon: lon
         });
+        Geocode.fromLatLng(parseFloat(lat), parseFloat(lon)).then(
+            (response) => {
+                const address = response.results[0].formatted_address;
+                form.setFieldsValue({ location: address });
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
     }
 
     const initModeAndData = async () => {
@@ -155,6 +184,22 @@ export const MyEventForm = () => {
         });
     }
 
+    const getLocationFromAddress = (value) => {
+
+        Geocode.fromAddress(value).then(
+            (response) => {
+                const { lat, lng } = response.results[0].geometry.location;
+                setCoordinates({
+                    lat: lat,
+                    lng: lng
+                });
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
+    }
+
     return (
         <Wrapper>
             <DeleteRaceModal
@@ -193,19 +238,19 @@ export const MyEventForm = () => {
                         initialValues={{
                             startDate: moment(),
                             startTime: moment('09:00:00', 'HH:mm:ss'),
-                            externalUrl: 'https://',
-                            approximateStartTime_zone: 'America/Scoresbysund'
+                            approximateStartTime_zone: 'Etc/UTC'
                         }}
                     >
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, max: 255 }]}
                         >
                             <SyrfInputField />
                         </Form.Item>
 
                         <Form.Item
+                            rules={[{ max: 255 }]}
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
                         >
@@ -214,7 +259,7 @@ export const MyEventForm = () => {
 
                         <Divider />
 
-                        <Row gutter={24}>
+                        <Row gutter={24} style={{ display: 'none' }}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.longitude)}</SyrfFieldLabel>}
@@ -236,8 +281,17 @@ export const MyEventForm = () => {
                             </Col>
                         </Row>
 
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.location)}</SyrfFieldLabel>}
+                            name="location"
+                            rules={[{ required: true }]}
+                        >
+                            <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} />
+                        </Form.Item>
+
                         {(mode === MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
                         {mode === MODE.CREATE && <LocationPicker coordinates={MAP_DEFAULT_VALUE.CENTER} onChoosedLocation={onChoosedLocation} />}
+
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item

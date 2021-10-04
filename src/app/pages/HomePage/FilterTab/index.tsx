@@ -1,22 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { media } from 'styles/media';
-import { FilterPane } from './components/FilterPane';
 import { FilterResult } from './components/FilterResult';
 import { BsSearch } from 'react-icons/bs';
 import { StyleConstants } from 'styles/StyleConstants';
-import { isMobile } from 'utils/helpers';
 
 export const FilterTab = (props) => {
-    const [showFilterPanel, setShowFilterPanel] = React.useState<boolean>(false);
-
     const { onPaginationPageChanged } = props; 
 
     return (
         <Wrapper>
             <FilterResult onPaginationPageChanged={onPaginationPageChanged} />
-            {(showFilterPanel || !isMobile()) && <FilterPane limitResults close={() => setShowFilterPanel(false)} />}
-            <ToggleFilterPane onClick={() => setShowFilterPanel(true)}>
+            <ToggleFilterPane>
                 <BsSearch size={25} color={StyleConstants.MAIN_TONE_COLOR} />
             </ToggleFilterPane>
         </Wrapper>

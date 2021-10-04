@@ -27,7 +27,11 @@ const MAP_MOVE_TYPE = {
     animation: 'animation'
 }
 
-export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
+let geoLoc;
+
+let watchID;
+
+export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInput }, ref) => {
 
     const map = useMap();
 
@@ -60,17 +64,19 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
      * @param type should be either type: immediately or animation
      */
     const zoomToCurrentUserLocationIfAllowed = (type: string) => {
-        if (navigator.geolocation)
-            navigator.geolocation.getCurrentPosition((position) => {
-                const params = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
+        if (!navigator.geolocation) return;
 
-                type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
-            }, error => {
-                _handleLocationPermissionError(error, type);
-            });
+        geoLoc = navigator.geolocation;
+        watchID = geoLoc.watchPosition((position) => {
+            const params = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
+        }, error => {
+            _handleLocationPermissionError(error, type);
+        });
     }
 
     const _handleLocationPermissionError = (error, type: string) => {
@@ -146,6 +152,13 @@ export const MapView = React.forwardRef<any, any>(({ zoom }, ref) => {
 
         return marker;
     }
+
+    React.useEffect(() => {
+        if (isFocusingOnSearchInput && geoLoc && watchID) {
+            geoLoc.clearWatch(watchID);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isFocusingOnSearchInput]);
 
     const renderRacePopup = (race) => {
         return (

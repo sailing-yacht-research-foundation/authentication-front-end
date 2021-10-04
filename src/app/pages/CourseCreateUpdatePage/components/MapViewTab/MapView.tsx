@@ -22,6 +22,8 @@ import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { CourseDeleteModal } from '../CourseDeleteModal';
 import { MODE } from 'utils/constants';
+import styled from 'styled-components';
+import { StyleConstants } from 'styles/StyleConstants';
 
 require('leaflet-draw');
 
@@ -56,6 +58,12 @@ L.drawLocal.draw.toolbar.buttons = {
 
 let drawControl;
 
+const defaultPolylineNames = ['Start/Finish', 'Start', 'Finish', 'Windward Gate', 'Leeward Gate'];
+
+const defaultPolygonNames = ['Course Boundary', 'Exclusion Area', 'Starting Area'];
+
+const defaultMarkerNames = ['Windward Mark', 'Leeward Mark', 'Offset'];
+
 export const MapView = React.forwardRef((props, ref) => {
 
     const map = useMap();
@@ -89,6 +97,8 @@ export const MapView = React.forwardRef((props, ref) => {
     const { t } = useTranslation();
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
+    const [drawMode, setDrawMode] = React.useState<string>('');
 
     React.useImperativeHandle(ref, () => ({
         saveCourse() {
@@ -225,6 +235,7 @@ export const MapView = React.forwardRef((props, ref) => {
     const registerOnGeometryDrawStartEvent = () => {
         map.on(L.Draw.Event.DRAWSTART, function (e) {
             setShowGeometryNamePopup(true);
+            setDrawMode(e.layerType);
             geometryNameForm.resetFields();
         });
     }
@@ -364,6 +375,27 @@ export const MapView = React.forwardRef((props, ref) => {
         goBack();
     }
 
+    const onNamePicked = (name) => {
+        geometryNameForm.setFieldsValue({ geometry_name: name });
+    }
+
+    const renderDrawModeNamePicker = () => {
+        switch (drawMode) {
+            case LAYER_TYPE.polygon:
+                return defaultPolygonNames.map(name => {
+                    return <Tag onClick={() => onNamePicked(name)}>{name}</Tag>
+                });
+            case LAYER_TYPE.polyline:
+                return defaultPolylineNames.map(name => {
+                    return <Tag onClick={() => onNamePicked(name)}>{name}</Tag>
+                });
+            case LAYER_TYPE.marker:
+                return defaultMarkerNames.map(name => {
+                    return <Tag onClick={() => onNamePicked(name)}>{name}</Tag>
+                });
+        }
+    }
+
     return (
         <>
             <CourseDeleteModal
@@ -388,6 +420,9 @@ export const MapView = React.forwardRef((props, ref) => {
                         geometry_name: '',
                     }}
                 >
+                    <NamePickerContainer>
+                        {renderDrawModeNamePicker()}
+                    </NamePickerContainer>
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.course_create_update_page.geometry_name)}</SyrfFieldLabel>}
                         name="geometry_name"
@@ -402,3 +437,18 @@ export const MapView = React.forwardRef((props, ref) => {
         </>
     );
 });
+
+const Tag = styled.div`
+    border-radius: 7px;
+    margin: 5px 5px;
+    padding: 5px 10px;
+    background: ${StyleConstants.MAIN_TONE_COLOR};
+    color: #fff;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 13px;
+`;
+
+const NamePickerContainer = styled.div`
+    margin: 10px 0;
+`;

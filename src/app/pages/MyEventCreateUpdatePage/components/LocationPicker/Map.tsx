@@ -14,7 +14,7 @@ export const Map = (props) => {
 
     const initMapClickEvent = () => {
         map.on('click', (e) => {
-            onMapClicked(e.latlng.lat, e.latlng.lng);
+            onMapClicked(e.latlng.wrap().lat, e.latlng.wrap().lng);
             if (!noMarkerInteraction)
                 setMarker(e.latlng);
         });
@@ -45,6 +45,11 @@ export const Map = (props) => {
 
         setMarker(coordinates);
     }
+
+    React.useEffect(() => {
+        map.setView(coordinates, 10);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [coordinates]);
 
     React.useEffect(() => {
         initializeMapView();

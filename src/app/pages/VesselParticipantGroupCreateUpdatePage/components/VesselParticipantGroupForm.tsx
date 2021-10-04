@@ -134,7 +134,7 @@ export const VesselParticipantGroupForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, max: 100 }]}
                         >
                             <SyrfInputField />
                         </Form.Item>

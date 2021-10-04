@@ -2,12 +2,11 @@
  * Root saga manages watcher lifecycle
  */
 
-import { all, call, delay, put, select, takeLatest } from "@redux-saga/core/effects";
+import { all, call, put, select, takeLatest } from "@redux-saga/core/effects";
 import { message } from "antd";
 import { getCompetitionUnitById, searchScrapedRaceById } from "services/live-data-server/competition-units";
 import { getVesselParticipantGroupById } from "services/live-data-server/vessel-participant-group";
 import { PlaybackTypes } from "types/Playback";
-import { urlToCompany } from "utils/url-to-company-map";
 import { playbackActions } from ".";
 import { selectCompetitionUnitDetail } from "./selectors";
 
