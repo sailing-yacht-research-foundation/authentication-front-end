@@ -2,7 +2,7 @@ name: SYRF My Sailing Profile production
 on:
   push:
     branches:
-      - main
+      - hotfix/SNS-393
 env:
   IMAGE_NAME: syrf_my_sailing_profile
 jobs:
@@ -22,13 +22,10 @@ jobs:
           --build-arg REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io' 
           --build-arg REACT_APP_ENV='production' 
           --build-arg REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}' 
-          --build-arg REACT_APP_SYRF_API_URL='' 
-          --build-arg REACT_APP_SYRF_API_VERSION='/v1' 
-          --build-arg REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_PRO_TOKEN }}' 
-          --build-arg REACT_APP_KEY_CLOAK_API_URL='https://auth.syrf.io' 
-          --build-arg REACT_APP_KEY_CLOAK_REALM_NAME='syrf' 
-          --build-arg REACT_APP_KEY_CLOAK_CLIENT_ID='SyrfWebApp' 
-          --build-arg REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='' 
+          --build-arg REACT_APP_SYRF_API_URL='https://liveserver.syrf.io'
+          --build-arg REACT_APP_SYRF_API_VERSION='/v1'
+          --build-arg REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_PRO_TOKEN }}'
+          --build-arg REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='wss://streaming-server.syrf.io' 
           --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to registry
         # This is where you will update the PAT to GITHUB_TOKEN
