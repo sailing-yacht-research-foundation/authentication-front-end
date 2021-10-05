@@ -146,7 +146,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
                 marker.closePopup();
             })
             .on('click', () => {
-                history.push(`/playback?raceid=${race._id}`);
+                history.push(`/playback?raceId=${race._id}`);
             })
             .addTo(map);
 
