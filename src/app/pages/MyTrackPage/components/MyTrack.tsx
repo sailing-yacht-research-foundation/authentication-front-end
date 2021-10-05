@@ -29,7 +29,9 @@ export const MyTrack = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>;
+                if (record.competitionUnit)
+                    return <Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>;
+                return record.event?.name;
             }
         },
         {
