@@ -44,11 +44,25 @@ export const Main = () => {
 
     React.useEffect(() => {
         searchRacesOnEnter();
+        disableBodyScrollOnMapView(getDefaultActiveTabs());
         // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        return () => {
+            document.body.className = '';
+        }
     }, []);
 
     const onTabChanged = (activeKey) => {
+        disableBodyScrollOnMapView(activeKey);
         localStorage.setItem('homepage_active_tab', activeKey);
+    }
+
+    const disableBodyScrollOnMapView = (activeKey) => {
+        if (activeKey === '1') {
+            document.body.className = 'no-scroll';
+        } else {
+            document.body.className = '';
+        }
     }
 
     const getDefaultActiveTabs = () => {

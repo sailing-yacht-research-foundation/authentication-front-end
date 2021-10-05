@@ -29,6 +29,10 @@ Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
 
+timeZones.push({
+    name: 'Etc/Utc'
+});
+
 export const MyEventForm = () => {
 
     const history = useHistory();
@@ -238,7 +242,7 @@ export const MyEventForm = () => {
                         initialValues={{
                             startDate: moment(),
                             startTime: moment('09:00:00', 'HH:mm:ss'),
-                            approximateStartTime_zone: 'Etc/UTC'
+                            approximateStartTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone
                         }}
                     >
                         <Form.Item

@@ -23,7 +23,7 @@ export const EventDetail = () => {
 
     const [event, setEvent] = React.useState<any>({});
 
-    const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
+    const [coordinates, setCoordinates] = React.useState<any>({});
 
     const [isFetchingEvent, setIsFetchingEvent] = React.useState<boolean>(false);
 
@@ -68,7 +68,7 @@ export const EventDetail = () => {
 
     return (
         <Spin spinning={isFetchingEvent}>
-            <LocationPicker onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="15" coordinates={coordinates} height="270px" noPadding />
+            { coordinates.lat &&  <LocationPicker onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} height="270px" noPadding /> }
             <PageHeaderContainerResponsive>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => goBack()}>

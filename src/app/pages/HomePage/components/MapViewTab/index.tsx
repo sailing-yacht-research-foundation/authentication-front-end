@@ -55,6 +55,8 @@ export const MapViewTab = (props) => {
 
     const [isFocusingOnSearchInput, setIsFocusingOnSearchInput] = React.useState<boolean>(false);
 
+    const mapContainerRef = React.useRef<any>();
+
     const searchForRaces = (e) => {
         if (e.keyCode === 13 || e.which === 13) {
             const params: any = {};
@@ -93,13 +95,23 @@ export const MapViewTab = (props) => {
         setIsFocusingOnSearchInput(false);
     }
 
+    const handleResize = () => {
+        const navHeight = 73;
+        const tabHeight = 76;
+        mapContainerRef.current._container.style.height = (window.innerHeight - navHeight - tabHeight) + 'px';
+    }
+
     React.useEffect(() => {
-        window.scrollTo(0, 0);
+        window.scroll(0, 0);
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
     }, []);
 
     return (
         <Wrapper>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={center} zoom={ZOOM}>
+            <MapContainer whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={center} zoom={ZOOM}>
                 <MapView isFocusingOnSearchInput={isFocusingOnSearchInput} ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
             {

@@ -25,6 +25,10 @@ import { renderTimezoneInUTCOffset } from 'utils/helpers';
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
 
+timeZones.push({
+    name: 'Etc/Utc'
+});
+
 export const CompetitionUnitForm = () => {
 
     const history = useHistory();
@@ -185,7 +189,10 @@ export const CompetitionUnitForm = () => {
         const response = await getEventById(eventId);
 
         if (response.success) {
-            form.setFieldsValue({ startDate: moment(response.data?.approximateStartTime) });
+            form.setFieldsValue({ 
+                startDate: moment(response.data?.approximateStartTime),
+                approximateStart_zone: response.data?.approximateStartTime_zone
+            });
         }
     }
 

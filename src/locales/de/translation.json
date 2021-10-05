@@ -508,14 +508,15 @@
     "name": "Class Name",
     "save_group": "Save Class",
     "update_group": "Update Class",
-    "create_a_new_group": "Create a new class",
+    "create_a_new_group": "Create a class",
     "vessels": "Boats",
     "add_to_group": "Add To Class",
     "delete_from_group": "Delete From Class",
     "successfully_added_to_group": "Successfully added this boat to the class.",
     "successfully_removed_vessel_from_the_group": "Successfully removed boat from the class.",
     "an_error_happened_when_adding_vessel_to_this_group": "An error happended when adding boat to the class",
-    "an_error_happened_when_removing_vessel_from_this_group": "An error happened when removing boat from this class"
+    "an_error_happened_when_removing_vessel_from_this_group": "An error happened when removing boat from this class",
+    "member_of_classes_regattas": "Members of classes/regattas are scored against each other and go around the same course at the same time. They can be used for classes, regattas, divisions or boats using the same handicap methodology."
   },
   "vessel_participant_group_list_page": {
     "created_date": "Created Date",

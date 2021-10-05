@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -116,6 +116,7 @@ export const VesselParticipantGroupForm = () => {
                     </GobackButton>
                     <PageInfoContainer>
                         <PageHeading>{mode === MODE.UPDATE ? t(translations.vessel_participant_group_create_update_page.update_group) : t(translations.vessel_participant_group_create_update_page.create_a_new_group)}</PageHeading>
+                        <PageDescription>{t(translations.vessel_participant_group_create_update_page.member_of_classes_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
