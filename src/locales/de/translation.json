@@ -158,7 +158,8 @@
     "events": "My Events",
     "competition_units": "My Races",
     "vessels": "Boats",
-    "vessel_participant_groups": "Classes"
+    "vessel_participant_groups": "Classes",
+    "my_tracks": "My Tracks"
   },
   "profile_page": {
     "update_profile": {
@@ -542,7 +543,7 @@
     "successfully_register": "Successfully registered this competitor to the class.",
     "an_error_happended_when_registering": "An error happened when registering the competitor to the class",
     "successfully_unregister": "Successfully unregistered this competitor to the class.",
-    "an_error_happended_when_ungistering": "An error happened when unregistering the competitor to the class.",
+    "an_error_happended_when_ungistering": "An error happened when unregistering the competitor from the class.",
     "action": "Action",
     "competitor_already_assigned": "Competitior already assigned to this class!"
   },
@@ -554,5 +555,14 @@
     "attend_this_event": "Attend this event",
     "invite_friends": "Invite friends",
     "update_this_event": "Edit this event"
+  },
+  "my_tracks_page": {
+    "my_tracks": "My Tracks",
+    "name":"Name",
+    "type": "Type",
+    "created_date": "Created Date",
+    "track_now": "Track Now",
+    "event_track": "Event Track",
+    "you_dont_have_any_tracks": "You don't have any tracks. Start tracking by using our app."
   }
 }

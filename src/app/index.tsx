@@ -42,6 +42,7 @@ import { VesselCreateUpdatePage } from './pages/VesselCreateUpdatePage/Loadable'
 import { ParticipantCreateUpdatePage } from './pages/ParticipantCreateUpdatePage/Loadable';
 import { VesselParticipantGroupPage } from './pages/VesselParticipantGroupCreateUpdatePage/Loadable';
 import { EventDetailPage } from './pages/EventDetailPage/Loadable';
+import { MyTrackPage } from './pages/MyTrackPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -167,6 +168,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-tracks'} component={MyTrackPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
