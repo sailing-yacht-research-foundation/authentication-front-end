@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Space, Spin } from 'antd';
+import { Table, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json';

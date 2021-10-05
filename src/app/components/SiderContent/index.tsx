@@ -27,7 +27,7 @@ export const SiderContent = (props) => {
     { key: '1', paths: ['/', '/search'] },
     { key: '13', paths: ['/events'], subMenuKey: 'events' },
     { key: '14', paths: ['/races'], subMenuKey: 'events' },
-    { key: '15', paths: ['/boats'], subMenuKey: 'events' },
+    { key: '15', paths: ['/boats'] },
     { key: '12', paths: ['/data'] },
     { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
     { key: '8', paths: ['/profile/change-password'], subMenuKey: 'profile' },

@@ -68,17 +68,17 @@ export const ParticipantList = (props) => {
     const menu = (
         <Menu>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="#" onClick={e => filterParticipants(e, FILTER_MODE.all)}>
+                <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.all)}>
                     {t(translations.participant_list.all)}
                 </a>
             </Menu.Item>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="#" onClick={e => filterParticipants(e, FILTER_MODE.assigned)}>
+                <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.assigned)}>
                     {t(translations.participant_list.assigned)}
                 </a>
             </Menu.Item>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="#" onClick={e => filterParticipants(e, FILTER_MODE.unassigned)}>
+                <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.unassigned)}>
                     {t(translations.participant_list.unassigned)}
                 </a>
             </Menu.Item>
@@ -184,6 +184,7 @@ export const ParticipantList = (props) => {
         if (!showAssignModal) {
             getAll(pagination.page);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showAssignModal]);
 
     return (
@@ -209,7 +210,7 @@ export const ParticipantList = (props) => {
                 </PageHeaderContainer>
                 <FilterWrapper>
                     <Dropdown overlay={menu}>
-                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                             {filterMode} <DownOutlined />
                         </a>
                     </Dropdown>

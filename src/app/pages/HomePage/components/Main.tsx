@@ -50,6 +50,7 @@ export const Main = () => {
         return () => {
             document.body.className = '';
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onTabChanged = (activeKey) => {

@@ -5,7 +5,7 @@ import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/Loc
 import { FaCalendarPlus, FaSave } from 'react-icons/fa';
 import { FiUserPlus } from 'react-icons/fi';
 import styled from 'styled-components';
-import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
+import { TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
 import { get } from 'services/live-data-server/event-calendars';
