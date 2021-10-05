@@ -65,7 +65,7 @@ export const VesselParticipantGroupForm = () => {
                 toast.success(t(translations.vessel_participant_group_create_update_page.successfully_updated_group));
             }
 
-            history.push(`/events/${eventId}/vessel-participant-groups/${response.data?.id}/update`);
+            history.push(`/events/${eventId}/classes/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
             toast.error(t(translations.vessel_participant_group_create_update_page.an_error_happened));
@@ -152,7 +152,7 @@ export const VesselParticipantGroupForm = () => {
 
             {mode === MODE.UPDATE &&
                 <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                    <VesselList group={group} />
+                    <VesselList group={group} eventId={eventId} />
                 </SyrfFormWrapper>
             }
         </Wrapper >

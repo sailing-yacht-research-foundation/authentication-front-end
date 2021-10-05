@@ -7,7 +7,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
 import moment from 'moment';
-import { create, update, get, getAllByCalendarEventId } from 'services/live-data-server/competition-units';
+import { create, update, get, cloneCourse, getAllCompetitionUnitsByEventIdWithSort } from 'services/live-data-server/competition-units';
 import { get as getEventById } from 'services/live-data-server/event-calendars';
 import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';
@@ -17,7 +17,7 @@ import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/co
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
+import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
@@ -53,6 +53,8 @@ export const CompetitionUnitForm = () => {
 
     const [groups, setGroups] = React.useState<any[]>([]);
 
+    const [lastCreatedRace, setLastCreatedRace] = React.useState<any>({});
+
     const onFinish = async (values) => {
         let { name, startDate, startTime, isCompleted, calendarEventId, vesselParticipantGroupId, description, approximateStart_zone } = values;
         let response;
@@ -87,8 +89,7 @@ export const CompetitionUnitForm = () => {
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data?.name }));
-                setCompetitionUnit(response.data);
+                onCompetitionUnitCreated(response);
             } else {
                 toast.success(t(translations.competition_unit_create_update_page.successfully_updated_competition_unit, { name: response.data?.name }));
             }
@@ -96,6 +97,18 @@ export const CompetitionUnitForm = () => {
             goBack();
         } else {
             toast.error(t(translations.competition_unit_create_update_page.an_error_happened));
+        }
+    }
+
+    const onCompetitionUnitCreated = (response) => {
+        toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data?.name }));
+        setCompetitionUnit(response.data);
+        cloneCourseToTheNewCreatedRace(response.data.id);
+    }
+
+    const cloneCourseToTheNewCreatedRace = async (newRaceId) => {
+        if (lastCreatedRace) {
+            await cloneCourse(lastCreatedRace.id, newRaceId);
         }
     }
 
@@ -127,14 +140,14 @@ export const CompetitionUnitForm = () => {
     const setDefaultClassForRace = (vesselGroups) => {
         if (location.pathname.includes(MODE.UPDATE)) return;
 
-        const defaultVesselGroup = vesselGroups[vesselGroups.length - 1];
+        const defaultVesselGroup = vesselGroups[0];
 
         if (defaultVesselGroup)
             form.setFieldsValue({ vesselParticipantGroupId: defaultVesselGroup.id });
     }
 
     const getAllUserVesselGroups = async () => {
-        const response = await getVesselParticipantGroupsByEventId(eventId, -1);
+        const response = await getVesselParticipantGroupsByEventIdWithSort(eventId, 1);
 
         if (response.success) {
             const vesselGroups = response.data?.rows;
@@ -158,10 +171,13 @@ export const CompetitionUnitForm = () => {
     }
 
     const setDefaultNameForRace = async () => {
-        const response = await getAllByCalendarEventId(eventId, 1);
+        const response = await getAllCompetitionUnitsByEventIdWithSort(eventId, 1);
 
         if (response.success) {
             form.setFieldsValue({ name: 'R' + ((Number(response.data?.count) + 1) || 1) });
+            const races = response.data?.rows;
+            if (races.length > 0)
+                setLastCreatedRace(races[0]);
         }
     }
 
@@ -205,7 +221,7 @@ export const CompetitionUnitForm = () => {
                     </GobackButton>
                     <PageInfoContainer>
                         <PageHeading>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeading>
-                        <PageDescription>{ t(translations.competition_unit_create_update_page.race_configurations_pair_classes_to_courses) }</PageDescription>
+                        <PageDescription>{t(translations.competition_unit_create_update_page.race_configurations_pair_classes_to_courses)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>

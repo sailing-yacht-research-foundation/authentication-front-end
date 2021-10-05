@@ -24,7 +24,7 @@ import { MODE } from 'utils/constants';
 import { debounce, renderTimezoneInUTCOffset } from 'utils/helpers';
 import Geocode from "react-geocode";
 
-Geocode.setApiKey('AIzaSyBTSPSpUY-DgnIMdVL_CRh_cC6_ckCOILs');
+Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();

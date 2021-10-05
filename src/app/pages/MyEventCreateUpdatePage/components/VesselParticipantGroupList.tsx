@@ -36,7 +36,7 @@ export const VesselParticipantGroupList = (props) => {
             render: (text, record) => {
                 return <Space size="middle">
                     <BorderedButton onClick={() => {
-                        history.push(`/events/${eventId}/vessel-participant-groups/${record.id}/update`);
+                        history.push(`/events/${eventId}/classes/${record.id}/update`);
                     }} type="primary">{t(translations.vessel_participant_group_list_page.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteGroupModal(record)}>{t(translations.vessel_participant_group_list_page.delete)}</BorderedButton>
                 </Space>;
@@ -102,7 +102,7 @@ export const VesselParticipantGroupList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.my_event_create_update_page.Vessel_participant_groups)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/events/${eventId}/vessel-participant-groups/create`)} icon={<AiFillPlusCircle
+                    <CreateButton onClick={() => history.push(`/events/${eventId}/classes/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.vessel_participant_group_list_page.create)}</CreateButton>
                 </PageHeaderContainer>

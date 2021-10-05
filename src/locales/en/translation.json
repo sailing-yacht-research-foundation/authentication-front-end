@@ -444,7 +444,12 @@
     "you_dont_have_any_vessels": "You do not have any boats, please create one.",
     "vessels": "Boats",
     "create_a_new_vessel": "Create a new Boats",
-    "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water."
+    "action":"Action",
+    "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water.",
+    "the_number_of_boats_must_be_greater_than_zero": "The number of boats must be greater than zero and must be a valid number.",
+    "the_number_of_boats_must_not_more_than_30": "The number of boats must not more than 30.",
+    "the_number_of_boats_must_be_a_number": "The number of boats must be a number.",
+    "successfully_created_vessels": "Successfully created {{number_of_vessels}} boats."
   },
   "vessel_create_update_page": {
     "created_a_new_vessel": "Created a new boat with name: {{name}}.",
@@ -473,7 +478,11 @@
     "action": "Action",
     "assign": "Assign",
     "tracker_url": "Tracker URL",
-    "copied_to_clipboard": "Copied to clipboard."
+    "copied_to_clipboard": "Copied to clipboard.",
+    "assigned_vessels": "Assigned Boats",
+    "all": "All",
+    "assigned": "Assigned",
+    "unassigned":"Unassigned"
   },
   "participant_unit_create_update_page": {
     "created_a_new_participant": "Created a new competitor with name: {{name}}.",
@@ -535,7 +544,7 @@
     "successfully_unregister": "Successfully unregistered this competitor to the class.",
     "an_error_happended_when_ungistering": "An error happened when unregistering the competitor to the class.",
     "action": "Action",
-    "competitor_already_assigned": "Competitior already assigned!"
+    "competitor_already_assigned": "Competitior already assigned to this class!"
   },
   "event_detail_page": {
     "organized_by": "Organized By",

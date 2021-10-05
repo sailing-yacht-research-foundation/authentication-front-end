@@ -64,7 +64,7 @@ export const VesselList = () => {
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
-            title: t(translations.competition_unit_list_page.action),
+            title: t(translations.vessel_list_page.action),
             key: 'action',
             render: (text, record) => {
                 const userId = localStorage.getItem('user_id');
@@ -73,7 +73,7 @@ export const VesselList = () => {
                         <BorderedButton onClick={() => {
                             history.push(`/boats/${record.id}/update`);
                         }} type="primary">{t(translations.vessel_list_page.update)}</BorderedButton>
-                        <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
+                        <BorderedButton danger onClick={() => showDeleteVesselModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
                     </Space>;
 
                 return <></>;
@@ -120,9 +120,9 @@ export const VesselList = () => {
         getAll(page);
     }
 
-    const showDeleteRaceModal = (competitionUnit) => {
+    const showDeleteVesselModal = (vessel) => {
         setShowDeleteModal(true);
-        setVessel(competitionUnit);
+        setVessel(vessel);
     }
 
     const onVesselDeleted = () => {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Space, Spin, Table } from 'antd';
-import { BorderedButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { Input, Space, Spin, Table } from 'antd';
+import { BorderedButton, CreateButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
-import { getMany } from 'services/live-data-server/vessels';
+import { getManyVesselsByEventCalendarId } from 'services/live-data-server/vessels';
 import { getMany as getManyVesselParticipants, create, deleteVesselParticipant } from 'services/live-data-server/vessel-participants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -10,14 +10,19 @@ import { TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue } from 'utils/helpers';
 import { toast } from 'react-toastify';
+import { AiFillPlusCircle } from 'react-icons/ai';
+import { create as createVessel } from 'services/live-data-server/vessels';
+import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVesselModal';
 
 export const VesselList = (props) => {
 
-    const { group } = props;
+    const { group, eventId } = props;
 
     const { t } = useTranslation();
 
     const [vesselParticipants, setVesselParticipants] = React.useState<any[]>([]);
+
+    const [numberOfBoatsToCreate, setNumberOfBoatsToCreate] = React.useState<any>(0);
 
     const columns = [
         {
@@ -53,6 +58,7 @@ export const VesselList = (props) => {
                         }} type="primary">{t(translations.vessel_participant_group_create_update_page.add_to_group)}</BorderedButton> :
                         <DeleteButton onClick={() => removeFromGroup(record.id)}>{t(translations.vessel_participant_group_create_update_page.delete_from_group)}</DeleteButton>
                     }
+                    <BorderedButton danger onClick={() => showDeleteVesselModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
                 </Space>;
             },
             width: '20%',
@@ -67,6 +73,14 @@ export const VesselList = (props) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
+    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
+    const [vessel, setVessel] = React.useState<any>({});
+
+    const showDeleteVesselModal = (vessel) => {
+        setShowDeleteModal(true);
+        setVessel(vessel);
+    }
 
     const getAllUserVesselParticipants = async () => {
         setIsLoading(true);
@@ -116,9 +130,9 @@ export const VesselList = (props) => {
         }
     }
 
-    const getAllUserVessels = async (page) => {
+    const getAllUserAndEventVessels = async (page) => {
         setIsLoading(true);
-        const response = await getMany(pagination.page);
+        const response = await getManyVesselsByEventCalendarId(eventId, pagination.page);
         setIsLoading(false);
 
         if (response.success) {
@@ -132,20 +146,66 @@ export const VesselList = (props) => {
     }
 
     const onPaginationChanged = (page) => {
-        getAllUserVessels(page);
+        getAllUserAndEventVessels(page);
+    }
+
+    const onVesselDeleted = () => {
+        getAllUserAndEventVessels(pagination.page);
+    }
+
+    const createNVessels = async () => {
+        const minimumVesselsToCreate = 1;
+        const maximumVesselsToCreate = 30;
+
+        if (numberOfBoatsToCreate < minimumVesselsToCreate) {
+            toast.error(t(translations.vessel_list_page.the_number_of_boats_must_be_greater_than_zero));
+            return;
+        } else if (numberOfBoatsToCreate > maximumVesselsToCreate) {
+            toast.error(t(translations.vessel_list_page.the_number_of_boats_must_not_more_than_30));
+            return;
+        }
+
+        setIsLoading(true);
+        for (let i = 0; i < numberOfBoatsToCreate; i++) {
+            await createVessel({
+                publicName: `Boat ${i + 1}`,
+                lengthInMeters: null,
+                orcJsonPolars: {},
+                bulkCreated: true
+            });
+        }
+        setIsLoading(false);
+        getAllUserAndEventVessels(1);
+        toast.success(t(translations.vessel_list_page.successfully_created_vessels, { number_of_vessels: numberOfBoatsToCreate }))
     }
 
     React.useEffect(() => {
-        getAllUserVessels(1);
+        getAllUserAndEventVessels(1);
         getAllUserVesselParticipants();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <>
+            <DeleteVesselModal
+                vessel={vessel}
+                onVesselDeleted={onVesselDeleted}
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+            />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.vessel_list_page.vessels)}</PageHeaderTextSmall>
+                    <Space>
+                        <Input value={numberOfBoatsToCreate} onChange={e => {
+                            setNumberOfBoatsToCreate(e.target.value)
+                        }} type="number" style={{ width: '70px' }} />
+                        <CreateButton
+                            onClick={() => createNVessels()}
+                            icon={<AiFillPlusCircle
+                                style={{ marginRight: '5px' }}
+                                size={18} />}>{t(translations.vessel_list_page.create)}</CreateButton>
+                    </Space>
                 </PageHeaderContainer>
                 <TableWrapper>
                     <Table columns={columns}
