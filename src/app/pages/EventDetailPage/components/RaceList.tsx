@@ -76,7 +76,7 @@ export const RaceList = (props) => {
         <>
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
-                    <PageHeaderTextSmall>{t(translations.event_detail_page.races_in_this_event, { number_of_races: pagination.total })}</PageHeaderTextSmall>
+                    <PageHeaderTextSmall>{t(translations.event_detail_page.races)}</PageHeaderTextSmall>
                 </PageHeaderContainer>
                 <TableWrapper>
                     <Table columns={columns}

@@ -200,7 +200,7 @@ export const searchScrapedRaceById = (id: string) => {
             }
         },
     };
-    
+
     searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "url", "source"];
 
     return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
@@ -214,4 +214,41 @@ export const searchScrapedRaceById = (id: string) => {
             error: error
         }
     });
+}
+
+export const cloneCourse = (fromCompetitionUnitId, toCompetitionUnitId) => {
+    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${toCompetitionUnitId}/clone-course`, {
+        cloneFromCompetitionId: fromCompetitionUnitId,
+        newName: null
+    }).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
+
+export const getAllCompetitionUnitsByEventIdWithSort = (calendarEventId, page) => {
+    const userId: any = localStorage.getItem('user_id');
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units?sort=createdAt&srdir=-1${!!userId ? `&createdById_eq=${userId}` : ''}`, {
+        params: {
+            page: page
+        }
+    })
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        })
 }

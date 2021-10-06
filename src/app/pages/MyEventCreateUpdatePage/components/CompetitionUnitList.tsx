@@ -28,11 +28,6 @@ export const CompetitionUnitList = (props) => {
             width: '20%',
         },
         {
-            title: t(translations.competition_unit_list_page.event_name),
-            render: (text, record) => <Link to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>,
-            width: '20%',
-        },
-        {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'created_at',
             key: 'created_at',

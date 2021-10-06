@@ -5,7 +5,7 @@ import { FilterTab } from '../FilterTab';
 import styled from 'styled-components';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { FiMap } from 'react-icons/fi';
-import { BsListUl } from 'react-icons/bs';
+import { BsListUl, BsSearch } from 'react-icons/bs';
 import { isMobile } from 'utils/helpers';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +13,10 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { useHomeSlice } from '../slice';
 import { useHistory, useLocation } from 'react-router';
-import { selectFromDate, selectSearchKeyword, selectToDate } from '../slice/selectors';
+import { selectFromDate, selectSearchKeyword, selectShowAdvancedSearch, selectToDate } from '../slice/selectors';
+import { media } from 'styles/media';
+import { FilterPane } from './FilterPane';
+import { StyleConstants } from 'styles/StyleConstants';
 
 const { TabPane } = Tabs;
 
@@ -37,13 +40,30 @@ export const Main = () => {
 
     const location = useLocation();
 
+    const showAdvancedSearch = useSelector(selectShowAdvancedSearch);
+
     React.useEffect(() => {
         searchRacesOnEnter();
+        disableBodyScrollOnMapView(getDefaultActiveTabs());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        return () => {
+            document.body.className = '';
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onTabChanged = (activeKey) => {
+        disableBodyScrollOnMapView(activeKey);
         localStorage.setItem('homepage_active_tab', activeKey);
+    }
+
+    const disableBodyScrollOnMapView = (activeKey) => {
+        if (activeKey === '1') {
+            document.body.className = 'no-scroll';
+        } else {
+            document.body.className = '';
+        }
     }
 
     const getDefaultActiveTabs = () => {
@@ -86,37 +106,52 @@ export const Main = () => {
     }
 
     return (
-        <StyledTabs<React.ElementType>
-            onChange={onTabChanged}
-            animated
-            defaultActiveKey={getDefaultActiveTabs()}>
-            <TabPane tab={<FiMap />} key="1">
-                <MapViewTab onPaginationPageChanged={onPaginationPageChanged} />
-            </TabPane>
-            <TabPane tab={<BsListUl />} key="2">
-                <FilterTab onPaginationPageChanged={onPaginationPageChanged} />
-            </TabPane>
-            {
-                (isMobile() && !isAuthenticated) && <ButtonCreateContainer>
-                    <Button
-                        shape="round"
-                        size={'large'}
-                        onClick={() => history.push("/events/create")}
-                        icon={<AiFillPlusCircle
-                            style={{ marginRight: '5px' }}
-                            size={18} />}
-                        type="primary">
-                        {t(translations.home_page.nav.create)}
-                    </Button>
-                </ButtonCreateContainer>
-            }
-        </StyledTabs>
+        <Wrapper>
+            <StyledTabs<React.ElementType>
+                onChange={onTabChanged}
+                animated
+                defaultActiveKey={getDefaultActiveTabs()}>
+                <TabPane tab={<FiMap />} key="1">
+                    <MapViewTab onPaginationPageChanged={onPaginationPageChanged} />
+                </TabPane>
+                <TabPane tab={<BsListUl />} key="2">
+                    <FilterTab onPaginationPageChanged={onPaginationPageChanged} />
+                </TabPane>
+                {
+                    (isMobile() && !isAuthenticated) && <ButtonCreateContainer>
+                        <Button
+                            shape="round"
+                            size={'large'}
+                            onClick={() => history.push("/events/create")}
+                            icon={<AiFillPlusCircle
+                                style={{ marginRight: '5px' }}
+                                size={18} />}
+                            type="primary">
+                            {t(translations.home_page.nav.create)}
+                        </Button>
+                    </ButtonCreateContainer>
+                }
+            </StyledTabs>
+            {(showAdvancedSearch || !isMobile()) && <FilterPane defaultFocus close={() => dispatch(actions.setShowAdvancedSearch(false))} />}
+            <ToggleFilterPane onClick={() => dispatch(actions.setShowAdvancedSearch(true))} >
+                <BsSearch size={25} color={StyleConstants.MAIN_TONE_COLOR} />
+            </ToggleFilterPane>
+        </Wrapper >
     )
 }
+
+const Wrapper = styled.div`
+    display: flex;
+`;
 
 const StyledTabs = styled(Tabs)`
     margin-bottom: 0;
     position: relative;
+    width: 100%;
+
+    ${media.medium`
+        width: 65%;
+    `}
 
     .ant-tabs-tab {
         font-size: 22px;
@@ -130,4 +165,20 @@ const ButtonCreateContainer = styled.div`
     position: absolute;
     right: 20px;
     top: 10px;
+`;
+
+const ToggleFilterPane = styled.div`
+    position: fixed;
+    bottom: 10%;
+    right: 20px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    padding: 8px;
+    box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
+    cursor: pointer;
+
+    ${media.medium`
+        display: none;
+    `}
 `;

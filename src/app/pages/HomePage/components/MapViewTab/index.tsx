@@ -4,11 +4,9 @@ import React, { useRef } from 'react';
 import { Input, Pagination, Spin } from 'antd';
 import styled from 'styled-components';
 import { ReactComponent as SYRFLogo } from '../assets/logo-dark.svg';
-import { FilterPane } from '../../FilterTab/components/FilterPane';
 import { media } from 'styles/media';
 import { MapContainer, } from 'react-leaflet';
 import { MapView } from './MapView';
-import { StyleConstants } from 'styles/StyleConstants';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +14,7 @@ import { selectIsSearching, selectPage, selectPageSize, selectResults, selectSea
 import { useHomeSlice } from '../../slice';
 import { BiTargetLock } from 'react-icons/bi';
 import { useHistory } from 'react-router';
+import { StyleConstants } from 'styles/StyleConstants';
 
 type MapViewProps = {
     zoomToCurrentUserLocationIfAllowed: () => void;
@@ -31,8 +30,6 @@ const ZOOM = 13;
 export const MapViewTab = (props) => {
 
     const { onPaginationPageChanged } = props;
-
-    const [showSearchPanel, setShowSearchPanel] = React.useState<boolean>(false);
 
     const searchKeyword = useSelector(selectSearchKeyword);
 
@@ -56,6 +53,10 @@ export const MapViewTab = (props) => {
 
     const history = useHistory();
 
+    const [isFocusingOnSearchInput, setIsFocusingOnSearchInput] = React.useState<boolean>(false);
+
+    const mapContainerRef = React.useRef<any>();
+
     const searchForRaces = (e) => {
         if (e.keyCode === 13 || e.which === 13) {
             const params: any = {};
@@ -67,11 +68,12 @@ export const MapViewTab = (props) => {
             dispatch(actions.setFromDate(''));
             dispatch(actions.setToDate(''));
             dispatch(actions.searchRaces(params));
-    
+
             history.push({
                 pathname: '/',
                 search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
             });
+            window.scrollTo(0, 0);
         }
     }
 
@@ -81,10 +83,36 @@ export const MapViewTab = (props) => {
         }
     }
 
+    const handleOnSearchInputFocus = () => {
+        window.scrollTo(0, 0);
+        setIsFocusingOnSearchInput(true);
+    }
+
+    const handleOnSearchInputBlur = () => {
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100);
+        setIsFocusingOnSearchInput(false);
+    }
+
+    const handleResize = () => {
+        const navHeight = 73;
+        const tabHeight = 76;
+        mapContainerRef.current._container.style.height = (window.innerHeight - navHeight - tabHeight) + 'px';
+    }
+
+    React.useEffect(() => {
+        window.scroll(0, 0);
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
+    }, []);
+
     return (
         <Wrapper>
-            <MapContainer style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%' }} center={center} zoom={ZOOM}>
-                <MapView ref={mapViewRef} zoom={ZOOM} />
+            <MapContainer whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={center} zoom={ZOOM}>
+                <MapView isFocusingOnSearchInput={isFocusingOnSearchInput} ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
             {
                 results.length > 0 && <PaginationWrapper>
@@ -100,6 +128,8 @@ export const MapViewTab = (props) => {
                             dispatch(actions.setKeyword(e.target.value));
                         }}
                         onKeyUp={searchForRaces}
+                        onFocus={handleOnSearchInputFocus}
+                        onBlur={handleOnSearchInputBlur}
                         placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                     <SearchBarLogo />
                     <StyledSpin spinning={isSearching}></StyledSpin>
@@ -107,15 +137,10 @@ export const MapViewTab = (props) => {
                 <AdvancedSearchTextWrapper>
                     <a href="/" onClick={(e) => {
                         e.preventDefault();
-                        setShowSearchPanel(true);
+                        dispatch(actions.setShowAdvancedSearch(true));
                     }}>{t(translations.home_page.map_view_tab.advanced_search)}</a>
                 </AdvancedSearchTextWrapper>
             </SearchBarWrapper>
-            {showSearchPanel && <StyledSearchPane
-                defaultFocus
-                searchKeyWord={searchKeyword}
-                closable
-                close={() => setShowSearchPanel(false)} />}
             <MyLocationWrapper onClick={() => zoomToUserLocation()}>
                 <StyledMyLocationIcon />
                 <MyLocationText>{t(translations.home_page.map_view_tab.my_location)}</MyLocationText>
@@ -130,13 +155,13 @@ const Wrapper = styled.div`
 
 const SearchBarWrapper = styled.div`
     position: absolute;
-    bottom: 110px;
+    bottom: 50px;
     left: 0;
     right: 0;
     margin: 0 auto;
     width: 570px;
     max-width: 80%;
-    z-index: 998;
+    z-index: 10;
 `;
 
 const SearchBarInnerWrapper = styled.div`
@@ -158,28 +183,14 @@ const StyledSearchBar = styled(Input)`
     padding-bottom: 10px;
     padding-left: 70px;
     padding-right: 50px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
 
     ::placeholder {
-        font - weight: 500;
+        font-weight: 500;
+        text-overflow:ellipsis;
+        white-space:nowrap;
     }
-`;
-
-const StyledSearchPane = styled(FilterPane)`
-    position: absolute;
-    bottom: 0;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 8px;
-    padding: 0 20px;
-    display: block;
-    border-top: 1px solid #eee;
-    width: 97%;
-    z-index: 999;
-
-    ${media.medium`
-        height: 300px;
-        width: 570px;
-    `}
 `;
 
 const AdvancedSearchTextWrapper = styled.div`
@@ -190,6 +201,11 @@ const AdvancedSearchTextWrapper = styled.div`
         font-size: 12px;
         margin-left: 5px;
     }
+    display: block;
+
+    ${media.medium`
+        display: none;
+    `};
 `;
 
 const StyledSpin = styled(Spin)`
@@ -200,8 +216,8 @@ const StyledSpin = styled(Spin)`
 
 const MyLocationWrapper = styled.div`
     position: absolute;
-    bottom: 80px;
-    z-index: 999;
+    bottom: 20px;
+    z-index: 10;
     cursor: pointer;
     left: 10px;
     display: flex;
@@ -229,12 +245,12 @@ const MyLocationText = styled.span`
 
 const PaginationWrapper = styled.div`
     position: absolute;
-    bottom: 200px;
+    bottom: 140px;
     left: 0;
     right: 0;
     margin: 0 auto;
     width: 570px;
     max-width: 98%;
-    z-index: 999;
+    z-index: 11;
     text-align: center;
 `;

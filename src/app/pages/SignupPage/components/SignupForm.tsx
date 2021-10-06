@@ -53,7 +53,7 @@ export const SignupForm = () => {
 
         if (response.success) {
             setIsSigningUp(false);
-            history.push('/signin');
+            history.push('/verify-account');
             toast.info(t(translations.signup_page.register_success));
         } else {
             setIsSigningUp(false);

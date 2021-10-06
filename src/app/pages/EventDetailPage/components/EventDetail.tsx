@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button, Space, Spin } from 'antd';
-import { PageHeaderContainerResponsive } from 'app/components/SyrfGeneral';
+import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaCalendarPlus, FaSave } from 'react-icons/fa';
 import { FiUserPlus } from 'react-icons/fi';
 import styled from 'styled-components';
-import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
-import SailCover from '../assets/sail-banner.jpg';
+import { TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
 import { get } from 'services/live-data-server/event-calendars';
@@ -14,6 +13,7 @@ import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
+import { IoIosArrowBack } from 'react-icons/io';
 
 let userId;
 
@@ -23,7 +23,7 @@ export const EventDetail = () => {
 
     const [event, setEvent] = React.useState<any>({});
 
-    const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
+    const [coordinates, setCoordinates] = React.useState<any>({});
 
     const [isFetchingEvent, setIsFetchingEvent] = React.useState<boolean>(false);
 
@@ -61,15 +61,25 @@ export const EventDetail = () => {
         return location;
     }
 
+    const goBack = () => {
+        if (history.action !== 'POP') history.goBack();
+        else history.push('/events');
+    }
+
     return (
         <Spin spinning={isFetchingEvent}>
-            <SailBanner src={SailCover} />
+            { coordinates.lat &&  <LocationPicker onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} height="270px" noPadding /> }
             <PageHeaderContainerResponsive>
-                <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
-                    <EventTitle>{event.name}</EventTitle>
-                    {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost>{event.createdBy?.name}</EventHost></EventHoldBy>}
-                    <EventDate>{moment(event.startTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
-                </EventHeaderInfoContainer>
+                <PageInfoOutterWrapper>
+                    <GobackButton onClick={() => goBack()}>
+                        <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
+                    </GobackButton>
+                    <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
+                        <EventTitle>{event.name}</EventTitle>
+                        {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost>{event.createdBy?.name}</EventHost></EventHoldBy>}
+                        <EventDate>{moment(event.startTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
+                    </EventHeaderInfoContainer>
+                </PageInfoOutterWrapper>
                 <EventActions>
                     <Space>
                         {
@@ -90,7 +100,6 @@ export const EventDetail = () => {
                 <EventDescription>
                     {event.description ? event.description : t(translations.home_page.filter_tab.filter_result.no_description)}
                 </EventDescription>
-                <LocationPicker onChoosedLocation={() => { }} locationDescription={renderCityAndCountryText(event)} zoom="15" coordinates={coordinates} height="250px" />
             </EventSection>
 
             <EventSection>
@@ -100,15 +109,7 @@ export const EventDetail = () => {
     );
 }
 
-const SailBanner = styled.img`
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-`;
-
-const EventTitle = styled.h2`
-
-`;
+const EventTitle = styled.h2``;
 
 const EventDate = styled.p`
  font-size: 13px;
@@ -124,7 +125,8 @@ const EventHost = styled.a`
 `;
 
 const EventHeaderInfoContainer = styled.div`
-
+    margin-top: 10px;
+    margin-left: 15px;
 `;
 
 const EventActions = styled.div`
@@ -138,7 +140,7 @@ const ShareButton = styled(Button)`
 
 const EventDescription = styled.p`
     padding: 0px;
-    text-align: center;
+    text-align: left;
 `;
 
 const EventSectionHeading = styled.h3`

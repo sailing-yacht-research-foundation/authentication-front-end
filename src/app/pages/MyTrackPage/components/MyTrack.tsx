@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Space, Spin } from 'antd';
+import { Table, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json';
@@ -29,7 +29,9 @@ export const MyTrack = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>;
+                if (record.competitionUnit)
+                    return <Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>;
+                return record.event?.name;
             }
         },
         {

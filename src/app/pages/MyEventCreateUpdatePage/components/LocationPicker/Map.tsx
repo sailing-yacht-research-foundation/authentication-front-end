@@ -8,14 +8,15 @@ let marker;
 
 export const Map = (props) => {
 
-    const { onMapClicked, coordinates, zoom } = props;
+    const { onMapClicked, coordinates, zoom, noMarkerInteraction } = props;
 
     const map = useMap();
 
     const initMapClickEvent = () => {
         map.on('click', (e) => {
-            onMapClicked(e.latlng.lat, e.latlng.lng);
-            setMarker(e.latlng);
+            onMapClicked(e.latlng.wrap().lat, e.latlng.wrap().lng);
+            if (!noMarkerInteraction)
+                setMarker(e.latlng);
         });
     }
 
@@ -25,7 +26,7 @@ export const Map = (props) => {
             icon: L.divIcon({
                 html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#fff', fontSize: '35px' }} />),
                 iconSize: [20, 20],
-                iconAnchor: [18, 42], 
+                iconAnchor: [18, 42],
                 className: 'my-race'
             })
         }).addTo(map);
@@ -44,6 +45,11 @@ export const Map = (props) => {
 
         setMarker(coordinates);
     }
+
+    React.useEffect(() => {
+        map.setView(coordinates, 10);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [coordinates]);
 
     React.useEffect(() => {
         initializeMapView();

@@ -85,7 +85,6 @@ const Wrapper = styled.div`
     padding: 0 15px;
 
     ${media.medium`
-        width: 65%;
         padding: 0 5px;
         height: 80vh;
         overflow-y: auto;

@@ -20,6 +20,31 @@ export const getAllByCalendarEventId = (calendarEventId, page) => {
         });
 }
 
+export const getAllByCalendarEventIdWithFilter = (calendarEventId, page, assignMode) => {
+    let assign: any = null;
+    if (assignMode === 'all') {
+        assign = null;
+    } else {
+        assign = assignMode === 'assigned';
+    }
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants${assign !== null ? `?assigned=${assign}` : ''}`, {
+        params: {
+            page: page
+        }
+    })
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        });
+}
+
 export const get = (id) => {
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${id}`)
         .then(response => {

@@ -94,7 +94,12 @@ export const AssignVesselParticipantModal = (props) => {
             toast.success(t(translations.assign_vessel_participant_modal.successfully_register));
             getVesselParticipantByEventId(pagination.page);
         } else {
-            toast.error(t(translations.assign_vessel_participant_modal.an_error_happended_when_registering));
+            if (response.error?.response
+                && response.error?.response?.status === 422) {
+                toast.error(t(translations.assign_vessel_participant_modal.competitor_already_assigned));
+            } else {
+                toast.error(t(translations.assign_vessel_participant_modal.an_error_happended_when_registering));
+            }
         }
     }
 
@@ -116,7 +121,7 @@ export const AssignVesselParticipantModal = (props) => {
     }, [showAssignModal]);
 
     return (
-        <StyledModal title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_groups)}
+        <StyledModal title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_group)}
             visible={showAssignModal}
             onCancel={() => setShowAssignModal(false)}
             okButtonProps={{

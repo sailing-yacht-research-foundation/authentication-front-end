@@ -11,7 +11,7 @@ const DEFAULT_ZOOM = 1;
 
 export const LocationPicker = (props) => {
 
-    const { onChoosedLocation, coordinates, zoom, height, locationDescription } = props;
+    const { onChoosedLocation, coordinates, zoom, height, locationDescription, noMarkerInteraction, noPadding } = props;
 
     const { t } = useTranslation();
 
@@ -20,9 +20,9 @@ export const LocationPicker = (props) => {
     }
 
     return (
-        <Wrapper style={{ height: height || '450px' }}>
+        <Wrapper style={{ height: height || '450px', padding: noPadding ? '0' : '30px 0' }}>
             <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
-                <Map coordinates={coordinates} onMapClicked={onMapClicked} zoom={zoom || DEFAULT_ZOOM} />
+                <Map noMarkerInteraction={noMarkerInteraction || false} coordinates={coordinates} onMapClicked={onMapClicked} zoom={zoom || DEFAULT_ZOOM} />
             </MapContainer>
             <PickerDescription>{locationDescription || t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
         </Wrapper>
@@ -32,7 +32,6 @@ export const LocationPicker = (props) => {
 const Wrapper = styled.div`
     width: 100%;
     height: 450px;
-    padding: 30px 0;
     z-index: -1;
 `;
 

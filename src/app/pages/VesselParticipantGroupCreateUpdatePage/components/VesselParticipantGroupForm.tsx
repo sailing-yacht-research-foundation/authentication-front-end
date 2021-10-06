@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
-import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -65,7 +65,7 @@ export const VesselParticipantGroupForm = () => {
                 toast.success(t(translations.vessel_participant_group_create_update_page.successfully_updated_group));
             }
 
-            history.push(`/events/${eventId}/vessel-participant-groups/${response.data?.id}/update`);
+            history.push(`/events/${eventId}/classes/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
             toast.error(t(translations.vessel_participant_group_create_update_page.an_error_happened));
@@ -91,7 +91,7 @@ export const VesselParticipantGroupForm = () => {
     }
 
     const onGroupDeleted = () => {
-        history.push('/vessel-participant-groups');
+        history.push(`/events/${eventId}/update`);
     }
 
     React.useEffect(() => {
@@ -116,6 +116,7 @@ export const VesselParticipantGroupForm = () => {
                     </GobackButton>
                     <PageInfoContainer>
                         <PageHeading>{mode === MODE.UPDATE ? t(translations.vessel_participant_group_create_update_page.update_group) : t(translations.vessel_participant_group_create_update_page.create_a_new_group)}</PageHeading>
+                        <PageDescription>{t(translations.vessel_participant_group_create_update_page.member_of_classes_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
@@ -134,7 +135,7 @@ export const VesselParticipantGroupForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, max: 100 }]}
                         >
                             <SyrfInputField />
                         </Form.Item>
@@ -152,7 +153,7 @@ export const VesselParticipantGroupForm = () => {
 
             {mode === MODE.UPDATE &&
                 <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                    <VesselList group={group} />
+                    <VesselList group={group} eventId={eventId} />
                 </SyrfFormWrapper>
             }
         </Wrapper >

@@ -51,6 +51,7 @@ export const PageHeaderContainerResponsive = styled.div`
 export const PageHeaderText = styled.h2`
     margin: 0;
     padding: 0;
+    text-transform: capitalize;
 `;
 
 export const PageHeaderTextSmall = styled.h3`
@@ -119,6 +120,7 @@ export const PageDescription = styled.p`
 export const PageHeading = styled.h2`
     padding: 10px 15px;
     padding-bottom: 0px;
+    text-transform: capitalize;
 `;
 
 export const PageInfoOutterWrapper = styled.div`

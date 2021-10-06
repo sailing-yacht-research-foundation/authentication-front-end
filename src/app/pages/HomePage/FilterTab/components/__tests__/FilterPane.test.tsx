@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
-import { FilterPane } from '../FilterPane';
+import { FilterPane } from '../../../components/FilterPane';
 import MyProvider from 'app/components/Provider';
 
 const shallowRenderer = createRenderer();

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Spin, Form, Divider, DatePicker, Row, Col, TimePicker, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea, SyrFieldDescription } from 'app/components/SyrfForm';
-import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
 import moment from 'moment';
-import { create, update, get } from 'services/live-data-server/competition-units';
+import { create, update, get, cloneCourse, getAllCompetitionUnitsByEventIdWithSort } from 'services/live-data-server/competition-units';
+import { get as getEventById } from 'services/live-data-server/event-calendars';
 import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';
 import { CoursesList } from './CoursesList';
@@ -16,13 +17,17 @@ import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/co
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
+import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
+
+timeZones.push({
+    name: 'Etc/Utc'
+});
 
 export const CompetitionUnitForm = () => {
 
@@ -51,6 +56,8 @@ export const CompetitionUnitForm = () => {
     const courseListRef = React.useRef<any>();
 
     const [groups, setGroups] = React.useState<any[]>([]);
+
+    const [lastCreatedRace, setLastCreatedRace] = React.useState<any>({});
 
     const onFinish = async (values) => {
         let { name, startDate, startTime, isCompleted, calendarEventId, vesselParticipantGroupId, description, approximateStart_zone } = values;
@@ -86,17 +93,26 @@ export const CompetitionUnitForm = () => {
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data?.name }));
-                setCompetitionUnit(response.data);
+                onCompetitionUnitCreated(response);
             } else {
                 toast.success(t(translations.competition_unit_create_update_page.successfully_updated_competition_unit, { name: response.data?.name }));
             }
 
-            history.push(`/events/${calendarEventId}/races/${response.data?.id}/update`);
-            setMode(MODE.UPDATE);
-            if (courseListRef) courseListRef.current?.scrollIntoView({ behavior: 'smooth' });
+            goBack();
         } else {
             toast.error(t(translations.competition_unit_create_update_page.an_error_happened));
+        }
+    }
+
+    const onCompetitionUnitCreated = (response) => {
+        toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data?.name }));
+        setCompetitionUnit(response.data);
+        cloneCourseToTheNewCreatedRace(response.data.id);
+    }
+
+    const cloneCourseToTheNewCreatedRace = async (newRaceId) => {
+        if (lastCreatedRace) {
+            await cloneCourse(lastCreatedRace.id, newRaceId);
         }
     }
 
@@ -119,14 +135,28 @@ export const CompetitionUnitForm = () => {
             } else {
                 history.push('/404');
             }
+        } else {
+            setDefaultNameForRace();
+            setDefaultTimeForRace();
         }
     }
 
+    const setDefaultClassForRace = (vesselGroups) => {
+        if (location.pathname.includes(MODE.UPDATE)) return;
+
+        const defaultVesselGroup = vesselGroups[0];
+
+        if (defaultVesselGroup)
+            form.setFieldsValue({ vesselParticipantGroupId: defaultVesselGroup.id });
+    }
+
     const getAllUserVesselGroups = async () => {
-        const response = await getVesselParticipantGroupsByEventId(eventId, -1);
+        const response = await getVesselParticipantGroupsByEventIdWithSort(eventId, 1);
 
         if (response.success) {
-            setGroups(response.data.rows);
+            const vesselGroups = response.data?.rows;
+            setGroups(vesselGroups);
+            setDefaultClassForRace(vesselGroups);
         }
     }
 
@@ -141,7 +171,29 @@ export const CompetitionUnitForm = () => {
     }
 
     const onCompetitionUnitDeleted = () => {
-        history.push('/races');
+        goBack();
+    }
+
+    const setDefaultNameForRace = async () => {
+        const response = await getAllCompetitionUnitsByEventIdWithSort(eventId, 1);
+
+        if (response.success) {
+            form.setFieldsValue({ name: 'R' + ((Number(response.data?.count) + 1) || 1) });
+            const races = response.data?.rows;
+            if (races.length > 0)
+                setLastCreatedRace(races[0]);
+        }
+    }
+
+    const setDefaultTimeForRace = async () => {
+        const response = await getEventById(eventId);
+
+        if (response.success) {
+            form.setFieldsValue({ 
+                startDate: moment(response.data?.approximateStartTime),
+                approximateStart_zone: response.data?.approximateStartTime_zone
+            });
+        }
     }
 
     React.useEffect(() => {
@@ -176,6 +228,7 @@ export const CompetitionUnitForm = () => {
                     </GobackButton>
                     <PageInfoContainer>
                         <PageHeading>{mode === MODE.UPDATE ? t(translations.competition_unit_create_update_page.update_your_competition_unit) : t(translations.competition_unit_create_update_page.create_a_new_competition_unit)}</PageHeading>
+                        <PageDescription>{t(translations.competition_unit_create_update_page.race_configurations_pair_classes_to_courses)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
@@ -193,19 +246,23 @@ export const CompetitionUnitForm = () => {
                         form={form}
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
+                        initialValues={{
+                            startTime: moment('09:00:00', 'HH:mm:ss'),
+                            approximateStart_zone: 'Etc/UTC'
+                        }}
                     >
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, max: 255 }]}
                         >
                             <SyrfInputField />
                         </Form.Item>
 
                         <Form.Item
+                            rules={[{ max: 255 }]}
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
-                            rules={[{ required: true }]}
                         >
                             <SyrfTextArea />
                         </Form.Item>

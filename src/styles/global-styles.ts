@@ -12,6 +12,10 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0 auto;
   }
 
+  body.no-scroll {
+    overflow: hidden;
+  }
+
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: ${p => p.theme.background};

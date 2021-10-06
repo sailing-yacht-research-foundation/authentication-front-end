@@ -1,14 +1,22 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Space, Spin, Table } from 'antd';
+import { Dropdown, Space, Spin, Table, Menu } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
-import { AiFillPlusCircle } from 'react-icons/ai';
-import { getAllByCalendarEventId } from 'services/live-data-server/participants';
+import { AiFillCopy, AiFillPlusCircle } from 'react-icons/ai';
+import { getAllByCalendarEventId, getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
 import styled from 'styled-components';
 import { AssignVesselParticipantModal } from './AssignVesselParticipantModal';
+import { toast } from 'react-toastify';
+import { DownOutlined } from '@ant-design/icons';
+
+const FILTER_MODE = {
+    assigned: 'assigned',
+    unassigned: 'unassigned',
+    all: 'all'
+}
 
 export const ParticipantList = (props) => {
 
@@ -22,7 +30,23 @@ export const ParticipantList = (props) => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: text => text,
-            width: '50%',
+        },
+        {
+            title: t(translations.participant_list.assigned_vessels),
+            dataIndex: 'vesselName',
+            key: 'vesselName',
+            render: (text, record) => {
+                return renderAssignedVessels(record);
+            },
+            ellipsis: true
+        },
+        {
+            title: t(translations.participant_list.tracker_url),
+            dataIndex: 'trackerUrl',
+            key: 'trackerUrl',
+            render: text => {
+                return <CreateButton onClick={() => copyToClipboard(text)} icon={<AiFillCopy style={{ marginRight: '10px' }} />}>Copy</CreateButton>
+            },
         },
         {
             title: t(translations.participant_list.action),
@@ -33,14 +57,33 @@ export const ParticipantList = (props) => {
                         showAssignParticipantModal(record);
                     }} type="primary">{t(translations.participant_list.assign)}</AssignButton>
                     <BorderedButton onClick={() => {
-                        history.push(`/events/${record.calendarEventId}/participants/${record.id}/update`)
+                        history.push(`/events/${record.calendarEventId}/competitors/${record.id}/update`)
                     }} type="primary">{t(translations.participant_list.update)}</BorderedButton>
                     <BorderedButton danger onClick={() => showDeleteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
                 </Space>
             ),
-            width: '50%',
         },
     ];
+
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.all)}>
+                    {t(translations.participant_list.all)}
+                </a>
+            </Menu.Item>
+            <Menu.Item>
+                <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.assigned)}>
+                    {t(translations.participant_list.assigned)}
+                </a>
+            </Menu.Item>
+            <Menu.Item>
+                <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.unassigned)}>
+                    {t(translations.participant_list.unassigned)}
+                </a>
+            </Menu.Item>
+        </Menu>
+    );
 
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
@@ -57,6 +100,29 @@ export const ParticipantList = (props) => {
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
     const [showAssignModal, setShowAssignModal] = React.useState<boolean>(false);
+
+    const [filterMode, setFilterMode] = React.useState<string>(FILTER_MODE.all);
+
+    const filterParticipants = (e, mode) => {
+        e.preventDefault();
+        setFilterMode(mode);
+        getAllByFilter(pagination.page, mode);
+    }
+
+    const getAllByFilter = async (page, mode) => {
+        setIsLoading(true);
+        const response = await getAllByCalendarEventIdWithFilter(eventId, pagination.page, mode);
+        setIsLoading(false);
+
+        if (response.success) {
+            setPagination({
+                ...pagination,
+                rows: response.data?.rows,
+                page: page,
+                total: response.data?.count
+            });
+        }
+    }
 
     const getAll = async (page) => {
         setIsLoading(true);
@@ -91,10 +157,35 @@ export const ParticipantList = (props) => {
         setParticipant(participant);
     }
 
+    const copyToClipboard = (text) => {
+        let input = document.createElement('input');
+        document.body.appendChild(input);
+        input.value = text;
+        input.select();
+        document.execCommand('copy', false);
+        toast.info(t(translations.participant_list.copied_to_clipboard));
+    }
+
+    const renderAssignedVessels = (participant) => {
+        const vesselParticipants = participant.vesselParticipants;
+        if (vesselParticipants
+            && vesselParticipants.length > 0) {
+            return vesselParticipants?.map((vp, index) => {
+                if (index !== (vesselParticipants.length - 1))
+                    return vp.vessel?.publicName + ', ';
+                return vp.vessel.publicName;
+            });
+        }
+
+        return t(translations.misc.not_available);
+    }
+
     React.useEffect(() => {
-        getAll(1);
+        if (!showAssignModal) {
+            getAll(pagination.page);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [showAssignModal]);
 
     return (
         <>
@@ -104,7 +195,7 @@ export const ParticipantList = (props) => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <AssignVesselParticipantModal 
+            <AssignVesselParticipantModal
                 participant={participant}
                 showAssignModal={showAssignModal}
                 eventId={eventId}
@@ -113,10 +204,17 @@ export const ParticipantList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/events/${eventId}/participants/create`)} icon={<AiFillPlusCircle
+                    <CreateButton onClick={() => history.push(`/events/${eventId}/competitors/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.participant_list.create)}</CreateButton>
                 </PageHeaderContainer>
+                <FilterWrapper>
+                    <Dropdown overlay={menu}>
+                        <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
+                            {filterMode} <DownOutlined />
+                        </a>
+                    </Dropdown>
+                </FilterWrapper>
                 <TableWrapper>
                     <Table columns={columns}
                         scroll={{ x: "max-content" }}
@@ -140,4 +238,9 @@ const AssignButton = styled(BorderedButton)`
         background: #DC6E1E;
         border: 1px solid #fff;
     }
+`;
+
+const FilterWrapper = styled.div`
+    text-align: right;
+    text-transform: capitalize;
 `;
