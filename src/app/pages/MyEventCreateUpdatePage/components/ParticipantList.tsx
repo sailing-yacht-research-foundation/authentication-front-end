@@ -171,9 +171,12 @@ export const ParticipantList = (props) => {
         if (vesselParticipants
             && vesselParticipants.length > 0) {
             return vesselParticipants?.map((vp, index) => {
-                if (index !== (vesselParticipants.length - 1))
-                    return vp.vessel?.publicName + ', ';
-                return vp.vessel.publicName;
+                if (vp.vessel) {
+                    if (index !== (vesselParticipants.length - 1))
+                        return vp.vessel?.publicName + ', ';
+                    return vp.vessel?.publicName;
+                }
+                return t(translations.misc.not_available);
             });
         }
 
