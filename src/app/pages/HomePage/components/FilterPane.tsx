@@ -50,6 +50,7 @@ export const FilterPane = (props) => {
     const onFormSubmit = (values) => {
         dispatch(actions.setResults([]));
         dispatch(actions.setShowAdvancedSearch(false));
+        window.scroll(0, 0);
 
         const { name, from_date, to_date } = values;
         const params: any = {};
