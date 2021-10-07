@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { Dropdown, Space, Spin, Table, Menu } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillCopy, AiFillPlusCircle } from 'react-icons/ai';
-import { getAllByCalendarEventId, getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
+import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
@@ -38,7 +38,7 @@ export const ParticipantList = (props) => {
             render: (text, record) => {
                 return renderAssignedVessels(record);
             },
-            ellipsis: true
+            ellipsis: true,
         },
         {
             title: t(translations.participant_list.tracker_url),
@@ -51,8 +51,9 @@ export const ParticipantList = (props) => {
         {
             title: t(translations.participant_list.action),
             key: 'action',
+            fixed: true,
             render: (text, record) => (
-                <Space size="middle">
+                <Space size={10}>
                     <AssignButton onClick={() => {
                         showAssignParticipantModal(record);
                     }} type="primary">{t(translations.participant_list.assign)}</AssignButton>
@@ -124,32 +125,17 @@ export const ParticipantList = (props) => {
         }
     }
 
-    const getAll = async (page) => {
-        setIsLoading(true);
-        const response = await getAllByCalendarEventId(eventId, pagination.page);
-        setIsLoading(false);
-
-        if (response.success) {
-            setPagination({
-                ...pagination,
-                rows: response.data?.rows,
-                page: page,
-                total: response.data?.count
-            });
-        }
-    }
-
     const showDeleteParticipanModal = (participant) => {
         setShowDeleteModal(true);
         setParticipant(participant);
     }
 
     const onPaginationChanged = (page) => {
-        getAll(page);
+        getAllByFilter(page, filterMode);
     }
 
     const onParticipantDeleted = () => {
-        getAll(pagination.page);
+        getAllByFilter(pagination.page, filterMode);
     }
 
     const showAssignParticipantModal = (participant) => {
@@ -185,7 +171,7 @@ export const ParticipantList = (props) => {
 
     React.useEffect(() => {
         if (!showAssignModal) {
-            getAll(pagination.page);
+            getAllByFilter(pagination.page, filterMode);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showAssignModal]);
