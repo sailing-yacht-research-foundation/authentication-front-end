@@ -13,6 +13,7 @@ import { PlaybackStreamRace } from "./components/PlaybackStreamRace";
 import { PlaybackInsecureScrapedRace } from "./components/PlaybackInsecureScrapedRace";
 import { PlaybackRaceLoading } from "./components/PlaybackRaceLoading";
 import { PlaybackRaceNotFound } from "./components/PlaybackRaceNotFound";
+import { PlaybackOldRace } from "./components/PlaybackOldrace";
 
 export const PlaybackPage = (props) => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "" });
@@ -118,6 +119,7 @@ export const PlaybackPage = (props) => {
         {playbackType === PlaybackTypes.SCRAPEDRACE && <PlaybackScrapedRace />}
         {playbackType === PlaybackTypes.INSECURESCRAPEDRACE && <PlaybackInsecureScrapedRace />}
         {playbackType === PlaybackTypes.STREAMINGRACE && <PlaybackStreamRace />}
+        {playbackType === PlaybackTypes.OLDRACE && <PlaybackOldRace />}
         {playbackType === PlaybackTypes.RACELOADING && <PlaybackRaceLoading />}
         {playbackType === PlaybackTypes.RACENOTFOUND && <PlaybackRaceNotFound />}
       </div>
