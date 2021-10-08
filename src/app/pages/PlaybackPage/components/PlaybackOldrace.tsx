@@ -426,6 +426,7 @@ export const PlaybackOldRace = (props) => {
       if (!retrievedTimestamps.includes(selectedTime)) {
         const nearest = findNearestRetrievedTimestamp(retrievedTimestamps, elapsedTime, 1000);
         if (!nearest.previous.length) {
+          isStillFetchingFromBoatRenderRef.current = true;
           handleRequestMoreRaceData(startRaceTime + selectedTime);
           break;
         }
