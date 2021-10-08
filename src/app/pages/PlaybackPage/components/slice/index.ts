@@ -15,6 +15,11 @@ export const initialState: PlaybackState = {
     searchRaceId: "",
     searchRaceDetail: "",
     playbackType: PlaybackTypes.RACELOADING,
+    raceSimplifiedTracks: [],
+    raceLegs: [],
+    raceCourseDetail: {},
+    raceTime: {},
+    raceRetrievedTimestamps: [],
 };
 
 const slice = createSlice({
@@ -48,10 +53,30 @@ const slice = createSlice({
         setPlaybackType(state, action: PayloadAction<PlaybackTypes>) {
             state.playbackType = action.payload;
         },
+        setRaceSimplifiedTracks(state, action: PayloadAction<any>) {
+            state.raceSimplifiedTracks = action.payload;
+        },
+        setRaceLegs(state, action: PayloadAction<any>) {
+            state.raceLegs = action.payload;
+        },
+        setRaceCourseDetail(state, action: PayloadAction<any>) {
+            state.raceCourseDetail = action.payload;
+        },
+        setRaceTime(state, action: PayloadAction<any>) {
+            state.raceTime = action.payload;
+        },
+        setRetrievedTimestamps(state, action: PayloadAction<any>) {
+            state.raceRetrievedTimestamps = action.payload;
+        },
         getCompetitionUnitDetail(state, action: PayloadAction<any>) {},
         getVesselParticipants(state, action: PayloadAction<any>) {},
         getSearchRaceDetail(state, action: PayloadAction<any>) {},
         getRaceData(state, action: PayloadAction<any>) {},
+        getRaceSimplifiedTracks(state, action: PayloadAction<any>) {},
+        getRaceLegs(state, action: PayloadAction<any>) {},
+        getRaceLength(state, action: PayloadAction<any>) {},
+        getRaceCourseDetail(state, action: PayloadAction<any>) {},
+        getOldRaceData(state, action: PayloadAction<any>) {}
     },
 });
 

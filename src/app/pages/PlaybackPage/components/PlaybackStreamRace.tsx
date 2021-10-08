@@ -25,8 +25,12 @@ import { Leaderboard } from "./Leaderboard";
 
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [socketUrl, setSocketUrl] = useState(streamUrl);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
+  
   const [participantsData, setParticipantsData] = useState([]);
   const [raceIdentity, setRaceIdentity] = useState({ name: "Race name", description: "Race description" });
 
@@ -89,7 +93,10 @@ export const PlaybackStreamRace = (props) => {
 
   // Get vessel participants
   useEffect(() => {
-    if (competitionUnitDetail?.vesselParticipantGroupId) dispatch(actions.getVesselParticipants({}));
+    if (competitionUnitDetail?.vesselParticipantGroupId)
+      dispatch(
+        actions.getVesselParticipants({ vesselParticipantGroupId: competitionUnitDetail.vesselParticipantGroupId })
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competitionUnitDetail]);
 
