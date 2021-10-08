@@ -19,3 +19,8 @@ export interface VesselParticipant {
     sail_number?: string;
   }
 }
+
+export interface VesselParitipantNearestPositions {
+  previous: VesselParticipantPosition[],
+  next: VesselParticipantPosition[],
+}

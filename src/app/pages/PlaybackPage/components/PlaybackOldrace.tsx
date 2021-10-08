@@ -14,6 +14,7 @@ import {
   normalizeSequencedGeometries,
   generateRaceLegsData,
   limitRaceLegsDataByElapsedTime,
+  findNearestRetrievedTimestamp,
 } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
@@ -39,13 +40,13 @@ import { OldRaceMap } from "./OldRaceMap";
 
 export const PlaybackOldRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
-  
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [socketUrl, setSocketUrl] = useState(streamUrl);
-  
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
-  
+
   const [participantsData, setParticipantsData] = useState([]);
   const [isReady, setIsReady] = useState(false);
 
@@ -59,6 +60,7 @@ export const PlaybackOldRace = (props) => {
   const elapsedTimeRef = useRef<number>();
   const isPlayingRef = useRef<boolean | undefined>();
   const raceLegsRef = useRef<any>();
+  const isStillFetchingFromBoatRenderRef = useRef<boolean>(false);
 
   const competitionUnitId = useSelector(selectCompetitionUnitId);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
@@ -229,15 +231,16 @@ export const PlaybackOldRace = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Listen to elapsed time update
+  // Count the elapsed time
   useEffect(() => {
     // Render the boat
+    const defaultInterval = 250;
     const interval = setInterval(() => {
       const elapsedTime = elapsedTimeRef.current;
       const isPlaying = isPlayingRef.current;
-      handleRenderTheBoat(elapsedTime, isPlaying);
+      handleRenderTheBoat(elapsedTime, isPlaying, defaultInterval);
       handleRenderLegs(elapsedTime, isPlaying);
-    }, 1000);
+    }, defaultInterval);
 
     return () => {
       clearInterval(interval);
@@ -306,12 +309,15 @@ export const PlaybackOldRace = (props) => {
     const retrievedTimestamps = retrievedTimestampsRef.current;
     const raceLength = raceLengthRef.current;
 
+    const roundedTarget = Math.round((nextDateTimeCpy - startTime) / 1000) * 1000;
+    const roundedNextDateTime = roundedTarget + startTime;
+
     // Check if the app retrieved the time
     if (retrievedTimestamps.length && startTime) {
       const generatedSetup = generateStartTimeFetchAndTimeToLoad(
         retrievedTimestamps,
         startTime,
-        nextDataTime,
+        roundedNextDateTime,
         raceLength || 0
       );
 
@@ -349,24 +355,31 @@ export const PlaybackOldRace = (props) => {
     handleRequestMoreRaceData(nextDateTime);
   };
 
-  const handleRenderTheBoat = (elapsedTime, isPlaying) => {
+  const handleRenderTheBoat = (elapsedTime, isPlaying, interval) => {
     // Check if the elapsed time is retrieved
     const retrievedTimestamps = retrievedTimestampsRef.current;
     const raceTimeStart = raceTimeRef.current.start;
     const vesselParticipants = vesselParticipantsRef.current;
+    const isStillFetchingFromBoatRender = isStillFetchingFromBoatRenderRef.current;
 
     // If no retrieved timestamps
     if (!retrievedTimestamps.length) return;
 
     // If the retrievedTimeStamps doensn't have the elapsed time
     if (!retrievedTimestamps.includes(elapsedTime)) {
-      handleRequestMoreRaceData(elapsedTime + raceTimeStart);
-      return;
+      // Find the nearest
+      const nearest = findNearestRetrievedTimestamp(retrievedTimestamps, elapsedTime, 1000);
+      if (!nearest?.previous?.length && !isStillFetchingFromBoatRender) {
+        isStillFetchingFromBoatRenderRef.current = true;
+        handleRequestMoreRaceData(elapsedTime + raceTimeStart);
+        return;
+      }
     }
 
     if (!isPlaying) return;
     if (!Object.keys(vesselParticipants)?.length) return;
 
+    isStillFetchingFromBoatRenderRef.current = false;
     const mappedVPs = generateVesselParticipantsLastPosition(vesselParticipants, elapsedTime);
 
     eventEmitter.emit("ping", mappedVPs);
@@ -376,7 +389,7 @@ export const PlaybackOldRace = (props) => {
     handleCheckNextRaceData(elapsedTime);
 
     // Set elapsed time
-    handleSetElapsedTime(elapsedTime + 1000);
+    handleSetElapsedTime(elapsedTime + interval);
 
     handleUpdateLeaderPosition(mappedVPs);
   };
@@ -411,8 +424,11 @@ export const PlaybackOldRace = (props) => {
 
     for (let selectedTime = startTimeToCheck; selectedTime <= maxTime; selectedTime += 1000) {
       if (!retrievedTimestamps.includes(selectedTime)) {
-        handleRequestMoreRaceData(startRaceTime + selectedTime);
-        break;
+        const nearest = findNearestRetrievedTimestamp(retrievedTimestamps, elapsedTime, 1000);
+        if (!nearest.previous.length) {
+          handleRequestMoreRaceData(startRaceTime + selectedTime);
+          break;
+        }
       }
     }
   };

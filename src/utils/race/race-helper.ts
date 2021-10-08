@@ -2,7 +2,11 @@ import * as turf from "@turf/turf";
 import { CourseGeometrySequenced, MappedCourseGeometrySequenced } from "types/CourseGeometry";
 import { NormalizedLeg, NormalizedRaceLeg, RaceLeg } from "types/RaceLeg";
 import { SimplifiedTrack, SimplifiedTrackData } from "types/SimplifiedTrack";
-import { VesselParticipant } from "types/VesselParticipant";
+import {
+  VesselParitipantNearestPositions,
+  VesselParticipant,
+  VesselParticipantPosition,
+} from "types/VesselParticipant";
 
 export const calculateTrackPingTime = (tracks: any[]) => {
   const timeOffset = tracks[0].first_ping_time;
@@ -252,6 +256,13 @@ export const generateStartTimeFetchAndTimeToLoad = (
   }
 
   // If targetted time not retrieved,
+
+  // ** Check if the nearest target is available
+  const nearestTimetamps = findNearestRetrievedTimestamp(retrievedTimestamps, target, 1000);
+  if (nearestTimetamps.previous.length) {
+    return false;
+  }
+
   // *** get the next 30 seconds
   return { timeToLoad: 30, nextDataTime };
 };
@@ -266,6 +277,14 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
     filteredPositions.sort((a, b) => b.timestamp - a.timestamp);
 
     const lastPosition = filteredPositions[0] || { lat: 0, lon: 0 };
+
+    const nearestPos = findNearestPositions(vP.positions, selectedTimestamp, 1000, { excludeSelectedTimestamp: true });
+    const interpolatedPosition = interpolateNearestPositions(nearestPos, selectedTimestamp);
+
+    if (interpolatedPosition) {
+      lastPosition.lat = interpolatedPosition.lat;
+      lastPosition.lon = interpolatedPosition.lon;
+    }
 
     const currentCoordinateForHeading = [lastPosition.lon || 0, lastPosition.lat || 0];
     const previousCoordinateForHeading =
@@ -341,4 +360,79 @@ export const limitRaceLegsDataByElapsedTime = (raceLegs: NormalizedRaceLeg[], el
   });
 
   return filteredRaceLegDatas;
+};
+
+export const findNearestRetrievedTimestamp = (
+  retrievedTimestamps: number[],
+  elapsedTime: number,
+  rangeLimit: number
+) => {
+  const previousTs = retrievedTimestamps.filter((ts) => {
+    return ts >= elapsedTime - rangeLimit && ts <= elapsedTime;
+  });
+
+  previousTs.sort((a, b) => a - b);
+
+  const nextTs = retrievedTimestamps.filter((ts) => {
+    return ts >= elapsedTime && ts <= elapsedTime + rangeLimit;
+  });
+
+  nextTs.sort((a, b) => a - b);
+
+  return { previous: previousTs, next: nextTs };
+};
+
+export const findNearestPositions = (
+  positions: VesselParticipantPosition[],
+  selectedTimestamp: number,
+  rangeLimit: number,
+  opt: any = {}
+) => {
+  let previousPos = positions.filter((pos) => {
+    return pos.timestamp >= selectedTimestamp - rangeLimit && pos.timestamp <= selectedTimestamp;
+  });
+
+  previousPos.sort((a, b) => a.timestamp - b.timestamp);
+
+  let nextPos = positions.filter((pos) => {
+    return pos.timestamp >= selectedTimestamp && pos.timestamp <= selectedTimestamp + rangeLimit;
+  });
+
+  nextPos.sort((a, b) => a.timestamp - b.timestamp);
+
+  if (opt?.excludeSelectedTimestamp) {
+    previousPos = previousPos.filter((pos) => pos.timestamp !== selectedTimestamp);
+    nextPos = nextPos.filter((pos) => pos.timestamp !== selectedTimestamp);
+  }
+
+  return { previous: previousPos, next: nextPos };
+};
+
+export const interpolateNearestPositions = (
+  nearestPositions: VesselParitipantNearestPositions,
+  selectedTimestamp: number
+) => {
+  // If we could find the previous and the next position
+  // example:
+  // nearestPosition: [5, 6] and the selectedTimeStamp: 5.5
+
+  if (nearestPositions.previous.length && nearestPositions.next.length) {
+    const mostPreviousPos = nearestPositions.previous[nearestPositions.previous.length - 1];
+
+    const earliestNext = nearestPositions.next[0];
+
+    const gap = {
+      timestamp: earliestNext.timestamp - mostPreviousPos.timestamp,
+      lat: earliestNext.lat - mostPreviousPos.lat,
+      lon: earliestNext.lon - mostPreviousPos.lon,
+    };
+
+    const normalizedTs = selectedTimestamp - mostPreviousPos.timestamp;
+    const interpolatedLat = (normalizedTs / gap.timestamp) * gap.lat;
+    const interpolatedLon = (normalizedTs / gap.timestamp) * gap.lon;
+
+    return { lat: interpolatedLat + mostPreviousPos.lat, lon: interpolatedLon + mostPreviousPos.lon };
+  }
+
+  return false;
 };
