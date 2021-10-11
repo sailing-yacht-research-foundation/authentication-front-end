@@ -123,19 +123,19 @@ export const MyEventForm = () => {
         if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
-    const createANewDefaultCompetitionUnit = async (calendarEventId, vesselParticipantGroupId, eventTimezone) => {
+    const createANewDefaultCompetitionUnit = async (event, vesselParticipantGroupId) => {
         const data = {
             name: 'R1',
-            startTime: moment().format(TIME_FORMAT.number),
-            approximateStart: moment().format(TIME_FORMAT.number),
+            startTime: event.approximateStartTime,
+            approximateStart: event.approximateStartTime,
             vesselParticipantGroupId: vesselParticipantGroupId,
-            calendarEventId: calendarEventId,
-            approximateStart_zone: eventTimezone
+            calendarEventId: event.id,
+            approximateStart_zone: event.approximateStartTime_zone
         };
 
-        await createCompetitionUnit(calendarEventId, data);
-
+        await createCompetitionUnit(event.id, data);
         setMode(MODE.UPDATE);
+        if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
     const createDefaultVesselParticipantGroup = async (event) => {
@@ -147,7 +147,7 @@ export const MyEventForm = () => {
         const response = await createVesselParticipantGroup(data);
 
         if (response.success) {
-            createANewDefaultCompetitionUnit(event.id, response.id, event.approximateStartTime_zone);
+            createANewDefaultCompetitionUnit(event, response.data.id);
         }
     }
 

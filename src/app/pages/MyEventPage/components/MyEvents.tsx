@@ -43,14 +43,14 @@ export const MyEvents = () => {
         },
         {
             title: t(translations.my_event_list_page.city),
-            dataIndex: 'locationName',
-            key: 'location',
+            dataIndex: 'city',
+            key: 'city',
             render: (text) => renderEmptyValue(text),
         },
         {
             title: t(translations.my_event_list_page.country),
-            dataIndex: 'locationName',
-            key: 'location',
+            dataIndex: 'country',
+            key: 'country',
             render: (text) => renderEmptyValue(text),
         },
         {
