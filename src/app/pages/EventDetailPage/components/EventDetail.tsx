@@ -68,7 +68,7 @@ export const EventDetail = () => {
 
     return (
         <Spin spinning={isFetchingEvent}>
-            { coordinates.lat &&  <LocationPicker onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} height="270px" noPadding /> }
+            <LocationPicker onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} height="270px" noPadding />
             <PageHeaderContainerResponsive>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => goBack()}>

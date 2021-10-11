@@ -41,8 +41,8 @@ export const VesselList = (props) => {
         },
         {
             title: t(translations.vessel_list_page.created_date),
-            dataIndex: 'created_at',
-            key: 'created_at',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
             width: '20%',
         },

@@ -8,11 +8,12 @@ import { LocationPicker } from './LocationPicker';
 import { useForm } from 'antd/lib/form/Form';
 import { create, get, update } from 'services/live-data-server/event-calendars';
 import { create as createVesselParticipantGroup } from 'services/live-data-server/vessel-participant-group';
+import { create as createCompetitionUnit } from 'services/live-data-server/competition-units';
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { CompetitionUnitList } from './CompetitionUnitList';
-import { MAP_DEFAULT_VALUE } from 'utils/constants';
+import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { BiTrash } from 'react-icons/bi';
 import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { useTranslation } from 'react-i18next';
@@ -45,11 +46,11 @@ export const MyEventForm = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [mode, setMode] = React.useState<string>(MODE.CREATE);
+    const [mode, setMode] = React.useState<string>('');
 
     const { eventId } = useParams<{ eventId: string }>();
 
-    const [coordinates, setCoordinates] = React.useState<any>({});
+    const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
 
     const [race, setRace] = React.useState<any>({});
 
@@ -57,7 +58,7 @@ export const MyEventForm = () => {
 
     const raceListRef = React.useRef<any>();
 
-    const [formChanged, setFormChanged] = React.useState<boolean>(false);
+    const [formChanged, setFormChanged] = React.useState<boolean>(true);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceAddressTyping = React.useCallback(debounce((value) => getLocationFromAddress(value), 1000), []);
@@ -108,13 +109,12 @@ export const MyEventForm = () => {
         if (mode === MODE.CREATE) {
             toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
             setRace(response.data);
-            createDefaultVesselParticipantGroup(response.data?.id);
+            createDefaultVesselParticipantGroup(response.data);
         } else {
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
         }
 
         history.push(`/events/${response.data?.id}/update`);
-        setMode(MODE.UPDATE);
         setCoordinates({
             lat: lat,
             lng: lon
@@ -123,13 +123,32 @@ export const MyEventForm = () => {
         if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
-    const createDefaultVesselParticipantGroup = async (eventId) => {
+    const createANewDefaultCompetitionUnit = async (calendarEventId, vesselParticipantGroupId, eventTimezone) => {
         const data = {
-            name: 'Default Class',
-            calendarEventId: eventId
+            name: 'R1',
+            startTime: moment().format(TIME_FORMAT.number),
+            approximateStart: moment().format(TIME_FORMAT.number),
+            vesselParticipantGroupId: vesselParticipantGroupId,
+            calendarEventId: calendarEventId,
+            approximateStart_zone: eventTimezone
         };
 
-        await createVesselParticipantGroup(data);
+        await createCompetitionUnit(calendarEventId, data);
+
+        setMode(MODE.UPDATE);
+    }
+
+    const createDefaultVesselParticipantGroup = async (event) => {
+        const data = {
+            name: 'Default Class',
+            calendarEventId: event.id
+        };
+
+        const response = await createVesselParticipantGroup(data);
+
+        if (response.success) {
+            createANewDefaultCompetitionUnit(event.id, response.id, event.approximateStartTime_zone);
+        }
     }
 
     const onChoosedLocation = (lat, lon) => {
@@ -148,35 +167,61 @@ export const MyEventForm = () => {
         );
     }
 
-    const initModeAndData = async () => {
+    const initMode = async () => {
         if (location.pathname.includes(MODE.UPDATE)) {
             setMode(MODE.UPDATE);
+            setFormChanged(false);
+        } else if (location.pathname.includes(MODE.CREATE)) {
+            setMode(MODE.CREATE);
+        }
+    }
 
-            setIsSavingRace(true);
-            const response = await get(eventId);
-            setIsSavingRace(false);
+    const initData = async () => {
+        setIsSavingRace(true);
+        const response = await get(eventId);
+        setIsSavingRace(false);
 
-            if (response.success) {
-                form.setFieldsValue({
-                    ...response.data,
-                    startDate: moment(response.data?.approximateStartTime),
-                    startTime: moment(response.data?.approximateStartTime)
-                });
-                setRace(response.data);
+        if (response.success) {
+            form.setFieldsValue({
+                ...response.data,
+                startDate: moment(response.data?.approximateStartTime),
+                startTime: moment(response.data?.approximateStartTime)
+            });
+            setRace(response.data);
+            setCoordinates({
+                lat: response.data.lat,
+                lng: response.data.lon
+            });
+            onChoosedLocation(response.data.lat, response.data.lon);
+        } else {
+            history.push('/404');
+        }
+    }
+
+    const initUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(({ coords }) => {
                 setCoordinates({
-                    lat: response.data.lat,
-                    lng: response.data.lon
+                    lat: coords.latitude,
+                    lng: coords.longitude
                 });
-            } else {
-                history.push('/404');
-            }
+                onChoosedLocation(coords.latitude, coords.longitude);
+            });
         }
     }
 
     React.useEffect(() => {
-        initModeAndData();
+        initMode();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        if (mode === MODE.CREATE) {
+            initUserLocation();
+        } else if (mode === MODE.UPDATE) {
+            initData();
+        }
+    }, [mode]);
 
     const onRaceDeleted = () => {
         history.push('/events');
@@ -189,7 +234,6 @@ export const MyEventForm = () => {
     }
 
     const getLocationFromAddress = (value) => {
-
         Geocode.fromAddress(value).then(
             (response) => {
                 const { lat, lng } = response.results[0].geometry.location;
@@ -293,8 +337,7 @@ export const MyEventForm = () => {
                             <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} />
                         </Form.Item>
 
-                        {(mode === MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
-                        {mode === MODE.CREATE && <LocationPicker coordinates={MAP_DEFAULT_VALUE.CENTER} onChoosedLocation={onChoosedLocation} />}
+                        <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />
 
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>

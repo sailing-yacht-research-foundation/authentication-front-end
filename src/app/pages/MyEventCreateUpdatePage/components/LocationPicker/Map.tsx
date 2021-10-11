@@ -15,8 +15,7 @@ export const Map = (props) => {
     const initMapClickEvent = () => {
         map.on('click', (e) => {
             onMapClicked(e.latlng.wrap().lat, e.latlng.wrap().lng);
-            if (!noMarkerInteraction)
-                setMarker(e.latlng);
+            setMarker(e.latlng);
         });
     }
 
@@ -48,12 +47,15 @@ export const Map = (props) => {
 
     React.useEffect(() => {
         map.setView(coordinates, 10);
+        setMarker(coordinates);
+        onMapClicked(coordinates.lat, coordinates.lng);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coordinates]);
 
     React.useEffect(() => {
         initializeMapView();
-        initMapClickEvent();
+        if (!noMarkerInteraction)
+            initMapClickEvent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
