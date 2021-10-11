@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
-import { MODE } from 'utils/constants';
+import { MODE, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
 
 const { getTimeZones } = require("@vvo/tzdb");
@@ -51,7 +51,7 @@ export const CompetitionUnitForm = () => {
 
     const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
 
-    const [formChanged, setFormChanged] = React.useState<boolean>(false);
+    const [formChanged, setFormChanged] = React.useState<boolean>(true);
 
     const courseListRef = React.useRef<any>();
 
@@ -68,8 +68,8 @@ export const CompetitionUnitForm = () => {
 
         const data = {
             name: name,
-            startTime: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc(),
-            approximateStart: moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc(),
+            startTime: moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format("HH:mm:ss")).utc(),
+            approximateStart: moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format("HH:mm:ss")).utc(),
             isCompleted: isCompleted,
             vesselParticipantGroupId: vesselParticipantGroupId,
             description: description,
@@ -118,6 +118,7 @@ export const CompetitionUnitForm = () => {
 
     const initModeAndData = async () => {
         if (location.pathname.includes(MODE.UPDATE)) {
+            setFormChanged(false);
             setMode(MODE.UPDATE);
             setIsSaving(true);
             const response = await get(eventId, competitionUnitId);
@@ -162,6 +163,7 @@ export const CompetitionUnitForm = () => {
 
     const onCoordinatesRecevied = (coordinates) => {
         setBoundingBoxCoordinates(coordinates);
+        setFormChanged(true);
     }
 
     const renderVesselParticipantGroupList = () => {
