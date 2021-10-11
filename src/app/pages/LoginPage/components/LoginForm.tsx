@@ -88,14 +88,14 @@ export const LoginForm = (props) => {
               name="email"
               rules={[{ required: true, type: 'email' }]}
             >
-              <SyrfInput placeholder={t(translations.login_page.email.label)} />
+              <SyrfInput placeholder={t(translations.login_page.email.label)} autoCapitalize="none" />
             </Form.Item>
 
             <Form.Item
               name="password"
               rules={[{ required: true }]}
             >
-              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} />
+              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} autoCapitalize="none" />
             </Form.Item>
 
             <Form.Item

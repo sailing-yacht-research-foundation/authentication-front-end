@@ -61,7 +61,7 @@ export const ChangePasswordForm = (props) => {
                             name="newPassword"
                             rules={[{ required: true, max: 16, min: 8 }]}
                         >
-                            <SyrfPasswordInputField />
+                            <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
                         </Form.Item>
 
                         <Form.Item
@@ -82,7 +82,7 @@ export const ChangePasswordForm = (props) => {
                                 }),
                             ]}
                         >
-                            <SyrfPasswordInputField />
+                            <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
                         </Form.Item>
 
                         <Form.Item>
