@@ -149,23 +149,23 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/races/create'} component={CompetitionUnitCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/races'} component={CompetitionUnitListPage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/races/:competitionUnitId/courses/create'} component={CourseCreatePage} />
-              <Route exact path={process.env.PUBLIC_URL + '/races/:competitionUnitId/courses/:courseId/update'} component={CourseCreatePage} />
-              <Route exact path={process.env.PUBLIC_URL + '/boats/'} component={VesselListPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/boats/create'} component={VesselCreateUpdatePage} />
-              <Route exact path={process.env.PUBLIC_URL + '/boats/:id/update'} component={VesselCreateUpdatePage} />
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/create'} component={ParticipantCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/create'} component={VesselParticipantGroupPage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/create'} component={CompetitionUnitCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races'} component={CompetitionUnitListPage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/:competitionUnitId/courses/create'} component={CourseCreatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/:competitionUnitId/courses/:courseId/update'} component={CourseCreatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/'} component={VesselListPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/create'} component={VesselCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:id/update'} component={VesselCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/create'} component={ParticipantCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/create'} component={VesselParticipantGroupPage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-tracks'} component={MyTrackPage} />
