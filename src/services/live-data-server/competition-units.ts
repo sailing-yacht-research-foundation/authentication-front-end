@@ -252,3 +252,59 @@ export const getAllCompetitionUnitsByEventIdWithSort = (calendarEventId, page) =
             }
         })
 }
+
+export const getSimplifiedTracksByCompetitionUnit = (id: string) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/simplified-tracks`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
+
+export const getLegsByCompetitionUnit = (id: string) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/legs`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
+
+export const getTimeByCompetitionUnit = (id: string) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/time`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
+
+export const getCourseByCompetitionUnit = (id: string) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/course`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}

@@ -88,7 +88,9 @@ export const AssignVesselParticipantModal = (props) => {
     }
 
     const assignParticipantToVesselParticipant = async (vesselParticipantId) => {
+        setIsLoading(true);
         const response = await registerParticipantsToVesselParticipant(vesselParticipantId, [participant.id]);
+        setIsLoading(false);
 
         if (response.success) {
             toast.success(t(translations.assign_vessel_participant_modal.successfully_register));
@@ -104,7 +106,9 @@ export const AssignVesselParticipantModal = (props) => {
     }
 
     const removeParticipantFromVesselParticipant = async (vesselParticipantId) => {
+        setIsLoading(true);
         const response = await unregisterParticipantFromVesselParticipant(vesselParticipantId, participant.id);
+        setIsLoading(false);
 
         if (response.success) {
             toast.success(t(translations.assign_vessel_participant_modal.successfully_unregister));
