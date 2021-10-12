@@ -61,7 +61,7 @@ export const ChangePasswordForm = (props) => {
                             name="newPassword"
                             rules={[{ required: true, max: 16, min: 8 }, {
                                 pattern: /^\S+$/,
-                                message: t(translations.misc.password_must_not_contains_blank)
+                                message: t(translations.misc.password_must_not_contain_blank)
                             }]}
                         >
                             <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
