@@ -59,7 +59,10 @@ export const ChangePasswordForm = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                             name="newPassword"
-                            rules={[{ required: true, max: 16, min: 8 }]}
+                            rules={[{ required: true, max: 16, min: 8 }, {
+                                pattern: /^\S+$/,
+                                message: t(translations.misc.password_must_not_contains_blank)
+                            }]}
                         >
                             <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
                         </Form.Item>

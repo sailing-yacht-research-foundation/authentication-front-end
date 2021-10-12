@@ -261,7 +261,8 @@
   },
   "misc": {
     "session_expired": "Session is expired and we renewed the session. Please try again!",
-    "not_available": "Not Available"
+    "not_available": "Not Available",
+    "password_must_not_contains_blank": "Password must not contains blank space."
   },
   "playback_page": {
     "competitor": "Competitor:",

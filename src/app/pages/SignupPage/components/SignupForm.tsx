@@ -129,7 +129,10 @@ export const SignupForm = () => {
                 <Form.Item
                     label={t(translations.signup_page.password)}
                     name="password"
-                    rules={[{ required: true, max: 16, min: 8 }]}
+                    rules={[{ required: true, max: 16, min: 8, }, {
+                        pattern: /^\S+$/,
+                        message: t(translations.misc.password_must_not_contains_blank)
+                    }]}
                 >
                     <Input.Password autoComplete="off" autoCapitalize="none" />
                 </Form.Item>

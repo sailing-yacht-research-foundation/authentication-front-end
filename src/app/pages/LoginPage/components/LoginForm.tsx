@@ -93,7 +93,10 @@ export const LoginForm = (props) => {
 
             <Form.Item
               name="password"
-              rules={[{ required: true, max: 16, min: 8 }]}
+              rules={[{ required: true, max: 16, min: 8 }, {
+                pattern: /^\S+$/,
+                message: t(translations.misc.password_must_not_contains_blank)
+              }]}
             >
               <SyrfInputPassword placeholder={t(translations.login_page.password.label)} autoCapitalize="none" />
             </Form.Item>
