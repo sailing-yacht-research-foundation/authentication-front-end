@@ -99,7 +99,9 @@ export const VesselList = (props) => {
             vesselParticipantId: ''
         }
 
+        setIsLoading(true);
         const response = await create(data);
+        setIsLoading(false);
 
         if (response.success) {
             toast.success(t(translations.vessel_participant_group_create_update_page.successfully_added_to_group));
@@ -119,7 +121,9 @@ export const VesselList = (props) => {
         const vesselParticipant: any = findVesselParticipantByVesselIdAndGroupId(vesselId);
 
         if (vesselParticipant) {
+            setIsLoading(true);
             const response = await deleteVesselParticipant(vesselParticipant.id);
+            setIsLoading(false);
 
             if (response.success) {
                 toast.success(t(translations.vessel_participant_group_create_update_page.successfully_removed_vessel_from_the_group));
