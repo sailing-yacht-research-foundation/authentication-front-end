@@ -123,7 +123,7 @@ export const FilterPane = (props) => {
                                 name="from_date"
                                 rules={[{ type: 'date' }, ({ getFieldValue }) => ({
                                     validator(_, value) {
-                                        if (!value || !getFieldValue('to_date') || value < getFieldValue('to_date')) {
+                                        if (!value || !getFieldValue('to_date') || value.isBefore(getFieldValue('to_date').format(TIME_FORMAT.number))) {
                                             return Promise.resolve();
                                         }
                                         return Promise.reject(new Error(t(translations.home_page.filter_tab.from_date_must_be_smaller_than_to_date)));
@@ -150,7 +150,8 @@ export const FilterPane = (props) => {
                                 name="to_date"
                                 rules={[{ type: 'date' },  ({ getFieldValue }) => ({
                                     validator(_, value) {
-                                        if (!value || !getFieldValue('from_date') || value > getFieldValue('from_date')) {
+                                        if (!value || !getFieldValue('from_date') || value.isAfter(getFieldValue('from_date').format(TIME_FORMAT.number))) {
+                                            
                                             return Promise.resolve();
                                         }
                                         return Promise.reject(new Error(t(translations.home_page.filter_tab.to_date_must_bigger_than_from_date)));
