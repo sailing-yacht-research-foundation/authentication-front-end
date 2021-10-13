@@ -121,7 +121,14 @@ export const FilterPane = (props) => {
                             <Form.Item
                                 label={t(translations.home_page.filter_tab.from_date)}
                                 name="from_date"
-                                rules={[{ type: 'date' }]}
+                                rules={[{ type: 'date' }, ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || !getFieldValue('to_date') || value < getFieldValue('to_date')) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error(t(translations.home_page.filter_tab.from_date_must_be_smaller_than_to_date)));
+                                    },
+                                })]}
                             >
                                 <DatePicker
                                     showToday={false}
@@ -141,7 +148,14 @@ export const FilterPane = (props) => {
                             <Form.Item
                                 label={t(translations.home_page.filter_tab.to_date)}
                                 name="to_date"
-                                rules={[{ type: 'date' }]}
+                                rules={[{ type: 'date' },  ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || !getFieldValue('from_date') || value > getFieldValue('from_date')) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error(t(translations.home_page.filter_tab.to_date_must_bigger_than_from_date)));
+                                    },
+                                })]}
                             >
                                 <DatePicker
                                     showToday={false}

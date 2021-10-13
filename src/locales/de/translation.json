@@ -24,6 +24,8 @@
       "from_date": "From Date",
       "to_date": "To Date",
       "search": "Search",
+      "from_date_must_be_smaller_than_to_date": "From date must be smaller than to date",
+      "to_date_must_bigger_than_from_date": "To date must be bigger than from date",
       "filter_result": {
         "start_searching_by_typing_something": "Nothing to show here. Start searching by typing something.",
         "about_number_result": "About {{total}} results",
