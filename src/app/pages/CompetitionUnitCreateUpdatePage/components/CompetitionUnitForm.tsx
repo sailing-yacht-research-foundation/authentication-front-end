@@ -258,7 +258,7 @@ export const CompetitionUnitForm = () => {
                             name="name"
                             rules={[{ required: true, max: 255 }]}
                         >
-                            <SyrfInputField />
+                            <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Form.Item
@@ -266,7 +266,7 @@ export const CompetitionUnitForm = () => {
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
                         >
-                            <SyrfTextArea />
+                            <SyrfTextArea  autoCorrect="off"/>
                         </Form.Item>
 
                         <Divider />

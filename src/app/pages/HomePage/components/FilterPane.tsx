@@ -112,6 +112,7 @@ export const FilterPane = (props) => {
                     >
                         <Input ref={searchInputRef}
                             value={searchKeyword}
+                            autoCorrect="off"
                         />
                     </Form.Item>
 

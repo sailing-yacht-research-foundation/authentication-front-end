@@ -55,9 +55,24 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
 
     useImperativeHandle(ref, () => ({
         zoomToCurrentUserLocationIfAllowed() {
-            zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.animation);
+            zoomToCurrentUserLocation(MAP_MOVE_TYPE.animation);
         }
     }));
+
+    const zoomToCurrentUserLocation = (type: string) => {
+        if (!navigator.geolocation) return;
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            const params = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
+        }, error => {
+            _handleLocationPermissionError(error, type);
+        }, { maximumAge: 60000, timeout: 5000, enableHighAccuracy: true })
+    }
 
     /**
      * Zoom to the location of current user
@@ -74,6 +89,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
             };
 
             type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
+            geoLoc.clearWatch(watchID);
         }, error => {
             _handleLocationPermissionError(error, type);
         });
@@ -114,6 +130,8 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
 
         markerCluster = L.markerClusterGroup();
 
+        if (results.length > 0 && geoLoc && watchID) geoLoc.clearWatch(watchID);
+
         results.forEach(race => {
             const marker = createResultMarker(race);
             if (marker) {
@@ -135,6 +153,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
             icon: L.divIcon({
                 html: ReactDOMServer.renderToString(<GoPrimitiveDot style={{ color: '#fff', fontSize: '35px' }} />),
                 iconSize: [20, 20],
+                iconAnchor: [18, 0],
                 className: 'my-race'
             })
         })
@@ -164,11 +183,11 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
         return (
             <>
                 <div>{t(translations.home_page.map_view_tab.name)} {race._source.name}</div>
-                <div>{t(translations.home_page.map_view_tab.location)} {race._source.start_country}</div>
+                {race._source.start_country && <div>{t(translations.home_page.map_view_tab.location)} {race._source.start_city + ', ' + race._source.start_country}</div>}
                 <div>{t(translations.home_page.map_view_tab.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}</div>
                 <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race._source.event_name)}</div>
                 <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race._source.event_description)}</div>
-                <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race._source.city)}</div>
+                <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race._source.start_city)}</div>
                 <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race._source.start_country)}</div>
             </>
         )

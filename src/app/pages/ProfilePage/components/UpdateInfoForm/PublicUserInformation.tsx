@@ -42,7 +42,7 @@ export const PublicUserInformation = (props) => {
                         name="first_name"
                         rules={[{ required: true, max: 15 }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoCorrect="off"/>
                     </Form.Item>
                 </Col>
 
@@ -52,7 +52,7 @@ export const PublicUserInformation = (props) => {
                         name="last_name"
                         rules={[{ required: true, max: 15 }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoCorrect="off"/>
                     </Form.Item>
                 </Col>
             </Row>

@@ -61,7 +61,7 @@ export function ForgotPasswordForm(props) {
               name="email"
               rules={[{ required: true, type: 'email' }]}
             >
-              <Input />
+              <Input autoCorrect="off" autoComplete="off" autoCapitalize="none" />
             </Form.Item>
 
             <Form.Item>

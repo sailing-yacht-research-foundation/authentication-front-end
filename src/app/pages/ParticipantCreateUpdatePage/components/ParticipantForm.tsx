@@ -151,7 +151,7 @@ export const ParticipantForm = () => {
                             name="publicName"
                             rules={[{ required: true, max: 100 }]}
                         >
-                            <SyrfInputField />
+                            <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Divider />

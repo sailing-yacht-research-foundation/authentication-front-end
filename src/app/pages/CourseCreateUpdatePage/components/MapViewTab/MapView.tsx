@@ -429,6 +429,7 @@ export const MapView = React.forwardRef((props, ref) => {
                         rules={[{ required: true }]}
                     >
                         <SyrfInputField
+                            autoCorrect="off"
                             placeholder={t(translations.course_create_update_page.input_a_name_for_this_geometry)}
                         />
                     </Form.Item>

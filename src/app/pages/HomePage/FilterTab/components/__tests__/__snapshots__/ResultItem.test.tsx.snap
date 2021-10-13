@@ -7,12 +7,12 @@ exports[`<ResultItem /> should render and match the snapshot 1`] = `
       size={5}
     >
       <GiPositionMarker />
-      California Coast
+      undefined, California Coast
     </Space>
   </styled.div>
   <styled.h3>
     <Link
-      to="/playback?raceid=undefined"
+      to="/playback?raceId=undefined"
     >
       Race at Wales west coast
     </Link>
