@@ -56,6 +56,7 @@ import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
 import { TutorialModal } from './components/TutorialModal';
+import { useTour } from '@reactour/tour';
 
 const { Sider, Content } = Layout;
 
@@ -97,7 +98,10 @@ export function App(props) {
 
   const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
 
+  const { setIsOpen } = useTour()
+
   React.useEffect(() => {
+    setIsOpen(true);
     if (isAuthenticated) {
       initGoogleAnalytic();
       dispatch(loginActions.getUser());
