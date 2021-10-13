@@ -50,3 +50,28 @@ export const selectPlaybackType = createSelector(
   [selectDomain],
   (playbackState) => playbackState.playbackType
 )
+
+export const selectRaceSimplifiedTracks = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.raceSimplifiedTracks
+)
+
+export const selectRaceLegs = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.raceLegs
+)
+
+export const selectRaceCourseDetail = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.raceCourseDetail
+)
+
+export const selectRaceTime = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.raceTime
+)
+
+export const selectRaceRetrievedTimestamps = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.raceRetrievedTimestamps
+)

@@ -101,7 +101,7 @@ export const SignupForm = () => {
                     name="email"
                     rules={[{ required: true, type: 'email' }]}
                 >
-                    <Input />
+                    <Input autoComplete="off" autoCapitalize="none" />
                 </Form.Item>
 
                 <Row gutter={24}>
@@ -111,7 +111,7 @@ export const SignupForm = () => {
                             name="first_name"
                             rules={[{ required: true, max: 15 }]}
                         >
-                            <Input />
+                            <Input autoComplete="off" />
                         </Form.Item>
                     </Col>
 
@@ -121,7 +121,7 @@ export const SignupForm = () => {
                             name="last_name"
                             rules={[{ required: true, max: 15 }]}
                         >
-                            <Input />
+                            <Input autoComplete="off" />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -129,9 +129,12 @@ export const SignupForm = () => {
                 <Form.Item
                     label={t(translations.signup_page.password)}
                     name="password"
-                    rules={[{ required: true, max: 16, min: 8 }]}
+                    rules={[{ required: true, max: 16, min: 8, }, {
+                        pattern: /^\S+$/,
+                        message: t(translations.misc.password_must_not_contain_blank)
+                    }]}
                 >
-                    <Input.Password />
+                    <Input.Password autoComplete="off" autoCapitalize="none" />
                 </Form.Item>
 
                 <Form.Item
@@ -152,7 +155,7 @@ export const SignupForm = () => {
                         }),
                     ]}
                 >
-                    <Input.Password />
+                    <Input.Password autoComplete="off" autoCapitalize="none" />
                 </Form.Item>
 
                 <Form.Item

@@ -35,7 +35,7 @@ export const Leaderboard = ({ participantsData = [] }) => {
                         {sortedParticipantsByLeaderboard.map((participant: any) => {
                             return (
                                 <div key={participant.id} style={{ margin: "8px 0px" }}>
-                                    <div style={{ borderBottom: `1px solid ${participant?.color}` }}>
+                                    <div style={{ borderBottom: `2px solid ${participant?.color}` }}>
                                         <p style={{ marginBottom: "0px" }}>
                                             {participant?.participant?.competitor_name}
                                         </p>

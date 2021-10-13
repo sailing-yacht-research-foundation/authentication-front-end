@@ -11,6 +11,11 @@ export interface PlaybackState {
     searchRaceId?: string;
     searchRaceDetail?: any;
     playbackType?: PlaybackTypes;
+    raceSimplifiedTracks?: any;
+    raceLegs?: any;
+    raceCourseDetail?: any;
+    raceTime?: any;
+    raceRetrievedTimestamps?: number[]
 }
 
 export type ContainerState = PlaybackState;
