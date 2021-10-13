@@ -8,6 +8,7 @@
 
 import 'antd/dist/antd.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { GlobalStyle } from '../styles/global-styles';
 
 import * as React from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
@@ -15,8 +16,7 @@ import { ToastContainer } from 'react-toastify';
 import { Layout } from 'antd';
 import { media } from 'styles/media';
 import styled from 'styled-components';
-
-import { GlobalStyle } from '../styles/global-styles';
+import ReactGA from 'react-ga';
 
 import { LoginPage } from './pages/LoginPage/Loadable';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
@@ -55,6 +55,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
+import { useTour } from '@reactour/tour';
 
 const { Sider, Content } = Layout;
 
@@ -96,8 +97,12 @@ export function App(props) {
 
   const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
 
+  const { setIsOpen } = useTour()
+
   React.useEffect(() => {
+    setIsOpen(true);
     if (isAuthenticated) {
+      initGoogleAnalytic();
       dispatch(loginActions.getUser());
     } else {
       dispatch(loginActions.syrfServiceAnonymousLogin());
@@ -111,6 +116,10 @@ export function App(props) {
     } else {
       setIsDesktopSiderToggled(!collapsed);
     }
+  }
+
+  const initGoogleAnalytic = () => {
+    ReactGA.initialize('G-0X3PS1RHMN');
   }
 
   const renderSider = () => {

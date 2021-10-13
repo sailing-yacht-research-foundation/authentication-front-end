@@ -112,7 +112,7 @@ export const Main = () => {
                 onChange={onTabChanged}
                 animated
                 defaultActiveKey={getDefaultActiveTabs()}>
-                <TabPane tab={<BsListUl />} key="2">
+                <TabPane tab={<BsListUl className="search-step-listview-results" />} key="2">
                     <FilterTab onPaginationPageChanged={onPaginationPageChanged} />
                 </TabPane>
                 <TabPane tab={<FiMap />} key="1">

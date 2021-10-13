@@ -12,6 +12,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import FontFaceObserver from 'fontfaceobserver';
+import { TourProvider } from '@reactour/tour'
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css';
@@ -28,6 +29,8 @@ import reportWebVitals from 'reportWebVitals';
 
 // Initialize languages
 import './locales/i18n';
+
+import { steps } from 'utils/tour-steps';
 
 // Observe loading of Inter (to remove 'Inter', remove the <link> tag in
 // the index.html file and this observer)
@@ -46,7 +49,9 @@ ReactDOM.render(
     <ThemeProvider>
       <HelmetProvider>
         <React.StrictMode>
-          <App />
+          <TourProvider steps={steps}>
+            <App />
+          </TourProvider>
         </React.StrictMode>
       </HelmetProvider>
     </ThemeProvider>

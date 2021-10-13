@@ -71,7 +71,7 @@ export const SiderContent = (props) => {
         <Logo
           onClick={() => history.push('/')}
           style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px' }} />
-        <SyrfMenuItem title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
+        <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
