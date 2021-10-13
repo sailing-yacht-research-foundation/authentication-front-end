@@ -151,7 +151,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage}/>
+              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage}/>
