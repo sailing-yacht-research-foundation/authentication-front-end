@@ -57,7 +57,7 @@ export const FilterResult = (props) => {
     }
 
     return (
-        <Wrapper>
+        <Wrapper className="search-step-listview-show-detail-results playback-step">
             {(results.length > 0 && !isSearching) ?
                 (<>
                     <ResultWrapper>

@@ -111,7 +111,7 @@ export const MapViewTab = (props) => {
 
     return (
         <Wrapper>
-            <MapContainer whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={center} zoom={ZOOM}>
+            <MapContainer className="search-step-results" whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={center} zoom={ZOOM}>
                 <MapView isFocusingOnSearchInput={isFocusingOnSearchInput} ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
             {
@@ -119,7 +119,7 @@ export const MapViewTab = (props) => {
                     <Pagination defaultCurrent={1} current={page} onChange={onPaginationPageChanged} total={total} pageSize={pageSize} />
                 </PaginationWrapper>
             }
-            <SearchBarWrapper>
+            <SearchBarWrapper className="search-step-input">
                 <SearchBarInnerWrapper>
                     <StyledSearchBar
                         type={'search'}
