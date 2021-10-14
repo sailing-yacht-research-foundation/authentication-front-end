@@ -13,7 +13,7 @@ import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { CompetitionUnitList } from './CompetitionUnitList';
-import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
+import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { BiTrash } from 'react-icons/bi';
 import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +24,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { debounce, renderTimezoneInUTCOffset } from 'utils/helpers';
 import Geocode from "react-geocode";
+import { CoursesList } from './CoursesList';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -426,6 +427,10 @@ export const MyEventForm = () => {
 
                         <SyrfFormWrapper style={{ marginTop: '30px' }}>
                             <ParticipantList eventId={eventId} />
+                        </SyrfFormWrapper>
+
+                        <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                            <CoursesList eventId={eventId} />
                         </SyrfFormWrapper>
                     </>
                 )

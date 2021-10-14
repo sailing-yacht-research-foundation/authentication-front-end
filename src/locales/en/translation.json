@@ -375,6 +375,7 @@
     "location": "Location"
   },
   "course_list": {
+    "name": "Name",
     "course": "Course",
     "create": "Create",
     "update": "Update",
@@ -419,9 +420,12 @@
     "you_cannot_create_course": "You cannot save the course because You have not added any geometries",
     "successfully_created_your_course": "Successfully saved your course.",
     "an_unexpected_error": "An unexpected error happened when saving your course.",
+    "please_enter_a_course_name": "Course Name",
     "enter_geometry_name": "Enter geometry name",
     "geometry_name": "Geometry Name",
     "input_a_name_for_this_geometry": "Input a name for this geometry",
+    "input_a_name_for_this_course": "Input a name for this course",
+    "course_name": "Course Name",
     "cancel": "Back",
     "save": "Save",
     "saving": "Saving...",
