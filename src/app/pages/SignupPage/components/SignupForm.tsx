@@ -101,7 +101,7 @@ export const SignupForm = () => {
                     name="email"
                     rules={[{ required: true, type: 'email' }]}
                 >
-                    <Input autoComplete="off" autoCapitalize="none" />
+                    <Input autoComplete="off" autoCapitalize="none" autoCorrect="off" />
                 </Form.Item>
 
                 <Row gutter={24}>
@@ -111,7 +111,7 @@ export const SignupForm = () => {
                             name="first_name"
                             rules={[{ required: true, max: 15 }]}
                         >
-                            <Input autoComplete="off" />
+                            <Input autoComplete="off" autoCorrect="off" />
                         </Form.Item>
                     </Col>
 
@@ -121,7 +121,7 @@ export const SignupForm = () => {
                             name="last_name"
                             rules={[{ required: true, max: 15 }]}
                         >
-                            <Input autoComplete="off" />
+                            <Input autoComplete="off" autoCorrect="off" />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -134,7 +134,7 @@ export const SignupForm = () => {
                         message: t(translations.misc.password_must_not_contain_blank)
                     }]}
                 >
-                    <Input.Password autoComplete="off" autoCapitalize="none" />
+                    <Input.Password autoComplete="off" autoCapitalize="none" autoCorrect="off" />
                 </Form.Item>
 
                 <Form.Item
@@ -155,7 +155,7 @@ export const SignupForm = () => {
                         }),
                     ]}
                 >
-                    <Input.Password autoComplete="off" autoCapitalize="none" />
+                    <Input.Password autoComplete="off" autoCapitalize="none" autoCorrect="off" />
                 </Form.Item>
 
                 <Form.Item

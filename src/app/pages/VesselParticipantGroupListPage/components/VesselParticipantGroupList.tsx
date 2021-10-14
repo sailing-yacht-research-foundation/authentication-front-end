@@ -80,7 +80,7 @@ export const VesselParticipantGroupList = () => {
 
     const getAll = async (page) => {
         setIsChangingPage(true);
-        const response = await getAllVesselParticipantGroups(pagination.page);
+        const response = await getAllVesselParticipantGroups(page);
         setIsChangingPage(false);
 
         if (response.success) {

@@ -65,7 +65,7 @@ export const MyTrack = () => {
 
     const getAll = async (page) => {
         setIsChangingPage(true);
-        const response = await getAllTracks(pagination.page);
+        const response = await getAllTracks(page);
         setIsChangingPage(false);
 
         if (response.success) {

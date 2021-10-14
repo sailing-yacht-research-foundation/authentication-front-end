@@ -65,7 +65,7 @@ export const CompetitionUnitList = (props) => {
 
     const getAll = async (page) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventId(eventId, pagination.page);
+        const response = await getAllByCalendarEventId(eventId, page);
         setIsLoading(false);
 
         if (response.success) {

@@ -60,7 +60,7 @@ export const VesselParticipantGroupList = (props) => {
 
     const getAll = async (page) => {
         setIsLoading(true);
-        const response = await getVesselParticipantGroupsByEventId(eventId, pagination.page);
+        const response = await getVesselParticipantGroupsByEventId(eventId, page);
         setIsLoading(false);
 
         if (response.success) {

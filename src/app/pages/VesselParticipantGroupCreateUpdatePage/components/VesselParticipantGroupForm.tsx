@@ -137,7 +137,7 @@ export const VesselParticipantGroupForm = () => {
                             name="name"
                             rules={[{ required: true, max: 100 }]}
                         >
-                            <SyrfInputField />
+                            <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Divider />
