@@ -136,7 +136,7 @@ export const VesselList = (props) => {
 
     const getAllUserAndEventVessels = async (page) => {
         setIsLoading(true);
-        const response = await getManyVesselsByEventCalendarId(eventId, pagination.page);
+        const response = await getManyVesselsByEventCalendarId(eventId, page);
         setIsLoading(false);
 
         if (response.success) {

@@ -90,7 +90,7 @@ export const CompetitionUnitList = () => {
 
     const getAll = async (page) => {
         setIsChangingPage(true);
-        const response = await getAllCompetitionUnits(pagination.page);
+        const response = await getAllCompetitionUnits(page);
         setIsChangingPage(false);
 
         if (response.success) {

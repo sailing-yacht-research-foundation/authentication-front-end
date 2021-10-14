@@ -137,7 +137,7 @@ export const VesselForm = () => {
                             name="publicName"
                             rules={[{ required: true }]}
                         >
-                            <SyrfInputField />
+                            <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Form.Item
@@ -155,7 +155,7 @@ export const VesselForm = () => {
                                 },
                             }),]}
                         >
-                            <SyrfInputField />
+                            <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Divider />

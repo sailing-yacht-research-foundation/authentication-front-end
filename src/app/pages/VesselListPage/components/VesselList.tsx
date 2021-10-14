@@ -103,7 +103,7 @@ export const VesselList = () => {
 
     const getAll = async (page) => {
         setIsChangingPage(true);
-        const response = await getMany(pagination.page);
+        const response = await getMany(page);
         setIsChangingPage(false);
 
         if (response.success) {

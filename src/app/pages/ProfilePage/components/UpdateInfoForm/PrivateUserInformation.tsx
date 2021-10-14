@@ -83,6 +83,7 @@ export const PrivateUserInformation = (props) => {
                                     className: 'location-search-input',
                                 })}
                                 value={address}
+                                autoCorrect="off"
                             />
                             {suggestions.length > 0 && <StyledPLaceDropdown>
                                 {suggestions.map((suggestion) => {
@@ -146,7 +147,7 @@ export const PrivateUserInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.world_sailing_number)}</SyrfFieldLabel>}
                         name="sailing_number"
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoCorrect="off" />
                     </Form.Item>
                 </Col>
             </Row>

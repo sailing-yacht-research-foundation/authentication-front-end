@@ -58,6 +58,7 @@ export const MapViewTab = (props) => {
     const mapContainerRef = React.useRef<any>();
 
     const searchForRaces = (e) => {
+        if (searchKeyword.length === 0) return;
         if (e.keyCode === 13 || e.which === 13) {
             const params: any = {};
             params.keyword = searchKeyword;
@@ -124,6 +125,7 @@ export const MapViewTab = (props) => {
                     <StyledSearchBar
                         type={'search'}
                         value={searchKeyword}
+                        autoCorrect="off"
                         onChange={(e) => {
                             dispatch(actions.setKeyword(e.target.value));
                         }}
@@ -141,10 +143,12 @@ export const MapViewTab = (props) => {
                     }}>{t(translations.home_page.map_view_tab.advanced_search)}</a>
                 </AdvancedSearchTextWrapper>
             </SearchBarWrapper>
-            <MyLocationWrapper onClick={() => zoomToUserLocation()}>
-                <StyledMyLocationIcon />
-                <MyLocationText>{t(translations.home_page.map_view_tab.my_location)}</MyLocationText>
-            </MyLocationWrapper>
+            {
+                results.length === 0 && <MyLocationWrapper onClick={() => zoomToUserLocation()}>
+                    <StyledMyLocationIcon />
+                    <MyLocationText>{t(translations.home_page.map_view_tab.my_location)}</MyLocationText>
+                </MyLocationWrapper>
+            }
         </Wrapper>
     )
 }
