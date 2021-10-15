@@ -101,7 +101,7 @@ export function App(props) {
   const { setIsOpen } = useTour()
 
   React.useEffect(() => {
-    setIsOpen(true);
+    // setIsOpen(true);
     if (isAuthenticated) {
       initGoogleAnalytic();
       dispatch(loginActions.getUser());
