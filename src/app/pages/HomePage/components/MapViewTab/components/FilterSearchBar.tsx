@@ -33,6 +33,8 @@ export const FilterSearchBar = (props) => {
 
     const searchBarWrapperRef = React.useRef<any>()
 
+    const searchBarRef = React.useRef<any>();
+
     const handleOnSearchInputFocus = () => {
         window.scrollTo(0, 0);
         setIsFocusingOnSearchInput(true);
@@ -55,7 +57,13 @@ export const FilterSearchBar = (props) => {
             dispatch(actions.setKeyword(params.keyword ?? ''));
             dispatch(actions.setFromDate(''));
             dispatch(actions.setToDate(''));
+
+            console.log(searchKeyword);
+            console.log(params.keyword);
+
             dispatch(actions.searchRaces(params));
+
+ 
 
             history.push({
                 pathname: '/',
@@ -69,6 +77,7 @@ export const FilterSearchBar = (props) => {
         <SearchBarWrapper className="search-step-input" ref={searchBarWrapperRef}>
             <SearchBarInnerWrapper>
                 <StyledSearchBar
+                    ref={searchBarRef}
                     type={'search'}
                     value={searchKeyword}
                     onChange={(e) => {
@@ -80,7 +89,7 @@ export const FilterSearchBar = (props) => {
                     placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                 <SearchBarLogo />
                 <StyledSpin spinning={isSearching}></StyledSpin>
-                <CriteriaSuggestion showAll={showAllCriteria} keyword={searchKeyword}/>
+                <CriteriaSuggestion showAll={showAllCriteria} searchBarRef={searchBarRef} keyword={searchKeyword}/>
             </SearchBarInnerWrapper>
             <AdvancedSearchTextWrapper>
                 <a href="/" onClick={(e) => {
@@ -100,7 +109,7 @@ const SearchBarWrapper = styled.div`
     margin: 0 auto;
     width: 570px;
     max-width: 80%;
-    z-index: 10;
+    z-index: 11;
 `;
 
 const SearchBarInnerWrapper = styled.div`
