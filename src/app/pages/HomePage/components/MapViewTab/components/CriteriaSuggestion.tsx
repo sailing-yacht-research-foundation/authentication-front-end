@@ -3,12 +3,11 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
+import { supportedSearchCriteria } from 'utils/constants';
 
 export const CriteriaSuggestion = (props) => {
 
     const { keyword, showAll } = props;
-
-    const supportedCriteria = ['city', 'country', 'year', 'month', 'class', 'description', 'boat_name'];
 
     const wrapperRef = React.useRef<any>();
 
@@ -18,10 +17,14 @@ export const CriteriaSuggestion = (props) => {
 
     const getSuggestionItems = () => {
         let criteriaMatched: any[] = [];
+        let lastword: any = keyword.match(/(?:\s|^)([\S]+)$/i) || '';
 
-        if (keyword.length === 0) return [];
-        supportedCriteria.forEach(criteria => {
-            if (criteria.includes(keyword)) {
+        if (lastword.length > 0)
+            lastword = lastword[0];
+
+        if (lastword.length === 0) return [];
+        supportedSearchCriteria.forEach(criteria => {
+            if (criteria.includes(lastword.trim())) {
                 criteriaMatched.unshift(criteria);
             }
         });
@@ -30,16 +33,21 @@ export const CriteriaSuggestion = (props) => {
     }
 
     const appendCriteria = (criteria) => {
+        let lastWordPosition = keyword.match(/(?:\s|^)([\S]+)$/i).index;
+        dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition)));
         const words = keyword.split(' ');
-        console.log(words);
-        dispatch(actions.setKeyword(keyword + ' ' + criteria + ':'));
+        if (words.length == 1) {
+            dispatch(actions.setKeyword(criteria + ':'));
+        } else {
+            dispatch(actions.setKeyword(keyword.substring(0, keyword.match(/(?:\s|^)([\S]+)$/i).index) + ' ' + criteria + ':'));
+        }
     }
 
     const renderSuggestionCriteria = () => {
         let criteria: any = []
         if (!showAll)
             criteria = getSuggestionItems();
-        else criteria = supportedCriteria;
+        else criteria = supportedSearchCriteria;
 
         return criteria.map(criteria => {
             return <SuggestionCriteria onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
