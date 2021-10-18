@@ -141,7 +141,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
+              <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
