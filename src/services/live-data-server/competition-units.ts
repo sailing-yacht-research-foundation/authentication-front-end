@@ -10,6 +10,8 @@ export const search = (params) => {
         }
     };
 
+    params.keyword = parseKeyword(params.keyword);
+
     query.bool.must.push({
         query_string: {
             query: parseKeyword(params.keyword)
