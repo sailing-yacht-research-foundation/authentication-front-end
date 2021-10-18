@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
-import { MapView } from '../MapViewTab/MapView';
+import { MapView } from '../MapViewTab/components/MapView';
 import MyProvider from 'app/components/Provider';
 
 const shallowRenderer = createRenderer();

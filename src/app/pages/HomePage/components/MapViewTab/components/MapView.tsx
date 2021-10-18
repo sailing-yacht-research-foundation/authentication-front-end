@@ -9,7 +9,7 @@ import { GoPrimitiveDot } from 'react-icons/go';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectResults } from '../../slice/selectors';
+import { selectResults } from '../../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';

@@ -64,6 +64,7 @@
     "react-avatar-edit": "^1.0.0",
     "react-dom": "16.13.1",
     "react-facebook-login": "^4.1.1",
+    "react-filter-box": "^3.4.2",
     "react-ga": "^3.3.0",
     "react-geocode": "^0.2.3",
     "react-helmet-async": "1.0.6",
