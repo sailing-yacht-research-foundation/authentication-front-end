@@ -21,6 +21,7 @@ export const search = (params) => {
     if (params.hasOwnProperty('from_date')
         && params.from_date !== ''
         && moment(params.from_date).isValid()) {
+        params.from_date = params.from_date + ' 00:00:00';
         query.bool.must.push({
             range: {
                 "approx_start_time_ms": {
@@ -33,6 +34,7 @@ export const search = (params) => {
     if (params.hasOwnProperty('to_date')
         && params.to_date !== ''
         && moment(params.to_date).isValid()) {
+        params.to_date = params.to_date + ' 23:59:59';
         query.bool.must.push({
             range: {
                 "approx_start_time_ms": {
@@ -46,7 +48,7 @@ export const search = (params) => {
         query: query,
     };
 
-    searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
+    searchParams._source = ["id", "name", "approx_start_point", "start_country", "start_city", "approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 

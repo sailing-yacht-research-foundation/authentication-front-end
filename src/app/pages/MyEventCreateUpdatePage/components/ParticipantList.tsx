@@ -112,7 +112,7 @@ export const ParticipantList = (props) => {
 
     const getAllByFilter = async (page, mode) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventIdWithFilter(eventId, pagination.page, mode);
+        const response = await getAllByCalendarEventIdWithFilter(eventId, page, mode);
         setIsLoading(false);
 
         if (response.success) {

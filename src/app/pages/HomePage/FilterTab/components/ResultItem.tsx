@@ -16,12 +16,12 @@ export const ResultItem = (props) => {
 
     return (
         <Wrapper key={props.index}>
-            <HeadDescriptionWrapper>
+            {race._source.start_country && <HeadDescriptionWrapper>
                 <Space size={5}>
                     <GiPositionMarker />
-                    {race._source.start_country}
+                    {race._source.start_city + ', ' + race._source.start_country}
                 </Space>
-            </HeadDescriptionWrapper>
+            </HeadDescriptionWrapper>}
             <Name><Link to={`/playback?raceId=${race._id}`}>{race._source.name}</Link></Name>
             {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
             <DescriptionWrapper>
@@ -32,7 +32,7 @@ export const ResultItem = (props) => {
                     {t(translations.home_page.filter_tab.filter_result.event_name)} {renderEmptyValue(race._source.event_name)}
                 </DescriptionItem>
                 <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race._source.city)}
+                    {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race._source.start_city)}
                 </DescriptionItem>
                 <DescriptionItem>
                     {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race._source.start_country)}

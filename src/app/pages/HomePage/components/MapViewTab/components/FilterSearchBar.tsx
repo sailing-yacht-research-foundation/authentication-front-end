@@ -46,6 +46,7 @@ export const FilterSearchBar = (props) => {
     }
 
     const searchForRaces = (e) => {
+        if (searchKeyword.length === 0) return;
         if (e.keyCode === 13 || e.which === 13) {
             const params: any = {};
             params.keyword = searchKeyword;

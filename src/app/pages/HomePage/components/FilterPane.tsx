@@ -112,6 +112,7 @@ export const FilterPane = (props) => {
                     >
                         <Input ref={searchInputRef}
                             value={searchKeyword}
+                            autoCorrect="off"
                         />
                     </Form.Item>
 
@@ -120,7 +121,14 @@ export const FilterPane = (props) => {
                             <Form.Item
                                 label={t(translations.home_page.filter_tab.from_date)}
                                 name="from_date"
-                                rules={[{ type: 'date' }]}
+                                rules={[{ type: 'date' }, ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || !getFieldValue('to_date') ||  moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('to_date').format(TIME_FORMAT.number))) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error(t(translations.home_page.filter_tab.from_date_must_be_smaller_than_to_date)));
+                                    },
+                                })]}
                             >
                                 <DatePicker
                                     showToday={false}
@@ -140,7 +148,15 @@ export const FilterPane = (props) => {
                             <Form.Item
                                 label={t(translations.home_page.filter_tab.to_date)}
                                 name="to_date"
-                                rules={[{ type: 'date' }]}
+                                rules={[{ type: 'date' },  ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || !getFieldValue('from_date') || moment(value.format(TIME_FORMAT.number)).isSameOrAfter(getFieldValue('from_date').format(TIME_FORMAT.number))) {
+                                            
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error(t(translations.home_page.filter_tab.to_date_must_bigger_than_from_date)));
+                                    },
+                                })]}
                             >
                                 <DatePicker
                                     showToday={false}

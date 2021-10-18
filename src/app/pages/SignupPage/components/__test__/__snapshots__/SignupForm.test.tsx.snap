@@ -35,6 +35,9 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
       }
     >
       <Input
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect="off"
         type="text"
       />
     </FormItem>
@@ -60,6 +63,8 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
           }
         >
           <Input
+            autoComplete="off"
+            autoCorrect="off"
             type="text"
           />
         </FormItem>
@@ -83,6 +88,8 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
           }
         >
           <Input
+            autoComplete="off"
+            autoCorrect="off"
             type="text"
           />
         </FormItem>
@@ -98,11 +105,18 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
             "min": 8,
             "required": true,
           },
+          Object {
+            "message": "Password must not contain blank space.",
+            "pattern": /\\^\\\\S\\+\\$/,
+          },
         ]
       }
     >
       <Password
         action="click"
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect="off"
         iconRender={[Function]}
         visibilityToggle={true}
       />
@@ -122,6 +136,9 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
     >
       <Password
         action="click"
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect="off"
         iconRender={[Function]}
         visibilityToggle={true}
       />
