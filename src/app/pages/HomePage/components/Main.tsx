@@ -112,11 +112,11 @@ export const Main = () => {
                 onChange={onTabChanged}
                 animated
                 defaultActiveKey={getDefaultActiveTabs()}>
-                <TabPane tab={<FiMap />} key="1">
-                    <MapViewTab onPaginationPageChanged={onPaginationPageChanged} />
-                </TabPane>
                 <TabPane tab={<BsListUl className="search-step-listview-results" />} key="2">
                     <FilterTab onPaginationPageChanged={onPaginationPageChanged} />
+                </TabPane>
+                <TabPane tab={<FiMap />} key="1">
+                    <MapViewTab onPaginationPageChanged={onPaginationPageChanged} />
                 </TabPane>
                 {
                     (isMobile() && !isAuthenticated) && <ButtonCreateContainer>

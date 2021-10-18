@@ -23,4 +23,4 @@ export const MODE = {
     UPDATE: 'update'
 };
 
-export const supportedSearchCriteria = ['name', 'start_city', 'start_country', 'year', 'month', 'class', 'description', 'boat_name'];
+export const supportedSearchCriteria = ['name', 'start_city', 'start_country', 'start_year', 'start_month', 'event_description', 'event_name'];
