@@ -58,6 +58,10 @@ export const FilterSearchBar = (props) => {
             dispatch(actions.setKeyword(params.keyword ?? ''));
             dispatch(actions.setFromDate(''));
             dispatch(actions.setToDate(''));
+
+            console.log(searchKeyword);
+            console.log(params.keyword);
+
             dispatch(actions.searchRaces(params));
 
  
