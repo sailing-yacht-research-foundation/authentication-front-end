@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
+import { supportedSearchCriteria } from 'utils/constants';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {
@@ -8,6 +9,8 @@ export const search = (params) => {
             must: []
         }
     };
+
+    params.keyword = parseKeyword(params.keyword);
 
     query.bool.must.push({
         query_string: {
@@ -309,4 +312,29 @@ export const getCourseByCompetitionUnit = (id: string) => {
             error: error
         }
     });
+}
+
+const parseKeyword = (keyword) => {
+    const words = keyword.split(' ');
+    let parseWords: any[] = [];
+    let result = '';
+    words.forEach((word, index) => {
+        let splittedWord = word.split(':');
+        if (splittedWord.length > 1 && supportedSearchCriteria.includes(splittedWord[0]) && index !== 0) {
+            splittedWord.splice(0, 0, 'AND');
+        }
+        parseWords.push(splittedWord);
+    });
+
+    parseWords.forEach(words => {
+        words.forEach((w, i) => {
+            if (supportedSearchCriteria.includes(w)) {
+                result += (w + ':');
+            } else {
+                result += w + ' ';
+            }
+        });
+    });
+
+    return result;
 }
