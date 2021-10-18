@@ -3,13 +3,7 @@
 exports[`<FilterTab /> should render and match the snapshot 1`] = `
 <styled.div>
   <FilterResult />
-  <FilterPane
-    close={[Function]}
-    limitResults={true}
-  />
-  <styled.div
-    onClick={[Function]}
-  >
+  <styled.div>
     <BsSearch
       color="#4F61A5"
       size={25}

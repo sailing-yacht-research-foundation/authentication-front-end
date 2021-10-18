@@ -250,7 +250,7 @@ export const MyEventForm = () => {
                             name="name"
                             rules={[{ required: true, max: 255 }]}
                         >
-                            <SyrfInputField />
+                            <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Form.Item
@@ -258,7 +258,7 @@ export const MyEventForm = () => {
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
                         >
-                            <SyrfTextArea />
+                            <SyrfTextArea autoCorrect="off" />
                         </Form.Item>
 
                         <Divider />
@@ -290,7 +290,7 @@ export const MyEventForm = () => {
                             name="location"
                             rules={[{ required: true }]}
                         >
-                            <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} />
+                            <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} autoCorrect="off" />
                         </Form.Item>
 
                         {(mode === MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
@@ -358,7 +358,7 @@ export const MyEventForm = () => {
                             name="externalUrl"
                             rules={[{ type: 'url' }]}
                         >
-                            <SyrfInputField />
+                            <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Form.Item>

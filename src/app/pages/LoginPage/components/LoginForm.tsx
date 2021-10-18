@@ -88,7 +88,7 @@ export const LoginForm = (props) => {
               name="email"
               rules={[{ required: true, type: 'email' }]}
             >
-              <SyrfInput placeholder={t(translations.login_page.email.label)} autoCapitalize="none" />
+              <SyrfInput placeholder={t(translations.login_page.email.label)} autoCorrect="off" autoCapitalize="none" autoComplete="off" />
             </Form.Item>
 
             <Form.Item
@@ -98,7 +98,7 @@ export const LoginForm = (props) => {
                 message: t(translations.misc.password_must_not_contain_blank)
               }]}
             >
-              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} autoCapitalize="none" />
+              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} autoCorrect="off" autoCapitalize="none" autoComplete="off" />
             </Form.Item>
 
             <Form.Item

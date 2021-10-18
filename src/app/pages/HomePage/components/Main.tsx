@@ -75,6 +75,7 @@ export const Main = () => {
             const search = location.search.substring(1);
             const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
 
+            dispatch(actions.setPageSize(params.size ?? 10));
             dispatch(actions.setKeyword(params.keyword ?? ''));
             dispatch(actions.setFromDate(params.from_date ?? ''));
             dispatch(actions.setToDate(params.to_date ?? ''));
