@@ -7,7 +7,7 @@ import { supportedSearchCriteria } from 'utils/constants';
 
 export const CriteriaSuggestion = (props) => {
 
-    const { keyword, showAll } = props;
+    const { keyword, showAll, searchBarRef } = props;
 
     const wrapperRef = React.useRef<any>();
 
@@ -41,6 +41,10 @@ export const CriteriaSuggestion = (props) => {
         } else {
             dispatch(actions.setKeyword(keyword.substring(0, keyword.match(/(?:\s|^)([\S]+)$/i).index) + ' ' + criteria + ':'));
         }
+
+        if (searchBarRef.current) {
+            searchBarRef.current.focus();
+        }
     }
 
     const renderSuggestionCriteria = () => {
@@ -55,13 +59,11 @@ export const CriteriaSuggestion = (props) => {
     }
 
     return (
-        <>
-            <Wrapper>
-                <SuggestionInnerWrapper ref={wrapperRef}>
-                    {renderSuggestionCriteria()}
-                </SuggestionInnerWrapper>
-            </Wrapper>
-        </>
+        <Wrapper>
+            <SuggestionInnerWrapper ref={wrapperRef}>
+                {renderSuggestionCriteria()}
+            </SuggestionInnerWrapper>
+        </Wrapper>
     )
 }
 

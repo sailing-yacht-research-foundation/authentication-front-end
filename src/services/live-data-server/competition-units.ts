@@ -10,11 +10,9 @@ export const search = (params) => {
         }
     };
 
-    params.keyword = parseKeyword(params.keyword);
-
     query.bool.must.push({
         query_string: {
-            query: params.keyword
+            query: parseKeyword(params.keyword)
         }
     });
 
@@ -48,7 +46,7 @@ export const search = (params) => {
         query: query,
     };
 
-    searchParams._source = ["id", "name", "approx_start_point", "start_country", "start_city", "approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
+    searchParams._source = ["id", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month","approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
