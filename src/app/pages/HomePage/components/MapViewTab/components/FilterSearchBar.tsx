@@ -80,6 +80,7 @@ export const FilterSearchBar = (props) => {
                     placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                 <SearchBarLogo />
                 <StyledSpin spinning={isSearching}></StyledSpin>
+                <CriteriaSuggestion showAll={showAllCriteria} keyword={searchKeyword}/>
             </SearchBarInnerWrapper>
             <AdvancedSearchTextWrapper>
                 <a href="/" onClick={(e) => {

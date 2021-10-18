@@ -22,3 +22,5 @@ export const MODE = {
     CREATE: 'create',
     UPDATE: 'update'
 };
+
+export const supportedSearchCriteria = ['name', 'start_city', 'start_country', 'year', 'month', 'class', 'description', 'boat_name'];
