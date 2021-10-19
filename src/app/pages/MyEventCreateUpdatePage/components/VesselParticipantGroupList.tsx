@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { TIME_FORMAT } from 'utils/constants';
+import ReactTooltip from 'react-tooltip';
 
 export const VesselParticipantGroupList = (props) => {
 
@@ -35,10 +36,11 @@ export const VesselParticipantGroupList = (props) => {
             width: '20%',
             render: (text, record) => {
                 return <Space size="middle">
-                    <BorderedButton onClick={() => {
+                    <BorderedButton data-tip={t(translations.tip.update_class)} onClick={() => {
                         history.push(`/events/${eventId}/classes/${record.id}/update`);
                     }} type="primary">{t(translations.vessel_participant_group_list_page.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteGroupModal(record)}>{t(translations.vessel_participant_group_list_page.delete)}</BorderedButton>
+                    <BorderedButton data-tip={t(translations.tip.delete_class)} danger onClick={() => showDeleteGroupModal(record)}>{t(translations.vessel_participant_group_list_page.delete)}</BorderedButton>
+                    <ReactTooltip/>
                 </Space>;
             }
         },
@@ -102,7 +104,7 @@ export const VesselParticipantGroupList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.my_event_create_update_page.Vessel_participant_groups)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/events/${eventId}/classes/create`)} icon={<AiFillPlusCircle
+                    <CreateButton data-tip={t(translations.tip.create_class)} onClick={() => history.push(`/events/${eventId}/classes/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.vessel_participant_group_list_page.create)}</CreateButton>
                 </PageHeaderContainer>
@@ -117,6 +119,7 @@ export const VesselParticipantGroupList = (props) => {
                         }} />
                 </TableWrapper>
             </Spin>
+            <ReactTooltip />
         </>
     )
 }

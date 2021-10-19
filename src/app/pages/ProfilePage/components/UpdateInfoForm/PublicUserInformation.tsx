@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import { localesList as countryList } from 'utils/languages-util';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import ReactTooltip from 'react-tooltip';
 
 export const PublicUserInformation = (props) => {
 
@@ -41,6 +42,7 @@ export const PublicUserInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.first_name)}</SyrfFieldLabel>}
                         name="first_name"
                         rules={[{ required: true, max: 15 }]}
+                        data-tip={t(translations.tip.first_name)}
                     >
                         <SyrfInputField autoCorrect="off"/>
                     </Form.Item>
@@ -51,6 +53,7 @@ export const PublicUserInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.last_name)}</SyrfFieldLabel>}
                         name="last_name"
                         rules={[{ required: true, max: 15 }]}
+                        data-tip={t(translations.tip.last_name)}
                     >
                         <SyrfInputField autoCorrect="off"/>
                     </Form.Item>
@@ -60,6 +63,7 @@ export const PublicUserInformation = (props) => {
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.country)}</SyrfFieldLabel>}
                 name="country"
+                data-tip={t(translations.tip.country)}
                 rules={[{ required: true }]}
             >
                 <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_country)}
@@ -80,9 +84,11 @@ export const PublicUserInformation = (props) => {
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.biography)}</SyrfFieldLabel>}
                 name="bio"
+                data-tip={t(translations.tip.bio)}
             >
                 <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
             </Form.Item>
+            <ReactTooltip/>
         </Wrapper>
     );
 }
