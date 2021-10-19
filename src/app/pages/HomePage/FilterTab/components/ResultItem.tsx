@@ -16,27 +16,27 @@ export const ResultItem = (props) => {
 
     return (
         <Wrapper key={props.index}>
-            {race._source.start_country && <HeadDescriptionWrapper>
+            {race._source?.start_country && <HeadDescriptionWrapper>
                 <Space size={5}>
                     <GiPositionMarker />
-                    {race._source.start_city + ', ' + race._source.start_country}
+                    {race._source?.start_city + ', ' + race._source?.start_country}
                 </Space>
             </HeadDescriptionWrapper>}
-            <Name><Link to={`/playback?raceId=${race._id}`}>{race._source.name}</Link></Name>
+            <Name><Link to={`/playback?raceId=${race._id}`}>{race._source?.name}</Link></Name>
             {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
             <DescriptionWrapper>
                 <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}
+                    {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source?.approx_start_time_ms).format(TIME_FORMAT.date_text)}
                 </DescriptionItem>
-                <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.event_name)} {renderEmptyValue(race._source.event_name)}
-                </DescriptionItem>
-                <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race._source.start_city)}
-                </DescriptionItem>
-                <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race._source.start_country)}
-                </DescriptionItem>
+                {race._source?.event_name && <DescriptionItem>
+                    {t(translations.home_page.filter_tab.filter_result.event_name)} {renderEmptyValue(race._source?.event_name)}
+                </DescriptionItem>}
+                {race._source?.start_city && <DescriptionItem>
+                    {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race._source?.start_city)}
+                </DescriptionItem>}
+                {race._source?.start_country && <DescriptionItem>
+                    {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race._source?.start_country)}
+                </DescriptionItem>}
             </DescriptionWrapper>
         </Wrapper>
     )
