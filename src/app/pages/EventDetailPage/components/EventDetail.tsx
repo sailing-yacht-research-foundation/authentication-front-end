@@ -5,7 +5,7 @@ import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/Loc
 import { FaCalendarPlus, FaSave } from 'react-icons/fa';
 import { FiUserPlus } from 'react-icons/fi';
 import styled from 'styled-components';
-import { TIME_FORMAT } from 'utils/constants';
+import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
 import { get } from 'services/live-data-server/event-calendars';
@@ -23,7 +23,7 @@ export const EventDetail = () => {
 
     const [event, setEvent] = React.useState<any>({});
 
-    const [coordinates, setCoordinates] = React.useState<any>({});
+    const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
 
     const [isFetchingEvent, setIsFetchingEvent] = React.useState<boolean>(false);
 
@@ -55,10 +55,7 @@ export const EventDetail = () => {
     }
 
     const renderCityAndCountryText = (event) => {
-        let location = event.city ? event.city : ' ';
-        location += (event.country ? (', ' + event.country ): ' ');
-
-        return location;
+        return [event?.city, event?.country].filter(Boolean).join(', ');
     }
 
     const goBack = () => {
