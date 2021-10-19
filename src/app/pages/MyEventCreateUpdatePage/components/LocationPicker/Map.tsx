@@ -8,7 +8,7 @@ let marker;
 
 export const Map = (props) => {
 
-    const { onMapClicked, coordinates, zoom, noMarkerInteraction } = props;
+    const { onMapClicked, coordinates, zoom, noMarkerInteraction, setFormChanged } = props;
 
     const map = useMap();
 
@@ -16,6 +16,9 @@ export const Map = (props) => {
         map.on('click', (e) => {
             onMapClicked(e.latlng.wrap().lat, e.latlng.wrap().lng);
             setMarker(e.latlng);
+            if (setFormChanged) {
+                setFormChanged(true);
+            }
         });
     }
 

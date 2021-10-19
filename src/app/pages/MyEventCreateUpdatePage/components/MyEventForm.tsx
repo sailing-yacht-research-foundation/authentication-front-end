@@ -340,7 +340,7 @@ export const MyEventForm = () => {
                             <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} autoCorrect="off" />
                         </Form.Item>
 
-                        <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />
+                        <LocationPicker coordinates={coordinates} setFormChanged={setFormChanged} onChoosedLocation={onChoosedLocation} />
 
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
