@@ -31,7 +31,7 @@ export const SiderContent = (props) => {
     { key: '12', paths: ['/data'] },
     { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
     { key: '8', paths: ['/profile/change-password'], subMenuKey: 'profile' },
-    { key: '16', paths: ['/my-tracks'] },
+    { key: '16', paths: ['/tracks'] },
   ];
 
   const history = useHistory();
@@ -75,7 +75,7 @@ export const SiderContent = (props) => {
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="16" onClick={() => history.push('/my-tracks')} title={t(translations.side_menu.my_tracks)} icon={<GiDeerTrack />}>
+        <SyrfMenuItem key="16" onClick={() => history.push('/tracks')} title={t(translations.side_menu.my_tracks)} icon={<GiDeerTrack />}>
           {t(translations.side_menu.my_tracks)}
         </SyrfMenuItem>
 

@@ -107,11 +107,9 @@ export const getById = (courseId) => {
         });
 }
 
-export const getByEventId = (eventId, page) => {
+export const getByEventId = (eventId, params) => {
     return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/courses`, {
-        params: {
-            page: page
-        }
+        params: params
     })
         .then(response => {
             return {

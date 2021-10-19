@@ -200,7 +200,11 @@ export const MapView = React.forwardRef((props, ref) => {
             switch (geometry.geometryType) {
                 case GEOMETRY_TYPE.line:
                     geoJsonGroup = L.polyline(geometry.coordinates).addTo(map);
-                    coordinates = geometry.coordinates[0][0];
+                    if (geometry.coordinates[0]?.length > 0 && Array.isArray(geometry.coordinates[0][0])) {
+                        coordinates = geometry.coordinates[0][0];
+                    } else {
+                        coordinates = geometry.coordinates[0];
+                    }
                     geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.line;
                     break;
                 case GEOMETRY_TYPE.point:
@@ -216,7 +220,11 @@ export const MapView = React.forwardRef((props, ref) => {
                     break;
                 case GEOMETRY_TYPE.polygon:
                     geoJsonGroup = L.polygon(geometry.coordinates).addTo(map);
-                    coordinates = geometry.coordinates[0][0];
+                    if (geometry.coordinates[0]?.length > 0 && Array.isArray(geometry.coordinates[0][0])) {
+                        coordinates = geometry.coordinates[0][0];
+                    } else {
+                        coordinates = geometry.coordinates[0];
+                    }
                     geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
             }
@@ -293,9 +301,12 @@ export const MapView = React.forwardRef((props, ref) => {
                             break;
                         case GEOMETRY_TYPE.line:
                             geometry.coordinates = layer.getLatLngs().map(function (points) {
-                                return points.map(function (point) {
-                                    return [point.lat, point.lng];
-                                })
+                                if (points.map)
+                                    return points.map(function (point) {
+                                        return [point.lat, point.lng];
+                                    });
+
+                                return [points.lat, points.lng];
                             });
                             break;
                     }
@@ -335,13 +346,14 @@ export const MapView = React.forwardRef((props, ref) => {
                             return [point.lat, point.lng];
                         });
                     });
+                    geometry.coordinates = geometry.coordinates[0];
                     layer.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
                 case LAYER_TYPE.polyline:
                     geometry.geometryType = GEOMETRY_TYPE.line;
-                    geometry.coordinates = [layer.getLatLngs().map(function (point) {
+                    geometry.coordinates = layer.getLatLngs().map(function (point) {
                         return [point.lat, point.lng];
-                    })];
+                    });
                     layer.options._geometry_type = GEOMETRY_TYPE.line;
                     break;
             }
@@ -428,7 +440,6 @@ export const MapView = React.forwardRef((props, ref) => {
     }
 
     const saveCourse = async (name) => {
-        console.log(name);
         if (couseSequencedGeometries.length === 0) {
             toast.error(t(translations.course_create_update_page.you_cannot_create_course));
         }
@@ -520,7 +531,7 @@ export const MapView = React.forwardRef((props, ref) => {
                 title={t(translations.course_create_update_page.please_enter_a_course_name)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
                 onOk={performSaveCourse}
-                onCancel={cancelDraw}
+                onCancel={() => setShowCourseNamePopup(false)}
                 visible={showCourseNamePopup}>
                 <Form
                     form={courseNameForm}
@@ -550,7 +561,7 @@ export const MapView = React.forwardRef((props, ref) => {
                 title={t(translations.course_create_update_page.enter_geometry_name)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
                 onOk={submitAndSetMarkerName}
-                onCancel={() => setShowCourseNamePopup(false)}
+                onCancel={cancelDraw}
                 visible={showGeometryNamePopup}>
                 <Form
                     form={geometryNameForm}

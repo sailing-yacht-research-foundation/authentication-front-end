@@ -349,7 +349,10 @@
     "vessel_participant_group_is_a_set": "Classes/regattas are groups of boats that are scored together and go around the same course at the same time.",
     "description": "Description",
     "timezone": "Time Zone",
-    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses."
+    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses.",
+    "course": "Course",
+    "course_is_a_set": "Course is a set of marks, gates and areas in the race.",
+    "select_a_course": "Select a course"
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",

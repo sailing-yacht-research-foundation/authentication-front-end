@@ -73,7 +73,9 @@ export const CoursesList = (props) => {
 
     const getCourseUsingCalendarEventId = async (page) => {
         setIsLoading(true);
-        const response = await getByEventId(eventId, page);
+        const response = await getByEventId(eventId, {
+            page: page
+        });
         setIsLoading(false);
 
         if (response.success) {

@@ -43,7 +43,7 @@ export const MyEventForm = () => {
 
     const [form] = useForm();
 
-    const [isSavingRace, setIsSavingRace] = React.useState<boolean>(false);
+    const [isSavingEvent, setIsSavingEvent] = React.useState<boolean>(false);
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
@@ -73,7 +73,7 @@ export const MyEventForm = () => {
             currentDate = endDate;
         }
 
-        setIsSavingRace(true);
+        setIsSavingEvent(true);
 
         const data = {
             name: name,
@@ -90,6 +90,7 @@ export const MyEventForm = () => {
             endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
             approximateStartTime_zone: approximateStartTime_zone,
+            isPrivate: false,
         };
 
         if (mode === MODE.CREATE)
@@ -97,7 +98,7 @@ export const MyEventForm = () => {
         else
             response = await update(eventId, data);
 
-        setIsSavingRace(false);
+        setIsSavingEvent(false);
 
         if (response.success) {
             onEventSaved(response, lat, lon);
@@ -178,9 +179,9 @@ export const MyEventForm = () => {
     }
 
     const initData = async () => {
-        setIsSavingRace(true);
+        setIsSavingEvent(true);
         const response = await get(eventId);
-        setIsSavingRace(false);
+        setIsSavingEvent(false);
 
         if (response.success) {
             form.setFieldsValue({
@@ -222,6 +223,7 @@ export const MyEventForm = () => {
         } else if (mode === MODE.UPDATE) {
             initData();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mode]);
 
     const onRaceDeleted = () => {
@@ -277,7 +279,7 @@ export const MyEventForm = () => {
                 </Space>
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
-                <Spin spinning={isSavingRace}>
+                <Spin spinning={isSavingEvent}>
                     <Form
                         onValuesChange={() => setFormChanged(true)}
                         layout={'vertical'}

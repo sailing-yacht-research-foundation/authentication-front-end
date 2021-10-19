@@ -168,7 +168,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-tracks'} component={MyTrackPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
