@@ -401,11 +401,6 @@ export const CompetitionUnitForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            {
-                mode === MODE.UPDATE && <SyrfFormWrapper ref={courseListRef} style={{ marginTop: '30px' }}>
-                    <CoursesList competitionUnitId={competitionUnitId} />
-                </SyrfFormWrapper>
-            }
             <ReactTooltip />
         </Wrapper >
     )
