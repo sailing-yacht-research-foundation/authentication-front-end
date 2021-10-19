@@ -20,6 +20,7 @@ export const initialState: PlaybackState = {
     raceCourseDetail: {},
     raceTime: {},
     raceRetrievedTimestamps: [],
+    timeBeforeRaceBegin: 0,
 };
 
 const slice = createSlice({
@@ -68,6 +69,9 @@ const slice = createSlice({
         setRetrievedTimestamps(state, action: PayloadAction<any>) {
             state.raceRetrievedTimestamps = action.payload;
         },
+        setTimeBeforeRaceBegin(state, action: PayloadAction<number>) {
+            state.timeBeforeRaceBegin = action.payload;
+        },
         getCompetitionUnitDetail(state, action: PayloadAction<any>) {},
         getVesselParticipants(state, action: PayloadAction<any>) {},
         getSearchRaceDetail(state, action: PayloadAction<any>) {},
@@ -76,7 +80,8 @@ const slice = createSlice({
         getRaceLegs(state, action: PayloadAction<any>) {},
         getRaceLength(state, action: PayloadAction<any>) {},
         getRaceCourseDetail(state, action: PayloadAction<any>) {},
-        getOldRaceData(state, action: PayloadAction<any>) {}
+        getOldRaceData(state, action: PayloadAction<any>) {},
+        getTimeBeforeRaceBegin(state, action: PayloadAction<any>) {}
     },
 });
 

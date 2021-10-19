@@ -37,7 +37,7 @@ export const PlaybackPage = (props) => {
 
   // Init detail
   useEffect(() => {
-    if (parsedQueryString.raceId) dispatch(actions.getRaceData({ raceId: parsedQueryString.raceId }));
+    dispatch(actions.getRaceData({ raceId: parsedQueryString?.raceId }));
 
     return () => {
       dispatch(actions.setSearchRaceId(""));
