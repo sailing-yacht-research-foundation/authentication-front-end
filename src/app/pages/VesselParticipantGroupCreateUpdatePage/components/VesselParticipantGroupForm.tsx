@@ -15,6 +15,7 @@ import { VesselList } from './VesselList';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
+import ReactTooltip from 'react-tooltip';
 
 export const VesselParticipantGroupForm = () => {
     const history = useHistory();
@@ -119,9 +120,16 @@ export const VesselParticipantGroupForm = () => {
                         <PageDescription>{t(translations.vessel_participant_group_create_update_page.member_of_classes_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                    style={{ marginRight: '5px' }}
-                    size={18} />}>{t(translations.vessel_participant_group_create_update_page.delete)}</DeleteButton>}
+                {mode === MODE.UPDATE && <>
+                    <DeleteButton
+                        data-tip={t(translations.tip.delete_class)}
+                        onClick={() => setShowDeleteModal(true)}
+                        danger
+                        icon={<BiTrash
+                            style={{ marginRight: '5px' }}
+                            size={18} />}>{t(translations.vessel_participant_group_create_update_page.delete)}</DeleteButton>
+                    <ReactTooltip />
+                </>}
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
@@ -135,6 +143,7 @@ export const VesselParticipantGroupForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
+                            data-tip={t(translations.tip.class_name)}
                             rules={[{ required: true, max: 100 }]}
                         >
                             <SyrfInputField autoCorrect="off" />

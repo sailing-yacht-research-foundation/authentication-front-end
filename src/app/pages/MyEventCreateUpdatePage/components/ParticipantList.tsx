@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { AssignVesselParticipantModal } from './AssignVesselParticipantModal';
 import { toast } from 'react-toastify';
 import { DownOutlined } from '@ant-design/icons';
+import ReactTooltip from 'react-tooltip';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -45,7 +46,7 @@ export const ParticipantList = (props) => {
             dataIndex: 'trackerUrl',
             key: 'trackerUrl',
             render: text => {
-                return <CreateButton onClick={() => copyToClipboard(text)} icon={<AiFillCopy style={{ marginRight: '10px' }} />}>Copy</CreateButton>
+                return <CreateButton data-tip={t(translations.tip.copy_competitor_tracker_link)} onClick={() => copyToClipboard(text)} icon={<AiFillCopy style={{ marginRight: '10px' }} />}>Copy</CreateButton>
             },
         },
         {
@@ -54,13 +55,14 @@ export const ParticipantList = (props) => {
             fixed: true,
             render: (text, record) => (
                 <Space size={10}>
-                    <AssignButton onClick={() => {
+                    <AssignButton data-tip={t(translations.tip.assign_competitor)} onClick={() => {
                         showAssignParticipantModal(record);
                     }} type="primary">{t(translations.participant_list.assign)}</AssignButton>
-                    <BorderedButton onClick={() => {
+                    <BorderedButton data-tip={t(translations.tip.update_competitor)} onClick={() => {
                         history.push(`/events/${record.calendarEventId}/competitors/${record.id}/update`)
                     }} type="primary">{t(translations.participant_list.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
+                    <BorderedButton data-tip={t(translations.tip.delete_competitor)} danger onClick={() => showDeleteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
+                    <ReactTooltip/>
                 </Space>
             ),
         },
@@ -193,7 +195,7 @@ export const ParticipantList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/events/${eventId}/competitors/create`)} icon={<AiFillPlusCircle
+                    <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => history.push(`/events/${eventId}/competitors/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.participant_list.create)}</CreateButton>
                 </PageHeaderContainer>
@@ -215,6 +217,7 @@ export const ParticipantList = (props) => {
                         }} />
                 </TableWrapper>
             </Spin>
+            <ReactTooltip />
         </>
     )
 }

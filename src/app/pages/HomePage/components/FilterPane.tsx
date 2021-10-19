@@ -174,7 +174,7 @@ export const FilterPane = (props) => {
                     </Row>
 
                     <Form.Item>
-                        <SyrfFormButton type="primary" htmlType="submit">
+                        <SyrfFormButton data-tip="hello world" type="primary" htmlType="submit">
                             {t(translations.home_page.filter_tab.search)}
                         </SyrfFormButton>
                     </Form.Item>
