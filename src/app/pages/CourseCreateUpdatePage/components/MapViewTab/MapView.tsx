@@ -288,9 +288,6 @@ export const MapView = React.forwardRef((props, ref) => {
                             geometry.coordinates = [
                                 [layer.getLatLng().lat, layer.getLatLng().lng]
                             ];
-                            console.log([
-                                [layer.getLatLng().lat, layer.getLatLng().lng]
-                            ]);
                             break;
                         case GEOMETRY_TYPE.polygon:
                             geometry.coordinates = layer.getLatLngs().map(points => {
@@ -432,7 +429,6 @@ export const MapView = React.forwardRef((props, ref) => {
                         return geometry.id !== layer.options._id;
                     });
                     mutableCouseSequencedGeometries.current = [...mutableCouseSequencedGeometries.current, geometry];
-                    console.log(mutableCouseSequencedGeometries.current);
                     dispatch(actions.setCourseSequencedGeometries(mutableCouseSequencedGeometries.current));
                 }
             }
@@ -510,7 +506,6 @@ export const MapView = React.forwardRef((props, ref) => {
             .validateFields()
             .then(values => {
                 const { course_name } = values;
-                console.log(values);
                 saveCourse(course_name);
                 setShowCourseNamePopup(false);
             })

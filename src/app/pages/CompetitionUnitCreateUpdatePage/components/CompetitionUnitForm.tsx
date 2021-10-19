@@ -64,8 +64,6 @@ export const CompetitionUnitForm = () => {
         let response;
         calendarEventId = eventId || calendarEventId;
 
-        console.log(values);
-
         setIsSaving(true);
 
         const data = {
