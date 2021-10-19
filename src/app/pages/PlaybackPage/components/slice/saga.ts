@@ -57,6 +57,11 @@ export function* getSearchRaceDetail({ type, payload }) {
 export function* getRaceData({ type, payload }) {
   const { raceId } = payload;
 
+  if (!raceId) {
+    yield put(playbackActions.setPlaybackType(PlaybackTypes.RACENOTFOUND));
+    return message.error("Race not found!");
+  }
+
   yield put(playbackActions.setPlaybackType(PlaybackTypes.RACELOADING));
   const competitionUnitResult = yield call(getCompetitionUnitById, raceId);
   const searchRaceDetailResult = yield call(searchScrapedRaceById, raceId);
@@ -169,6 +174,19 @@ export function* getOldRaceDate({ type, payload }) {
   yield put(playbackActions.getRaceCourseDetail({ raceId }));
 }
 
+export function* getTimeBeforeRaceBegin({ type, payload }) {
+  const { raceStartTime } = payload;
+  if (!raceStartTime) return;
+
+  const currentTime = new Date().getTime();
+  const startTime = new Date(raceStartTime).getTime();
+
+  let timeDiff = startTime - currentTime;
+  if (timeDiff < 0) timeDiff = 0;
+
+  yield put(playbackActions.setTimeBeforeRaceBegin(timeDiff));
+}
+
 export default function* playbackSaga() {
   yield all([
     takeLatest(playbackActions.getCompetitionUnitDetail.type, getCompetitionUnitDetail),
@@ -180,5 +198,6 @@ export default function* playbackSaga() {
     takeLatest(playbackActions.getRaceLegs.type, getRaceLegs),
     takeLatest(playbackActions.getRaceSimplifiedTracks.type, getRaceSimplifiedTracks),
     takeLatest(playbackActions.getRaceCourseDetail.type, getRaceCourseDetail),
+    takeLatest(playbackActions.getTimeBeforeRaceBegin.type, getTimeBeforeRaceBegin),
   ]);
 }

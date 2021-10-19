@@ -268,6 +268,7 @@
   },
   "playback_page": {
     "competitor": "Competitor:",
+    "coordinate_lat_lon": "Coordinate [lat, lon]",
     "sail_number": "Sail number:",
     "getting_race_data": "Getting race data...",
     "race_not_found": "Race not found",
@@ -275,7 +276,9 @@
     "insecure_scraped_thisrace": "THIS RACE",
     "insecure_scraped_nothttps": "does not use HTTPS, the standard way to protect users on the internet.",
     "insecure_scraped_clickhere": "Click here",
-    "insecure_scraped_viewinsecureplayer": "if you want to view their insecure player in a new tab."
+    "insecure_scraped_viewinsecureplayer": "if you want to view their insecure player in a new tab.",
+    "countdown_timer_racewillstart": "Race will start in",
+    "countdown_timer_on": "on"
   },
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",

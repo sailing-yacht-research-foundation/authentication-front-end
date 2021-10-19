@@ -22,15 +22,16 @@ import { StreamingRaceMap } from "./StreamingRaceMap";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
+import { ModalCountdownTimer } from "./ModalCountdownTimer";
 
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
-  
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [socketUrl, setSocketUrl] = useState(streamUrl);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
-  
+
   const [participantsData, setParticipantsData] = useState([]);
   const [raceIdentity, setRaceIdentity] = useState({ name: "Race name", description: "Race description" });
 
@@ -85,18 +86,13 @@ export const PlaybackStreamRace = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionToken]);
 
-  // Get competition unit detail
-  useEffect(() => {
-    if (competitionUnitId) dispatch(actions.getCompetitionUnitDetail({ id: competitionUnitId }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [competitionUnitId, sessionToken]);
-
   // Get vessel participants
   useEffect(() => {
-    if (competitionUnitDetail?.vesselParticipantGroupId)
+    if (competitionUnitDetail?.vesselParticipantGroupId) {
       dispatch(
         actions.getVesselParticipants({ vesselParticipantGroupId: competitionUnitDetail.vesselParticipantGroupId })
       );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competitionUnitDetail]);
 
@@ -348,6 +344,7 @@ export const PlaybackStreamRace = (props) => {
       >
         <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
           <Leaderboard participantsData={participantsData}></Leaderboard>
+          <ModalCountdownTimer />
         </LeaderboardContainer>
         <Playback />
         <StreamingRaceMap emitter={eventEmitter} />

@@ -33,6 +33,13 @@ export const Nav = () => {
     <Wrapper>
       {isAuthenenticated ? (
         <>
+          <StyledButtonCreate
+            type="primary"
+            shape="round"
+            size="large"
+            onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
+              style={{ marginRight: '5px' }}
+              size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>
           <DropDownWrapper>
             <UserDropdown logout={logout} />
             <SelectLanguage />
@@ -48,13 +55,6 @@ export const Nav = () => {
         </>
       ) : (
         <>
-          <StyledButtonCreate
-            type="primary"
-            shape="round"
-            size="large"
-            onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
-              style={{ marginRight: '5px' }}
-              size={18} />}>Create</StyledButtonCreate>
           <AboutLink to="/about">{t(translations.about_page.nav.about)}</AboutLink>
           <Space size={15}>
             <div>
