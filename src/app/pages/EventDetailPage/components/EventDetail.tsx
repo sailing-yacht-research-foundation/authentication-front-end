@@ -56,7 +56,7 @@ export const EventDetail = () => {
 
     const renderCityAndCountryText = (event) => {
         let location = event.city ? event.city : ' ';
-        location += (event.country ? event.country : ' ');
+        location += (event.country ? (', ' + event.country ): ' ');
 
         return location;
     }

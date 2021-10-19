@@ -119,7 +119,7 @@ export const Main = () => {
                     <FilterTab onPaginationPageChanged={onPaginationPageChanged} />
                 </TabPane>
                 {
-                    (isMobile() && !isAuthenticated) && <ButtonCreateContainer>
+                    (isMobile() && isAuthenticated) && <ButtonCreateContainer>
                         <Button
                             shape="round"
                             size={'large'}
