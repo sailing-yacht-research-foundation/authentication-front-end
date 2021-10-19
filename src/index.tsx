@@ -15,6 +15,7 @@ import FontFaceObserver from 'fontfaceobserver';
 import { TourProvider } from '@reactour/tour';
 import SmartBanner from 'react-smartbanner';
 import 'react-smartbanner/dist/main.css';
+import { Curtains } from "react-curtains";
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css';
@@ -52,8 +53,10 @@ ReactDOM.render(
       <HelmetProvider>
         <React.StrictMode>
           <TourProvider steps={steps}>
-            <App />
             <SmartBanner position="bottom" title={'SYRF - Your Sailing Adventures'} />
+            <Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
+              <App />
+            </Curtains>
           </TourProvider>
         </React.StrictMode>
       </HelmetProvider>
