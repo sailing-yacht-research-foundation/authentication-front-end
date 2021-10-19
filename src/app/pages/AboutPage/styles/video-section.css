@@ -2,6 +2,7 @@
     font-weight: 700 !important;
     font-size: 52px !important;
     line-height: 63px !important;
+    z-index: 10;
 }
 
 .video-section .introduction-description {
@@ -10,4 +11,26 @@
     line-height: 28.5px;
     color: #fff;
     max-width: 771px;
+}
+
+.curtains-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.SimpleVideoPlane {
+  position: absolute;
+  left: 0;
+  top: -5%;
+  bottom: -5%;
+  right: 0;
+}
+
+.SimpleVideoPlane video {
+  display: none;
 }
