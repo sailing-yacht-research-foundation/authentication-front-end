@@ -12,7 +12,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import FontFaceObserver from 'fontfaceobserver';
-import { TourProvider } from '@reactour/tour'
+import { TourProvider } from '@reactour/tour';
+import { Curtains } from "react-curtains";
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css';
@@ -50,7 +51,9 @@ ReactDOM.render(
       <HelmetProvider>
         <React.StrictMode>
           <TourProvider steps={steps}>
-            <App />
+            <Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
+              <App />
+            </Curtains>
           </TourProvider>
         </React.StrictMode>
       </HelmetProvider>
