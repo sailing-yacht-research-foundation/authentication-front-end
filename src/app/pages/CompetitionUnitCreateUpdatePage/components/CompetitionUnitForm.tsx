@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
-import { MODE, TIME_FORMAT } from 'utils/constants';
+import { MAP_DEFAULT_VALUE, MODE, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 
@@ -47,6 +47,8 @@ export const CompetitionUnitForm = () => {
 
     const [boundingBoxCoordinates, setBoundingBoxCoordinates] = React.useState([]);
 
+    const [coordinates, setCoordinates] = React.useState(MAP_DEFAULT_VALUE.CENTER);
+
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
     const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
@@ -55,7 +57,7 @@ export const CompetitionUnitForm = () => {
 
     const [groups, setGroups] = React.useState<any[]>([]);
 
-    const [lastCreatedRace, setLastCreatedRace] = React.useState<any>({});
+    const [, setLastCreatedRace] = React.useState<any>({});
 
     const [courses, setCourses] = React.useState<any[]>([]);
 
@@ -108,13 +110,6 @@ export const CompetitionUnitForm = () => {
     const onCompetitionUnitCreated = (response) => {
         toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data?.name }));
         setCompetitionUnit(response.data);
-        cloneCourseToTheNewCreatedRace(response.data.id);
-    }
-
-    const cloneCourseToTheNewCreatedRace = async (newRaceId) => {
-        if (lastCreatedRace) {
-            await cloneCourse(lastCreatedRace.id, newRaceId);
-        }
     }
 
     const initModeAndData = async () => {
@@ -199,7 +194,19 @@ export const CompetitionUnitForm = () => {
         }
     }
 
+    const initUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(({ coords }) => {
+                setCoordinates({
+                    lat: coords.latitude,
+                    lng: coords.longitude
+                });
+            });
+        }
+    }
+
     React.useEffect(() => {
+        initUserLocation();
         initModeAndData();
         getAllUserVesselGroups();
         getAllEventCourses();
@@ -348,7 +355,7 @@ export const CompetitionUnitForm = () => {
                             </Col>
                         </Row>
 
-                        <BoundingBoxPicker coordinates={boundingBoxCoordinates} onCoordinatesRecevied={onCoordinatesRecevied} />
+                        <BoundingBoxPicker userCoordinates={coordinates} coordinates={boundingBoxCoordinates} onCoordinatesRecevied={onCoordinatesRecevied} />
 
                         <Form.Item
                             style={{ marginBottom: '10px' }}

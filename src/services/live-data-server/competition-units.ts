@@ -218,10 +218,10 @@ export const searchScrapedRaceById = (id: string) => {
     });
 }
 
-export const cloneCourse = (fromCompetitionUnitId, toCompetitionUnitId) => {
+export const cloneCourse = (fromCompetitionUnitId, toCompetitionUnitId, newName) => {
     return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${toCompetitionUnitId}/clone-course`, {
         cloneFromCompetitionId: fromCompetitionUnitId,
-        newName: null
+        newName: newName
     }).then(response => {
         return {
             success: true,
