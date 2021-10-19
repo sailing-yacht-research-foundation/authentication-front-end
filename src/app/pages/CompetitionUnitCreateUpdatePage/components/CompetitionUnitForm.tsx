@@ -21,6 +21,7 @@ import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
+import ReactTooltip from 'react-tooltip';
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
@@ -191,7 +192,7 @@ export const CompetitionUnitForm = () => {
         const response = await getEventById(eventId);
 
         if (response.success) {
-            form.setFieldsValue({ 
+            form.setFieldsValue({
                 startDate: moment(response.data?.approximateStartTime),
                 approximateStart_zone: response.data?.approximateStartTime_zone
             });
@@ -234,10 +235,16 @@ export const CompetitionUnitForm = () => {
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
-                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.competition_unit_create_update_page.delete)}</DeleteButton>}
-
+                    {mode === MODE.UPDATE &&
+                        <>
+                            <DeleteButton
+                                data-tip={t(translations.tip.delete_race)}
+                                onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                                    style={{ marginRight: '5px' }}
+                                    size={18}
+                                />}>{t(translations.competition_unit_create_update_page.delete)}</DeleteButton>
+                            <ReactTooltip/>
+                        </>}
                 </Space>
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
@@ -256,6 +263,7 @@ export const CompetitionUnitForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
+                            data-tip={t(translations.tip.race_name)}
                             rules={[{ required: true, max: 255 }]}
                         >
                             <SyrfInputField autoCorrect="off" />
@@ -263,10 +271,11 @@ export const CompetitionUnitForm = () => {
 
                         <Form.Item
                             rules={[{ max: 255 }]}
+                            data-tip={t(translations.tip.race_description)}
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
                         >
-                            <SyrfTextArea  autoCorrect="off"/>
+                            <SyrfTextArea autoCorrect="off" />
                         </Form.Item>
 
                         <Divider />
@@ -274,6 +283,7 @@ export const CompetitionUnitForm = () => {
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
+                                    data-tip={t(translations.tip.race_start_date)}
                                     label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
                                     rules={[{ type: 'date', required: true }]}
@@ -281,6 +291,7 @@ export const CompetitionUnitForm = () => {
                                     <DatePicker
                                         showToday={true}
                                         className="syrf-datepicker"
+                                        data-tip={t(translations.tip.race_start_time)}
                                         style={{ width: '100%' }}
                                         dateRender={current => {
                                             return (
@@ -295,6 +306,7 @@ export const CompetitionUnitForm = () => {
 
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
+                                    data-tip={t(translations.tip.race_start_time)}
                                     label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
                                     rules={[{ required: true }]}
@@ -305,6 +317,7 @@ export const CompetitionUnitForm = () => {
 
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
+                                    data-tip={t(translations.tip.race_start_timezone)}
                                     label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.timezone)}</SyrfFieldLabel>}
                                     name="approximateStart_zone"
                                     rules={[{ required: true }]}
@@ -331,6 +344,7 @@ export const CompetitionUnitForm = () => {
                         <BoundingBoxPicker coordinates={boundingBoxCoordinates} onCoordinatesRecevied={onCoordinatesRecevied} />
 
                         <Form.Item
+                            data-tip={t(translations.tip.race_class)}
                             style={{ marginBottom: '10px' }}
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.vessel_group)}</SyrfFieldLabel>}
                             name="vesselParticipantGroupId"
@@ -354,6 +368,7 @@ export const CompetitionUnitForm = () => {
                     <CoursesList competitionUnitId={competitionUnitId} />
                 </SyrfFormWrapper>
             }
+            <ReactTooltip />
         </Wrapper >
     )
 }

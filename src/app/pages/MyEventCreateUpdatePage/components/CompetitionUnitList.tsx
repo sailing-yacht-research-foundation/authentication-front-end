@@ -10,6 +10,7 @@ import { translations } from 'locales/translations';
 import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
 import { TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 export const CompetitionUnitList = (props) => {
 
@@ -23,7 +24,7 @@ export const CompetitionUnitList = (props) => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>;
+                return <Link data-tip={t(translations.tip.view_this_race_in_the_playback)} to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             },
             width: '20%',
         },
@@ -39,10 +40,11 @@ export const CompetitionUnitList = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <BorderedButton onClick={() => {
+                    <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                         history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                    <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                    <ReactTooltip />
                 </Space>
             ),
             width: '20%',
@@ -107,7 +109,7 @@ export const CompetitionUnitList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderTextSmall>
-                    <CreateButton onClick={() => history.push(`/events/${eventId}/races/create`)} icon={<AiFillPlusCircle
+                    <CreateButton data-tip={t(translations.tip.create_race)} onClick={() => history.push(`/events/${eventId}/races/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
                 </PageHeaderContainer>
@@ -122,6 +124,7 @@ export const CompetitionUnitList = (props) => {
                         }} />
                 </TableWrapper>
             </Spin>
+            <ReactTooltip />
         </>
     )
 }

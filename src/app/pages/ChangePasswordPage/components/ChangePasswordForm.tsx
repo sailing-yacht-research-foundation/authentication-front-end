@@ -14,6 +14,7 @@ import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { changePassword } from 'services/live-data-server/user';
+import ReactTooltip from 'react-tooltip';
 
 export const ChangePasswordForm = (props) => {
 
@@ -59,6 +60,7 @@ export const ChangePasswordForm = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                             name="newPassword"
+                            data-tip={t(translations.tip.new_password)}
                             rules={[{ required: true, max: 16, min: 8 }, {
                                 pattern: /^\S+$/,
                                 message: t(translations.misc.password_must_not_contain_blank)
@@ -70,6 +72,7 @@ export const ChangePasswordForm = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.change_password_page.confirm_new_password)}</SyrfFieldLabel>}
                             name="newPasswordConfirmation"
+                            data-tip={t(translations.tip.password_confirmation)}
                             rules={[
                                 {
                                     required: true,
@@ -96,6 +99,7 @@ export const ChangePasswordForm = (props) => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
+            <ReactTooltip/>
         </Wrapper>
     );
 }

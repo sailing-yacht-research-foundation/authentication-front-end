@@ -23,6 +23,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { debounce, renderTimezoneInUTCOffset } from 'utils/helpers';
 import Geocode from "react-geocode";
+import ReactTooltip from 'react-tooltip';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -225,9 +226,11 @@ export const MyEventForm = () => {
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
-                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.my_event_create_update_page.delete)}</DeleteButton>}
+                    {mode === MODE.UPDATE && <>
+                        <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                            style={{ marginRight: '5px' }}
+                            size={18} />}>{t(translations.my_event_create_update_page.delete)}</DeleteButton>
+                    </>}
 
                 </Space>
             </PageHeaderContainerResponsive>
@@ -248,6 +251,7 @@ export const MyEventForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
+                            data-tip={t(translations.tip.name_of_the_event)}
                             rules={[{ required: true, max: 255 }]}
                         >
                             <SyrfInputField autoCorrect="off" />
@@ -257,6 +261,8 @@ export const MyEventForm = () => {
                             rules={[{ max: 255 }]}
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
+                            data-multiline={true}
+                            data-tip={t(translations.tip.event_description)}
                         >
                             <SyrfTextArea autoCorrect="off" />
                         </Form.Item>
@@ -288,6 +294,7 @@ export const MyEventForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.location)}</SyrfFieldLabel>}
                             name="location"
+                            data-tip={t(translations.tip.event_location)}
                             rules={[{ required: true }]}
                         >
                             <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} autoCorrect="off" />
@@ -301,6 +308,7 @@ export const MyEventForm = () => {
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
+                                    data-tip={t(translations.tip.event_start_date)}
                                     rules={[{ type: 'date', required: true }]}
                                 >
                                     <DatePicker
@@ -322,6 +330,7 @@ export const MyEventForm = () => {
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
+                                    data-tip={t(translations.tip.event_start_time)}
                                     rules={[{ required: true }]}
                                 >
                                     <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
@@ -332,6 +341,7 @@ export const MyEventForm = () => {
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.timezone)}</SyrfFieldLabel>}
                                     name="approximateStartTime_zone"
+                                    data-tip={t(translations.tip.event_time_zone)}
                                     rules={[{ required: true }]}
                                 >
                                     <SyrfFormSelect placeholder={t(translations.my_event_create_update_page.timezone)}
@@ -356,6 +366,7 @@ export const MyEventForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
                             name="externalUrl"
+                            data-tip={t(translations.tip.event_website)}
                             rules={[{ type: 'url' }]}
                         >
                             <SyrfInputField autoCorrect="off" />
@@ -387,6 +398,7 @@ export const MyEventForm = () => {
                     </>
                 )
             }
+            <ReactTooltip />
         </Wrapper>
     )
 }

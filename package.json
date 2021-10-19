@@ -88,6 +88,7 @@
     "react-share": "^4.4.0",
     "react-test-renderer": "16.13.1",
     "react-toastify": "^7.0.4",
+    "react-tooltip": "^4.2.21",
     "react-twitter-login": "^1.4.0",
     "react-use-websocket": "^2.7.1",
     "reactour": "^1.18.6",

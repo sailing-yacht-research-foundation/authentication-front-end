@@ -24,7 +24,7 @@ export const VideoSection = (props) => {
                 <Typography.Title className="text-white introduction-text">{t(translations.about_page.video_section.one_login)} <br /> {t(translations.about_page.video_section.ultimate_potential)}</Typography.Title>
             </Row>
 
-            <Row style={{ marginTop: '40px', 'zIndex': 999 }}>
+            <Row style={{ marginTop: '40px', 'zIndex': 5 }}>
                 <Space size={15}>
                     <Col>
                         <Button onClick={() => history.push('/signin')} className="syrf-button">{t(translations.about_page.video_section.login)}</Button>

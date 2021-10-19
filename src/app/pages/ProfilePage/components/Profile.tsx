@@ -11,6 +11,7 @@ import { Row, Col, Button } from 'antd';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import ReactTooltip from 'react-tooltip';
 
 export const Profile = () => {
 
@@ -49,13 +50,14 @@ export const Profile = () => {
                     </Col>
                     <Col xs={24} sm={24} md={12} lg={12}>
                         <DeleteAccountButtonWrapper>
-                            <Button danger onClick={() => setShowDeleteUserModal(true)}>
+                            <Button data-tip={t(translations.tip.delete_account)} danger onClick={() => setShowDeleteUserModal(true)}>
                                 {t(translations.profile_page.update_profile.permantly_delete_my_account)}
                             </Button>
                         </DeleteAccountButtonWrapper>
                     </Col>
                 </Row>
             </SyrfFormWrapper>
+            <ReactTooltip/>
         </Wrapper>
     )
 }

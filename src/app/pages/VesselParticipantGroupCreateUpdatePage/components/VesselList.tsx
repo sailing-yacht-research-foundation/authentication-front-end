@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { create as createVessel } from 'services/live-data-server/vessels';
 import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVesselModal';
+import ReactTooltip from 'react-tooltip';
 
 export const VesselList = (props) => {
 
@@ -30,7 +31,7 @@ export const VesselList = (props) => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
-                return <Link to={`/boats/${record.id}/update`}>{text}</Link>;
+                return <Link data-tip={t(translations.tip.update_this_boat)} to={`/boats/${record.id}/update`}>{text}</Link>;
             },
         },
         {
@@ -53,12 +54,15 @@ export const VesselList = (props) => {
                 const vesselParticipant: any = findVesselParticipantByVesselIdAndGroupId(record.id);
                 return <Space size="middle">
                     {!vesselParticipant ?
-                        <BorderedButton onClick={() => {
+                        <BorderedButton 
+                        data-tip={t(translations.tip.add_boat_to_class)}
+                        onClick={() => {
                             addToGroup(record.id);
                         }} type="primary">{t(translations.vessel_participant_group_create_update_page.add_to_group)}</BorderedButton> :
-                        <DeleteButton onClick={() => removeFromGroup(record.id)}>{t(translations.vessel_participant_group_create_update_page.delete_from_group)}</DeleteButton>
+                        <DeleteButton data-tip={t(translations.tip.remove_boat_from_class)} onClick={() => removeFromGroup(record.id)}>{t(translations.vessel_participant_group_create_update_page.delete_from_group)}</DeleteButton>
                     }
-                    <BorderedButton danger onClick={() => showDeleteVesselModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
+                    <BorderedButton data-tip={t(translations.tip.delete_boat)} danger onClick={() => showDeleteVesselModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
+                    <ReactTooltip />
                 </Space>;
             },
             width: '20%',
@@ -205,6 +209,7 @@ export const VesselList = (props) => {
                             setNumberOfBoatsToCreate(e.target.value)
                         }} type="number" style={{ width: '70px' }} />
                         <CreateButton
+                            data-tip={t(translations.tip.create_n_boats)}
                             onClick={() => createNVessels()}
                             icon={<AiFillPlusCircle
                                 style={{ marginRight: '5px' }}

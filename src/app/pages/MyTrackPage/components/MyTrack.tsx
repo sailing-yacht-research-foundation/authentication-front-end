@@ -9,6 +9,7 @@ import moment from 'moment';
 import { getAllTracks } from 'services/live-data-server/my-tracks';
 import { Link } from 'react-router-dom';
 import { TIME_FORMAT } from 'utils/constants';
+import ReactTooltip from 'react-tooltip';
 
 const defaultOptions = {
     loop: true,
@@ -30,7 +31,10 @@ export const MyTrack = () => {
             key: 'name',
             render: (text, record) => {
                 if (record.competitionUnit)
-                    return <Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>;
+                    return <>
+                        <Link data-tip={t(translations.tip.play_this_track)} to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>
+                        <ReactTooltip/>
+                    </>;
                 return record.event?.name;
             }
         },
