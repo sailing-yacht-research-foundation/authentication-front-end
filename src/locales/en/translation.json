@@ -269,6 +269,9 @@
   "playback_page": {
     "competitor": "Competitor:",
     "coordinate_lat_lon": "Coordinate [lat, lon]",
+    "coordinate": "Coordinate",
+    "lat_lon": "[lat, lng]",
+    "identifier": "Identifier",
     "sail_number": "Sail number:",
     "getting_race_data": "Getting race data...",
     "race_not_found": "Race not found",
