@@ -267,7 +267,7 @@ export const generateStartTimeFetchAndTimeToLoad = (
   return { timeToLoad: 30, nextDataTime };
 };
 
-export const generateVesselParticipantsLastPosition = (vesselParticipantsObject, selectedTimestamp: number) => {
+export const generateVesselParticipantsLastPosition = (vesselParticipantsObject, selectedTimestamp: number, retrievedTimestamps: number[]) => {
   const vesselParticipants: VesselParticipant[] = Object.keys(vesselParticipantsObject).map(
     (key) => vesselParticipantsObject[key]
   );
@@ -278,12 +278,17 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
 
     const lastPosition = filteredPositions[0] || { lat: 0, lon: 0 };
 
-    const nearestPos = findNearestPositions(vP.positions, selectedTimestamp, 1000, { excludeSelectedTimestamp: true });
-    const interpolatedPosition = interpolateNearestPositions(nearestPos, selectedTimestamp);
 
-    if (interpolatedPosition) {
-      lastPosition.lat = interpolatedPosition.lat;
-      lastPosition.lon = interpolatedPosition.lon;
+    const isRetrievedTimestampExist = retrievedTimestamps.includes(selectedTimestamp);
+    if (!isRetrievedTimestampExist) {
+      // Only interpolate when no timestamp available
+      const nearestPos = findNearestPositions(vP.positions, selectedTimestamp, 1000, { excludeSelectedTimestamp: true });
+      const interpolatedPosition = interpolateNearestPositions(nearestPos, selectedTimestamp);
+      
+      if (interpolatedPosition) {
+        lastPosition.lat = interpolatedPosition.lat;
+        lastPosition.lon = interpolatedPosition.lon;
+      }
     }
 
     const currentCoordinateForHeading = [lastPosition.lon || 0, lastPosition.lat || 0];
@@ -308,10 +313,13 @@ export const normalizeSequencedGeometries = (
   sequencedGeometries: CourseGeometrySequenced[]
 ): MappedCourseGeometrySequenced[] => {
   return sequencedGeometries.map((sG) => {
+
+    const coordinates = sG.points.map((point) => point.position);
+
     return {
       id: sG.id,
       geometryType: sG.geometryType,
-      coordinates: sG.coordinates,
+      coordinates: coordinates,
     };
   });
 };
