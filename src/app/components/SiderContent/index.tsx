@@ -14,7 +14,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { media } from 'styles/media';
-import { GiDeerTrack, GiSailboat } from 'react-icons/gi';
+import { GiPathDistance, GiSailboat } from 'react-icons/gi';
 import { FaFlagCheckered } from 'react-icons/fa';
 import { GoDatabase } from 'react-icons/go';
 import { isMobile } from 'utils/helpers';
@@ -75,7 +75,7 @@ export const SiderContent = (props) => {
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="16" onClick={() => history.push('/tracks')} title={t(translations.side_menu.my_tracks)} icon={<GiDeerTrack />}>
+        <SyrfMenuItem key="16" onClick={() => history.push('/tracks')} title={t(translations.side_menu.my_tracks)} icon={<GiPathDistance />}>
           {t(translations.side_menu.my_tracks)}
         </SyrfMenuItem>
 
