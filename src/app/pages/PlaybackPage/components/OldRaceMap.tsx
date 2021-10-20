@@ -8,12 +8,13 @@ import { formatCoordinatesObjectToArray, generateLastArray } from "utils/race/ra
 import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
 import MarkIcon from "../assets/mark.svg";
+import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
 import { message } from "antd";
 import { MarkerInfo } from "./MarkerInfo";
 
-require("leaflet.boatmarker");
 require("leaflet-hotline");
+require("leaflet-rotatedmarker");
 
 const objectType = {
   boat: "boat",
@@ -204,9 +205,39 @@ export const OldRaceMap = (props) => {
         <PlayerInfo playerData={participant.participant} coordinate={currentCoordinate} />
       );
 
-      const marker = L.boatMarker([currentCoordinate.lat, currentCoordinate.lon], {
-        color: participant.color, // color of the boat
-        idleCircle: false, // if set to true, the icon will draw a circle
+      const participantColor = participant.color;
+
+      const styleSetup = {
+        fill: participantColor,
+        stroke: participantColor,
+        width: "32px",
+        height: "32px",
+        marginLeft: `-16px`,
+        marginTop: "-4px",
+      };
+
+      const svgStyle = {
+        width: "32px",
+        height: "32px",
+      };
+
+      const renderedBoatIcon = (
+        <div style={styleSetup}>
+          <BoatIcon style={svgStyle} />
+        </div>
+      );
+
+      const markerIcon = L.divIcon({
+        iconAnchor: [-1, 1],
+        labelAnchor: [0, 0],
+        popupAnchor: [0, -24],
+        iconSize: [0, 0],
+        html: ReactDOMServer.renderToString(renderedBoatIcon),
+      });
+
+      const marker = L.marker([currentCoordinate.lat, currentCoordinate.lon], {
+        icon: markerIcon,
+        rotationOrigin: "center center",
       }).bindPopup(popupContent);
 
       marker.on("click", function (e) {
@@ -267,8 +298,7 @@ export const OldRaceMap = (props) => {
         localBoats[participant.id].layer.setLatLng(
           new L.LatLng(participant.lastPosition?.lat || 0, participant.lastPosition?.lon || 0)
         );
-
-        localBoats[participant.id].layer.setHeading(participant.lastPosition?.heading || 0);
+        localBoats[participant.id].layer.setRotationAngle(participant.lastPosition?.heading || 0);
       }
     });
 
