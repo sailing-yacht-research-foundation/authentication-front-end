@@ -37,6 +37,7 @@ export const Nav = () => {
             type="primary"
             shape="round"
             size="large"
+            className="event-step"
             data-tip={t(translations.tip.host_a_new_event_with_races)}
             onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
               style={{ marginRight: '5px' }}
