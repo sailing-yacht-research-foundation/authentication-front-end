@@ -22,10 +22,10 @@ const playbackTime = {
 }
 
 export const Playback = (props) => {
-
+    const { onPlaybackTimeManualUpdate } = props;
     const elapsedTime = useSelector(selectElapsedTime);
     const raceLength = useSelector(selectRaceLength);
-    const isPlaying = useSelector(selectIsPlaying);
+    const isPlaying = useSelector(selectIsPlaying);    
 
     const dispatch = useDispatch();
 
@@ -46,12 +46,16 @@ export const Playback = (props) => {
 
     const backward = (miliseconds) => {
         let backwardTime = elapsedTime - miliseconds;
-        dispatch(actions.setElapsedTime(backwardTime > 0 ? backwardTime : 0));
+        const selectedMillis = backwardTime > 0 ? backwardTime : 0;
+        dispatch(actions.setElapsedTime(selectedMillis));
+        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(selectedMillis);
     }
 
     const forward = (miliseconds) => {
         let forwardTime = elapsedTime + miliseconds;
-        dispatch(actions.setElapsedTime(forwardTime > raceLength ? raceLength : forwardTime));
+        const selectedMillis = forwardTime > raceLength ? raceLength : forwardTime
+        dispatch(actions.setElapsedTime(selectedMillis));
+        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(selectedMillis);
     }
 
     const playAtClickedPosition = (e) => {
@@ -78,6 +82,7 @@ export const Playback = (props) => {
 
         let convertedPlayTimeInMiliseconds = Number(newPlayTimeInMilisecondsInString.join(''));
         dispatch(actions.setElapsedTime(convertedPlayTimeInMiliseconds));
+        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(convertedPlayTimeInMiliseconds);
     }
 
     return (
@@ -128,6 +133,7 @@ const ProgressBar = styled.div`
     width: 100%;
     height: 7px;
     background: #ddd;
+    position: relative;
 `;
 
 const ProgressedBar = styled.div`
@@ -135,14 +141,14 @@ const ProgressedBar = styled.div`
     background: ${StyleConstants.MAIN_TONE_COLOR};
     height: 100%;
     transition: width 0.2s;
-
+    z-index: 11000;
 `;
 
 const PlayBackControlContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 12px;
 `;
 
 const ButtonContainer = styled.div`
