@@ -1,253 +1,413 @@
-import React, { useEffect, useRef } from 'react';
-import * as L from 'leaflet';
-import { useMap } from 'react-leaflet';
-import ReactDOMServer from 'react-dom/server';
-import { PlayerInfo } from './PlayerInfo';
-import {
-    simplifiedGeoJsonTrackToLastHeading,
-    simulateThirdParameter,
-    simulateThirdParameterForCourse,
-    toSimplifiedGeoJson
-} from 'utils/race/race-helper';
-import { useDispatch, useSelector } from 'react-redux';
-import { usePlaybackSlice } from './slice';
-import { selectElapsedTime, selectRaceLength } from './slice/selectors';
-import MarkIcon from '../assets/mark.svg';
+import React, { useEffect, useRef } from "react";
+import * as L from "leaflet";
+import { useMap } from "react-leaflet";
+import ReactDOMServer from "react-dom/server";
+import copy from "copy-to-clipboard";
+import { PlayerInfo } from "./PlayerInfo";
+import { formatCoordinatesObjectToArray, generateLastArray } from "utils/race/race-helper";
+import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
-require("leaflet.boatmarker");
-require('leaflet-hotline');
+import MarkIcon from "../assets/mark.svg";
+import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
+import { NormalizedRaceLeg } from "types/RaceLeg";
+import { message } from "antd";
+import { MarkerInfo } from "./MarkerInfo";
+
+require("leaflet-hotline");
+require("leaflet-rotatedmarker");
 
 const objectType = {
-    boat: 'boat',
-    mark: 'mark',
-    course: 'course',
-    leg: 'leg'
-}
-
-const geometryType = {
-    line: 'LineString',
-    point: 'Point'
-}
+  boat: "boat",
+  mark: "mark",
+  course: "course",
+  leg: "leg",
+  point: "point",
+  line: "line",
+};
 
 export const RaceMap = (props) => {
+  const { emitter } = props;
 
-    const { eventEmitter, race } = props;
+  const map = useMap();
 
-    const map = useMap();
+  const raceStatus = useRef<any>({
+    boats: {}, // layers
+    tracks: {}, // layers
+    courses: {}, // layers
+    legs: {}, // layets
+    isMarkersAttached: false,
+    isTracksAttached: false,
+    isParticipantsDataAvailable: false,
+    zoomedToRaceLocation: false,
+  });
 
-    const dispatch = useDispatch();
+  useEffect(() => {
+    initializeMapView();
+    const { current } = raceStatus;
 
-    const { actions } = usePlaybackSlice();
-
-    const elapsedTime = useRef(0);
-
-    const playbackElapsedTime = useSelector(selectElapsedTime);
-
-    const raceLength = useSelector(selectRaceLength);
-
-    useEffect(() => {
-        elapsedTime.current = playbackElapsedTime;
-    }, [playbackElapsedTime]);
-
-    useEffect(() => {
-        initializeMapView();
-
-        const mapVariable: any = {
-            deviceIdsToLayers: {},
-            deviceIdsToBoatMarkers: {},
-            gemetryLayers: [],
-            legLayers: [],
-            zoomedToRaceLocation: false,
-            deviceMarker: null,
-            markerAttachedToMap: false,
-            deviceIdToElapsedTime: '',
-            startCountingTime: false,
-            updateElapesedTimeInterval: null
-        }
-
-        eventEmitter.on('geometry', function (data) {
-            onCourseGeometryUpdate(data, mapVariable);
-        });
-
-        eventEmitter.on('leg-update', function (data) {
-            onLegUpdate(data, mapVariable);
-        });
-
-        eventEmitter.on('ping', function (data) {
-            onReceivedDevicePing(data, mapVariable);
-        });
-
-        return () => {
-            clearInterval(mapVariable.updateElapesedTimeInterval);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const onReceivedDevicePing = (data, mapVariable) => {
-        let deviceMarker;
-        let receivedMessage = JSON.parse(data);
-        let deviceId = receivedMessage.deviceId;
-        let json = toSimplifiedGeoJson(receivedMessage);
-        let heading = simplifiedGeoJsonTrackToLastHeading(json);
-        let coords = simulateThirdParameter(json);
-        let boatTrackLayer = L.polyline(coords).setStyle({
-            color: receivedMessage.color,
-            weight: 1
-        });
-
-
-        _startCountingElapsedTime(mapVariable);
-        _zoomToRaceLocation(receivedMessage, mapVariable);
-        _removeAllRaceObjectLayers(mapVariable);
-        deviceMarker = _initializeBoatAndMarkMarker(receivedMessage);
-        _initLayerAndSetLocationAndHeadingForBoatAndBoatTrackAndMark(
-            mapVariable,
-            deviceId,
-            deviceMarker,
-            receivedMessage,
-            boatTrackLayer,
-            heading
+    if (emitter) {
+      // Zoom to specific race location
+      emitter.on("zoom-to-location", (lastPosition: { position: number[]; pingTime: number }) => {
+        map.setView(
+          {
+            lat: lastPosition.position[1],
+            lng: lastPosition.position[0],
+          },
+          16.4
         );
-        _attachMarkersToMap(mapVariable);
-    }
+      });
 
-    const _initLayerAndSetLocationAndHeadingForBoatAndBoatTrackAndMark = (mapVariable, deviceId, deviceMarker, receivedMessage, boatTrackLayer, heading) => {
-        mapVariable.deviceIdsToLayers[deviceId] = boatTrackLayer;
-        if (mapVariable.deviceIdsToBoatMarkers[deviceId] === undefined) {
-            mapVariable.deviceIdsToBoatMarkers[deviceId] = {
-                layer: deviceMarker
-            }
-        } else {
-            mapVariable.deviceIdsToBoatMarkers[deviceId].layer.setLatLng(new L.LatLng(receivedMessage.content.lat, receivedMessage.content.lon));
-            if (receivedMessage.deviceType === objectType.boat) {
-                mapVariable.deviceIdsToBoatMarkers[deviceId].layer.setHeading(heading);
-            }
+      // Render the boat
+      emitter.on("ping", (participants) => {
+        if (!participants?.length) return;
+
+        // Zoom to location
+        if (!current.zoomedToRaceLocation) {
+          current.zoomedToRaceLocation = _zoomToRaceLocation(participants[0], current);
         }
-    }
 
-    const _removeCourseGeometryOrLegGeomtryLayersFromMap = (arrayOfLayers) => {
-        arrayOfLayers.forEach((layer, index) => {
-            map.removeLayer(layer);
-            arrayOfLayers.splice(index, 1);
-        })
-    }
-
-    const _attachGeometryLayerToMap = (coordinates, geometryLayersArray, typeOfGeometry, geometryColor) => {
-        let coords = simulateThirdParameterForCourse(coordinates);
-        if (typeOfGeometry === geometryType.line) {
-            let geometryLineLayer = L.polyline(coords).setStyle({
-                weight: 1,
-                color: geometryColor
-            }).addTo(map);
-
-            geometryLayersArray.push(geometryLineLayer);
+        // Remove all race object layers
+        if (current.isMarkersAttached) {
+          _removeAllRaceObjectLayers(participants, current.boats);
+          current.isMarkersAttached = false;
         }
-    }
 
-    const onCourseGeometryUpdate = (data, mapVariable) => {
-        _removeCourseGeometryOrLegGeomtryLayersFromMap(mapVariable.gemetryLayers);
+        // Map the boat markers
+        if (!!participants?.length) {
+          const initializedBoatMarkers = participants.map((participant) => ({
+            id: participant.id,
+            layer: _initializeBoatMarker(participant, current.boats?.[participant.id]?.layer),
+          }));
+          current.boats = _initLayerAndSetLocationAndHeadingForBoat(
+            participants,
+            initializedBoatMarkers,
+            current.boats
+          );
 
-        let geometryData = JSON.parse(data);
+          current.boats = _attachMarkersToMap(current.boats);
+          current.isMarkersAttached = true;
+        }
+      });
 
-        geometryData.geometry.forEach(geometry => {
-            _attachGeometryLayerToMap(geometry.geometry?.coordinates, mapVariable.gemetryLayers, geometry.geometry?.type, 'white');
+      // Update the track
+      emitter.on("track-update", (participants) => {
+        if (!participants.length) return;
+        const participantsCpy = [...participants];
+
+        // Tracks
+        if (current.isTracksAttached) {
+          _removeTrackLayersFromMap(current.tracks);
+          current.isTracksAttached = false;
+        }
+
+        // Generate tracks coordinate
+        const tracksData = {};
+        participantsCpy.forEach((participant) => {
+          const generatedCoordinates = generateLastArray(participant.positions, participant.positions.length);
+          const formattedCoordinates = formatCoordinatesObjectToArray(generatedCoordinates);
+          tracksData[participant.id] = {
+            coordinates: formattedCoordinates,
+            color: participant.color,
+          };
         });
-    }
 
-    const onLegUpdate = (data, mapVariable) => {
-        _removeCourseGeometryOrLegGeomtryLayersFromMap(mapVariable.legLayers);
+        // Attach tracks to map
+        if (!current.isTracksAttached) {
+          const newTracks = {};
+          Object.keys(tracksData).forEach((key) => {
+            const { coordinates, color } = tracksData[key];
+            newTracks[key] = _attachPolylineToMap(coordinates, color);
+          });
 
-        let geometryData = JSON.parse(data);
+          current.tracks = newTracks;
+          current.isTracksAttached = true;
+        }
+      });
 
-        geometryData.legs.forEach(leg => {
-            _attachGeometryLayerToMap(leg.geometry?.coordinates, mapVariable.legLayers, leg.geometry?.type, '#DC6E1E');
-        });
-    }
+      // Update the courses
+      emitter.on("sequenced-courses-update", (sequencedCourses: MappedCourseGeometrySequenced[]) => {
+        if (!sequencedCourses.length) return;
+        const currentCourses = raceStatus.current.courses;
 
-    const _attachMarkersToMap = (mapVariable) => {
-        Object.keys(mapVariable.deviceIdsToLayers).forEach(k => {
-            mapVariable.deviceIdsToLayers[k].addTo(map);
-            if (mapVariable.deviceIdsToBoatMarkers[k].attached === undefined) {
-                mapVariable.deviceIdsToBoatMarkers[k].layer.addTo(map);
-                mapVariable.deviceIdsToBoatMarkers[k].attached = true;
-            }
-        });
-    }
+        // Remove course layers
+        if (Object.keys(currentCourses).length) {
+          _removeLayersFromMap(currentCourses);
+          raceStatus.current.courses = {};
+        }
 
-    const _initializeBoatAndMarkMarker = (receivedMessage,) => {
-        if (receivedMessage.deviceType === objectType.boat) {
-            return L.boatMarker([receivedMessage.content.lat, receivedMessage.content.lon], {
-                color: receivedMessage.color, 	// color of the boat
-                idleCircle: false	// if set to true, the icon will draw a circle
-            }).bindPopup(
-                ReactDOMServer.renderToString(<PlayerInfo playerData={receivedMessage.playerData} />)
-            ).openPopup();
-        } else if (receivedMessage.deviceType === objectType.mark) {
-            return L.marker([receivedMessage.content.lat, receivedMessage.content.lon], {
-                icon: new L.icon({
-                    iconUrl: MarkIcon,
-                    iconSize: [40, 40],
-                    iconAnchor: [14, 32], 
-                })
+        const coursesData = {};
+
+        sequencedCourses.forEach((sequencedCourse) => {
+          if (sequencedCourse.geometryType === objectType.point) {
+            const coordinate = sequencedCourse.coordinates[0];
+            coursesData[sequencedCourse.id || ""] = _initPointMarker({
+              coordinate: { lat: coordinate[0], lon: coordinate[1] },
+              id: sequencedCourse.id,
             });
+          }
+
+          if (sequencedCourse.geometryType === objectType.line) {
+            coursesData[sequencedCourse.id || ""] = _initPolyline(sequencedCourse.coordinates, "#000000", 3);
+          }
+        });
+
+        // Attach to map
+        _attachCoursesToMap(coursesData);
+      });
+
+      emitter.on("render-legs", (raceLegs: NormalizedRaceLeg[]) => {
+        const { current } = raceStatus;
+
+        if (Object.keys(current.legs)?.length) {
+          _removeTrackLayersFromMap(current.legs);
         }
+
+        const legs = {};
+
+        raceLegs.forEach((raceLeg) => {
+          raceLeg.legs.forEach((leg) => {
+            legs[`${leg.legId}-${raceLeg.vesselParticipantId}`] = _attachPolylineToMap(
+              leg.coordinates,
+              raceLeg.color,
+              3
+            );
+          });
+        });
+
+        current.legs = legs;
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const _initializeBoatMarker = (participant, layer) => {
+    if (layer) {
+      const currentCoordinate = {
+        lat: participant?.lastPosition?.lat || 0,
+        lon: participant?.lastPosition?.lon || 0,
+      };
+
+      const popupContent = ReactDOMServer.renderToString(
+        <PlayerInfo playerData={participant.participant} coordinate={currentCoordinate} />
+      );
+      layer._popup.setContent(popupContent);
+
+      return;
     }
 
-    const _startCountingElapsedTime = (mapVariable) => {        
-        if (!mapVariable.startCountingTime) {
-            mapVariable.updateElapesedTimeInterval = setInterval(() => {
-                if (!race.isPlaying) {
-                    clearInterval(mapVariable.updateElapesedTimeInterval);
-                    mapVariable.startCountingTime = false;
-                    return;
-                }
+    if (participant.deviceType === objectType.boat) {
+      const currentCoordinate = {
+        lat: participant?.lastPosition?.lat || 0,
+        lon: participant?.lastPosition?.lon || 0,
+      };
 
-                elapsedTime.current += 1000;
-                dispatch(actions.setElapsedTime(elapsedTime.current));
+      const popupContent = ReactDOMServer.renderToString(
+        <PlayerInfo playerData={participant.participant} coordinate={currentCoordinate} />
+      );
 
-                if (elapsedTime.current >= raceLength) {
-                    race.setIsPlaying(false);
-                    dispatch(actions.setElapsedTime(raceLength));
-                    clearInterval(mapVariable.updateElapesedTimeInterval);
-                    mapVariable.startCountingTime = false;
-                }
-            }, 1000);
-        }
-        mapVariable.startCountingTime = true;
+      const participantColor = participant.color;
+
+      const styleSetup = {
+        fill: participantColor,
+        stroke: participantColor,
+        width: "32px",
+        height: "32px",
+        marginLeft: `-16px`,
+        marginTop: "-4px",
+      };
+
+      const svgStyle = {
+        width: "32px",
+        height: "32px",
+      };
+
+      const renderedBoatIcon = (
+        <div style={styleSetup}>
+          <BoatIcon style={svgStyle} />
+        </div>
+      );
+
+      const markerIcon = L.divIcon({
+        iconAnchor: [-1, 1],
+        labelAnchor: [0, 0],
+        popupAnchor: [0, -8],
+        iconSize: [0, 0],
+        html: ReactDOMServer.renderToString(renderedBoatIcon),
+      });
+
+      const marker = L.marker([currentCoordinate.lat, currentCoordinate.lon], {
+        icon: markerIcon,
+        rotationOrigin: "center center",
+      }).bindPopup(popupContent);
+
+      marker.on("click", function (e) {
+        marker.openPopup();
+
+        const coordinate = {
+          lat: e.latlng.lat,
+          lon: e.latlng.lng,
+        };
+
+        message.success("Coordinate copied!");
+        copy(`coordinate [lat, lon]: [${coordinate.lat}, ${coordinate.lon}]`);
+      });
+
+      marker.on("mouseover", function (e) {
+        marker.openPopup();
+      });
+
+      marker.on("mouseout", function () {
+        marker.closePopup();
+      });
+
+      return marker;
     }
+  };
 
-    const _zoomToRaceLocation = (receivedMessage, mapVariable) => {
-        if (!mapVariable.zoomedToRaceLocation) {
-            map.setView({
-                lat: receivedMessage.content.lat,
-                lng: receivedMessage.content.lon
-            }, 18)
-            mapVariable.zoomedToRaceLocation = true;
-        }
+  const _removeAllRaceObjectLayers = (participants, boats) => {
+    participants.forEach((participant) => {
+      try {
+        // map.removeLayer(boats[participant.id].layer);
+      } catch (e) {}
+    });
+  };
+
+  const _removeTrackLayersFromMap = (legLayers) => {
+    Object.keys(legLayers).forEach((key) => {
+      map.removeLayer(legLayers[key]);
+    });
+  };
+
+  const _removeLayersFromMap = (layers) => {
+    Object.keys(layers).forEach((key) => {
+      map.removeLayer(layers[key]);
+    });
+  };
+
+  const _initLayerAndSetLocationAndHeadingForBoat = (participants, boatMarkers, boats) => {
+    const localBoats = { ...boats };
+
+    participants.forEach((participant) => {
+      const selectedBoatMarker = boatMarkers.filter((bM) => bM.id === participant.id);
+      if (!localBoats[participant.id])
+        localBoats[participant.id] = {
+          layer: selectedBoatMarker[0].layer,
+          id: selectedBoatMarker[0].id,
+        };
+      else {
+        localBoats[participant.id].layer.setLatLng(
+          new L.LatLng(participant.lastPosition?.lat || 0, participant.lastPosition?.lon || 0)
+        );
+        localBoats[participant.id].layer.setRotationAngle(participant.lastPosition?.heading || 0);
+      }
+    });
+
+    return localBoats;
+  };
+
+  const _attachMarkersToMap = (boats) => {
+    const localBoats = { ...boats };
+    Object.keys(localBoats).forEach((k) => {
+      if (!localBoats[k].attached) {
+        localBoats[k].layer.addTo(map);
+        localBoats[k].attached = true;
+      }
+    });
+
+    return localBoats;
+  };
+
+  const _attachCoursesToMap = (courses) => {
+    Object.keys(courses).forEach((k) => {
+      courses[k].addTo(map);
+    });
+  };
+
+  const _attachPolylineToMap = (coordinates, color, weight = 1) => {
+    return L.polyline(coordinates)
+      .setStyle({
+        weight,
+        color,
+      })
+      .addTo(map);
+  };
+
+  const _initPolyline = (coordinates, color, weight = 1) => {
+    return L.polyline(coordinates)
+      .setStyle({
+        weight,
+        color,
+      })
+      .addTo(map);
+  };
+
+  const _initPointMarker = (data) => {
+    const { coordinate, id } = data;
+
+    const popupContent = ReactDOMServer.renderToString(<MarkerInfo coordinate={coordinate} identifier={id} />);
+
+    const marker = L.marker([coordinate.lat, coordinate.lon], {
+      icon: new L.icon({
+        iconUrl: MarkIcon,
+        iconSize: [40, 40],
+        iconAnchor: [14, 32],
+      }),
+    })
+      .bindPopup(popupContent)
+      .addTo(map);
+
+    marker.on("click", function (e) {
+      marker.openPopup();
+
+      const coordinate = {
+        lat: e.latlng.lat,
+        lon: e.latlng.lng,
+      };
+
+      message.success("Coordinate copied!");
+      copy(`coordinate [lat, lon]: [${coordinate.lat}, ${coordinate.lon}]`);
+    });
+
+    marker.on("mouseover", function (e) {
+      marker.openPopup();
+    });
+
+    marker.on("mouseout", function () {
+      marker.closePopup();
+    });
+
+    return marker;
+  };
+
+  const _zoomToRaceLocation = (participant, mapVariable) => {
+    if (!mapVariable.zoomedToRaceLocation) {
+      if (!participant?.lastPosition?.lat || !participant?.lastPosition?.lon) return false;
+      map.setView(
+        {
+          lat: participant.lastPosition.lat,
+          lng: participant.lastPosition.lon,
+        },
+        18
+      );
+      return true;
     }
+  };
 
-    const _removeAllRaceObjectLayers = (mapVariable) => {
-        Object.keys(mapVariable.deviceIdsToLayers).forEach(k => {
-            try {
-                map.removeLayer(mapVariable.deviceIdsToLayers[k])
-            } catch (e) { }
-        })
-    }
+  const initializeMapView = () => {
+    new L.TileLayer(
+      `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`,
+      {
+        attribution:
+          '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
+        maxZoom: 21,
+        minZoom: 13,
+        id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: "your.mapbox.access.token",
+      }
+    ).addTo(map);
+  };
 
-    const initializeMapView = () => {
-        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
-            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-            maxZoom: 18,
-            minZoom: 13,
-            id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token'
-        }).addTo(map);
-    }
-
-    return (
-        <>
-        </>
-    )
-}
+  return <></>;
+};
