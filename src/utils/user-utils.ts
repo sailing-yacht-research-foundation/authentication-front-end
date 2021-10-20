@@ -38,3 +38,15 @@ export const getProfilePicture = (user) => {
 export const checkForVerifiedField = (user, field) => {
     return field === 'email' ? user.emailVerified : user.attributes?.phoneNumberVerified;
 }
+
+export const updateUserAttribute = (user, attributeKey, attributeValue) => {
+    const attributes = user.attributes;
+    const userData = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        attributes: {
+            ...user.attributes,
+            [attributeKey]: attributeValue
+        }
+    }
+}

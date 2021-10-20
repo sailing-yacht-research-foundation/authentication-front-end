@@ -1,7 +1,11 @@
 export const steps = [
     {
         selector: '.search-step',
-        content: 'Here you can search for races in the past or races will happen, or people\s races'
+        content: 'Here you can search for races in the past or races will happen, or people\'s races'
+    },
+    {
+        selector: '.select-map-view-tap-step',
+        content: 'Select map view tab to start searching'
     },
     {
         selector: '.search-step-input',

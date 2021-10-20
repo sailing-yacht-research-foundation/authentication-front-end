@@ -52,6 +52,7 @@ export const SelectLanguage = (props) => {
                     birthdate: getUserAttribute(user,'birthdate'),
                     address: getUserAttribute(user,'address'),
                     phone_number: getUserAttribute(user,'phone_number'),
+                    showed_tour: getUserAttribute(user, 'showed_tour'),
                 }
             }
             await updateProfile(userData);

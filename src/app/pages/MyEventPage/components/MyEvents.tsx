@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom';
 import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
+import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
+import styled from 'styled-components';
 
 const defaultOptions = {
     loop: true,
@@ -75,11 +77,14 @@ export const MyEvents = () => {
                 const userId = localStorage.getItem('user_id');
                 if ((userId && record.createdById === userId) || (uuid === record.createdById))
                     return <Space size="middle">
+                        <DownloadButton  data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
+                            downloadIcalendarFile(record);
+                        }} type="primary">{t(translations.my_event_list_page.download_icalendar)}</DownloadButton>
                         <BorderedButton data-tip={t(translations.tip.update_this_event)} onClick={() => {
                             history.push(`/events/${record.id}/update`)
                         }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
                         <BorderedButton data-tip={t(translations.tip.delete_event)} danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
-                        <ReactTooltip/>
+                        <ReactTooltip />
                     </Space>;
 
                 return <></>;
@@ -167,3 +172,13 @@ export const MyEvents = () => {
         </>
     )
 }
+
+const DownloadButton = styled(BorderedButton)`
+    background: #DC6E1E;
+    border: 1px solid #fff;
+
+    :hover, :focus {
+        background: #DC6E1E;
+        border: 1px solid #fff;
+    }
+`;

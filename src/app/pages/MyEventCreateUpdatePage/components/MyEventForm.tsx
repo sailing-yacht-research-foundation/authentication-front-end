@@ -251,6 +251,7 @@ export const MyEventForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
+                            className="event-name-step"
                             data-tip={t(translations.tip.name_of_the_event)}
                             rules={[{ required: true, max: 255 }]}
                         >
@@ -261,6 +262,7 @@ export const MyEventForm = () => {
                             rules={[{ max: 255 }]}
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
+                            className="event-description-step"
                             data-multiline={true}
                             data-tip={t(translations.tip.event_description)}
                         >
@@ -272,6 +274,7 @@ export const MyEventForm = () => {
                         <Row gutter={24} style={{ display: 'none' }}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
+             
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.longitude)}</SyrfFieldLabel>}
                                     name="lon"
                                     rules={[{ required: true }]}
@@ -294,6 +297,7 @@ export const MyEventForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.location)}</SyrfFieldLabel>}
                             name="location"
+                            className="event-location-step"
                             data-tip={t(translations.tip.event_location)}
                             rules={[{ required: true }]}
                         >
@@ -308,6 +312,7 @@ export const MyEventForm = () => {
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
+                                    className="event-start-date-step"
                                     data-tip={t(translations.tip.event_start_date)}
                                     rules={[{ type: 'date', required: true }]}
                                 >
@@ -330,6 +335,7 @@ export const MyEventForm = () => {
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
+                                    className="event-start-time-step"
                                     data-tip={t(translations.tip.event_start_time)}
                                     rules={[{ required: true }]}
                                 >
@@ -341,6 +347,7 @@ export const MyEventForm = () => {
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.timezone)}</SyrfFieldLabel>}
                                     name="approximateStartTime_zone"
+                                    className="event-time-zone-step"
                                     data-tip={t(translations.tip.event_time_zone)}
                                     rules={[{ required: true }]}
                                 >
@@ -366,6 +373,7 @@ export const MyEventForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
                             name="externalUrl"
+                            className="event-external-website-step"
                             data-tip={t(translations.tip.event_website)}
                             rules={[{ type: 'url' }]}
                         >
