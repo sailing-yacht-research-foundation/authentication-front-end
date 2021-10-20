@@ -2,12 +2,15 @@ import React, { useEffect, useRef } from "react";
 import * as L from "leaflet";
 import { useMap } from "react-leaflet";
 import ReactDOMServer from "react-dom/server";
+import copy from "copy-to-clipboard";
 import { PlayerInfo } from "./PlayerInfo";
 import { formatCoordinatesObjectToArray, generateLastArray } from "utils/race/race-helper";
 import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
 import MarkIcon from "../assets/mark.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
+import { message } from "antd";
+import { MarkerInfo } from "./MarkerInfo";
 
 require("leaflet.boatmarker");
 require("leaflet-hotline");
@@ -64,7 +67,7 @@ export const OldRaceMap = (props) => {
 
         // Remove all race object layers
         if (current.isMarkersAttached) {
-          _removeAllRaceObjectLayers(participants);
+          _removeAllRaceObjectLayers(participants, current.boats);
           current.isMarkersAttached = false;
         }
 
@@ -72,7 +75,7 @@ export const OldRaceMap = (props) => {
         if (!!participants?.length) {
           const initializedBoatMarkers = participants.map((participant) => ({
             id: participant.id,
-            layer: _initializeBoatMarker(participant),
+            layer: _initializeBoatMarker(participant, current.boats?.[participant.id]?.layer),
           }));
           current.boats = _initLayerAndSetLocationAndHeadingForBoat(
             participants,
@@ -132,17 +135,18 @@ export const OldRaceMap = (props) => {
         }
 
         const coursesData = {};
+
         sequencedCourses.forEach((sequencedCourse) => {
           if (sequencedCourse.geometryType === objectType.point) {
             const coordinate = sequencedCourse.coordinates[0];
-            coursesData[sequencedCourse.id || ""] = _initPointMarker({ lat: coordinate[1], lon: coordinate[0] });
+            coursesData[sequencedCourse.id || ""] = _initPointMarker({
+              coordinate: { lat: coordinate[0], lon: coordinate[1] },
+              id: sequencedCourse.id,
+            });
           }
 
           if (sequencedCourse.geometryType === objectType.line) {
-            const switchedCoordinates = sequencedCourse.coordinates.map((coordinate) => {
-              return [coordinate[1], coordinate[0]];
-            });
-            coursesData[sequencedCourse.id || ""] = _initPolyline(switchedCoordinates, "#000000", 3);
+            coursesData[sequencedCourse.id || ""] = _initPolyline(sequencedCourse.coordinates, "#000000", 3);
           }
         });
 
@@ -175,21 +179,64 @@ export const OldRaceMap = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const _initializeBoatMarker = (participant) => {
+  const _initializeBoatMarker = (participant, layer) => {
+    if (layer) {
+      const currentCoordinate = {
+        lat: participant?.lastPosition?.lat || 0,
+        lon: participant?.lastPosition?.lon || 0,
+      };
+
+      const popupContent = ReactDOMServer.renderToString(
+        <PlayerInfo playerData={participant.participant} coordinate={currentCoordinate} />
+      );
+      layer._popup.setContent(popupContent);
+
+      return;
+    }
+
     if (participant.deviceType === objectType.boat) {
-      return L.boatMarker([participant?.lastPosition?.lat || 0, participant?.lastPosition?.lon || 0], {
+      const currentCoordinate = {
+        lat: participant?.lastPosition?.lat || 0,
+        lon: participant?.lastPosition?.lon || 0,
+      };
+
+      const popupContent = ReactDOMServer.renderToString(
+        <PlayerInfo playerData={participant.participant} coordinate={currentCoordinate} />
+      );
+
+      const marker = L.boatMarker([currentCoordinate.lat, currentCoordinate.lon], {
         color: participant.color, // color of the boat
         idleCircle: false, // if set to true, the icon will draw a circle
-      })
-        .bindPopup(ReactDOMServer.renderToString(<PlayerInfo playerData={participant.participant} />))
-        .openPopup();
+      }).bindPopup(popupContent);
+
+      marker.on("click", function (e) {
+        marker.openPopup();
+
+        const coordinate = {
+          lat: e.latlng.lat,
+          lon: e.latlng.lng,
+        };
+
+        message.success("Coordinate copied!");
+        copy(`coordinate [lat, lon]: [${coordinate.lat}, ${coordinate.lon}]`);
+      });
+
+      marker.on("mouseover", function (e) {
+        marker.openPopup();
+      });
+
+      marker.on("mouseout", function () {
+        marker.closePopup();
+      });
+
+      return marker;
     }
   };
 
-  const _removeAllRaceObjectLayers = (participants) => {
+  const _removeAllRaceObjectLayers = (participants, boats) => {
     participants.forEach((participant) => {
       try {
-        map.removeLayer(participant.id);
+        // map.removeLayer(boats[participant.id].layer);
       } catch (e) {}
     });
   };
@@ -264,14 +311,42 @@ export const OldRaceMap = (props) => {
       .addTo(map);
   };
 
-  const _initPointMarker = (coordinates) => {
-    return L.marker([coordinates.lat, coordinates.lon], {
+  const _initPointMarker = (data) => {
+    const { coordinate, id } = data;
+
+    const popupContent = ReactDOMServer.renderToString(<MarkerInfo coordinate={coordinate} identifier={id} />);
+
+    const marker = L.marker([coordinate.lat, coordinate.lon], {
       icon: new L.icon({
         iconUrl: MarkIcon,
         iconSize: [40, 40],
         iconAnchor: [14, 32],
       }),
-    }).addTo(map);
+    })
+      .bindPopup(popupContent)
+      .addTo(map);
+
+    marker.on("click", function (e) {
+      marker.openPopup();
+
+      const coordinate = {
+        lat: e.latlng.lat,
+        lon: e.latlng.lng,
+      };
+
+      message.success("Coordinate copied!");
+      copy(`coordinate [lat, lon]: [${coordinate.lat}, ${coordinate.lon}]`);
+    });
+
+    marker.on("mouseover", function (e) {
+      marker.openPopup();
+    });
+
+    marker.on("mouseout", function () {
+      marker.closePopup();
+    });
+
+    return marker;
   };
 
   const _zoomToRaceLocation = (participant, mapVariable) => {
@@ -294,7 +369,7 @@ export const OldRaceMap = (props) => {
       {
         attribution:
           '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-        maxZoom: 18,
+        maxZoom: 21,
         minZoom: 13,
         id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",
         tileSize: 512,
