@@ -10,12 +10,48 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from "react-share";
-import { RiWechatFill } from 'react-icons/ri';
-import { HiShare } from 'react-icons/hi';
+import { isDesktop } from 'react-device-detect';
+import { HiShare, HiLink } from 'react-icons/hi';
 import { StyleConstants } from 'styles/StyleConstants';
+import copy from 'copy-to-clipboard';
+import { message } from 'antd';
 
-export const Share = () => {
+export const Share = React.memo(() => {
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
+
+    const handleShareButtonClick = () => {
+        setIsOpen(false);        
+    }
+
+    const handleCopyRaceLink = (currUrl) => {
+        copy(currUrl);
+        message.success('Copied the race link');
+        handleShareButtonClick();
+        return;
+    }
+
+    const handleGeneralShareClick = () => {
+        const currentUrl = window?.location.href;
+        
+        if (isDesktop) {
+            handleCopyRaceLink(currentUrl);
+            return;
+        }
+
+        if (navigator?.share) {
+            navigator.share({url: currentUrl})
+                .catch(err => {
+                    handleCopyRaceLink(currentUrl);
+                });
+            
+            return;
+        }
+
+        handleCopyRaceLink(currentUrl);
+
+    }
+
+    const currentUrl = window?.location?.href;
 
     return (
         <ShareButtonWrapper>
@@ -24,29 +60,28 @@ export const Share = () => {
             </ButtonContainer>
             {
                 isOpen && <ShareDropdown>
-                    <ShareButtonItemWrapper>
-                        <ShareButtonInnerWrapper style={{ background: 'green' }}>
-                            <RiWechatFill style={{ fontSize: '28px', color: '#fff' }}>
-                            </RiWechatFill>
+                    <ShareButtonItemWrapper onClick={handleShareButtonClick}>
+                        <ShareButtonInnerWrapper onClick={handleGeneralShareClick} style={{ background: 'green' }}>
+                            <HiLink style={{fontSize: '24px', color: '#FFF'}} />
                         </ShareButtonInnerWrapper>
                     </ShareButtonItemWrapper>
-                    <ShareButtonItemWrapper>
-                        <FacebookShareButton url="">
+                    <ShareButtonItemWrapper onClick={handleShareButtonClick}>
+                        <FacebookShareButton quote={currentUrl} url={currentUrl}>
                             <FacebookIcon size={35} round={true} />
                         </FacebookShareButton>
                     </ShareButtonItemWrapper>
-                    <ShareButtonItemWrapper>
-                        <InstapaperShareButton url="">
+                    <ShareButtonItemWrapper onClick={handleShareButtonClick}>
+                        <InstapaperShareButton url={currentUrl}>
                             <InstapaperIcon size={35} round={true} />
                         </InstapaperShareButton>
                     </ShareButtonItemWrapper>
-                    <ShareButtonItemWrapper>
-                        <TwitterShareButton url="">
+                    <ShareButtonItemWrapper onClick={handleShareButtonClick}>
+                        <TwitterShareButton url={currentUrl}>
                             <TwitterIcon size={35} round={true} />
                         </TwitterShareButton>
                     </ShareButtonItemWrapper>
-                    <ShareButtonItemWrapper>
-                        <WhatsappShareButton url="">
+                    <ShareButtonItemWrapper onClick={handleShareButtonClick}>
+                        <WhatsappShareButton url={currentUrl}>
                             <WhatsappIcon size={35} round={true} />
                         </WhatsappShareButton>
                     </ShareButtonItemWrapper>
@@ -54,11 +89,11 @@ export const Share = () => {
             }
         </ShareButtonWrapper>
     )
-}
+});
 
 const ShareButtonWrapper = styled.div`
     position: absolute;
-    bottom: 10px;
+    bottom: 16px;
     right: 20px;
 `;
 
