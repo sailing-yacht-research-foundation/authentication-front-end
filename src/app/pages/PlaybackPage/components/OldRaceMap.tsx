@@ -230,7 +230,7 @@ export const OldRaceMap = (props) => {
       const markerIcon = L.divIcon({
         iconAnchor: [-1, 1],
         labelAnchor: [0, 0],
-        popupAnchor: [0, -24],
+        popupAnchor: [0, -8],
         iconSize: [0, 0],
         html: ReactDOMServer.renderToString(renderedBoatIcon),
       });
