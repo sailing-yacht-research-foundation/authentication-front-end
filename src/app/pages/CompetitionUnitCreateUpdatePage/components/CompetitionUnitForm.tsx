@@ -124,8 +124,8 @@ export const CompetitionUnitForm = () => {
                 setCompetitionUnit(response.data);
                 form.setFieldsValue({
                     ...response.data,
-                    startDate: moment(response.data?.approximateStartTime),
-                    startTime: moment(response.data?.approximateStartTime)
+                    startDate: moment(response.data?.approximateStart),
+                    startTime: moment(response.data?.approximateStart)
                 });
                 if (response.data?.boundingBox?.coordinates)
                     setBoundingBoxCoordinates(response.data?.boundingBox?.coordinates);
