@@ -44,8 +44,8 @@ export const MyTrack = () => {
         },
         {
             title: t(translations.my_tracks_page.created_date),
-            dataIndex: 'created_at',
-            key: 'created_at',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
     ];

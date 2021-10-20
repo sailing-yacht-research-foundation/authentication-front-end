@@ -352,7 +352,10 @@
     "vessel_participant_group_is_a_set": "Classes/regattas are groups of boats that are scored together and go around the same course at the same time.",
     "description": "Description",
     "timezone": "Time Zone",
-    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses."
+    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses.",
+    "course": "Course",
+    "course_is_a_set": "Course is a set of marks, gates and areas in the race.",
+    "select_a_course": "Select a course"
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -378,6 +381,7 @@
     "location": "Location"
   },
   "course_list": {
+    "name": "Name",
     "course": "Course",
     "create": "Create",
     "update": "Update",
@@ -422,9 +426,12 @@
     "you_cannot_create_course": "You cannot save the course because You have not added any geometries",
     "successfully_created_your_course": "Successfully saved your course.",
     "an_unexpected_error": "An unexpected error happened when saving your course.",
+    "please_enter_a_course_name": "Course Name",
     "enter_geometry_name": "Enter geometry name",
     "geometry_name": "Geometry Name",
     "input_a_name_for_this_geometry": "Input a name for this geometry",
+    "input_a_name_for_this_course": "Input a name for this course",
+    "course_name": "Course Name",
     "cancel": "Back",
     "save": "Save",
     "saving": "Saving...",

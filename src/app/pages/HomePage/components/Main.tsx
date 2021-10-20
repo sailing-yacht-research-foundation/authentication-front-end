@@ -67,7 +67,7 @@ export const Main = () => {
     }
 
     const getDefaultActiveTabs = () => {
-        return !!localStorage.getItem('homepage_active_tab') ? localStorage.getItem('homepage_active_tab') : '1';
+        return !!localStorage.getItem('homepage_active_tab') ? localStorage.getItem('homepage_active_tab') : '2';
     }
 
     const searchRacesOnEnter = () => {
@@ -112,11 +112,11 @@ export const Main = () => {
                 onChange={onTabChanged}
                 animated
                 defaultActiveKey={getDefaultActiveTabs()}>
-                <TabPane tab={<FiMap />} key="1">
-                    <MapViewTab onPaginationPageChanged={onPaginationPageChanged} />
-                </TabPane>
                 <TabPane tab={<BsListUl />} key="2">
                     <FilterTab onPaginationPageChanged={onPaginationPageChanged} />
+                </TabPane>
+                <TabPane tab={<FiMap />} key="1">
+                    <MapViewTab onPaginationPageChanged={onPaginationPageChanged} />
                 </TabPane>
                 {
                     (isMobile() && isAuthenticated) && <ButtonCreateContainer>

@@ -8,6 +8,7 @@ import { LocationPicker } from './LocationPicker';
 import { useForm } from 'antd/lib/form/Form';
 import { create, get, update } from 'services/live-data-server/event-calendars';
 import { create as createVesselParticipantGroup } from 'services/live-data-server/vessel-participant-group';
+import { create as createCompetitionUnit } from 'services/live-data-server/competition-units';
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
@@ -23,6 +24,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { debounce, renderTimezoneInUTCOffset } from 'utils/helpers';
 import Geocode from "react-geocode";
+import { CoursesList } from './CoursesList';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -41,15 +43,15 @@ export const MyEventForm = () => {
 
     const [form] = useForm();
 
-    const [isSavingRace, setIsSavingRace] = React.useState<boolean>(false);
+    const [isSavingEvent, setIsSavingEvent] = React.useState<boolean>(false);
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [mode, setMode] = React.useState<string>(MODE.CREATE);
+    const [mode, setMode] = React.useState<string>('');
 
     const { eventId } = useParams<{ eventId: string }>();
 
-    const [coordinates, setCoordinates] = React.useState<any>({});
+    const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
 
     const [race, setRace] = React.useState<any>({});
 
@@ -57,7 +59,7 @@ export const MyEventForm = () => {
 
     const raceListRef = React.useRef<any>();
 
-    const [formChanged, setFormChanged] = React.useState<boolean>(false);
+    const [formChanged, setFormChanged] = React.useState<boolean>(true);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceAddressTyping = React.useCallback(debounce((value) => getLocationFromAddress(value), 1000), []);
@@ -71,7 +73,7 @@ export const MyEventForm = () => {
             currentDate = endDate;
         }
 
-        setIsSavingRace(true);
+        setIsSavingEvent(true);
 
         const data = {
             name: name,
@@ -88,6 +90,7 @@ export const MyEventForm = () => {
             endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
             approximateStartTime_zone: approximateStartTime_zone,
+            isPrivate: false,
         };
 
         if (mode === MODE.CREATE)
@@ -95,7 +98,7 @@ export const MyEventForm = () => {
         else
             response = await update(eventId, data);
 
-        setIsSavingRace(false);
+        setIsSavingEvent(false);
 
         if (response.success) {
             onEventSaved(response, lat, lon);
@@ -108,13 +111,12 @@ export const MyEventForm = () => {
         if (mode === MODE.CREATE) {
             toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
             setRace(response.data);
-            createDefaultVesselParticipantGroup(response.data?.id);
+            createDefaultVesselParticipantGroup(response.data);
         } else {
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
         }
 
         history.push(`/events/${response.data?.id}/update`);
-        setMode(MODE.UPDATE);
         setCoordinates({
             lat: lat,
             lng: lon
@@ -123,13 +125,32 @@ export const MyEventForm = () => {
         if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
-    const createDefaultVesselParticipantGroup = async (eventId) => {
+    const createANewDefaultCompetitionUnit = async (event, vesselParticipantGroupId) => {
         const data = {
-            name: 'Default Class',
-            calendarEventId: eventId
+            name: 'R1',
+            startTime: event.approximateStartTime,
+            approximateStart: event.approximateStartTime,
+            vesselParticipantGroupId: vesselParticipantGroupId,
+            calendarEventId: event.id,
+            approximateStart_zone: event.approximateStartTime_zone
         };
 
-        await createVesselParticipantGroup(data);
+        await createCompetitionUnit(event.id, data);
+        setMode(MODE.UPDATE);
+        if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const createDefaultVesselParticipantGroup = async (event) => {
+        const data = {
+            name: 'Default Class',
+            calendarEventId: event.id
+        };
+
+        const response = await createVesselParticipantGroup(data);
+
+        if (response.success) {
+            createANewDefaultCompetitionUnit(event, response.data.id);
+        }
     }
 
     const onChoosedLocation = (lat, lon) => {
@@ -148,35 +169,62 @@ export const MyEventForm = () => {
         );
     }
 
-    const initModeAndData = async () => {
+    const initMode = async () => {
         if (location.pathname.includes(MODE.UPDATE)) {
             setMode(MODE.UPDATE);
+            setFormChanged(false);
+        } else if (location.pathname.includes(MODE.CREATE)) {
+            setMode(MODE.CREATE);
+        }
+    }
 
-            setIsSavingRace(true);
-            const response = await get(eventId);
-            setIsSavingRace(false);
+    const initData = async () => {
+        setIsSavingEvent(true);
+        const response = await get(eventId);
+        setIsSavingEvent(false);
 
-            if (response.success) {
-                form.setFieldsValue({
-                    ...response.data,
-                    startDate: moment(response.data?.approximateStartTime),
-                    startTime: moment(response.data?.approximateStartTime)
-                });
-                setRace(response.data);
+        if (response.success) {
+            form.setFieldsValue({
+                ...response.data,
+                startDate: moment(response.data?.approximateStartTime),
+                startTime: moment(response.data?.approximateStartTime)
+            });
+            setRace(response.data);
+            setCoordinates({
+                lat: response.data.lat,
+                lng: response.data.lon
+            });
+            onChoosedLocation(response.data.lat, response.data.lon);
+        } else {
+            history.push('/404');
+        }
+    }
+
+    const initUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(({ coords }) => {
                 setCoordinates({
-                    lat: response.data.lat,
-                    lng: response.data.lon
+                    lat: coords.latitude,
+                    lng: coords.longitude
                 });
-            } else {
-                history.push('/404');
-            }
+                onChoosedLocation(coords.latitude, coords.longitude);
+            });
         }
     }
 
     React.useEffect(() => {
-        initModeAndData();
+        initMode();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        if (mode === MODE.CREATE) {
+            initUserLocation();
+        } else if (mode === MODE.UPDATE) {
+            initData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mode]);
 
     const onRaceDeleted = () => {
         history.push('/events');
@@ -189,7 +237,6 @@ export const MyEventForm = () => {
     }
 
     const getLocationFromAddress = (value) => {
-
         Geocode.fromAddress(value).then(
             (response) => {
                 const { lat, lng } = response.results[0].geometry.location;
@@ -232,7 +279,7 @@ export const MyEventForm = () => {
                 </Space>
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
-                <Spin spinning={isSavingRace}>
+                <Spin spinning={isSavingEvent}>
                     <Form
                         onValuesChange={() => setFormChanged(true)}
                         layout={'vertical'}
@@ -293,8 +340,7 @@ export const MyEventForm = () => {
                             <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} autoCorrect="off" />
                         </Form.Item>
 
-                        {(mode === MODE.UPDATE && coordinates.lat) && <LocationPicker coordinates={coordinates} onChoosedLocation={onChoosedLocation} />}
-                        {mode === MODE.CREATE && <LocationPicker coordinates={MAP_DEFAULT_VALUE.CENTER} onChoosedLocation={onChoosedLocation} />}
+                        <LocationPicker coordinates={coordinates} setFormChanged={setFormChanged} onChoosedLocation={onChoosedLocation} />
 
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
@@ -383,6 +429,10 @@ export const MyEventForm = () => {
 
                         <SyrfFormWrapper style={{ marginTop: '30px' }}>
                             <ParticipantList eventId={eventId} />
+                        </SyrfFormWrapper>
+
+                        <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                            <CoursesList eventId={eventId} />
                         </SyrfFormWrapper>
                     </>
                 )

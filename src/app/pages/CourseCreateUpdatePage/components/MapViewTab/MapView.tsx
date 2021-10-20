@@ -14,7 +14,7 @@ import { selectCourseSequencedGeometries } from '../../slice/selectors';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { create, getById, updateCourseGeometry } from 'services/live-data-server/courses';
+import { create, getById, update } from 'services/live-data-server/courses';
 import { addNonGroupLayers } from 'utils/helpers';
 import ReactDOMServer from 'react-dom/server';
 import { translations } from 'locales/translations';
@@ -74,7 +74,11 @@ export const MapView = React.forwardRef((props, ref) => {
 
     const [showGeometryNamePopup, setShowGeometryNamePopup] = React.useState<boolean>(false);
 
+    const [showCourseNamePopup, setShowCourseNamePopup] = React.useState<boolean>(false);
+
     const [geometryNameForm] = Form.useForm();
+
+    const [courseNameForm] = Form.useForm();
 
     const { actions } = useCourseSlice();
 
@@ -90,7 +94,7 @@ export const MapView = React.forwardRef((props, ref) => {
 
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
-    const { competitionUnitId, courseId } = useParams<{ competitionUnitId: string, courseId: string }>();
+    const { eventId, courseId } = useParams<{ eventId: string, courseId: string }>();
 
     const [course, setCourse] = React.useState<any>({});
 
@@ -100,9 +104,11 @@ export const MapView = React.forwardRef((props, ref) => {
 
     const [drawMode, setDrawMode] = React.useState<string>('');
 
+    const [editingLayerId, setEditingLayerId] = React.useState<string | any>('');
+
     React.useImperativeHandle(ref, () => ({
         saveCourse() {
-            saveCourse();
+            setShowCourseNamePopup(true);
         },
         deleteCourse() {
             setShowDeleteModal(true);
@@ -160,6 +166,7 @@ export const MapView = React.forwardRef((props, ref) => {
         registerOnGeometryCreatedEvent(drawnItems);
         registerOnLayersDeletedEvent();
         registerOnLayersEdittedEvent();
+        registerOnGeometryEditStart();
         initModeAndData(drawnItems);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -172,6 +179,7 @@ export const MapView = React.forwardRef((props, ref) => {
 
             if (response.success) {
                 setCourse(response.data);
+                courseNameForm.setFieldsValue({ course_name: response.data.name });
                 const courseSequencedGeometriesData = response.data?.courseSequencedGeometries;
                 if (courseSequencedGeometriesData.length > 0) {
                     mutableCouseSequencedGeometries.current = courseSequencedGeometriesData;
@@ -192,7 +200,11 @@ export const MapView = React.forwardRef((props, ref) => {
             switch (geometry.geometryType) {
                 case GEOMETRY_TYPE.line:
                     geoJsonGroup = L.polyline(geometry.coordinates).addTo(map);
-                    coordinates = geometry.coordinates[0][0];
+                    if (geometry.coordinates[0]?.length > 0 && Array.isArray(geometry.coordinates[0][0])) {
+                        coordinates = geometry.coordinates[0][0];
+                    } else {
+                        coordinates = geometry.coordinates[0];
+                    }
                     geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.line;
                     break;
                 case GEOMETRY_TYPE.point:
@@ -208,13 +220,18 @@ export const MapView = React.forwardRef((props, ref) => {
                     break;
                 case GEOMETRY_TYPE.polygon:
                     geoJsonGroup = L.polygon(geometry.coordinates).addTo(map);
-                    coordinates = geometry.coordinates[0][0];
+                    if (geometry.coordinates[0]?.length > 0 && Array.isArray(geometry.coordinates[0][0])) {
+                        coordinates = geometry.coordinates[0][0];
+                    } else {
+                        coordinates = geometry.coordinates[0];
+                    }
                     geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
             }
 
             geoJsonGroup.options._id = geometry.id;
             geoJsonGroup.options._name = geometry.properties.name;
+            registerLayerNameAndTooltipClickEvent(geoJsonGroup);
             addNonGroupLayers(geoJsonGroup, drawnItems);
 
             map.setView(coordinates, 13);
@@ -240,6 +257,20 @@ export const MapView = React.forwardRef((props, ref) => {
         });
     }
 
+    const registerOnGeometryEditStart = () => {
+        map.on(L.Draw.Event.EDITSTART, function (e) {
+            removeAllLayerToolTip();
+        });
+    }
+
+    const removeAllLayerToolTip = () => {
+        map.eachLayer(function (layer) {
+            if (layer.options && layer.options._id) {
+                layer.unbindTooltip();
+            }
+        });
+    }
+
     const registerOnLayersEdittedEvent = () => {
         map.on(L.Draw.Event.EDITED, function (e) {
             const layers = e.layers;
@@ -250,26 +281,35 @@ export const MapView = React.forwardRef((props, ref) => {
                 mutableCouseSequencedGeometries.current = mutableCouseSequencedGeometries.current.filter(geometry => {
                     return geometry.id !== layer.options._id;
                 });
-                switch (layer.options._geometry_type) {
-                    case LAYER_TYPE.marker:
-                        geometry.coordinates = [
-                            [layer.getLatLng().lat, layer.getLatLng().lng]
-                        ];
-                        break;
-                    case LAYER_TYPE.polygon:
-                        geometry.coordinates = layer.getLatLngs().map(points => {
-                            return points.map(point => {
-                                return [point.lat, point.lng];
+                if (geometry) {
+                    geometry = JSON.parse(JSON.stringify(geometry));
+                    switch (layer.options._geometry_type) {
+                        case GEOMETRY_TYPE.point:
+                            geometry.coordinates = [
+                                [layer.getLatLng().lat, layer.getLatLng().lng]
+                            ];
+                            break;
+                        case GEOMETRY_TYPE.polygon:
+                            geometry.coordinates = layer.getLatLngs().map(points => {
+                                return points.map(point => {
+                                    return [point.lat, point.lng];
+                                });
                             });
-                        });
-                        break;
-                    case LAYER_TYPE.polyline:
-                        geometry.coordinates = [layer.getLatLngs().map(function (point) {
-                            return [point.lat, point.lng];
-                        })];
-                        break;
+                            break;
+                        case GEOMETRY_TYPE.line:
+                            geometry.coordinates = layer.getLatLngs().map(function (points) {
+                                if (points.map)
+                                    return points.map(function (point) {
+                                        return [point.lat, point.lng];
+                                    });
+
+                                return [points.lat, points.lng];
+                            });
+                            break;
+                    }
+                    mutableCouseSequencedGeometries.current.push(geometry);
                 }
-                mutableCouseSequencedGeometries.current.push(geometry);
+                registerLayerNameAndTooltipClickEvent(layer);
             });
             dispatch(actions.setCourseSequencedGeometries(mutableCouseSequencedGeometries.current));
         });
@@ -303,24 +343,58 @@ export const MapView = React.forwardRef((props, ref) => {
                             return [point.lat, point.lng];
                         });
                     });
+                    geometry.coordinates = geometry.coordinates[0];
                     layer.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
                 case LAYER_TYPE.polyline:
                     geometry.geometryType = GEOMETRY_TYPE.line;
-                    geometry.coordinates = [layer.getLatLngs().map(function (point) {
+                    geometry.coordinates = layer.getLatLngs().map(function (point) {
                         return [point.lat, point.lng];
-                    })];
+                    });
                     layer.options._geometry_type = GEOMETRY_TYPE.line;
                     break;
             }
 
             layer.options._name = geometryName.current;
             layer.options._id = layerId;
+
+            registerLayerNameAndTooltipClickEvent(layer);
             drawnItems.addLayer(layer);
             mutableCouseSequencedGeometries.current = [...mutableCouseSequencedGeometries.current, geometry];
             dispatch(actions.setCourseSequencedGeometries(JSON.parse(JSON.stringify(mutableCouseSequencedGeometries.current))));
             layerOrder.current++;
         });
+    }
+
+    const registerLayerNameAndTooltipClickEvent = (layer) => {
+        let tooltip: HTMLDivElement = document.createElement("div");
+        tooltip.setAttribute('_id', layer.options._id);
+        tooltip.innerText = layer.options._name;
+        tooltip.onclick = function (event) {
+            const target = event.target as HTMLDivElement;
+            const layerId = target.getAttribute('_id');
+            const targetLayer = getLayerBasedOnId(layerId);
+
+            if (targetLayer) {
+                geometryNameForm.setFieldsValue({ geometry_name: layer.options._name });
+                setEditingLayerId(layerId);
+                setShowGeometryNamePopup(true);
+            }
+        }
+        layer.bindTooltip(tooltip, { 'permanent': true, 'interactive': true });
+    }
+
+    const getLayerBasedOnId = (layerId) => {
+        let targetLayer = null;
+        map.eachLayer(function (layer) {
+            if (layer.options && layer.options._id) {
+                if (layer.options._id === layerId) {
+                    targetLayer = layer;
+                }
+            }
+        });
+
+        return targetLayer;
     }
 
     const submitAndSetMarkerName = () => {
@@ -330,13 +404,38 @@ export const MapView = React.forwardRef((props, ref) => {
                 const { geometry_name } = values;
                 geometryName.current = geometry_name;
                 setShowGeometryNamePopup(false);
+                updateGeometryName(geometry_name);
             })
             .catch(info => {
                 // no UI/UX throw here so leave this blank for now, just need the validation.
             });
     }
 
-    const saveCourse = async () => {
+    const updateGeometryName = (name) => {
+        if (editingLayerId && editingLayerId !== '') {
+            const layer: any = getLayerBasedOnId(editingLayerId);
+            if (layer) {
+                layer.options._name = name;
+                layer.unbindTooltip();
+                registerLayerNameAndTooltipClickEvent(layer);
+                setEditingLayerId('');
+                let geometry = mutableCouseSequencedGeometries.current.filter(geometry => {
+                    return geometry.id === layer.options._id;
+                })[0];
+                if (geometry) {
+                    geometry = JSON.parse(JSON.stringify(geometry));
+                    geometry.properties.name = name;
+                    mutableCouseSequencedGeometries.current = mutableCouseSequencedGeometries.current.filter(geometry => {
+                        return geometry.id !== layer.options._id;
+                    });
+                    mutableCouseSequencedGeometries.current = [...mutableCouseSequencedGeometries.current, geometry];
+                    dispatch(actions.setCourseSequencedGeometries(mutableCouseSequencedGeometries.current));
+                }
+            }
+        }
+    }
+
+    const saveCourse = async (name) => {
         if (couseSequencedGeometries.length === 0) {
             toast.error(t(translations.course_create_update_page.you_cannot_create_course));
         }
@@ -345,9 +444,9 @@ export const MapView = React.forwardRef((props, ref) => {
             toast.info(t(translations.course_create_update_page.saving));
 
             if (mode === MODE.CREATE)
-                response = await create(competitionUnitId, couseSequencedGeometries);
+                response = await create(eventId, name, couseSequencedGeometries);
             else
-                response = await updateCourseGeometry(courseId, couseSequencedGeometries);
+                response = await update(course.calendarEventId, courseId, name, couseSequencedGeometries);
 
             if (response.success) {
                 toast.success(t(translations.course_create_update_page.successfully_created_your_course));
@@ -356,7 +455,7 @@ export const MapView = React.forwardRef((props, ref) => {
                 toast.error(t(translations.course_create_update_page.an_unexpected_error));
             }
 
-            history.push(`/races`);
+            goBack();
         }
     }
 
@@ -368,7 +467,13 @@ export const MapView = React.forwardRef((props, ref) => {
 
     const goBack = () => {
         if (history.action !== 'POP') history.goBack();
-        else history.push('/races');
+        else {
+            if (course && course.calendarEventId) {
+                history.push(`/events/${course.calendarEventId}/update`);
+            } else {
+                history.push(`/events/`);
+            }
+        }
     }
 
     const onCourseDeleted = () => {
@@ -396,6 +501,19 @@ export const MapView = React.forwardRef((props, ref) => {
         }
     }
 
+    const performSaveCourse = () => {
+        courseNameForm
+            .validateFields()
+            .then(values => {
+                const { course_name } = values;
+                saveCourse(course_name);
+                setShowCourseNamePopup(false);
+            })
+            .catch(info => {
+                // no UI/UX throw here so leave this blank for now, just need the validation.
+            });
+    }
+
     return (
         <>
             <CourseDeleteModal
@@ -404,6 +522,36 @@ export const MapView = React.forwardRef((props, ref) => {
                 onCourseDeleted={onCourseDeleted}
                 course={course}
             />
+            <Modal
+                title={t(translations.course_create_update_page.please_enter_a_course_name)}
+                bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
+                onOk={performSaveCourse}
+                onCancel={() => setShowCourseNamePopup(false)}
+                visible={showCourseNamePopup}>
+                <Form
+                    form={courseNameForm}
+                    layout="vertical"
+                    name="basic"
+                    style={{ width: '100%' }}
+
+                    initialValues={{
+                        course_name: '',
+                    }}
+                >
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.course_create_update_page.course_name)}</SyrfFieldLabel>}
+                        name="course_name"
+                        rules={[{ required: true }]}
+                    >
+                        <SyrfInputField
+                            autoCorrect="off"
+                            placeholder={t(translations.course_create_update_page.input_a_name_for_this_course)}
+                        />
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+
             <Modal
                 title={t(translations.course_create_update_page.enter_geometry_name)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}

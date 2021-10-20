@@ -117,7 +117,10 @@ export const deleteVesselParticipantGroup = (vesselParticipantGroupId) => {
 export const getVesselParticipantGroupsByEventIdWithSort = (calendarEventId, page) => {
   const userId: any = localStorage.getItem('user_id');
   return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups?calendarEventId_eq=${calendarEventId}&sort=createdAt&srdir=1&${!!userId ? `&createdById_eq=${userId}` : ''}`, {
-    page: page
+    params: {
+      page: page,
+      size: 100
+    }
   }).then(response => {
     return {
       success: true,

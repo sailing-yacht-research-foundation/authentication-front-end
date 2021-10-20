@@ -43,14 +43,14 @@ export const MyEvents = () => {
         },
         {
             title: t(translations.my_event_list_page.city),
-            dataIndex: 'locationName',
-            key: 'location',
+            dataIndex: 'city',
+            key: 'city',
             render: (text) => renderEmptyValue(text),
         },
         {
             title: t(translations.my_event_list_page.country),
-            dataIndex: 'locationName',
-            key: 'location',
+            dataIndex: 'country',
+            key: 'country',
             render: (text) => renderEmptyValue(text),
         },
         {
@@ -63,8 +63,8 @@ export const MyEvents = () => {
         },
         {
             title: t(translations.my_event_list_page.created_date),
-            dataIndex: 'created_at',
-            key: 'created_at',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {

@@ -155,10 +155,10 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/create'} component={CourseCreatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/:courseId/update'} component={CourseCreatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/create'} component={CompetitionUnitCreateUpdatePage}/>
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/races'} component={CompetitionUnitListPage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/:competitionUnitId/courses/create'} component={CourseCreatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/:competitionUnitId/courses/:courseId/update'} component={CourseCreatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/'} component={VesselListPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/create'} component={VesselCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:id/update'} component={VesselCreateUpdatePage} />
@@ -168,7 +168,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage}/>
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/my-tracks'} component={MyTrackPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

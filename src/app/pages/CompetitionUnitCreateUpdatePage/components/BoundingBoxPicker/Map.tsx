@@ -11,7 +11,7 @@ let drawnItems;
 
 export const Map = (props) => {
 
-    const { onCoordinatesRecevied, coordinates } = props;
+    const { onCoordinatesRecevied, coordinates, userCoordinates } = props;
 
     const [inititalizedPolygon, setInitializedPolygon] = React.useState<boolean>(false);
 
@@ -21,6 +21,13 @@ export const Map = (props) => {
         initPolygonShapeOnCompetitionUnitUpdate();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coordinates]);
+
+    React.useEffect(() => {
+        if (!coordinates || coordinates.length === 0) {
+            map.setView(userCoordinates);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userCoordinates]);
 
     const initPolygonShapeOnCompetitionUnitUpdate = () => {
         if (coordinates.length > 0 && !inititalizedPolygon) {
@@ -118,7 +125,7 @@ export const Map = (props) => {
         registerOnSavedEvent();
         registerOnLayerDeletedEvent();
         registerOnGeometryCreatedEvent();
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
