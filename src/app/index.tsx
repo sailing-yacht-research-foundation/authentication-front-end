@@ -98,10 +98,7 @@ export function App(props) {
 
   const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
 
-  const { setIsOpen } = useTour()
-
   React.useEffect(() => {
-    // setIsOpen(true);
     if (isAuthenticated) {
       initGoogleAnalytic();
       dispatch(loginActions.getUser());
