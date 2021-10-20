@@ -13,6 +13,8 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import FontFaceObserver from 'fontfaceobserver';
 import { TourProvider } from '@reactour/tour';
+import SmartBanner from 'react-smartbanner';
+import 'react-smartbanner/dist/main.css';
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css';
@@ -51,6 +53,7 @@ ReactDOM.render(
         <React.StrictMode>
           <TourProvider steps={steps}>
             <App />
+            <SmartBanner position="bottom" title={'SYRF - Your Sailing Adventures'} />
           </TourProvider>
         </React.StrictMode>
       </HelmetProvider>
