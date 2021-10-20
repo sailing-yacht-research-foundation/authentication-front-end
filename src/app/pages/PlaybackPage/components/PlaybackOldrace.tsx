@@ -36,7 +36,7 @@ import { stringToColour } from "utils/helpers";
 import { selectSessionToken } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
 import { Playback } from "./Playback";
-import { OldRaceMap } from "./OldRaceMap";
+import { RaceMap } from "./RaceMap";
 
 export const PlaybackOldRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -464,7 +464,7 @@ export const PlaybackOldRace = (props) => {
           <Leaderboard participantsData={participantsData}></Leaderboard>
         </LeaderboardContainer>
         <Playback onPlaybackTimeManualUpdate={handlePlaybackClickedPosition} />
-        <OldRaceMap emitter={eventEmitter} />
+        <RaceMap emitter={eventEmitter} />
       </MapContainer>
     </div>
   );
