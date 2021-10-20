@@ -10,7 +10,7 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from "react-share";
-import { isMobile, isDesktop } from 'react-device-detect';
+import { isDesktop } from 'react-device-detect';
 import { HiShare, HiLink } from 'react-icons/hi';
 import { StyleConstants } from 'styles/StyleConstants';
 import copy from 'copy-to-clipboard';
@@ -33,7 +33,6 @@ export const Share = React.memo(() => {
     const handleGeneralShareClick = () => {
         const currentUrl = window?.location.href;
         
-        message.info(`${isDesktop} ${isMobile}`)
         if (isDesktop) {
             handleCopyRaceLink(currentUrl);
             return;
@@ -41,7 +40,6 @@ export const Share = React.memo(() => {
 
         if (navigator?.share) {
             navigator.share({url: currentUrl})
-                .then(() => {})
                 .catch(err => {
                     handleCopyRaceLink(currentUrl);
                 });
@@ -68,7 +66,7 @@ export const Share = React.memo(() => {
                         </ShareButtonInnerWrapper>
                     </ShareButtonItemWrapper>
                     <ShareButtonItemWrapper onClick={handleShareButtonClick}>
-                        <FacebookShareButton url={currentUrl}>
+                        <FacebookShareButton quote={currentUrl} url={currentUrl}>
                             <FacebookIcon size={35} round={true} />
                         </FacebookShareButton>
                     </ShareButtonItemWrapper>
