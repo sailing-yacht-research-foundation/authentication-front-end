@@ -264,7 +264,9 @@
   "misc": {
     "session_expired": "Session is expired and we renewed the session. Please try again!",
     "not_available": "Not Available",
-    "password_must_not_contain_blank": "Password must not contain blank space."
+    "password_must_not_contain_blank": "Password must not contain blank space.",
+    "want_to_take_a_quick_tour": "Want to take a quick tour?",
+    "look_like_you_are_new": "Looks like your are new here {{username}}, Do you want to take a quick tour with us?"
   },
   "playback_page": {
     "competitor": "Competitor:",
@@ -311,7 +313,8 @@
     "create": "Create",
     "city": "City",
     "country": "Country",
-    "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies."
+    "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
+    "download_icalendar": "Download Icalendar"
   },
   "competition_unit_list_page": {
     "name": "Name",
@@ -637,6 +640,7 @@
     "delete_account": "Delete all your associated information.",
     "new_password": "Your new password.",
     "password_confirmation": "Please confirm you new password.",
-    "play_this_track":"Play this track."
+    "play_this_track":"Play this track.",
+    "download_icalendar_file": "Download this event as Icalendar."
   }
 }

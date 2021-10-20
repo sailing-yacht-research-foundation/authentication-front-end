@@ -81,7 +81,8 @@ export const UpdateInfo = (props) => {
                 birthdate: birthdate ? birthdate.format(TIME_FORMAT.number) : moment('2002-01-01').format(TIME_FORMAT.number),
                 address: address,
                 phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
-                picture: getUserAttribute(authUser, 'picture')
+                picture: getUserAttribute(authUser, 'picture'),
+                showed_tour: getUserAttribute(authUser, 'showed_tour'),
             }
         });
 

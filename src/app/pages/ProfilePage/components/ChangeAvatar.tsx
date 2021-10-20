@@ -55,6 +55,7 @@ export const ChangeAvatar = (props) => {
                         birthdate: getUserAttribute(authUser,'birthdate'),
                         address: getUserAttribute(authUser,'address'),
                         phone_number: getUserAttribute(authUser,'phone_number'),
+                        showed_tour: getUserAttribute(authUser, 'showed_tour'),
                     }
                 }
                 await updateProfile(userData);

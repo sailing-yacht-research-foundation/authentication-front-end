@@ -55,7 +55,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
-import { useTour } from '@reactour/tour';
+import { TutorialModal } from './components/TutorialModal';
 
 const { Sider, Content } = Layout;
 
@@ -97,10 +97,7 @@ export function App(props) {
 
   const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
 
-  const { setIsOpen } = useTour()
-
   React.useEffect(() => {
-    // setIsOpen(true);
     if (isAuthenticated) {
       initGoogleAnalytic();
       dispatch(loginActions.getUser());
@@ -181,6 +178,7 @@ export function App(props) {
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
+            <TutorialModal/>
           </Content>
         </Layout>
       </Layout>
