@@ -15,6 +15,8 @@ export const CriteriaSuggestion = (props) => {
 
     const { actions } = useHomeSlice();
 
+    const [showSuggestion, setShowSuggestion] = React.useState<boolean>(false);
+
     const getSuggestionItems = () => {
         let criteriaMatched: any[] = [];
         let lastword: any = keyword.match(/(?:\s|^)([\S]+)$/i) || '';
@@ -29,7 +31,10 @@ export const CriteriaSuggestion = (props) => {
             }
         });
 
-        return criteriaMatched;
+        if (showSuggestion)
+            return criteriaMatched;
+
+        return [];
     }
 
     const appendCriteria = (criteria) => {
@@ -45,6 +50,8 @@ export const CriteriaSuggestion = (props) => {
         if (searchBarRef.current) {
             searchBarRef.current.focus();
         }
+
+        setShowSuggestion(false);
     }
 
     const renderSuggestionCriteria = () => {
@@ -57,6 +64,10 @@ export const CriteriaSuggestion = (props) => {
             return <SuggestionCriteria onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
         });
     }
+
+    React.useEffect(() => {
+        if (keyword.length > 0) setShowSuggestion(true);
+    },[keyword]);
 
     return (
         <Wrapper>
@@ -72,6 +83,7 @@ const Wrapper = styled.div`
     left: 0;
     right: 0;
     bottom: 45px;
+    box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
 `;
 
 const SuggestionCriteria = styled.div`

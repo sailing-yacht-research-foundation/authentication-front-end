@@ -5,7 +5,7 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { StyleConstants } from 'styles/StyleConstants';
-import { isMobile } from 'utils/helpers';
+import { insert3AfterWordWhenPressingSpace, insert3ToLastWordWhenSearch, isMobile } from 'utils/helpers';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -15,6 +15,7 @@ import moment from 'moment';
 import { selectIsSearching, selectFromDate, selectSearchKeyword, selectToDate } from '../slice/selectors';
 import { TIME_FORMAT } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
+import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
 
 export const FilterPane = (props) => {
 
@@ -40,6 +41,8 @@ export const FilterPane = (props) => {
 
     const toDate = useSelector(selectToDate);
 
+    const [keyword, setKeyword] = React.useState<string>('');
+
     useEffect(() => {
         if (defaultFocus && searchInputRef) {
             searchInputRef.current?.focus();
@@ -55,7 +58,7 @@ export const FilterPane = (props) => {
         const { name, from_date, to_date } = values;
         const params: any = {};
 
-        params.keyword = name;
+        params.keyword = insert3ToLastWordWhenSearch(name);
         if (from_date) params.from_date = moment(from_date).format(TIME_FORMAT.number);
         if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
 
@@ -79,7 +82,6 @@ export const FilterPane = (props) => {
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchKeyword, fromDate, toDate]);
-
     return (
         <Wrapper {...props}>
             <FilterHeader>
@@ -105,17 +107,25 @@ export const FilterPane = (props) => {
                     initialValues={{
                         name: searchKeyword,
                     }}>
-                    <Form.Item
-                        label={t(translations.home_page.filter_tab.race_name)}
-                        name="name"
-                        rules={[{ required: true }]}
-                    >
-                        <Input ref={searchInputRef}
-                            value={searchKeyword}
-                            autoCorrect="off"
-                        />
-                    </Form.Item>
+                    <div style={{ position: 'relative' }}>
+                        <Form.Item
+                            label={t(translations.home_page.filter_tab.race_name)}
+                            name="name"
+                            rules={[{ required: true }]}
+                        >
+                            <Input ref={searchInputRef}
+                                value={searchKeyword}
+                                onChange={e => {
+                                   const value = insert3AfterWordWhenPressingSpace(e.target.value, searchKeyword); 
 
+                                    dispatch(actions.setKeyword(value));
+                                    setKeyword(value);
+                                }}
+                                autoCorrect="off"
+                            />
+                            <CriteriaSuggestion keyword={keyword} searchBarRef={searchInputRef} />
+                        </Form.Item>
+                    </div>
                     <Row gutter={24}>
                         <Col xs={12} sm={12} md={12} lg={12}>
                             <Form.Item
@@ -123,7 +133,7 @@ export const FilterPane = (props) => {
                                 name="from_date"
                                 rules={[{ type: 'date' }, ({ getFieldValue }) => ({
                                     validator(_, value) {
-                                        if (!value || !getFieldValue('to_date') ||  moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('to_date').format(TIME_FORMAT.number))) {
+                                        if (!value || !getFieldValue('to_date') || moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('to_date').format(TIME_FORMAT.number))) {
                                             return Promise.resolve();
                                         }
                                         return Promise.reject(new Error(t(translations.home_page.filter_tab.from_date_must_be_smaller_than_to_date)));
@@ -148,10 +158,9 @@ export const FilterPane = (props) => {
                             <Form.Item
                                 label={t(translations.home_page.filter_tab.to_date)}
                                 name="to_date"
-                                rules={[{ type: 'date' },  ({ getFieldValue }) => ({
+                                rules={[{ type: 'date' }, ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         if (!value || !getFieldValue('from_date') || moment(value.format(TIME_FORMAT.number)).isSameOrAfter(getFieldValue('from_date').format(TIME_FORMAT.number))) {
-                                            
                                             return Promise.resolve();
                                         }
                                         return Promise.reject(new Error(t(translations.home_page.filter_tab.to_date_must_bigger_than_from_date)));

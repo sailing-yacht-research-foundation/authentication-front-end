@@ -574,7 +574,8 @@
     "people_are_going_to_this_event": "{{participants_count}} people are going to this event.",
     "attend_this_event": "Attend this event",
     "invite_friends": "Invite friends",
-    "update_this_event": "Edit this event"
+    "update_this_event": "Edit this event",
+    "share": "Share"
   },
   "my_tracks_page": {
     "my_tracks": "My Tracks",
