@@ -18,11 +18,11 @@ import {
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
 import { MAP_DEFAULT_VALUE } from "utils/constants";
-import { StreamingRaceMap } from "./StreamingRaceMap";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
+import { RaceMap } from "./RaceMap";
 
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -347,7 +347,7 @@ export const PlaybackStreamRace = (props) => {
           <ModalCountdownTimer />
         </LeaderboardContainer>
         <Playback />
-        <StreamingRaceMap emitter={eventEmitter} />
+        <RaceMap emitter={eventEmitter} />
       </MapContainer>
     </div>
   );

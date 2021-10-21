@@ -50,6 +50,7 @@
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
     "leaflet-hotline": "^0.4.0",
+    "leaflet-rotatedmarker": "^0.2.0",
     "leaflet.boatmarker": "^1.1.5",
     "leaflet.markercluster": "^1.5.1",
     "lint-staged": "10.3.0",

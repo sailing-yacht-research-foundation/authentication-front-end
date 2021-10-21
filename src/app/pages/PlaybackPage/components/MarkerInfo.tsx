@@ -3,43 +3,37 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-export const PlayerInfo = (props) => {
-    const { competitor_name, competitor_sail_number } = props.playerData;
-    const { coordinate } = props;
+export const MarkerInfo = (props) => {
+    const { coordinate, identifier } = props;
 
     const { t } = useTranslation();
+
+    const isIdentifierExist = !!identifier;
+    const identifierElement = isIdentifierExist ? (
+        <RacerInfoContainer>
+            <RacerInfoTitle>
+                {t(translations.playback_page.identifier)}: 
+            </RacerInfoTitle>
+            <br />
+            {identifier}
+        </RacerInfoContainer>
+    ) : undefined;
 
     const isCoordinateExist = !!(coordinate.lat || coordinate.lon);
     const coordinateElement = isCoordinateExist ? (
         <RacerInfoContainer>
-            <hr/>
+            {isIdentifierExist && <hr/>}
             <RacerInfoTitle>
                 {t(translations.playback_page.coordinate)} 
                 <span style={{ color: '#999' }}>{t(translations.playback_page.lat_lon)}</span>:
             </RacerInfoTitle>
-            <br />
             [{coordinate.lat}, {coordinate.lon}]
         </RacerInfoContainer>
     ) : undefined;
 
     return (
         <div>
-            <RacerInfoContainer>
-                <RacerInfoTitle>
-                    {t(translations.playback_page.competitor)}
-                </RacerInfoTitle>
-                {competitor_name}
-            </RacerInfoContainer>
-
-            {competitor_sail_number &&
-                <RacerInfoContainer>
-                    <RacerInfoTitle>
-                        {t(translations.playback_page.sail_number)}
-                    </RacerInfoTitle>
-                    {competitor_sail_number}
-                </RacerInfoContainer>
-            }
-
+            {identifierElement}
             {coordinateElement}
         </div>
     );

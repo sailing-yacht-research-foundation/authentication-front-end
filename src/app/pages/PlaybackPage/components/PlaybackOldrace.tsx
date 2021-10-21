@@ -35,8 +35,8 @@ import { MAP_DEFAULT_VALUE } from "utils/constants";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
-import { PlaybackForOldRace } from "./PlaybackForOldRace";
-import { OldRaceMap } from "./OldRaceMap";
+import { Playback } from "./Playback";
+import { RaceMap } from "./RaceMap";
 
 export const PlaybackOldRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -380,7 +380,7 @@ export const PlaybackOldRace = (props) => {
     if (!Object.keys(vesselParticipants)?.length) return;
 
     isStillFetchingFromBoatRenderRef.current = false;
-    const mappedVPs = generateVesselParticipantsLastPosition(vesselParticipants, elapsedTime);
+    const mappedVPs = generateVesselParticipantsLastPosition(vesselParticipants, elapsedTime, retrievedTimestamps);
 
     eventEmitter.emit("ping", mappedVPs);
     eventEmitter.emit("track-update", mappedVPs);
@@ -424,7 +424,7 @@ export const PlaybackOldRace = (props) => {
 
     for (let selectedTime = startTimeToCheck; selectedTime <= maxTime; selectedTime += 1000) {
       if (!retrievedTimestamps.includes(selectedTime)) {
-        const nearest = findNearestRetrievedTimestamp(retrievedTimestamps, elapsedTime, 1000);
+        const nearest = findNearestRetrievedTimestamp(retrievedTimestamps, selectedTime, 1000);
         if (!nearest.previous.length) {
           isStillFetchingFromBoatRenderRef.current = true;
           handleRequestMoreRaceData(startRaceTime + selectedTime);
@@ -463,8 +463,8 @@ export const PlaybackOldRace = (props) => {
         <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
           <Leaderboard participantsData={participantsData}></Leaderboard>
         </LeaderboardContainer>
-        <PlaybackForOldRace onPlaybackTimeManualUpdate={handlePlaybackClickedPosition} />
-        <OldRaceMap emitter={eventEmitter} />
+        <Playback onPlaybackTimeManualUpdate={handlePlaybackClickedPosition} />
+        <RaceMap emitter={eventEmitter} />
       </MapContainer>
     </div>
   );
