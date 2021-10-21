@@ -9,14 +9,15 @@ import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
 import { updateProfile } from 'services/live-data-server/user';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
+import { useHistory } from 'react-router';
 
-export const TutorialModal = (props) => {
+export const TutorialModal = React.forwardRef((props, ref) => {
 
     const { t } = useTranslation();
 
     const user = useSelector(selectUser);
 
-    const { setIsOpen } = useTour();
+    const { setIsOpen, currentStep } = useTour();
 
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
@@ -26,7 +27,10 @@ export const TutorialModal = (props) => {
 
     const dispatch = useDispatch();
 
+    const history = useHistory();
+
     const showTour = () => {
+        history.push('/');
         setIsOpen(true);
         setShowModal(false);
     }
@@ -58,6 +62,18 @@ export const TutorialModal = (props) => {
         updateTourAttribute(true);
     }
 
+    React.useImperativeHandle(ref, () => ({
+        dismissTour() {
+            dismissTour();
+        }
+      }));
+
+    React.useEffect(() => {
+        if (currentStep === 3) {
+            history.push('/events/create');
+        }
+    }, [currentStep]);
+
     React.useEffect(() => {
         if (user.attributes && isAuthenticated && (
             !getUserAttribute(user, 'showed_tour') ||
@@ -80,7 +96,7 @@ export const TutorialModal = (props) => {
             <ModalMessage>{t(translations.misc.look_like_you_are_new, { username: user.firstName + ' ' + user.lastName })}</ModalMessage>
         </Modal>
     )
-}
+});
 
 const ModalMessage = styled.div`
     margin: 0 5px;

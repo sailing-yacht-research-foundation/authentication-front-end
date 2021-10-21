@@ -11,6 +11,7 @@ import { selectIsSearching, selectPageSize, selectSearchKeyword } from '../../..
 import { ReactComponent as SYRFLogo } from '../../assets/logo-dark.svg';
 import { CriteriaSuggestion } from './CriteriaSuggestion';
 import ReactTooltip from 'react-tooltip';
+import { insert3AfterWordWhenPressingSpace, insert3ToLastWordWhenSearch } from 'utils/helpers';
 
 export const FilterSearchBar = (props) => {
 
@@ -36,6 +37,8 @@ export const FilterSearchBar = (props) => {
 
     const searchBarRef = React.useRef<any>();
 
+    const [keyword, setKeyword] = React.useState<string>('');
+
     const handleOnSearchInputFocus = () => {
         window.scrollTo(0, 0);
         setIsFocusingOnSearchInput(true);
@@ -52,20 +55,14 @@ export const FilterSearchBar = (props) => {
         if (searchKeyword.length === 0) return;
         if (e.keyCode === 13 || e.which === 13) {
             const params: any = {};
-            params.keyword = searchKeyword;
+            params.keyword = insert3ToLastWordWhenSearch(searchKeyword);;
             params.size = pageSize;
 
             dispatch(actions.setPage(1));
             dispatch(actions.setKeyword(params.keyword ?? ''));
             dispatch(actions.setFromDate(''));
             dispatch(actions.setToDate(''));
-
-            console.log(searchKeyword);
-            console.log(params.keyword);
-
             dispatch(actions.searchRaces(params));
-
- 
 
             history.push({
                 pathname: '/',
@@ -76,7 +73,7 @@ export const FilterSearchBar = (props) => {
     }
 
     return (
-        <SearchBarWrapper className="search-step-input" ref={searchBarWrapperRef}>
+        <SearchBarWrapper ref={searchBarWrapperRef}>
             <SearchBarInnerWrapper>
                 <StyledSearchBar
                     data-tip={t(translations.tip.search_for_races_using_different_criteria)}
@@ -84,7 +81,9 @@ export const FilterSearchBar = (props) => {
                     type={'search'}
                     value={searchKeyword}
                     onChange={(e) => {
-                        dispatch(actions.setKeyword(e.target.value));
+                        const value = insert3AfterWordWhenPressingSpace(e.target.value, searchKeyword);
+                        dispatch(actions.setKeyword(value));
+                        setKeyword(value);
                     }}
                     onKeyUp={searchForRaces}
                     onFocus={handleOnSearchInputFocus}
@@ -92,7 +91,7 @@ export const FilterSearchBar = (props) => {
                     placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                 <SearchBarLogo />
                 <StyledSpin spinning={isSearching}></StyledSpin>
-                <CriteriaSuggestion showAll={showAllCriteria} searchBarRef={searchBarRef} keyword={searchKeyword}/>
+                <CriteriaSuggestion showAll={showAllCriteria} searchBarRef={searchBarRef} keyword={keyword} />
             </SearchBarInnerWrapper>
             <AdvancedSearchTextWrapper>
                 <a href="/" onClick={(e) => {

@@ -3,7 +3,6 @@ import { Button, Space, Spin } from 'antd';
 import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaCalendarPlus, FaSave } from 'react-icons/fa';
-import { FiUserPlus } from 'react-icons/fi';
 import styled from 'styled-components';
 import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
@@ -14,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { IoIosArrowBack } from 'react-icons/io';
+import { Share } from 'app/pages/PlaybackPage/components/Share';
 
 let userId;
 
@@ -87,7 +87,8 @@ export const EventDetail = () => {
                                 <Button icon={<FaCalendarPlus style={{ marginRight: '5px' }} />} shape="round" type="primary">{t(translations.event_detail_page.attend_this_event)}</Button>
                             )
                         }
-                        <ShareButton shape="round" icon={<FiUserPlus style={{ marginRight: '5px' }} />}>{t(translations.event_detail_page.invite_friends)}</ShareButton>
+                        {/* <ShareButton shape="round" icon={<HiShare style={{ marginRight: '5px' }} />}>{t(translations.event_detail_page.share)}</ShareButton> */}
+                        <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
                     </Space>
                 </EventActions>
             </PageHeaderContainerResponsive>
@@ -128,11 +129,6 @@ const EventHeaderInfoContainer = styled.div`
 
 const EventActions = styled.div`
     text-align: right;
-`;
-
-const ShareButton = styled(Button)`
-    color: #40a9ff;
-    border-color: #40a9ff;
 `;
 
 const EventDescription = styled.p`

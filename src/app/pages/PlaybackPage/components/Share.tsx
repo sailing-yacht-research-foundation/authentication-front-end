@@ -16,11 +16,11 @@ import { StyleConstants } from 'styles/StyleConstants';
 import copy from 'copy-to-clipboard';
 import { message } from 'antd';
 
-export const Share = React.memo(() => {
+export const Share = React.memo((props: any) => {
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
     const handleShareButtonClick = () => {
-        setIsOpen(false);        
+        setIsOpen(false);
     }
 
     const handleCopyRaceLink = (currUrl) => {
@@ -32,18 +32,18 @@ export const Share = React.memo(() => {
 
     const handleGeneralShareClick = () => {
         const currentUrl = window?.location.href;
-        
+
         if (isDesktop) {
             handleCopyRaceLink(currentUrl);
             return;
         }
 
         if (navigator?.share) {
-            navigator.share({url: currentUrl})
+            navigator.share({ url: currentUrl })
                 .catch(err => {
                     handleCopyRaceLink(currentUrl);
                 });
-            
+
             return;
         }
 
@@ -54,7 +54,7 @@ export const Share = React.memo(() => {
     const currentUrl = window?.location?.href;
 
     return (
-        <ShareButtonWrapper>
+        <ShareButtonWrapper style={{...props.style}}>
             <ButtonContainer style={{ width: '30px', height: '30px' }} onClick={() => setIsOpen(!isOpen)}>
                 <ShareButton />
             </ButtonContainer>
@@ -62,7 +62,7 @@ export const Share = React.memo(() => {
                 isOpen && <ShareDropdown>
                     <ShareButtonItemWrapper onClick={handleShareButtonClick}>
                         <ShareButtonInnerWrapper onClick={handleGeneralShareClick} style={{ background: 'green' }}>
-                            <HiLink style={{fontSize: '24px', color: '#FFF'}} />
+                            <HiLink style={{ fontSize: '24px', color: '#FFF' }} />
                         </ShareButtonInnerWrapper>
                     </ShareButtonItemWrapper>
                     <ShareButtonItemWrapper onClick={handleShareButtonClick}>
@@ -95,6 +95,7 @@ const ShareButtonWrapper = styled.div`
     position: absolute;
     bottom: 16px;
     right: 20px;
+    cursor: pointer;
 `;
 
 const ShareButtonItemWrapper = styled.div`
@@ -118,7 +119,8 @@ const ShareDropdown = styled.div`
     flex-direction: column;
     padding: 0 10px;
     align-items: center;
-    // display: none;
+    max-width: 50px;
+    z-index: 10;
 `;
 
 const ButtonContainer = styled.div`

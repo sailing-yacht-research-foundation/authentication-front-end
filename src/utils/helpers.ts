@@ -144,10 +144,49 @@ export const renderEmptyValue = (value) => {
 
 export const renderTimezoneInUTCOffset = (timezone) => {
     if (!timezone) return '';
-    
-    const offset = moment.tz(timezone).utcOffset() /  60;
+
+    const offset = moment.tz(timezone).utcOffset() / 60;
 
     if (offset > 0) return '+' + offset;
 
     return offset;
+}
+
+/**
+ * Insert 3~ after word on search when pressing space.
+ * @param eventValue 
+ * @param searchKeyword 
+ * @returns 
+ */
+export const insert3AfterWordWhenPressingSpace = (eventValue, searchKeyword) => {
+    let value = eventValue;
+    let lastWord: any = searchKeyword.match(/(?:\s|^)([\S]+)$/i);
+    if (lastWord) {
+        lastWord = lastWord[0];
+    }
+
+    if (value[value.length - 1] === ' ' && lastWord && !Array.isArray(lastWord) && !lastWord!.includes('~3')) {
+        value = value.substr(0, value.length - 1) + '~3' + value.substr(value.length - 1);
+    }
+
+    return value;
+}
+
+/**
+ * Insert new ~3 when search.
+ * @param keyword 
+ * @returns 
+ */
+export const insert3ToLastWordWhenSearch = (keyword) => {
+    let value = keyword;
+    let lastWord: any = keyword.match(/(?:\s|^)([\S]+)$/i);
+    if (lastWord) {
+        lastWord = lastWord[0];
+    }
+
+    if (lastWord && !Array.isArray(lastWord) && !lastWord!.includes('~3')) {
+        value = value.substr(0, value.length) + '~3' + value.substr(value.length);
+    }
+
+    return value;
 }

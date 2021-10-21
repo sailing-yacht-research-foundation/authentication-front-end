@@ -12,7 +12,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import FontFaceObserver from 'fontfaceobserver';
-import { TourProvider } from '@reactour/tour';
 import SmartBanner from 'react-smartbanner';
 import 'react-smartbanner/dist/main.css';
 
@@ -32,8 +31,6 @@ import reportWebVitals from 'reportWebVitals';
 // Initialize languages
 import './locales/i18n';
 
-import { steps } from 'utils/tour-steps';
-
 // Observe loading of Inter (to remove 'Inter', remove the <link> tag in
 // the index.html file and this observer)
 const openSansObserver = new FontFaceObserver('Inter', {});
@@ -51,10 +48,8 @@ ReactDOM.render(
     <ThemeProvider>
       <HelmetProvider>
         <React.StrictMode>
-          <TourProvider steps={steps}>
-            <App />
-            <SmartBanner position="bottom" title={'SYRF - Your Sailing Adventures'} />
-          </TourProvider>
+          <App />
+          <SmartBanner position="bottom" title={'SYRF - Your Sailing Adventures'} />
         </React.StrictMode>
       </HelmetProvider>
     </ThemeProvider>
