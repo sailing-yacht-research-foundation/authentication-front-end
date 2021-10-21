@@ -209,16 +209,16 @@ export const RaceMap = (props) => {
 
       const styleSetup = {
         fill: participantColor,
-        stroke: participantColor,
-        width: "32px",
-        height: "32px",
-        marginLeft: `-16px`,
-        marginTop: "-4px",
+        stroke: "#000000",
+        width: "18px",
+        height: "36px",
+        marginLeft: `-9px`,
+        marginTop: "-8px",
       };
 
       const svgStyle = {
-        width: "32px",
-        height: "32px",
+        width: "18px",
+        height: "36px",
       };
 
       const renderedBoatIcon = (
@@ -298,7 +298,20 @@ export const RaceMap = (props) => {
         localBoats[participant.id].layer.setLatLng(
           new L.LatLng(participant.lastPosition?.lat || 0, participant.lastPosition?.lon || 0)
         );
-        localBoats[participant.id].layer.setRotationAngle(participant.lastPosition?.heading || 0);
+
+        const currentHeading = participant.lastPosition?.heading || 0;
+        const previousHeading = localBoats[participant.id].layer?.options?.rotationAngle || 0;
+        let targetHeading = currentHeading;
+
+        if (Math.abs(currentHeading - previousHeading) >= 180) {
+          if (previousHeading >= 0 && targetHeading < 0) {
+            targetHeading = 360 + targetHeading;
+          } else if (previousHeading < 0 && targetHeading > 0) {
+            targetHeading = -360 + targetHeading;
+          }
+        }
+        
+        localBoats[participant.id].layer.setRotationAngle(targetHeading || 0);
       }
     });
 
@@ -399,7 +412,7 @@ export const RaceMap = (props) => {
       {
         attribution:
           '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-        maxZoom: 21,
+        maxZoom: 19,
         minZoom: 13,
         id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",
         tileSize: 512,
