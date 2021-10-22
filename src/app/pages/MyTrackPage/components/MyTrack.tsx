@@ -60,16 +60,16 @@ export const MyTrack = () => {
                     <Dropdown overlay={<Menu>
                         <Menu.Item>
                             <a onClick={(e) => performDownloadTrack(e, record, 'kml')} target="_blank" rel="noopener noreferrer" href="/">
-                                Download as KML
+                                {t(translations.my_tracks_page.download_as_kml)}
                             </a>
                         </Menu.Item>
                         <Menu.Item>
                             <a onClick={(e) => performDownloadTrack(e, record, 'gpx')} target="_blank" rel="noopener noreferrer" href="/">
-                                Download as GPX
+                            {t(translations.my_tracks_page.download_as_gpx)}
                             </a>
                         </Menu.Item>
                     </Menu>} placement="bottomRight" arrow>
-                        <Button type="link">Download</Button>
+                        <Button type="link">{t(translations.my_tracks_page.download)}</Button>
                     </Dropdown>
                 </>;
             }

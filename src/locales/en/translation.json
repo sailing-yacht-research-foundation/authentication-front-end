@@ -584,7 +584,10 @@
     "created_date": "Created Date",
     "track_now": "Track Now",
     "event_track": "Event Track",
-    "you_dont_have_any_tracks": "You don't have any tracks. Start tracking by using our app."
+    "you_dont_have_any_tracks": "You don't have any tracks. Start tracking by using our app.",
+    "download_as_gpx": "Download as GPX",
+    "download_as_kml": "Download as KML",
+    "download":"Download"
   },
   "tip": {
     "search_for_races_using_different_criteria": "Search for races using different criteria.",
