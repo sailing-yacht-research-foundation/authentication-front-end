@@ -11,7 +11,7 @@ import { selectIsSearching, selectPageSize, selectSearchKeyword } from '../../..
 import { ReactComponent as SYRFLogo } from '../../assets/logo-dark.svg';
 import { CriteriaSuggestion } from './CriteriaSuggestion';
 import ReactTooltip from 'react-tooltip';
-import { insert3AfterWordWhenPressingSpace, insert3ToLastWordWhenSearch } from 'utils/helpers';
+import { ResultSuggestion } from './ResultSuggestion';
 
 export const FilterSearchBar = (props) => {
 
@@ -30,8 +30,6 @@ export const FilterSearchBar = (props) => {
     const pageSize = useSelector(selectPageSize);
 
     const { t } = useTranslation();
-
-    const [showAllCriteria, setShowAllCriteria] = React.useState<boolean>(false);
 
     const searchBarWrapperRef = React.useRef<any>()
 
@@ -54,7 +52,7 @@ export const FilterSearchBar = (props) => {
     const searchForRaces = (e) => {
         if (e.keyCode === 13 || e.which === 13) {
             const params: any = {};
-            params.keyword = insert3ToLastWordWhenSearch(searchKeyword);;
+            params.keyword = searchKeyword;
             params.size = pageSize;
 
             dispatch(actions.setPage(1));
@@ -80,7 +78,7 @@ export const FilterSearchBar = (props) => {
                     type={'search'}
                     value={searchKeyword}
                     onChange={(e) => {
-                        const value = insert3AfterWordWhenPressingSpace(e.target.value, searchKeyword);
+                        const value = e.target.value;
                         dispatch(actions.setKeyword(value));
                         setKeyword(value);
                     }}
@@ -90,7 +88,8 @@ export const FilterSearchBar = (props) => {
                     placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                 <SearchBarLogo />
                 <StyledSpin spinning={isSearching}></StyledSpin>
-                <CriteriaSuggestion showAll={showAllCriteria} searchBarRef={searchBarRef} keyword={keyword} />
+                <CriteriaSuggestion searchBarRef={searchBarRef} keyword={keyword} />
+                <ResultSuggestion searchBarRef={searchBarRef} keyword={keyword}/>
             </SearchBarInnerWrapper>
             <AdvancedSearchTextWrapper>
                 <a href="/" onClick={(e) => {

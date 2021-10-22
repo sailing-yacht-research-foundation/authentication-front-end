@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react";
 import { Plane, useCurtains } from "react-curtains";
 import { Vec2 } from 'curtainsjs/dist/curtains.umd';
 import Video from './assets/sailing.webm';
-import styled from 'styled-components';
 
 const vertexShader = `
   precision mediump float;

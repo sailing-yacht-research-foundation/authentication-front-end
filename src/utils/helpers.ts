@@ -161,12 +161,14 @@ export const renderTimezoneInUTCOffset = (timezone) => {
 export const insert3AfterWordWhenPressingSpace = (eventValue, searchKeyword) => {
     let value = eventValue;
     let lastWord: any = searchKeyword.match(/(?:\s|^)([\S]+)$/i);
+    const valueLength = value.length;
+
     if (lastWord) {
         lastWord = lastWord[0];
     }
 
-    if (value[value.length - 1] === ' ' && lastWord && !Array.isArray(lastWord) && !lastWord!.includes('~3')) {
-        value = value.substr(0, value.length - 1) + '~3' + value.substr(value.length - 1);
+    if (value[valueLength - 1] === ' ' && lastWord && !Array.isArray(lastWord) && !lastWord!.includes('~3')) {
+        value = value.substr(0, valueLength - 1) + '~3' + value.substr(valueLength - 1);
     }
 
     return value;
@@ -189,4 +191,8 @@ export const insert3ToLastWordWhenSearch = (keyword) => {
     }
 
     return value;
+}
+
+export const insert3BetweenEachWord = (stringOfWords) => {
+    return stringOfWords.split(' ').join('~3 ') + '~3';
 }

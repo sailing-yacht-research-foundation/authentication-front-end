@@ -66,12 +66,13 @@ export const TutorialModal = React.forwardRef((props, ref) => {
         dismissTour() {
             dismissTour();
         }
-      }));
+    }));
 
     React.useEffect(() => {
         if (currentStep === 3) {
             history.push('/events/create');
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentStep]);
 
     React.useEffect(() => {
@@ -81,6 +82,7 @@ export const TutorialModal = React.forwardRef((props, ref) => {
         )) {
             setShowModal(true);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     return (
