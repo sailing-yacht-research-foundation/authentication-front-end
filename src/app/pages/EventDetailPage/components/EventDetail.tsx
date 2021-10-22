@@ -87,7 +87,6 @@ export const EventDetail = () => {
                                 <Button icon={<FaCalendarPlus style={{ marginRight: '5px' }} />} shape="round" type="primary">{t(translations.event_detail_page.attend_this_event)}</Button>
                             )
                         }
-                        {/* <ShareButton shape="round" icon={<HiShare style={{ marginRight: '5px' }} />}>{t(translations.event_detail_page.share)}</ShareButton> */}
                         <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
                     </Space>
                 </EventActions>

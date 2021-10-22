@@ -5,7 +5,7 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { StyleConstants } from 'styles/StyleConstants';
-import { insert3AfterWordWhenPressingSpace, insert3ToLastWordWhenSearch, isMobile } from 'utils/helpers';
+import { isMobile } from 'utils/helpers';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -59,7 +59,7 @@ export const FilterPane = (props) => {
         const { name, from_date, to_date } = values;
         const params: any = {};
 
-        params.keyword = insert3ToLastWordWhenSearch(name);
+        params.keyword = name;
         if (from_date) params.from_date = moment(from_date).format(TIME_FORMAT.number);
         if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
 
@@ -117,7 +117,7 @@ export const FilterPane = (props) => {
                             <Input ref={searchInputRef}
                                 value={searchKeyword}
                                 onChange={e => {
-                                    const value = insert3AfterWordWhenPressingSpace(e.target.value, searchKeyword);
+                                    const value = e.target.value;
 
                                     dispatch(actions.setKeyword(value));
                                     setKeyword(value);
@@ -185,7 +185,7 @@ export const FilterPane = (props) => {
                     </Row>
 
                     <Form.Item>
-                        <SyrfFormButton data-tip="hello world" type="primary" htmlType="submit">
+                        <SyrfFormButton type="primary" htmlType="submit">
                             {t(translations.home_page.filter_tab.search)}
                         </SyrfFormButton>
                     </Form.Item>

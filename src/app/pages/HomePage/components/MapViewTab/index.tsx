@@ -77,10 +77,12 @@ export const MapViewTab = (props) => {
                 </PaginationWrapper>
             }
             <FilterSearchBar setIsFocusingOnSearchInput={setIsFocusingOnSearchInput} />
-            <MyLocationWrapper onClick={() => zoomToUserLocation()}>
-                <StyledMyLocationIcon />
-                <MyLocationText>{t(translations.home_page.map_view_tab.my_location)}</MyLocationText>
-            </MyLocationWrapper>
+            {
+                results.length === 0 && <MyLocationWrapper onClick={() => zoomToUserLocation()}>
+                    <StyledMyLocationIcon />
+                    <MyLocationText>{t(translations.home_page.map_view_tab.my_location)}</MyLocationText>
+                </MyLocationWrapper>
+            }
         </Wrapper>
     )
 }
