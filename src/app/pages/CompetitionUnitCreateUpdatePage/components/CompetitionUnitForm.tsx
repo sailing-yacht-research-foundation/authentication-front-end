@@ -7,7 +7,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
 import moment from 'moment';
-import { create, update, get, cloneCourse, getAllCompetitionUnitsByEventIdWithSort } from 'services/live-data-server/competition-units';
+import { create, update, get, getAllCompetitionUnitsByEventIdWithSort } from 'services/live-data-server/competition-units';
 import { get as getEventById } from 'services/live-data-server/event-calendars';
 import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';

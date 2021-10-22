@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { GlobalStyle } from '../styles/global-styles';
 
 import * as React from 'react';
-import { Switch, Route, BrowserRouter, Redirect, useHistory } from 'react-router-dom';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Layout } from 'antd';
 import { media } from 'styles/media';
@@ -100,8 +100,6 @@ export function App(props) {
   const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
 
   const tourRef = React.useRef<any>();
-
-  const history = useHistory();
 
   React.useEffect(() => {
     if (isAuthenticated) {

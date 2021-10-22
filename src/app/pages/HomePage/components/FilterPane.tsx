@@ -16,6 +16,7 @@ import { selectIsSearching, selectFromDate, selectSearchKeyword, selectToDate } 
 import { TIME_FORMAT } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
+import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
 
 export const FilterPane = (props) => {
 
@@ -116,7 +117,7 @@ export const FilterPane = (props) => {
                             <Input ref={searchInputRef}
                                 value={searchKeyword}
                                 onChange={e => {
-                                   const value = insert3AfterWordWhenPressingSpace(e.target.value, searchKeyword); 
+                                    const value = insert3AfterWordWhenPressingSpace(e.target.value, searchKeyword);
 
                                     dispatch(actions.setKeyword(value));
                                     setKeyword(value);
@@ -124,6 +125,7 @@ export const FilterPane = (props) => {
                                 autoCorrect="off"
                             />
                             <CriteriaSuggestion keyword={keyword} searchBarRef={searchInputRef} />
+                            <ResultSuggestion keyword={keyword} searchBarRef={searchInputRef} />
                         </Form.Item>
                     </div>
                     <Row gutter={24}>
