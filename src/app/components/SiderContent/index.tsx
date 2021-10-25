@@ -52,12 +52,13 @@ export const SiderContent = (props) => {
   }, [location]);
 
   const renderDefaultSelectedRoute = () => {
-    const item = items.filter(item => {
-      return item.paths!.indexOf(location.pathname) !== -1
-    })[0];
-    if (item) {
-      setSelectedKey(item.key);
-      setOpenKey(item.subMenuKey ?? '');
+    const filteredItems = items.filter(item => {
+      return location.pathname.includes(item.paths.join(' '));
+    });
+    if (filteredItems.length > 0) {
+      if (!filteredItems[0].subMenuKey) setOpenKey('');
+      else setOpenKey(filteredItems[0].subMenuKey);
+      setSelectedKey(filteredItems[0].key);
     }
     setRenderedDefaultActive(true);
   }
