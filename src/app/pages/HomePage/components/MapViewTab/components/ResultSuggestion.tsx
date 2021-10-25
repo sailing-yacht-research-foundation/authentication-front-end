@@ -5,7 +5,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { search } from 'services/live-data-server/competition-units';
 import { supportedSearchCriteria } from 'utils/constants';
-import { debounce } from 'utils/helpers';
+import { debounce, insert3BetweenEachWord } from 'utils/helpers';
 
 export const ResultSuggestion = (props) => {
 
@@ -59,6 +59,8 @@ export const ResultSuggestion = (props) => {
         const wordsLength = words.length;
         const lastWord = words[wordsLength - 1];
         const firstWord = words[0];
+
+        criteria = insert3BetweenEachWord(criteria);
 
         dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition)));
 

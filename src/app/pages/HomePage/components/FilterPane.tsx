@@ -5,7 +5,7 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { StyleConstants } from 'styles/StyleConstants';
-import { isMobile } from 'utils/helpers';
+import { insert3ToLastWordWhenSearch, isMobile } from 'utils/helpers';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -59,7 +59,7 @@ export const FilterPane = (props) => {
         const { name, from_date, to_date } = values;
         const params: any = {};
 
-        params.keyword = name;
+        params.keyword = insert3ToLastWordWhenSearch(name);
         if (from_date) params.from_date = moment(from_date).format(TIME_FORMAT.number);
         if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
 
@@ -117,10 +117,15 @@ export const FilterPane = (props) => {
                             <Input ref={searchInputRef}
                                 value={searchKeyword}
                                 onChange={e => {
-                                    const value = e.target.value;
-
-                                    dispatch(actions.setKeyword(value));
-                                    setKeyword(value);
+                                    dispatch(actions.setKeyword(e.target.value));
+                                    setKeyword(e.target.value);
+                                }}
+                                onKeyUp={e => {
+                                    if (e.keyCode === 32) {
+                                        const inserted3Keyword = searchKeyword.slice(0, -1) + '~3 ';
+                                        dispatch(actions.setKeyword(inserted3Keyword));
+                                        setKeyword(inserted3Keyword);
+                                    }
                                 }}
                                 autoCorrect="off"
                             />

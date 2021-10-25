@@ -153,28 +153,6 @@ export const renderTimezoneInUTCOffset = (timezone) => {
 }
 
 /**
- * Insert 3~ after word on search when pressing space.
- * @param eventValue 
- * @param searchKeyword 
- * @returns 
- */
-export const insert3AfterWordWhenPressingSpace = (eventValue, searchKeyword) => {
-    let value = eventValue;
-    let lastWord: any = searchKeyword.match(/(?:\s|^)([\S]+)$/i);
-    const valueLength = value.length;
-
-    if (lastWord) {
-        lastWord = lastWord[0];
-    }
-
-    if (value[valueLength - 1] === ' ' && lastWord && !Array.isArray(lastWord) && !lastWord!.includes('~3')) {
-        value = value.substr(0, valueLength - 1) + '~3' + value.substr(valueLength - 1);
-    }
-
-    return value;
-}
-
-/**
  * Insert new ~3 when search.
  * @param keyword 
  * @returns 
@@ -192,7 +170,25 @@ export const insert3ToLastWordWhenSearch = (keyword) => {
 
     return value;
 }
-
+/**
+ * Insert 3~ between each word when append suggestion
+ * @param stringOfWords 
+ * @returns 
+ */
 export const insert3BetweenEachWord = (stringOfWords) => {
     return stringOfWords.split(' ').join('~3 ') + '~3';
+}
+
+/**
+ * Remove all ~3 after word.
+ * @param stringOfWords 
+ * @returns 
+ */
+export const remove3AfterEachWord = (stringOfWords) => {
+    return stringOfWords.split(' ').map((word, index) => {
+        if (word.includes('~3')) {
+            word = word.slice(0, -2);
+        }
+        return word;
+    }).join(' ');
 }

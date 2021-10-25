@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
 import { supportedSearchCriteria } from 'utils/constants';
+import { remove3AfterEachWord } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {
@@ -12,7 +13,7 @@ export const search = (params) => {
 
     query.bool.must.push({
         query_string: {
-            query: parseKeyword(params.keyword)
+            query: parseKeyword(remove3AfterEachWord(params.keyword))
         }
     });
 
@@ -334,5 +335,5 @@ const parseKeyword = (keyword) => {
         });
     });
 
-    return result;
+    return result.trim();
 }
