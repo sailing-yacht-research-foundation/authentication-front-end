@@ -50,9 +50,7 @@ ReactDOM.render(
       <HelmetProvider>
         <React.StrictMode>
             <SmartBanner position="bottom" title={'SYRF - Your Sailing Adventures'} />
-            <Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
               <App />
-            </Curtains>
         </React.StrictMode>
       </HelmetProvider>
     </ThemeProvider>
