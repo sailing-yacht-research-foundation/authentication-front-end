@@ -12,8 +12,6 @@ import { ReactComponent as SYRFLogo } from '../../assets/logo-dark.svg';
 import { CriteriaSuggestion } from './CriteriaSuggestion';
 import ReactTooltip from 'react-tooltip';
 import { ResultSuggestion } from './ResultSuggestion';
-import { insert3ToLastWordWhenSearch } from 'utils/helpers';
-
 export const FilterSearchBar = (props) => {
 
     const { setIsFocusingOnSearchInput } = props;
@@ -53,15 +51,9 @@ export const FilterSearchBar = (props) => {
     const searchForRaces = (e) => {
         if (searchKeyword.length === 0) return;
 
-        if (e.keyCode === 32) {
-            const inserted3Keyword = searchKeyword.slice(0, -1) + '~3 ';
-            dispatch(actions.setKeyword(inserted3Keyword));
-            setKeyword(inserted3Keyword);
-        }
-
         if (e.keyCode === 13 || e.which === 13) {
             const params: any = {};
-            params.keyword = insert3ToLastWordWhenSearch(searchKeyword);
+            params.keyword = searchKeyword;
             params.size = pageSize;
 
             dispatch(actions.setPage(1));

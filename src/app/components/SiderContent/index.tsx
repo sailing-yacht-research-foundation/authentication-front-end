@@ -62,15 +62,21 @@ export const SiderContent = (props) => {
     setRenderedDefaultActive(true);
   }
 
+  const navigateToHome = () => {
+    history.push('/');
+    setSelectedKey("1");
+  }
+
   return (
     <SiderWrapper style={{ width: (toggled && !isMobile()) ? '100%' : 'auto' }}>
       {renderedDefaultActive && <SyrfMenu
         defaultSelectedKeys={[selectedKey]}
         mode="inline"
+        selectedKeys={[selectedKey]}
         defaultOpenKeys={[openKey]}>
         <Logo
-          onClick={() => history.push('/')}
-          style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px' }} />
+          onClick={navigateToHome}
+          style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px', cursor: 'pointer' }} />
         <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
           {t(translations.side_menu.search)}
         </SyrfMenuItem>

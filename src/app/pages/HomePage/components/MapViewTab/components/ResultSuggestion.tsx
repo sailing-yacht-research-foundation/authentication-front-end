@@ -4,12 +4,13 @@ import { selectIsSearching } from 'app/pages/HomePage/slice/selectors';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { search } from 'services/live-data-server/competition-units';
+import styled from 'styled-components';
 import { supportedSearchCriteria } from 'utils/constants';
-import { debounce, insert3BetweenEachWord } from 'utils/helpers';
+import { debounce, isMobile } from 'utils/helpers';
 
 export const ResultSuggestion = (props) => {
 
-    const { keyword, searchBarRef } = props;
+    const { keyword, searchBarRef, isFilterPane } = props;
 
     const wrapperRef = React.useRef<any>();
 
@@ -25,7 +26,10 @@ export const ResultSuggestion = (props) => {
     const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 1000), []);
 
     const getSuggestionItems = async (keyword) => {
-        if (!keyword) return;
+        if (!keyword) {
+            setCriteria([]);
+            return;
+        }
 
         let criteriaMatched: any[] = [];
         let lastWord: any = keyword.match(/(?:\s|^)([\S]+)$/i) || '';
@@ -34,7 +38,7 @@ export const ResultSuggestion = (props) => {
             lastWord = lastWord[0];
 
         if (lastWord.length === 0) setCriteria([]);
-        if (supportedSearchCriteria.indexOf(lastWord) !== 1) {
+        if (!supportedSearchCriteria.includes(lastWord)) {
             let searchKeyword = lastWord.split(':');
 
             if (searchKeyword.length > 1)
@@ -59,8 +63,6 @@ export const ResultSuggestion = (props) => {
         const wordsLength = words.length;
         const lastWord = words[wordsLength - 1];
         const firstWord = words[0];
-
-        criteria = insert3BetweenEachWord(criteria);
 
         dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition)));
 
@@ -104,10 +106,23 @@ export const ResultSuggestion = (props) => {
     }
 
     return (
-        <SuggestionWrapper>
-            <SuggestionInnerWrapper ref={wrapperRef}>
-                {renderSuggestionCriteria()}
-            </SuggestionInnerWrapper>
+        <SuggestionWrapper style={{ top: !isMobile() && isFilterPane ? '40px' : 'auto' }}>
+            {
+                criteria.length > 0 && <>
+                    <CloseButton onClick={() => setCriteria([])}>x</CloseButton>
+                    <SuggestionInnerWrapper ref={wrapperRef}>
+                        {renderSuggestionCriteria()}
+                    </SuggestionInnerWrapper>
+                </>
+            }
         </SuggestionWrapper>
     )
 }
+
+const CloseButton = styled.div`
+    position: absolute;
+    right: 5px;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 15px;
+`;

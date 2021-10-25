@@ -140,7 +140,7 @@ export const SuggestionWrapper = styled.div`
     left: 0;
     right: 0;
     bottom: 45px;
-    box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
+    z-index: 15;
 `;
 
 export const SuggestionCriteria = styled.div`
@@ -160,4 +160,5 @@ export const SuggestionCriteria = styled.div`
 export const SuggestionInnerWrapper = styled.div`
     border-radius: 5px;
     overflow: hidden;
+    box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
 `;
