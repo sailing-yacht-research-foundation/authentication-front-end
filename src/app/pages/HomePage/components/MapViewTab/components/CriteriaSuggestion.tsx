@@ -25,7 +25,7 @@ export const CriteriaSuggestion = (props) => {
 
         if (lastword.length === 0) return [];
         supportedSearchCriteria.forEach(criteria => {
-            if (criteria.includes(lastword.trim()) && !keyword.includes(criteria)) {
+            if (criteria.includes(lastword.trim()) && !keyword.includes(criteria + ':')) {
                 criteriaMatched.unshift(criteria);
             }
         });
