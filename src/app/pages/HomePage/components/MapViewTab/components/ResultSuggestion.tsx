@@ -41,7 +41,7 @@ export const ResultSuggestion = (props) => {
     const getSuggestionItems = async (keyword) => {
         let criteriaMatched: any[] = [];
         let searchKeyWord = keyword.slice(0, keyword.indexOf(' ', caretPosition.current));
-        
+
         if (keyword.indexOf(' ', caretPosition.current)) searchKeyWord = keyword;
 
         const searchKeyWordAsArray = searchKeyWord.split(' ');
@@ -86,21 +86,15 @@ export const ResultSuggestion = (props) => {
     const returnValueBasedOnCriteria = (criteria, result, keyword) => {
         switch (criteria) {
             case Criteria.NAME:
-                return result._source?.name;
             case Criteria.START_CITY:
-                return result._source?.start_city;
             case Criteria.START_COUNTRY:
-                return result._source?.start_country;
-            case Criteria.BOAT_NAMES:
-                return findArrayItemByKey(result._source?.boat_names, keyword);
-            case Criteria.BOAT_MODELS:
-                return findArrayItemByKey(result._source?.boat_models, keyword);
-            case Criteria.HANDICAP_RULES:
-                return findArrayItemByKey(result._source?.handicap_rules, keyword);
             case Criteria.SOURCE:
-                return result._source?.source;
+                return result._source[criteria];
             case Criteria.UNSTRUCTURED_TEXT:
-                return result._source?.unstructured_text;
+            case Criteria.BOAT_NAMES:
+            case Criteria.BOAT_MODELS:
+            case Criteria.HANDICAP_RULES:
+                return findArrayItemByKey(result._source[criteria], keyword);
             default:
                 return result._source?.name;
         }
