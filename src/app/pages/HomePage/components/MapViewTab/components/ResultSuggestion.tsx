@@ -42,7 +42,7 @@ export const ResultSuggestion = (props) => {
         let criteriaMatched: any[] = [];
         let searchKeyWord = keyword.slice(0, keyword.indexOf(' ', caretPosition.current));
 
-        if (keyword.indexOf(' ', caretPosition.current)) searchKeyWord = keyword;
+        if (keyword.indexOf(' ', caretPosition.current) === -1) searchKeyWord = keyword;
 
         const searchKeyWordAsArray = searchKeyWord.split(' ');
 
