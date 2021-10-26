@@ -22,7 +22,7 @@ export const getAllTracks = (page) => {
 }
 
 export const downloadTrack = (track, type) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/7cb23d92-5d32-4aad-9bc0-8af3ef6b6317/export-track/${type}`, { responseType: 'blob' })
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/${track.id}/export-track/${type}`, { responseType: 'blob' })
         .then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
