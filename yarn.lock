@@ -3679,53 +3679,6 @@
     "@reactour/utils" "*"
 
 "@reactour/tour@^2.2.0":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@reactour/tour/-/tour-2.2.1.tgz#cb6aec417dd253108ba409ea52391db8bb878f83"
-  integrity sha512-BJC3E+lyWNeZEjOP0WM3q5WXIi965Nv14Do2Ovg+gY26awqKgpRqnI9bY+5OSIYjUCsfUNsR4888AHjgd1Hhig==
-  dependencies:
-    "@emotion/react" "11.4.1"
-    "@react-aria/focus" "3.4.1"
-    "@reactour/mask" "*"
-    "@reactour/popover" "*"
-    "@reactour/utils" "*"
-
-"@reactour/utils@*":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@reactour/utils/-/utils-0.2.1.tgz#ab3b7038faf685ee160fa7c76256970b13002b15"
-  integrity sha512-HiMH304EMOIBN0sO3zZhqxaujJvJdQLnCOjvHOqM4Az8rtul4N9uTIYQ4QyMwvEZ1Mko/INlpQv6y2sBFRmzhA==
-  dependencies:
-    "@rooks/use-mutation-observer" "4.11.2"
-    resize-observer-polyfill "1.5.1"
-
-"@react-stately/utils@^3.2.2":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@react-stately/utils/-/utils-3.2.2.tgz#468eafa60740c6b0b847a368215dfaa55e87f505"
-  integrity sha512-7NCpRMAexDdgVqbrB9uDrkDpM4Tdw5BU6Gu6IKUXmKsoDYziE6mAjaGkCZBitsrln1Cezc6euI5YPa1JqxgpJg==
-  dependencies:
-    "@babel/runtime" "^7.6.2"
-
-"@react-types/shared@^3.8.0", "@react-types/shared@^3.9.0":
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/@react-types/shared/-/shared-3.9.0.tgz#d834f3e6e2c992089192f3c83fb7963e3a6f5207"
-  integrity sha512-YYksINfR6q92P10AhPEGo47Hd7oz1hrnZ6Vx8Gsrq62IbqDdv1XOTzPBaj17Z1ymNY2pitLUSEXsLmozt4wxxQ==
-
-"@reactour/mask@*":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@reactour/mask/-/mask-0.2.2.tgz#fa837200973959b83f3e3c06480b2f6e42d76d97"
-  integrity sha512-mSwZiue7KtfKv3ga6J3tWl/tToHUoKmHDdOlKGTSSWdfB078FFZ8dwZfHvbJFDkkwE8cCofUwpFumUCT112AWw==
-  dependencies:
-    "@emotion/react" "11.4.1"
-    "@reactour/utils" "*"
-
-"@reactour/popover@*":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@reactour/popover/-/popover-0.2.1.tgz#e02e322cc3172e39638f8de15be356fd98908592"
-  integrity sha512-TqhaMJY2GFwoyiIZOQvN5yoj0PrVJCAGA7C17APZUhg8I7G2klR6DuVhBdKXfiRQlooe5ImLKUyx1oHMjWLBVw==
-  dependencies:
-    "@emotion/react" "11.4.1"
-    "@reactour/utils" "*"
-
-"@reactour/tour@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@reactour/tour/-/tour-2.2.0.tgz#2a98561e8b69af594b4fee9e29d97eb1d0b316cd"
   integrity sha512-i2RqcxnC79FcSplvP4vOguazCHHCpZ+HqW4jS48xt+Yg1jD8hIuw4LMua5dsOKbzfMaPf8s7pipGWFVUF0v47g==
@@ -7566,11 +7519,6 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.42.0:
-  version "5.63.3"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.63.3.tgz#97042a242027fe0c87c09b36bc01931d37b76527"
-  integrity sha512-1C+LELr+5grgJYqwZKqxrcbPsHFHapVaVAloBsFBASbpLnQqLw1U8yXJ3gT5D+rhxIiSpo+kTqN+hQ+9ialIXw==
-
 collect-v8-coverage@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/collect-v8-coverage/-/collect-v8-coverage-1.0.1.tgz#cc2c8e94fc18bbdffe64d6534570c8a673b27f59"
@@ -8282,11 +8230,6 @@ csstype@^3.0.2:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.9.tgz#6410af31b26bd0520933d02cbc64fce9ce3fbf0b"
   integrity sha512-rpw6JPxK6Rfg1zLOYCSwle2GFOOsnjmDYDaBwEcwoOg4qlsIVCN789VkBZDJAGi4T07gI4YSutR43t9Zz4Lzuw==
-
-curtainsjs@>=8.1.0, curtainsjs@^8.1.3:
-  version "8.1.3"
-  resolved "https://registry.yarnpkg.com/curtainsjs/-/curtainsjs-8.1.3.tgz#577eccdca1996e6cf2cdb56e9f25070037290050"
-  integrity sha512-E98l9mRNyJNjp1zGAqDRQgzuK0jEfblIfTZd3Q5c18gVnMYt4riag8fGcnmlc8fL7HNFLJctdpt9Ph3KPVKT6g==
 
 curtainsjs@>=8.1.0, curtainsjs@^8.1.3:
   version "8.1.3"
@@ -13990,11 +13933,6 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-pegjs@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/pegjs/-/pegjs-0.10.0.tgz#cf8bafae6eddff4b5a7efb185269eaaf4610ddbd"
-  integrity sha1-z4uvrm7d/0tafvsYUmnqr0YQ3b0=
-
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -15558,11 +15496,6 @@ react-clientside-effect@^1.2.5:
   dependencies:
     "@babel/runtime" "^7.12.13"
 
-react-codemirror2@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-5.1.0.tgz#62de4460178adea40eb52eabf7491669bf3794b8"
-  integrity sha512-Cksbgbviuf2mJfMyrKmcu7ycK6zX/ukuQO8dvRZdFWqATf5joalhjFc6etnBdGCcPA2LbhIwz+OPnQxLN/j1Fw==
-
 react-curtains@^1.0.10:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/react-curtains/-/react-curtains-1.0.10.tgz#e697c1cd6ec2d2c97d8dbaca043305d75fd43bfa"
@@ -15617,16 +15550,6 @@ react-dom@16.13.1:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
-react-dom@^16.6.3:
-  version "16.14.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
-  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.19.1"
-
 react-easy-swipe@^0.0.21:
   version "0.0.21"
   resolved "https://registry.yarnpkg.com/react-easy-swipe/-/react-easy-swipe-0.0.21.tgz#ce9384d576f7a8529dc2ca377c1bf03920bac8eb"
@@ -15649,18 +15572,6 @@ react-fast-compare@^3.0.1, react-fast-compare@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
-react-filter-box@^3.4.2:
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/react-filter-box/-/react-filter-box-3.4.2.tgz#88c211b2016daef358e8cf84044d00c4093ccc2c"
-  integrity sha512-DcZWe8pAPobOKWs8dvTCx2KFCOT/8cE1fjCuoeLJ+NOozzSqS6bO235BllPUUfd0bMfSmjbIxewqvGgaAOxdzA==
-  dependencies:
-    codemirror "^5.42.0"
-    lodash "^4.17.19"
-    pegjs "^0.10.0"
-    react "^16.6.3"
-    react-codemirror2 "^5.1.0"
-    react-dom "^16.6.3"
-
 react-focus-lock@2.5.2:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.5.2.tgz#f1e4db5e25cd8789351f2bd5ebe91e9dcb9c2922"
@@ -15673,10 +15584,10 @@ react-focus-lock@2.5.2:
     use-callback-ref "^1.2.5"
     use-sidecar "^1.0.5"
 
-react-ga@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-3.3.0.tgz#c91f407198adcb3b49e2bc5c12b3fe460039b3ca"
-  integrity sha512-o8RScHj6Lb8cwy3GMrVH6NJvL+y0zpJvKtc0+wmH7Bt23rszJmnqEQxRbyrqUzk9DTJIHoP42bfO5rswC9SWBQ==
+react-ga4@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-ga4/-/react-ga4-1.3.0.tgz#f86faca877d71f9b43ecb1f45fd5647c63213c8e"
+  integrity sha512-Zv/RrbSmB5o52SJ2Ls1rw6JsMyTW5zxw9e+ZlymiHgyzEEGBlxGhAmEXTymJ4uJkikxS8O31i45mCzfSIjXE5g==
 
 react-geocode@^0.2.3:
   version "0.2.3"
@@ -15985,15 +15896,6 @@ react@16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-
-react@^16.6.3:
-  version "16.14.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
-  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

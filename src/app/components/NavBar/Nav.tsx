@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { SelectLanguage } from './components/SelectLanguage';
 import { UserDropdown } from './components/UserDropdown';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { media } from 'styles/media';
 import { useHistory } from 'react-router';
@@ -12,6 +12,7 @@ import { Space, Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import ReactGA from 'react-ga4';
 
 export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);
@@ -24,10 +25,30 @@ export const Nav = () => {
 
   const { t } = useTranslation();
 
+  const location = useLocation();
+
   const logout = () => {
     dispatch(loginActions.setLogout());
     history.push('/signin');
   }
+
+  const initGoogleAnalytic = () => {
+    ReactGA.initialize('G-0X3PS1RHMN');
+  }
+
+  React.useEffect(() => {
+    if (isAuthenenticated) {
+      initGoogleAnalytic();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenenticated]);
+
+  React.useEffect(() => {
+    if (isAuthenenticated) {
+      ReactGA.send({ hitType: "pageview", page: window.location.pathname + window.location.search });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   return (
     <Wrapper>
