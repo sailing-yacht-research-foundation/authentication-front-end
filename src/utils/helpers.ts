@@ -176,7 +176,7 @@ export const insert3ToLastWordWhenSearch = (keyword) => {
  * @returns 
  */
 export const insert3BetweenEachWord = (stringOfWords) => {
-    const format = /[ `!@#$%^&*()_+\-=\[\]{};'"\\|,.<>\/?~]/;
+    const format = /[ `!@#$%^&*()+\-=\[\]{};'"\\|,.<>\/?~]/;
     const formattedWord: any[] = [];
     
     stringOfWords.split(' ').map(word => {
