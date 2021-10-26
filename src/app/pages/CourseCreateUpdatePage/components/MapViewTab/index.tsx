@@ -12,6 +12,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { MapView } from './MapView';
 import { MODE } from 'utils/constants';
+import ReactTooltip from 'react-tooltip';
 
 const NAV_HEIGHT = '150px';
 
@@ -63,18 +64,23 @@ export const MapViewTab = () => {
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
-                    <Button style={{ borderRadius: '5px' }} onClick={() => mapViewRef.current.saveCourse()} type="primary" icon={<BiSave style={{ marginRight: '5px' }} />}>
+                    <Button data-tip={t(translations.tip.save_course)} style={{ borderRadius: '5px' }} onClick={() => mapViewRef.current.saveCourse()} type="primary" icon={<BiSave style={{ marginRight: '5px' }} />}>
                         {t(translations.course_create_update_page.save)}
                     </Button>
-                    {mode === MODE.UPDATE && <DeleteButton onClick={() => mapViewRef.current?.deleteCourse()} danger icon={<BiTrash
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.course_create_update_page.delete)}</DeleteButton>}
+                    {mode === MODE.UPDATE &&
+                        <>
+                            <DeleteButton data-tip={t(translations.tip.delete_course)} onClick={() => mapViewRef.current?.deleteCourse()} danger icon={<BiTrash
+                                style={{ marginRight: '5px' }}
+                                size={18} />}>{t(translations.course_create_update_page.delete)}</DeleteButton>
+                            <ReactTooltip />
+                        </>}
 
                 </Space>
             </PageHeaderContainerResponsive>
             <MapContainer whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${NAV_HEIGHT})`, width: 'calc(100%)', zIndex: 1 }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <MapView ref={mapViewRef} />
             </MapContainer>
+            <ReactTooltip />
         </Wrapper>
     );
 }

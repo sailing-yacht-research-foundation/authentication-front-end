@@ -16,6 +16,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { FIELD_VALIDATE } from 'utils/constants';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import ReactTooltip from 'react-tooltip';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -62,6 +63,7 @@ export const PrivateUserInformation = (props) => {
                 label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
                 name="email"
                 rules={[{ required: true, type: 'email' }]}
+                data-tip={t(translations.tip.email)}
             >
                 <SyrfInputField disabled />
             </Form.Item>
@@ -70,6 +72,7 @@ export const PrivateUserInformation = (props) => {
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.address)}</SyrfFieldLabel>}
                 name="address"
+                data-tip={t(translations.tip.address)}
             >
                 <PlacesAutocomplete
                     value={address}
@@ -117,6 +120,7 @@ export const PrivateUserInformation = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.date_of_birth)}</SyrfFieldLabel>}
                         name="birthdate"
+                        data-tip={t(translations.tip.date_of_birth)}
                         rules={[{ type: 'date', required: true }]}
                     >
                         <DatePicker
@@ -146,6 +150,7 @@ export const PrivateUserInformation = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.world_sailing_number)}</SyrfFieldLabel>}
                         name="sailing_number"
+                        data-tip={t(translations.tip.world_sailing_number)}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -157,6 +162,7 @@ export const PrivateUserInformation = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.phone_number)}</SyrfFieldLabel>}
                         name="phone_number"
+                        data-tip={t(translations.tip.phone_number)}
                         rules={[{ type: 'string' }]}
                     >
                         <SyrfPhoneInput
@@ -171,6 +177,7 @@ export const PrivateUserInformation = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.language)}</SyrfFieldLabel>}
                         name="language"
+                        data-tip={t(translations.tip.language)}
                         rules={[{ required: true }]}
                     >
                         <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_language)}
@@ -191,6 +198,7 @@ export const PrivateUserInformation = (props) => {
                     </Form.Item>
                 </Col>
             </Row>
+            <ReactTooltip/>
         </Wrapper>
     )
 }

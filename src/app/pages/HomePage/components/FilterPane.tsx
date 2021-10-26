@@ -15,6 +15,8 @@ import moment from 'moment';
 import { selectIsSearching, selectFromDate, selectSearchKeyword, selectToDate } from '../slice/selectors';
 import { TIME_FORMAT } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
+import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
+import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
 
 export const FilterPane = (props) => {
 
@@ -39,6 +41,8 @@ export const FilterPane = (props) => {
     const fromDate = useSelector(selectFromDate);
 
     const toDate = useSelector(selectToDate);
+
+    const [keyword, setKeyword] = React.useState<string>('');
 
     useEffect(() => {
         if (defaultFocus && searchInputRef) {
@@ -79,7 +83,6 @@ export const FilterPane = (props) => {
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchKeyword, fromDate, toDate]);
-
     return (
         <Wrapper {...props}>
             <FilterHeader>
@@ -105,17 +108,24 @@ export const FilterPane = (props) => {
                     initialValues={{
                         name: searchKeyword,
                     }}>
-                    <Form.Item
-                        label={t(translations.home_page.filter_tab.race_name)}
-                        name="name"
-                        rules={[{ required: true }]}
-                    >
-                        <Input ref={searchInputRef}
-                            value={searchKeyword}
-                            autoCorrect="off"
-                        />
-                    </Form.Item>
-
+                    <div style={{ position: 'relative' }}>
+                        <Form.Item
+                            label={t(translations.home_page.filter_tab.race_name)}
+                            name="name"
+                            rules={[{ required: true }]}
+                        >
+                            <Input ref={searchInputRef}
+                                value={searchKeyword}
+                                onChange={e => {
+                                    dispatch(actions.setKeyword(e.target.value));
+                                    setKeyword(e.target.value);
+                                }}
+                                autoCorrect="off"
+                            />
+                            <CriteriaSuggestion keyword={keyword} searchBarRef={searchInputRef} />
+                            <ResultSuggestion isFilterPane keyword={keyword} searchBarRef={searchInputRef} />
+                        </Form.Item>
+                    </div>
                     <Row gutter={24}>
                         <Col xs={12} sm={12} md={12} lg={12}>
                             <Form.Item
@@ -123,7 +133,7 @@ export const FilterPane = (props) => {
                                 name="from_date"
                                 rules={[{ type: 'date' }, ({ getFieldValue }) => ({
                                     validator(_, value) {
-                                        if (!value || !getFieldValue('to_date') ||  moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('to_date').format(TIME_FORMAT.number))) {
+                                        if (!value || !getFieldValue('to_date') || moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('to_date').format(TIME_FORMAT.number))) {
                                             return Promise.resolve();
                                         }
                                         return Promise.reject(new Error(t(translations.home_page.filter_tab.from_date_must_be_smaller_than_to_date)));
@@ -148,10 +158,9 @@ export const FilterPane = (props) => {
                             <Form.Item
                                 label={t(translations.home_page.filter_tab.to_date)}
                                 name="to_date"
-                                rules={[{ type: 'date' },  ({ getFieldValue }) => ({
+                                rules={[{ type: 'date' }, ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         if (!value || !getFieldValue('from_date') || moment(value.format(TIME_FORMAT.number)).isSameOrAfter(getFieldValue('from_date').format(TIME_FORMAT.number))) {
-                                            
                                             return Promise.resolve();
                                         }
                                         return Promise.reject(new Error(t(translations.home_page.filter_tab.to_date_must_bigger_than_from_date)));

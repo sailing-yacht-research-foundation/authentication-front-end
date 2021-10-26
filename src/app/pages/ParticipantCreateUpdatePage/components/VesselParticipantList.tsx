@@ -13,6 +13,7 @@ import {
     DeleteButton,
     PageHeaderTextSmall
 } from 'app/components/SyrfGeneral';
+import ReactTooltip from 'react-tooltip';
 
 export const VesselParticipantList = (props) => {
 
@@ -52,14 +53,20 @@ export const VesselParticipantList = (props) => {
             key: 'action',
             render: (text, record) => {
                 if (checkIfParticipantExistsOnVesselParticipant(record.participants)) {
-                    return <DeleteButton onClick={() => {
-                        removeParticipantFromVesselParticipant(record.id);
-                    }} danger>{t(translations.assign_vessel_participant_modal.unassign)}</DeleteButton>;
+                    return <>
+                        <DeleteButton data-tip={t(translations.tip.unassign_competitor_to_a_class_and_vessel)} onClick={() => {
+                            removeParticipantFromVesselParticipant(record.id);
+                        }} danger>{t(translations.assign_vessel_participant_modal.unassign)}</DeleteButton>
+                        <ReactTooltip />
+                    </>;
                 }
 
-                return <BorderedButton onClick={() => {
-                    assignParticipantToVesselParticipant(record.id);
-                }} type="primary">{t(translations.assign_vessel_participant_modal.assign)}</BorderedButton>;
+                return <>
+                    <BorderedButton data-tip={t(translations.tip.assign_competitor_to_a_class_and_vessel)} onClick={() => {
+                        assignParticipantToVesselParticipant(record.id);
+                    }} type="primary">{t(translations.assign_vessel_participant_modal.assign)}</BorderedButton>
+                    <ReactTooltip />
+                </>;
             },
             width: '33%',
         },
@@ -142,6 +149,7 @@ export const VesselParticipantList = (props) => {
                     />
                 </TableWrapper>
             </Spin >
+            <ReactTooltip />
         </>
     )
 }
