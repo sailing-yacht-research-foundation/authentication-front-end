@@ -32,7 +32,7 @@ export const FilterSearchBar = (props) => {
 
     const searchBarWrapperRef = React.useRef<any>()
 
-    const searchBarRef = React.useRef<any>();
+    const searchBarRef = React.createRef<Input>();
 
     const [keyword, setKeyword] = React.useState<string>('');
 

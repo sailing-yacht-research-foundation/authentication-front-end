@@ -27,14 +27,9 @@ export const supportedSearchCriteria = [
     'name',
     'start_city',
     'start_country',
-    'start_year',
-    'start_month',
-    'event_name',
     'boat_names',
     'boat_models',
-    'approx_distance_km',
     'handicap_rules',
-    'num_boats',
     'source',
     'unstructured_text'
 ];

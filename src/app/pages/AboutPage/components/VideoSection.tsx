@@ -5,7 +5,7 @@ import { Col, Row, Button, Space, Typography } from 'antd';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { SimpleVideoPlane } from './SImpleVideoPlane';
+import { SimpleVideoPlane } from './SimpleVideoPlane';
 
 export const VideoSection = (props) => {
 

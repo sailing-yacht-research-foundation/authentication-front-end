@@ -3,10 +3,21 @@ import { useHomeSlice } from 'app/pages/HomePage/slice';
 import { selectIsSearching } from 'app/pages/HomePage/slice/selectors';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { search } from 'services/live-data-server/competition-units';
+import { getSuggestion } from 'services/live-data-server/competition-units';
 import styled from 'styled-components';
 import { supportedSearchCriteria } from 'utils/constants';
 import { debounce, isMobile } from 'utils/helpers';
+
+const enum Criteria {
+    NAME = 'name',
+    START_CITY = 'start_city',
+    START_COUNTRY = 'start_country',
+    BOAT_NAMES = 'boat_names',
+    BOAT_MODELS = 'boat_models',
+    HANDICAP_RULES = 'handicap_rules',
+    SOURCE = 'source',
+    UNSTRUCTURED_TEXT = 'unstructured_text',
+};
 
 export const ResultSuggestion = (props) => {
 
@@ -22,39 +33,93 @@ export const ResultSuggestion = (props) => {
 
     const isSearching = useSelector(selectIsSearching);
 
+    const caretPosition = React.useRef<number>(0);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 1000), []);
 
     const getSuggestionItems = async (keyword) => {
-        if (!keyword) {
+        let criteriaMatched: any[] = [];
+        let searchKeyWord = keyword.slice(0, keyword.indexOf(' ', caretPosition.current));
+        
+        if (keyword.indexOf(' ', caretPosition.current)) searchKeyWord = keyword;
+
+        const searchKeyWordAsArray = searchKeyWord.split(' ');
+
+        if (!keyword || !searchKeyWord) {
             setCriteria([]);
             return;
         }
 
-        let criteriaMatched: any[] = [];
-        let lastWord: any = keyword.match(/(?:\s|^)([\S]+)$/i) || '';
+        searchKeyWord = searchKeyWordAsArray[searchKeyWordAsArray.length - 1];
 
-        if (lastWord.length > 0)
-            lastWord = lastWord[0];
+        if (searchKeyWord.includes(':')) {
+            searchKeyWord = searchKeyWord.split(':')[1];
+        }
 
-        if (lastWord.length === 0) setCriteria([]);
-        if (!supportedSearchCriteria.includes(lastWord)) {
-            let searchKeyword = lastWord.split(':');
+        const criteriaSuggestionItem = supportedSearchCriteria.find(criteria => {
+            return criteria.includes(searchKeyWord);
+        });
 
-            if (searchKeyword.length > 1)
-                searchKeyword = searchKeyword[1].trim();
-            else searchKeyword = searchKeyword[0].trim();
+        if (criteriaSuggestionItem) {
+            setCriteria([]);
+            return;
+        }
 
-            if (searchKeyword) {
-                const response = await search({ keyword: searchKeyword });
-                if (response.success) {
-                    criteriaMatched = response.data?.hits?.hits?.map(race => {
-                        return race._source.name;
-                    })
-                }
+        const criteriaField = getSuggestionFieldFromSearchQuery(keyword);
+        const response = await getSuggestion(criteriaField, searchKeyWord);
+        if (response.success) {
+            criteriaMatched = response.data?.suggest?.autocomplete[0]?.options?.map(result => {
+                return returnValueBasedOnCriteria(criteriaField, result, searchKeyWord);
+            });
+        }
+
+        setCriteria(criteriaMatched.filter(Boolean));
+    }
+
+    const findArrayItemByKey = (array, keyword) => {
+        return array.find(item => {
+            return String(item).toLowerCase().includes(keyword);
+        });
+    }
+
+    const returnValueBasedOnCriteria = (criteria, result, keyword) => {
+        switch (criteria) {
+            case Criteria.NAME:
+                return result._source?.name;
+            case Criteria.START_CITY:
+                return result._source?.start_city;
+            case Criteria.START_COUNTRY:
+                return result._source?.start_country;
+            case Criteria.BOAT_NAMES:
+                return findArrayItemByKey(result._source?.boat_names, keyword);
+            case Criteria.BOAT_MODELS:
+                return findArrayItemByKey(result._source?.boat_models, keyword);
+            case Criteria.HANDICAP_RULES:
+                return findArrayItemByKey(result._source?.handicap_rules, keyword);
+            case Criteria.SOURCE:
+                return result._source?.source;
+            case Criteria.UNSTRUCTURED_TEXT:
+                return result._source?.unstructured_text;
+            default:
+                return result._source?.name;
+        }
+    }
+
+    const getSuggestionFieldFromSearchQuery = (keyword) => {
+        const currentKeywordAtCaretPosition = keyword.substring(0, caretPosition.current);
+        const currentKeywordAtCaretPositionLength = currentKeywordAtCaretPosition.split(' ').length;
+        const splittedKeyword = currentKeywordAtCaretPosition.split(' ');
+        let criteria = Criteria.NAME;
+
+        for (let i = currentKeywordAtCaretPositionLength - 1; i >= 0; i--) {
+            if (splittedKeyword[i].includes(':')) {
+                criteria = splittedKeyword[i].split(':')[0];
+                break;
             }
         }
-        setCriteria(criteriaMatched);
+
+        return criteria;
     }
 
     const appendCriteria = (criteria) => {
@@ -86,6 +151,13 @@ export const ResultSuggestion = (props) => {
 
         setCriteria([]);
     }
+
+    React.useEffect(() => {
+        if (searchBarRef.current) {
+            caretPosition.current = searchBarRef.current?.input.selectionEnd;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchBarRef]);
 
     React.useEffect(() => {
         if (isSearching) {

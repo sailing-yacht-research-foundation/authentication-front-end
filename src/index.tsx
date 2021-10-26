@@ -14,7 +14,6 @@ import { Provider } from 'react-redux';
 import FontFaceObserver from 'fontfaceobserver';
 import SmartBanner from 'react-smartbanner';
 import 'react-smartbanner/dist/main.css';
-import { Curtains } from "react-curtains";
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css';

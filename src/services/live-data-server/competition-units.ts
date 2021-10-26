@@ -47,7 +47,7 @@ export const search = (params) => {
         query: query,
     };
 
-    searchParams._source = ["id", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month","approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
+    searchParams._source = ["id", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
@@ -336,4 +336,33 @@ const parseKeyword = (keyword) => {
     });
 
     return result.trim();
+}
+
+export const getSuggestion = (fieldName, word) => {
+    const searchParams = {
+        "suggest": {
+            "autocomplete": {
+                "prefix": word,
+                "completion": {
+                    "field": `${fieldName}.completion`,
+                    "skip_duplicates": true,
+                    "fuzzy": {
+                        "fuzziness": 1
+                    }
+                }
+            }
+        }
+    };
+    
+    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
 }
