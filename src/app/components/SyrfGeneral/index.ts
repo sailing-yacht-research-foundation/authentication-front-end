@@ -133,4 +133,32 @@ export const GobackButton = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
-`; 
+`;
+
+export const SuggestionWrapper = styled.div`
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 45px;
+    z-index: 15;
+`;
+
+export const SuggestionCriteria = styled.div`
+    width: 100%;
+    background: #fff;
+    padding: 5px;
+    padding-left: 20px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    
+    :hover {
+        background: ${StyleConstants.MAIN_TONE_COLOR};
+        color: #fff;
+    }
+`;
+
+export const SuggestionInnerWrapper = styled.div`
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
+`;

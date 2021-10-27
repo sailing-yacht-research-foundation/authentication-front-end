@@ -144,10 +144,60 @@ export const renderEmptyValue = (value) => {
 
 export const renderTimezoneInUTCOffset = (timezone) => {
     if (!timezone) return '';
-    
-    const offset = moment.tz(timezone).utcOffset() /  60;
+
+    const offset = moment.tz(timezone).utcOffset() / 60;
 
     if (offset > 0) return '+' + offset;
 
     return offset;
+}
+
+/**
+ * Insert new ~3 when search.
+ * @param keyword 
+ * @returns 
+ */
+export const insert3ToLastWordWhenSearch = (keyword) => {
+    let value = keyword;
+    let lastWord: any = keyword.match(/(?:\s|^)([\S]+)$/i);
+    if (lastWord) {
+        lastWord = lastWord[0];
+    }
+
+    if (lastWord && !Array.isArray(lastWord) && !lastWord!.includes('~3')) {
+        value = value.substr(0, value.length) + '~3' + value.substr(value.length);
+    }
+
+    return value;
+}
+/**
+ * Insert 3~ between each word when append suggestion
+ * @param stringOfWords 
+ * @returns 
+ */
+export const insert3BetweenEachWord = (stringOfWords) => {
+    const format = /[ `!@#$%^&*()+\-=\[\]{};'"\\|,.<>\/?~]/;
+    const formattedWord: any[] = [];
+    
+    stringOfWords.split(' ').map(word => {
+        if (!format.test(word)) {
+            formattedWord.push(word);
+        }
+    });
+
+    return formattedWord.join('~3 ') + '~3';
+}
+
+/**
+ * Remove all ~3 after word.
+ * @param stringOfWords 
+ * @returns 
+ */
+export const remove3AfterEachWord = (stringOfWords) => {
+    return stringOfWords.split(' ').map((word, index) => {
+        if (word.includes('~3')) {
+            word = word.slice(0, -2);
+        }
+        return word;
+    }).join(' ');
 }

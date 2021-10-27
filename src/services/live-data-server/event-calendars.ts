@@ -97,3 +97,19 @@ export const deleteRace = (id) => {
         }
     })
 }
+
+export const downloadIcalendarFile = (event) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${event.id}/ics`, { responseType: 'blob' }).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${event.name}.ics`); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    })
+}

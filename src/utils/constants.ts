@@ -22,3 +22,14 @@ export const MODE = {
     CREATE: 'create',
     UPDATE: 'update'
 };
+
+export const supportedSearchCriteria = [
+    'name',
+    'start_city',
+    'start_country',
+    'boat_names',
+    'boat_models',
+    'handicap_rules',
+    'source',
+    'unstructured_text'
+];

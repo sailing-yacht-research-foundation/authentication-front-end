@@ -15,6 +15,7 @@ import { DeleteParticipantModal } from './DeleteParticipantForm';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { VesselParticipantList } from './VesselParticipantList';
+import ReactTooltip from 'react-tooltip';
 
 export const ParticipantForm = () => {
 
@@ -131,9 +132,14 @@ export const ParticipantForm = () => {
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
-                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.participant_unit_create_update_page.delete)}</DeleteButton>}
+                    {mode === MODE.UPDATE && <>
+                        <DeleteButton 
+                            data-tip={t(translations.tip.delete_competitor)}
+                            onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                            style={{ marginRight: '5px' }}
+                            size={18} />}>{t(translations.participant_unit_create_update_page.delete)}</DeleteButton>
+                            <ReactTooltip/>
+                    </>}
 
                 </Space>
             </PageHeaderContainerResponsive>
@@ -149,6 +155,7 @@ export const ParticipantForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.public_name)}</SyrfFieldLabel>}
                             name="publicName"
+                            data-tip={t(translations.tip.competitor_name)}
                             rules={[{ required: true, max: 100 }]}
                         >
                             <SyrfInputField autoCorrect="off" />
@@ -170,6 +177,7 @@ export const ParticipantForm = () => {
                     <VesselParticipantList participant={participant} eventId={eventId} />
                 </SyrfFormWrapper>
             }
+            <ReactTooltip />
         </Wrapper >
     )
 }

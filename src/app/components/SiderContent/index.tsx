@@ -52,14 +52,20 @@ export const SiderContent = (props) => {
   }, [location]);
 
   const renderDefaultSelectedRoute = () => {
-    const item = items.filter(item => {
-      return item.paths!.indexOf(location.pathname) !== -1
-    })[0];
-    if (item) {
-      setSelectedKey(item.key);
-      setOpenKey(item.subMenuKey ?? '');
+    const filteredItems = items.filter(item => {
+      return location.pathname.includes(item.paths.join(' '));
+    });
+    if (filteredItems.length > 0) {
+      if (!filteredItems[0].subMenuKey) setOpenKey('');
+      else setOpenKey(filteredItems[0].subMenuKey);
+      setSelectedKey(filteredItems[0].key);
     }
     setRenderedDefaultActive(true);
+  }
+
+  const navigateToHome = () => {
+    history.push('/');
+    setSelectedKey("1");
   }
 
   return (
@@ -67,11 +73,12 @@ export const SiderContent = (props) => {
       {renderedDefaultActive && <SyrfMenu
         defaultSelectedKeys={[selectedKey]}
         mode="inline"
+        selectedKeys={[selectedKey]}
         defaultOpenKeys={[openKey]}>
         <Logo
-          onClick={() => history.push('/')}
-          style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px' }} />
-        <SyrfMenuItem title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
+          onClick={navigateToHome}
+          style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px', cursor: 'pointer' }} />
+        <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 

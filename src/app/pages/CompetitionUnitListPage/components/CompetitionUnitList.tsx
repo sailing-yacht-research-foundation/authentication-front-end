@@ -11,6 +11,7 @@ import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { getAllCompetitionUnits } from 'services/live-data-server/competition-units';
 import { Link } from 'react-router-dom';
 import { TIME_FORMAT } from 'utils/constants';
+import ReactTooltip from 'react-tooltip';
 
 const defaultOptions = {
     loop: true,
@@ -35,14 +36,14 @@ export const CompetitionUnitList = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>;
+                return <Link data-tip={t(translations.tip.view_this_race_in_the_playback)} to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             }
         },
         {
             title: t(translations.competition_unit_list_page.event_name),
             dataIndex: 'eventName',
             key: 'eventName',
-            render: (text, record) => <Link to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>,
+            render: (text, record) => <Link data-tip={t(translations.tip.view_this_race_event)} to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>,
         },
         {
             title: t(translations.competition_unit_list_page.created_date),
@@ -58,10 +59,11 @@ export const CompetitionUnitList = () => {
                 const userId = localStorage.getItem('user_id');
                 if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
-                        <BorderedButton onClick={() => {
+                        <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
                         }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-                        <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                        <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                        <ReactTooltip />
                     </Space>;
 
                 return <></>;
@@ -167,6 +169,7 @@ export const CompetitionUnitList = () => {
                         width={400} />
                     <LottieMessage>{t(translations.competition_unit_list_page.you_dont_have_any_competition_unit)}</LottieMessage>
                 </LottieWrapper>)}
+            <ReactTooltip />
         </>
     )
 }

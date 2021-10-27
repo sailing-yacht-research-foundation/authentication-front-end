@@ -44,6 +44,7 @@ export const SyrfSubmitButton = styled(Button)`
     display: flex;
     justify-content: center;
     align-items:center;
+    text-transform: capitalize;
 `
 
 export const SyrfInputField = styled(Input)`
@@ -90,6 +91,7 @@ export const SyrfFormButton = styled(Button)`
     font-weight: 700;
     line-height: 19px;
     color: #fff;
+    text-transform: capitalize;
     :disabled {
         background: #dddddd;
     }

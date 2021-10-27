@@ -1,5 +1,7 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
+import { supportedSearchCriteria } from 'utils/constants';
+import { insert3BetweenEachWord } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {
@@ -11,7 +13,7 @@ export const search = (params) => {
 
     query.bool.must.push({
         query_string: {
-            query: params.keyword
+            query: parseKeyword(insert3BetweenEachWord(params.keyword))
         }
     });
 
@@ -45,7 +47,7 @@ export const search = (params) => {
         query: query,
     };
 
-    searchParams._source = ["id", "name", "approx_start_point", "start_country", "start_city", "approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
+    searchParams._source = ["id", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event_description"]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
@@ -299,6 +301,60 @@ export const getTimeByCompetitionUnit = (id: string) => {
 
 export const getCourseByCompetitionUnit = (id: string) => {
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/course`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
+
+const parseKeyword = (keyword) => {
+    const words = keyword.split(' ');
+    let parseWords: any[] = [];
+    let result = '';
+    words.forEach((word, index) => {
+        let splittedWord = word.split(':');
+        if (splittedWord.length > 1 && supportedSearchCriteria.includes(splittedWord[0]) && index !== 0) {
+            splittedWord.splice(0, 0, 'AND');
+        }
+        parseWords.push(splittedWord);
+    });
+
+    parseWords.forEach(words => {
+        words.forEach((w, i) => {
+            if (supportedSearchCriteria.includes(w)) {
+                result += (w + ':');
+            } else {
+                result += w + ' ';
+            }
+        });
+    });
+
+    return result.trim();
+}
+
+export const getSuggestion = (fieldName, word) => {
+    const searchParams = {
+        "suggest": {
+            "autocomplete": {
+                "prefix": word,
+                "completion": {
+                    "field": `${fieldName}.completion`,
+                    "skip_duplicates": true,
+                    "fuzzy": {
+                        "fuzziness": 1
+                    }
+                }
+            }
+        }
+    };
+    
+    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
         return {
             success: true,
             data: response.data

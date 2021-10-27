@@ -12,6 +12,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import FontFaceObserver from 'fontfaceobserver';
+import SmartBanner from 'react-smartbanner';
+import 'react-smartbanner/dist/main.css';
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css';
@@ -46,7 +48,8 @@ ReactDOM.render(
     <ThemeProvider>
       <HelmetProvider>
         <React.StrictMode>
-          <App />
+            <SmartBanner position="bottom" title={'SYRF - Your Sailing Adventures'} />
+              <App />
         </React.StrictMode>
       </HelmetProvider>
     </ThemeProvider>

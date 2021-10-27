@@ -8,6 +8,7 @@
 
 import 'antd/dist/antd.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { GlobalStyle } from '../styles/global-styles';
 
 import * as React from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
@@ -15,8 +16,7 @@ import { ToastContainer } from 'react-toastify';
 import { Layout } from 'antd';
 import { media } from 'styles/media';
 import styled from 'styled-components';
-
-import { GlobalStyle } from '../styles/global-styles';
+import ReactGA from 'react-ga';
 
 import { LoginPage } from './pages/LoginPage/Loadable';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
@@ -55,6 +55,9 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { isMobile } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
+import { TutorialModal } from './components/TutorialModal';
+import { TourProvider } from '@reactour/tour';
+import { steps } from 'utils/tour-steps';
 
 const { Sider, Content } = Layout;
 
@@ -96,8 +99,11 @@ export function App(props) {
 
   const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
 
+  const tourRef = React.useRef<any>();
+
   React.useEffect(() => {
     if (isAuthenticated) {
+      initGoogleAnalytic();
       dispatch(loginActions.getUser());
     } else {
       dispatch(loginActions.syrfServiceAnonymousLogin());
@@ -113,6 +119,10 @@ export function App(props) {
     }
   }
 
+  const initGoogleAnalytic = () => {
+    ReactGA.initialize('G-0X3PS1RHMN');
+  }
+
   const renderSider = () => {
     if (isAuthenticated && isSiderToggled)
       return (
@@ -122,7 +132,7 @@ export function App(props) {
           width={256}
           style={{
             background: StyleConstants.MAIN_TONE_COLOR,
-            zIndex: 9999
+            zIndex: 998
           }}
         >
           <SiderContent toggled={isDesktopSiderToggled} />
@@ -149,29 +159,36 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage}/>
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage} />
+              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/create'} component={CourseCreatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/:courseId/update'} component={CourseCreatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/create'} component={CompetitionUnitCreateUpdatePage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races'} component={CompetitionUnitListPage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/create'} component={CompetitionUnitCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races'} component={CompetitionUnitListPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/'} component={VesselListPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/create'} component={VesselCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:id/update'} component={VesselCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/create'} component={ParticipantCreateUpdatePage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/create'} component={VesselParticipantGroupPage}/>
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage}/>
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/create'} component={ParticipantCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/create'} component={VesselParticipantGroupPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage} />
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
+            <TourProvider beforeClose={() => {
+              if (tourRef.current) {
+                tourRef.current.dismissTour();
+              }
+            }} steps={steps}>
+              <TutorialModal ref={tourRef} />
+            </TourProvider>
           </Content>
         </Layout>
       </Layout>

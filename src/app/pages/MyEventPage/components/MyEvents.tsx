@@ -16,6 +16,9 @@ import { DeleteRaceModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
+import ReactTooltip from 'react-tooltip';
+import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
+import styled from 'styled-components';
 
 const defaultOptions = {
     loop: true,
@@ -38,7 +41,7 @@ export const MyEvents = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/events/${record.id}`}>{text}</Link>;
+                return <Link data-tip={t(translations.tip.view_event_detail)} to={`/events/${record.id}`}>{text}</Link>;
             },
         },
         {
@@ -74,10 +77,14 @@ export const MyEvents = () => {
                 const userId = localStorage.getItem('user_id');
                 if ((userId && record.createdById === userId) || (uuid === record.createdById))
                     return <Space size="middle">
-                        <BorderedButton onClick={() => {
+                        <DownloadButton  data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
+                            downloadIcalendarFile(record);
+                        }} type="primary">{t(translations.my_event_list_page.download_icalendar)}</DownloadButton>
+                        <BorderedButton data-tip={t(translations.tip.update_this_event)} onClick={() => {
                             history.push(`/events/${record.id}/update`)
                         }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
-                        <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
+                        <BorderedButton data-tip={t(translations.tip.delete_event)} danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
+                        <ReactTooltip />
                     </Space>;
 
                 return <></>;
@@ -134,7 +141,7 @@ export const MyEvents = () => {
                     <PageHeading>{t(translations.my_event_list_page.my_events)}</PageHeading>
                     <PageDescription>{t(translations.my_event_list_page.events_are_regattas)}</PageDescription>
                 </PageInfoContainer>
-                <CreateButton onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
+                <CreateButton data-tip={t(translations.tip.host_a_new_event_with_races)} onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
                     style={{ marginRight: '5px' }}
                     size={18} />}>{t(translations.my_event_list_page.create_a_new_event)}</CreateButton>
             </PageHeaderContainerResponsive>
@@ -161,6 +168,17 @@ export const MyEvents = () => {
                         size={18} />} onClick={() => history.push("/events/create")}>{t(translations.my_event_list_page.create)}</CreateButton>
                     <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_event)}</LottieMessage>
                 </LottieWrapper>)}
+            <ReactTooltip />
         </>
     )
 }
+
+const DownloadButton = styled(BorderedButton)`
+    background: #DC6E1E;
+    border: 1px solid #fff;
+
+    :hover, :focus {
+        background: #DC6E1E;
+        border: 1px solid #fff;
+    }
+`;
