@@ -35,7 +35,6 @@ export const Nav = () => {
   }
 
   const initGoogleAnalytic = () => {
-    console.log(analycticsKey);
     ReactGA.initialize(analycticsKey);
   }
 
