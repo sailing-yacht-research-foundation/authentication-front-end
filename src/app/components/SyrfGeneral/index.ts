@@ -48,6 +48,17 @@ export const PageHeaderContainerResponsive = styled.div`
     }
 `;
 
+export const PageHeaderContainerSimple = styled.div`
+    display: block;
+    text-align: left;
+
+    ${media.medium`
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    `}
+`;
+
 export const PageHeaderText = styled.h2`
     margin: 0;
     padding: 0;
