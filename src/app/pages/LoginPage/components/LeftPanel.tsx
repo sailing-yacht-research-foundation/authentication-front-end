@@ -8,25 +8,28 @@ import WindSurfing from '../assets/sport-logos/windsurfing.svg';
 import Winging from '../assets/sport-logos/Winging.svg';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-
+import { SimpleVideoPlane } from 'app/pages/AboutPage/components/SimpleVideoPlane';
 
 export const LeftPanel = () => {
     const { t } = useTranslation();
 
     return (
         <Wrapper>
-            <Title>{t(translations.login_page.leftpanel_title)}</Title>
-            <Description>
-            {t(translations.login_page.leftpanel_description)}
-            </Description>
+            <SimpleVideoPlane />
+            <ContentWrapper>
+                <Title>{t(translations.login_page.leftpanel_title)}</Title>
+                <Description>
+                    {t(translations.login_page.leftpanel_description)}
+                </Description>
 
-            <PartnerPlaceHolder>
-                <PartnerLogoImage src={Handicap}/>
-                <PartnerLogoImage src={KiteSurfing}/>
-                <PartnerLogoImage src={OneDesign}/>
-                <PartnerLogoImage src={WindSurfing}/>
-                <PartnerLogoImage src={Winging}/>
-            </PartnerPlaceHolder>
+                <PartnerPlaceHolder>
+                    <PartnerLogoImage src={Handicap} />
+                    <PartnerLogoImage src={KiteSurfing} />
+                    <PartnerLogoImage src={OneDesign} />
+                    <PartnerLogoImage src={WindSurfing} />
+                    <PartnerLogoImage src={Winging} />
+                </PartnerPlaceHolder>
+            </ContentWrapper>
         </Wrapper>
     )
 }
@@ -34,12 +37,10 @@ export const LeftPanel = () => {
 const Wrapper = styled.div`
     width: 100%;
     height: 100vh;
-    background: linear-gradient(0deg, rgba(14, 80, 182, 0.92), rgba(14, 80, 182, 0.92)), url(${BG});
-    background-size: cover;
     color: #fff;
     font-family: 'Open Sans';
     padding: 0 130px;
-`
+`;
 
 const Title = styled.h1`
     font-weight: 700;
@@ -47,20 +48,25 @@ const Title = styled.h1`
     line-height: 68px;
     padding-top: 119px;
     color: #fff;
-`
+`;
 
 const Description = styled.p`
     font-size: 18px;
     line-height: 24.5px;
     margin-top: 73px;
-`
+`;
 
 const PartnerPlaceHolder = styled.div`
     display: flex;
     margin-top: 163px;
     justify-content:center;
-`
+`;
 
 const PartnerLogoImage = styled.img`
     margin: 0 15px;
+`;
+
+const ContentWrapper = styled.div`
+    position: relative;
+    z-index: 11;
 `

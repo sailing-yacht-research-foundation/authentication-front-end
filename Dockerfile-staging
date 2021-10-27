@@ -43,23 +43,8 @@ RUN yarn test -- --watchAll=false --u
 
 RUN yarn build
 
-FROM node:14
+FROM nginx
 
-COPY --from=build /app/build /app/build
+COPY --from=build /app/build /usr/share/nginx/html
 
-COPY ./proxy-server/package.json /app/package.json
-COPY ./proxy-server/yarn.lock /app/yarn.lock
-
-WORKDIR /app
-
-ENV SYRF_API_URL ${REACT_APP_SYRF_API_URL}
-ENV SYRF_API_VERSION ${REACT_APP_SYRF_API_VERSION}
-ENV SYRF_API_DEV_TOKEN ${REACT_APP_SYRF_API_DEV_TOKEN}
-ENV BUILD_FOLDER_PATH=./build
-ENV SITE_URL=https://syrf.io
-
-RUN yarn install
-
-COPY proxy-server /app
-
-CMD [ "node", "server.js" ]
+ADD default.conf /etc/nginx/conf.d/

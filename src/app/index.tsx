@@ -16,7 +16,6 @@ import { ToastContainer } from 'react-toastify';
 import { Layout } from 'antd';
 import { media } from 'styles/media';
 import styled from 'styled-components';
-import ReactGA from 'react-ga';
 
 import { LoginPage } from './pages/LoginPage/Loadable';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
@@ -103,7 +102,6 @@ export function App(props) {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      initGoogleAnalytic();
       dispatch(loginActions.getUser());
     } else {
       dispatch(loginActions.syrfServiceAnonymousLogin());
@@ -117,10 +115,6 @@ export function App(props) {
     } else {
       setIsDesktopSiderToggled(!collapsed);
     }
-  }
-
-  const initGoogleAnalytic = () => {
-    ReactGA.initialize('G-0X3PS1RHMN');
   }
 
   const renderSider = () => {
