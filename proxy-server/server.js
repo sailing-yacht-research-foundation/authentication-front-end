@@ -71,10 +71,10 @@ app.get('/events/:eventId', function (request, response) {
     }
 
     result = replaceOpenGraphTagsContent(
-      eventData.name ? eventData.name : defaultTitle,
-      eventData.description ? [eventData.description, moment(eventData.approximateStartTime).format('MMM. D, YYYY [at] h:mm A z'), eventData.approximateStartTime_zone].join(', ')  : defaultDescription,
+      eventData && eventData.name ? eventData.name : defaultTitle,
+      eventData && eventData.description ? [eventData.description, moment(eventData.approximateStartTime).format('MMM. D, YYYY [at] h:mm A z'), eventData.approximateStartTime_zone].join(', ')  : defaultDescription,
       defaultUrl + request.url,
-      eventData.openGraphImage ?? defaultOpenGraphImage,
+      eventData && eventData.openGraphImage ? eventData.openGraphImage : defaultOpenGraphImage,
       data
     );
 
