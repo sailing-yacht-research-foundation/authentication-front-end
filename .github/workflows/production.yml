@@ -27,6 +27,7 @@ jobs:
           --build-arg REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_PRO_TOKEN }}'
           --build-arg REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='wss://streaming-server.syrf.io'
           --build-arg REACT_APP_GOOGLE_MAP_API_KEY='${{ secrets.GOOGLE_MAP_API_KEY }}'
+          --build-arg REACT_APP_GOOGLE_ANALYTICS_KEY='${{ secrets.GOOGLE_ANALYTICS_KEY_PRODUCTION }}'
           --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to registry
         # This is where you will update the PAT to GITHUB_TOKEN

@@ -14,6 +14,8 @@ import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import ReactGA from 'react-ga4';
 
+const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
+
 export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);
 
@@ -33,18 +35,19 @@ export const Nav = () => {
   }
 
   const initGoogleAnalytic = () => {
-    ReactGA.initialize('G-0X3PS1RHMN');
+    console.log(analycticsKey);
+    ReactGA.initialize(analycticsKey);
   }
 
   React.useEffect(() => {
-    if (isAuthenenticated) {
+    if (isAuthenenticated && analycticsKey) {
       initGoogleAnalytic();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenenticated]);
 
   React.useEffect(() => {
-    if (isAuthenenticated) {
+    if (isAuthenenticated && analycticsKey) {
       ReactGA.send({ hitType: "pageview", page: window.location.pathname + window.location.search });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
