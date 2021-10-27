@@ -14,6 +14,10 @@ export const ResultItem = (props) => {
 
     const { t } = useTranslation();
 
+    const eventId = race._source?.event;
+    const eventText = renderEmptyValue(race._source?.event_name, ' ');
+    const eventElement = eventId && race._source.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText; 
+
     return (
         <Wrapper key={props.index}>
             {race._source?.start_country && <HeadDescriptionWrapper>
@@ -28,14 +32,8 @@ export const ResultItem = (props) => {
                 <DescriptionItem>
                     {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source?.approx_start_time_ms).format(TIME_FORMAT.date_text)}
                 </DescriptionItem>
-                {race._source?.event_name && <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.event_name)} {renderEmptyValue(race._source?.event_name)}
-                </DescriptionItem>}
-                {race._source?.start_city && <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.city)} {renderEmptyValue(race._source?.start_city)}
-                </DescriptionItem>}
-                {race._source?.start_country && <DescriptionItem>
-                    {t(translations.home_page.filter_tab.filter_result.country)} {renderEmptyValue(race._source?.start_country)}
+                {eventText && <DescriptionItem>
+                    {t(translations.home_page.filter_tab.filter_result.event_name)} {eventElement}
                 </DescriptionItem>}
             </DescriptionWrapper>
         </Wrapper>
