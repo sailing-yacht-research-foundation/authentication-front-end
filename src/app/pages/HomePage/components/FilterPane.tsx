@@ -121,6 +121,8 @@ export const FilterPane = (props) => {
                                     setKeyword(e.target.value);
                                 }}
                                 autoCorrect="off"
+                                autoComplete="off"
+                                autoCapitalize="none"
                             />
                             <CriteriaSuggestion keyword={keyword} searchBarRef={searchInputRef} />
                             <ResultSuggestion isFilterPane keyword={keyword} searchBarRef={searchInputRef} />

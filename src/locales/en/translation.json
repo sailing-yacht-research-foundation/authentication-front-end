@@ -266,7 +266,8 @@
     "not_available": "Not Available",
     "password_must_not_contain_blank": "Password must not contain blank space.",
     "want_to_take_a_quick_tour": "Want to take a quick tour?",
-    "look_like_you_are_new": "Looks like your are new here {{username}}, Do you want to take a quick tour with us?"
+    "look_like_you_are_new": "Looks like your are new here {{username}}, Do you want to take a quick tour with us?",
+    "an_error_happended_when_downloading_your_track": "An error happened when downloading your track."
   },
   "playback_page": {
     "competitor": "Competitor:",

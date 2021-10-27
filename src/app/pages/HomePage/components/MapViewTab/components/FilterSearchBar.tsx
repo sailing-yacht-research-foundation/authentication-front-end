@@ -85,6 +85,9 @@ export const FilterSearchBar = (props) => {
                     onKeyUp={searchForRaces}
                     onFocus={handleOnSearchInputFocus}
                     onBlur={handleOnSearchInputBlur}
+                    autoComplete="off"
+                    autoCapitalize="none"
+                    autoCorrect="off"
                     placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                 <SearchBarLogo />
                 <StyledSpin spinning={isSearching}></StyledSpin>

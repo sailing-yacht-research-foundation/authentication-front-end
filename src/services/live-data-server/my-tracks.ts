@@ -1,3 +1,6 @@
+import i18next from 'i18next';
+import { translations } from 'locales/translations';
+import { toast } from 'react-toastify';
 import { SYRF_SERVER } from 'services/service-constants';
 import syrfRequest from 'utils/syrf-request';
 
@@ -31,6 +34,7 @@ export const downloadTrack = (track, type) => {
             document.body.appendChild(link);
             link.click();
         }).catch(error => {
+            toast.error(i18next.t(translations.misc.an_error_happended_when_downloading_your_track));
             return {
                 success: false,
                 error: error
