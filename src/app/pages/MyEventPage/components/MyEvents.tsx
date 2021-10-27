@@ -1,184 +1,77 @@
-import React from 'react';
-import { Table, Space, Spin } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectIsChangingPage, selectResults } from '../slice/selectors';
-import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
-import { useTranslation } from 'react-i18next';
-import Lottie from 'react-lottie';
-import NoResult from '../assets/no-results.json'
-import { translations } from 'locales/translations';
-import { AiFillPlusCircle } from 'react-icons/ai';
-import { BorderedButton, CreateButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, TableWrapper } from 'app/components/SyrfGeneral';
-import { useHistory } from 'react-router';
-import { useMyEventListSlice } from '../slice';
-import moment from 'moment';
-import { DeleteRaceModal } from './DeleteEventModal';
-import { Link } from 'react-router-dom';
-import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
-import { TIME_FORMAT } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
-import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
+import React, { useState } from 'react';
+import { Tabs } from 'antd';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { AiFillPlusCircle } from 'react-icons/ai';
+import { useHistory } from 'react-router';
+import { FiMap } from 'react-icons/fi';
+import { FaFlagCheckered, FaRegCalendar } from 'react-icons/fa';
+import { BsListUl } from 'react-icons/bs';
 
-const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: NoResult,
-    rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice'
-    }
-};
+import { translations } from 'locales/translations';
+import { CreateButton, PageDescription, PageHeaderContainerSimple, PageHeading, PageInfoContainer } from 'app/components/SyrfGeneral';
+import { EventList } from './EventList';
+import { CompetitionUnitList } from './CompetitionUnitList';
 
-const uuid = localStorage.getItem('uuid');
+const { TabPane } = Tabs;
+
+const renderIcon = (Icon, text) => {
+    return (
+        <span>
+            <Icon style={{ fontSize: '16px' }} /> <span style={{ fontSize: '16px' }}>{text}</span>
+        </span>
+    )
+}
 
 export const MyEvents = () => {
 
     const { t } = useTranslation();
-
-    const columns = [
-        {
-            title: t(translations.my_event_list_page.name),
-            dataIndex: 'name',
-            key: 'name',
-            render: (text, record) => {
-                return <Link data-tip={t(translations.tip.view_event_detail)} to={`/events/${record.id}`}>{text}</Link>;
-            },
-        },
-        {
-            title: t(translations.my_event_list_page.city),
-            dataIndex: 'city',
-            key: 'city',
-            render: (text) => renderEmptyValue(text),
-        },
-        {
-            title: t(translations.my_event_list_page.country),
-            dataIndex: 'country',
-            key: 'country',
-            render: (text) => renderEmptyValue(text),
-        },
-        {
-            title: t(translations.my_event_list_page.start_date),
-            dataIndex: 'approximateStartTime',
-            key: 'start_date',
-            render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time)
-                + ' ' + record.approximateStartTime_zone + ' '
-                + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
-        },
-        {
-            title: t(translations.my_event_list_page.created_date),
-            dataIndex: 'createdAt',
-            key: 'createdAt',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text),
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (text, record) => {
-                const userId = localStorage.getItem('user_id');
-                if ((userId && record.createdById === userId) || (uuid === record.createdById))
-                    return <Space size="middle">
-                        <DownloadButton  data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
-                            downloadIcalendarFile(record);
-                        }} type="primary">{t(translations.my_event_list_page.download_icalendar)}</DownloadButton>
-                        <BorderedButton data-tip={t(translations.tip.update_this_event)} onClick={() => {
-                            history.push(`/events/${record.id}/update`)
-                        }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
-                        <BorderedButton data-tip={t(translations.tip.delete_event)} danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
-                        <ReactTooltip />
-                    </Space>;
-
-                return <></>;
-            }
-        },
-    ];
-
-    const results = useSelector(selectResults);
-
-    const page = useSelector(selectPage);
-
-    const total = useSelector(selectTotal);
-
     const history = useHistory();
-
-    const dispatch = useDispatch();
-
-    const { actions } = useMyEventListSlice();
-
-    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-
-    const [race, setRace] = React.useState<any>({});
-
-    const isChangingPage = useSelector(selectIsChangingPage);
-
-    React.useEffect(() => {
-        dispatch(actions.getEvents(1));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const onPaginationChanged = (page) => {
-        dispatch(actions.getEvents(page));
-    }
-
-    const showDeleteRaceModal = (race) => {
-        setShowDeleteModal(true);
-        setRace(race);
-    }
-
-    const onRaceDeleted = () => {
-        dispatch(actions.getEvents(page));
-    }
 
     return (
         <>
-            <DeleteRaceModal
-                race={race}
-                onRaceDeleted={onRaceDeleted}
-                showDeleteModal={showDeleteModal}
-                setShowDeleteModal={setShowDeleteModal}
-            />
-            <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
-                <PageInfoContainer>
-                    <PageHeading>{t(translations.my_event_list_page.my_events)}</PageHeading>
-                    <PageDescription>{t(translations.my_event_list_page.events_are_regattas)}</PageDescription>
-                </PageInfoContainer>
-                <CreateButton data-tip={t(translations.tip.host_a_new_event_with_races)} onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
-                    style={{ marginRight: '5px' }}
-                    size={18} />}>{t(translations.my_event_list_page.create_a_new_event)}</CreateButton>
-            </PageHeaderContainerResponsive>
-            {results.length > 0 ? (
-                <Spin spinning={isChangingPage}>
-                    <TableWrapper>
-                        <Table scroll={{ x: "max-content" }} columns={columns}
-                            dataSource={results} pagination={{
-                                defaultPageSize: 10,
-                                current: page,
-                                total: total,
-                                onChange: onPaginationChanged
-                            }} />
-                    </TableWrapper>
-                </Spin>
-            )
-                : (<LottieWrapper>
-                    <Lottie
-                        options={defaultOptions}
-                        height={400}
-                        width={400} />
-                    <CreateButton icon={<AiFillPlusCircle
-                        style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/events/create")}>{t(translations.my_event_list_page.create)}</CreateButton>
-                    <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_event)}</LottieMessage>
-                </LottieWrapper>)}
-            <ReactTooltip />
+            <StyledTabs<React.ElementType>
+                animated
+                defaultActiveKey="1"
+            >
+                <TabPane tab={renderIcon(FaRegCalendar, 'Events')} key="1">
+                    <PageHeaderContainerSimple style={{ 'alignSelf': 'flex-start', width: '100%', padding: '0px 15px' }}>
+                        <PageInfoContainer style={{ paddingRight: '8px' }}>
+                            <PageHeading style={{ padding: '0px', marginBottom: '4px' }}>{t(translations.my_event_list_page.my_events)}</PageHeading>
+                            <PageDescription style={{ padding: '0px', marginBottom: '8px' }}>{t(translations.my_event_list_page.events_are_regattas)}</PageDescription>
+                        </PageInfoContainer>
+                        <div>
+                            <CreateButton style={{ margin: '0px' }} onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
+                                style={{ marginRight: '5px' }}
+                                size={18} />}>{t(translations.my_event_list_page.create_a_new_event)}</CreateButton>
+                        </div>
+                    </PageHeaderContainerSimple>
+                    <EventList />
+                </TabPane>
+
+                <TabPane tab={renderIcon(FaFlagCheckered, 'Races')} key="2">
+                    <PageHeaderContainerSimple style={{ 'alignSelf': 'flex-start', width: '100%', padding: '0px 15px' }}>
+                        <PageInfoContainer style={{ paddingRight: '8px' }}>
+                            <PageHeading style={{ padding: '0px', marginBottom: '4px' }}>{t(translations.competition_unit_list_page.competition_units)}</PageHeading>
+                            <PageDescription style={{ padding: '0px', marginBottom: '8px' }}>{t(translations.competition_unit_list_page.race_configurations_pair_classes_to_courses)}</PageDescription>
+                        </PageInfoContainer>
+                    </PageHeaderContainerSimple>
+                    <CompetitionUnitList />
+                </TabPane>
+            </StyledTabs>            
         </>
     )
 }
 
-const DownloadButton = styled(BorderedButton)`
-    background: #DC6E1E;
-    border: 1px solid #fff;
+const StyledTabs = styled(Tabs)`
+    margin-bottom: 0;
+    position: relative;
+    width: 100%;
 
-    :hover, :focus {
-        background: #DC6E1E;
-        border: 1px solid #fff;
+    .ant-tabs-tab {
+        font-size: 22px;
+    }
+    .ant-tabs-tab:first-child {
+        margin-left: 10px;
     }
 `;
