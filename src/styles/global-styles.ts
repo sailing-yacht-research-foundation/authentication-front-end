@@ -212,4 +212,8 @@ export const GlobalStyle = createGlobalStyle`
   .volcano-5 {
     background-color: #ff7a45;
   }
+
+  .ant-menu.ant-menu-inline-collapsed {
+    width: 80px !important;
+  }
 `;

@@ -5,7 +5,7 @@ import { Col, Row, Button, Space, Typography } from 'antd';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { SimpleVideoPlane } from './SimpleVideoPlane';
+import SailingBackground from './../assets/hero-homepage-3.jpg';
 
 export const VideoSection = (props) => {
 
@@ -19,7 +19,6 @@ export const VideoSection = (props) => {
 
     return (
         <Wrapper className="video-section">
-            <SimpleVideoPlane/>
             <Row style={{ marginTop: '88px' }}>
                 <Typography.Title className="text-white introduction-text">{t(translations.about_page.video_section.one_login)} <br /> {t(translations.about_page.video_section.ultimate_potential)}</Typography.Title>
             </Row>
@@ -52,4 +51,5 @@ const Wrapper = styled.div`
     padding: 0 15px;
     padding-bottom: 50px;
     position: relative;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(${SailingBackground});
 `;

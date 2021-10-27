@@ -1,3 +1,6 @@
+import i18next from 'i18next';
+import { translations } from 'locales/translations';
+import { toast } from 'react-toastify';
 import { SYRF_SERVER } from 'services/service-constants';
 import syrfRequest from 'utils/syrf-request';
 
@@ -22,7 +25,7 @@ export const getAllTracks = (page) => {
 }
 
 export const downloadTrack = (track, type) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/7cb23d92-5d32-4aad-9bc0-8af3ef6b6317/export-track/${type}`, { responseType: 'blob' })
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/${track.id}/export-track/${type}`, { responseType: 'blob' })
         .then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
@@ -31,6 +34,7 @@ export const downloadTrack = (track, type) => {
             document.body.appendChild(link);
             link.click();
         }).catch(error => {
+            toast.error(i18next.t(translations.misc.an_error_happended_when_downloading_your_track));
             return {
                 success: false,
                 error: error
