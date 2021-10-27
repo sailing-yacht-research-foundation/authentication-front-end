@@ -136,8 +136,10 @@ export const addNonGroupLayers = (sourceLayer, targetGroup) => {
  * @param value
  * @return string
  */
-export const renderEmptyValue = (value) => {
+export const renderEmptyValue = (value, replacement: string | undefined = undefined) => {
     if (value) return value;
+
+    if (replacement) return replacement;
 
     return i18next.t(translations.misc.not_available);
 }
