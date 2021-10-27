@@ -284,7 +284,8 @@
     "insecure_scraped_clickhere": "Click here",
     "insecure_scraped_viewinsecureplayer": "if you want to view their insecure player in a new tab.",
     "countdown_timer_racewillstart": "Race will start in",
-    "countdown_timer_on": "on"
+    "countdown_timer_on": "on",
+    "connecting": "Connecting..."
   },
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",
@@ -588,7 +589,13 @@
     "you_dont_have_any_tracks": "You don't have any tracks. Start tracking by using our app.",
     "download_as_gpx": "Download as GPX",
     "download_as_kml": "Download as KML",
-    "download":"Download"
+    "download":"Download",
+    "city": "City",
+    "country": "Country",
+    "elapsed_time": "Elapsed Time",
+    "total_distance": "Total Distance",
+    "traveled_overground_distance": "Traveled Over Ground Distance",
+    "map_view": "Map View"
   },
   "tip": {
     "search_for_races_using_different_criteria": "Search for races using different criteria.",
