@@ -16,6 +16,8 @@ export const Leaderboard = ({ participantsData = [] }) => {
           })
         : [];
 
+    if (participantsData?.length <= 1) return null;
+
     return (
         <Wrapper>
             <HeaderContainer onClick={handleIsOpenChange}>

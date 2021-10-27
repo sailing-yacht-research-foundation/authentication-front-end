@@ -14,6 +14,9 @@ import { PlaybackInsecureScrapedRace } from "./components/PlaybackInsecureScrape
 import { PlaybackRaceLoading } from "./components/PlaybackRaceLoading";
 import { PlaybackRaceNotFound } from "./components/PlaybackRaceNotFound";
 import { PlaybackOldRace } from "./components/PlaybackOldrace";
+import { PlaybackMobileIssue } from './components/PlaybackMobileIssue';
+import { Share } from "./components/Share";
+import { FullScreen } from './components/FullScreen';
 
 export const PlaybackPage = (props) => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "" });
@@ -46,6 +49,14 @@ export const PlaybackPage = (props) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (parsedQueryString?.dbg === 'true') {
+      console.log("=== SOURCE DATA ===");
+      console.log({ competitionUnitDetail, searchRaceData, playbackType });
+      console.log("===================");
+    };
+  }, [competitionUnitDetail, searchRaceData, playbackType, parsedQueryString]);
 
   useEffect(() => {
     if (playbackType === PlaybackTypes.SCRAPEDRACE) {
@@ -108,9 +119,26 @@ export const PlaybackPage = (props) => {
             <IoIosArrowBack style={{ fontSize: "40px", color: "#1890ff" }} />
           </GobackButton>
         )}
-        <div ref={headerInfoElementRef}>
+        <div style={{ width: "100%" }} ref={headerInfoElementRef}>
           <PageInfoContainer>
-            <PageHeading>{raceIdentity.name}</PageHeading> <PageDescription>{raceIdentity.description}</PageDescription>
+            <PageHeadingContainer>
+              <div>
+                <PageHeading>{raceIdentity.name}</PageHeading>
+                {raceIdentity.description && <PageDescription>{raceIdentity.description}</PageDescription>}
+              </div>
+
+              <PageHeadingRightContainer>
+                { playbackType !== PlaybackTypes.RACELOADING 
+                  && playbackType !== PlaybackTypes.RACENOTFOUND 
+                  && (
+                    <>
+                      <Share />
+                      <FullScreen />
+                    </>
+                  )
+                }
+              </PageHeadingRightContainer>
+            </PageHeadingContainer>
           </PageInfoContainer>
         </div>
       </PageHeadContainer>
@@ -122,21 +150,34 @@ export const PlaybackPage = (props) => {
         {playbackType === PlaybackTypes.OLDRACE && <PlaybackOldRace />}
         {playbackType === PlaybackTypes.RACELOADING && <PlaybackRaceLoading />}
         {playbackType === PlaybackTypes.RACENOTFOUND && <PlaybackRaceNotFound />}
+        {playbackType === PlaybackTypes.MOBILEISSUE && <PlaybackMobileIssue />}
       </div>
     </Wrapper>
   );
 };
 
 const PageHeading = styled.h2`
-  padding: 8px 16px;
   padding-bottom: 0px;
   margin-bottom: 0px;
+`;
+
+const PageHeadingContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+`;
+
+const PageHeadingRightContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const PageHeadContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  width: 100%;
 `;
 
 const PageInfoContainer = styled.div`
@@ -145,8 +186,9 @@ const PageInfoContainer = styled.div`
 `;
 
 const PageDescription = styled.p`
-  padding: 0 16px;
-  margin-bottom: 8px;
+  padding: 0px;
+  margin-bottom: 0px;
+  margin-top: 8px;
 `;
 
 const GobackButton = styled.div`

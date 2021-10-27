@@ -3,14 +3,14 @@ import * as L from "leaflet";
 import { useMap } from "react-leaflet";
 import ReactDOMServer from "react-dom/server";
 import copy from "copy-to-clipboard";
-import { PlayerInfo } from "./PlayerInfo";
+import { message } from "antd";
 import { formatCoordinatesObjectToArray, generateLastArray } from "utils/race/race-helper";
 import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
+import { PlayerInfo } from "./PlayerInfo";
 import MarkIcon from "../assets/mark.svg";
 import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
-import { message } from "antd";
 import { MarkerInfo } from "./MarkerInfo";
 
 require("leaflet-hotline");
@@ -228,9 +228,9 @@ export const RaceMap = (props) => {
       );
 
       const markerIcon = L.divIcon({
-        iconAnchor: [-1, 1],
         labelAnchor: [0, 0],
         popupAnchor: [0, -8],
+        iconAnchor: [0, 0],
         iconSize: [0, 0],
         html: ReactDOMServer.renderToString(renderedBoatIcon),
       });

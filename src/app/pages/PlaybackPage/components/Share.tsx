@@ -11,8 +11,8 @@ import {
     WhatsappShareButton
 } from "react-share";
 import { isDesktop } from 'react-device-detect';
-import { HiShare, HiLink } from 'react-icons/hi';
-import { StyleConstants } from 'styles/StyleConstants';
+import { HiLink } from 'react-icons/hi';
+import { BiShareAlt } from 'react-icons/bi';
 import copy from 'copy-to-clipboard';
 import { message } from 'antd';
 
@@ -92,35 +92,28 @@ export const Share = React.memo((props: any) => {
 });
 
 const ShareButtonWrapper = styled.div`
-    position: absolute;
-    bottom: 16px;
-    right: 20px;
-    cursor: pointer;
+    position: relative;
 `;
 
 const ShareButtonItemWrapper = styled.div`
-    margin: 5px 0;
+    margin: 8px 0px;
 `;
 
-const ShareButton = styled(HiShare)`
-    color: #fff;
-    font-size: 17px;
+const ShareButton = styled(BiShareAlt)`
+    font-size: 24px;
 `;
 
 const ShareDropdown = styled.div`
-    width: 100%;
+    width: 56px;
     background: #fff;
     box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
     border-radius: 20px;
     position: absolute;
     height: auto;
-    bottom: 50px;
-    display: flex;
-    flex-direction: column;
+    top: 50px;
     padding: 0 10px;
-    align-items: center;
-    max-width: 50px;
-    z-index: 10;
+    text-align: center;
+    z-index: 10000;
 `;
 
 const ButtonContainer = styled.div`
@@ -130,8 +123,8 @@ const ButtonContainer = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    background: ${StyleConstants.MAIN_TONE_COLOR};
     margin: 0 10px;
+    cursor: pointer;
 `;
 
 const ShareButtonInnerWrapper = styled.div`
@@ -141,4 +134,5 @@ const ShareButtonInnerWrapper = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 50%;
+    cursor: pointer;
 `;
