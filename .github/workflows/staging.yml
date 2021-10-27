@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build image and test
-        run: docker build . --file Dockerfile-staging --tag $IMAGE_NAME 
+        run: docker build . --file Dockerfile-ci --tag $IMAGE_NAME 
             --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
             --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
             --build-arg REACT_APP_TWITTER_CLIENT_ID='' 
@@ -70,5 +70,5 @@ jobs:
             echo VERSION=\$VERSION
             docker pull \$IMAGE_ID:\$VERSION
             docker container rm -f syrf_my_sailing_profile || true
-            docker run -d -p 3002:80 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
+            docker run -d -p 3002:5000 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
           EOF
