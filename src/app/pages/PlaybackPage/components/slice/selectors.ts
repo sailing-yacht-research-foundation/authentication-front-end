@@ -80,3 +80,8 @@ export const selectTimeBeforeRaceBegin = createSelector(
   [selectDomain],
   (playbackState) => playbackState.timeBeforeRaceBegin
 )
+
+export const selectIsConnecting = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.isConnecting
+)
