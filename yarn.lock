@@ -3679,53 +3679,6 @@
     "@reactour/utils" "*"
 
 "@reactour/tour@^2.2.0":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@reactour/tour/-/tour-2.2.1.tgz#cb6aec417dd253108ba409ea52391db8bb878f83"
-  integrity sha512-BJC3E+lyWNeZEjOP0WM3q5WXIi965Nv14Do2Ovg+gY26awqKgpRqnI9bY+5OSIYjUCsfUNsR4888AHjgd1Hhig==
-  dependencies:
-    "@emotion/react" "11.4.1"
-    "@react-aria/focus" "3.4.1"
-    "@reactour/mask" "*"
-    "@reactour/popover" "*"
-    "@reactour/utils" "*"
-
-"@reactour/utils@*":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@reactour/utils/-/utils-0.2.1.tgz#ab3b7038faf685ee160fa7c76256970b13002b15"
-  integrity sha512-HiMH304EMOIBN0sO3zZhqxaujJvJdQLnCOjvHOqM4Az8rtul4N9uTIYQ4QyMwvEZ1Mko/INlpQv6y2sBFRmzhA==
-  dependencies:
-    "@rooks/use-mutation-observer" "4.11.2"
-    resize-observer-polyfill "1.5.1"
-
-"@react-stately/utils@^3.2.2":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@react-stately/utils/-/utils-3.2.2.tgz#468eafa60740c6b0b847a368215dfaa55e87f505"
-  integrity sha512-7NCpRMAexDdgVqbrB9uDrkDpM4Tdw5BU6Gu6IKUXmKsoDYziE6mAjaGkCZBitsrln1Cezc6euI5YPa1JqxgpJg==
-  dependencies:
-    "@babel/runtime" "^7.6.2"
-
-"@react-types/shared@^3.8.0", "@react-types/shared@^3.9.0":
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/@react-types/shared/-/shared-3.9.0.tgz#d834f3e6e2c992089192f3c83fb7963e3a6f5207"
-  integrity sha512-YYksINfR6q92P10AhPEGo47Hd7oz1hrnZ6Vx8Gsrq62IbqDdv1XOTzPBaj17Z1ymNY2pitLUSEXsLmozt4wxxQ==
-
-"@reactour/mask@*":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@reactour/mask/-/mask-0.2.2.tgz#fa837200973959b83f3e3c06480b2f6e42d76d97"
-  integrity sha512-mSwZiue7KtfKv3ga6J3tWl/tToHUoKmHDdOlKGTSSWdfB078FFZ8dwZfHvbJFDkkwE8cCofUwpFumUCT112AWw==
-  dependencies:
-    "@emotion/react" "11.4.1"
-    "@reactour/utils" "*"
-
-"@reactour/popover@*":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@reactour/popover/-/popover-0.2.1.tgz#e02e322cc3172e39638f8de15be356fd98908592"
-  integrity sha512-TqhaMJY2GFwoyiIZOQvN5yoj0PrVJCAGA7C17APZUhg8I7G2klR6DuVhBdKXfiRQlooe5ImLKUyx1oHMjWLBVw==
-  dependencies:
-    "@emotion/react" "11.4.1"
-    "@reactour/utils" "*"
-
-"@reactour/tour@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@reactour/tour/-/tour-2.2.0.tgz#2a98561e8b69af594b4fee9e29d97eb1d0b316cd"
   integrity sha512-i2RqcxnC79FcSplvP4vOguazCHHCpZ+HqW4jS48xt+Yg1jD8hIuw4LMua5dsOKbzfMaPf8s7pipGWFVUF0v47g==
@@ -6515,12 +6468,19 @@ axe-core@^4.0.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.3.3.tgz#b55cd8e8ddf659fe89b064680e1c6a4dceab0325"
   integrity sha512-/lqqLAmuIPi79WYfRpy2i8z+x+vxU3zX2uAm0gs1q52qTuKwolOj1P8XbufpXcsydrpKx2yGn2wzAnxCMV86QA==
 
-axios@0.21.4, axios@^0.21.1:
+axios@0.21.4:
   version "0.21.4"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"
   integrity sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
   dependencies:
     follow-redirects "^1.14.0"
+
+axios@^0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.24.0.tgz#804e6fa1e4b9c5288501dd9dff56a7a0940d20d6"
+  integrity sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==
+  dependencies:
+    follow-redirects "^1.14.4"
 
 axobject-query@^2.2.0:
   version "2.2.0"
@@ -8288,11 +8248,6 @@ curtainsjs@>=8.1.0, curtainsjs@^8.1.3:
   resolved "https://registry.yarnpkg.com/curtainsjs/-/curtainsjs-8.1.3.tgz#577eccdca1996e6cf2cdb56e9f25070037290050"
   integrity sha512-E98l9mRNyJNjp1zGAqDRQgzuK0jEfblIfTZd3Q5c18gVnMYt4riag8fGcnmlc8fL7HNFLJctdpt9Ph3KPVKT6g==
 
-curtainsjs@>=8.1.0, curtainsjs@^8.1.3:
-  version "8.1.3"
-  resolved "https://registry.yarnpkg.com/curtainsjs/-/curtainsjs-8.1.3.tgz#577eccdca1996e6cf2cdb56e9f25070037290050"
-  integrity sha512-E98l9mRNyJNjp1zGAqDRQgzuK0jEfblIfTZd3Q5c18gVnMYt4riag8fGcnmlc8fL7HNFLJctdpt9Ph3KPVKT6g==
-
 cyclist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
@@ -9825,7 +9780,7 @@ focus-outline-manager@^1.0.2:
   resolved "https://registry.yarnpkg.com/focus-outline-manager/-/focus-outline-manager-1.0.2.tgz#7bf3658865341fb6b08d042a037b9d2868b119b5"
   integrity sha1-e/NliGU0H7awjQQqA3udKGixGbU=
 
-follow-redirects@^1.0.0, follow-redirects@^1.14.0:
+follow-redirects@^1.0.0, follow-redirects@^1.14.0, follow-redirects@^1.14.4:
   version "1.14.4"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.4.tgz#838fdf48a8bbdd79e52ee51fb1c94e3ed98b9379"
   integrity sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==

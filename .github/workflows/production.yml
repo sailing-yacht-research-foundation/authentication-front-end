@@ -69,5 +69,5 @@ jobs:
             echo VERSION=\$VERSION
             docker pull \$IMAGE_ID:\$VERSION
             docker container rm -f syrf_my_sailing_profile || true
-            docker run -d -p 3002:80 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
+            docker run -d -p 3002:5000 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
           EOF
