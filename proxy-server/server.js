@@ -15,9 +15,6 @@ const defaultDescription = "Sailing Yacht Research Foundation";
 const buildPath = process.env.BUILD_FOLDER_PATH;
 const defaultUrl = process.env.SITE_URL;
 
-
-console.log(buildPath);
-
 app.get('/', function (request, response) {
   const filePath = path.resolve(__dirname, buildPath, 'index.html');
   // read in the index.html file
