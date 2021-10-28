@@ -28,13 +28,18 @@ export const MyEvents = () => {
     const { t } = useTranslation();
     const history = useHistory();
 
+    const translate = {
+        events: t(translations.my_event_list_page.my_events),
+        races: t(translations.my_event_list_page.my_races)
+    }
+
     return (
         <>
             <StyledTabs<React.ElementType>
                 animated
                 defaultActiveKey="1"
             >
-                <TabPane tab={renderIcon(FaRegCalendar, 'Events')} key="1">
+                <TabPane tab={renderIcon(FaRegCalendar, translate.events)} key="1">
                     <PageHeaderContainerSimple style={{ 'alignSelf': 'flex-start', width: '100%', padding: '0px 15px' }}>
                         <PageInfoContainer style={{ paddingRight: '8px' }}>
                             <PageHeading style={{ padding: '0px', marginBottom: '4px' }}>{t(translations.my_event_list_page.my_events)}</PageHeading>
@@ -49,7 +54,7 @@ export const MyEvents = () => {
                     <EventList />
                 </TabPane>
 
-                <TabPane tab={renderIcon(FaFlagCheckered, 'Races')} key="2">
+                <TabPane tab={renderIcon(FaFlagCheckered, translate.races)} key="2">
                     <PageHeaderContainerSimple style={{ 'alignSelf': 'flex-start', width: '100%', padding: '0px 15px' }}>
                         <PageInfoContainer style={{ paddingRight: '8px' }}>
                             <PageHeading style={{ padding: '0px', marginBottom: '4px' }}>{t(translations.competition_unit_list_page.competition_units)}</PageHeading>
