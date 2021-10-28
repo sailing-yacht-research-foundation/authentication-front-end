@@ -300,6 +300,10 @@ export const PlaybackOldRace = (props) => {
     const wsData = JSON.parse(lastMessage.data);
 
     if (wsData?.type === "data" && wsData?.dataType === "position") handleAddNewPosition(wsData.data);
+
+    handleDebug("=== WS DATA ===");
+    handleDebug(wsData);
+    handleDebug("===============");
   };
 
   // Handle add new position to each vessel partiicpant

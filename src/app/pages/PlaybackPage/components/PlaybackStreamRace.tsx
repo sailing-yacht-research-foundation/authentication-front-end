@@ -140,6 +140,10 @@ export const PlaybackStreamRace = (props) => {
       const parsedData = JSON.parse(lastMessage.data);
       const { type, dataType, data } = parsedData;
       if (type === "data" && dataType === "position") handleAddPosition(data);
+    
+      handleDebug("=== WS DATA ===");
+      handleDebug(parsedData);
+      handleDebug("===============");
     }
   }, [lastMessage]);
 
