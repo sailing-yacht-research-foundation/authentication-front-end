@@ -1,10 +1,11 @@
 import "leaflet/dist/leaflet.css";
 
 import React, { useEffect, useRef, useState } from "react";
-import { message } from "antd";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MapContainer } from "react-leaflet";
 import styled from "styled-components";
+import { useLocation } from "react-router";
+import queryString from "querystring";
 import {
   normalizeSimplifiedTracksPingTime,
   selectLatestPositionOfSimplifiedTracks,
@@ -37,6 +38,7 @@ import { selectSessionToken } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
 import { Playback } from "./Playback";
 import { RaceMap } from "./RaceMap";
+import { ConnectionLoader } from './ConnectionLoader';
 
 export const PlaybackOldRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -51,6 +53,10 @@ export const PlaybackOldRace = (props) => {
   const [isReady, setIsReady] = useState(false);
 
   const dispatch = useDispatch();
+  const location = useLocation();
+  const parsedQueryString: any = queryString.parse(
+    location.search.includes("?") ? location.search.substring(1) : location.search
+  );
 
   const simplifiedTracksRef = useRef<any[]>([]);
   const vesselParticipantsRef = useRef<any>([]);
@@ -145,8 +151,14 @@ export const PlaybackOldRace = (props) => {
 
   // Manage message of websocket status
   useEffect(() => {
-    if (connectionStatus === "open") message.success("Connected!");
-    if (connectionStatus === "connecting") message.info("Connecting...");
+    if (connectionStatus === "open") handleSetIsConnecting(false);
+    if (connectionStatus === "connecting") handleSetIsConnecting(true);
+
+    handleDebug("=== Connection Status ===");
+    handleDebug(connectionStatus);
+    handleDebug("=========================");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus]);
 
   // Normalized simplified tracks
@@ -186,7 +198,12 @@ export const PlaybackOldRace = (props) => {
 
       vesselParticipantsRef.current = vesselParticipantsObject;
       setIsReady(true);
+
+      handleDebug("=== Vessel Participants ===");
+      handleDebug(vesselParticipantsObject);
+      handleDebug("===========================");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vesselParticipants]);
 
   useEffect(() => {
@@ -213,6 +230,11 @@ export const PlaybackOldRace = (props) => {
 
   useEffect(() => {
     handleRenderCourseDetail(raceCourseDetail);
+
+    handleDebug("=== Course Detail ===");
+    handleDebug(raceCourseDetail);
+    handleDebug("=====================");
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceCourseDetail]);
 
@@ -248,6 +270,15 @@ export const PlaybackOldRace = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleSetIsConnecting = (value = false) => {
+    dispatch(actions.setIsConnecting(value));
+  };
+
+  const handleDebug = (value) => {
+    if (parsedQueryString?.dbg !== "true") return;
+    console.log(value);
+  };
+
   // Map retrieved timestamps
   const handleMapRetrievedTimestamps = (vesselParticipantsObject) => {
     const vesselParticipants = Object.keys(vesselParticipantsObject).map((key) => vesselParticipantsObject[key]);
@@ -257,6 +288,10 @@ export const PlaybackOldRace = (props) => {
 
     retrievedTimestampsRef.current = retrievedTimestamps;
     dispatch(actions.setRetrievedTimestamps(retrievedTimestamps));
+
+    handleDebug("=== Retrieved Timestamps ===");
+    handleDebug(retrievedTimestamps);
+    handleDebug("============================");
   };
 
   // Handle message from websocket
@@ -268,10 +303,11 @@ export const PlaybackOldRace = (props) => {
   };
 
   // Handle add new position to each vessel partiicpant
-  const handleAddNewPosition = (source) => {
+  const handleAddNewPosition = (source: any) => {
     const data = { ...source };
     const vesselParticipants = vesselParticipantsRef.current;
     const raceTime = raceTimeRef.current;
+    console.log(JSON.stringify(data))
 
     if (!Object.keys(vesselParticipants)?.length || !data?.raceData?.vesselParticipantId || !raceTime.start) return;
 
@@ -392,6 +428,11 @@ export const PlaybackOldRace = (props) => {
     handleSetElapsedTime(elapsedTime + interval);
 
     handleUpdateLeaderPosition(mappedVPs);
+
+    // Debug
+    handleDebug("=== Mapped Vessel Participants ===");
+    handleDebug(mappedVPs);
+    handleDebug("==================================");
   };
 
   const handleRenderLegs = (elapsedTime, isPlaying) => {
@@ -450,7 +491,7 @@ export const PlaybackOldRace = (props) => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <div style={{ height: "100%", position: "relative" }}>
       <MapContainer
         style={{
           height: "100%",
@@ -459,13 +500,28 @@ export const PlaybackOldRace = (props) => {
         }}
         center={MAP_DEFAULT_VALUE.CENTER}
         zoom={MAP_DEFAULT_VALUE.ZOOM}
+        zoomSnap={0.2}
+        zoomAnimation={false}
+        markerZoomAnimation={false}
+        fadeAnimation={false}
+        zoomAnimationThreshold={0}
+        inertia={false}
+        zoomanim={false}
+        animate={false}
+        duration={0}
+        easeLinearity={0}
       >
         <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
           <Leaderboard participantsData={participantsData}></Leaderboard>
         </LeaderboardContainer>
-        <Playback onPlaybackTimeManualUpdate={handlePlaybackClickedPosition} />
         <RaceMap emitter={eventEmitter} />
       </MapContainer>
+
+      <div style={{ width: "100%", position: "relative" }}>
+        <Playback onPlaybackTimeManualUpdate={handlePlaybackClickedPosition} />
+      </div>
+
+      <ConnectionLoader />
     </div>
   );
 };

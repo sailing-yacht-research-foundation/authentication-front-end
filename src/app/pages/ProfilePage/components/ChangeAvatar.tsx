@@ -22,14 +22,14 @@ export const ChangeAvatar = (props) => {
 
     const { t } = useTranslation();
 
-    const onSubmitCroppedAvatar = async () => {
-        if (base64ConvertedURL === '') {
+    const onSubmitCroppedAvatar = async (imageData) => {
+        if (base64ConvertedURL === '' && (!imageData || typeof imageData !== 'string')) {
             toast.error(t(translations.profile_page.update_profile.please_choose_an_image_to_crop));
             return;
         }
 
         const avatarFileName = `${(+ new Date())}-${String(authUser.username).substring(0, 8)}-profile-picture.png`;
-        let file = dataURLtoFile(base64ConvertedURL, avatarFileName);
+        let file = dataURLtoFile(base64ConvertedURL || imageData, avatarFileName);
 
         setIsUploadingProfilePicture(true);
         setCropAvatarModalVisible(false);
@@ -72,15 +72,33 @@ export const ChangeAvatar = (props) => {
 
     const onAvatarCropped = (convertedBase64ImageURL) => {
         setBase64ConvertedURL(convertedBase64ImageURL)
+        console.log(convertedBase64ImageURL)
     }
 
     const onClearCropper = () => {
         setBase64ConvertedURL('');
     }
 
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+      }
+
     const onAfterUploadingAvatar = () => {
         setBase64ConvertedURL('');
         setIsUploadingProfilePicture(false);
+    }
+
+    const onFileUpload = async (file) => {
+        if (file.type === 'image/gif') {
+            const imageData = await getBase64(file);
+            if (!imageData) return;
+            onSubmitCroppedAvatar(imageData);
+        };
     }
 
     return (
@@ -95,7 +113,9 @@ export const ChangeAvatar = (props) => {
                     onClose={onClearCropper}
                     width={390}
                     height={295}
+                    onFileLoad={onFileUpload}
                     exportAsSquare={true}
+                    mimeTypes="image/jpeg,image/png,image/gif"
                     onCrop={onAvatarCropped}
                 />
             </Modal>

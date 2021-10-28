@@ -1,143 +1,56 @@
-import React from 'react';
-import { Table, Spin, Dropdown, Menu, Button } from 'antd';
-import { useTranslation } from 'react-i18next';
-import Lottie from 'react-lottie';
-import NoResult from '../assets/no-results.json';
-import { translations } from 'locales/translations';
-import { LottieMessage, LottieWrapper, PageHeaderContainer, PageHeaderText, TableWrapper } from 'app/components/SyrfGeneral';
-import moment from 'moment';
-import { downloadTrack, getAllTracks } from 'services/live-data-server/my-tracks';
-import { Link } from 'react-router-dom';
-import { TIME_FORMAT } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
+import React from "react";
+import { Tabs } from "antd";
+import styled from "styled-components";
+import { useTranslation } from "react-i18next";
+import { FiMap } from 'react-icons/fi';
+import { BsListUl } from 'react-icons/bs';
 
-const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: NoResult,
-    rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice'
-    }
+import { translations } from "locales/translations";
+import { MyTrackList } from "./MyTrackList";
+import { MyTrackMapView } from './MyTrackMapView';
+
+const { TabPane } = Tabs;
+
+const renderIcon = (Icon, text) => {
+  return (
+    <span>
+      <Icon style={{ fontSize: "16px" }} /> <span style={{ fontSize: "16px" }}>{text}</span>
+    </span>
+  );
 };
 
 export const MyTrack = () => {
+  const { t } = useTranslation();
 
-    const { t } = useTranslation();
+  const translate = {
+    tracks: t(translations.my_tracks_page.my_tracks),
+    map: t(translations.my_tracks_page.map_view)
+  }
 
-    const columns = [
-        {
-            title: t(translations.my_tracks_page.name),
-            dataIndex: 'name',
-            key: 'name',
-            render: (text, record) => {
-                if (record.competitionUnit)
-                    return <>
-                        <Link data-tip={t(translations.tip.play_this_track)} to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>
-                        <ReactTooltip />
-                    </>;
-                return record.event?.name;
-            }
-        },
-        {
-            title: t(translations.my_tracks_page.type),
-            dataIndex: 'type',
-            key: 'type',
-            render: (text, record) => {
-                return record.event?.isPrivate ? t(translations.my_tracks_page.track_now) : t(translations.my_tracks_page.event_track)
-            }
-        },
-        {
-            title: t(translations.my_tracks_page.created_date),
-            dataIndex: 'createdAt',
-            key: 'createdAt',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text),
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (text, record) => {
-                return <>
-                    <Dropdown overlay={<Menu>
-                        <Menu.Item>
-                            <a onClick={(e) => performDownloadTrack(e, record, 'kml')} target="_blank" rel="noopener noreferrer" href="/">
-                                {t(translations.my_tracks_page.download_as_kml)}
-                            </a>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <a onClick={(e) => performDownloadTrack(e, record, 'gpx')} target="_blank" rel="noopener noreferrer" href="/">
-                            {t(translations.my_tracks_page.download_as_gpx)}
-                            </a>
-                        </Menu.Item>
-                    </Menu>} placement="bottomRight" arrow>
-                        <Button type="link">{t(translations.my_tracks_page.download)}</Button>
-                    </Dropdown>
-                </>;
-            }
-        },
-    ];
+  return (
+    <div>
+      <StyledTabs<React.ElementType> animated defaultActiveKey="1">
+        <TabPane tab={renderIcon(BsListUl, translate.tracks)} key="1">
+          <MyTrackList />
+        </TabPane>
 
-    const [pagination, setPagination] = React.useState<any>({
-        page: 1,
-        total: 0,
-        rows: []
-    });
+        <TabPane tab={renderIcon(FiMap, translate.map)} key="2">
+            <MyTrackMapView />
+        </TabPane>
+      </StyledTabs>
+    </div>
+  );
+};
 
-    const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
+const StyledTabs = styled(Tabs)`
+  margin-bottom: 0;
+  position: relative;
+  width: 100%;
 
-    React.useEffect(() => {
-        getAll(1);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const getAll = async (page) => {
-        setIsChangingPage(true);
-        const response = await getAllTracks(page);
-        setIsChangingPage(false);
-
-        if (response.success) {
-            setPagination({
-                ...pagination,
-                rows: response.data?.rows,
-                page: page,
-                total: response.data?.count
-            });
-        }
-    }
-
-    const onPaginationChanged = (page) => {
-        getAll(page);
-    }
-
-    const performDownloadTrack = (e, track, type) => {
-        e.preventDefault();
-        downloadTrack(track, type);
-    }
-
-    return (
-        <>
-            <PageHeaderContainer>
-                <PageHeaderText>{t(translations.my_tracks_page.my_tracks)}</PageHeaderText>
-            </PageHeaderContainer>
-            {pagination.rows.length > 0 ? (
-                <Spin spinning={isChangingPage}>
-                    <TableWrapper>
-                        <Table scroll={{ x: "max-content" }} columns={columns}
-                            dataSource={pagination.rows} pagination={{
-                                defaultPageSize: 10,
-                                current: pagination.page,
-                                total: pagination.total,
-                                onChange: onPaginationChanged
-                            }} />
-                    </TableWrapper>
-                </Spin>
-            )
-                : (<LottieWrapper>
-                    <Lottie
-                        options={defaultOptions}
-                        height={400}
-                        width={400} />
-                    <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
-                </LottieWrapper>)}
-        </>
-    )
-}
+  .ant-tabs-tab {
+    font-size: 22px;
+  }
+  .ant-tabs-tab:first-child {
+    margin-left: 10px;
+  }
+`;

@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Select, Col, Row, Form, DatePicker, Menu } from 'antd';
-import { languagesList } from 'utils/languages-util';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import moment from 'moment';
+import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+
 import {
     SyrfFieldLabel,
     SyrfInputField,
@@ -8,15 +12,14 @@ import {
     SyrfFormTitle,
     SyrfFormSelect,
 } from 'app/components/SyrfForm';
-import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';
-import PlacesAutocomplete from 'react-places-autocomplete';
-import moment from 'moment';
-import styled from 'styled-components';
-import { StyleConstants } from 'styles/StyleConstants';
-import { FIELD_VALIDATE } from 'utils/constants';
+import { languagesList } from 'utils/languages-util';
 import { translations } from 'locales/translations';
-import { useTranslation } from 'react-i18next';
+import { StyleConstants } from 'styles/StyleConstants';
+import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';
+import { FIELD_VALIDATE } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
+import { FilterWorldSailingNumber } from 'utils/world-sailing-number';
+import countryCodeSource from '../../assets/world-sailing-number-countrycode.json';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -32,6 +35,24 @@ export const PrivateUserInformation = (props) => {
     const { authUser, address, setAddress } = props;
 
     const { t } = useTranslation();
+    const [isSuggestionVisible, setIsSuggestionVisible] = useState(false);
+    const [worldSailingNumber, setWorldSailingNumber] = useState('');
+    const [countryCodeList, setCountryCodeList] = useState<string[]>([]);
+
+    const isInitRef = useRef(true);
+
+    useEffect(() => {
+        if (worldSailingNumber.length > 2) setIsSuggestionVisible(false);
+        else {
+            if (!isInitRef.current) {
+                setIsSuggestionVisible(true);
+            };
+
+            handleFilterWorldSailingNumber(worldSailingNumber, countryCodeSource);
+        }
+
+        isInitRef.current = false;
+    }, [worldSailingNumber])
 
     const renderLanguegesDropdownList = () => {
         const objectArray = Object.entries(languagesList);
@@ -55,6 +76,46 @@ export const PrivateUserInformation = (props) => {
                 )
         }
     }
+
+    const handleSuggestionVisible = () => {
+        if (worldSailingNumber.length > 2) {
+            setIsSuggestionVisible(false);
+            return;
+        };
+
+        setIsSuggestionVisible(true);
+    };
+
+    const handleSuggestionNotVisible = () => {
+        setIsSuggestionVisible(false);
+    };
+
+    const handleSuggestionBlur = () => {
+        setTimeout(() => {
+            handleSuggestionNotVisible();
+        }, 200);
+    };
+
+    const handleWorldSailingNumberChange = (e) => {
+        setWorldSailingNumber(e.target.value);
+    };
+
+    const handleFilterWorldSailingNumber = (key: string, source: string[]) => {
+        const filtered = FilterWorldSailingNumber(key, source);
+        setCountryCodeList(filtered);
+    };
+
+    const handleCountryCodeSuggestionClick = (countryCode) => {
+        setWorldSailingNumber(countryCode);
+    };
+
+    const renderCountryCodeList = (countryCodeList: string[]) => {
+        return countryCodeList.map((countryCode) => {
+            return <SailingNumberSuggestionItem onClick={() => {handleCountryCodeSuggestionClick(countryCode)}} key={countryCode}>{countryCode}</SailingNumberSuggestionItem>
+        });
+    };
+
+
 
     return (
         <Wrapper>
@@ -151,8 +212,17 @@ export const PrivateUserInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.world_sailing_number)}</SyrfFieldLabel>}
                         name="sailing_number"
                         data-tip={t(translations.tip.world_sailing_number)}
+                        style={{ position: 'relative' }}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField value={worldSailingNumber} onChange={handleWorldSailingNumberChange} autoCorrect="off" onFocus={handleSuggestionVisible} onBlur={handleSuggestionBlur} />
+                        <SailingNumberSuggestionContainer style={{ display: isSuggestionVisible ? 'block' : 'none' }}>
+                            <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
+                                {countryCodeList.length > 0 ?
+                                    renderCountryCodeList(countryCodeList) :
+                                    <div>No data found</div>
+                                }
+                            </div>
+                        </SailingNumberSuggestionContainer>
                     </Form.Item>
                 </Col>
             </Row>
@@ -227,4 +297,26 @@ const StyledPLaceDropdown = styled(Menu)`
     background: #fff;
     border: 1px solid #d9d9d9;
     width: 100%;
+`;
+
+const SailingNumberSuggestionContainer = styled.div`
+    position: absolute;
+    top: 100%;
+    padding: 4px 0px;
+    border-radius: 4px;
+    left: 0px;
+    width: 100%;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    z-index: 20;
+    transform: translateY(8px);
+`;
+
+const SailingNumberSuggestionItem = styled.div`
+    padding: 4px 16px;
+    background-color: #FFFFFF;
+    z-index: 20;
+
+    &:hover {
+        background-color: #E6F7FF;
+    }
 `;

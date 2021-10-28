@@ -444,3 +444,12 @@ export const interpolateNearestPositions = (
 
   return false;
 };
+
+export const checkIsForcedToInstallAppOnMobile = (source) => {
+  const allowedWebviewOnMobile = ['ESTELLA', 'KWINDOO', 'RACEQS', 'TACKTRACKER', 'YACHTBOT', 'GEOVOILE'];
+  if (allowedWebviewOnMobile.includes(source)) {
+    return false;
+  }
+
+  return true;
+}

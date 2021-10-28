@@ -4,5 +4,6 @@ export enum PlaybackTypes {
   INSECURESCRAPEDRACE= "insecureScrapedRace",
   OLDRACE = "oldRace",
   RACENOTFOUND = 'raceNotFound',
-  RACELOADING = 'raceLoading'
+  RACELOADING = 'raceLoading',
+  MOBILEISSUE = 'playbackIssue',
 }

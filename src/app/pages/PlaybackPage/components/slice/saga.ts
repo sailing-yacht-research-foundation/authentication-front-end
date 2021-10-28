@@ -24,8 +24,6 @@ export function* getCompetitionUnitDetail({ type, payload }) {
   if (result.success) {
     yield put(playbackActions.setCompetitionUnitId(id));
     yield put(playbackActions.setCompetitionUnitDetail(result.data));
-  } else {
-    message.error("Competition unit id not found!");
   }
 }
 
@@ -38,7 +36,7 @@ export function* getVesselParticipants({ type, payload }) {
 
 export function* getSearchRaceDetail({ type, payload }) {
   const { searchRaceId } = payload;
-  if (!searchRaceId) return message.error("Race not found!");
+  if (!searchRaceId) return;
   const result = yield call(searchScrapedRaceById, searchRaceId);
 
   if (result.success) {
@@ -46,11 +44,9 @@ export function* getSearchRaceDetail({ type, payload }) {
 
     // Select the first data
     const raceDetail = result.data.hits?.hits?.[0];
-    if (!raceDetail) return message.error("Race not found!");
+    if (!raceDetail) return;
 
     yield put(playbackActions.setSearchRaceDetail(raceDetail._source));
-  } else {
-    message.error(result.error.message || "Something went wrong when try to search the race id");
   }
 }
 
@@ -59,7 +55,7 @@ export function* getRaceData({ type, payload }) {
 
   if (!raceId) {
     yield put(playbackActions.setPlaybackType(PlaybackTypes.RACENOTFOUND));
-    return message.error("Race not found!");
+    return;
   }
 
   yield put(playbackActions.setPlaybackType(PlaybackTypes.RACELOADING));
@@ -87,7 +83,7 @@ export function* getRaceData({ type, payload }) {
     const raceDetail = searchRaceDetailResult.data?.hits?.hits?.[0];
     if (!raceDetail) {
       yield put(playbackActions.setPlaybackType(PlaybackTypes.RACENOTFOUND));
-      return message.error("Race not found!");
+      return;
     }
 
     yield put(playbackActions.setSearchRaceDetail(raceDetail._source));
@@ -98,7 +94,7 @@ export function* getRaceData({ type, payload }) {
 
     if (raceDetail._source?.source === "SYRF") {
       yield put(playbackActions.setPlaybackType(PlaybackTypes.RACENOTFOUND));
-      return message.error("Race not found!");
+      return;
     }
 
     yield put(playbackActions.setPlaybackType(PlaybackTypes.SCRAPEDRACE));
@@ -107,37 +103,33 @@ export function* getRaceData({ type, payload }) {
   // If no data found
   else {
     yield put(playbackActions.setPlaybackType(PlaybackTypes.RACENOTFOUND));
-    message.error("Race not found!");
+    return;
   }
 }
 
 export function* getRaceSimplifiedTracks({ type, payload }) {
   const { raceId } = payload;
-  if (!raceId) return message.error("Race not found!");
+  if (!raceId) return;
 
   const result = yield call(getSimplifiedTracksByCompetitionUnit, raceId);
   if (result.success) {
     yield put(playbackActions.setRaceSimplifiedTracks(result.data));
-  } else {
-    message.error("Failed to get simplified tracks!");
   }
 }
 
 export function* getRaceLegs({ type, payload }) {
   const { raceId } = payload;
-  if (!raceId) return message.error("Race not found!");
+  if (!raceId) return;
 
   const result = yield call(getLegsByCompetitionUnit, raceId);
   if (result.success) {
     yield put(playbackActions.setRaceLegs(result.data));
-  } else {
-    message.error("Failed to get race legs");
   }
 }
 
 export function* getRaceLength({ type, payload }) {
   const { raceId } = payload;
-  if (!raceId) return message.error("Race not found!");
+  if (!raceId) return;
 
   const result = yield call(getTimeByCompetitionUnit, raceId);
   if (result.success) {
@@ -147,26 +139,22 @@ export function* getRaceLength({ type, payload }) {
     const raceLength = Math.ceil(endMillis - startMillis);
     yield put(playbackActions.setRaceLength(raceLength));
     yield put(playbackActions.setRaceTime({ start: startMillis, end: endMillis }));
-  } else {
-    message.error("Failed to get race time");
   }
 }
 
 export function* getRaceCourseDetail({ type, payload }) {
   const { raceId } = payload;
-  if (!raceId) return message.error("Race not found!");
+  if (!raceId) return;
 
   const result = yield call(getCourseByCompetitionUnit, raceId);
   if (result.success) {
     yield put(playbackActions.setRaceCourseDetail(result.data));
-  } else {
-    message.error("Failed to get race course detail");
   }
 }
 
 export function* getOldRaceDate({ type, payload }) {
   const { raceId } = payload;
-  if (!raceId) return message.error("Race not found");
+  if (!raceId) return;
 
   yield put(playbackActions.getRaceLength({ raceId }));
   yield put(playbackActions.getRaceLegs({ raceId }));

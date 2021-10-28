@@ -159,7 +159,7 @@
     "data": "Data",
     "events": "My Events",
     "competition_units": "My Races",
-    "vessels": "Boats",
+    "vessels": "My Boats",
     "vessel_participant_groups": "Classes",
     "my_tracks": "My Tracks"
   },
@@ -284,7 +284,8 @@
     "insecure_scraped_clickhere": "Click here",
     "insecure_scraped_viewinsecureplayer": "if you want to view their insecure player in a new tab.",
     "countdown_timer_racewillstart": "Race will start in",
-    "countdown_timer_on": "on"
+    "countdown_timer_on": "on",
+    "connecting": "Connecting..."
   },
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",
@@ -312,7 +313,8 @@
     "action": "Action",
     "update": "Update",
     "delete": "Delete",
-    "my_events": "Events",
+    "my_events": "My Events",
+    "my_races": "My Races",
     "create_a_new_event": "Create A New Event",
     "create": "Create",
     "city": "City",
@@ -463,8 +465,8 @@
     "update": "Update",
     "delete": "Delete",
     "you_dont_have_any_vessels": "You do not have any boats, please create one.",
-    "vessels": "Boats",
-    "create_a_new_vessel": "Create a new Boat",
+    "vessels": "My Boats",
+    "create_a_new_vessel": "Create A New Boat",
     "action":"Action",
     "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water.",
     "the_number_of_boats_must_be_greater_than_zero": "The number of boats must be greater than zero and must be a valid number.",
@@ -485,7 +487,7 @@
     "save_vessel": "Save Boat",
     "is_completed": "Is Completed",
     "update_your_vessel": "Update your boat",
-    "create_a_new_vessel": "Create a new boat",
+    "create_a_new_vessel": "Create A New boat",
     "length_in_meters_must_be_a_number": "Length In Meters must be a number.",
     "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water."
   },
@@ -588,7 +590,13 @@
     "you_dont_have_any_tracks": "You don't have any tracks. Start tracking by using our app.",
     "download_as_gpx": "Download as GPX",
     "download_as_kml": "Download as KML",
-    "download":"Download"
+    "download":"Download",
+    "city": "City",
+    "country": "Country",
+    "elapsed_time": "Elapsed Time",
+    "total_distance": "Total Distance",
+    "traveled_overground_distance": "Traveled Over Ground Distance",
+    "map_view": "Map View"
   },
   "tip": {
     "search_for_races_using_different_criteria": "Search for races using different criteria.",

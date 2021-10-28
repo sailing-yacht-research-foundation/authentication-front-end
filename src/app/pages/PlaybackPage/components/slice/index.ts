@@ -21,6 +21,7 @@ export const initialState: PlaybackState = {
     raceTime: {},
     raceRetrievedTimestamps: [],
     timeBeforeRaceBegin: 0,
+    isConnecting: false,
 };
 
 const slice = createSlice({
@@ -71,6 +72,9 @@ const slice = createSlice({
         },
         setTimeBeforeRaceBegin(state, action: PayloadAction<number>) {
             state.timeBeforeRaceBegin = action.payload;
+        },
+        setIsConnecting(state, action: PayloadAction<boolean>) {
+            state.isConnecting = action.payload;
         },
         getCompetitionUnitDetail(state, action: PayloadAction<any>) {},
         getVesselParticipants(state, action: PayloadAction<any>) {},
