@@ -32,7 +32,7 @@ export const ResultItem = (props) => {
                 <DescriptionItem>
                     {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source?.approx_start_time_ms).format(TIME_FORMAT.date_text)}
                 </DescriptionItem>
-                {eventText && <DescriptionItem>
+                {race._source?.event_name && <DescriptionItem>
                     {t(translations.home_page.filter_tab.filter_result.event_name)} {eventElement}
                 </DescriptionItem>}
             </DescriptionWrapper>
