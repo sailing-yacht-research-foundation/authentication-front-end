@@ -3,7 +3,7 @@ import syrfRequest from 'utils/syrf-request';
 
 export const getMany = (page) => {
     const userId: any = localStorage.getItem('user_id');
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels${!!userId ? `?createdById_eq=${userId}` : ''}`, {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels${!!userId ? `?createdById_eq=${userId}` : ''}&bulkCreated_eq=false`, {
         params: {
             page: page
         }

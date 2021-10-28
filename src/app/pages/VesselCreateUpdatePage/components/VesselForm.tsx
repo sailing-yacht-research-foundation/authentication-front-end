@@ -148,7 +148,7 @@ export const VesselForm = () => {
                                     if (!value) {
                                         return Promise.reject();
                                     }
-                                    if (isNaN(value)) {
+                                    if (isNaN(value) || value <= 0) {
                                         return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
                                     }
                                     return Promise.resolve();

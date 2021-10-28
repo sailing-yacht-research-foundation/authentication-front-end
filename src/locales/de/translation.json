@@ -486,7 +486,7 @@
     "is_completed": "Is Completed",
     "update_your_vessel": "Update your boat",
     "create_a_new_vessel": "Create a new boat",
-    "length_in_meters_must_be_a_number": "Length In Meters must be a number.",
+    "length_in_meters_must_be_a_number": "Length In Meters must be a number and must be positive.",
     "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water."
   },
   "participant_list": {
