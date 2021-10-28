@@ -467,7 +467,7 @@
     "you_dont_have_any_vessels": "You do not have any boats, please create one.",
     "vessels": "My Boats",
     "create_a_new_vessel": "Create A New Boat",
-    "action":"Action",
+    "action": "Action",
     "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water.",
     "the_number_of_boats_must_be_greater_than_zero": "The number of boats must be greater than zero and must be a valid number.",
     "the_number_of_boats_must_not_more_than_30": "The number of boats must not more than 30.",
@@ -488,7 +488,7 @@
     "is_completed": "Is Completed",
     "update_your_vessel": "Update your boat",
     "create_a_new_vessel": "Create A New Boat",
-    "length_in_meters_must_be_a_number": "Length In Meters must be a number.",
+    "length_in_meters_must_be_a_number": "Length In Meters must be a number and must be positive.",
     "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water."
   },
   "participant_list": {
@@ -505,7 +505,7 @@
     "assigned_vessels": "Assigned Boats",
     "all": "All",
     "assigned": "Assigned",
-    "unassigned":"Unassigned"
+    "unassigned": "Unassigned"
   },
   "participant_unit_create_update_page": {
     "created_a_new_participant": "Created a new competitor with name: {{name}}.",
@@ -519,7 +519,7 @@
     "update_participant": "Update Competitor",
     "create_a_new_participant": "Create a new competitor",
     "participants_are_human_sailors": "Competitors are human sailors who compete in races.",
-    "assign_competitor_to_class_and_vessel" : "Assign competitor to class and vessel"
+    "assign_competitor_to_class_and_vessel": "Assign competitor to class and vessel"
   },
   "vessel_participant_group_create_update_page": {
     "created_a_new_group": "Created a new class with name",
@@ -562,7 +562,7 @@
     "vessel_name": "Boat Name",
     "assign": "Assign",
     "unassign": "Unassign",
-    "assign_vessel_to_vessel_group" : "Assign competitor to class",
+    "assign_vessel_to_vessel_group": "Assign competitor to class",
     "successfully_register": "Successfully registered this competitor to the class.",
     "an_error_happended_when_registering": "An error happened when registering the competitor to the class",
     "successfully_unregister": "Successfully unregistered this competitor to the class.",
@@ -582,7 +582,7 @@
   },
   "my_tracks_page": {
     "my_tracks": "My Tracks",
-    "name":"Name",
+    "name": "Name",
     "type": "Type",
     "created_date": "Created Date",
     "track_now": "Track Now",
@@ -590,7 +590,7 @@
     "you_dont_have_any_tracks": "You don't have any tracks. Start tracking by using our app.",
     "download_as_gpx": "Download as GPX",
     "download_as_kml": "Download as KML",
-    "download":"Download",
+    "download": "Download",
     "city": "City",
     "country": "Country",
     "elapsed_time": "Elapsed Time",
@@ -650,13 +650,13 @@
     "email": "Your registered email.",
     "address": "Your address.",
     "date_of_birth": "Your birthdate",
-    "world_sailing_number":"Your world Sailing Number",
+    "world_sailing_number": "Your world Sailing Number",
     "phone_number": "Your phone number.",
     "language": "Your spoken language.",
     "delete_account": "Delete all your associated information.",
     "new_password": "Your new password.",
     "password_confirmation": "Please confirm you new password.",
-    "play_this_track":"Play this track.",
+    "play_this_track": "Play this track.",
     "download_icalendar_file": "Download this event as Icalendar."
   }
 }
