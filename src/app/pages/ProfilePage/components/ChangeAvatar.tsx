@@ -23,7 +23,7 @@ export const ChangeAvatar = (props) => {
     const { t } = useTranslation();
 
     const onSubmitCroppedAvatar = async (imageData) => {
-        if (base64ConvertedURL === '' && !imageData) {
+        if (base64ConvertedURL === '' && (!imageData || typeof imageData !== 'string')) {
             toast.error(t(translations.profile_page.update_profile.please_choose_an_image_to_crop));
             return;
         }
