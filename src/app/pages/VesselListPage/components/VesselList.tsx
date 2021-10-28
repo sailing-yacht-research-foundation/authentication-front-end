@@ -168,9 +168,6 @@ export const VesselList = () => {
                         options={defaultOptions}
                         height={400}
                         width={400} />
-                    <CreateButton icon={<AiFillPlusCircle
-                        style={{ marginRight: '5px' }}
-                        size={18} />} onClick={() => history.push("/boats/create")}>{t(translations.vessel_list_page.create)}</CreateButton>
                     <LottieMessage>{t(translations.vessel_list_page.you_dont_have_any_vessels)}</LottieMessage>
                 </LottieWrapper>)}
             <ReactTooltip />
