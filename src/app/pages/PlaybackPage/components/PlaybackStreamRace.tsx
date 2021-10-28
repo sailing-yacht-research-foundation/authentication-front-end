@@ -5,10 +5,12 @@ import { message } from "antd";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MapContainer } from "react-leaflet";
 import styled from "styled-components";
-import { Playback } from "./Playback";
-import { generateLastHeading } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
+import { useLocation } from "react-router";
+import queryString from "querystring";
+import { generateLastHeading } from "utils/race/race-helper";
+import { Playback } from "./Playback";
 import {
   selectCompetitionUnitDetail,
   selectCompetitionUnitId,
@@ -36,6 +38,10 @@ export const PlaybackStreamRace = (props) => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "Race name", description: "Race description" });
 
   const dispatch = useDispatch();
+  const location = useLocation();
+  const parsedQueryString: any = queryString.parse(
+    location.search.includes("?") ? location.search.substring(1) : location.search
+  );
 
   const messageHistory = useRef<any[]>([]);
   const competitionUnitId = useSelector(selectCompetitionUnitId);
@@ -120,6 +126,12 @@ export const PlaybackStreamRace = (props) => {
       });
       groupedPosition.current = groupedResult;
     }
+
+    handleDebug("=== Vessel Participants ===");
+    handleDebug(vesselParticipants);
+    handleDebug("===========================");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vesselParticipants]);
 
   // Manage last message from websocket
@@ -153,6 +165,12 @@ export const PlaybackStreamRace = (props) => {
   useEffect(() => {
     if (connectionStatus === "open") message.success("Connected!");
     if (connectionStatus === "connecting") message.info("Connecting...");
+
+    handleDebug("=== Connection Status ===");
+    handleDebug(connectionStatus);
+    handleDebug("=========================");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus]);
 
   // Normalize data every 1 second
@@ -210,6 +228,11 @@ export const PlaybackStreamRace = (props) => {
       handleResize();
     }, 200);
   }, [raceIdentity]);
+
+  const handleDebug = (value) => {
+    if (parsedQueryString?.dbg !== "true") return;
+    console.log(value);
+  };
 
   const handleSetRaceLengthStreaming = (currentLength) => {
     dispatch(actions.setRaceLength(currentLength));
@@ -283,6 +306,10 @@ export const PlaybackStreamRace = (props) => {
     eventEmitter.emit("leg-update", currentPositions);
     handleUpdateLeaderPosition(currentPositions);
 
+    handleDebug("=== Current Positions ===");
+    handleDebug(currentPositions);
+    handleDebug("=========================");
+
     if (currentElapsedTime < currentTime) {
       let nextElapsedTime = currentElapsedTimeRef.current + 1000;
       if (nextElapsedTime > currentTime) nextElapsedTime = currentTime;
@@ -331,7 +358,7 @@ export const PlaybackStreamRace = (props) => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <div style={{ height: "100%" }}>
       <MapContainer
         style={{
           height: "100vh",
@@ -341,14 +368,27 @@ export const PlaybackStreamRace = (props) => {
         center={MAP_DEFAULT_VALUE.CENTER}
         zoom={MAP_DEFAULT_VALUE.ZOOM}
         whenCreated={(mapInstance: any) => (mapElementRef.current = mapInstance)}
+        zoomSnap={0.2}
+        zoomAnimation={false}
+        markerZoomAnimation={false}
+        fadeAnimation={false}
+        zoomAnimationThreshold={0.1}
+        inertia={false}
+        zoomanim={false}
+        animate={false}
+        duration={0}
+        easeLinearity={0}
       >
         <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
           <Leaderboard participantsData={participantsData}></Leaderboard>
           <ModalCountdownTimer />
         </LeaderboardContainer>
-        <Playback />
         <RaceMap emitter={eventEmitter} />
       </MapContainer>
+
+      <div style={{ width: "100%", position: "relative" }}>
+        <Playback />
+      </div>
     </div>
   );
 };

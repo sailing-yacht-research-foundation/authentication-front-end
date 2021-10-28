@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { media } from 'styles/media';
 import { GiPathDistance, GiSailboat } from 'react-icons/gi';
-import { FaFlagCheckered } from 'react-icons/fa';
 import { GoDatabase } from 'react-icons/go';
 import { isMobile } from 'utils/helpers';
 
@@ -86,10 +85,9 @@ export const SiderContent = (props) => {
           {t(translations.side_menu.my_tracks)}
         </SyrfMenuItem>
 
-        <SyrfSubmenu key="events" icon={<CalendarOutlined style={{ marginRight: '10px' }} />} title={t(translations.side_menu.my_events)}>
-          <SyrfMenuItem title={t(translations.side_menu.events)} key="13" onClick={() => history.push('/events')} icon={<CalendarOutlined />} >{t(translations.side_menu.events)}</SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.competition_units)} icon={<FaFlagCheckered />} onClick={() => history.push('/races')} key="14">{t(translations.side_menu.competition_units)}</SyrfMenuItem>
-        </SyrfSubmenu>
+        <SyrfMenuItem key="events" onClick={() => history.push('/events')} title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
+          {t(translations.side_menu.my_events)}
+        </SyrfMenuItem>
 
         <SyrfMenuItem title={t(translations.side_menu.vessels)} icon={<GiSailboat />} onClick={() => history.push('/boats')} key="15">{t(translations.side_menu.vessels)}</SyrfMenuItem>
 

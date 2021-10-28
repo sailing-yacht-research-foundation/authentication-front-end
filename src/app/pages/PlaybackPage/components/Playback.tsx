@@ -7,7 +7,6 @@ import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectElapsedTime, selectIsPlaying, selectRaceLength } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
-import { Share } from './Share';
 
 const buttonStyle = {
     fontSize: '25px',
@@ -111,7 +110,6 @@ export const Playback = (props) => {
                     <MdForward10 style={buttonStyle} />
                 </ButtonContainer>
             </PlayBackControlContainer>
-            <Share/>
         </PlaybackWrapper>
     )
 }

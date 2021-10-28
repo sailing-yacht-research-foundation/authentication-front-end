@@ -17,6 +17,7 @@ export interface PlaybackState {
     raceTime?: any;
     raceRetrievedTimestamps?: number[],
     timeBeforeRaceBegin?: number,
+    isConnecting?: boolean,
 }
 
 export type ContainerState = PlaybackState;
