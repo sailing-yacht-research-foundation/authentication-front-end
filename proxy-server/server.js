@@ -71,10 +71,10 @@ app.get('/events/:eventId', function (request, response) {
     }
 
     result = replaceOpenGraphTagsContent(
-      eventData && eventData.name ? eventData.name : defaultTitle,
-      eventData && eventData.description ? [eventData.description, moment(eventData.approximateStartTime).format('MMM. D, YYYY [at] h:mm A z'), eventData.approximateStartTime_zone].join(', ')  : defaultDescription,
+      eventData?.name || defaultTitle,
+      [eventData?.description || defaultDescription, moment(eventData?.approximateStartTime).format('MMM. D, YYYY [at] h:mm A z'), eventData?.approximateStartTime_zone].join(', '),
       defaultUrl + request.url,
-      eventData && eventData.openGraphImage ? eventData.openGraphImage : defaultOpenGraphImage,
+      eventData?.openGraphImage || defaultOpenGraphImage,
       data
     );
 
@@ -98,8 +98,8 @@ app.get('/playback', async function (request, response) {
     }
 
     result = replaceOpenGraphTagsContent(
-      raceDescription.title ?? 'SYRF - Playback',
-      raceDescription.description ?? 'Replay races in the sailing world.',
+      raceDescription?.title ?? 'SYRF - Playback',
+      raceDescription?.description ?? 'Replay races in the sailing world.',
       defaultUrl + request.url,
       defaultOpenGraphImage,
       data
