@@ -8,10 +8,14 @@ export const MarkerInfo = (props) => {
 
   const { t } = useTranslation();
 
+  const translate = {
+    trackName: t(translations.my_tracks_page.track_name)
+  };
+
   const isIdentifierExist = !!identifier;
   const identifierElement = isIdentifierExist ? (
     <RacerInfoContainer>
-      <RacerInfoTitle>Track Name:</RacerInfoTitle>
+      <RacerInfoTitle>{translate.trackName}</RacerInfoTitle>
       <br />
       <a href={`/playback?raceId=${id}`} target="__blank">
         {identifier}
