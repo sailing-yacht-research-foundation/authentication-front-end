@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space, Spin } from 'antd';
+import { Button, message, Space, Spin } from 'antd';
 import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaCalendarPlus, FaSave } from 'react-icons/fa';
@@ -50,7 +50,8 @@ export const EventDetail = () => {
                 lng: response.data.lon
             });
         } else {
-            history.push('/404');
+            message.error(t(translations.event_detail_page.event_not_found));
+            history.push('/events');
         }
     }
 
