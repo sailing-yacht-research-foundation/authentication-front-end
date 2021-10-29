@@ -114,8 +114,6 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
             zoomOffset: -1,
             accessToken: 'your.mapbox.access.token',
         }).addTo(map);
-
-        map.setMaxBounds(map.getBounds());
     }
 
     const attachRaceMarkersToMap = () => {

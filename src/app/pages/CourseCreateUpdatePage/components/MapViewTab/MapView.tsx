@@ -129,8 +129,6 @@ export const MapView = React.forwardRef((props, ref) => {
             accessToken: 'your.mapbox.access.token'
         }).addTo(map);
 
-        map.setMaxBounds(map.getBounds());
-
         const drawnItems = L.featureGroup().addTo(map);
         drawControl = new L.Control.Draw({
             edit: {

@@ -45,7 +45,6 @@ export const Map = (props) => {
             accessToken: 'your.mapbox.access.token'
         }).addTo(map);
 
-        map.setMaxBounds(map.getBounds());
         setMarker(coordinates);
     }
 
