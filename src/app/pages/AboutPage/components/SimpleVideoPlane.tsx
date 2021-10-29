@@ -209,7 +209,8 @@ export function SimpleVideoPlane() {
       onAfterResize={onAfterResize}
     >
       <video
-        src={Video}
+        // src={Video}
+        poster="/hero-homepage-30-large.jpg"
         autoPlay
         loop
         data-sampler="simplePlaneTexture"
