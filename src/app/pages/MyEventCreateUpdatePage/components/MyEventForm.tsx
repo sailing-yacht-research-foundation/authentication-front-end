@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Space } from 'antd';
+import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Space, message } from 'antd';
 import { DeleteButton, PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -16,16 +16,17 @@ import { CompetitionUnitList } from './CompetitionUnitList';
 import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { BiTrash } from 'react-icons/bi';
 import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
+import { IoIosArrowBack } from 'react-icons/io';
+import Geocode from "react-geocode";
+import ReactTooltip from 'react-tooltip';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ParticipantList } from './ParticipantList';
 import { VesselParticipantGroupList } from './VesselParticipantGroupList';
-import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { debounce, renderTimezoneInUTCOffset } from 'utils/helpers';
-import Geocode from "react-geocode";
 import { CoursesList } from './CoursesList';
-import ReactTooltip from 'react-tooltip';
+import tzLookup from 'tz-lookup';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -56,8 +57,12 @@ export const MyEventForm = () => {
 
     const [race, setRace] = React.useState<any>({});
 
-    const { t } = useTranslation();
+    const [error, setError] = React.useState<any>({
+        startTime: '',
+    });
 
+    const { t } = useTranslation();
+    
     const raceListRef = React.useRef<any>();
 
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
@@ -70,6 +75,11 @@ export const MyEventForm = () => {
         let response;
         let currentDate = moment();
 
+        if (!checkIfDateTimeValid(values, mode)) {
+            handleStartTimeError();
+            return;
+        }
+        
         if (endDate) {
             currentDate = endDate;
         }
@@ -159,6 +169,13 @@ export const MyEventForm = () => {
             lat: lat,
             lon: lon
         });
+
+        // Select timezone
+        const currentTimezone = tzLookup(lat, lon);
+        form.setFieldsValue({ approximateStartTime_zone: currentTimezone });
+
+
+        // Get address
         Geocode.fromLatLng(parseFloat(lat), parseFloat(lon)).then(
             (response) => {
                 const address = response.results[0].formatted_address;
@@ -171,11 +188,13 @@ export const MyEventForm = () => {
     }
 
     const initMode = async () => {
+        resetData();
         if (location.pathname.includes(MODE.UPDATE)) {
             setMode(MODE.UPDATE);
             setFormChanged(false);
         } else if (location.pathname.includes(MODE.CREATE)) {
             setMode(MODE.CREATE);
+            setFormChanged(true);
         }
     }
 
@@ -197,8 +216,54 @@ export const MyEventForm = () => {
             });
             onChoosedLocation(response.data.lat, response.data.lon);
         } else {
-            history.push('/404');
+            message.error(t(translations.my_event_create_update_page.event_not_found));
+            history.push('/events');
         }
+    }
+
+    const resetData = () => {
+        form.resetFields();
+    }
+
+    const checkIfDateTimeValid = (values, mode) => {
+        if (mode === MODE.UPDATE) return true;
+
+        const { startDate, startTime } = values;
+        const currentDate = new Date();
+
+        const selectedDate = startDate?.toObject();
+        const selectedTime = startTime?.toObject();
+        const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
+
+        if (selectedDateTime.getTime() + 3000 <= currentDate.getTime()) return false;
+        return true;
+    }
+
+    const handleFieldChange = (field, value) => {
+        const currentError = { ...error };
+        currentError[field] = '';
+        setError(currentError);
+
+        if (field === 'startTime' || field === 'startDate') handleStartTimeChange();
+    };
+
+    const handleStartTimeChange = () => {
+        const values = form.getFieldsValue();
+
+        if (!checkIfDateTimeValid(values, mode)) {
+            handleStartTimeError();
+            return;
+        }
+
+        setError({ ...error, startTime: '' });
+    }
+
+    const handleStartTimeError = () => {
+        setError({ startTime: t(translations.my_event_create_update_page.starttime_must_be_in_future) });
+    }
+
+    const renderErrorField = (error, field) => {
+        return error?.[field] || false;
     }
 
     const initUserLocation = () => {
@@ -216,10 +281,11 @@ export const MyEventForm = () => {
     React.useEffect(() => {
         initMode();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [location]);
 
     React.useEffect(() => {
         if (mode === MODE.CREATE) {
+            resetData();
             initUserLocation();
         } else if (mode === MODE.UPDATE) {
             initData();
@@ -251,6 +317,11 @@ export const MyEventForm = () => {
             }
         );
     }
+
+    const dateLimiter = (current) => {
+        if (mode === MODE.UPDATE) return false;
+        return current && current < moment().startOf('day');
+    };
 
     return (
         <Wrapper>
@@ -291,7 +362,7 @@ export const MyEventForm = () => {
                         onFinish={onFinish}
                         initialValues={{
                             startDate: moment(),
-                            startTime: moment('09:00:00', 'HH:mm:ss'),
+                            startTime: moment(new Date()).add(1, 'h'),
                             approximateStartTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone
                         }}
                     >
@@ -321,7 +392,6 @@ export const MyEventForm = () => {
                         <Row gutter={24} style={{ display: 'none' }}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-             
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.longitude)}</SyrfFieldLabel>}
                                     name="lon"
                                     rules={[{ required: true }]}
@@ -361,9 +431,13 @@ export const MyEventForm = () => {
                                     className="event-start-date-step"
                                     data-tip={t(translations.tip.event_start_date)}
                                     rules={[{ type: 'date', required: true }]}
+                                    validateStatus={(renderErrorField(error, 'startDate') && 'error') || ''}
+                                    help={renderErrorField(error, 'startDate')}
                                 >
                                     <DatePicker
+                                        onChange={(val) => handleFieldChange('startDate', val)} 
                                         showToday={true}
+                                        disabledDate={dateLimiter}
                                         className="syrf-datepicker"
                                         style={{ width: '100%' }}
                                         dateRender={current => {
@@ -384,8 +458,14 @@ export const MyEventForm = () => {
                                     className="event-start-time-step"
                                     data-tip={t(translations.tip.event_start_time)}
                                     rules={[{ required: true }]}
+                                    validateStatus={(renderErrorField(error, 'startTime') && 'error') || ''}
+                                    help={renderErrorField(error, 'startTime')}
                                 >
-                                    <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
+                                    <TimePicker 
+                                        onChange={(val) => handleFieldChange('startTime', val)} 
+                                        className="syrf-datepicker" 
+                                        defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} 
+                                    />
                                 </Form.Item>
                             </Col>
 
