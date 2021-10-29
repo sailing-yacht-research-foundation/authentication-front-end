@@ -23,11 +23,6 @@ exports[`<ResultItem /> should render and match the snapshot 1`] = `
        
       Jun. 23, 2017
     </styled.span>
-    <styled.span>
-      Country:
-       
-      California Coast
-    </styled.span>
   </styled.div>
 </styled.div>
 `;

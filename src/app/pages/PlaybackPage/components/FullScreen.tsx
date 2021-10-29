@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/all';
+import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai';
 
 export const FullScreen = () => {
     const [isFullScreen, setIsFullScreen] = useState(false);
