@@ -395,7 +395,9 @@
     "Vessel_participant_groups": "Classes",
     "description": "Description",
     "timezone": "Time Zone",
-    "location": "Location"
+    "location": "Location",
+    "starttime_must_be_in_future": "Start time must be in future",
+    "event_not_found": "Event not found!"
   },
   "course_list": {
     "name": "Name",
@@ -463,7 +465,8 @@
     "create_a_new_course": "Create a new course",
     "update_course": "Update course",
     "delete": "Delete",
-    "creating_a_start_line": "Creating a start line will #StopThePingParade."
+    "creating_a_start_line": "Creating a start line will #StopThePingParade.",
+    "event_not_found": "Event not found!"
   },
   "vessel_list_page": {
     "public_name": "Public Name",
@@ -587,7 +590,8 @@
     "attend_this_event": "Attend this event",
     "invite_friends": "Invite friends",
     "update_this_event": "Edit this event",
-    "share": "Share"
+    "share": "Share",
+    "event_not_found": "Event not found!"
   },
   "my_tracks_page": {
     "my_tracks": "My Tracks",
