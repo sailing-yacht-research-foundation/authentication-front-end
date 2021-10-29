@@ -291,13 +291,15 @@ export const CompetitionUnitForm = () => {
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
                             data-tip={t(translations.tip.race_name)}
-                            rules={[{ required: true, max: 255 }]}
+                            rules={[{ required: true, message: t(translations.forms.race_name_is_required) }, {
+                                max: 150, message: t(translations.forms.race_name_must_not_be_longer_than_150_chars)
+                            }]}
                         >
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Form.Item
-                            rules={[{ max: 255 }]}
+                            rules={[{ max: 255, message: t(translations.forms.race_description_must_not_be_longer_than_255_chars) }]}
                             data-tip={t(translations.tip.race_description)}
                             label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"

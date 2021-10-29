@@ -99,7 +99,9 @@ export const SignupForm = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, type: 'email' }]}
+                    rules={[{ required: true, message: t(translations.forms.email_is_required) }, {
+                        type: 'email', message: t(translations.forms.email_must_be_valid)
+                    }]}
                 >
                     <Input autoComplete="off" autoCapitalize="none" autoCorrect="off" />
                 </Form.Item>
@@ -133,9 +135,11 @@ export const SignupForm = () => {
                 <Form.Item
                     label={t(translations.signup_page.password)}
                     name="password"
-                    rules={[{ required: true, max: 16, min: 8, }, {
+                    rules={[{ required: true, message: t(translations.forms.password_is_required) }, {
                         pattern: /^\S+$/,
                         message: t(translations.misc.password_must_not_contain_blank)
+                    }, {
+                        max: 16, min: 8, message: t(translations.forms.password_must_be_between)
                     }]}
                 >
                     <Input.Password autoComplete="off" autoCapitalize="none" autoCorrect="off" />

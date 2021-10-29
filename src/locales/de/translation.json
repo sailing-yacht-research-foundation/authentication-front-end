@@ -686,6 +686,18 @@
     "boat_name_is_required": "Boat name is required.",
     "class_name_must_not_be_longer_than_100_chars": "Class name must not be longer than 100 characters.",
     "please_input_a_name_for_this_geometry": "Please input a name for this geometry.",
-    "please_input_a_course_name": "Please input a course name."
+    "please_input_a_course_name": "Please input a course name.",
+    "email_is_required": "Email is required.",
+    "password_is_required": "Password is required.",
+    "external_url_is_not_a_valid_url": "Please input a valid URL.",
+    "race_name_is_required": "Race name is required",
+    "event_name_is_required": "Event name is required.",
+    "location_is_required": "Location is required.",
+    "event_name_must_not_be_longer_than_150_chars": "Event name must not be longer than 150 characters.",
+    "race_name_must_not_be_longer_than_150_chars":"Race name must not be longer than 150 characters.",
+    "event_description_must_not_be_longer_than_255_chars": "Event description must not be longer than 150 characters.",
+    "race_description_must_not_be_longer_than_255_chars": "Race description must not be longer than 255 characters.",
+    "email_must_be_valid":"Please input a valid email.",
+    "search_keyword_is_required": "Search keyword is required."
   }
 }
