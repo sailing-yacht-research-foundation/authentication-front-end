@@ -144,7 +144,10 @@ export const VesselParticipantGroupForm = () => {
                             label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
                             name="name"
                             data-tip={t(translations.tip.class_name)}
-                            rules={[{ required: true, max: 100 }]}
+                            rules={[
+                                { required: true, message: t(translations.forms.class_name_is_required) },
+                                { max: 100, message: t(translations.forms.class_name_must_not_be_longer_than_100_chars) }
+                            ]}
                         >
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>

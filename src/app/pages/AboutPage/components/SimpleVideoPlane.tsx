@@ -210,6 +210,7 @@ export function SimpleVideoPlane() {
     >
       <video
         src={Video}
+        poster="/hero-homepage-30-large.jpg"
         autoPlay
         loop
         data-sampler="simplePlaneTexture"

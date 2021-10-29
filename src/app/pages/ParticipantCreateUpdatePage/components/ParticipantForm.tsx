@@ -133,12 +133,12 @@ export const ParticipantForm = () => {
                 </PageInfoOutterWrapper>
                 <Space size={10}>
                     {mode === MODE.UPDATE && <>
-                        <DeleteButton 
+                        <DeleteButton
                             data-tip={t(translations.tip.delete_competitor)}
                             onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                            style={{ marginRight: '5px' }}
-                            size={18} />}>{t(translations.participant_unit_create_update_page.delete)}</DeleteButton>
-                            <ReactTooltip/>
+                                style={{ marginRight: '5px' }}
+                                size={18} />}>{t(translations.participant_unit_create_update_page.delete)}</DeleteButton>
+                        <ReactTooltip />
                     </>}
 
                 </Space>
@@ -156,7 +156,10 @@ export const ParticipantForm = () => {
                             label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.public_name)}</SyrfFieldLabel>}
                             name="publicName"
                             data-tip={t(translations.tip.competitor_name)}
-                            rules={[{ required: true, max: 100 }]}
+                            rules={[
+                                { required: true, message: t(translations.forms.competitor_name_is_required) },
+                                { max: 50, message: t(translations.forms.competitor_name_must_not_longer_than_50_character) }
+                            ]}
                         >
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>
