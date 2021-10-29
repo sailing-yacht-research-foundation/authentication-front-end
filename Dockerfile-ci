@@ -43,8 +43,6 @@ RUN yarn install
 
 COPY . .
 
-RUN yarn test -- --watchAll=false --u
-
 RUN yarn build
 
 FROM node:14
