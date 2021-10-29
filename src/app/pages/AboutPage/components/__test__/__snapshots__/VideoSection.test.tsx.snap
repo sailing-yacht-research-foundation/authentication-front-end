@@ -25,6 +25,7 @@ exports[`<VideoSection /> should render and matchs the snapshot 1`] = `
     style={
       Object {
         "marginTop": "40px",
+        "zIndex": 5,
       }
     }
   >

@@ -16,6 +16,6 @@ exports[`<Share /> should render and match snapshot 1`] = `
     }
   }
 >
-  <Share />
+  <Memo />
 </Provider>
 `;

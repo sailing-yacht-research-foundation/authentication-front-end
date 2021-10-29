@@ -16,7 +16,11 @@ exports[`<LoginPage /> should render and match the snapshot 1`] = `
     sm={0}
     xs={0}
   >
-    <LeftPanel />
+    <Curtains$1
+      pixelRatio={1}
+    >
+      <LeftPanel />
+    </Curtains$1>
   </Col>
   <Col
     lg={12}

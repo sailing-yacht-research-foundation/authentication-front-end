@@ -18,7 +18,7 @@ exports[`<ChangeAvatar /> should render to match the snapshot 1`] = `
     visible={false}
     width={520}
   >
-    <r
+    <c
       backgroundColor="grey"
       borderStyle={
         Object {
@@ -46,7 +46,7 @@ exports[`<ChangeAvatar /> should render to match the snapshot 1`] = `
         }
       }
       lineWidth={4}
-      mimeTypes="image/jpeg,image/png"
+      mimeTypes="image/jpeg,image/png,image/gif"
       minCropRadius={30}
       mobileScaleSpeed={0.5}
       onBeforeFileLoad={[Function]}

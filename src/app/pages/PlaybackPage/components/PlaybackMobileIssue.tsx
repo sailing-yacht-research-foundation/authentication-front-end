@@ -34,6 +34,13 @@ export const PlaybackMobileIssue = (props: ButtonClickProperties) => {
   };
 
   const appLink = isAndroid ? process.env.REACT_APP_DOWNLOAD_LINK_ANDROID : process.env.REACT_APP_DOWNLOAD_LINK_IOS;
+  const translate = {
+    unfortunately: t(translations.playback_page.unfortunately),
+    watch_without_app: t(translations.playback_page.watch_without_app_installation),
+    next_time: t(translations.playback_page.next_time),
+    liveping_lets_viewers: t(translations.playback_page.live_ping_lets_viewers),
+    insecure: t(translations.playback_page.insecure_scraped_thisrace)
+  };
 
   return (
     <div
@@ -49,15 +56,17 @@ export const PlaybackMobileIssue = (props: ButtonClickProperties) => {
       <LottieWrapper style={{ marginTop: "-40px" }}>
         <Lottie options={defaultOptions} height={280} width={280} />
         <h4 style={{ maxWidth: "800px", textAlign: "center", marginTop: "15px" }}>
-          Unfortunately,&nbsp;
-          {searchRaceData.source ||
-            urlToCompany(searchRaceData.url) ||
-            t(translations.playback_page.insecure_scraped_thisrace)}&nbsp;
-          doesn’t let mobile users watch their races without installing their app. 
+          {translate.unfortunately}&nbsp;
+          
+          { searchRaceData.source ||
+            urlToCompany(searchRaceData.url) || translate.insecure }&nbsp;
+          
+          {translate.watch_without_app}
+
           <br /> <br />
-          Next time, use SYRF’s LivePing app
-          for universal, mobile friendly race tracking and playback. LivePing lets viewers watch the race from their
-          browser, and is the only tracking app to #StopThePingParade.
+          
+          {translate.next_time} 
+          {translate.liveping_lets_viewers}
         </h4>
 
         <Button style={{ marginTop: '8px' }} size="large" shape="round" block onClick={handleButtonClick} href={appLink} target="__blank">Download App</Button>
