@@ -6,29 +6,29 @@ on:
 env:
   IMAGE_NAME: syrf_my_sailing_profile
 jobs:
-  build-test-and-push-image-staging:
+  build-and-push-image-staging:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
       - uses: actions/checkout@v2
-      - name: Build image and test
-        run: docker build . --file Dockerfile-ci --tag $IMAGE_NAME 
-            --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
-            --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
-            --build-arg REACT_APP_TWITTER_CLIENT_ID='' 
-            --build-arg REACT_APP_INSTAGRAM_CLIENT_ID='' 
-            --build-arg REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io' 
-            --build-arg REACT_APP_ENV='staging' 
-            --build-arg REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}' 
-            --build-arg REACT_APP_SYRF_API_URL='https://liveserver-dev.syrf.io'
-            --build-arg REACT_APP_SYRF_API_VERSION='/v1' 
-            --build-arg REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_DEV_TOKEN }}' 
-            --build-arg REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='wss://streaming-server-dev.syrf.io'
-            --build-arg REACT_APP_GOOGLE_MAP_API_KEY='${{ secrets.GOOGLE_MAP_API_KEY }}'
-            --build-arg REACT_APP_GOOGLE_ANALYTICS_KEY='${{ secrets.GOOGLE_ANALYTICS_KEY_STAGING }}'
-            --label "runnumber=${GITHUB_RUN_ID}"
+      - name: Build image
+        run: docker build . --file Dockerfile-ci --tag $IMAGE_NAME
+          --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
+          --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
+          --build-arg REACT_APP_TWITTER_CLIENT_ID=''
+          --build-arg REACT_APP_INSTAGRAM_CLIENT_ID=''
+          --build-arg REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io'
+          --build-arg REACT_APP_ENV='staging'
+          --build-arg REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}'
+          --build-arg REACT_APP_SYRF_API_URL='https://liveserver-dev.syrf.io'
+          --build-arg REACT_APP_SYRF_API_VERSION='/v1'
+          --build-arg REACT_APP_SYRF_API_DEV_TOKEN='${{ secrets.API_DEV_TOKEN }}'
+          --build-arg REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL='wss://streaming-server-dev.syrf.io'
+          --build-arg REACT_APP_GOOGLE_MAP_API_KEY='${{ secrets.GOOGLE_MAP_API_KEY }}'
+          --build-arg REACT_APP_GOOGLE_ANALYTICS_KEY='${{ secrets.GOOGLE_ANALYTICS_KEY_STAGING }}'
+          --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to registry
         # This is where you will update the PAT to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -50,7 +50,7 @@ jobs:
 
   deploy-staging:
     runs-on: ubuntu-latest
-    needs: [build-test-and-push-image-staging]
+    needs: [build-and-push-image-staging]
     steps:
       # Step 1
       - name: Connect to EC2 instance

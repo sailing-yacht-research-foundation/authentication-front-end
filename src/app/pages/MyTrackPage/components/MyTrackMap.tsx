@@ -47,7 +47,6 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
 
     useEffect(() => {
         attachRaceMarkersToMap();
-        console.log({ results });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [results]);
 

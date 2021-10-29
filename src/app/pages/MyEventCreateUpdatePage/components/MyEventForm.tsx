@@ -300,13 +300,16 @@ export const MyEventForm = () => {
                             name="name"
                             className="event-name-step"
                             data-tip={t(translations.tip.name_of_the_event)}
-                            rules={[{ required: true, max: 255 }]}
+                            rules={[{ required: true, message: t(translations.forms.event_name_is_required) },
+                            {   
+                                max: 150, message: t(translations.forms.event_name_must_not_be_longer_than_150_chars)
+                            }]}
                         >
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
                         <Form.Item
-                            rules={[{ max: 255 }]}
+                            rules={[{ max: 255, message: t(translations.forms.event_description_must_not_be_longer_than_255_chars) }]}
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                             name="description"
                             className="event-description-step"
@@ -321,7 +324,7 @@ export const MyEventForm = () => {
                         <Row gutter={24} style={{ display: 'none' }}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-             
+
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.longitude)}</SyrfFieldLabel>}
                                     name="lon"
                                     rules={[{ required: true }]}
@@ -346,7 +349,7 @@ export const MyEventForm = () => {
                             name="location"
                             className="event-location-step"
                             data-tip={t(translations.tip.event_location)}
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, message: t(translations.forms.location_is_required) }]}
                         >
                             <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} autoCorrect="off" />
                         </Form.Item>
@@ -360,7 +363,10 @@ export const MyEventForm = () => {
                                     name="startDate"
                                     className="event-start-date-step"
                                     data-tip={t(translations.tip.event_start_date)}
-                                    rules={[{ type: 'date', required: true }]}
+                                    rules={[{ type: 'date' }, {
+                                        required: true,
+                                        message: t(translations.forms.start_date_is_required)
+                                    }]}
                                 >
                                     <DatePicker
                                         showToday={true}
@@ -383,7 +389,7 @@ export const MyEventForm = () => {
                                     name="startTime"
                                     className="event-start-time-step"
                                     data-tip={t(translations.tip.event_start_time)}
-                                    rules={[{ required: true }]}
+                                    rules={[{ required: true, message: t(translations.forms.start_time_is_required) }]}
                                 >
                                     <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
                                 </Form.Item>
@@ -421,7 +427,7 @@ export const MyEventForm = () => {
                             name="externalUrl"
                             className="event-external-website-step"
                             data-tip={t(translations.tip.event_website)}
-                            rules={[{ type: 'url' }]}
+                            rules={[{ type: 'url', message: t(translations.forms.external_url_is_not_a_valid_url) }]}
                         >
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>

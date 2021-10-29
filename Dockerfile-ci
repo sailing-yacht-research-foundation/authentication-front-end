@@ -43,11 +43,13 @@ RUN yarn install
 
 COPY . .
 
-RUN yarn test -- --watchAll=false --u
-
 RUN yarn build
 
 FROM node:14
+
+ARG REACT_APP_SYRF_API_URL
+ARG REACT_APP_SYRF_API_VERSION
+ARG REACT_APP_SYRF_API_DEV_TOKEN
 
 COPY --from=build /app/build /app/build
 

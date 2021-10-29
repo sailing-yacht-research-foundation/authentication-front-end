@@ -112,7 +112,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
             id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
             tileSize: 512,
             zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token'
+            accessToken: 'your.mapbox.access.token',
         }).addTo(map);
     }
 
