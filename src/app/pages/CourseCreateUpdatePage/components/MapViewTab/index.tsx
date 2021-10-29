@@ -1,18 +1,20 @@
-import { Button, Space } from 'antd';
-import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
-import { translations } from 'locales/translations';
+import { Button, message, Space } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BiSave, BiTrash } from 'react-icons/bi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MapContainer } from 'react-leaflet';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import styled from 'styled-components';
-import { StyleConstants } from 'styles/StyleConstants';
-import { MAP_DEFAULT_VALUE } from 'utils/constants';
-import { MapView } from './MapView';
-import { MODE } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
+
+import { StyleConstants } from 'styles/StyleConstants';
+import { MODE } from 'utils/constants';
+import { MAP_DEFAULT_VALUE } from 'utils/constants';
+import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { translations } from 'locales/translations';
+import { get } from 'services/live-data-server/event-calendars';
+import { MapView } from './MapView';
 
 const NAV_HEIGHT = '150px';
 
@@ -22,11 +24,21 @@ export const MapViewTab = () => {
 
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
+    const [currentEvent, setCurrentEvent] = React.useState<any>({ });
+
     const mapViewRef = React.useRef<any>();
 
     const location = useLocation();
 
+    const params = useParams<any>();
+
+    const history = useHistory();
+
     const mapContainerRef = React.useRef<any>();
+
+    const translate = {
+        eventNotFound: t(translations.course_create_update_page.event_not_found)
+    }
 
     const handleResize = () => {
         window.addEventListener('resize', performResize);
@@ -40,16 +52,49 @@ export const MapViewTab = () => {
         }
     }
 
+    const handleGetCurrentEvent = async (eventId) => {
+        try {
+            if (!eventId) throw new Error(translate.eventNotFound);
+
+            const response = await get(eventId);
+            if (!response.success) throw response?.error;
+            setCurrentEvent(response.data);
+
+        } catch (err: any) {
+            message.error(err?.message || err || translate.eventNotFound);
+            history.push("/events");
+        }
+    }
+
     React.useEffect(() => {
         handleResize();
         if (location.pathname.includes(MODE.UPDATE))
             setMode(MODE.UPDATE);
+
+        handleGetCurrentEvent(params?.eventId);
+        
 
         return () => {
             window.removeEventListener('resize', performResize);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        const mapCoordinate = currentEvent?.lat || currentEvent?.lon ?
+            [currentEvent.lat || 0, currentEvent.lon || 0] :
+            undefined;
+
+        if (mapCoordinate) {
+            setTimeout(() => {
+                mapContainerRef.current?.flyTo(mapCoordinate, 9, {
+                    animate: true,
+                    duration: 1
+                });
+            }, 500);
+        }
+
+    }, [currentEvent]);
 
     return (
         <Wrapper>
