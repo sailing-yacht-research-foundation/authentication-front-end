@@ -112,7 +112,7 @@ export const FilterPane = (props) => {
                         <Form.Item
                             label={t(translations.home_page.filter_tab.race_name)}
                             name="name"
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, message: t(translations.forms.search_keyword_is_required) }]}
                         >
                             <Input ref={searchInputRef}
                                 value={searchKeyword}

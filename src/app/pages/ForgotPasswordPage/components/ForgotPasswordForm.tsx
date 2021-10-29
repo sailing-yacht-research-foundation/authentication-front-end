@@ -59,7 +59,9 @@ export function ForgotPasswordForm(props) {
             <Form.Item
               label={t(translations.forgot_password_page.your_email)}
               name="email"
-              rules={[{ required: true, type: 'email' }]}
+              rules={[{ required: true, message: t(translations.forms.email_is_required) }, {
+                type: 'email', message: t(translations.forms.email_must_be_valid)
+              }]}
             >
               <Input autoCorrect="off" autoComplete="off" autoCapitalize="none" />
             </Form.Item>

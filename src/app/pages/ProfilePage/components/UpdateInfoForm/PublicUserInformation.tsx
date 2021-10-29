@@ -41,10 +41,13 @@ export const PublicUserInformation = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.first_name)}</SyrfFieldLabel>}
                         name="first_name"
-                        rules={[{ required: true, max: 15 }]}
+                        rules={[{ required: true, message: t(translations.forms.first_name_is_required) }, {
+                            max: 15,
+                            message: t(translations.forms.first_name_cannot_be_longer)
+                        }]}
                         data-tip={t(translations.tip.first_name)}
                     >
-                        <SyrfInputField autoCorrect="off"/>
+                        <SyrfInputField autoCorrect="off" />
                     </Form.Item>
                 </Col>
 
@@ -52,10 +55,13 @@ export const PublicUserInformation = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.last_name)}</SyrfFieldLabel>}
                         name="last_name"
-                        rules={[{ required: true, max: 15 }]}
+                        rules={[{ required: true, message: t(translations.forms.last_name_is_required) }, {
+                            max: 15,
+                            message: t(translations.forms.last_name_cannot_be_longer)
+                        }]}
                         data-tip={t(translations.tip.last_name)}
                     >
-                        <SyrfInputField autoCorrect="off"/>
+                        <SyrfInputField autoCorrect="off" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -88,7 +94,7 @@ export const PublicUserInformation = (props) => {
             >
                 <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
             </Form.Item>
-            <ReactTooltip/>
+            <ReactTooltip />
         </Wrapper>
     );
 }

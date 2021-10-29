@@ -24,7 +24,7 @@ export const Playback = (props) => {
     const { onPlaybackTimeManualUpdate } = props;
     const elapsedTime = useSelector(selectElapsedTime);
     const raceLength = useSelector(selectRaceLength);
-    const isPlaying = useSelector(selectIsPlaying);    
+    const isPlaying = useSelector(selectIsPlaying);
 
     const dispatch = useDispatch();
 
@@ -33,10 +33,14 @@ export const Playback = (props) => {
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
-        if (elapsedTime > 0)
-            return (elapsedTime / raceLength) * 100;
+        let percentage = 0;
 
-        return 0;
+        if (elapsedTime > 0)
+            percentage = (elapsedTime / raceLength) * 100;
+
+        if (percentage > 100) percentage = 100;
+
+        return percentage;
     }
 
     const pauseUnPauseRace = () => {

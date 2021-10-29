@@ -86,16 +86,20 @@ export const LoginForm = (props) => {
           >
             <Form.Item
               name="email"
-              rules={[{ required: true, type: 'email' }]}
+              rules={[{ required: true, message: t(translations.forms.email_is_required) }, {
+                type: 'email', message: t(translations.forms.email_must_be_valid)
+              }]}
             >
               <SyrfInput placeholder={t(translations.login_page.email.label)} autoCorrect="off" autoCapitalize="none" autoComplete="off" />
             </Form.Item>
 
             <Form.Item
               name="password"
-              rules={[{ required: true, max: 16, min: 8 }, {
+              rules={[{ required: true, message: t(translations.forms.password_is_required) }, {
                 pattern: /^\S+$/,
                 message: t(translations.misc.password_must_not_contain_blank)
+              }, {
+                max: 16, min: 8, message: t(translations.forms.password_must_be_between)
               }]}
             >
               <SyrfInputPassword placeholder={t(translations.login_page.password.label)} autoCorrect="off" autoCapitalize="none" autoComplete="off" />

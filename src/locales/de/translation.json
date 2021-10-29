@@ -139,7 +139,11 @@
     "please_confirm_your_password": "Please confirm your password!",
     "the_two_passwords_that_you_entered_do_not_match": "The two passwords that you entered do not match!",
     "user_already_exists": "User already exists",
-    "register_success": "Thank for becoming a member of SYRF, Please verify your account!"
+    "register_success": "Thank for becoming a member of SYRF, Please verify your account!",
+    "first_name_is_required": "First name is required",
+    "last_name_is_required": "Last name is required",
+    "first_name_cannot_be_longer": "First name cannot be longer than 15 characters",
+    "last_name_cannot_be_longer": "Last name cannot be longer than 15 characters."
   },
   "side_menu": {
     "deal": "Deals",
@@ -494,9 +498,10 @@
     "save_vessel": "Save Boat",
     "is_completed": "Is Completed",
     "update_your_vessel": "Update your boat",
-    "create_a_new_vessel": "Create A New boat",
+    "create_a_new_vessel": "Create A New Boat",
     "length_in_meters_must_be_a_number": "Length In Meters must be a number and must be positive.",
-    "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water."
+    "vessel_are_yatchs": "Boats are yachts, dinghies, boards, or other vehicles that you sail on the water.",
+    "length_in_meters_is_required": "Length in meters is required."
   },
   "participant_list": {
     "participants": "Competitors",
@@ -667,5 +672,36 @@
     "password_confirmation": "Please confirm you new password.",
     "play_this_track": "Play this track.",
     "download_icalendar_file": "Download this event as Icalendar."
+  },
+  "forms": {
+    "first_name_is_required": "First name is required.",
+    "last_name_is_required": "Last name is required.",
+    "first_name_cannot_be_longer": "First name cannot be longer than 15 characters",
+    "last_name_cannot_be_longer": "Last name cannot be longer than 15 characters.",
+    "birth_date_is_required": "Birth date is required.",
+    "new_password_is_required": "New password is required.",
+    "new_password_must_be_between": "New password must be between 8 and 16 characters",
+    "start_date_is_required": "Start date is required.",
+    "start_time_is_required": "Start time is required.",
+    "competitor_name_is_required": "Competitor name is required.",
+    "competitor_name_must_not_longer_than_50_character": "Competitor name must not be longer than 50 characters.",
+    "class_name_is_required": "Class name is required.",
+    "course_name_is_required": "Course name is required.",
+    "boat_name_is_required": "Boat name is required.",
+    "class_name_must_not_be_longer_than_100_chars": "Class name must not be longer than 100 characters.",
+    "please_input_a_name_for_this_geometry": "Please input a name for this geometry.",
+    "please_input_a_course_name": "Please input a course name.",
+    "email_is_required": "Email is required.",
+    "password_is_required": "Password is required.",
+    "external_url_is_not_a_valid_url": "Please input a valid URL.",
+    "race_name_is_required": "Race name is required",
+    "event_name_is_required": "Event name is required.",
+    "location_is_required": "Location is required.",
+    "event_name_must_not_be_longer_than_150_chars": "Event name must not be longer than 150 characters.",
+    "race_name_must_not_be_longer_than_150_chars":"Race name must not be longer than 150 characters.",
+    "event_description_must_not_be_longer_than_255_chars": "Event description must not be longer than 150 characters.",
+    "race_description_must_not_be_longer_than_255_chars": "Race description must not be longer than 255 characters.",
+    "email_must_be_valid":"Please input a valid email.",
+    "search_keyword_is_required": "Search keyword is required."
   }
 }
