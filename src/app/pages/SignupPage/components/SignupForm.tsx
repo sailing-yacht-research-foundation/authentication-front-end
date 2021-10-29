@@ -109,7 +109,9 @@ export const SignupForm = () => {
                         <Form.Item
                             label={t(translations.signup_page.first_name)}
                             name="first_name"
-                            rules={[{ required: true, max: 15 }]}
+                            rules={[
+                                { required: true, message: t(translations.forms.first_name_is_required) },
+                                { max: 15, message: t(translations.forms.first_name_cannot_be_longer) }]}
                         >
                             <Input autoComplete="off" autoCorrect="off" />
                         </Form.Item>
@@ -119,7 +121,9 @@ export const SignupForm = () => {
                         <Form.Item
                             label={t(translations.signup_page.last_name)}
                             name="last_name"
-                            rules={[{ required: true, max: 15 }]}
+                            rules={[
+                                { required: true, message: t(translations.forms.last_name_is_required) },
+                                { max: 15, message: t(translations.forms.last_name_cannot_be_longer) }]}
                         >
                             <Input autoComplete="off" autoCorrect="off" />
                         </Form.Item>
@@ -161,7 +165,9 @@ export const SignupForm = () => {
                 <Form.Item
                     label={t(translations.signup_page.date_of_birth)}
                     name="birthdate"
-                    rules={[{ type: 'date', required: true }]}
+                    rules={[{ type: 'date' }, {
+                        required: true, message: t(translations.forms.birth_date_is_required)
+                    }]}
                 >
                     <DatePicker
                         ref="datePickerRef"

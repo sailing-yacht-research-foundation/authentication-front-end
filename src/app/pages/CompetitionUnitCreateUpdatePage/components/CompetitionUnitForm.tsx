@@ -313,7 +313,10 @@ export const CompetitionUnitForm = () => {
                                     data-tip={t(translations.tip.race_start_date)}
                                     label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_date)}</SyrfFieldLabel>}
                                     name="startDate"
-                                    rules={[{ type: 'date', required: true }]}
+                                    rules={[{ type: 'date' }, {
+                                        required: true,
+                                        message: t(translations.forms.start_date_is_required)
+                                    }]}
                                 >
                                     <DatePicker
                                         showToday={true}
@@ -336,7 +339,7 @@ export const CompetitionUnitForm = () => {
                                     data-tip={t(translations.tip.race_start_time)}
                                     label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
-                                    rules={[{ required: true }]}
+                                    rules={[{ required: true, message: t(translations.forms.start_time_is_required) }]}
                                 >
                                     <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
                                 </Form.Item>

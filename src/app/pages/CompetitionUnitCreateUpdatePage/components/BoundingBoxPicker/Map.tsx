@@ -54,6 +54,8 @@ export const Map = (props) => {
             accessToken: 'your.mapbox.access.token'
         }).addTo(map);
 
+        map.setMaxBounds(map.getBounds());
+
         drawnItems = L.featureGroup().addTo(map);
         drawControlFull = new L.Control.Draw({
             edit: {

@@ -129,6 +129,8 @@ export const MapView = React.forwardRef((props, ref) => {
             accessToken: 'your.mapbox.access.token'
         }).addTo(map);
 
+        map.setMaxBounds(map.getBounds());
+
         const drawnItems = L.featureGroup().addTo(map);
         drawControl = new L.Control.Draw({
             edit: {
@@ -541,7 +543,7 @@ export const MapView = React.forwardRef((props, ref) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.course_create_update_page.course_name)}</SyrfFieldLabel>}
                         name="course_name"
-                        rules={[{ required: true }]}
+                        rules={[{ required: true, message: t(translations.forms.please_input_a_course_name) }]}
                     >
                         <SyrfInputField
                             autoCorrect="off"
@@ -574,7 +576,7 @@ export const MapView = React.forwardRef((props, ref) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.course_create_update_page.geometry_name)}</SyrfFieldLabel>}
                         name="geometry_name"
-                        rules={[{ required: true }]}
+                        rules={[{ required: true, message: t(translations.forms.please_input_a_name_for_this_geometry) }]}
                     >
                         <SyrfInputField
                             autoCorrect="off"

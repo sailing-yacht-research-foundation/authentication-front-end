@@ -62,8 +62,8 @@ export const PlaybackOldRace = (props) => {
   const vesselParticipantsRef = useRef<any>([]);
   const raceTimeRef = useRef<any>({});
   const retrievedTimestampsRef = useRef<number[]>([]);
-  const raceLengthRef = useRef<number>();
-  const elapsedTimeRef = useRef<number>();
+  const raceLengthRef = useRef<number>(0);
+  const elapsedTimeRef = useRef<number>(0);
   const isPlayingRef = useRef<boolean | undefined>();
   const raceLegsRef = useRef<any>();
   const isStillFetchingFromBoatRenderRef = useRef<boolean>(false);
@@ -98,10 +98,10 @@ export const PlaybackOldRace = (props) => {
     return () => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
-        eventEmitter.off("ping", () => {});
-        eventEmitter.off("track-update", () => {});
-        eventEmitter.off("sequenced-courses-update", () => {});
-        eventEmitter.off("zoom-to-location", () => {});
+        eventEmitter.off("ping", () => { });
+        eventEmitter.off("track-update", () => { });
+        eventEmitter.off("sequenced-courses-update", () => { });
+        eventEmitter.off("zoom-to-location", () => { });
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
@@ -311,7 +311,6 @@ export const PlaybackOldRace = (props) => {
     const data = { ...source };
     const vesselParticipants = vesselParticipantsRef.current;
     const raceTime = raceTimeRef.current;
-    console.log(JSON.stringify(data))
 
     if (!Object.keys(vesselParticipants)?.length || !data?.raceData?.vesselParticipantId || !raceTime.start) return;
 
@@ -337,7 +336,10 @@ export const PlaybackOldRace = (props) => {
   };
 
   const handleSetElapsedTime = (elapsedTime) => {
-    dispatch(actions.setElapsedTime(elapsedTime));
+    if (elapsedTime < raceLengthRef.current)
+      dispatch(actions.setElapsedTime(elapsedTime));
+    else if (elapsedTime >= raceLengthRef.current)
+      dispatch(actions.setElapsedTime(raceLengthRef.current));
   };
 
   // Handle request more data

@@ -135,7 +135,7 @@ export const VesselForm = () => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.public_name)}</SyrfFieldLabel>}
                             name="publicName"
-                            rules={[{ required: true }]}
+                            rules={[{ required: true, message: t(translations.forms.boat_name_is_required) }]}
                         >
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>
@@ -145,15 +145,15 @@ export const VesselForm = () => {
                             name="lengthInMeters"
                             rules={[() => ({
                                 validator(_, value) {
-                                    if (!value) {
-                                        return Promise.reject();
+                                    if (value === null) {
+                                        return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_is_required));
                                     }
                                     if (isNaN(value) || value <= 0) {
                                         return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
                                     }
                                     return Promise.resolve();
                                 },
-                            }),]}
+                            }), { required: true, message: t(translations.vessel_create_update_page.length_in_meters_is_required) }]}
                         >
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>

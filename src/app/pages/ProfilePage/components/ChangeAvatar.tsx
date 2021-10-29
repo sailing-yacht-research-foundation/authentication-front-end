@@ -71,8 +71,7 @@ export const ChangeAvatar = (props) => {
     }
 
     const onAvatarCropped = (convertedBase64ImageURL) => {
-        setBase64ConvertedURL(convertedBase64ImageURL)
-        console.log(convertedBase64ImageURL)
+        setBase64ConvertedURL(convertedBase64ImageURL);
     }
 
     const onClearCropper = () => {

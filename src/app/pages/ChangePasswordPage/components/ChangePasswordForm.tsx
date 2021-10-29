@@ -61,10 +61,10 @@ export const ChangePasswordForm = (props) => {
                             label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                             name="newPassword"
                             data-tip={t(translations.tip.new_password)}
-                            rules={[{ required: true, max: 16, min: 8 }, {
+                            rules={[{ required: true, message: t(translations.forms.new_password_is_required) }, {
                                 pattern: /^\S+$/,
                                 message: t(translations.misc.password_must_not_contain_blank)
-                            }]}
+                            }, { max: 16, min: 8, message: t(translations.forms.new_password_must_be_between) }]}
                         >
                             <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
                         </Form.Item>
@@ -99,7 +99,7 @@ export const ChangePasswordForm = (props) => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <ReactTooltip/>
+            <ReactTooltip />
         </Wrapper>
     );
 }

@@ -182,7 +182,10 @@ export const PrivateUserInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.date_of_birth)}</SyrfFieldLabel>}
                         name="birthdate"
                         data-tip={t(translations.tip.date_of_birth)}
-                        rules={[{ type: 'date', required: true }]}
+                        rules={[{ type: 'date' }, {
+                            required: true,
+                            message: t(translations.forms.birth_date_is_required)
+                        }]}
                     >
                         <DatePicker
                             style={{ width: '100%' }}

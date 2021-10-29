@@ -321,7 +321,7 @@ export const MyEventForm = () => {
                         <Row gutter={24} style={{ display: 'none' }}>
                             <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
-             
+
                                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.longitude)}</SyrfFieldLabel>}
                                     name="lon"
                                     rules={[{ required: true }]}
@@ -360,7 +360,10 @@ export const MyEventForm = () => {
                                     name="startDate"
                                     className="event-start-date-step"
                                     data-tip={t(translations.tip.event_start_date)}
-                                    rules={[{ type: 'date', required: true }]}
+                                    rules={[{ type: 'date' }, {
+                                        required: true,
+                                        message: t(translations.forms.start_date_is_required)
+                                    }]}
                                 >
                                     <DatePicker
                                         showToday={true}
@@ -383,7 +386,7 @@ export const MyEventForm = () => {
                                     name="startTime"
                                     className="event-start-time-step"
                                     data-tip={t(translations.tip.event_start_time)}
-                                    rules={[{ required: true }]}
+                                    rules={[{ required: true, message: t(translations.forms.start_time_is_required) }]}
                                 >
                                     <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
                                 </Form.Item>
