@@ -83,9 +83,12 @@ export const MyTrackList = () => {
         },
         {
             title: t(translations.my_tracks_page.traveled_overground_distance),
-            dataIndex: 'competitionUnit',
-            key: 'competitionUnit.traveled_overground',
-            render: (_value, source) => source?.competitionUnit?.traveled_overground || '-'
+            dataIndex: 'trackJson',
+            key: 'trackJson.totalTraveledDistance',
+            render: (_value, source) => {
+                const totalTraveledDistance = source?.trackJson?.totalTraveledDistance;
+                return totalTraveledDistance ? `${totalTraveledDistance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} NMi` : '-';
+            }
         },
         {
             title: t(translations.my_tracks_page.elapsed_time),

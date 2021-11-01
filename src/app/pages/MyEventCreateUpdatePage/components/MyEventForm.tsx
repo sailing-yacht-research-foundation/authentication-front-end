@@ -233,8 +233,8 @@ export const MyEventForm = () => {
         const { startDate, startTime } = values;
         const currentDate = new Date();
 
-        const selectedDate = startDate?.toObject();
-        const selectedTime = startTime?.toObject();
+        const selectedDate = (startDate || moment())?.toObject();
+        const selectedTime = (startTime || moment())?.toObject();
         const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
 
         if (selectedDateTime.getTime() + 3000 <= currentDate.getTime()) return false;
@@ -443,6 +443,7 @@ export const MyEventForm = () => {
                                     help={renderErrorField(error, 'startDate')}
                                 >
                                     <DatePicker
+                                        allowClear={false}
                                         onChange={(val) => handleFieldChange('startDate', val)} 
                                         showToday={true}
                                         disabledDate={dateLimiter}
@@ -470,6 +471,7 @@ export const MyEventForm = () => {
                                     help={renderErrorField(error, 'startTime')}
                                 >
                                     <TimePicker 
+                                        allowClear={false}
                                         onChange={(val) => handleFieldChange('startTime', val)} 
                                         className="syrf-datepicker" 
                                         defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} 
