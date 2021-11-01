@@ -704,5 +704,15 @@
     "race_description_must_not_be_longer_than_255_chars": "Race description must not be longer than 255 characters.",
     "email_must_be_valid":"Please input a valid email.",
     "search_keyword_is_required": "Search keyword is required."
+  },
+  "expedition_server_actions": {
+    "race_udp_server_detail": "Race UDP server detail",
+    "subscribe_stream_to_expedition":"Subscribe Expedition",
+    "stream_to_expedition_detail": "Stream To Expedition Detail",
+    "udp_port": "UDP Port:",
+    "udp_ip": "UDP IP:",
+    "copy": "Copy",
+    "unsubscribe": "Unsubscribe",
+    "copied_to_clipboard": "Copied to clipboard."
   }
 }
