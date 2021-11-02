@@ -35,6 +35,7 @@ export const ExpeditionServerActionButtons = (props) => {
 
     React.useEffect(() => {
         checkForSubscribeStatus();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const subscribe = async () => {
@@ -89,7 +90,7 @@ export const ExpeditionServerActionButtons = (props) => {
     const copyToClipboard = (text) => {
         let input = document.createElement('input');
         document.body.appendChild(input);
-        input.value = udpDetail?.ipAddress?.address + ':'+ udpDetail?.port;
+        input.value = udpDetail?.ipAddress?.address + ':' + udpDetail?.port;
         input.select();
         document.execCommand('copy', false);
         toast.info(t(translations.expedition_server_actions.copied_to_clipboard));
@@ -102,7 +103,7 @@ export const ExpeditionServerActionButtons = (props) => {
                 {!subscribed ? (
                     <CreateButton icon={<MdAddComment style={{ marginRight: '5px' }} />} onClick={subscribe} >{t(translations.expedition_server_actions.subscribe_stream_to_expedition)}</CreateButton>
                 ) : (
-                    <CreateButton icon={<AiFillInfoCircle  style={{ marginRight: '5px' }}/>} onClick={showUDPModalDetail} >{t(translations.expedition_server_actions.stream_to_expedition_detail)}</CreateButton>
+                    <CreateButton icon={<AiFillInfoCircle style={{ marginRight: '5px' }} />} onClick={showUDPModalDetail} >{t(translations.expedition_server_actions.stream_to_expedition_detail)}</CreateButton>
                 )}
             </Spin>
             <Modal

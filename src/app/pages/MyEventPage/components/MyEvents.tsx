@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs } from 'antd';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useHistory } from 'react-router';
-import { FiMap } from 'react-icons/fi';
 import { FaFlagCheckered, FaRegCalendar } from 'react-icons/fa';
-import { BsListUl } from 'react-icons/bs';
 
 import { translations } from 'locales/translations';
 import { CreateButton, PageDescription, PageHeaderContainerSimple, PageHeading, PageInfoContainer } from 'app/components/SyrfGeneral';
