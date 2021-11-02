@@ -2,7 +2,7 @@ import { SYRF_SERVER } from "services/service-constants";
 import syrfService from 'utils/syrf-request';
 
 export const subscribe = (competitionUnitId) => {
-    return syrfService.post(`${SYRF_SERVER.EXPEDITION_SERVER}${SYRF_SERVER.API_VERSION}/expedition/subscribe`, {
+    return syrfService.post(`${SYRF_SERVER.STREAMING_SERVER}${SYRF_SERVER.API_VERSION}/expedition/subscribe`, {
         competitionUnitId: competitionUnitId
     }).then(response => {
         return {
@@ -18,7 +18,7 @@ export const subscribe = (competitionUnitId) => {
 }
 
 export const unsubscribe = (competitionUnitId) => {
-    return syrfService.post(`${SYRF_SERVER.EXPEDITION_SERVER}${SYRF_SERVER.API_VERSION}/expedition/unsubscribe`, {
+    return syrfService.post(`${SYRF_SERVER.STREAMING_SERVER}${SYRF_SERVER.API_VERSION}/expedition/unsubscribe`, {
         competitionUnitId: competitionUnitId
     }).then(response => {
         return {
@@ -34,7 +34,7 @@ export const unsubscribe = (competitionUnitId) => {
 }
 
 export const checkForUserSubscribeStatus = (competitionUnitId) => {
-    return syrfService.get(`${SYRF_SERVER.EXPEDITION_SERVER}${SYRF_SERVER.API_VERSION}/expedition?competitionUnitId_eq=${competitionUnitId}`).then(response => {
+    return syrfService.get(`${SYRF_SERVER.STREAMING_SERVER}${SYRF_SERVER.API_VERSION}/expedition?competitionUnitId_eq=${competitionUnitId}`).then(response => {
         return {
             success: true,
             data: response.data
@@ -48,7 +48,7 @@ export const checkForUserSubscribeStatus = (competitionUnitId) => {
 }
 
 export const getUDPServerDetail = () => {
-    return syrfService.get(`${SYRF_SERVER.EXPEDITION_SERVER}${SYRF_SERVER.API_VERSION}/expedition/udp-server`).then(response => {
+    return syrfService.get(`${SYRF_SERVER.STREAMING_SERVER}${SYRF_SERVER.API_VERSION}/expedition/udp-server`).then(response => {
         return {
             success: true,
             data: response.data
