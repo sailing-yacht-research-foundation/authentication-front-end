@@ -14,7 +14,8 @@ module.exports = {
         if (race) {
             return {
                 title: race.name,
-                description: race.description
+                description: race.description,
+                openGraphImage: race.openGraphImage
             }
         } else if (scrapedRaceResponse) {
             scrapedRace = scrapedRaceResponse?.hits?.hits?.[0];

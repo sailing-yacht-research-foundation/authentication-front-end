@@ -101,7 +101,7 @@ app.get('/playback', async function (request, response) {
       raceDescription?.title ?? 'SYRF - Playback',
       raceDescription?.description ?? 'Replay races in the sailing world.',
       defaultUrl + request.url,
-      defaultOpenGraphImage,
+      raceDescription?.openGraphImage ?? defaultOpenGraphImage,
       data
     );
 
