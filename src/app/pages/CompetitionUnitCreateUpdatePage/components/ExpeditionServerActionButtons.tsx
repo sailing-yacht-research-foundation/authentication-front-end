@@ -3,7 +3,8 @@ import { toast } from 'react-toastify';
 import {
     subscribe as subscribeRace,
     unsubscribe as unsubscribeRace,
-    checkForUserSubscribeStatus
+    checkForUserSubscribeStatus,
+    getUDPServerDetail
 } from 'services/streaming-server/expedition';
 import { Spin, Modal, Button, Space } from 'antd';
 import { MdAddComment } from 'react-icons/md';
@@ -43,10 +44,9 @@ export const ExpeditionServerActionButtons = (props) => {
 
         if (response?.success) {
             setSubscribed(true);
-            setShowUDPModal(true);
-            setUdpDetail(response?.data?.udpServer);
+            showUDPModalDetail();
         } else {
-            toast.error('An error happened when unsubscribe this race.');
+            toast.error(t(translations.expedition_server_actions.an_error_happened_when_subscribe_this_race));
         }
     }
 
@@ -58,14 +58,21 @@ export const ExpeditionServerActionButtons = (props) => {
         if (response?.success) {
             setSubscribed(false);
         } else {
-            toast.error('An error happened when unsubscribe this race.');
+            toast.error(t(translations.expedition_server_actions.an_error_happened_when_unsubscribe_this_race));
         }
 
         setShowUDPModal(false);
     }
 
-    const showUDPModalDetail = () => {
-        setShowUDPModal(true);
+    const showUDPModalDetail = async () => {
+        const response = await getUDPServerDetail();
+
+        if (response.success) {
+            setUdpDetail(response.data);
+            setShowUDPModal(true);
+        } else {
+            toast.error(t(translations.expedition_server_actions.an_error_happened_when_getting_udp_server_detail))
+        }
     }
 
     const checkForSubscribeStatus = async () => {

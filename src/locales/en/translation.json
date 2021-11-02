@@ -713,6 +713,9 @@
     "udp_ip": "UDP IP:",
     "copy": "Copy",
     "unsubscribe": "Unsubscribe",
-    "copied_to_clipboard": "Copied to clipboard."
+    "copied_to_clipboard": "Copied to clipboard.",
+    "an_error_happened_when_getting_udp_server_detail": "We've encountered an error when getting UDP server detail.",
+    "an_error_happened_when_subscribe_this_race": "Oops. Looks like there is something wrong when subscribing you to this race.",
+    "an_error_happened_when_unsubscribe_this_race": "Oops. Looks like there is something wrong when unsubscribing you from this race."
   }
 }

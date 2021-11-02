@@ -46,3 +46,17 @@ export const checkForUserSubscribeStatus = (competitionUnitId) => {
         }
     });
 }
+
+export const getUDPServerDetail = () => {
+    return syrfService.get(`${SYRF_SERVER.EXPEDITION_SERVER}${SYRF_SERVER.API_VERSION}/expedition/udp-server`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}
