@@ -20,7 +20,7 @@
     },
     "filter_tab": {
       "advanced_search": "Advanced search",
-      "race_name": "Race Name",
+      "race_name": "Search keyword",
       "from_date": "From Date",
       "to_date": "To Date",
       "search": "Search",
@@ -681,6 +681,7 @@
     "birth_date_is_required": "Birth date is required.",
     "new_password_is_required": "New password is required.",
     "new_password_must_be_between": "New password must be between 8 and 16 characters",
+    "password_must_be_between": "Password must be between 8 and 16 characters",
     "start_date_is_required": "Start date is required.",
     "start_time_is_required": "Start time is required.",
     "competitor_name_is_required": "Competitor name is required.",
@@ -703,5 +704,18 @@
     "race_description_must_not_be_longer_than_255_chars": "Race description must not be longer than 255 characters.",
     "email_must_be_valid":"Please input a valid email.",
     "search_keyword_is_required": "Search keyword is required."
+  },
+  "expedition_server_actions": {
+    "race_udp_server_detail": "Race UDP server detail",
+    "subscribe_stream_to_expedition":"Subscribe Expedition",
+    "stream_to_expedition_detail": "Stream To Expedition Detail",
+    "udp_port": "UDP Port:",
+    "udp_ip": "UDP IP:",
+    "copy": "Copy",
+    "unsubscribe": "Unsubscribe",
+    "copied_to_clipboard": "Copied to clipboard.",
+    "an_error_happened_when_getting_udp_server_detail": "We've encountered an error when getting UDP server detail.",
+    "an_error_happened_when_subscribe_this_race": "Oops. Looks like there is something wrong when subscribing you to this race.",
+    "an_error_happened_when_unsubscribe_this_race": "Oops. Looks like there is something wrong when unsubscribing you from this race."
   }
 }
