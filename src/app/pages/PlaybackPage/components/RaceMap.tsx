@@ -413,7 +413,7 @@ export const RaceMap = (props) => {
         attribution:
           '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
         maxZoom: 19,
-        minZoom: 13,
+        minZoom: 8,
         id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",
         tileSize: 512,
         zoomOffset: -1,
