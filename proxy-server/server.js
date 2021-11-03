@@ -98,10 +98,10 @@ app.get('/playback', async function (request, response) {
     }
 
     result = replaceOpenGraphTagsContent(
-      raceDescription?.title ?? 'SYRF - Playback',
-      raceDescription?.description ?? 'Replay races in the sailing world.',
+      raceDescription?.title || 'SYRF - Playback',
+      raceDescription?.description || 'Replay races in the sailing world.',
       defaultUrl + request.url,
-      raceDescription?.openGraphImage ?? defaultOpenGraphImage,
+      raceDescription?.openGraphImage || defaultOpenGraphImage,
       data
     );
 
