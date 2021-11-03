@@ -34,7 +34,7 @@ import {
 import { usePlaybackSlice } from "./slice";
 import { MAP_DEFAULT_VALUE } from "utils/constants";
 import { stringToColour } from "utils/helpers";
-import { selectSessionToken } from "../../LoginPage/slice/selectors";
+import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
 import { Playback } from "./Playback";
 import { RaceMap } from "./RaceMap";
@@ -79,6 +79,7 @@ export const PlaybackOldRace = (props) => {
   const raceTime = useSelector(selectRaceTime);
   const raceSimplifiedTracks = useSelector(selectRaceSimplifiedTracks);
   const raceLength = useSelector(selectRaceLength);
+  const userCoordinate = useSelector(selectUserCoordinate);
 
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
     `${streamUrl}/authenticate?session_token=${sessionToken}`
@@ -496,6 +497,11 @@ export const PlaybackOldRace = (props) => {
     setParticipantsData(normalizedPosition);
   };
 
+  const mapCenter = {
+    lat: userCoordinate?.lat || MAP_DEFAULT_VALUE.CENTER.lat,
+    lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
+  };
+
   return (
     <div style={{ height: "100%", position: "relative" }}>
       <MapContainer
@@ -504,7 +510,7 @@ export const PlaybackOldRace = (props) => {
           width: "100%",
           position: "relative",
         }}
-        center={MAP_DEFAULT_VALUE.CENTER}
+        center={mapCenter}
         zoom={MAP_DEFAULT_VALUE.ZOOM}
         zoomSnap={0.2}
         zoomAnimation={false}
