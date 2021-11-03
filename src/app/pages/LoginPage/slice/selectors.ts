@@ -30,3 +30,8 @@ export const selectUserCoordinate = createSelector(
   [selectDomain],
   (loginState) => loginState.user_coordinate
 );
+
+export const selectRefreshToken = createSelector(
+  [selectDomain],
+  (loginState) => loginState.refresh_token
+)

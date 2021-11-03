@@ -5,6 +5,7 @@ export interface LoginState {
   session_token: string,
   syrf_authenticated: boolean;
   user_coordinate?: null | Coordinate;
+  refresh_token?: string;
 }
 
 export type ContainerState = LoginState

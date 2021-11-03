@@ -10,6 +10,7 @@ export const initialState: LoginState = {
   session_token: !!localStorage.getItem('session_token') ? String(localStorage.getItem('session_token')) : '',
   syrf_authenticated: !!localStorage.getItem('session_token') && !!localStorage.getItem('is_guest'),
   user_coordinate: JSON.parse(localStorage.getItem('user_coordinate') || 'null'),
+  refresh_token: !!localStorage.getItem('refresh_token') ? String(localStorage.getItem('refresh_token')) : '',
 };
 
 const slice = createSlice({
@@ -22,6 +23,10 @@ const slice = createSlice({
     setSessionToken(state, action: PayloadAction<string>) {
       state.session_token = action.payload;
       localStorage.setItem('session_token', action.payload);
+    },
+    setRefreshToken(state, action: PayloadAction<string>) {
+      state.refresh_token = action.payload;
+      localStorage.setItem('refresh_token', action.payload);
     },
     setIsAuthenticated(state, action: PayloadAction<boolean>) {
       state.is_authenticated = action.payload;
@@ -38,8 +43,10 @@ const slice = createSlice({
       localStorage.removeItem('session_token');
       localStorage.removeItem('user_id');
       localStorage.removeItem('user_coordinate');
+      localStorage.removeItem('refresh_token');
     },
     getUser() {},
+    getNewToken() {},
     syrfServiceAnonymousLogin() {},
     setSYRFServiceAuthorized(state, action: PayloadAction<boolean>) {
       state.syrf_authenticated = action.payload;
