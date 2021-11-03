@@ -7,7 +7,7 @@ import * as L from 'leaflet';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { Modal, Form } from 'antd';
+import { Modal, Form, message } from 'antd';
 import { SyrfFieldLabel, SyrfInputField } from 'app/components/SyrfForm';
 import { useCourseSlice } from '../../slice';
 import { selectCourseSequencedGeometries } from '../../slice/selectors';
@@ -187,7 +187,8 @@ export const MapView = React.forwardRef((props, ref) => {
                     drawGeometries(courseSequencedGeometriesData, drawnItems);
                 }
             } else {
-                history.push('/404');
+                history.push(`/events/${eventId}`);
+                message.error(t(translations.course_create_update_page.course_not_found));
             }
         }
     }
@@ -471,7 +472,7 @@ export const MapView = React.forwardRef((props, ref) => {
             if (course && course.calendarEventId) {
                 history.push(`/events/${course.calendarEventId}/update`);
             } else {
-                history.push(`/events/`);
+                history.push(`/events`);
             }
         }
     }

@@ -15,6 +15,8 @@ import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerRespons
 import { translations } from 'locales/translations';
 import { get } from 'services/live-data-server/event-calendars';
 import { MapView } from './MapView';
+import { useSelector } from 'react-redux';
+import { selectUserCoordinate } from 'app/pages/LoginPage/slice/selectors';
 
 const NAV_HEIGHT = '150px';
 
@@ -33,6 +35,8 @@ export const MapViewTab = () => {
     const params = useParams<any>();
 
     const history = useHistory();
+
+    const userCoordinate = useSelector(selectUserCoordinate);
 
     const mapContainerRef = React.useRef<any>();
 
@@ -61,7 +65,7 @@ export const MapViewTab = () => {
             setCurrentEvent(response.data);
 
         } catch (err: any) {
-            message.error(err?.message || err || translate.eventNotFound);
+            message.error(translate.eventNotFound);
             history.push("/events");
         }
     }
@@ -96,6 +100,11 @@ export const MapViewTab = () => {
 
     }, [currentEvent]);
 
+    const mapCenter = {
+        lat: userCoordinate?.lat || MAP_DEFAULT_VALUE.CENTER.lat,
+        lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
+    }
+
     return (
         <Wrapper>
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
@@ -122,7 +131,7 @@ export const MapViewTab = () => {
 
                 </Space>
             </PageHeaderContainerResponsive>
-            <MapContainer whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${NAV_HEIGHT})`, width: 'calc(100%)', zIndex: 1 }} center={MAP_DEFAULT_VALUE.CENTER} zoom={MAP_DEFAULT_VALUE.ZOOM}>
+            <MapContainer whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${NAV_HEIGHT})`, width: 'calc(100%)', zIndex: 1 }} center={mapCenter} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <MapView ref={mapViewRef} />
             </MapContainer>
             <ReactTooltip />

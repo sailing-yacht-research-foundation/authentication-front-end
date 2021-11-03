@@ -480,7 +480,8 @@
     "update_course": "Update course",
     "delete": "Delete",
     "creating_a_start_line": "Creating a start line will #StopThePingParade.",
-    "event_not_found": "Event not found!"
+    "event_not_found": "Event not found!",
+    "course_not_found": "Course not found!"
   },
   "vessel_list_page": {
     "public_name": "Public Name",
