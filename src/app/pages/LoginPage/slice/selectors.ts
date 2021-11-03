@@ -25,3 +25,8 @@ export const selectSessionToken = createSelector(
   [selectDomain],
   (loginState) => loginState.session_token
 );
+
+export const selectUserCoordinate = createSelector(
+  [selectDomain],
+  (loginState) => loginState.user_coordinate
+);

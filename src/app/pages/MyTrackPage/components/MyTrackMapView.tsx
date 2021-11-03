@@ -1,12 +1,16 @@
 import React, { useRef, useEffect } from "react";
 import { MapContainer } from "react-leaflet";
-import { StyleConstants } from 'styles/StyleConstants';
+import { useSelector } from 'react-redux';
 
+import { StyleConstants } from 'styles/StyleConstants';
 import { MAP_DEFAULT_VALUE } from "utils/constants";
+
 import { MyTrackMap } from "./MyTrackMap";
+import { selectUserCoordinate } from "app/pages/LoginPage/slice/selectors";
 
 export const MyTrackMapView = (props) => {
   const mapContainerRef = useRef<any>();
+  const userCoordinate = useSelector(selectUserCoordinate);
 
   const handleResize = () => {
     const { current } = mapContainerRef;
@@ -24,6 +28,11 @@ export const MyTrackMapView = (props) => {
     };
   }, []);
 
+  const mapCenter = { 
+    lat: userCoordinate?.lat || MAP_DEFAULT_VALUE.CENTER.lat, 
+    lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng 
+  };
+  
   return (
       <div style={{ position: "relative" }}>
         <MapContainer
@@ -32,7 +41,7 @@ export const MyTrackMapView = (props) => {
             width: "100%",
             zIndex: 1
           }}
-          center={MAP_DEFAULT_VALUE.CENTER}
+          center={mapCenter}
           zoom={MAP_DEFAULT_VALUE.ZOOM}
           zoomSnap={0.2}
           zoomAnimation={false}

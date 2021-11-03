@@ -57,6 +57,7 @@ import { useState } from 'react';
 import { TutorialModal } from './components/TutorialModal';
 import { TourProvider } from '@reactour/tour';
 import { steps } from 'utils/tour-steps';
+import { initUserLocation } from 'utils/location';
 
 const { Sider, Content } = Layout;
 
@@ -108,6 +109,17 @@ export function App(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    initUserLocation(handleInitUserLocationSuccess, () => {})
+  }, []);
+
+  const handleInitUserLocationSuccess = (position) => {
+    const {latitude, longitude } = position.coords;
+    if (latitude && longitude) {
+      dispatch(loginActions.setUserCoordinate({ lat: latitude, lon: longitude }));
+    }
+  }
 
   const onSiderCollapsed = (collapsed) => {
     if (isMobile()) {

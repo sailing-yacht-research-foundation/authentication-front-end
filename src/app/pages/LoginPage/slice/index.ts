@@ -2,13 +2,14 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import loginSaga from './saga';
-import { LoginState } from './types';
+import { LoginState, Coordinate } from './types';
 
 export const initialState: LoginState = {
   user: {},
   is_authenticated: !!localStorage.getItem('session_token') && !localStorage.getItem('is_guest'),
   session_token: !!localStorage.getItem('session_token') ? String(localStorage.getItem('session_token')) : '',
-  syrf_authenticated: !!localStorage.getItem('session_token') && !!localStorage.getItem('is_guest')
+  syrf_authenticated: !!localStorage.getItem('session_token') && !!localStorage.getItem('is_guest'),
+  user_coordinate: JSON.parse(localStorage.getItem('user_coordinate') || 'null'),
 };
 
 const slice = createSlice({
@@ -25,6 +26,10 @@ const slice = createSlice({
     setIsAuthenticated(state, action: PayloadAction<boolean>) {
       state.is_authenticated = action.payload;
     },
+    setUserCoordinate(state, action: PayloadAction<null | Coordinate>) {
+      state.user_coordinate = action.payload;
+      localStorage.setItem('user_coordinate', JSON.stringify(action.payload));
+    },
     setLogout(state) {
       state.is_authenticated = false;
       state.session_token = '';
@@ -32,6 +37,7 @@ const slice = createSlice({
       localStorage.removeItem('user');
       localStorage.removeItem('session_token');
       localStorage.removeItem('user_id');
+      localStorage.removeItem('user_coordinate');
     },
     getUser() {},
     syrfServiceAnonymousLogin() {},
