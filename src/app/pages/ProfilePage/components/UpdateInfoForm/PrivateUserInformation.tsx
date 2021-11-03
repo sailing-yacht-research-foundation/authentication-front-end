@@ -139,7 +139,8 @@ export const PrivateUserInformation = (props) => {
                     value={address}
                     onChange={(address) => { setAddress(address) }}
                 >
-                    {({ getInputProps, suggestions, getSuggestionItemProps }) => (
+                    {({ getInputProps, suggestions, getSuggestionItemProps }) => {
+                        return (
                         <>
                             <SyrfInputField
                                 {...getInputProps({
@@ -172,7 +173,7 @@ export const PrivateUserInformation = (props) => {
                                 })}
                             </StyledPLaceDropdown>}
                         </>
-                    )}
+                    )}}
                 </PlacesAutocomplete>
             </Form.Item>
 
@@ -222,7 +223,7 @@ export const PrivateUserInformation = (props) => {
                             <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
                                 {countryCodeList.length > 0 ?
                                     renderCountryCodeList(countryCodeList) :
-                                    <div>No data found</div>
+                                    <SailingNumberSuggestionEmpty>No data found</SailingNumberSuggestionEmpty>
                                 }
                             </div>
                         </SailingNumberSuggestionContainer>
@@ -322,4 +323,10 @@ const SailingNumberSuggestionItem = styled.div`
     &:hover {
         background-color: #E6F7FF;
     }
+`;
+
+const SailingNumberSuggestionEmpty = styled.div`
+    padding: 4px 16px;
+    background-color: #FFFFFF;
+    z-index: 20;
 `;
