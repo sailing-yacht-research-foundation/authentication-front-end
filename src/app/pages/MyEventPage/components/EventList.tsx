@@ -18,6 +18,8 @@ import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import ReactTooltip from 'react-tooltip';
+import { AiOutlineCalendar } from 'react-icons/ai';
+import { RaceList } from './RaceList'; 
 
 const defaultOptions = {
   loop: true,
@@ -77,7 +79,10 @@ export const EventList = () => {
                     return <Space size="middle">
                         <DownloadButton  data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
                             downloadIcalendarFile(record);
-                        }} type="primary">{t(translations.my_event_list_page.download_icalendar)}</DownloadButton>
+                        }} type="primary">
+                          <AiOutlineCalendar />  
+                          {/* {t(translations.my_event_list_page.download_icalendar)} */}
+                        </DownloadButton>
                         <BorderedButton onClick={() => {
                             history.push(`/events/${record.id}/update`)
                         }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
@@ -106,12 +111,19 @@ export const EventList = () => {
 
     const [race, setRace] = React.useState<any>({});
 
+    const [mappedResults, setMappedResults] = React.useState<any[]>([]);
+
     const isChangingPage = useSelector(selectIsChangingPage);
 
     React.useEffect(() => {
         dispatch(actions.getEvents(1));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+      const resultsWithKey = results.map((result) => ({ ...result, key: result.id }))
+      setMappedResults(resultsWithKey);
+    }, [results]);
 
     const onPaginationChanged = (page) => {
         dispatch(actions.getEvents(page));
@@ -126,6 +138,14 @@ export const EventList = () => {
         dispatch(actions.getEvents(page));
     }
 
+    const renderExpandedRowRender = (record) => {
+      return (
+        <div>
+          <RaceList event={record} />
+        </div>
+      );
+    }
+
   return (
     <>
         <DeleteRaceModal
@@ -135,18 +155,21 @@ export const EventList = () => {
             setShowDeleteModal={setShowDeleteModal}
         />
 
-      {results.length > 0 ? (
+      {mappedResults.length > 0 ? (
         <Spin spinning={isChangingPage}>
           <TableWrapper>
             <Table
               scroll={{ x: "max-content" }}
               columns={columns}
-              dataSource={results}
+              dataSource={mappedResults}
               pagination={{
                 defaultPageSize: 10,
                 current: page,
                 total: total,
                 onChange: onPaginationChanged,
+              }}
+              expandable={{
+                expandedRowRender: record => renderExpandedRowRender(record)
               }}
             />
           </TableWrapper>
@@ -164,6 +187,11 @@ export const EventList = () => {
 const DownloadButton = styled(BorderedButton)`
     background: #DC6E1E;
     border: 1px solid #fff;
+    font-size: 20px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     :hover, :focus {
         background: #DC6E1E;
