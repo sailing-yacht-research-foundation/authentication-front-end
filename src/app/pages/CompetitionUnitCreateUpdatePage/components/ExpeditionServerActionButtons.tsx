@@ -66,7 +66,9 @@ export const ExpeditionServerActionButtons = (props) => {
     }
 
     const showUDPModalDetail = async () => {
+        setIsLoading(true);
         const response = await getUDPServerDetail();
+        setIsLoading(false);
 
         if (response.success) {
             setUdpDetail(response.data);
