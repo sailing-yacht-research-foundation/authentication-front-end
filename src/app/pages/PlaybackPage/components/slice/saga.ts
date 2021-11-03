@@ -3,7 +3,6 @@
  */
 
 import { all, call, put, takeLatest } from "@redux-saga/core/effects";
-import { message } from "antd";
 import {
   getCompetitionUnitById,
   getCourseByCompetitionUnit,

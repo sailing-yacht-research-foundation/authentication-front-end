@@ -178,9 +178,10 @@ export const insert3ToLastWordWhenSearch = (keyword) => {
  * @returns 
  */
 export const insert3BetweenEachWord = (stringOfWords) => {
+    //eslint-disable-next-line
     const format = /[ `!@#$%^&*()+\-=\[\]{};'"\\|,.<>\/?~]/;
     const formattedWord: any[] = [];
-    
+
     stringOfWords.split(' ').map(word => {
         if (!format.test(word)) {
             formattedWord.push(word);

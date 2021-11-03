@@ -22,6 +22,7 @@ import { MAP_DEFAULT_VALUE, MODE, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import ReactTooltip from 'react-tooltip';
+import { ExpeditionServerActionButtons } from './ExpeditionServerActionButtons';
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
@@ -29,6 +30,11 @@ const timeZones = getTimeZones();
 timeZones.push({
     name: 'Etc/Utc'
 });
+
+const enum RaceStatus {
+    ON_GOING = 'ONGOING',
+    SCHEDULED = 'SCHEDULED'
+}
 
 export const CompetitionUnitForm = () => {
 
@@ -264,13 +270,15 @@ export const CompetitionUnitForm = () => {
                 <Space size={10}>
                     {mode === MODE.UPDATE &&
                         <>
+                            {competitionUnit?.id
+                                && competitionUnit?.status === RaceStatus.ON_GOING && <ExpeditionServerActionButtons competitionUnit={competitionUnit} />}
                             <DeleteButton
                                 data-tip={t(translations.tip.delete_race)}
                                 onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                                     style={{ marginRight: '5px' }}
                                     size={18}
                                 />}>{t(translations.competition_unit_create_update_page.delete)}</DeleteButton>
-                            <ReactTooltip/>
+                            <ReactTooltip />
                         </>}
                 </Space>
             </PageHeaderContainerResponsive>

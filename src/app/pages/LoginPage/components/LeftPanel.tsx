@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import BG from '../assets/sail.webp';
 import Handicap from '../assets/sport-logos/Handicap-sailing.svg';
 import KiteSurfing from '../assets/sport-logos/kitesurfing.svg';
 import OneDesign from '../assets/sport-logos/One-design.svg';
