@@ -45,6 +45,7 @@ export const LoginForm = (props) => {
 
     if (response.success) {
       dispatch(actions.setSessionToken(response.token));
+      dispatch(actions.setRefreshToken(response.user.refresh_token));
       dispatch(actions.getUser());
       if (response.user?.email_verified) {
         dispatch(actions.setIsAuthenticated(true));
