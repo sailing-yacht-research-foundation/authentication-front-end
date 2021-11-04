@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, message, Space, Spin } from 'antd';
+import { Button, message, Space, Spin, Tag } from 'antd';
 import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaCalendarPlus, FaSave } from 'react-icons/fa';
@@ -75,6 +75,16 @@ export const EventDetail = () => {
         else history.push('/events');
     }
 
+    const translate = {
+        status_open_regis: t(translations.my_event_list_page.status_openregistration),
+        status_public: t(translations.my_event_list_page.status_publicevent),
+        status_private: t(translations.my_event_list_page.status_privateevent),
+        anyone_canregist: t(translations.tip.anyone_can_register_event_and_tracking),
+        anyone_canview: t(translations.tip.anyone_can_search_view_event),
+        only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
+      }
+    
+
     return (
         <Spin spinning={isFetchingEvent}>
             <PageHeaderContainerResponsive>
@@ -111,6 +121,11 @@ export const EventDetail = () => {
                     <EventDescription>
                         {event.description ? event.description : t(translations.home_page.filter_tab.filter_result.no_description)}
                     </EventDescription>
+                    <EventOpenRegistrationContainer>
+                        {event?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
+                        {event?.isOpen && <StyledTag data-tip={translate.anyone_canview} color="purple">{translate.status_public}</StyledTag>}
+                        {!event?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
+                    </EventOpenRegistrationContainer>
                 </EventSection>
             </EventDescriptionContainer>
 
@@ -162,4 +177,14 @@ const EventSection = styled.div`
 
 const EventDescriptionContainer = styled.div`
     margin: 16px 0px;
+`;
+
+const EventOpenRegistrationContainer = styled.div`
+    margin: 16px 0px;
+    max-width: 300px;
+`;
+
+const StyledTag = styled(Tag)`
+    margin-top: 4px;
+    margin-bottom: 4px;
 `;

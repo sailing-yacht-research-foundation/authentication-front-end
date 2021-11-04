@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Table, Space, Spin } from 'antd';
+import { Table, Space, Spin, Tag } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsChangingPage, selectResults } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
@@ -35,6 +35,16 @@ const uuid = localStorage.getItem('uuid');
 export const EventList = () => {
 
   const { t } = useTranslation();
+
+  const translate = {
+    status_open_regis: t(translations.my_event_list_page.status_openregistration),
+    status_public: t(translations.my_event_list_page.status_publicevent),
+    status_private: t(translations.my_event_list_page.status_privateevent),
+    anyone_canregist: t(translations.tip.anyone_can_register_event_and_tracking),
+    anyone_canview: t(translations.tip.anyone_can_search_view_event),
+    only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
+  }
+
   const columns = [
         {
             title: t(translations.my_event_list_page.name),
@@ -43,6 +53,20 @@ export const EventList = () => {
             render: (text, record) => {
                 return <Link to={`/events/${record.id}`}>{text}</Link>;
             },
+        },
+        {
+            title: 'Status',
+            dataIndex: 'isOpen',
+            key: 'isOpen',
+            render: (isOpen, record) => {
+              return (
+                <StatusContainer>
+                  {record?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
+                  {record?.isOpen && <StyledTag data-tip={translate.anyone_canview} color="purple">{translate.status_public}</StyledTag>}
+                  {!record?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
+                </StatusContainer>
+              );
+            }
         },
         {
             title: t(translations.my_event_list_page.city),
@@ -81,7 +105,6 @@ export const EventList = () => {
                             downloadIcalendarFile(record);
                         }} type="primary">
                           <AiOutlineCalendar />  
-                          {/* {t(translations.my_event_list_page.download_icalendar)} */}
                         </DownloadButton>
                         <BorderedButton onClick={() => {
                             history.push(`/events/${record.id}/update`)
@@ -197,4 +220,13 @@ const DownloadButton = styled(BorderedButton)`
         background: #DC6E1E;
         border: 1px solid #fff;
     }
+`;
+
+const StatusContainer = styled.div`
+    max-width: 250px;
+`;
+
+const StyledTag = styled(Tag)`
+    margin-top: 4px;
+    margin-bottom: 4px;
 `;

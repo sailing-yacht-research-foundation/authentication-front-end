@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Menu, Space, message } from 'antd';
+import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Menu, Space, message, Switch } from 'antd';
 import { DeleteButton, PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -74,7 +74,7 @@ export const MyEventForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
 
     const onFinish = async (values) => {
-        const { name, startDate, externalUrl, lon, lat, endDate, endTime, startTime, description, approximateStartTime_zone, approximateEndTime_zone, endLat, endLon } = values;
+        const { name, startDate, externalUrl, isOpen, lon, lat, endDate, endTime, startTime, description, approximateStartTime_zone, approximateEndTime_zone, endLat, endLon } = values;
         let response;
         let currentDate = moment();
         let currentTime = moment();
@@ -86,7 +86,7 @@ export const MyEventForm = () => {
             setError({ ...startTimeValidation.errors, ...endTimeValidation.errors })
             return;
         }        
-        
+
         if (endDate) {
             currentDate = endDate;
         }
@@ -117,6 +117,7 @@ export const MyEventForm = () => {
             approximateStartTime_zone: approximateStartTime_zone,
             approximateEndTime_zone: approximateEndTime_zone,
             isPrivate: false,
+            isOpen: isOpen
         };
 
         if (mode === MODE.CREATE)
@@ -138,15 +139,17 @@ export const MyEventForm = () => {
             toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
             setRace(response.data);
             createDefaultVesselParticipantGroup(response.data);
+            
+            history.push(`/events/${response.data?.id}/update`);
+            setCoordinates({
+                lat: lat,
+                lng: lon
+            });
+            
         } else {
+            initData();
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
         }
-
-        history.push(`/events/${response.data?.id}/update`);
-        setCoordinates({
-            lat: lat,
-            lng: lon
-        });
 
         if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -257,6 +260,7 @@ export const MyEventForm = () => {
         setIsSavingEvent(false);
 
         if (response.success) {
+            console.log(response.data)
             form.setFieldsValue({
                 ...response.data,
                 startDate: moment(response.data?.approximateStartTime),
@@ -600,6 +604,15 @@ export const MyEventForm = () => {
                             data-tip={t(translations.tip.event_description)}
                         >
                             <SyrfTextArea autoCorrect="off" />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>Open for Registration</SyrfFieldLabel>}
+                            name="isOpen"
+                            data-tip={"Opening the registration means anyone can register for the event and start tracking for it from the mobile app"}
+                            valuePropName="checked"
+                        >
+                            <Switch />
                         </Form.Item>
 
                         <Divider />
