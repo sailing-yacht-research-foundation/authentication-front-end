@@ -446,7 +446,7 @@ export const interpolateNearestPositions = (
 };
 
 export const checkIsForcedToInstallAppOnMobile = (source) => {
-  const allowedWebviewOnMobile = ['ESTELLA', 'KWINDOO', 'RACEQS', 'TACKTRACKER', 'YACHTBOT', 'GEOVOILE', 'ESTELA', 'BLUEWATER'];
+  const allowedWebviewOnMobile = ['KWINDOO', 'RACEQS', 'TACKTRACKER', 'YACHTBOT', 'GEOVOILE', 'ESTELA', 'BLUEWATER'];
   if (allowedWebviewOnMobile.includes(source)) {
     return false;
   }
