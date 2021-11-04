@@ -328,7 +328,8 @@
     "city": "City",
     "country": "Country",
     "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
-    "download_icalendar": "Download Icalendar"
+    "download_icalendar": "Download Icalendar",
+    "races": "Races"
   },
   "competition_unit_list_page": {
     "name": "Name",
@@ -372,7 +373,10 @@
     "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses.",
     "course": "Course",
     "course_is_a_set": "Course is a set of marks, gates and areas in the race.",
-    "select_a_course": "Select a course"
+    "select_a_course": "Select a course",
+    "event_not_found": "Event not found!",
+    "race_not_found": "Race not found!",
+    "error_starttime_greater_eventtime": "Start time should be greater than event time"
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -386,6 +390,8 @@
     "location_name": "Location Name",
     "start_date": "Start Date",
     "start_time": "Start Time",
+    "end_date": "End Date",
+    "end_time": "End Time",
     "external_url": "Event Website",
     "longitude": "Longitude",
     "latitude": "Latitude",
@@ -396,8 +402,16 @@
     "description": "Description",
     "timezone": "Time Zone",
     "location": "Location",
+    "start_location": "Start Location",
+    "end_location": "End Location",
     "starttime_must_be_in_future": "Start time must be in future",
-    "event_not_found": "Event not found!"
+    "endtime_must_be_in_future": "End time must be in future",
+    "event_not_found": "Event not found!",
+    "error_enddate_should_greater_than_startdate": "End date should be greater than start date",
+    "error_enddate_should_selected": "End date should be selected",
+    "error_endtime_should_selected": "End time should be selected",
+    "error_endtime_shouldgreater_starttime": "End time should be greater than start time",
+    "error_starttime_shouldgreater_currenttime": "Start time should be greater than current time"
   },
   "course_list": {
     "name": "Name",
@@ -466,7 +480,8 @@
     "update_course": "Update course",
     "delete": "Delete",
     "creating_a_start_line": "Creating a start line will #StopThePingParade.",
-    "event_not_found": "Event not found!"
+    "event_not_found": "Event not found!",
+    "course_not_found": "Course not found!"
   },
   "vessel_list_page": {
     "public_name": "Public Name",
@@ -619,8 +634,12 @@
     "name_of_the_event": "Name of the event",
     "event_description": "Event description, something like: Yacht racing is a sailing sport involving sailing yachts and larger sailboats,<br/> as distinguished from dinghy racing, which involves open boats.",
     "event_location": "Event location, you can either input the location by hand or choose a location by clicking on the map.",
+    "event_location_start": "Start event location, you can either input the location by hand or choose a location by clicking on the map.",
+    "event_location_end": "End event location, you can either input the location by hand or choose a location by clicking on the map.",
     "event_start_date": "The start date of the event.",
     "event_start_time": "The start time of the event.",
+    "event_end_date": "The end date of the event.",
+    "event_end_time": "The end time of the event.",
     "event_time_zone": "The timezone which the event will happen.",
     "event_website": "Your website that host the event.",
     "create_race": "Create and setup a new race for this event.",
@@ -684,6 +703,8 @@
     "password_must_be_between": "Password must be between 8 and 16 characters",
     "start_date_is_required": "Start date is required.",
     "start_time_is_required": "Start time is required.",
+    "end_date_is_required": "End date is required.",
+    "end_time_is_required": "End time is required.",
     "competitor_name_is_required": "Competitor name is required.",
     "competitor_name_must_not_longer_than_50_character": "Competitor name must not be longer than 50 characters.",
     "class_name_is_required": "Class name is required.",

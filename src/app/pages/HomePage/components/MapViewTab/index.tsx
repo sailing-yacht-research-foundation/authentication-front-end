@@ -14,6 +14,8 @@ import { selectPage, selectPageSize, selectResults, selectTotal } from '../../sl
 import { BiTargetLock } from 'react-icons/bi';
 import { StyleConstants } from 'styles/StyleConstants';
 import { FilterSearchBar } from './components/FilterSearchBar';
+import { selectUserCoordinate } from 'app/pages/LoginPage/slice/selectors';
+import { MAP_DEFAULT_VALUE } from "utils/constants";
 
 type MapViewProps = {
     zoomToCurrentUserLocationIfAllowed: () => void;
@@ -42,6 +44,8 @@ export const MapViewTab = (props) => {
 
     const results = useSelector(selectResults);
 
+    const userCoordinate = useSelector(selectUserCoordinate);
+
     const [isFocusingOnSearchInput, setIsFocusingOnSearchInput] = React.useState<boolean>(false);
 
     const mapContainerRef = React.useRef<any>();
@@ -66,9 +70,14 @@ export const MapViewTab = (props) => {
         }
     }, []);
 
+    const mapCenter = {
+        lat: userCoordinate?.lat || MAP_DEFAULT_VALUE.CENTER.lat,
+        lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
+    };
+
     return (
         <Wrapper>
-            <MapContainer className="search-step-results" whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={center} zoom={ZOOM}>
+            <MapContainer className="search-step-results" whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={mapCenter} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <MapView isFocusingOnSearchInput={isFocusingOnSearchInput} ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
             {

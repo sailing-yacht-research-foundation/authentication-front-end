@@ -5,7 +5,7 @@ export const FIELD_VALIDATE = {
 }
 
 export const MAP_DEFAULT_VALUE = {
-    ZOOM: 13,
+    ZOOM: 11,
     CENTER: {
         lng: -122.4,
         lat: 37.8

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Space, message } from 'antd';
+import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Menu, Space, message } from 'antd';
 import { DeleteButton, PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -21,12 +21,12 @@ import Geocode from "react-geocode";
 import ReactTooltip from 'react-tooltip';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 import { ParticipantList } from './ParticipantList';
 import { VesselParticipantGroupList } from './VesselParticipantGroupList';
 import { MODE } from 'utils/constants';
-import { debounce, renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { CoursesList } from './CoursesList';
 import tzLookup from 'tz-lookup';
 
@@ -56,6 +56,7 @@ export const MyEventForm = () => {
     const { eventId } = useParams<{ eventId: string }>();
 
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
+    const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
 
     const [race, setRace] = React.useState<any>({});
 
@@ -63,27 +64,35 @@ export const MyEventForm = () => {
         startTime: '',
     });
 
+    const [address, setAddress] = React.useState<string>('');
+    const [endAddress, setEndAddress] = React.useState<string>('');
+
     const { t } = useTranslation();
     
     const raceListRef = React.useRef<any>();
 
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debounceAddressTyping = React.useCallback(debounce((value) => getLocationFromAddress(value), 1000), []);
-
     const onFinish = async (values) => {
-        const { name, startDate, externalUrl, lon, lat, endDate, startTime, description, approximateStartTime_zone } = values;
+        const { name, startDate, externalUrl, lon, lat, endDate, endTime, startTime, description, approximateStartTime_zone, approximateEndTime_zone, endLat, endLon } = values;
         let response;
         let currentDate = moment();
+        let currentTime = moment();
 
-        if (!checkIfDateTimeValid(values, mode)) {
-            handleStartTimeError();
+        const startTimeValidation = handleCheckIsStartTimeValid();
+        const endTimeValidation = handleCheckIsEndDateTimeValid();
+
+        if (!startTimeValidation.isValid || !endTimeValidation.isValid) {
+            setError({ ...startTimeValidation.errors, ...endTimeValidation.errors })
             return;
-        }
+        }        
         
         if (endDate) {
             currentDate = endDate;
+        }
+
+        if (endTime) {
+            currentTime = endTime;
         }
 
         setIsSavingEvent(true);
@@ -93,8 +102,11 @@ export const MyEventForm = () => {
             externalUrl: externalUrl,
             lon: lon,
             lat: lat,
+            endLon: endLon,
+            endLat: endLat,
             description: description,
             approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
+            approximateEndTime: moment(currentDate.format('YYYY-MM-DD') + ' ' + currentTime.format("HH:mm:ss")).utc(),
             startDay: startDate.utc().format('DD'),
             startMonth: startDate.utc().format('MM'),
             startYear: startDate.utc().format('YYYY'),
@@ -103,6 +115,7 @@ export const MyEventForm = () => {
             endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
             approximateStartTime_zone: approximateStartTime_zone,
+            approximateEndTime_zone: approximateEndTime_zone,
             isPrivate: false,
         };
 
@@ -166,27 +179,65 @@ export const MyEventForm = () => {
         }
     }
 
-    const onChoosedLocation = (lat, lon) => {
-        form.setFieldsValue({
-            lat: lat,
-            lon: lon
-        });
+    const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
+        
+        if (selector === 'start') {
+            form.setFieldsValue({
+                lat: lat,
+                lon: lon
+            });
+        } else {
+            form.setFieldsValue({
+                endLat: lat,
+                endLon: lon
+            });
+        }
 
         // Select timezone
         const currentTimezone = tzLookup(lat, lon);
-        form.setFieldsValue({ approximateStartTime_zone: currentTimezone });
+
+        if (selector === 'start') {
+            form.setFieldsValue({ approximateStartTime_zone: currentTimezone });
+        } else {
+            form.setFieldsValue({ approximateEndTime_zone: currentTimezone })
+        }
 
 
         // Get address
-        Geocode.fromLatLng(parseFloat(lat), parseFloat(lon)).then(
-            (response) => {
-                const address = response.results[0].formatted_address;
-                form.setFieldsValue({ location: address });
-            },
-            (error) => {
-                console.error(error);
+        if (shouldFetchAddress) {
+            Geocode.fromLatLng(parseFloat(lat), parseFloat(lon)).then(
+                (response) => {
+                    const address = response.results[0].formatted_address;
+                    
+                    if (selector === 'start') {
+                        form.setFieldsValue({ location: address });
+                        setAddress(address);
+                    } else {
+                        form.setFieldsValue({ endLocation: address });
+                        setEndAddress(address);
+                    }
+                },
+                (error) => {
+                    console.error(error);
+                }
+            );
+        }
+
+        if (shouldUpdateCoordinate) {
+            
+            if (selector === 'start') {
+                setCoordinates({
+                    lat: lat,
+                    lon: lon
+                });
+            } else {
+                setEndCoordinates({
+                    lat: lat, 
+                    lon: lon
+                })
             }
-        );
+            
+        }
     }
 
     const initMode = async () => {
@@ -227,8 +278,178 @@ export const MyEventForm = () => {
         form.resetFields();
     }
 
-    const checkIfDateTimeValid = (values, mode) => {
-        if (mode === MODE.UPDATE) return true;
+    const handleFieldChange = (field, value) => {
+        const currentError = { ...error };
+        currentError[field] = '';
+
+        let accumulatedError = {};
+
+        if (field === 'startDate') {
+            // Check start date
+            const checkStartTimeResult = handleCheckIsStartTimeValid();
+            accumulatedError = { ...checkStartTimeResult.errors };
+
+            // Check end date only
+            const checkEndDateResult = handleCheckIsEndDateValid();
+            accumulatedError = { ...accumulatedError, ...checkEndDateResult.errors }
+            
+            if (checkEndDateResult.isValid) {
+                // If date valid, compare (start and end) date-time
+                const checkEndDateTimeResult = handleCheckIsEndDateTimeValid();
+                accumulatedError = { ...accumulatedError, ...checkEndDateTimeResult.errors }
+            }
+        }
+
+        if (field === 'startTime') {
+            // Check start date
+            const checkStartTimeResult = handleCheckIsStartTimeValid();
+            accumulatedError = { ...checkStartTimeResult.errors };
+
+            // Compare (start and end) date-time
+            const checkEndDateTimeResult = handleCheckIsEndDateTimeValid();
+            accumulatedError = { ...accumulatedError, ...checkEndDateTimeResult.errors }
+        }
+
+        if (field === 'endDate' || field === 'endTime') {
+            const checkEndDateTimeResult = handleCheckIsEndDateTimeValid();
+            accumulatedError = { ...accumulatedError, ...checkEndDateTimeResult.errors }
+        }
+
+        setError({ ...error, ...accumulatedError });
+    };
+
+    // Check if endDate > startDate and reset if false
+    const handleCheckIsEndDateValid = () => {
+        const { startDate, endDate } = form.getFieldsValue();
+        if (!endDate) {
+            form.setFieldsValue({ endTime: null });
+            return {
+                isValid: true,
+                errors: { endDate: null, endTime: null }
+            };
+        }
+
+        const startDt = startDate._d.getTime();
+        const endDt = endDate._d.getTime();
+
+        if (startDt < endDt) return {
+            isValid: true,
+            errors: { endDate: null, endTime: null }
+        };
+        
+        form.setFieldsValue({ endTime: null });
+        return {
+            isValid: false,
+            errors: { endDate: t(translations.my_event_create_update_page.error_enddate_should_greater_than_startdate) }
+        };        
+    }
+
+    const handleCheckIsEndDateTimeValid = () => {
+        const { startDate, endDate, startTime, endTime } = form.getFieldsValue();
+        setError({ ...error, endDate: null, endTime: null });
+
+        if (!endDate && !endTime) {
+            return {
+                isValid: true,
+                errors: { endDate: null, endTime: null }
+            };
+        }
+
+        if (!endDate) {
+            form.setFieldsValue({ endTime: null });
+            return {
+                isValid: false,
+                errors: { endDate: t(translations.my_event_create_update_page.error_enddate_should_selected) }
+            };
+        };
+
+        if (!endTime) {
+            return {
+                isValid: false,
+                errors: { endTime: t(translations.my_event_create_update_page.error_endtime_should_selected) }
+            };
+        }
+
+        const selectedStartDate = (startDate || moment())?.toObject();
+        const selectedStartTime = (startTime || moment())?.toObject();
+        const selectedStartDateTime = new Date(selectedStartDate.years, selectedStartDate.months, selectedStartDate.date, selectedStartTime.hours, selectedStartTime.minutes, selectedStartTime.seconds);
+
+
+        const selectedEndDate = (endDate || moment())?.toObject();
+        const selectedEndTime = (endTime || moment())?.toObject();
+        const selectedEndDateTime = new Date(selectedEndDate.years, selectedEndDate.months, selectedEndDate.date, selectedEndTime.hours, selectedEndTime.minutes, selectedEndTime.seconds);
+
+        form.setFieldsValue({ endTime: endTime || moment() })
+        
+        if (selectedEndDateTime.getTime() + 5000 > selectedStartDateTime.getTime()) 
+            return {
+                isValid: true,
+                errors: { endDate: null, endTime: null }
+            };
+
+        return {
+            isValid: false,
+            errors: {
+                endTime: t(translations.my_event_create_update_page.error_endtime_shouldgreater_starttime)
+            }
+        }
+    }
+
+    const handleAddressChange = (addr) => {
+        setAddress(addr);
+    }
+
+    const handleEndAddressChange = (addr) => {
+        setEndAddress(addr);
+
+        if (!addr) {
+            form.setFieldsValue({
+                approximateEndTime_zone: null,
+                endLocation: ''
+            });
+
+            setEndCoordinates(null);
+        }
+    }
+
+    const handleSelectAddress = (addr) => {
+        setAddress(addr);
+        geocodeByAddress(addr)
+            .then(results => getLatLng(results[0]))
+            .then(coordinate => onChoosedLocation(coordinate.lat, coordinate.lng, false, true))
+            .catch(error => console.log('Geocode map err', error))
+    }
+
+    const handleSelectEndAddress = (addr) => {
+        setEndAddress(addr);
+
+        if (!addr) { 
+            form.setFieldsValue({ 
+                approximateEndTime_zone: null,
+                endLocation: ''
+            });
+
+            setEndCoordinates(null);
+
+            return;
+        }
+
+        geocodeByAddress(addr)
+            .then(results => getLatLng(results[0]))
+            .then(coordinate => onChoosedLocation(coordinate.lat, coordinate.lng, false, true, 'end'))
+            .catch(error => console.log('Geocode map err', error))
+    }
+
+    const handleCheckIsStartTimeValid = () => {
+        const values = form.getFieldsValue();
+        setError({ ...error, startDate: null, startTime: null });
+
+        if (mode === MODE.UPDATE) {
+            return {
+                isValid: true,
+                errors: { startDate: null, endDate: null }
+            }
+        };
 
         const { startDate, startTime } = values;
         const currentDate = new Date();
@@ -237,31 +458,17 @@ export const MyEventForm = () => {
         const selectedTime = (startTime || moment())?.toObject();
         const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
 
-        if (selectedDateTime.getTime() + 3000 <= currentDate.getTime()) return false;
-        return true;
-    }
+        if (selectedDateTime.getTime() + 3000 > currentDate.getTime()) {
+            return {
+                isValid: true,
+                errors: { startDate: null, startTime: null }
+            }
+        };
 
-    const handleFieldChange = (field, value) => {
-        const currentError = { ...error };
-        currentError[field] = '';
-        setError(currentError);
-
-        if (field === 'startTime' || field === 'startDate') handleStartTimeChange();
-    };
-
-    const handleStartTimeChange = () => {
-        const values = form.getFieldsValue();
-
-        if (!checkIfDateTimeValid(values, mode)) {
-            handleStartTimeError();
-            return;
+        return {
+            isValid: false,
+            errors: { startTime: t(translations.my_event_create_update_page.error_starttime_shouldgreater_currenttime) }
         }
-
-        setError({ ...error, startTime: '' });
-    }
-
-    const handleStartTimeError = () => {
-        setError({ startTime: t(translations.my_event_create_update_page.starttime_must_be_in_future) });
     }
 
     const renderErrorField = (error, field) => {
@@ -278,6 +485,18 @@ export const MyEventForm = () => {
                 onChoosedLocation(coords.latitude, coords.longitude);
             });
         }
+    }
+
+    const handleRemoveEventLocation = () => {
+        setEndAddress('');
+        setEndCoordinates(null);
+        form.setFieldsValue({
+            approximateEndTime_zone: null,
+            endLocation: '',
+            endLat: null,
+            endLon: null
+        });
+
     }
 
     React.useEffect(() => {
@@ -305,25 +524,16 @@ export const MyEventForm = () => {
         });
     }
 
-    const getLocationFromAddress = (value) => {
-        Geocode.fromAddress(value).then(
-            (response) => {
-                const { lat, lng } = response.results[0].geometry.location;
-                setCoordinates({
-                    lat: lat,
-                    lng: lng
-                });
-            },
-            (error) => {
-                console.error(error);
-            }
-        );
-    }
-
     const dateLimiter = (current) => {
         if (mode === MODE.UPDATE) return false;
         return current && current < moment().startOf('day');
     };
+
+    const endDateLimiter = (current) => {
+        const { startDate } = form.getFieldsValue();
+        const currentStartDate = (startDate || moment());
+        return current && current < currentStartDate.startOf('day');
+    }
 
     return (
         <Wrapper>
@@ -414,19 +624,79 @@ export const MyEventForm = () => {
                                     <SyrfInputField disabled />
                                 </Form.Item>
                             </Col>
+
+                            <Col xs={24} sm={24} md={12} lg={12}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.latitude)}</SyrfFieldLabel>}
+                                    name="endLat"
+                                    rules={[{ required: false }]}
+                                >
+                                    <SyrfInputField disabled />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={12} lg={12}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.latitude)}</SyrfFieldLabel>}
+                                    name="endLon"
+                                    rules={[{ required: false }]}
+                                >
+                                    <SyrfInputField disabled />
+                                </Form.Item>
+                            </Col>
                         </Row>
 
+                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoosedLocation={onChoosedLocation} />
+
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.location)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_location)}</SyrfFieldLabel>}
                             name="location"
                             className="event-location-step"
-                            data-tip={t(translations.tip.event_location)}
+                            data-tip={t(translations.tip.event_location_start)}
                             rules={[{ required: true, message: t(translations.forms.location_is_required) }]}
                         >
-                            <SyrfInputField onChange={(e) => debounceAddressTyping(e.target.value)} autoCorrect="off" />
+                            <PlacesAutocomplete
+                                value={address}
+                                onChange={handleAddressChange}
+                                onSelect={handleSelectAddress}
+                            >
+                                 {({ getInputProps, suggestions, getSuggestionItemProps }) => {
+                                    return (
+                                    <>
+                                        <SyrfInputField
+                                            {...getInputProps({
+                                                placeholder: t(translations.profile_page.update_profile.search_places),
+                                                className: 'location-search-input',
+                                            })}
+                                            value={address}
+                                            autoCorrect="off"
+                                        />
+                                        {suggestions.length > 0 && <StyledPLaceDropdown>
+                                            {suggestions.map((suggestion) => {
+                                                const className = suggestion.active
+                                                    ? 'suggestion-item--active'
+                                                    : 'suggestion-item';
+                                                // inline style for demonstration purpose
+                                                const style = suggestion.active
+                                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                                return (
+                                                    <Menu.Item
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className,
+                                                            style,
+                                                        })}
+                                                        key={suggestion.index}
+                                                    >
+                                                        <span>{suggestion.description}</span>
+                                                    </Menu.Item>
+                                                );
+                                            })}
+                                        </StyledPLaceDropdown>}
+                                    </>
+                                )}}   
+                            </PlacesAutocomplete>
                         </Form.Item>
-
-                        <LocationPicker coordinates={coordinates} setFormChanged={setFormChanged} onChoosedLocation={onChoosedLocation} />
 
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
@@ -507,6 +777,126 @@ export const MyEventForm = () => {
                         </Row>
 
                         <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_location)}</SyrfFieldLabel>}
+                            name="endLocation"
+                            className="event-location-step"
+                            data-tip={t(translations.tip.event_location_end)}
+                        >
+                            <PlacesAutocomplete
+                                value={address}
+                                onChange={handleEndAddressChange}
+                                onSelect={handleSelectEndAddress}
+                            >
+                                 {({ getInputProps, suggestions, getSuggestionItemProps }) => {
+                                    return (
+                                    <>
+                                        <SyrfInputField
+                                            {...getInputProps({
+                                                placeholder: t(translations.profile_page.update_profile.search_places),
+                                                className: 'location-search-input',
+                                            })}
+                                            allowClear
+                                            value={endAddress}
+                                            autoCorrect="off"
+                                        />
+                                        {suggestions.length > 0 && <StyledPLaceDropdown>
+                                            {suggestions.map((suggestion) => {
+                                                const className = suggestion.active
+                                                    ? 'suggestion-item--active'
+                                                    : 'suggestion-item';
+                                                // inline style for demonstration purpose
+                                                const style = suggestion.active
+                                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                                return (
+                                                    <Menu.Item
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className,
+                                                            style,
+                                                        })}
+                                                        key={suggestion.index}
+                                                    >
+                                                        <span>{suggestion.description}</span>
+                                                    </Menu.Item>
+                                                );
+                                            })}
+                                        </StyledPLaceDropdown>}
+                                    </>
+                                )}}   
+                            </PlacesAutocomplete>
+                        </Form.Item>
+
+                        <Row gutter={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_date)}</SyrfFieldLabel>}
+                                    name="endDate"
+                                    className="event-start-date-step"
+                                    data-tip={t(translations.tip.event_end_date)}
+                                    validateStatus={(renderErrorField(error, 'endDate') && 'error') || ''}
+                                    help={renderErrorField(error, 'endDate')}
+                                >
+                                    <DatePicker
+                                        onChange={(val) => handleFieldChange('endDate', val)} 
+                                        showToday={true}
+                                        disabledDate={endDateLimiter}
+                                        className="syrf-datepicker"
+                                        style={{ width: '100%' }}
+                                        dateRender={current => {
+                                            return (
+                                                <div className="ant-picker-cell-inner">
+                                                    {current.date()}
+                                                </div>
+                                            );
+                                        }}
+                                    />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_time)}</SyrfFieldLabel>}
+                                    name="endTime"
+                                    className="event-start-time-step"
+                                    data-tip={t(translations.tip.event_end_time)}
+                                    validateStatus={(renderErrorField(error, 'endTime') && 'error') || ''}
+                                    help={renderErrorField(error, 'endTime')}
+                                >
+                                    <TimePicker 
+                                        onChange={(val) => handleFieldChange('endTime', val)} 
+                                        className="syrf-datepicker" 
+                                        defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} 
+                                    />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.timezone)}</SyrfFieldLabel>}
+                                    name="approximateEndTime_zone"
+                                    className="event-time-zone-step"
+                                    data-tip={t(translations.tip.event_time_zone)}
+                                >
+                                    <SyrfFormSelect placeholder={t(translations.my_event_create_update_page.timezone)}
+                                        showSearch
+                                        filterOption={(input, option) => {
+                                            if (option) {
+                                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+
+                                            return false;
+                                        }}
+                                    >
+                                        {
+                                            renderTimezoneDropdownList()
+                                        }
+                                    </SyrfFormSelect>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
+                        <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
                             name="externalUrl"
                             className="event-external-website-step"
@@ -546,6 +936,7 @@ export const MyEventForm = () => {
                     </>
                 )
             }
+
             <ReactTooltip />
         </Wrapper>
     )
@@ -558,4 +949,12 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 100%;
     margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
+`;
+
+const StyledPLaceDropdown = styled(Menu)`
+    position: absolute;
+    z-index: 2;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    width: 100%;
 `;

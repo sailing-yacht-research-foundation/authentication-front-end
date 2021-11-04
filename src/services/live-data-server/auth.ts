@@ -37,7 +37,8 @@ export const anonymousLogin = () => {
     }).then(response => {
         return {
             success: true,
-            token: response.data?.token
+            token: response.data?.token,
+            data: response.data
         }
     }).catch(error => {
         return {
@@ -60,6 +61,24 @@ export const validateToken = (token) => {
     }).catch(error => {
         return {
             success: false,
+            error: error
+        }
+    })
+}
+
+
+export const renewToken = (refreshToken) => {
+    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/renew-token`, {
+        refresh_token: refreshToken
+    })
+    .then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            sucess: false,
             error: error
         }
     })

@@ -16,9 +16,8 @@ export function EventDetailPage() {
 
 const StyledWrapper = styled(Wrapper)`
     padding: 0 0;
-    margin-top: 100px;
 
     ${media.medium`
-        padding: 0 50px;
+        padding: 0 0px;
     `}
 `;

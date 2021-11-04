@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, DatePicker, Row, Col, TimePicker, Space } from 'antd';
+import { Spin, Form, Divider, DatePicker, Row, Col, TimePicker, Space, message } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea, SyrFieldDescription } from 'app/components/SyrfForm';
 import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
@@ -62,16 +62,23 @@ export const CompetitionUnitForm = () => {
 
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
 
+    const [eventData, setEventData] = React.useState<any>(null);
+
     const [groups, setGroups] = React.useState<any[]>([]);
 
     const [, setLastCreatedRace] = React.useState<any>({});
 
     const [courses, setCourses] = React.useState<any[]>([]);
 
+    const [error, setError] = React.useState<any>({});
+
     const onFinish = async (values) => {
         let { name, startDate, startTime, isCompleted, calendarEventId, vesselParticipantGroupId, description, approximateStart_zone, courseId } = values;
         let response;
         calendarEventId = eventId || calendarEventId;
+
+        const checkStartTimeValidResult = handleCheckIsStartTimeValid();
+        if (!checkStartTimeValidResult.isValid) return;
 
         setIsSaving(true);
 
@@ -120,6 +127,9 @@ export const CompetitionUnitForm = () => {
     }
 
     const initModeAndData = async () => {
+        const isEventExist = await getEventData();
+        if (!isEventExist) return;
+
         if (location.pathname.includes(MODE.UPDATE)) {
             setFormChanged(false);
             setMode(MODE.UPDATE);
@@ -137,12 +147,25 @@ export const CompetitionUnitForm = () => {
                 if (response.data?.boundingBox?.coordinates)
                     setBoundingBoxCoordinates(response.data?.boundingBox?.coordinates);
             } else {
-                history.push('/404');
+                history.push(`/events/${eventId}`);
+                message.error(t(translations.competition_unit_create_update_page.race_not_found));
             }
         } else {
             setDefaultNameForRace();
             setDefaultTimeForRace();
         }
+    }
+
+    const getEventData = async () => {
+        const response = await getEventById(eventId);
+        if (response.success) {
+            setEventData(response.data);
+            return true;
+        }
+
+        history.push('/events');
+        message.error(t(translations.competition_unit_create_update_page.event_not_found));
+        return false;
     }
 
     const setDefaultClassForRace = (vesselGroups) => {
@@ -212,6 +235,46 @@ export const CompetitionUnitForm = () => {
         }
     }
 
+    const renderErrorField = (error, field) => {
+        return error?.[field] || false;
+    }
+
+    const handleFieldChange = (field, value) => {
+        const currentError = { ...error };
+        currentError[field] = '';
+
+        let accumulatedError = {};
+
+        if (field === 'startDate' || field === 'startTime') {
+            const checkStartTimeResult = handleCheckIsStartTimeValid();
+            accumulatedError = { ...checkStartTimeResult.errors };
+        }
+
+        setError({ ...accumulatedError })
+    }
+
+    const handleCheckIsStartTimeValid = () => {
+        const values = form.getFieldsValue();
+        const { startDate, startTime } = values;
+
+        const selectedDate = (startDate || moment())?.toObject();
+        const selectedTime = (startTime || moment())?.toObject();
+        const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
+        const eventDateTime = new Date(eventData?.approximateStartTime);
+
+        if (selectedDateTime.getTime() > eventDateTime.getTime()) {
+            return {
+                isValid: true,
+                errors: { startDate: null, startTime: null }
+            }
+        };
+
+        return {
+            isValid: false,
+            errors: { startTime: t(translations.competition_unit_create_update_page.error_starttime_greater_eventtime) }
+        }
+    }
+
     React.useEffect(() => {
         initUserLocation();
         initModeAndData();
@@ -234,7 +297,7 @@ export const CompetitionUnitForm = () => {
 
     const goBack = () => {
         if (history.action !== 'POP') history.goBack();
-        else history.push('/races');
+        else history.push(`/events/${eventId}`);
     }
 
     const renderCourseDropdownList = () => {
@@ -248,6 +311,14 @@ export const CompetitionUnitForm = () => {
             return <Select.Option key={index} value={timezone.name}>{timezone.name + ' ' + renderTimezoneInUTCOffset(timezone.name)}</Select.Option>
         });
     }
+
+    const dateLimiter = (current) => {
+        if (!eventData) {
+            return current && current < moment().startOf('day');
+        }
+
+        return current && current < moment(new Date(eventData?.approximateStartTime)).startOf('day');
+    };
 
     return (
         <Wrapper>
@@ -329,10 +400,13 @@ export const CompetitionUnitForm = () => {
                                     }]}
                                 >
                                     <DatePicker
+                                        allowClear={false}
                                         showToday={true}
                                         className="syrf-datepicker"
                                         data-tip={t(translations.tip.race_start_time)}
                                         style={{ width: '100%' }}
+                                        disabledDate={dateLimiter}
+                                        onChange={(val) => handleFieldChange('startDate', val)}
                                         dateRender={current => {
                                             return (
                                                 <div className="ant-picker-cell-inner">
@@ -350,8 +424,15 @@ export const CompetitionUnitForm = () => {
                                     label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_time)}</SyrfFieldLabel>}
                                     name="startTime"
                                     rules={[{ required: true, message: t(translations.forms.start_time_is_required) }]}
+                                    validateStatus={(renderErrorField(error, 'startTime') && 'error') || ''}
+                                    help={renderErrorField(error, 'startTime')}
                                 >
-                                    <TimePicker className="syrf-datepicker" defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
+                                    <TimePicker 
+                                        allowClear={false} 
+                                        className="syrf-datepicker" 
+                                        onChange={(val) => handleFieldChange('startTime', val)}
+                                        defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} 
+                                    />
                                 </Form.Item>
                             </Col>
 

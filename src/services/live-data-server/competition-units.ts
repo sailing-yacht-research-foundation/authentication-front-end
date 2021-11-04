@@ -80,11 +80,12 @@ export const create = (calendarEventId, data) => {
     })
 }
 
-export const getAllByCalendarEventId = (calendarEventId, page) => {
+export const getAllByCalendarEventId = (calendarEventId, page, size = 10) => {
     const userId: any = localStorage.getItem('user_id');
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
-            page: page
+            page: page,
+            size: size,
         }
     })
         .then(response => {

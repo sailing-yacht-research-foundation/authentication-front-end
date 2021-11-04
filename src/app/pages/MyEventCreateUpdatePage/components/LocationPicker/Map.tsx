@@ -5,17 +5,23 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import ReactDOMServer from 'react-dom/server';
 
 let marker;
+let endMarker;
 
 export const Map = (props) => {
 
-    const { onMapClicked, coordinates, zoom, noMarkerInteraction, setFormChanged } = props;
+    const { onMapClicked, coordinates, endCoordinates, zoom, noMarkerInteraction, setFormChanged, option } = props;
 
     const map = useMap();
+    const selectedOption = React.useRef("start");
 
     const initMapClickEvent = () => {
         map.on('click', (e) => {
-            onMapClicked(e.latlng.wrap().lat, e.latlng.wrap().lng);
-            setMarker(e.latlng);
+            const selectedOpt = selectedOption.current;
+            onMapClicked(e.latlng.wrap().lat, e.latlng.wrap().lng, selectedOpt);
+            
+            if (selectedOpt === "start") setMarker(e.latlng);
+            else setEndMarker(e.latlng);
+            
             if (setFormChanged) {
                 setFormChanged(true);
             }
@@ -26,12 +32,29 @@ export const Map = (props) => {
         if (marker) map.removeLayer(marker);
         marker = new L.marker(coordinates, {
             icon: L.divIcon({
-                html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#fff', fontSize: '35px' }} />),
+                html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#FFF', fontSize: '35px' }} />),
                 iconSize: [20, 20],
                 iconAnchor: [18, 42],
                 className: 'my-race'
             })
         }).addTo(map);
+    }
+
+    const setEndMarker = (coordinates) => {
+        if (endMarker) map.removeLayer(endMarker);
+        endMarker = new L.marker(coordinates, {
+            icon: L.divIcon({
+                html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#4F61A5', fontSize: '35px' }} />),
+                iconSize: [20, 20],
+                iconAnchor: [18, 42],
+                className: 'my-race'
+            })
+        }).addTo(map);
+    }
+
+    const removeEndMarker = () => {
+        if (endMarker) map.removeLayer(endMarker);
+        endMarker = undefined;
     }
 
     const initializeMapView = () => {
@@ -51,9 +74,18 @@ export const Map = (props) => {
     React.useEffect(() => {
         map.setView(coordinates, 10);
         setMarker(coordinates);
-        onMapClicked(coordinates.lat, coordinates.lng);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coordinates]);
+
+    React.useEffect(() => {
+        if (endCoordinates) {
+            map.setView(endCoordinates, 10);
+            setEndMarker(endCoordinates);
+        } else {
+            removeEndMarker();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [endCoordinates])
 
     React.useEffect(() => {
         initializeMapView();
@@ -61,6 +93,10 @@ export const Map = (props) => {
             initMapClickEvent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        selectedOption.current = option;
+    }, [option])
 
     return (
         <>

@@ -24,6 +24,7 @@ export const EventDetail = () => {
     const [event, setEvent] = React.useState<any>({});
 
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
+    const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
 
     const [isFetchingEvent, setIsFetchingEvent] = React.useState<boolean>(false);
 
@@ -43,12 +44,22 @@ export const EventDetail = () => {
         setIsFetchingEvent(false);
 
         if (response.success) {
+            const { data } = response;
 
             setEvent(response.data);
             setCoordinates({
-                lat: response.data.lat,
-                lng: response.data.lon
+                lat: data.lat,
+                lng: data.lon
             });
+
+            if (data.endLat && data.endLon) {
+                setEndCoordinates({
+                    lat: data.endLat,
+                    lng: data.endLon
+                });
+            } else {
+                setEndCoordinates(null);
+            }
         } else {
             message.error(t(translations.event_detail_page.event_not_found));
             history.push('/events');
@@ -66,7 +77,6 @@ export const EventDetail = () => {
 
     return (
         <Spin spinning={isFetchingEvent}>
-            <LocationPicker onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} height="270px" noPadding />
             <PageHeaderContainerResponsive>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => goBack()}>
@@ -93,12 +103,16 @@ export const EventDetail = () => {
                 </EventActions>
             </PageHeaderContainerResponsive>
 
-            <EventSection>
-                <EventSectionHeading>{t(translations.event_detail_page.about_this_event)}</EventSectionHeading>
-                <EventDescription>
-                    {event.description ? event.description : t(translations.home_page.filter_tab.filter_result.no_description)}
-                </EventDescription>
-            </EventSection>
+            <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
+            
+            <EventDescriptionContainer>
+                <EventSection>
+                    <EventSectionHeading>{t(translations.event_detail_page.about_this_event)}</EventSectionHeading>
+                    <EventDescription>
+                        {event.description ? event.description : t(translations.home_page.filter_tab.filter_result.no_description)}
+                    </EventDescription>
+                </EventSection>
+            </EventDescriptionContainer>
 
             <EventSection>
                 {event.id && <RaceList event={event} />}
@@ -111,6 +125,7 @@ const EventTitle = styled.h2``;
 
 const EventDate = styled.p`
  font-size: 13px;
+ margin-bottom: 0px;
 `;
 
 const EventHoldBy = styled.div`
@@ -134,6 +149,7 @@ const EventActions = styled.div`
 const EventDescription = styled.p`
     padding: 0px;
     text-align: left;
+    margin-bottom: 0px;
 `;
 
 const EventSectionHeading = styled.h3`
@@ -142,4 +158,8 @@ const EventSectionHeading = styled.h3`
 
 const EventSection = styled.div`
     padding: 10px 15px;
+`;
+
+const EventDescriptionContainer = styled.div`
+    margin: 16px 0px;
 `;
