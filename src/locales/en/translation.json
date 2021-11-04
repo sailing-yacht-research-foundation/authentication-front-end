@@ -228,8 +228,14 @@
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!",
     "error_encounted_when_delete_account": "An error happened when deleting your account"
   },
-  "privacy_page": {},
-  "eulapage": {},
+  "privacy_page": {
+    "version": "version",
+    "agree": "agree"
+  },
+  "eulapage": {
+    "version": "version",
+    "agree": "agree"
+  },
   "not_found_page": {
     "page_not_found": "Page not found",
     "return_to_homepage": "Return to Home page"
@@ -329,7 +335,10 @@
     "country": "Country",
     "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
     "download_icalendar": "Download Icalendar",
-    "races": "Races"
+    "races": "Races",
+    "status_openregistration": "Open for Registration",
+    "status_publicevent": "Public Event",
+    "status_privateevent": "Private Event"
   },
   "competition_unit_list_page": {
     "name": "Name",
@@ -690,7 +699,10 @@
     "new_password": "Your new password.",
     "password_confirmation": "Please confirm you new password.",
     "play_this_track": "Play this track.",
-    "download_icalendar_file": "Download this event as Icalendar."
+    "download_icalendar_file": "Download this event as Icalendar.",
+    "anyone_can_register_event_and_tracking": "Anyone can register for the event and start tracking for it from the mobile app.",
+    "anyone_can_search_view_event": "Anyone can search and view this event.",
+    "only_owner_cansearch_view_event": "Only owner can search and view this event."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
