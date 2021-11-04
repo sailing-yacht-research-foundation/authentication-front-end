@@ -3,10 +3,11 @@
  */
 
 import { eulaActions } from ".";
-import { call, takeLatest, select } from 'redux-saga/effects';
+import { call, takeLatest, select, put } from 'redux-saga/effects';
 import { logVersion } from "services/versioning";
 import { getUser } from "services/live-data-server/user";
 import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
+import { loginActions } from "app/pages/LoginPage/slice";
 
 export function* signEulaVersion(version) {
     const isAuthenticated = yield select(selectIsAuthenticated);
@@ -15,7 +16,10 @@ export function* signEulaVersion(version) {
 
     const response = yield call(getAuthorizedUser);
     
-    if (response.user) yield call(logVersion, response.user?.email, 'eula', version);
+    if (response.user) {
+        yield call(logVersion, response.user?.email, 'eula', version)
+        yield put(loginActions.getUser());
+    };
 }
 
 function getAuthorizedUser() {
