@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest, call } from 'redux-saga/effects';
 import * as slice from '..';
 
 import loginSaga, { getAuthUser } from '../saga';
@@ -19,7 +19,10 @@ describe('login Saga', () => {
       success: true,
       user: {}
     };
+
+    getAuthUserIterator.next();
     const putDescriptor = getAuthUserIterator.next(response).value;
+    
     expect(putDescriptor).toEqual(
       put(slice.loginActions.setUser({})),
     );
