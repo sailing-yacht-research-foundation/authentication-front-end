@@ -12,36 +12,17 @@ import { privacypolicyVersionsFilter } from 'utils/privacy-policy';
 
 import { usePrivacyPolicySlice } from '../slice';
 import { versionList } from './privacyPolicyVersions';
-import { PrivacyPolicyDropdown } from './privacyPolicyDropdown';
 
 export const PrivacyPolicy = () => {
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const [privacyPolicy, setPrivacyPolicy] = React.useState<PrivacyPolicyInterface>(privacypolicyVersionsFilter('', versionList)[0])
-  const [privacyPolicyList, setPrivacyPolicyList] = React.useState<PrivacyPolicyInterface[]>(privacypolicyVersionsFilter('', versionList));
+  const privacyPolicy = React.useRef<PrivacyPolicyInterface>(privacypolicyVersionsFilter('', versionList)[0]).current;
 
   const provicyPolicyActions = usePrivacyPolicySlice().actions;
 
   const user = useSelector(selectUser);
-
-  React.useEffect(() => {
-    handleSelectPrivacyPolicy(user);
-  }, [user]);
-
-  const handleSelectPrivacyPolicy = (user) => {
-    if (!user) return;
-    const privacyPolicies = privacypolicyVersionsFilter(user?.acceptPrivacyPolicyVersion, versionList);
-    
-    setPrivacyPolicyList(privacyPolicies);
-    setPrivacyPolicy(privacyPolicies[0]);
-  }
-
-  const handleSelectVersion = (version) => {
-    const filteredPrivacyPolicy = privacyPolicyList.filter((privacyPolicy) => privacyPolicy.version === version);
-    setPrivacyPolicy(filteredPrivacyPolicy[0]);
-  }
 
   const handleAgree = (privacyPolicy: PrivacyPolicyInterface) => {
     dispatch(provicyPolicyActions.signPolicyVersion(privacyPolicy.version));
@@ -54,7 +35,7 @@ export const PrivacyPolicy = () => {
     <div style={{ minHeight: '100vh', marginTop: '100px', padding: '24px' }}>
       <h1 style={{ marginBottom: '0px' }}>
         Privacy Policy for SYRF&nbsp;
-        <PrivacyPolicyDropdown privacyPolicyList={privacyPolicyList} privacyPolicy={privacyPolicy} onChange={handleSelectVersion} />
+        <Version>{privacyPolicy.version}</Version>
       </h1>
       <ReleaseDate>Release Date: {moment(privacyPolicy.releaseDate).format('LL')}</ReleaseDate>
 
@@ -86,4 +67,9 @@ const ButtonContainer = styled.div`
 
 const ButtonParentContainer = styled.div`
   margin-top: 24px;
+`;
+
+const Version = styled.span`
+  font-size: 16px;
+  color: #999999;
 `;
