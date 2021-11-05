@@ -12,36 +12,17 @@ import { eulaVersionsFilter } from 'utils/eula';
 
 import { useEulaSlice } from '../slice';
 import { versionList } from './eulaVersions';
-import { EulaDropdown } from './eulaDropdown';
 
 export const EULA = () => {
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const [eula, setEula] = React.useState<EulaInterface>(eulaVersionsFilter('', versionList)[0])
-  const [eulaList, setEulaList] = React.useState<EulaInterface[]>(eulaVersionsFilter('', versionList));
+  const eula = React.useRef<EulaInterface>(eulaVersionsFilter('', versionList)[0]).current;
 
   const eulaActions = useEulaSlice().actions;
 
   const user = useSelector(selectUser);
-
-  React.useEffect(() => {
-    handleSelectEula(user);
-  }, [user])
-
-  const handleSelectEula = (user) => {
-    if (!user) return;
-    const eulas = eulaVersionsFilter(user?.acceptEulaVersion, versionList);
-    
-    setEulaList(eulas);
-    setEula(eulas[0]);
-  }
-
-  const handleSelectVersion = (version) => {
-    const filteredEula = eulaList.filter((eula) => eula.version === version);
-    setEula(filteredEula[0]);
-  }
 
   const handleAgree = (eula: EulaInterface) => {
     dispatch(eulaActions.signEulaVersion(eula.version));
@@ -54,7 +35,8 @@ export const EULA = () => {
     <div style={{ minHeight: '100vh', marginTop: '100px', padding: '24px' }}>
       <h1 style={{ marginBottom: '0px' }}>
         End-User License Agreement (EULA) of <span className="app_name"><span className="highlight preview_app_name">LivePing and SYRF Webapps</span></span>&nbsp;
-        <EulaDropdown eulaList={eulaList} eula={eula} onChange={handleSelectVersion} />
+        <Version>{eula.version}</Version>
+        {/* <EulaDropdown eulaList={eulaList} eula={eula} onChange={handleSelectVersion} /> */}
       </h1>
       <ReleaseDate>Release Date: {moment(eula.releaseDate).format('LL')}</ReleaseDate>
       
@@ -86,4 +68,9 @@ const ButtonContainer = styled.div`
 
 const ButtonParentContainer = styled.div`
   margin-top: 24px;
+`;
+
+const Version = styled.span`
+  font-size: 16px;
+  color: #999999;
 `;
