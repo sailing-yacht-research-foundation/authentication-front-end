@@ -166,7 +166,8 @@
     "competition_units": "My Races",
     "vessels": "My Boats",
     "vessel_participant_groups": "Classes",
-    "my_tracks": "My Tracks"
+    "my_tracks": "My Tracks",
+    "groups": "Groups"
   },
   "profile_page": {
     "update_profile": {
@@ -703,7 +704,12 @@
     "download_icalendar_file": "Download this event as Icalendar.",
     "anyone_can_register_event_and_tracking": "Anyone can register for the event and start tracking for it from the mobile app.",
     "anyone_can_search_view_event": "Anyone can search and view this event.",
-    "only_owner_cansearch_view_event": "Only owner can search and view this event."
+    "only_owner_cansearch_view_event": "Only owner can search and view this event.",
+    "delete_group_along_with_all_associated_information": "Delete this group along with all associated information.",
+    "group_description": "Description of the group.",
+    "group_name": "Name of this group.",
+    "group_visibility": "The visibility of this group towards other sailors.",
+    "group_type": "Type of this group."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -736,8 +742,11 @@
     "race_name_must_not_be_longer_than_150_chars":"Race name must not be longer than 150 characters.",
     "event_description_must_not_be_longer_than_255_chars": "Event description must not be longer than 150 characters.",
     "race_description_must_not_be_longer_than_255_chars": "Race description must not be longer than 255 characters.",
+    "group_description_must_not_be_longer_than_255_chars": "Group description must not be longer than 255 characters.",
     "email_must_be_valid":"Please input a valid email.",
-    "search_keyword_is_required": "Search keyword is required."
+    "search_keyword_is_required": "Search keyword is required.",
+    "group_name_is_required": "Group name is required.",
+    "group_name_must_not_be_longer_than_100_chars": "Group name must not be longer than 100 characters."
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",
@@ -756,5 +765,23 @@
     "title": "There's a change to our agreements",
     "description": "In order to use our app, you should agree with our updated agreements",
     "agree": "Agree"
+  },
+  "group_create_update_page": {
+    "create_group": "Create A New Group",
+    "update_group": "Update Group",
+    "delete_group": "Delete Group",
+    "group_is_where_sailors_gather": "Group is where sailors gather.",
+    "group_description": "Group Description",
+    "save_group": "Save Group",
+    "group_name": "Group Name",
+    "group_type": "Group Type",
+    "group_visibility": "Group Visibility",
+    "select_a_visibility": "Select a visibility",
+    "please_choose_a_group_visibility": "Please choose a group visibility",
+    "group_has_a_type_please_choose_one_from_the_list": "Group has a type, please choose one from the list.",
+    "select_a_group_type": "Select a group type.",
+    "successfully_created_a_new_group": "Successfully created a new group.",
+    "successfully_updated_your_group": "Successfully updated your group.",
+    "an_error_happened": "Oops! An error happened when saving this group."
   }
 }
