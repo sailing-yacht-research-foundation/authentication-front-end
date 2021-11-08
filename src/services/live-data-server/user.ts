@@ -82,3 +82,18 @@ export const uploadAvatar = (formData) => {
         }
     }); 
 }
+
+export const updateAgreements = (data) => {
+    return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/accept-eula`, data)
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        })
+}

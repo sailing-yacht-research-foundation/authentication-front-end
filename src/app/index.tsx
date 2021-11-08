@@ -58,6 +58,7 @@ import { TutorialModal } from './components/TutorialModal';
 import { TourProvider } from '@reactour/tour';
 import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
+import { AgreementModal } from './components/AgreementModal/AgreementModal';
 
 const { Sider, Content } = Layout;
 
@@ -112,6 +113,7 @@ export function App(props) {
 
   React.useEffect(() => {
     initUserLocation(handleInitUserLocationSuccess, () => {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInitUserLocationSuccess = (position) => {
@@ -150,6 +152,7 @@ export function App(props) {
     <BrowserRouter>
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
+        <AgreementModal />
         {renderSider()}
         <Layout className="site-layout">
           <Content>
