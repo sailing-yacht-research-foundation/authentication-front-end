@@ -1,16 +1,13 @@
 import { EulaInterface } from "types/Eula";
 
-export const eulaVersionsFilter = (currentVersion: string, versionList: EulaInterface[]): EulaInterface[] => {
-  // Select aggreed version and last eula
-  if (currentVersion) {
-    const versionNumber = parseFloat(currentVersion.replaceAll(".", ""));
+export const eulaVersionsFilter = (versionList: EulaInterface[]): EulaInterface[] => {
+  const sortedVersions = versionList.map((eula) => ({
+    ...eula,
+    versionNumber: parseFloat(eula.version.replaceAll(".", "")) / 100,
+  }));
 
-    const filteredEula = versionList.filter((eula) => eula.versionNumber >= versionNumber);
-
-    if (filteredEula.length > 1) return [filteredEula[0], filteredEula[filteredEula.length - 1]];
-    return [filteredEula[0]];
-  }
+  sortedVersions.sort((a, b) => a.versionNumber - b.versionNumber);
 
   // Select last eula
-  return [versionList[versionList.length - 1]];
-}
+  return [sortedVersions[sortedVersions.length - 1]];
+};

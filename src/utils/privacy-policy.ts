@@ -1,16 +1,12 @@
 import { PrivacyPolicyInterface } from "types/PrivacyPolicy";
 
-export const privacypolicyVersionsFilter = (currentVersion: string, versionList: PrivacyPolicyInterface[]): PrivacyPolicyInterface[] => {
-  // Select aggreed version and last eula
-  if (currentVersion) {
-    const versionNumber = parseFloat(currentVersion.replaceAll(".", ""));
+export const privacypolicyVersionsFilter = (versionList: PrivacyPolicyInterface[]): PrivacyPolicyInterface[] => {
+  const sortedVersions = versionList.map((privacyPolicy) => ({
+    ...privacyPolicy,
+    versionNumber: parseFloat(privacyPolicy.version.replaceAll(".", "")) / 100,
+  }));
+  sortedVersions.sort((a, b) => a.versionNumber - b.versionNumber);
 
-    const filteredPrivacyPolicy = versionList.filter((eula) => eula.versionNumber >= versionNumber);
-
-    if (filteredPrivacyPolicy.length > 1) return [filteredPrivacyPolicy[0], filteredPrivacyPolicy[filteredPrivacyPolicy.length - 1]];
-    return [filteredPrivacyPolicy[0]];
-  }
-
-  // Select last eula
-  return [versionList[versionList.length - 1]];
-}
+  // Select last privacy policy
+  return [sortedVersions[sortedVersions.length - 1]];
+};
