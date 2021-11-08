@@ -2,16 +2,23 @@ import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
 import { Input, Form, Select, Divider, DatePicker, Checkbox, Spin, Row, Col } from 'antd';
-import { languagesList, localesList } from 'utils/languages-util';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import { SyrfFormButton } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
+
+import { languagesList, localesList } from 'utils/languages-util';
+import { SyrfFormButton } from 'app/components/SyrfForm';
+import * as eulaVersions from 'app/pages/EULAPage/components/eulaVersions';
+import * as privacyPolicyVersions from 'app/pages/PrivacyPolicyPage/components/privacyPolicyVersions';
 import { translations } from 'locales/translations';
 import { register } from 'services/live-data-server/auth';
 import { TIME_FORMAT } from 'utils/constants';
+import { EulaInterface } from 'types/Eula';
+import { eulaVersionsFilter } from 'utils/eula';
+import { PrivacyPolicyInterface } from 'types/PrivacyPolicy';
+import { privacypolicyVersionsFilter } from 'utils/privacy-policy';
 
 const { Option } = Select;
 
@@ -26,6 +33,9 @@ const disabledDates = [
 
 export const SignupForm = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
+    
+    const eula = React.useRef<EulaInterface>(eulaVersionsFilter(eulaVersions.versionList)[0]).current;
+    const privacyPolicy = React.useRef<PrivacyPolicyInterface>(privacypolicyVersionsFilter(privacyPolicyVersions.versionList)[0]).current;
 
     const history = useHistory();
 
@@ -48,7 +58,9 @@ export const SignupForm = () => {
                 picture: String(Math.floor(Math.random() * 20) + 1),
             },
             enabled: true,
-            credentials: [{ type: "password", value: password, temporary: false }]
+            credentials: [{ type: "password", value: password, temporary: false }],
+            eulaVersion: eula.version,
+            privacyPolicyVersion: privacyPolicy.version
         });
 
         if (response.success) {
