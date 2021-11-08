@@ -56,8 +56,8 @@ export const AgreementModal = React.memo(() => {
     }
 
     const agreedWith = {
-      eula: user.acceptEulaVersion === privacyPolicy.version,
-      privacy: user.acceptPrivacyPolicyVersion === eula.version
+      eula: user.acceptEulaVersion === eula.version,
+      privacy: user.acceptPrivacyPolicyVersion === privacyPolicy.version
     };
 
     if (!agreedWith.eula || !agreedWith.privacy) {
