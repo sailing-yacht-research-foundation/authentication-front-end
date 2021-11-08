@@ -24,8 +24,6 @@ export const privacypolicyVersionsFilter = (versionList: PrivacyPolicyInterface[
     }
   });
 
-  console.log({ sortedVersions });
-
   // Select last privacy policy
   return [sortedVersions[sortedVersions.length - 1]];
 };

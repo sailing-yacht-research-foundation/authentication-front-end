@@ -24,9 +24,6 @@ export const eulaVersionsFilter = (versionList: EulaInterface[]): EulaInterface[
     }
   });
 
-  console.log({ sortedVersions });
-
-
   // Select last eula
   return [sortedVersions[sortedVersions.length - 1]];
 };
