@@ -30,8 +30,8 @@ export const AgreementModal = React.memo(() => {
   const [isAgree, setIsAgree] = React.useState({ eula: false, privacy: false });
   const [isButtonLoading, setIsButtonLoading] = React.useState<boolean>(false);
 
-  const eula = React.useRef<EulaInterface>(eulaVersionsFilter('', eulaVersion.versionList)[0]).current;
-  const privacyPolicy = React.useRef<PrivacyPolicyInterface>(privacypolicyVersionsFilter('', privacyPolicyVersion.versionList)[0]).current;
+  const eula = React.useRef<EulaInterface>(eulaVersionsFilter(eulaVersion.versionList)[0]).current;
+  const privacyPolicy = React.useRef<PrivacyPolicyInterface>(privacypolicyVersionsFilter(privacyPolicyVersion.versionList)[0]).current;
 
   React.useEffect(() => {
     if (!isAuthenticated) setIsModalOpen(false);

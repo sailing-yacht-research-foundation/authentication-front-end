@@ -18,7 +18,7 @@ export const PrivacyPolicy = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const privacyPolicy = React.useRef<PrivacyPolicyInterface>(privacypolicyVersionsFilter('', versionList)[0]).current;
+  const privacyPolicy = React.useRef<PrivacyPolicyInterface>(privacypolicyVersionsFilter(versionList)[0]).current;
 
   const provicyPolicyActions = usePrivacyPolicySlice().actions;
 

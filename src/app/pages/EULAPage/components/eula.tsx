@@ -18,7 +18,7 @@ export const EULA = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const eula = React.useRef<EulaInterface>(eulaVersionsFilter('', versionList)[0]).current;
+  const eula = React.useRef<EulaInterface>(eulaVersionsFilter(versionList)[0]).current;
 
   const eulaActions = useEulaSlice().actions;
 
