@@ -8,7 +8,7 @@ export const initialState: GroupState = {
     groupCurrentPage: 1,
     groupTotalPage: 0,
     invitationsCurrentPage: 1,
-    invitationsTotalPage: 5,
+    invitationsTotalPage: 0,
     invitations: [],
     groups: [],
     members: [],

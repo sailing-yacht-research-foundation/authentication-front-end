@@ -14,6 +14,7 @@ import {
     selectTotal
 } from '../../slice/selectors';
 import { LottieMessage, LottieWrapper } from 'app/components/SyrfGeneral';
+import { renderNumberWithCommas } from 'utils/helpers';
 
 export const FilterResult = (props) => {
 
@@ -61,7 +62,7 @@ export const FilterResult = (props) => {
             {(results.length > 0 && !isSearching) ?
                 (<>
                     <ResultWrapper>
-                        <ResultCountText>{t(translations.home_page.filter_tab.filter_result.about_number_result, { total: String(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })}</ResultCountText>
+                        <ResultCountText>{t(translations.home_page.filter_tab.filter_result.about_number_result, { total: renderNumberWithCommas(total) })}</ResultCountText>
                         {renderResult()}
                     </ResultWrapper>
                     <PaginationWrapper>

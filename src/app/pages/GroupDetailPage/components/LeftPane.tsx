@@ -1,59 +1,68 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AiFillUnlock } from 'react-icons/ai';
-import { UserName, UserAvatarContainer, UserDescription, UserItem, UserInforContainer } from './Main';
+import { renderNumberWithCommas } from 'utils/helpers';
+import { GiEarthAmerica } from 'react-icons/gi';
+import { MdOutlineAddModerator } from 'react-icons/md';
+import { media } from 'styles/media';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
-export const LeftPane = () => {
+const enum GroupVisibility {
+    public = 'PUBLIC',
+    private = 'PRIVATE',
+    moderated = 'MODERATED'
+}
+
+export const LeftPane = (props) => {
+
+    const { t } = useTranslation();
+
+    const { group } = props;
+
+    const renderGroupText = (text) => {
+        const type = String(text).toLowerCase();
+        return type.charAt(0).toUpperCase() + type.slice(1);
+    }
+
+    const renderGroupVisibility = (visibility) => {
+        switch (visibility) {
+            case GroupVisibility.private:
+                return <><AiFillUnlock /> {renderGroupText(visibility)}</>
+            case GroupVisibility.public:
+                return <><GiEarthAmerica /> {renderGroupText(visibility)}</>
+            default:
+                return <><MdOutlineAddModerator /> {renderGroupText(visibility)}</>
+        }
+    }
+
     return (
         <Wrapper>
             <SectionContainer style={{ textAlign: 'center' }}>
-                <GroupAvatar style={{ background: "url('/hero-homepage-3.jpg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
-                <GroupName>SYRF Sailing Group</GroupName>
-                <GroupType>Organization</GroupType>
-                <GroupTypeAndMemeber><AiFillUnlock /> Private Group • 225k members</GroupTypeAndMemeber>
+                <GroupAvatar style={{ background: "url('/default-avatar.jpeg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
+                <GroupName>{group.groupName}</GroupName>
+                <GroupType>{renderGroupText(group.groupType)}</GroupType>
+                <GroupTypeAndMemeber>{renderGroupVisibility(group.visibility)} • {renderNumberWithCommas(group.memberCount)} members</GroupTypeAndMemeber>
             </SectionContainer>
 
-            <SectionContainer>
-                <SectionTitle>About</SectionTitle>
-                <GroupDescription>
-                    We're SYRF Sailing Group.
-                </GroupDescription>
-            </SectionContainer>
-
-            <SectionContainer>
-                <SectionTitle>Admins (10)</SectionTitle>
-                <AdminListContainer>
-                    <UserItem>
-                        <UserAvatarContainer style={{ background: "url('https://cdn.dribbble.com/users/439063/avatars/small/4f4177a2f6c0cc8e75dde4ff6b3705ae.png?1634834389')", backgroundSize: 'cover' }} />
-                        <UserInforContainer>
-                            <UserName>John Doe</UserName>
-                            <UserDescription>Admin</UserDescription>
-                        </UserInforContainer>
-                    </UserItem>
-
-                    <UserItem>
-                        <UserAvatarContainer style={{ background: "url('https://cdn.dribbble.com/users/439063/avatars/small/4f4177a2f6c0cc8e75dde4ff6b3705ae.png?1634834389')", backgroundSize: 'cover' }} />
-                        <UserInforContainer>
-                            <UserName>John Doe</UserName>
-                            <UserDescription>Admin</UserDescription>
-                        </UserInforContainer>
-                    </UserItem>
-
-                    <UserItem>
-                        <UserAvatarContainer style={{ background: "url('https://cdn.dribbble.com/users/439063/avatars/small/4f4177a2f6c0cc8e75dde4ff6b3705ae.png?1634834389')", backgroundSize: 'cover' }} />
-                        <UserInforContainer>
-                            <UserName>John Doe</UserName>
-                            <UserDescription>Admin</UserDescription>
-                        </UserInforContainer>
-                    </UserItem>
-                </AdminListContainer>
-            </SectionContainer>
+            {
+                group.description && <SectionContainer>
+                    <SectionTitle>{t(translations.group.about)}</SectionTitle>
+                    <GroupDescription>
+                        {group.description}
+                    </GroupDescription>
+                </SectionContainer>
+            }
         </Wrapper>
     );
 }
 
 const Wrapper = styled.div`
-    width: 25%;
+    ${media.medium`
+        width: 25%;
+    `}
+
+    width: 100%;
     margin-top: 15px;
 `;
 
@@ -83,10 +92,6 @@ const GroupAvatar = styled.div`
 
 const SectionTitle = styled.h3`
     padding: 10px 0;
-`;
-
-const AdminListContainer = styled.div`
-    text-align: left;
 `;
 
 const GroupType = styled.div`

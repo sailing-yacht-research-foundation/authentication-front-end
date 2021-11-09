@@ -18,8 +18,13 @@ import {
 } from '../slice/selectors';
 import { GroupItemRow } from './GroupItem';
 import { useGroupSlice } from '../slice';
+import { media } from 'styles/media';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 export const GroupList = () => {
+
+    const { t } = useTranslation();
 
     const groups = useSelector(selectGroups);
 
@@ -45,14 +50,23 @@ export const GroupList = () => {
 
     const renderGroupItems = () => {
         if (groups.length > 0)
-            return groups.map(group => <GroupItemRow group={group?.group} />);
-        return <span>Your groups will be shown here.</span>
+            return groups.map(group => <GroupItemRow
+                showGroupButton={false}
+                memberCount={group.memberCount}
+                group={group?.group}
+                status={group.status} />);
+        return <span>{t(translations.group.your_groups_will_be_shown_here)}</span>
     }
 
     const renderGroupResults = () => {
         if (results.length > 0)
-            return results.map(group => <GroupItemRow group={group} />);
-        return <span>Your results will be shown here.</span>
+            return results.map(group => <GroupItemRow
+                memberCount={group.memberCount}
+                status={group.userStatus}
+                showGroupButton={true}
+                onGroupJoinRequested={onGroupJoinRequested}
+                group={group} />);
+        return <span>{t(translations.group.your_results_will_be_shown_here)}</span>
     }
 
     const onPaginationChanged = (page) => {
@@ -63,8 +77,13 @@ export const GroupList = () => {
         dispatch(actions.searchForGroups({ keyword: searchKeyword, page: page }));
     }
 
+    const onGroupJoinRequested = () => {
+        dispatch(actions.searchForGroups({ keyword: searchKeyword, page: searchCurrentPage }));
+    }
+
     React.useEffect(() => {
         dispatch(actions.getGroups(1));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -74,12 +93,12 @@ export const GroupList = () => {
                 results.length === 0 ? (
                     <>
                         <GroupListContainer>
-                            <h3>My Groups</h3>
+                            <h3>{t(translations.group.my_groups)}</h3>
                             <CreateButton onClick={() => {
                                 history.push('/groups/create');
                             }} icon={<AiFillPlusCircle
                                 style={{ marginRight: '5px' }}
-                                size={18} />}>Create a new Group</CreateButton>
+                                size={18} />}>{t(translations.group.create_a_new_group)}</CreateButton>
                         </GroupListContainer>
                         <Spin spinning={isLoading}>
                             {renderGroupItems()}
@@ -91,7 +110,7 @@ export const GroupList = () => {
                 ) : (
                     <>
                         <GroupListContainer>
-                            <h3>Results</h3>
+                            <h3>{t(translations.group.results)}</h3>
                         </GroupListContainer>
                         <Spin spinning={isLoading}>
                             {renderGroupResults()}
@@ -107,8 +126,12 @@ export const GroupList = () => {
 }
 
 const Wrapper = styled.div`
-    width: 65%;
+    width: 100%;
     padding: 0 20px;
+
+    ${media.medium`
+        width: 65%;
+    `}
 `;
 
 const PaginationWrapper = styled.div`

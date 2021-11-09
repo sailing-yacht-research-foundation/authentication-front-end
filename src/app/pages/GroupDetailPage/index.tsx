@@ -1,4 +1,3 @@
-import { Wrapper } from 'app/components/SyrfGeneral';
 import React from 'react';
 import styled from 'styled-components';
 import { Main } from './components/Main';

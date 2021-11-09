@@ -3,7 +3,6 @@
  */
 
 import { call, put, takeLatest } from "@redux-saga/core/effects";
-import { toast } from "react-toastify";
 import { getGroupInvitations, getMyGroups, searchGroups } from "services/live-data-server/groups";
 import { groupActions } from ".";
 
@@ -18,8 +17,6 @@ export function* getGroups({ type, payload }) {
         yield put(groupActions.setGroups(response.data?.rows));
         yield put(groupActions.setCurrentGroupPage(response.data?.page));
         yield put(groupActions.setGroupTotalPage(response.data?.count));
-    } else {
-        toast.error('Oops! We\'re unable to list your groups');
     }
 }
 
@@ -35,8 +32,6 @@ export function* searchForGroups({type, payload }) {
         yield put(groupActions.setSearchResults(response.data?.rows));
         yield put(groupActions.setSearchCurrentPage(response.data?.page));
         yield put(groupActions.setSearchTotalPage(response.data?.count));
-    } else {
-        toast.error('Oops! We\'re unable to search at the moment.');
     }
 }
 
@@ -51,11 +46,8 @@ export function* getInvitations({ type, payload }) {
         yield put(groupActions.setInvitations(response.data?.rows));
         yield put(groupActions.setCurrentInvitationPage(response.data?.page));
         yield put(groupActions.setInvitationTotalPage(response.data?.count));
-    } else {
-        toast.error('Oops! We\'re unable to list your invitations');
     }
 }
-
 
 export default function* groupSaga() {
     yield takeLatest(groupActions.getGroups.type, getGroups);

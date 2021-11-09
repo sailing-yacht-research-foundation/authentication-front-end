@@ -4,24 +4,25 @@ import { getGroupById } from 'services/live-data-server/groups';
 import styled from 'styled-components';
 import { LeftPane } from './LeftPane';
 import { Nav } from './Nav';
-import { RightPane } from './RightPane';
+import { Members } from './Members';
+import { Spin } from 'antd';
+import { media } from 'styles/media';
 
 export const Main = () => {
     const [group, setGroup] = React.useState<any>({});
-    
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const { groupId } = useParams<{ groupId: string }>();
 
     const history = useHistory();
 
-    const getGroupDetail = () => {
+    const getGroupDetail = async () => {
         setIsLoading(true);
-        const response = getGroupById(groupId);
+        const response = await getGroupById(groupId);
         setIsLoading(false);
 
         if (response.success) {
-            console.log(response.data);
             setGroup(response.data);
         } else {
             history.goBack();
@@ -30,57 +31,38 @@ export const Main = () => {
 
     React.useEffect(() => {
         getGroupDetail();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     return (
         <Wrapper>
-            <Nav />
-            <Container>
-                <LeftPane />
-                <RightPane />
-            </Container>
+            <Spin spinning={isLoading}>
+                <Nav group={group} />
+                <Container>
+                    <LeftPane group={group} />
+                    <Members group={group} />
+                </Container>
+            </Spin>
         </Wrapper>
     );
 }
 
 const Wrapper = styled.div`
-    padding: 30px 15px 0 15px;
-    max-width: 80%;
+    max-width: 100%;
     margin: 0 auto;
+    padding: 10px;
+
+    ${media.medium`
+        padding: 30px 15px 0 15px;
+        max-width: 80%;
+    `}
 `;
 
 const Container = styled.div`
     display: flex;
-`;
-
-export const UserItem = styled.div`
-    display: flex;
-    align-items: center;
-    &:not(:last-child) {
-        padding-bottom: 15px;
-        margin-bottom: 15px;
-        border-bottom: 1px solid #eee;
-    }
-`;
-
-export const UserAvatarContainer = styled.div`
-    width: 35px;
-    height: 35px;
-    border: 1px solid #eee;
-    border-radius: 50%;
-    margin-right: 15px;
-`;
-
-export const UserInforContainer = styled.div`
-    display: flex;
     flex-direction: column;
-`;
 
-export const UserName = styled.a`
-    font-weight: bold;
-`;
-
-export const UserDescription = styled.span`
-    color: hsl(210, 8%, 45%);
-    font-size: 13px;
+    ${media.medium`
+        flex-direction: row;
+    `}
 `;

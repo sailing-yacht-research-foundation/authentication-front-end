@@ -1,21 +1,63 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Space, Button } from 'antd';
+import { userAcceptInvitationRequest, userRejectInvitationRequest } from 'services/live-data-server/groups';
+import { useGroupSlice } from '../slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectInvitationCurrentPage } from '../slice/selectors';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
+import { GroupMemberStatus } from 'utils/constants';
 
 export const InvitationItemRow = (props) => {
-    const { invitation } = props;
+
+    const { t } = useTranslation();
+
+    const { request, setIsLoading, reloadInvitationList } = props;
+
+    const { actions } = useGroupSlice();
+
+    const dispatch = useDispatch();
+
+    const invitationCurrentPage = useSelector(selectInvitationCurrentPage);
+
+    const acceptJoinRequest = async () => {
+        setIsLoading(true);
+        const response = await userAcceptInvitationRequest(request.id);
+        setIsLoading(false);
+
+        if (response.success) {
+            dispatch(actions.getGroupInvitations({ page: invitationCurrentPage, invitationType: GroupMemberStatus.invited }));
+            if (reloadInvitationList) reloadInvitationList();
+        } else {
+            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+        }
+    }
+
+    const rejectJoinRequest = async () => {
+        setIsLoading(true);
+        const response = await userRejectInvitationRequest(request.id);
+        setIsLoading(false);
+
+        if (response.success) {
+            dispatch(actions.getGroupInvitations({ page: invitationCurrentPage, invitationType: GroupMemberStatus.invited }));
+            if (reloadInvitationList) reloadInvitationList();
+        } else {
+            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+        }
+    }
 
     return (
         <InvitationItem>
             <ItemInfoContainer>
-                <InvitationItemTitle>SYRF Race Team</InvitationItemTitle>
-                <InvitationItemGroupMembersCount>Organization, 255 members</InvitationItemGroupMembersCount>
-                <InvitationItemInvitedOn>22 Jul 2021</InvitationItemInvitedOn>
+                <InvitationItemTitle>{request.group?.groupName}</InvitationItemTitle>
+                <InvitationItemGroupMembersCount>{request.group?.groupType}</InvitationItemGroupMembersCount>
             </ItemInfoContainer>
             <ItemButtonContainer>
                 <Space size={5}>
-                    <Button type="primary">Join</Button>
-                    <Button>Cancel</Button>
+                    <Button onClick={acceptJoinRequest} type="primary">{t(translations.group.join)}</Button>
+                    <Button onClick={rejectJoinRequest}>{t(translations.group.cancel)}</Button>
                 </Space>
             </ItemButtonContainer>
         </InvitationItem>
@@ -37,11 +79,6 @@ const InvitationItemTitle = styled.a``;
 
 const InvitationItemGroupMembersCount = styled.span`
     margin-top: 5px;
-`;
-
-const InvitationItemInvitedOn = styled.span`
-    margin-top: 5px;
-    color: hsl(210, 8%, 45%);
 `;
 
 const ItemInfoContainer = styled.div`

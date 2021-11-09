@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { media } from 'styles/media';
 import { GroupInvitationList } from './GroupInvitationList';
 
 export const RightPane = () => {
@@ -11,6 +12,11 @@ export const RightPane = () => {
 }
 
 const Wrapper = styled.div`
-    width: 33%;
+    ${media.medium`
+        width: 33%;
+        display: block;
+    `}
+
+    display: none;
     padding-top: 30px;
 `;
