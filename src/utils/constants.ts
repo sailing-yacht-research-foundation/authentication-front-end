@@ -33,3 +33,10 @@ export const supportedSearchCriteria = [
     'source',
     'unstructured_text'
 ];
+
+export const enum GroupMemberStatus {
+    invited = 'INVITED',
+    requested = 'REQUESTED',
+    accepted = 'ACCEPTED',
+    declined = 'DECLINED'
+};

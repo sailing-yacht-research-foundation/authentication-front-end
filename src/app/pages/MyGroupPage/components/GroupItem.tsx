@@ -1,31 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Space, Button, Spin } from 'antd';
+import { Button, Spin } from 'antd';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { requestJoinGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
-
-const enum GroupMemberStatus {
-    invited = 'INVITED',
-    requested = 'REQUESTED',
-    accepted = 'ACCEPTED',
-    declined = 'DECLINED'
-};
+import { renderNumberWithCommas } from 'utils/helpers';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
+import { GroupMemberStatus } from 'utils/constants';
 
 export const GroupItemRow = (props) => {
+
+    const { t } = useTranslation();
 
     const history = useHistory();
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const { group } = props;
+    const { group, showGroupButton, memberCount, status, onGroupJoinRequested } = props;
 
     const renderButtonByStatus = () => {
-        if (group.status === GroupMemberStatus.requested)
-            return <Button shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>Pending</Button>
-        if (!group.status)
-            return <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>Join</Button>
+        if (!showGroupButton) return <></>;
+
+        if (status === GroupMemberStatus.requested)
+            return <Button onClick={e => e.preventDefault()} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</Button>
+        if (!status)
+            return <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
     }
 
     const renderGroupText = (text) => {
@@ -44,35 +45,25 @@ export const GroupItemRow = (props) => {
         setIsLoading(false);
 
         if (response.success) {
-
+            if (onGroupJoinRequested) onGroupJoinRequested();
         } else {
-            toast.error('An error happened when joining this group.');
+            toast.error(t(translations.group.an_error_happened_joining_this_group));
         }
     }
 
     return (
         <GroupItem onClick={showGroupItemDetail}>
+            <GroupItemAvatarContainer>
+                <GroupItemAvatar style={{ background: "url('/default-avatar.jpeg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
+            </GroupItemAvatarContainer>
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>
                 <GroupItemDescription>{group.description}</GroupItemDescription>
-                <GroupType>{renderGroupText(group.groupType)} • {renderGroupText(group.visibility)} • 18 members.</GroupType>
-                <GroupMemberContainer>
-                    <Space size={10}>
-                        <GroupMemberItem style={{ background: "url('https://cdn.dribbble.com/users/439063/avatars/small/4f4177a2f6c0cc8e75dde4ff6b3705ae.png?1634834389')", backgroundSize: 'cover' }}>
-                        </GroupMemberItem>
-                        <GroupMemberItem style={{ background: "url('https://cdn.dribbble.com/users/439063/avatars/small/4f4177a2f6c0cc8e75dde4ff6b3705ae.png?1634834389')", backgroundSize: 'cover' }}>
-                        </GroupMemberItem>
-                        <GroupMemberItem style={{ background: "url('https://cdn.dribbble.com/users/439063/avatars/small/4f4177a2f6c0cc8e75dde4ff6b3705ae.png?1634834389')", backgroundSize: 'cover' }}>
-                        </GroupMemberItem>
-                        <GroupMemberItem>
-                            5+
-                        </GroupMemberItem>
-                    </Space>
-                </GroupMemberContainer>
+                <GroupType>{renderGroupText(group.groupType)} • {renderGroupText(group.visibility)} • {t(translations.group.number_of_members, { numberOfMembers: renderNumberWithCommas(memberCount) })}</GroupType>
             </GroupItemInfoContainer>
             <GroupItemAction>
                 <Spin spinning={isLoading}>
-                {renderButtonByStatus()}
+                    {renderButtonByStatus()}
                 </Spin>
             </GroupItemAction>
         </GroupItem>
@@ -103,24 +94,8 @@ const GroupItemDescription = styled.span`
     color: hsl(210, 8%, 45%);
 `;
 
-const GroupMemberContainer = styled.div`
-    display: flex;
-    margin-top: 10px;
-`;
-
 const GroupType = styled.div`
     padding: 10px 0;
-`;
-
-const GroupMemberItem = styled.div`
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 1px solid #eee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
 
 const GroupItemInfoContainer = styled.div`
@@ -130,3 +105,13 @@ const GroupItemInfoContainer = styled.div`
 const GroupItemAction = styled.div`
     padding: 0 15px;
 `;
+
+const GroupItemAvatarContainer = styled.div`
+    margin-right: 10px;
+`;
+
+const GroupItemAvatar = styled.div`
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+`

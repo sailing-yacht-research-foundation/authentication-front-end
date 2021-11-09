@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spin, Form, Divider, Select } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField, SyrfTextArea, SyrFieldDescription, SyrfFormSelect } from 'app/components/SyrfForm';
-import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -114,6 +114,7 @@ export const GroupForm = () => {
                 form.setFieldsValue({
                     ...response.data
                 });
+                if (!response?.data?.isAdmin) history.push('/404');
             } else {
                 history.push('/404');
             }
@@ -158,19 +159,8 @@ export const GroupForm = () => {
                     </GobackButton>
                     <PageInfoContainer>
                         <PageHeading>{mode === MODE.UPDATE ? t(translations.group_create_update_page.update_group) : t(translations.group_create_update_page.create_group)}</PageHeading>
-                        <PageDescription>{t(translations.group_create_update_page.group_is_where_sailors_gather)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                {mode === MODE.UPDATE && <>
-                    <DeleteButton
-                        data-tip={t(translations.tip.delete_group_along_with_all_associated_information)}
-                        onClick={() => setShowDeleteModal(true)}
-                        danger
-                        icon={<BiTrash
-                            style={{ marginRight: '5px' }}
-                            size={18} />}>{t(translations.group_create_update_page.delete_group)}</DeleteButton>
-                    <ReactTooltip />
-                </>}
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
@@ -212,10 +202,10 @@ export const GroupForm = () => {
                         <Form.Item
                             data-tip={t(translations.tip.group_visibility)}
                             style={{ marginBottom: '10px' }}
-                            label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_type)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_visibility)}</SyrfFieldLabel>}
                             name="visibility"
                             help={<SyrFieldDescription>{t(translations.group_create_update_page.please_choose_a_group_visibility)}</SyrFieldDescription>}
-                            rules={[{required: true}]}
+                            rules={[{ required: true }]}
                         >
                             <SyrfFormSelect placeholder={t(translations.group_create_update_page.select_a_visibility)}>
                                 {renderGroupVisibilityList()}
@@ -228,7 +218,7 @@ export const GroupForm = () => {
                             label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_type)}</SyrfFieldLabel>}
                             name="groupType"
                             help={<SyrFieldDescription>{t(translations.group_create_update_page.group_has_a_type_please_choose_one_from_the_list)}</SyrFieldDescription>}
-                            rules={[{required: true}]}
+                            rules={[{ required: true }]}
                         >
                             <SyrfFormSelect placeholder={t(translations.group_create_update_page.select_a_group_type)}>
                                 {renderGroupTypeList()}
@@ -245,7 +235,7 @@ export const GroupForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <ReactTooltip/>
+            <ReactTooltip />
         </Wrapper >
     )
 }
