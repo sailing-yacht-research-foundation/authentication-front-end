@@ -19,7 +19,6 @@ jobs:
           --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
           --build-arg REACT_APP_TWITTER_CLIENT_ID=''
           --build-arg REACT_APP_INSTAGRAM_CLIENT_ID=''
-          --build-arg REACT_APP_TOKEN_SERVICE_ENDPOINT='https://service.syrf.io'
           --build-arg REACT_APP_ENV='staging'
           --build-arg REACT_APP_MAP_BOX_API_KEY='${{ secrets.MAPBOX_API_KEY }}'
           --build-arg REACT_APP_SYRF_API_URL='https://liveserver-dev.syrf.io'

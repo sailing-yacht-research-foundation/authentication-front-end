@@ -1,4 +1,4 @@
-export const SERVICE_URL = process.env.REACT_APP_TOKEN_SERVICE_ENDPOINT;
+export const SERVICE_URL = process.env.REACT_APP_SYRF_API_URL;
 
 export const SYRF_SERVER = {
     API_URL:process.env.REACT_APP_SYRF_API_URL,
