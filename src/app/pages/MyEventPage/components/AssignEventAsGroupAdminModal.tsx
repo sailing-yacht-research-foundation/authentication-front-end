@@ -1,49 +1,45 @@
 import React from 'react';
-import { Modal, Form, Select } from 'antd';
+import { Modal, Form, Select, Switch } from 'antd';
 import { SyrfFieldLabel } from 'app/components/SyrfForm';
-import { assignAdmin, searchMembers } from 'services/live-data-server/groups';
+import { assignEventAsGroupAdmin, searchMyGroups } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { SyrfFormSelect } from 'app/components/SyrfForm';
-import { useParams } from 'react-router';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'utils/helpers';
 
-export const AddAdminModal = (props) => {
+export const AssignEventAsGroupAdminModal = (props) => {
 
     const { t } = useTranslation();
 
-    const { groupId } = useParams<{ groupId: string }>();
-
     const [form] = Form.useForm();
 
-    const { showModal, setShowModal, onAdminAdded } = props;
+    const { showModal, setShowModal, event } = props;
 
     const [results, setResults] = React.useState<any[]>([]);
 
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
-    const hideAddAdminModal = () => {
+    const hideAssignModal = () => {
         setShowModal(false);
         form.setFieldsValue({
-            uuid: ''
+            groupId: ''
         })
     }
 
-    const setUserAsAdmin = () => {
+    const assignCalendarEventAsGroupAdmin = () => {
         form
             .validateFields()
             .then(async values => {
-                const { uuid } = values;
-                const response = await assignAdmin(groupId, uuid);
+                const { isIndividualAssignment, groupId } = values;
+                const response = await assignEventAsGroupAdmin(groupId, event.id, isIndividualAssignment);
 
                 if (response.success) {
-                    toast.success(t(translations.group.successfully_set_user_as_admin));
-                    hideAddAdminModal();
-                    onAdminAdded();
+                    toast.success(t(translations.group.successfully_added_this_event_as_group_admin));
                 } else {
                     toast.error(t(translations.group.an_error_happened_when_performing_your_request));
                 }
+                hideAssignModal();
             })
             .catch(info => {
                 // no UI/UX throw here so leave this blank for now, just need the validation.
@@ -51,7 +47,7 @@ export const AddAdminModal = (props) => {
     }
 
     const onSearch = async (keyword) => {
-        const response = await searchMembers(groupId, keyword);
+        const response = await searchMyGroups(keyword);
 
         if (response.success) {
             setResults(response.data.rows);
@@ -59,7 +55,7 @@ export const AddAdminModal = (props) => {
     }
 
     const renderSearchResults = () => {
-        return results.map(member => <Select.Option value={member.id}>{member.member?.name + ' - ' + member.email}</Select.Option>)
+        return results.map(group => <Select.Option value={group?.group?.id}>{group?.group?.groupName}</Select.Option>)
     }
 
     return (
@@ -67,8 +63,8 @@ export const AddAdminModal = (props) => {
             title={t(translations.group.assign_new_admin)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
             visible={showModal}
-            onOk={setUserAsAdmin}
-            onCancel={hideAddAdminModal}
+            onOk={assignCalendarEventAsGroupAdmin}
+            onCancel={hideAssignModal}
         >
             <Form
                 form={form}
@@ -77,19 +73,21 @@ export const AddAdminModal = (props) => {
                 style={{ width: '100%' }}
             >
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.group.select_a_member)}</SyrfFieldLabel>}
-                    name="uuid"
-                    rules={[{ required: true, message: t(translations.group.please_select_a_member_to_assign_him_as_admin) }]}
+                    label={<SyrfFieldLabel>{t(translations.group.select_a_group)}</SyrfFieldLabel>}
+                    name="groupId"
+                    rules={[{ required: true, message: t(translations.group.please_choose_a_group) }]}
                 >
                     <SyrfFormSelect
                         showSearch
-                        placeholder={t(translations.group.select_a_member)}
+                        placeholder={t(translations.group.select_a_group)}
                         optionFilterProp="children"
                         onSearch={debounceSearch}
                     >
                         {renderSearchResults()}
                     </SyrfFormSelect>
                 </Form.Item>
+
+                <Form.Item label={<SyrfFieldLabel>{t(translations.group.invididual_assignment_only)}</SyrfFieldLabel>} name="isIndividualAssignment" valuePropName="checked" initialValue={true}> <Switch /> </Form.Item>
             </Form>
         </Modal>
     )

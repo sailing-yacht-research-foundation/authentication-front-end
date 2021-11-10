@@ -847,6 +847,10 @@
     "number_of_invitations": "{{numberOfInvitations}} invitations",
     "please_select_a_member_to_assign_him_as_admin": "Please select a member to assign him as admin.",
     "declined": "Declined",
-    "invitations_title": "Invitations"
+    "invitations_title": "Invitations",
+    "invididual_assignment_only": "Invidual Assignment Only",
+    "select_a_group": "Select a Group",
+    "please_choose_a_group": "Please choose a group from the list.",
+    "successfully_added_this_event_as_group_admin": "Successfully added this event as group admin."
   }
 }

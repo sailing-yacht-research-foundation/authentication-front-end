@@ -84,7 +84,7 @@ export const update = (id, data) => {
     })
 }
 
-export const deleteRace = (id) => {
+export const deleteEvent = (id) => {
     return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${id}`).then(response => {
         return {
             success: true,

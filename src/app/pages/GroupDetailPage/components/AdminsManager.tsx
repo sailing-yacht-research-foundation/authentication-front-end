@@ -57,7 +57,7 @@ export const AdminsManager = (props) => {
         getAdmins(adminCurrentPage);
     }
 
-    const getAdmins = async (page) => {
+    const getAdmins = (page) => {
         dispatch(actions.getAdmins({ groupId, page }));
     }
 

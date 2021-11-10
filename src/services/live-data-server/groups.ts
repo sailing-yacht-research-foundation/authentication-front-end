@@ -20,6 +20,25 @@ export const getMyGroups = (page) => {
         })
 }
 
+export const searchMyGroups = (keyword) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/my-groups`, {
+        params: {
+            q: keyword
+        }
+    })
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        })
+}
+
 export const searchGroups = (searchKeyword, page) => {
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups?q=${searchKeyword}`, {
         params: {
@@ -340,6 +359,24 @@ export const adminAcceptJoinRequest = (requestId, status) => {
 export const userRejectInvitationRequest = (requestId) => {
     return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/reject-invitation`, {
         id: requestId
+    })
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        })
+}
+
+export const assignEventAsGroupAdmin = (groupId: string, eventId: string, isIndividualAssignment: boolean) => {
+    return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/set-as-event-admin`, {
+        calendarEventId: eventId,
+        isIndividualAssignment
     })
         .then(response => {
             return {

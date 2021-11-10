@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import { CompetitionUnitList } from './CompetitionUnitList';
 import { MAP_DEFAULT_VALUE } from 'utils/constants';
 import { BiTrash } from 'react-icons/bi';
-import { DeleteRaceModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
+import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
 import ReactTooltip from 'react-tooltip';
@@ -541,7 +541,7 @@ export const MyEventForm = () => {
 
     return (
         <Wrapper>
-            <DeleteRaceModal
+            <DeleteEventModal
                 race={race}
                 onRaceDeleted={onRaceDeleted}
                 showDeleteModal={showDeleteModal}

@@ -10,6 +10,7 @@ import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { GroupMemberStatus } from 'utils/constants';
 
 export const PendingJoinRequests = (props) => {
 
@@ -70,10 +71,10 @@ export const PendingJoinRequests = (props) => {
     const renderActionButton = (member) => {
         return (
             <Space size={10}>
-                <Button type="primary" onClick={() => decideJoinRequest(member, 'ACCEPTED')} icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
+                <Button type="primary" onClick={() => decideJoinRequest(member, GroupMemberStatus.accepted)} icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
                     {t(translations.group.accept)}
                 </Button>
-                <Button onClick={() => decideJoinRequest(member, 'DECLINED')} icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
+                <Button onClick={() => decideJoinRequest(member, GroupMemberStatus.declined)} icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
                     {t(translations.group.reject)}
                 </Button>
             </Space>

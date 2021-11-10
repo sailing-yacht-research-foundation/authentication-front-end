@@ -53,7 +53,7 @@ export const MembersManager = (props) => {
         return <span>{t(translations.group.we_dont_have_any_members_right_now)}</span>
     }
 
-    const getMembers = async (page) => {
+    const getMembers = (page) => {
         dispatch(actions.getMembers({ page: page, groupId: groupId }))
     }
 
