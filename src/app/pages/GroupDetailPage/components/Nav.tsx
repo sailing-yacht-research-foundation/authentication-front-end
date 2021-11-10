@@ -9,6 +9,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { GroupMemberStatus } from 'utils/constants';
 
 export const Nav = (props) => {
 
@@ -68,7 +69,7 @@ export const Nav = (props) => {
                 </GobackButton>
                 <InnerWrapper>
                     <NavItem className="active">{t(translations.group.members_nav)}</NavItem>
-                    {group?.groupMemberId &&
+                    {group?.groupMemberId && group.status !== GroupMemberStatus.requested &&
                         <NavItem>{renderActionButton()}</NavItem>}
                 </InnerWrapper>
 

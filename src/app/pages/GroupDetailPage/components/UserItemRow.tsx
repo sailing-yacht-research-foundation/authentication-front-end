@@ -15,6 +15,8 @@ export const UserItemRow = (props) => {
         switch (item.status) {
             case GroupMemberStatus.invited:
                 return <StyledTag color="cyan">{t(translations.group.pending)}</StyledTag>;
+            case GroupMemberStatus.requested:
+                return <StyledTag color="cyan">{t(translations.group.requested)}</StyledTag>;
             case GroupMemberStatus.declined:
                 return <StyledTag color="magenta">{t(translations.group.declined)}</StyledTag>;
             default:
@@ -27,8 +29,8 @@ export const UserItemRow = (props) => {
             <UserInnerContainer>
                 <UserAvatarContainer style={{ background: "url('/default-avatar.png')", backgroundSize: 'cover' }} />
                 <UserInforContainer>
-                    <UserName>{ item?.member?.name } {renderTag()}</UserName>
-                    <UserDescription>{ item?.isAdmin ? t(translations.group.admin) : t(translations.group.member) }</UserDescription>
+                    <UserName>{item?.member?.name} {renderTag()}</UserName>
+                    <UserDescription>{item?.isAdmin ? t(translations.group.admin) : t(translations.group.member)}</UserDescription>
                 </UserInforContainer>
             </UserInnerContainer>
             <UserActionButtonContainer>

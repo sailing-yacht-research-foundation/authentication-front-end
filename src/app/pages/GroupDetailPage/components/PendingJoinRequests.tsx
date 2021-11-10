@@ -11,6 +11,9 @@ import { MdRemoveCircle } from 'react-icons/md';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { GroupMemberStatus } from 'utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGroupDetailSlice } from '../slice';
+import { selectMemberCurrentPage } from '../slice/selectors';
 
 export const PendingJoinRequests = (props) => {
 
@@ -27,6 +30,12 @@ export const PendingJoinRequests = (props) => {
         total: 0,
         rows: []
     });
+
+    const dispatch = useDispatch();
+
+    const { actions } = useGroupDetailSlice();
+
+    const memberCurrentPage = useSelector(selectMemberCurrentPage);
 
     const renderRequests = () => {
         return pagination.rows.map(item => <UserItemRow item={item} buttons={renderActionButton(item)} />);
@@ -58,6 +67,7 @@ export const PendingJoinRequests = (props) => {
 
         if (response.success) {
             getJoinRequests(pagination.page);
+            dispatch(actions.getMembers({ groupId, page: memberCurrentPage }));
         } else {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         }

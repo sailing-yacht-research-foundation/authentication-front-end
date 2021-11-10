@@ -852,6 +852,7 @@
     "select_a_group": "Select a Group",
     "please_choose_a_group": "Please choose a group from the list.",
     "successfully_added_this_event_as_group_admin": "Successfully added this event as group admin.",
-    "assign_this_event_as_group_admin": "Assign this event as group admin."
+    "assign_this_event_as_group_admin": "Assign this event as group admin.",
+    "requested": "Requested"
   }
 }
