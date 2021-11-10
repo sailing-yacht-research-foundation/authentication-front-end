@@ -3,28 +3,28 @@ import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { deleteRace } from 'services/live-data-server/event-calendars';
+import { deleteEvent } from 'services/live-data-server/event-calendars';
 import { translations } from 'locales/translations';
 
-export const DeleteRaceModal = (props) => {
+export const DeleteEventModal = (props) => {
 
     const { t } = useTranslation();
 
     const { onRaceDeleted } = props;
 
     const {
-        race,
+        event,
         showDeleteModal,
         setShowDeleteModal
     } = props;
 
     const performDeleteRace = async () => {
-        const response = await deleteRace(race.id);
+        const response = await deleteEvent(event.id);
 
         setShowDeleteModal(false);
 
         if (response.success) {
-            toast.success(t(translations.delete_event_modal.successfully_deleted, { name: race.name }));
+            toast.success(t(translations.delete_event_modal.successfully_deleted, { name: event.name }));
             onRaceDeleted();
         } else {
             toast.error(t(translations.delete_event_modal.an_unexpected_error));

@@ -9,6 +9,8 @@ import { EULAState } from 'app/pages/EULAPage/slice/types';
 import { HomeState } from 'app/pages/HomePage/slice/types';
 import { CourseState } from 'app/pages/CourseCreateUpdatePage/slice/types';
 import { MyEventListState } from 'app/pages/MyEventPage/slice/types';
+import { GroupState } from 'app/pages/MyGroupPage/slice/types';
+import { GroupDetailState } from 'app/pages/GroupDetailPage/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -29,5 +31,7 @@ export interface RootState {
   home?: HomeState;
   course?: CourseState;
   myEventList?: MyEventListState;
+  group?: GroupState;
+  groupDetail?: GroupDetailState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

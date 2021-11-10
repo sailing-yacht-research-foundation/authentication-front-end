@@ -42,6 +42,9 @@ import { ParticipantCreateUpdatePage } from './pages/ParticipantCreateUpdatePage
 import { VesselParticipantGroupPage } from './pages/VesselParticipantGroupCreateUpdatePage/Loadable';
 import { EventDetailPage } from './pages/EventDetailPage/Loadable';
 import { MyTrackPage } from './pages/MyTrackPage/Loadable';
+import { MyGroupsPage } from './pages/MyGroupPage/Loadable';
+import { GroupDetailPage } from './pages/GroupDetailPage/Loadable';
+import { GroupCreateUpdatePage } from './pages/GroupCreateUpdatePage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -185,6 +188,10 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/create'} component={VesselParticipantGroupPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups'} component={MyGroupsPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/create'} component={GroupCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/update'} component={GroupCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId'} component={GroupDetailPage} />
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />

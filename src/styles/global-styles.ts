@@ -216,4 +216,8 @@ export const GlobalStyle = createGlobalStyle`
   .ant-menu.ant-menu-inline-collapsed {
     width: 80px !important;
   }
+
+  .ant-modal-header {
+    padding-right: 56px;
+  }
 `;

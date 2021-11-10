@@ -33,3 +33,16 @@ export const supportedSearchCriteria = [
     'source',
     'unstructured_text'
 ];
+
+export const enum GroupMemberStatus {
+    invited = 'INVITED',
+    requested = 'REQUESTED',
+    accepted = 'ACCEPTED',
+    declined = 'DECLINED'
+};
+
+export const enum GroupVisibility {
+    public = 'PUBLIC',
+    private = 'PRIVATE',
+    moderated = 'MODERATED'
+};

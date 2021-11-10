@@ -17,6 +17,7 @@ import { media } from 'styles/media';
 import { GiPathDistance, GiSailboat } from 'react-icons/gi';
 import { GoDatabase } from 'react-icons/go';
 import { isMobile } from 'utils/helpers';
+import { MdGroups } from 'react-icons/md';
 
 export const SiderContent = (props) => {
 
@@ -31,6 +32,7 @@ export const SiderContent = (props) => {
     { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
     { key: '8', paths: ['/profile/change-password'], subMenuKey: 'profile' },
     { key: '16', paths: ['/tracks'] },
+    { key: '17', paths: ['/groups'] },
   ];
 
   const history = useHistory();
@@ -90,6 +92,10 @@ export const SiderContent = (props) => {
         </SyrfMenuItem>
 
         <SyrfMenuItem title={t(translations.side_menu.vessels)} icon={<GiSailboat />} onClick={() => history.push('/boats')} key="15">{t(translations.side_menu.vessels)}</SyrfMenuItem>
+
+        <SyrfMenuItem key="17" onClick={() => history.push('/groups')} title={t(translations.side_menu.groups)} icon={<MdGroups />}>
+          {t(translations.side_menu.groups)}
+        </SyrfMenuItem>
 
         <SyrfMenuItem key="12" onClick={() => history.push('/data')} title={t(translations.side_menu.data)} icon={<GoDatabase />}>
           {t(translations.side_menu.data)}
