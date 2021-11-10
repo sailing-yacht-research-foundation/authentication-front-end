@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AiFillUnlock } from 'react-icons/ai';
-import { renderNumberWithCommas } from 'utils/helpers';
 import { GiEarthAmerica } from 'react-icons/gi';
 import { MdOutlineAddModerator } from 'react-icons/md';
+import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { media } from 'styles/media';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -20,19 +20,14 @@ export const LeftPane = (props) => {
 
     const { group } = props;
 
-    const renderGroupText = (text) => {
-        const type = String(text).toLowerCase();
-        return type.charAt(0).toUpperCase() + type.slice(1);
-    }
-
     const renderGroupVisibility = (visibility) => {
         switch (visibility) {
             case GroupVisibility.private:
-                return <><AiFillUnlock /> {renderGroupText(visibility)}</>
+                return <><AiFillUnlock /> {uppercaseFirstCharacter(visibility)}</>
             case GroupVisibility.public:
-                return <><GiEarthAmerica /> {renderGroupText(visibility)}</>
+                return <><GiEarthAmerica /> {uppercaseFirstCharacter(visibility)}</>
             default:
-                return <><MdOutlineAddModerator /> {renderGroupText(visibility)}</>
+                return <><MdOutlineAddModerator /> {uppercaseFirstCharacter(visibility)}</>
         }
     }
 
@@ -41,7 +36,7 @@ export const LeftPane = (props) => {
             <SectionContainer style={{ textAlign: 'center' }}>
                 <GroupAvatar style={{ background: "url('/default-avatar.jpeg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
                 <GroupName>{group.groupName}</GroupName>
-                <GroupType>{renderGroupText(group.groupType)}</GroupType>
+                <GroupType>{uppercaseFirstCharacter(group.groupType)}</GroupType>
                 <GroupTypeAndMemeber>{renderGroupVisibility(group.visibility)} • {renderNumberWithCommas(group.memberCount)} members</GroupTypeAndMemeber>
             </SectionContainer>
 

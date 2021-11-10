@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
+import React from 'react'
 
 /**
  * Check if is mobile
@@ -212,7 +213,20 @@ export const renderNumberWithCommas = (number) => {
     return String(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
+/**
+ * Check if email is valid
+ * @param email 
+ * @returns 
+ */
 export const checkIfEmailIsValid = (email: string) => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+}
+
+/**
+ * Render uppercase text
+ */
+export const uppercaseFirstCharacter = (text) => {
+    const type = String(text).toLowerCase();
+    return type.charAt(0).toUpperCase() + type.slice(1);
 }

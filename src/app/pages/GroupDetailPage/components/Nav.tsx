@@ -68,8 +68,10 @@ export const Nav = (props) => {
                 </GobackButton>
                 <InnerWrapper>
                     <NavItem className="active">{t(translations.group.members_nav)}</NavItem>
-                    <NavItem>{renderActionButton()}</NavItem>
+                    {group?.groupMemberId &&
+                        <NavItem>{renderActionButton()}</NavItem>}
                 </InnerWrapper>
+
             </Wrapper>
         </>
     );

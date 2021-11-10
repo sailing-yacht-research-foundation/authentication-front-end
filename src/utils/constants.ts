@@ -40,3 +40,9 @@ export const enum GroupMemberStatus {
     accepted = 'ACCEPTED',
     declined = 'DECLINED'
 };
+
+export const enum GroupVisibility {
+    public = 'PUBLIC',
+    private = 'PRIVATE',
+    moderated = 'MODERATED'
+};

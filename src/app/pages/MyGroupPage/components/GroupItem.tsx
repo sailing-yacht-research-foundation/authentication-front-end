@@ -5,10 +5,13 @@ import { MdOutlineGroupAdd } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { requestJoinGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
-import { renderNumberWithCommas } from 'utils/helpers';
+import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { GroupMemberStatus } from 'utils/constants';
+import { GroupMemberStatus, GroupVisibility } from 'utils/constants';
+import { AiFillUnlock } from 'react-icons/ai';
+import { GiEarthAmerica } from 'react-icons/gi';
+import { MdOutlineAddModerator } from 'react-icons/md';
 
 export const GroupItemRow = (props) => {
 
@@ -29,11 +32,6 @@ export const GroupItemRow = (props) => {
             return <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
     }
 
-    const renderGroupText = (text) => {
-        const type = String(text).toLowerCase();
-        return type.charAt(0).toUpperCase() + type.slice(1);
-    }
-
     const showGroupItemDetail = () => {
         history.push(`/groups/${group.id}`);
     }
@@ -51,6 +49,17 @@ export const GroupItemRow = (props) => {
         }
     }
 
+    const renderGroupVisibility = (visibility) => {
+        switch (visibility) {
+            case GroupVisibility.private:
+                return <><AiFillUnlock /> {uppercaseFirstCharacter(visibility)}</>
+            case GroupVisibility.public:
+                return <><GiEarthAmerica /> {uppercaseFirstCharacter(visibility)}</>
+            default:
+                return <><MdOutlineAddModerator /> {uppercaseFirstCharacter(visibility)}</>
+        }
+    }
+
     return (
         <GroupItem onClick={showGroupItemDetail}>
             <GroupItemAvatarContainer>
@@ -59,7 +68,7 @@ export const GroupItemRow = (props) => {
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>
                 <GroupItemDescription>{group.description}</GroupItemDescription>
-                <GroupType>{renderGroupText(group.groupType)} • {renderGroupText(group.visibility)} • {t(translations.group.number_of_members, { numberOfMembers: renderNumberWithCommas(memberCount) })}</GroupType>
+                <GroupType>{uppercaseFirstCharacter(group.groupType)} • {renderGroupVisibility(group.visibility)} • {t(translations.group.number_of_members, { numberOfMembers: renderNumberWithCommas(memberCount) })}</GroupType>
             </GroupItemInfoContainer>
             <GroupItemAction>
                 <Spin spinning={isLoading}>

@@ -8,7 +8,11 @@ import { selectInvitationCurrentPage } from '../slice/selectors';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { GroupMemberStatus } from 'utils/constants';
+import { GroupMemberStatus, GroupVisibility } from 'utils/constants';
+import { uppercaseFirstCharacter } from 'utils/helpers';
+import { AiFillUnlock } from 'react-icons/ai';
+import { GiEarthAmerica } from 'react-icons/gi';
+import { MdOutlineAddModerator } from 'react-icons/md';
 
 export const InvitationItemRow = (props) => {
 
@@ -35,6 +39,17 @@ export const InvitationItemRow = (props) => {
         }
     }
 
+    const renderGroupVisibility = (visibility) => {
+        switch (visibility) {
+            case GroupVisibility.private:
+                return <><AiFillUnlock /> {uppercaseFirstCharacter(visibility)}</>
+            case GroupVisibility.public:
+                return <><GiEarthAmerica /> {uppercaseFirstCharacter(visibility)}</>
+            default:
+                return <><MdOutlineAddModerator /> {uppercaseFirstCharacter(visibility)}</>
+        }
+    }
+
     const rejectJoinRequest = async () => {
         setIsLoading(true);
         const response = await userRejectInvitationRequest(request.id);
@@ -52,7 +67,7 @@ export const InvitationItemRow = (props) => {
         <InvitationItem>
             <ItemInfoContainer>
                 <InvitationItemTitle>{request.group?.groupName}</InvitationItemTitle>
-                <InvitationItemGroupMembersCount>{request.group?.groupType}</InvitationItemGroupMembersCount>
+                <InvitationItemGroupMembersCount>{uppercaseFirstCharacter(request.group?.groupType)} • {renderGroupVisibility(request.group?.visibility)} </InvitationItemGroupMembersCount>
             </ItemInfoContainer>
             <ItemButtonContainer>
                 <Space size={5}>
