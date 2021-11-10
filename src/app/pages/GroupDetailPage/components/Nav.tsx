@@ -48,7 +48,11 @@ export const Nav = (props) => {
         if (!response.success) {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         } else {
-            setJoinStatus(GroupMemberStatus.requested);
+            if (response.data.status === GroupMemberStatus.accepted) {
+                window.location.reload();
+            } else {
+                setJoinStatus(GroupMemberStatus.requested);
+            }
         }
     }
 
