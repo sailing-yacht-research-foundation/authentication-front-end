@@ -18,21 +18,29 @@ export const AssignEventAsGroupAdminModal = (props) => {
 
     const [results, setResults] = React.useState<any[]>([]);
 
+    const [checked, setChecked] = React.useState(false);
+
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
     const hideAssignModal = () => {
         setShowModal(false);
         form.setFieldsValue({
             groupId: ''
-        })
+        });
+        setChecked(false);
+    }
+
+    const handleChecked = (checked) => {
+        setChecked(checked);
     }
 
     const assignCalendarEventAsGroupAdmin = () => {
         form
             .validateFields()
             .then(async values => {
-                const { isIndividualAssignment, groupId } = values;
-                const response = await assignEventAsGroupAdmin(groupId, event.id, isIndividualAssignment);
+                const { groupId } = values;
+                console.log(values);
+                const response = await assignEventAsGroupAdmin(groupId, event.id, checked);
 
                 if (response.success) {
                     toast.success(t(translations.group.successfully_added_this_event_as_group_admin));
@@ -87,7 +95,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
                     </SyrfFormSelect>
                 </Form.Item>
 
-                <Form.Item label={<SyrfFieldLabel>{t(translations.group.invididual_assignment_only)}</SyrfFieldLabel>} name="isIndividualAssignment" valuePropName="checked" initialValue={true}> <Switch /> </Form.Item>
+                <Form.Item label={<SyrfFieldLabel>{t(translations.group.invididual_assignment_only)}</SyrfFieldLabel>} name="isIndividualAssignment" valuePropName="checked"><Switch checked={checked} onChange={handleChecked} checkedChildren="Yes" unCheckedChildren="No" /> </Form.Item>
             </Form>
         </Modal>
     )
