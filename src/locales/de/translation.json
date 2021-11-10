@@ -775,7 +775,7 @@
     "save_group": "Save Group",
     "group_name": "Group Name",
     "group_type": "Group Type",
-    "group_visibility": "Group Visibility",
+    "group_visibility": "Visibility",
     "select_a_visibility": "Select a visibility",
     "please_choose_a_group_visibility": "Please choose a group visibility",
     "group_has_a_type_please_choose_one_from_the_list": "Group has a type, please choose one from the list.",
@@ -795,7 +795,7 @@
     "members": "Members ({{membersCount}})",
     "assign_new_admin": "Assign new admin",
     "manage": "Manage",
-    "remove_as_admin": "Remove as admin",
+    "remove_as_admin": "Remove as Admin",
     "remove_from_group": "Remove from group",
     "invite": "Invite",
     "are_you_sure_you_want_to_remove_person_out_of_this_group": "Are you sure you want to remove {{memberName}} from the group?",
@@ -846,6 +846,12 @@
     "member": "Member",
     "number_of_invitations": "{{numberOfInvitations}} invitations",
     "please_select_a_member_to_assign_him_as_admin": "Please select a member to assign him as admin.",
-    "declined": "Declined"
+    "declined": "Declined",
+    "invitations_title": "Invitations",
+    "invididual_assignment_only": "Invidual Assignment Only",
+    "select_a_group": "Select a Group",
+    "please_choose_a_group": "Please choose a group from the list.",
+    "successfully_added_this_event_as_group_admin": "Successfully added this event as group admin.",
+    "assign_this_event_as_group_admin": "Assign this event as group admin."
   }
 }

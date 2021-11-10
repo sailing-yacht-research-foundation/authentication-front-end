@@ -60,7 +60,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
 
     return (
         <Modal
-            title={t(translations.group.assign_new_admin)}
+            title={t(translations.group.assign_this_event_as_group_admin)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
             visible={showModal}
             onOk={assignCalendarEventAsGroupAdmin}
