@@ -127,10 +127,11 @@ export const GroupList = () => {
 
 const Wrapper = styled.div`
     width: 100%;
-    padding: 0 20px;
+    padding: 0 10px;
 
     ${media.medium`
         width: 65%;
+        padding: 0 20px;
     `}
 `;
 
