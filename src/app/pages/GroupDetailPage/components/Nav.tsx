@@ -1,15 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Button, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { DeleteGroupModal } from './modals/DeleteGroupModal';
 import { LeaveGroupModal } from './modals/LeaveGroupModal';
-import { GobackButton } from 'app/components/SyrfGeneral';
+import { CreateButton, GobackButton } from 'app/components/SyrfGeneral';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { GroupMemberStatus } from 'utils/constants';
+import { MdOutlineGroupAdd } from 'react-icons/md';
+import { requestJoinGroup, leaveGroup } from 'services/live-data-server/groups';
+import { toast } from 'react-toastify';
 
 export const Nav = (props) => {
 
@@ -23,6 +26,10 @@ export const Nav = (props) => {
 
     const history = useHistory();
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+    const [joinStatus, setJoinStatus] = React.useState<any>();
+
     const showDeleteGroupModal = (e) => {
         e.preventDefault();
         setShowDeleteModal(true);
@@ -31,6 +38,30 @@ export const Nav = (props) => {
     const showLeaveGroupModal = (e) => {
         e.preventDefault();
         setShowLeaveModal(true);
+    }
+
+    const joinGroup = async () => {
+        setIsLoading(true);
+        const response = await requestJoinGroup(group.id);
+        setIsLoading(false);
+
+        if (!response.success) {
+            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+        } else {
+            setJoinStatus(GroupMemberStatus.requested);
+        }
+    }
+
+    const undoJoin = async () => {
+        setIsLoading(true);
+        const response = await leaveGroup(group.id);
+        setIsLoading(false);
+
+        if (!response.success) {
+            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+        } else {
+            setJoinStatus(null);
+        }
     }
 
     const renderActionButton = () => {
@@ -59,6 +90,23 @@ export const Nav = (props) => {
         );
     }
 
+    const renderButtonByStatus = () => {
+        let button = <></>;
+        if (joinStatus === GroupMemberStatus.requested)
+            button = <CreateButton onClick={undoJoin} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</CreateButton>
+        if (!joinStatus)
+            button = <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
+
+        return <div style={{ marginRight: '10px' }}>{button}</div>;
+    }
+
+    React.useEffect(() => {
+        if (group.id) {
+            console.log(group.status);
+            setJoinStatus(group.status);
+        }
+    }, [group]);
+
     return (
         <>
             <DeleteGroupModal group={group} showModal={showDeleteModal} setShowModal={setShowDeleteModal} />
@@ -67,12 +115,16 @@ export const Nav = (props) => {
                 <GobackButton onClick={() => history.push("/groups")}>
                     <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
                 </GobackButton>
-                <InnerWrapper>
-                    <NavItem className="active">{t(translations.group.members_nav)}</NavItem>
-                    {group?.groupMemberId && group.status === GroupMemberStatus.accepted &&
-                        <NavItem>{renderActionButton()}</NavItem>}
-                </InnerWrapper>
-
+                <RightSectionWrapper>
+                    <Spin style={{ marginRight: '15px' }} spinning={isLoading}>
+                        {renderButtonByStatus()}
+                    </Spin>
+                    <InnerWrapper>
+                        <NavItem className="active">{t(translations.group.members_nav)}</NavItem>
+                        {group?.groupMemberId && group.status === GroupMemberStatus.accepted &&
+                            <NavItem>{renderActionButton()}</NavItem>}
+                    </InnerWrapper>
+                </RightSectionWrapper>
             </Wrapper>
         </>
     );
@@ -102,4 +154,10 @@ const NavItem = styled.div`
         background: #fff;
         border: 1px solid #eee;
     }
+`;
+
+const RightSectionWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;

@@ -13,6 +13,7 @@ import { uppercaseFirstCharacter } from 'utils/helpers';
 import { AiFillLock } from 'react-icons/ai';
 import { GiEarthAmerica } from 'react-icons/gi';
 import { MdOutlineAddModerator } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 export const InvitationItemRow = (props) => {
 
@@ -66,7 +67,7 @@ export const InvitationItemRow = (props) => {
     return (
         <InvitationItem>
             <ItemInfoContainer>
-                <InvitationItemTitle>{request.group?.groupName}</InvitationItemTitle>
+                <Link to={`/groups/${request.group?.id}`}>{request.group?.groupName}</Link>
                 <InvitationItemGroupMembersCount>{uppercaseFirstCharacter(request.group?.groupType)} • {renderGroupVisibility(request.group?.visibility)} </InvitationItemGroupMembersCount>
             </ItemInfoContainer>
             <ItemButtonContainer>
@@ -89,8 +90,6 @@ const InvitationItem = styled.div`
         border-bottom: 1px solid #eee;
     }
 `;
-
-const InvitationItemTitle = styled.a``;
 
 const InvitationItemGroupMembersCount = styled.span`
     margin-top: 5px;

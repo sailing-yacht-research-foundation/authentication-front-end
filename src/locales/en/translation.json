@@ -778,7 +778,7 @@
     "group_visibility": "Visibility",
     "select_a_visibility": "Select a visibility",
     "please_choose_a_group_visibility": "Please choose a group visibility",
-    "group_has_a_type_please_choose_one_from_the_list": "Group has a type, please choose one from the list.",
+    "group_has_a_type_please_choose_one_from_the_list": "Group has a type, you can choose one from the list or leave it.",
     "select_a_group_type": "Select a group type.",
     "successfully_created_a_new_group": "Successfully created a new group.",
     "successfully_updated_your_group": "Successfully updated your group.",

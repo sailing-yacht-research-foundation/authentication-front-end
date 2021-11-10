@@ -33,6 +33,10 @@ const groupVisibilities = [
 
 const groupTypes = [
     {
+        name: "None",
+        value: "",
+    },
+    {
         name: "Organization",
         value: "ORGANIZATION"
     },
@@ -76,7 +80,7 @@ export const GroupForm = () => {
         const data = {
             groupName: groupName,
             description: description,
-            groupType: groupType,
+            groupType: groupType || undefined,
             visibility: visibility
         };
 
@@ -112,7 +116,8 @@ export const GroupForm = () => {
             if (response.success) {
                 setGroup(response.data);
                 form.setFieldsValue({
-                    ...response.data
+                    ...response.data,
+                    groupType: response.data.groupType || ''
                 });
                 if (!response?.data?.isAdmin) history.push('/404');
             } else {
@@ -174,7 +179,7 @@ export const GroupForm = () => {
                             groupName: '',
                             description: '',
                             visibility: 'PUBLIC',
-                            groupType: 'TEAM'
+                            groupType: ''
                         }}
                     >
                         <Form.Item
@@ -218,7 +223,6 @@ export const GroupForm = () => {
                             label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_type)}</SyrfFieldLabel>}
                             name="groupType"
                             help={<SyrFieldDescription>{t(translations.group_create_update_page.group_has_a_type_please_choose_one_from_the_list)}</SyrFieldDescription>}
-                            rules={[{ required: true }]}
                         >
                             <SyrfFormSelect placeholder={t(translations.group_create_update_page.select_a_group_type)}>
                                 {renderGroupTypeList()}

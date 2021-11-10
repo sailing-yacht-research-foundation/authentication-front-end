@@ -227,6 +227,7 @@ export const checkIfEmailIsValid = (email: string) => {
  * Render uppercase text
  */
 export const uppercaseFirstCharacter = (text) => {
+    if (!text) return '';
     const type = String(text).toLowerCase();
     return type.charAt(0).toUpperCase() + type.slice(1);
 }

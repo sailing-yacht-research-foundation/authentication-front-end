@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Button, Spin } from 'antd';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import { useHistory } from 'react-router';
-import { requestJoinGroup } from 'services/live-data-server/groups';
+import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
@@ -27,7 +27,7 @@ export const GroupItemRow = (props) => {
         if (!showGroupButton) return <></>;
 
         if (status === GroupMemberStatus.requested)
-            return <Button onClick={e => e.preventDefault()} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</Button>
+            return <Button onClick={undoJoin} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</Button>
         if (!status)
             return <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
     }
@@ -36,17 +36,30 @@ export const GroupItemRow = (props) => {
         history.push(`/groups/${group.id}`);
     }
 
+    const handlePostJoinActions = (response) => {
+        if (response.success) {
+            if (onGroupJoinRequested) onGroupJoinRequested();
+        } else {
+            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+        }
+    }
+
+    const undoJoin = async (e) => {
+        e.stopPropagation();
+        setIsLoading(true);
+        const response = await leaveGroup(group.id);
+        setIsLoading(false);
+        
+        handlePostJoinActions(response);
+    }
+
     const joinGroup = async (e) => {
         e.stopPropagation();
         setIsLoading(true);
         const response = await requestJoinGroup(group.id);
         setIsLoading(false);
 
-        if (response.success) {
-            if (onGroupJoinRequested) onGroupJoinRequested();
-        } else {
-            toast.error(t(translations.group.an_error_happened_joining_this_group));
-        }
+        handlePostJoinActions(response);
     }
 
     const renderGroupVisibility = (visibility) => {
