@@ -17,6 +17,7 @@ import { useGroupDetailSlice } from '../slice';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { renderNumberWithCommas } from 'utils/helpers';
+import { GroupMemberStatus } from 'utils/constants';
 
 export const MembersManager = (props) => {
 
@@ -102,9 +103,11 @@ export const MembersManager = (props) => {
 
         const menu = (
             <Menu>
-                <Menu.Item key="2">
-                    <a onClick={(e) => setMemberAsAdmin(e, member)} href="/">Set as admin</a>
-                </Menu.Item>
+                {
+                    GroupMemberStatus.accepted === member.status && <Menu.Item key="2">
+                        <a onClick={(e) => setMemberAsAdmin(e, member)} href="/">Set as admin</a>
+                    </Menu.Item>
+                }
                 <Menu.Item key="1">
                     <a onClick={(e) => removeFromGroup(e, member)} href="/">Remove from group</a>
                 </Menu.Item>
