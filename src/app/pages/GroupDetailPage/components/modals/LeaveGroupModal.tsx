@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { leaveGroup } from 'services/live-data-server/groups';
+import { useHistory } from 'react-router';
 
 export const LeaveGroupModal = (props) => {
 
@@ -14,8 +15,9 @@ export const LeaveGroupModal = (props) => {
         group,
         showModal,
         setShowModal,
-        onLeftGroup
     } = props;
+
+    const history = useHistory();
 
     const performRemoveMember = async () => {
         const response = await leaveGroup(group.id);
@@ -24,7 +26,7 @@ export const LeaveGroupModal = (props) => {
 
         if (response.success) {
             toast.success(t(translations.group.leave_group_successfully));
-            onLeftGroup();
+            history.push('/groups');
         } else {
             if (response.error?.response?.status === 403) {
                 toast.error(t(translations.group.please_assign_other_admin_before_leaving_the_group));

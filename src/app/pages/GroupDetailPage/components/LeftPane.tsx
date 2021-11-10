@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { AiFillUnlock } from 'react-icons/ai';
+import { AiFillLock } from 'react-icons/ai';
 import { GiEarthAmerica } from 'react-icons/gi';
 import { MdOutlineAddModerator } from 'react-icons/md';
 import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
@@ -23,7 +23,7 @@ export const LeftPane = (props) => {
     const renderGroupVisibility = (visibility) => {
         switch (visibility) {
             case GroupVisibility.private:
-                return <><AiFillUnlock /> {uppercaseFirstCharacter(visibility)}</>
+                return <><AiFillLock /> {uppercaseFirstCharacter(visibility)}</>
             case GroupVisibility.public:
                 return <><GiEarthAmerica /> {uppercaseFirstCharacter(visibility)}</>
             default:
