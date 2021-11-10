@@ -18,6 +18,7 @@ export const SearchGroup = () => {
     const { actions } = useGroupSlice();
 
     const searchForGroups = (keyword) => {
+        if (keyword.length === 0) return;
         dispatch(actions.searchForGroups({ keyword, page: 1 }));
     }
 
@@ -28,7 +29,7 @@ export const SearchGroup = () => {
     const setSearchKeyword = (e) => {
         const value = e.target?.value;
         dispatch(actions.setSearchKeyword(value));
-        if (value) dispatch(actions.setSearchResults([]));
+        if (value.length === 0) dispatch(actions.setSearchResults([]));
     }
 
     const invitationTotal = useSelector(selectInvitationTotalPage);

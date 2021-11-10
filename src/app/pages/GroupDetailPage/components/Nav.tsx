@@ -69,7 +69,7 @@ export const Nav = (props) => {
                 </GobackButton>
                 <InnerWrapper>
                     <NavItem className="active">{t(translations.group.members_nav)}</NavItem>
-                    {group?.groupMemberId && group.status !== GroupMemberStatus.requested &&
+                    {group?.groupMemberId && group.status === GroupMemberStatus.accepted &&
                         <NavItem>{renderActionButton()}</NavItem>}
                 </InnerWrapper>
 
