@@ -803,7 +803,7 @@
     "successfully_removed_this_person_from_the_group": "Successfully removed {{memberName}} from the group.",
     "an_error_happened_when_performing_your_request": "An unexpected error happened when performing your request.",
     "are_you_sure_you_want_to_remove_this_admin": "Are you sure you want to remove this person as admin?",
-    "this_person_will_no_longer_can": "{{memberName}} will no longer be able to manger members, events, posts... Are you sure you want to continue?",
+    "this_person_will_no_longer_can": "{{memberName}} will no longer be able to manage members, events, posts... Are you sure you want to continue?",
     "successfully_remove_person_as_admin": "Successfully removed {{memberName}} as admin",
     "join":"Join",
     "cancel": "Cancel",
