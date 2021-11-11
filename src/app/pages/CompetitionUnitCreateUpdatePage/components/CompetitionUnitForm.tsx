@@ -78,7 +78,11 @@ export const CompetitionUnitForm = () => {
         calendarEventId = eventId || calendarEventId;
 
         const checkStartTimeValidResult = handleCheckIsStartTimeValid();
-        if (!checkStartTimeValidResult.isValid) return;
+        if (!checkStartTimeValidResult.isValid) {
+            if (checkStartTimeValidResult.errors?.startTime)
+                toast.error(checkStartTimeValidResult.errors.startTime);
+            return;
+        }
 
         setIsSaving(true);
 
@@ -427,11 +431,11 @@ export const CompetitionUnitForm = () => {
                                     validateStatus={(renderErrorField(error, 'startTime') && 'error') || ''}
                                     help={renderErrorField(error, 'startTime')}
                                 >
-                                    <TimePicker 
-                                        allowClear={false} 
-                                        className="syrf-datepicker" 
+                                    <TimePicker
+                                        allowClear={false}
+                                        className="syrf-datepicker"
                                         onChange={(val) => handleFieldChange('startTime', val)}
-                                        defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} 
+                                        defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
                                     />
                                 </Form.Item>
                             </Col>

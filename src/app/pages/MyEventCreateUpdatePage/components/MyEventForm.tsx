@@ -260,7 +260,6 @@ export const MyEventForm = () => {
         setIsSavingEvent(false);
 
         if (response.success) {
-            console.log(response.data)
             form.setFieldsValue({
                 ...response.data,
                 startDate: moment(response.data?.approximateStartTime),
