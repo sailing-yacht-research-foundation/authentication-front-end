@@ -46,3 +46,8 @@ export const enum GroupVisibility {
     private = 'PRIVATE',
     moderated = 'MODERATED'
 };
+
+export const enum RaceStatus {
+    ON_GOING = 'ONGOING',
+    SCHEDULED = 'SCHEDULED'
+}

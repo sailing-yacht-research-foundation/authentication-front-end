@@ -4,15 +4,18 @@ import {
     subscribe as subscribeRace,
     unsubscribe as unsubscribeRace,
     checkForUserSubscribeStatus,
-    getUDPServerDetail
+    getUDPServerDetail,
+    getExpeditionByCompetitionUnitId
 } from 'services/streaming-server/expedition';
-import { Spin, Modal, Button, Space } from 'antd';
+import { Spin, Modal, Button, Space, Image, Divider } from 'antd';
 import { MdAddComment } from 'react-icons/md';
 import { AiFillInfoCircle } from 'react-icons/ai';
 import { CreateButton } from 'app/components/SyrfGeneral';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import styled from 'styled-components';
+import { media } from 'styles/media';
+import CheckList from '../assets/checklist.png';
 
 export const ExpeditionServerActionButtons = (props) => {
 
@@ -37,6 +40,10 @@ export const ExpeditionServerActionButtons = (props) => {
         checkForSubscribeStatus();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const getExpeditionByCompetitionUnit = async () => {
+        const response = await getExpeditionByCompetitionUnitId(competitionUnit?.id);
+    }
 
     const subscribe = async () => {
         setIsLoading(true);
@@ -73,6 +80,7 @@ export const ExpeditionServerActionButtons = (props) => {
         if (response.success) {
             setUdpDetail(response.data);
             setShowUDPModal(true);
+            getExpeditionByCompetitionUnit();
         } else {
             toast.error(t(translations.expedition_server_actions.an_error_happened_when_getting_udp_server_detail))
         }
@@ -92,15 +100,14 @@ export const ExpeditionServerActionButtons = (props) => {
     const copyToClipboard = (text) => {
         let input = document.createElement('input');
         document.body.appendChild(input);
-        input.value = udpDetail?.ipAddress?.address + ':' + udpDetail?.port;
+        input.value = text;
         input.select();
         document.execCommand('copy', false);
         toast.info(t(translations.expedition_server_actions.copied_to_clipboard));
     }
 
-
     return (
-        <>
+        <Wrapper>
             <Spin spinning={isLoading}>
                 {!subscribed ? (
                     <CreateButton icon={<MdAddComment style={{ marginRight: '5px' }} />} onClick={subscribe} >{t(translations.expedition_server_actions.subscribe_stream_to_expedition)}</CreateButton>
@@ -115,25 +122,69 @@ export const ExpeditionServerActionButtons = (props) => {
                 footer={null}
             >
                 <ModalBody>
-                    <ModalUDPTitle><h4>{t(translations.expedition_server_actions.udp_ip)}</h4> {udpDetail?.ipAddress?.address}</ModalUDPTitle>
-                    <ModalUDPTitle><h4>{t(translations.expedition_server_actions.udp_port)}</h4> {udpDetail?.port}</ModalUDPTitle>
+                    <ul style={{ listStyleType: 'upper-greek' }}>
+                        <li>{t(translations.expedition_server_actions.check_list_1)}
+                            <ul  style={{ listStyleType: 'none' }}>
+                                <li> {t(translations.expedition_server_actions.check_list_1_1)}</li>
+                            </ul>
+                        </li>
+
+                        <li>{t(translations.expedition_server_actions.check_list_2)}</li>
+
+                        <li>{t(translations.expedition_server_actions.check_list_3)}</li>
+
+                        <li>{t(translations.expedition_server_actions.check_list_4)}</li>
+
+                        <li>{t(translations.expedition_server_actions.check_list_5)}</li>
+
+                        <li>{t(translations.expedition_server_actions.check_list_6)}</li>
+
+                        <li>{t(translations.expedition_server_actions.check_list_7)}</li>
+                    </ul>
+                    <Image src={CheckList} />
+                    <Divider/>
+                    <ModalUDPTitle>
+                        <ItemTitle>
+                            {t(translations.expedition_server_actions.udp_ip)} <b>{udpDetail?.ipAddress?.address}</b>
+                        </ItemTitle>
+                        <Button onClick={() => copyToClipboard(udpDetail?.ipAddress?.address)} shape={"round"} type="primary">{t(translations.expedition_server_actions.copy)}</Button>
+                    </ModalUDPTitle>
+                    <ModalUDPTitle>
+                        <ItemTitle>
+                            {t(translations.expedition_server_actions.udp_port)} <b>{udpDetail?.port}</b>
+                        </ItemTitle>
+                        <Button onClick={() => copyToClipboard(udpDetail?.port)} shape={"round"} type="primary">{t(translations.expedition_server_actions.copy)}</Button>
+                    </ModalUDPTitle>
                 </ModalBody>
                 <ModalButtonContainer>
                     <Space size={10}>
-                        <Button onClick={copyToClipboard} type="primary">{t(translations.expedition_server_actions.copy)}</Button>
                         <Button onClick={unsubscribe}>{t(translations.expedition_server_actions.unsubscribe)}</Button>
                     </Space>
                 </ModalButtonContainer>
             </Modal>
-        </>
+        </Wrapper>
     )
 }
+
+const Wrapper = styled.div`
+    display: none;
+
+    ${media.large`
+        display: block !important;
+    `}
+`;
 
 const ModalBody = styled.div`
 `;
 
+const ItemTitle = styled.div`
+    flex: .8;
+`;
+
 const ModalUDPTitle = styled.div`
-    dislay: block;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
 
      > h4 {
          display: inline-block;

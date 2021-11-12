@@ -759,7 +759,15 @@
     "copied_to_clipboard": "Copied to clipboard.",
     "an_error_happened_when_getting_udp_server_detail": "We've encountered an error when getting UDP server detail.",
     "an_error_happened_when_subscribe_this_race": "Oops. Looks like there is something wrong when subscribing you to this race.",
-    "an_error_happened_when_unsubscribe_this_race": "Oops. Looks like there is something wrong when unsubscribing you from this race."
+    "an_error_happened_when_unsubscribe_this_race": "Oops. Looks like there is something wrong when unsubscribing you from this race.",
+    "check_list_1": "Create a new network connection and enable Rx filters for these parameters:",
+    "check_list_1_1": "a. Gun, Start port latitude, Start port longitude, Start stbd latitude, Start stbd longitude.",
+    "check_list_2": "Select ‘Expedition’ from instruments drop down.",
+    "check_list_3": "Set connection setting to ‘UDP to IP Address’",
+    "check_list_4": "Paste this ip address (copy link and text) into the Expedition IP box.",
+    "check_list_5": "Paste the port (copy link and text) into the Expedition Port box.’",
+    "check_list_6": "Click ‘Apply’",
+    "check_list_7": "Send a test ping to test the connection. Type ‘ping’ into the command box in expedition and hit ‘Send’."
   },
   "agreement_modal": {
     "title": "There's a change to our agreements",
