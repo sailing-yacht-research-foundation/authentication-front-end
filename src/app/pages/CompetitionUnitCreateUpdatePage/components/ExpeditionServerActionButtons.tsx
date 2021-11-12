@@ -31,7 +31,7 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const [showUDPModal, setShowUDPModal] = React.useState<boolean>(false);
 
-    const [udpDetail, setUdpDetail] = React.useState({
+    const [udpDetail, setUdpDetail] = React.useState<any>({
         ipAddress: {
             address: ''
         },
@@ -40,7 +40,9 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const [lastMessage, setLastMessage] = React.useState({
         message: '',
-        from: '',
+        from: {
+            ipAddress: ''
+        },
         timestamp: Date.now()
     });
 
@@ -172,7 +174,7 @@ export const ExpeditionServerActionButtons = (props) => {
                     </ModalUDPTitle>
                     {
                         lastMessage?.message && <ModalUDPTitle>
-                            {t(translations.expedition_server_actions.last_message)} { lastMessage?.message }{t(translations.expedition_server_actions.from)} { lastMessage?.from }{t(translations.expedition_server_actions.at)} { moment(lastMessage.timestamp).format(TIME_FORMAT.date_text_with_time) }
+                            {t(translations.expedition_server_actions.last_message)} { lastMessage?.message }{t(translations.expedition_server_actions.from)} { lastMessage?.from?.ipAddress }{t(translations.expedition_server_actions.at)} { moment(lastMessage.timestamp).format(TIME_FORMAT.date_text_with_time) }
                         </ModalUDPTitle>
                     }
                 </ModalBody>
