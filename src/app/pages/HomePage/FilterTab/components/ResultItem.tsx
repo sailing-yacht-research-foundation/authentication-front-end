@@ -8,6 +8,7 @@ import { renderEmptyValue } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
+import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 
 export const ResultItem = (props) => {
     const race = props.item;
@@ -16,7 +17,7 @@ export const ResultItem = (props) => {
 
     const eventId = race._source?.event;
     const eventText = renderEmptyValue(race._source?.event_name, ' ');
-    const eventElement = eventId && race._source.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText; 
+    const eventElement = eventId && race._source.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText;
 
     return (
         <Wrapper key={props.index}>
@@ -36,6 +37,10 @@ export const ResultItem = (props) => {
                     {t(translations.home_page.filter_tab.filter_result.event_name)} {eventElement}
                 </DescriptionItem>}
             </DescriptionWrapper>
+            {race?._source?.id &&
+                race?._source?.source === 'SYRF' &&
+                moment(race._source?.approx_start_time_ms).isAfter(moment())
+                && <ExpeditionServerActionButtons competitionUnit={race._source} />}
         </Wrapper>
     )
 }
