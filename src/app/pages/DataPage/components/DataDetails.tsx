@@ -8,6 +8,10 @@ import { GobackButton, PageDescription, PageHeading } from 'app/components/SyrfG
 export const DataDetails = (props) => {
     const { data, goBack } = props;
 
+    React.useEffect(() => {
+        window.scroll(0, 0);
+    }, []);
+
     return (
         <Wrapper>
             <PageHeadContainer>

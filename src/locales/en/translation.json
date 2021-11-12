@@ -767,7 +767,10 @@
     "check_list_4": "Paste this ip address (copy link and text) into the Expedition IP box.",
     "check_list_5": "Paste the port (copy link and text) into the Expedition Port box.’",
     "check_list_6": "Click ‘Apply’",
-    "check_list_7": "Send a test ping to test the connection. Type ‘ping’ into the command box in expedition and hit ‘Send’."
+    "check_list_7": "Send a test ping to test the connection. Type ‘ping’ into the command box in expedition and hit ‘Send’.",
+    "last_message": "Last message:",
+    "from": ", from",
+    "at": ", at"
   },
   "agreement_modal": {
     "title": "There's a change to our agreements",
