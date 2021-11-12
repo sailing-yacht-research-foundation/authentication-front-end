@@ -16,6 +16,8 @@ import { translations } from 'locales/translations';
 import styled from 'styled-components';
 import { media } from 'styles/media';
 import CheckList from '../assets/checklist.png';
+import moment from 'moment';
+import { TIME_FORMAT } from 'utils/constants';
 
 export const ExpeditionServerActionButtons = (props) => {
 
@@ -36,6 +38,12 @@ export const ExpeditionServerActionButtons = (props) => {
         port: ''
     });
 
+    const [lastMessage, setLastMessage] = React.useState({
+        message: '',
+        from: '',
+        timestamp: Date.now()
+    });
+
     React.useEffect(() => {
         checkForSubscribeStatus();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,6 +51,10 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const getExpeditionByCompetitionUnit = async () => {
         const response = await getExpeditionByCompetitionUnitId(competitionUnit?.id);
+
+        if (response.success) {
+            setLastMessage(response?.data?.lastPing);
+        }
     }
 
     const subscribe = async () => {
@@ -124,7 +136,7 @@ export const ExpeditionServerActionButtons = (props) => {
                 <ModalBody>
                     <ul style={{ listStyleType: 'upper-greek' }}>
                         <li>{t(translations.expedition_server_actions.check_list_1)}
-                            <ul  style={{ listStyleType: 'none' }}>
+                            <ul style={{ listStyleType: 'none' }}>
                                 <li> {t(translations.expedition_server_actions.check_list_1_1)}</li>
                             </ul>
                         </li>
@@ -142,19 +154,27 @@ export const ExpeditionServerActionButtons = (props) => {
                         <li>{t(translations.expedition_server_actions.check_list_7)}</li>
                     </ul>
                     <Image src={CheckList} />
-                    <Divider/>
+
+                    <Divider />
+
                     <ModalUDPTitle>
                         <ItemTitle>
                             {t(translations.expedition_server_actions.udp_ip)} <b>{udpDetail?.ipAddress?.address}</b>
                         </ItemTitle>
                         <Button onClick={() => copyToClipboard(udpDetail?.ipAddress?.address)} shape={"round"} type="primary">{t(translations.expedition_server_actions.copy)}</Button>
                     </ModalUDPTitle>
+
                     <ModalUDPTitle>
                         <ItemTitle>
                             {t(translations.expedition_server_actions.udp_port)} <b>{udpDetail?.port}</b>
                         </ItemTitle>
                         <Button onClick={() => copyToClipboard(udpDetail?.port)} shape={"round"} type="primary">{t(translations.expedition_server_actions.copy)}</Button>
                     </ModalUDPTitle>
+                    {
+                        lastMessage?.message && <ModalUDPTitle>
+                            {t(translations.expedition_server_actions.last_message)} { lastMessage?.message }{t(translations.expedition_server_actions.from)} { lastMessage?.from }{t(translations.expedition_server_actions.at)} { moment(lastMessage.timestamp).format(TIME_FORMAT.date_text_with_time) }
+                        </ModalUDPTitle>
+                    }
                 </ModalBody>
                 <ModalButtonContainer>
                     <Space size={10}>

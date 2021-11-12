@@ -68,7 +68,7 @@ export const PlaybackPage = (props) => {
       }
     }
 
-    if (playbackType === PlaybackTypes.STREAMINGRACE) {
+    if (playbackType && [PlaybackTypes.STREAMINGRACE, PlaybackTypes.OLDRACE].includes(playbackType)) {
       if (competitionUnitDetail.id) {
         setRaceIdentity({
           name: competitionUnitDetail?.name,
