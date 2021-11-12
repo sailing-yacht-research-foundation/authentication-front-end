@@ -2,7 +2,6 @@ import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
-import React from 'react'
 
 /**
  * Check if is mobile

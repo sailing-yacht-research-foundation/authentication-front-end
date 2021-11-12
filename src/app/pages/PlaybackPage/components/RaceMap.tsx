@@ -21,8 +21,8 @@ const objectType = {
   mark: "mark",
   course: "course",
   leg: "leg",
-  point: "point",
-  line: "line",
+  point: "Point",
+  line: "LineString",
 };
 
 export const RaceMap = (props) => {
