@@ -30,7 +30,8 @@ export function* getVesselParticipants({ type, payload }) {
   const { vesselParticipantGroupId } = payload;
 
   const { data } = yield call(getVesselParticipantGroupById, vesselParticipantGroupId);
-  yield put(playbackActions.setVesselParticipants(data.vesselParticipants));
+  if (data)
+    yield put(playbackActions.setVesselParticipants(data.vesselParticipants));
 }
 
 export function* getSearchRaceDetail({ type, payload }) {
