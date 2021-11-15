@@ -21,8 +21,10 @@ const objectType = {
   mark: "mark",
   course: "course",
   leg: "leg",
-  point: "Point",
-  line: "LineString",
+  point: 'point',
+  lineString: 'linestring',
+  line: 'line',
+  polygon: 'polygon'
 };
 
 export const RaceMap = (props) => {
@@ -48,10 +50,11 @@ export const RaceMap = (props) => {
     if (emitter) {
       // Zoom to specific race location
       emitter.on("zoom-to-location", (lastPosition: { position: number[]; pingTime: number }) => {
+        if (!lastPosition || !lastPosition.position) return;
         map.setView(
           {
-            lat: lastPosition.position[1],
-            lng: lastPosition.position[0],
+            lat: lastPosition?.position[1],
+            lng: lastPosition?.position[0],
           },
           16.4
         );
@@ -138,7 +141,8 @@ export const RaceMap = (props) => {
         const coursesData = {};
 
         sequencedCourses.forEach((sequencedCourse) => {
-          if (sequencedCourse.geometryType === objectType.point) {
+          const courseGeometryType = String(sequencedCourse.geometryType).toLowerCase();
+          if (courseGeometryType === objectType.point) {
             const coordinate = sequencedCourse.coordinates[0];
             coursesData[sequencedCourse.id || ""] = _initPointMarker({
               coordinate: { lat: coordinate[0], lon: coordinate[1] },
@@ -146,8 +150,13 @@ export const RaceMap = (props) => {
             });
           }
 
-          if (sequencedCourse.geometryType === objectType.line) {
+          if (courseGeometryType === objectType.line
+            || courseGeometryType === objectType.lineString) {
             coursesData[sequencedCourse.id || ""] = _initPolyline(sequencedCourse.coordinates, "#000000", 3);
+          }
+
+          if (courseGeometryType === objectType.polygon) {
+            coursesData[sequencedCourse.id || ""] = _initPolygon(sequencedCourse.coordinates, "#000000", 3);
           }
         });
 
@@ -268,7 +277,7 @@ export const RaceMap = (props) => {
     participants.forEach((participant) => {
       try {
         // map.removeLayer(boats[participant.id].layer);
-      } catch (e) {}
+      } catch (e) { }
     });
   };
 
@@ -310,7 +319,7 @@ export const RaceMap = (props) => {
             targetHeading = -360 + targetHeading;
           }
         }
-        
+
         localBoats[participant.id].layer.setRotationAngle(targetHeading || 0);
       }
     });
@@ -347,6 +356,15 @@ export const RaceMap = (props) => {
 
   const _initPolyline = (coordinates, color, weight = 1) => {
     return L.polyline(coordinates)
+      .setStyle({
+        weight,
+        color,
+      })
+      .addTo(map);
+  };
+
+  const _initPolygon = (coordinates, color, weight = 1) => {
+    return L.polygon(coordinates)
       .setStyle({
         weight,
         color,
