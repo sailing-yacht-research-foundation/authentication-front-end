@@ -32,9 +32,9 @@ export const RaceList = (props) => {
         },
         {
             title: t(translations.competition_unit_list_page.start_date),
-            dataIndex: 'approximateStartTime',
-            key: 'start_date',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
+            dataIndex: 'approximateStart',
+            key: 'approximateStart',
+            render: (value) => moment(value).format(TIME_FORMAT.date_text),
             width: '33%'
         },
         {
