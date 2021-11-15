@@ -152,6 +152,7 @@ export const ParticipantList = (props) => {
         input.select();
         document.execCommand('copy', false);
         toast.info(t(translations.participant_list.copied_to_clipboard));
+        document.body.removeChild(input);
     }
 
     const renderAssignedVessels = (participant) => {
