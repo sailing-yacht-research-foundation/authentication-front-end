@@ -118,6 +118,7 @@ export const ExpeditionServerActionButtons = (props) => {
         input.select();
         document.execCommand('copy', false);
         toast.info(t(translations.expedition_server_actions.copied_to_clipboard));
+        document.body.removeChild(input);
     }
 
     return (
@@ -136,11 +137,11 @@ export const ExpeditionServerActionButtons = (props) => {
                 footer={null}
             >
                 <ModalBody>
-                    <ul style={{ listStyleType: 'upper-greek' }}>
+                    <StyledUl style={{ listStyleType: 'upper-greek' }}>
                         <li>{t(translations.expedition_server_actions.check_list_1)}
-                            <ul style={{ listStyleType: 'none' }}>
+                            <StyledUl style={{ listStyleType: 'none' }}>
                                 <li> {t(translations.expedition_server_actions.check_list_1_1)}</li>
-                            </ul>
+                            </StyledUl>
                         </li>
 
                         <li>{t(translations.expedition_server_actions.check_list_2)}</li>
@@ -154,7 +155,7 @@ export const ExpeditionServerActionButtons = (props) => {
                         <li>{t(translations.expedition_server_actions.check_list_6)}</li>
 
                         <li>{t(translations.expedition_server_actions.check_list_7)}</li>
-                    </ul>
+                    </StyledUl>
                     <Image src={CheckList} />
 
                     <Divider />
@@ -187,6 +188,10 @@ export const ExpeditionServerActionButtons = (props) => {
         </Wrapper>
     )
 }
+
+const StyledUl = styled.ul`
+    padding-left: 15px;
+`;
 
 const Wrapper = styled.div`
     display: none;
