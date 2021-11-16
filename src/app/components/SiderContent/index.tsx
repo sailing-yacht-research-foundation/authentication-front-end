@@ -24,15 +24,14 @@ export const SiderContent = (props) => {
   const { toggled } = props;
 
   const items = [
-    { key: '1', paths: ['/', '/search'] },
-    { key: '13', paths: ['/events'], subMenuKey: 'events' },
-    { key: '14', paths: ['/races'], subMenuKey: 'events' },
-    { key: '15', paths: ['/boats'] },
-    { key: '12', paths: ['/data'] },
-    { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
-    { key: '8', paths: ['/profile/change-password'], subMenuKey: 'profile' },
-    { key: '16', paths: ['/tracks'] },
-    { key: '17', paths: ['/groups'] },
+    { key: '1', paths: ['search'] },
+    { key: '14', paths: ['events'], subMenuKey: 'events' },
+    { key: '15', paths: ['boats'] },
+    { key: '12', paths: ['data'] },
+    { key: '7', paths: ['profile'], subMenuKey: 'profile' },
+    { key: '8', paths: ['change-password'], subMenuKey: 'profile' },
+    { key: '16', paths: ['tracks'] },
+    { key: '17', paths: ['groups'] },
   ];
 
   const history = useHistory();
@@ -54,11 +53,19 @@ export const SiderContent = (props) => {
 
   const renderDefaultSelectedRoute = () => {
     const filteredItems = items.filter(item => {
-      return location.pathname.includes(item.paths.join(' '));
+      const itemPath = item.paths.join('').split('/');
+      const pathName = location.pathname.split('/');
+      if (pathName.length > 0)
+        return pathName[pathName.length - 1]?.includes(itemPath[itemPath?.length - 1]);
+      return false;
     });
+
+    console.log(filteredItems);
     if (filteredItems.length > 0) {
       if (!filteredItems[0].subMenuKey) setOpenKey('');
       else setOpenKey(filteredItems[0].subMenuKey);
+
+      console.log(filteredItems);
       setSelectedKey(filteredItems[0].key);
     }
     setRenderedDefaultActive(true);
@@ -70,7 +77,7 @@ export const SiderContent = (props) => {
   }
 
   return (
-    <SiderWrapper style={{ width: (toggled && !isMobile()) ? '100%' : 'auto' }}>
+    <SiderWrapper style={{ width: (toggled && !isMobile()) ? '256px' : 'auto' }}>
       {renderedDefaultActive && <SyrfMenu
         defaultSelectedKeys={[selectedKey]}
         mode="inline"
@@ -79,7 +86,7 @@ export const SiderContent = (props) => {
         <Logo
           onClick={navigateToHome}
           style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px', cursor: 'pointer' }} />
-        <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
+        <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/search')} icon={<SearchOutlined />}>
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
@@ -87,7 +94,7 @@ export const SiderContent = (props) => {
           {t(translations.side_menu.my_tracks)}
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="events" onClick={() => history.push('/events')} title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
+        <SyrfMenuItem key="14" onClick={() => history.push('/events')} title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
           {t(translations.side_menu.my_events)}
         </SyrfMenuItem>
 
@@ -131,6 +138,7 @@ export const SiderContent = (props) => {
 const SiderWrapper = styled.div`
   position: fixed;
   width: 256px;
+  overflow: hidden;
 
   ${media.medium`
     width: auto;
