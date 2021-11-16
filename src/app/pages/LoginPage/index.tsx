@@ -8,12 +8,12 @@ export const LoginPage = () => {
 
   return (
     <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
-      <Col lg={12} md={0} xs={0} sm={0}>
+      <Col xl={12} lg={0} md={0} xs={0} sm={0}>
         <Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
           <LeftPanel />
         </Curtains>
       </Col>
-      <Col lg={12} md={24} xs={24} sm={24}>
+      <Col xl={12} lg={24} md={24} xs={24} sm={24}>
         <LoginForm />
       </Col>
     </Row>
