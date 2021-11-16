@@ -123,6 +123,7 @@ export const FilterPane = (props) => {
                                 autoCorrect="off"
                                 autoComplete="off"
                                 autoCapitalize="none"
+                                allowClear={true}
                             />
                             <CriteriaSuggestion keyword={keyword} searchBarRef={searchInputRef} />
                             <ResultSuggestion isFilterPane keyword={keyword} searchBarRef={searchInputRef} />
@@ -208,7 +209,7 @@ const Wrapper = styled.div`
     border-top: 1px solid #eee;
     z-index: 100;
 
-    ${media.medium`
+    ${media.large`
         position: static;
         padding: 0;
         padding-left: 60px;
@@ -235,7 +236,7 @@ const FilterHeader = styled.div`
 const StyledAiFillCloseCircle = styled(AiFillCloseCircle)`
     display: block;
 
-    ${media.medium`
+    ${media.large`
         display: none;
     `}
 `;

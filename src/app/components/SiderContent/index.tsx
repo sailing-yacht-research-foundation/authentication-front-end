@@ -132,7 +132,7 @@ const SiderWrapper = styled.div`
   position: fixed;
   width: 256px;
 
-  ${media.medium`
+  ${media.large`
     width: auto;
     max-width: 256px;
   `}
@@ -163,7 +163,7 @@ const SyrfMenuItem = styled(Menu.Item)`
     line-height: 50px !important;
     width: 256px !important;
 
-    ${media.medium`
+    ${media.large`
       width: auto !important;
     `}
 `;

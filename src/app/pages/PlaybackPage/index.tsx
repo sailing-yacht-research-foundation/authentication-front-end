@@ -103,22 +103,24 @@ export const PlaybackPage = (props) => {
   };
 
   const handleHistoryGoBack = () => {
-    history.goBack();
-    const currentPathname = history.location.pathname;
+    if (history.action !== "POP") {
+      history.goBack();
+      const currentPathname = history.location.pathname;
 
-    setTimeout(() => {
-      if (currentPathname === window.location.pathname) history.goBack();
-    }, 100);
+      setTimeout(() => {
+        if (currentPathname === window.location.pathname) history.goBack();
+      }, 100);
+    } else {
+      history.push('/');
+    }
   };
 
   return (
     <Wrapper>
       <PageHeadContainer>
-        {history.action !== "POP" && (
-          <GobackButton onClick={handleHistoryGoBack}>
-            <IoIosArrowBack style={{ fontSize: "40px", color: "#1890ff" }} />
-          </GobackButton>
-        )}
+        <GobackButton onClick={handleHistoryGoBack}>
+          <IoIosArrowBack style={{ fontSize: "40px", color: "#1890ff" }} />
+        </GobackButton>
         <div style={{ width: "100%" }} ref={headerInfoElementRef}>
           <PageInfoContainer>
             <PageHeadingContainer>
@@ -128,8 +130,8 @@ export const PlaybackPage = (props) => {
               </div>
 
               <PageHeadingRightContainer>
-                { playbackType !== PlaybackTypes.RACELOADING 
-                  && playbackType !== PlaybackTypes.RACENOTFOUND 
+                {playbackType !== PlaybackTypes.RACELOADING
+                  && playbackType !== PlaybackTypes.RACENOTFOUND
                   && (
                     <>
                       <Share />

@@ -150,7 +150,7 @@ const StyledTabs = styled(Tabs)`
     position: relative;
     width: 100%;
 
-    ${media.medium`
+    ${media.large`
         width: 65%;
     `}
 
@@ -179,7 +179,7 @@ const ToggleFilterPane = styled.div`
     box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
     cursor: pointer;
 
-    ${media.medium`
+    ${media.large`
         display: none;
     `}
 `;
