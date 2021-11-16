@@ -214,7 +214,6 @@ export const removeMemberFromTheGroup = (groupId, invitationId) => {
 }
 
 export const removeAsAdmin = (groupId, invitationId) => {
-    console.log(invitationId);
     return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/remove-admin`, {
         data: {
             id: invitationId

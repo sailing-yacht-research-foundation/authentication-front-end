@@ -106,7 +106,6 @@ export const Nav = (props) => {
 
     React.useEffect(() => {
         if (group.id) {
-            console.log(group.status);
             setJoinStatus(group.status);
         }
     }, [group]);

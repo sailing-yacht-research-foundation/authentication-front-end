@@ -108,7 +108,7 @@ const LinkStyled = styled(Link)`
 const DropDownWrapper = styled.div`
   display: none;
 
-  ${media.medium`
+  ${media.large`
     display: flex;
   `}
 `;
@@ -118,7 +118,7 @@ export const MobileMenuWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 10;
-  ${media.medium`
+  ${media.large`
     display: none;
   `}
 `;
@@ -135,7 +135,7 @@ const AboutLink = styled(LinkStyled)`
 
 const StyledButtonCreate = styled(Button)`
   display: none;
-  ${media.medium`
+  ${media.large`
     display: block;
     margin-right: 30px;
     margin-top: 13px;

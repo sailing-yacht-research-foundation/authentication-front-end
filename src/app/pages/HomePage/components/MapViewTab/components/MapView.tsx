@@ -183,7 +183,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
         return (
             <>
                 <div>{t(translations.home_page.map_view_tab.name)} {race._source.name}</div>
-                {race._source.start_country && <div>{t(translations.home_page.map_view_tab.location)} {race._source.start_city + ', ' + race._source.start_country}</div>}
+                {race._source.start_country && <div>{t(translations.home_page.map_view_tab.location)} {[race._source.start_city, race._source.start_country].filter(Boolean).join(', ')}</div>}
                 <div>{t(translations.home_page.map_view_tab.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}</div>
                 {race._source.event_name && <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race._source.event_name)}</div>}
                 {race._source.event_description && <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race._source.event_description)}</div>}

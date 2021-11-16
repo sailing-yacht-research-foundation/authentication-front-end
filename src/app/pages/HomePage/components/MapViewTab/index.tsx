@@ -110,7 +110,7 @@ const MyLocationWrapper = styled.div`
     flex-direction: column;
     align-items: center;
 
-    ${media.medium`
+    ${media.large`
         bottom: 20px;
     `}
 `;
@@ -119,7 +119,7 @@ const StyledMyLocationIcon = styled(BiTargetLock)`
     color: #fff;
     font-size: 30px;
 
-    ${media.medium`
+    ${media.large`
         font-size: 40px;
     `}
 `;

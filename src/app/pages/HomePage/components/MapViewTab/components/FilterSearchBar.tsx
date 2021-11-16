@@ -88,6 +88,7 @@ export const FilterSearchBar = (props) => {
                     autoComplete="off"
                     autoCapitalize="none"
                     autoCorrect="off"
+                    allowClear={true}
                     placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
                 <SearchBarLogo />
                 <StyledSpin spinning={isSearching}></StyledSpin>
@@ -114,6 +115,12 @@ const SearchBarWrapper = styled.div`
     width: 570px;
     max-width: 80%;
     z-index: 11;
+
+    display: block;
+
+    ${media.large`
+        display: none;
+    `}
 `;
 
 const SearchBarInnerWrapper = styled.div`
@@ -126,6 +133,7 @@ const SearchBarLogo = styled(SYRFLogo)`
     top: 0px;
     width: 45px;
     height: 45px;
+    z-index: 10;
 `;
 
 const StyledSearchBar = styled(Input)`
@@ -134,7 +142,7 @@ const StyledSearchBar = styled(Input)`
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 70px;
-    padding-right: 50px;
+    padding-right: 10px;
     white-space:nowrap;
     text-overflow:ellipsis;
 
@@ -155,7 +163,7 @@ const AdvancedSearchTextWrapper = styled.div`
     }
     display: block;
 
-    ${media.medium`
+    ${media.large`
         display: none;
     `};
 `;

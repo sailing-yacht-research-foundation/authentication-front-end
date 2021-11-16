@@ -39,7 +39,6 @@ export const AssignEventAsGroupAdminModal = (props) => {
             .validateFields()
             .then(async values => {
                 const { groupId } = values;
-                console.log(values);
                 const response = await assignEventAsGroupAdmin(groupId, event.id, checked);
 
                 if (response.success) {

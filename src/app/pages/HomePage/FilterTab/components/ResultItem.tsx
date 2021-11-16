@@ -23,7 +23,7 @@ export const ResultItem = (props) => {
             {race._source?.start_country && <HeadDescriptionWrapper>
                 <Space size={5}>
                     <GiPositionMarker />
-                    {race._source?.start_city + ', ' + race._source?.start_country}
+                    {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
                 </Space>
             </HeadDescriptionWrapper>}
             <Name><Link to={`/playback?raceId=${race._id}`}>{race._source?.name}</Link></Name>
