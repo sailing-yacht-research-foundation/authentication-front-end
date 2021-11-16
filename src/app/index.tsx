@@ -143,7 +143,7 @@ export function App(props) {
           width={256}
           style={{
             background: StyleConstants.MAIN_TONE_COLOR,
-            zIndex: 998
+            zIndex: 99999
           }}
         >
           <SiderContent toggled={isDesktopSiderToggled} />

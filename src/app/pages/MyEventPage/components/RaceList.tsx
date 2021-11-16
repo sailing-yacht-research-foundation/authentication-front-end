@@ -4,8 +4,9 @@ import moment from 'moment';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { TIME_FORMAT } from 'utils/constants';
+import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
+import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 
 export const RaceList = (props) => {
 
@@ -21,22 +22,33 @@ export const RaceList = (props) => {
             render: (text, record) => {
                 return <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             },
-            width: '33%'
+            width: '25%'
         },
         {
             title: t(translations.competition_unit_list_page.start_date),
-            dataIndex: 'approximateStartTime',
-            key: 'start_date',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text_with_time),
-            width: '33%'
+            dataIndex: 'approximateStart',
+            key: 'approximateStart',
+            render: (value) => moment(value).format(TIME_FORMAT.date_text),
+            width: '25%'
         },
         {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
-            width: '33%'
-        }
+            width: '25%'
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => {
+                if (record?.id
+                    && record?.status === RaceStatus.ON_GOING)
+                return <ExpeditionServerActionButtons competitionUnit={record} />;
+      
+              return <></>;
+            }
+          },
     ];
 
     const [pagination, setPagination] = React.useState<any>({
@@ -60,10 +72,6 @@ export const RaceList = (props) => {
                 total: response.data?.count
             });
         }
-    }
-
-    const onPaginationChanged = (page) => {
-        getAll(page);
     }
 
     React.useEffect(() => {

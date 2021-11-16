@@ -146,6 +146,7 @@ const SyrfMenu = styled(Menu)`
     font-weight: 500;
     height: 100vh;
     border-right: none;
+    overflow-y: auto;
 `;
 
 const SyrfSubmenu = styled(Menu.SubMenu)`

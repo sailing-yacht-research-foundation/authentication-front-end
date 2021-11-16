@@ -2,7 +2,6 @@ import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
-import React from 'react'
 
 /**
  * Check if is mobile
@@ -29,10 +28,16 @@ export const stringToColour = (str) => {
     return colour;
 }
 
-export const milisecondsToMinutes = (miliseconds) => {
-    let minutes = Math.floor(miliseconds / 60000);
-    let seconds = ((miliseconds % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (Number(seconds) < 10 ? '0' : '') + seconds;
+export const milisecondsToMinutes = (duration) => {
+    let seconds: any = Math.floor((duration / 1000) % 60),
+        minutes: any = Math.floor((duration / (1000 * 60)) % 60),
+        hours: any = Math.floor((duration / (1000 * 60 * 60)) % 24);
+        
+        hours = hours.toString().padStart(2, '0');
+        minutes= minutes.toString().padStart(2, '0');
+        seconds= seconds.toString().padStart(2, '0');
+
+    return hours + ":" + minutes + ":" + seconds;
 }
 
 export const debounce = (callback, time) => {

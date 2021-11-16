@@ -60,3 +60,17 @@ export const getUDPServerDetail = () => {
         }
     });
 }
+
+export const getExpeditionByCompetitionUnitId = (competitionUnit) => {
+    return syrfService.get(`${SYRF_SERVER.STREAMING_SERVER}${SYRF_SERVER.API_VERSION}/expedition/competition-unit/${competitionUnit}`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    }); 
+}

@@ -19,12 +19,13 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE } from "utils/constants";
+import { MAP_DEFAULT_VALUE, RaceStatus } from "utils/constants";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
+import { ExpeditionServerActionButtons } from "app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons";
 
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -396,6 +397,12 @@ export const PlaybackStreamRace = (props) => {
           <ModalCountdownTimer />
         </LeaderboardContainer>
         <RaceMap emitter={eventEmitter} />
+
+        {competitionUnitDetail?.id
+          && competitionUnitDetail?.status === RaceStatus.ON_GOING &&
+          <StreamToExpeditionContainer>
+            <ExpeditionServerActionButtons competitionUnit={competitionUnitDetail} />
+          </StreamToExpeditionContainer>}
       </MapContainer>
 
       <div style={{ width: "100%", position: "relative" }}>
@@ -407,4 +414,11 @@ export const PlaybackStreamRace = (props) => {
 
 const LeaderboardContainer = styled.div`
   transition: all 0.3s;
+`;
+
+const StreamToExpeditionContainer = styled.div`
+  position: absolute;
+  bottom: 160px;
+  right: 10px;
+  z-index: 501;
 `;
