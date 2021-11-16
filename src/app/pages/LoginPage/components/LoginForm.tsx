@@ -74,7 +74,7 @@ export const LoginForm = (props) => {
     <Wrapper>
       <Spin spinning={isSigningIn} tip={t(translations.login_page.login_message)}>
         <Title>
-          <Logo />
+          <StyledLogo onClick={() => history.push('/')} />
         </Title>
 
         <FormWrapper>
@@ -248,3 +248,7 @@ const SyrfSignupButton = styled(Button)`
     border-color: #DB6E1E;
   } 
 `;
+
+const StyledLogo = styled(Logo)`
+  cursor: pointer;
+`
