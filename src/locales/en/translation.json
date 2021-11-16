@@ -770,7 +770,8 @@
     "check_list_7": "Send a test ping to test the connection. Type ‘ping’ into the command box in expedition and hit ‘Send’.",
     "last_message": "Last message:",
     "from": ", from",
-    "at": ", at"
+    "at": ", at",
+    "are_you_sure_you_want_to_leave": "Are you sure you want to leave SYRF? You are subscribing to a race, the connection will be terminated after closing our web app."
   },
   "agreement_modal": {
     "title": "There's a change to our agreements",
