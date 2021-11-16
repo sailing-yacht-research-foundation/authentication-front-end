@@ -33,6 +33,7 @@ export const PlaybackPage = (props) => {
 
   const headerInfoElementRef = useRef<any>();
   const contentContainerRef = useRef<any>();
+  const playbackContainerRef = useRef<any>();
 
   const { actions } = usePlaybackSlice();
 
@@ -116,7 +117,7 @@ export const PlaybackPage = (props) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper ref={playbackContainerRef}>
       <PageHeadContainer>
         <GobackButton onClick={handleHistoryGoBack}>
           <IoIosArrowBack style={{ fontSize: "40px", color: "#1890ff" }} />
@@ -134,8 +135,8 @@ export const PlaybackPage = (props) => {
                   && playbackType !== PlaybackTypes.RACENOTFOUND
                   && (
                     <>
-                      <Share />
-                      <FullScreen />
+                      {!competitionUnitDetail?.calendarEvent?.isPrivate && <Share />}
+                      <FullScreen container={playbackContainerRef} />
                     </>
                   )
                 }

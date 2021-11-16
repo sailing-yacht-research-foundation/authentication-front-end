@@ -1,31 +1,36 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai';
+import { media } from 'styles/media';
 
-export const FullScreen = () => {
+export const FullScreen = (props) => {
     const [isFullScreen, setIsFullScreen] = useState(false);
 
-    const handleOpenFullScreen = () => {
-        if (document?.body?.requestFullscreen) {
-            document.body.requestFullscreen(); 
-            setIsFullScreen(true);
-            return;
-        };
+    const { container } = props;
 
-        setIsFullScreen(false);
+    const handleOpenFullScreen = () => {
+        if (document?.fullscreenElement) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        } else {
+            if (container?.current?.requestFullscreen) {
+                container?.current?.requestFullscreen();
+                setIsFullScreen(true);
+            }
+        }
     }
 
     const handleCloseFullScreen = () => {
-        if (document?.exitFullscreen) {
+        if (document?.fullscreenElement) {
             document.exitFullscreen();
-            setIsFullScreen(false);
-            return;
-        };
+        }
+        setIsFullScreen(false);
     }
 
     return (
         <div style={{ marginLeft: "8px" }}>
-            { isFullScreen ? 
+            {isFullScreen ?
                 <ExitFullScreenButton onClick={handleCloseFullScreen} />
                 :
                 <FullScreenButton onClick={handleOpenFullScreen} />
@@ -37,6 +42,11 @@ export const FullScreen = () => {
 const FullScreenButton = styled(AiOutlineFullscreen)`
     font-size: 24px;
     cursor: pointer;
+    display: none;
+
+    ${media.medium`
+        display: block;
+    `};
 `;
 
 const ExitFullScreenButton = styled(AiOutlineFullscreenExit)`

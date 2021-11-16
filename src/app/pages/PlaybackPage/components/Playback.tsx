@@ -162,6 +162,7 @@ const ButtonContainer = styled.div`
     border-radius: 50%;
     background: ${StyleConstants.MAIN_TONE_COLOR};
     margin: 0 10px;
+    cursor: pointer;
 `;
 
 const PlaybackLengthContainer = styled.div`
