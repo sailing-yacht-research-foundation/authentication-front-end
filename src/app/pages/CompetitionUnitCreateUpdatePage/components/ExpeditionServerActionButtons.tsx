@@ -120,8 +120,6 @@ export const ExpeditionServerActionButtons = (props) => {
             unsubscribe(competitionUnit?.id);
         }
 
-        console.log(competitionUnit?.id, lastSubscribedCompetitionUnitId);
-
         lastSubscribedCompetitionUnitIdRef.current = lastSubscribedCompetitionUnitId;
     }, [lastSubscribedCompetitionUnitId]);
 
