@@ -23,6 +23,9 @@ import { selectLastSubscribedCompetitionUnitId } from '../slice/selectors';
 import { useCompetitionUnitManagerSlice } from '../slice';
 import { StyleConstants } from 'styles/StyleConstants';
 import { MdAddComment } from 'react-icons/md';
+import { SYRF_SERVER } from 'services/service-constants';
+import { selectSessionToken } from 'app/pages/LoginPage/slice/selectors';
+import 'whatwg-fetch';
 
 export const ExpeditionServerActionButtons = (props) => {
 
@@ -41,6 +44,8 @@ export const ExpeditionServerActionButtons = (props) => {
     const lastSubscribedCompetitionUnitIdRef = React.useRef<string>(lastSubscribedCompetitionUnitId);
 
     const { actions } = useCompetitionUnitManagerSlice();
+
+    const sessionToken = useSelector(selectSessionToken);
 
     const dispatch = useDispatch();
 
@@ -72,28 +77,50 @@ export const ExpeditionServerActionButtons = (props) => {
     React.useEffect(() => {
         checkForSubscribeStatus();
         window.onbeforeunload = onWindowClose;
+        window.onunload = onWindowClose;
         return () => {
             window.onbeforeunload = null;
+            window.onunload = null;
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onWindowClose = (e) => {
         if (lastSubscribedCompetitionUnitIdRef.current) {
-            unsubscribe();
-            return t(translations.expedition_server_actions.are_you_sure_you_want_to_leave);
+            fetch(`${SYRF_SERVER.STREAMING_SERVER}${SYRF_SERVER.API_VERSION}/expedition/unsubscribe`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + sessionToken
+                },
+                body: JSON.stringify({
+                    competitionUnitId: lastSubscribedCompetitionUnitIdRef.current
+                }),
+                keepalive: true // this is important!
+            })
         }
 
         return null;
     }
 
-    // update subscribe status of invidiual button on pages after unsubscribe using nav connection button.
     React.useEffect(() => {
-        if (previousValue?.lastSubscribedCompetitionUnitId && !lastSubscribedCompetitionUnitId &&
-            previousValue?.lastSubscribedCompetitionUnitId === competitionUnit?.id
-        ) {
+        // update subscribe status of invidiual button on pages after unsubscribe using nav connection button.
+        if (previousValue?.lastSubscribedCompetitionUnitId
+            && !lastSubscribedCompetitionUnitId
+            && previousValue?.lastSubscribedCompetitionUnitId
+            === competitionUnit?.id) {
             setSubscribed(false);
         }
+
+        // unsubscribe all previous races
+        if (competitionUnit
+            && competitionUnit?.id
+            === previousValue?.lastSubscribedCompetitionUnitId
+            && subscribed) {
+            unsubscribe(competitionUnit?.id);
+        }
+
+        console.log(competitionUnit?.id, lastSubscribedCompetitionUnitId);
 
         lastSubscribedCompetitionUnitIdRef.current = lastSubscribedCompetitionUnitId;
     }, [lastSubscribedCompetitionUnitId]);
@@ -120,14 +147,15 @@ export const ExpeditionServerActionButtons = (props) => {
         }
     }
 
-    const unsubscribe = async () => {
+    const unsubscribe = async (competitionUnitId) => {
         setIsLoading(true);
-        const response = await unsubscribeRace(competitionUnit?.id || lastSubscribedCompetitionUnitIdRef.current);
+        const response = await unsubscribeRace(competitionUnitId);
         setIsLoading(false);
 
         if (response?.success) {
             setSubscribed(false);
-            dispatch(actions.setLastSubscribedCompetitionUnitId(''));
+            if (competitionUnitId === lastSubscribedCompetitionUnitId)
+                dispatch(actions.setLastSubscribedCompetitionUnitId(''));
         } else {
             toast.error(t(translations.expedition_server_actions.an_error_happened_when_unsubscribe_this_race));
         }
@@ -230,7 +258,7 @@ export const ExpeditionServerActionButtons = (props) => {
                 </ModalBody>
                 <ModalButtonContainer>
                     <Space size={10}>
-                        <Button onClick={unsubscribe}>{t(translations.expedition_server_actions.unsubscribe)}</Button>
+                        <Button onClick={() => unsubscribe(competitionUnit?.id || lastSubscribedCompetitionUnitIdRef?.current)}>{t(translations.expedition_server_actions.unsubscribe)}</Button>
                     </Space>
                 </ModalButtonContainer>
             </Modal>
