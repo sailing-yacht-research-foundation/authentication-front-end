@@ -16,6 +16,8 @@ import { timeMillisToHours } from 'utils/time';
 import KMLIcon from '../assets/kml.png';
 import GPXIcon from '../assets/gpx.png';
 import ReactTooltip from 'react-tooltip';
+import { BiTrash } from 'react-icons/bi';
+import { DeleteTrackModal } from './DeleteTrackModal';
 
 const defaultOptions = {
     loop: true,
@@ -29,6 +31,10 @@ const defaultOptions = {
 export const MyTrackList = () => {
 
     const { t } = useTranslation();
+
+    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
+    const [track, setTrack] = React.useState<any>({});
 
     const columns = [
         {
@@ -113,11 +119,17 @@ export const MyTrackList = () => {
                 return <Space size={10}>
                     <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'kml')} src={KMLIcon} data-tip={t(translations.my_tracks_page.download_as_kml)} />
                     <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'gpx')} src={GPXIcon} data-tip={t(translations.my_tracks_page.download_as_gpx)} />
+                    {record?.event?.isPrivate && <BiTrash onClick={() => showTrackDeleteModal(record)} data-tip={t(translations.tip.delete_this_track)} style={{ color: 'red', fontSize: '25px', cursor: 'pointer' }} />}
                     <ReactTooltip />
                 </Space>;
             }
         },
     ];
+
+    const showTrackDeleteModal = (track) => {
+        setTrack(track);
+        setShowDeleteModal(true);
+    }
 
     const performDownloadTrack = (e, track, type) => {
         e.preventDefault();
@@ -155,8 +167,17 @@ export const MyTrackList = () => {
         getAll(page);
     }
 
+    const onTrackDeleted = () => {
+        getAll(pagination.page);
+    }
+
     return (
         <>
+            <DeleteTrackModal 
+                onTrackDeleted={onTrackDeleted} 
+                track={track} 
+                showDeleteModal={showDeleteModal} 
+                setShowDeleteModal={setShowDeleteModal} />
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
