@@ -13,11 +13,15 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import ReactGA from 'react-ga4';
+import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
+import { selectLastSubscribedCompetitionUnitId } from 'app/pages/CompetitionUnitCreateUpdatePage/slice/selectors';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
 export const Nav = () => {
   const isAuthenenticated = useSelector(selectIsAuthenticated);
+
+  const lastSubscribedCompetitionUnitId = useSelector(selectLastSubscribedCompetitionUnitId);
 
   const dispatch = useDispatch();
 
@@ -65,6 +69,7 @@ export const Nav = () => {
             onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
               style={{ marginRight: '5px' }}
               size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>
+          {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
           <DropDownWrapper>
             <UserDropdown logout={logout} />
             <SelectLanguage />
@@ -137,7 +142,7 @@ const StyledButtonCreate = styled(Button)`
   display: none;
   ${media.medium`
     display: block;
-    margin-right: 30px;
+    margin: 0 15px;
     margin-top: 13px;
   `}
 `;

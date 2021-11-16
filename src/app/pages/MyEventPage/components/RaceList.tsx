@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space, Spin, Table } from 'antd';
+import { Spin, Table } from 'antd';
 import moment from 'moment';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
@@ -72,10 +72,6 @@ export const RaceList = (props) => {
                 total: response.data?.count
             });
         }
-    }
-
-    const onPaginationChanged = (page) => {
-        getAll(page);
     }
 
     React.useEffect(() => {
