@@ -28,8 +28,8 @@ export const SiderContent = (props) => {
     { key: '14', paths: ['events'], subMenuKey: 'events' },
     { key: '15', paths: ['boats'] },
     { key: '12', paths: ['data'] },
-    { key: '7', paths: ['profile'], subMenuKey: 'profile' },
     { key: '8', paths: ['change-password'], subMenuKey: 'profile' },
+    { key: '7', paths: ['profile'], subMenuKey: 'profile' },
     { key: '16', paths: ['tracks'] },
     { key: '17', paths: ['groups'] },
   ];
@@ -53,20 +53,14 @@ export const SiderContent = (props) => {
 
   const renderDefaultSelectedRoute = () => {
     const filteredItems = items.filter(item => {
-      const itemPath = item.paths.join('').split('/');
-      const pathName = location.pathname.split('/');
-      if (pathName.length > 0)
-        return pathName[pathName.length - 1]?.includes(itemPath[itemPath?.length - 1]);
-      return false;
+      return location.pathname.includes(item.paths.join(' '));
     });
-
-    console.log(filteredItems);
     if (filteredItems.length > 0) {
       if (!filteredItems[0].subMenuKey) setOpenKey('');
       else setOpenKey(filteredItems[0].subMenuKey);
-
-      console.log(filteredItems);
       setSelectedKey(filteredItems[0].key);
+    } else {
+      setSelectedKey("1");
     }
     setRenderedDefaultActive(true);
   }
@@ -86,7 +80,7 @@ export const SiderContent = (props) => {
         <Logo
           onClick={navigateToHome}
           style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px', cursor: 'pointer' }} />
-        <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/search')} icon={<SearchOutlined />}>
+        <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
 
