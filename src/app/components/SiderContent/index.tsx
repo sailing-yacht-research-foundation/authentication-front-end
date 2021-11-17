@@ -16,7 +16,6 @@ import { translations } from 'locales/translations';
 import { media } from 'styles/media';
 import { GiPathDistance, GiSailboat } from 'react-icons/gi';
 import { GoDatabase } from 'react-icons/go';
-import { isMobile } from 'utils/helpers';
 import { MdGroups } from 'react-icons/md';
 
 export const SiderContent = (props) => {
@@ -71,7 +70,7 @@ export const SiderContent = (props) => {
   }
 
   return (
-    <SiderWrapper style={{ width: (toggled && !isMobile()) ? '256px' : 'auto' }}>
+    <SiderWrapper style={{ width: 'auto' }}>
       {renderedDefaultActive && <SyrfMenu
         defaultSelectedKeys={[selectedKey]}
         mode="inline"
@@ -79,7 +78,7 @@ export const SiderContent = (props) => {
         defaultOpenKeys={[openKey]}>
         <Logo
           onClick={navigateToHome}
-          style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px', cursor: 'pointer' }} />
+          style={{ margin: '20px auto', display: 'block', width: toggled ? 'auto' : '0px', cursor: 'pointer' }} />
         <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
@@ -143,6 +142,7 @@ const SiderWrapper = styled.div`
 `;
 
 const SyrfMenu = styled(Menu)`
+    width: 256px;
     background: ${StyleConstants.MAIN_TONE_COLOR};
     color: #fff;
     font-weight: 500;
