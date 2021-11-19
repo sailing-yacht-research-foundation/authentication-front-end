@@ -116,7 +116,7 @@ export const generateLastArray = (arrayData: any[], maxSize: number) => {
   if (length - maxSize < 0) limit = 0;
 
   // Select latest positions
-  for (let index = length - 1; index >= limit; index--) {
+  for (let index = length - 1; index >= (limit + 1); index--) {
     result.push(arrayData[index]);
   }
 

@@ -20,17 +20,13 @@ const defaultOptions = {
 
 export const ConnectionLoader = React.memo(() => {
   const { t } = useTranslation();
-  const [connecting, setConnecting] = useState<boolean|undefined>(false);
-  const isConnecting = useSelector(selectIsConnecting);
+  const [connecting, setConnecting] = useState<boolean|undefined>(true);
 
   useEffect(() => {
-    if (isConnecting) setConnecting(isConnecting);
-    if (!isConnecting) {
-      setTimeout(() => {
-        setConnecting(isConnecting);
-      }, 2000)
-    }
-  }, [isConnecting])
+    setTimeout(() => {
+      setConnecting(false);
+    }, 1000);
+  }, [])
 
   if (!connecting) return null;
 

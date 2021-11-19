@@ -22,6 +22,8 @@ export const initialState: PlaybackState = {
     raceRetrievedTimestamps: [],
     timeBeforeRaceBegin: 0,
     isConnecting: false,
+    speed: 1,
+    viewsCount: 0,
 };
 
 const slice = createSlice({
@@ -85,7 +87,13 @@ const slice = createSlice({
         getRaceLength(state, action: PayloadAction<any>) {},
         getRaceCourseDetail(state, action: PayloadAction<any>) {},
         getOldRaceData(state, action: PayloadAction<any>) {},
-        getTimeBeforeRaceBegin(state, action: PayloadAction<any>) {}
+        getTimeBeforeRaceBegin(state, action: PayloadAction<any>) {},
+        setPlaybackSpeed(state, action: PayloadAction<number>) {
+            state.speed = action.payload;
+        },
+        setViewsCount(state, action: PayloadAction<number>) {
+            state.viewsCount = action.payload;
+        }
     },
 });
 

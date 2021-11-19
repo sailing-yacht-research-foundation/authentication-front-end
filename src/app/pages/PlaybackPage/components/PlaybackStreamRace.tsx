@@ -406,7 +406,7 @@ export const PlaybackStreamRace = (props) => {
       </MapContainer>
 
       <div style={{ width: "100%", position: "relative" }}>
-        <Playback />
+        <Playback emitter={eventEmitter} />
       </div>
     </div>
   );

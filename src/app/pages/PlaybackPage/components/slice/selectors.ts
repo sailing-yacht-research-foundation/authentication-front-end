@@ -85,3 +85,13 @@ export const selectIsConnecting = createSelector(
   [selectDomain],
   (playbackState) => playbackState.isConnecting
 )
+
+export const selectPlaybackSpeed = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.speed || 1
+)
+
+export const selectViewCounts = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.viewsCount
+)

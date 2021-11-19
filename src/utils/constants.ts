@@ -51,3 +51,29 @@ export const enum RaceStatus {
     ON_GOING = 'ONGOING',
     SCHEDULED = 'SCHEDULED'
 }
+
+export const enum WebsocketConnectionStatus {
+    connecting = "connecting",
+    open = "open",
+    closing = "closing",
+    closed = "closed",
+    uninstantiated = "uninstantiated",
+}
+
+export const enum PlaybackSpeed {
+    speed1X = 1,
+    speed2X = 2,
+    speed5X = 5,
+    speed10X = 10,
+    speed20X = 20,
+    speed50X = 50,
+    speed100X = 100,
+}
+
+export const enum RaceEmitterEvent {
+    ping = 'ping',
+    zoom_to_location = 'zoom-to-location',
+    sequenced_courses_update = 'sequenced-courses-update',
+    track_update = 'track-update',
+    render_legs = 'render-legs',
+}
