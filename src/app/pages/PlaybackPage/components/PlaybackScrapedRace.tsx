@@ -9,6 +9,7 @@ import { PlaybackTypes } from "types/Playback";
 import { selectSearchRaceDetail, selectPlaybackType } from "./slice/selectors";
 import { checkIsForcedToInstallAppOnMobile } from "utils/race/race-helper";
 import { PlaybackMobileIssue } from "./PlaybackMobileIssue";
+import ReactGA from 'react-ga4';
 
 export const PlaybackScrapedRace = (props) => {
   const location = useLocation();
@@ -16,7 +17,7 @@ export const PlaybackScrapedRace = (props) => {
   const playbackType = useSelector(selectPlaybackType);
   const searchRaceData = useSelector(selectSearchRaceDetail);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  
+
   const parsedQueryString: any = queryString.parse(
     location.search.includes("?") ? location.search.substring(1) : location.search
   );
@@ -25,6 +26,7 @@ export const PlaybackScrapedRace = (props) => {
     handleDebug("=== Search Race Data ===");
     handleDebug(searchRaceData);
     handleDebug("========================");
+    sendGaSource();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchRaceData]);
 
@@ -46,6 +48,10 @@ export const PlaybackScrapedRace = (props) => {
     setIsModalVisible(false);
   }
 
+  const sendGaSource = () => {
+    if (searchRaceData?.source)
+      ReactGA.set({ 'data_source': searchRaceData?.source });
+  }
 
   return (
     <div style={{ width: "100%", height: "100%" }}>

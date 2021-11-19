@@ -279,7 +279,8 @@
     "password_must_not_contain_blank": "Password must not contain blank space.",
     "want_to_take_a_quick_tour": "Want to take a quick tour?",
     "look_like_you_are_new": "Looks like your are new here {{username}}, Do you want to take a quick tour with us?",
-    "an_error_happended_when_downloading_your_track": "An error happened when downloading your track."
+    "an_error_happended_when_downloading_your_track": "An error happened when downloading your track.",
+    "your_file_is_not_found": "Your file is not found."
   },
   "playback_page": {
     "competitor": "Competitor:",
@@ -441,6 +442,12 @@
     "an_unexpected_error": "An unexpected error happened when deleting your event",
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this event?",
     "you_will_delete": "You will delete this event along with all associated information, are you sure you want to continue?"
+  },
+  "delete_track_modal": {
+    "successfully_deleted": "Successfully deleted track {{name}}",
+    "an_unexpected_error": "An unexpected error happened when deleting your track",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete this track?",
+    "you_will_delete": "You will delete this track along with all associated information, are you sure you want to continue?"
   },
   "delete_competition_unit_modal": {
     "successfully_deleted": "Successfully deleted race {{name}}",
@@ -636,7 +643,8 @@
     "total_distance": "Total Distance",
     "traveled_overground_distance": "Traveled Over Ground Distance",
     "map_view": "Map View",
-    "track_name": "Track Name:"
+    "track_name": "Track Name:",
+    "action": "Action"
   },
   "tip": {
     "search_for_races_using_different_criteria": "Search for races using different criteria.",
@@ -709,7 +717,8 @@
     "group_description": "Description of the group.",
     "group_name": "Name of this group.",
     "group_visibility": "The visibility of this group towards other sailors.",
-    "group_type": "Type of this group."
+    "group_type": "Type of this group.",
+    "delete_this_track": "Delete this track"
   },
   "forms": {
     "first_name_is_required": "First name is required.",

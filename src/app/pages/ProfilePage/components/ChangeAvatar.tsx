@@ -92,14 +92,6 @@ export const ChangeAvatar = (props) => {
         setIsUploadingProfilePicture(false);
     }
 
-    const onFileUpload = async (file) => {
-        if (file.type === 'image/gif') {
-            const imageData = await getBase64(file);
-            if (!imageData) return;
-            onSubmitCroppedAvatar(imageData);
-        };
-    }
-
     return (
         <>
             <Modal
@@ -112,7 +104,6 @@ export const ChangeAvatar = (props) => {
                     onClose={onClearCropper}
                     width={390}
                     height={295}
-                    onFileLoad={onFileUpload}
                     exportAsSquare={true}
                     mimeTypes="image/jpeg,image/png,image/gif"
                     onCrop={onAvatarCropped}

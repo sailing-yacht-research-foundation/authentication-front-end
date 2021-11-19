@@ -5,7 +5,6 @@ import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { StyleConstants } from 'styles/StyleConstants';
-import { isMobile } from 'utils/helpers';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -87,7 +86,7 @@ export const FilterPane = (props) => {
         <Wrapper {...props}>
             <FilterHeader>
                 <FilterTabTitle>{t(translations.home_page.filter_tab.advanced_search)}</FilterTabTitle>
-                {props.closable && !isMobile() && <AiFillCloseCircle
+                {props.closable && document.body.clientWidth > 1024 && <AiFillCloseCircle
                     onClick={props.close}
                     style={{ cursor: 'pointer' }}
                     size={22}
@@ -209,7 +208,7 @@ const Wrapper = styled.div`
     border-top: 1px solid #eee;
     z-index: 100;
 
-    ${media.large`
+    ${media.medium`
         position: static;
         padding: 0;
         padding-left: 60px;

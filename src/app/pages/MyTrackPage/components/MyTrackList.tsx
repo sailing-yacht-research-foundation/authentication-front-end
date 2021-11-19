@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Spin } from 'antd';
+import { Table, Spin, Space } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import styled from 'styled-components';
@@ -7,12 +7,17 @@ import { translations } from 'locales/translations';
 import moment from 'moment';
 import { AiOutlineMinus } from 'react-icons/all'
 
-import { getAllTracks } from 'services/live-data-server/my-tracks';
+import { downloadTrack, getAllTracks } from 'services/live-data-server/my-tracks';
 import NoResult from '../assets/no-results.json';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import { Link } from 'react-router-dom';
 import { TIME_FORMAT } from 'utils/constants';
 import { timeMillisToHours } from 'utils/time';
+import KMLIcon from '../assets/kml.png';
+import GPXIcon from '../assets/gpx.png';
+import ReactTooltip from 'react-tooltip';
+import { BiTrash } from 'react-icons/bi';
+import { DeleteTrackModal } from './DeleteTrackModal';
 
 const defaultOptions = {
     loop: true,
@@ -27,6 +32,10 @@ export const MyTrackList = () => {
 
     const { t } = useTranslation();
 
+    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
+    const [track, setTrack] = React.useState<any>({});
+
     const columns = [
         {
             title: t(translations.my_tracks_page.name),
@@ -36,7 +45,7 @@ export const MyTrackList = () => {
                 if (record.competitionUnit)
                     return (
                         <FlexWrapper>
-                            {record?.competitionUnit?.openGraphImage ? 
+                            {record?.competitionUnit?.openGraphImage ?
                                 <OpenGraphImage src={record?.competitionUnit?.openGraphImage} alt={record.event.name} /> :
                                 <NoImageContainer>
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
@@ -87,7 +96,7 @@ export const MyTrackList = () => {
             key: 'trackJson.totalTraveledDistance',
             render: (_value, source) => {
                 const totalTraveledDistance = source?.trackJson?.totalTraveledDistance;
-                return totalTraveledDistance ? `${totalTraveledDistance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} NMi` : '-';
+                return totalTraveledDistance ? `${totalTraveledDistance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} NMi` : '-';
             }
         },
         {
@@ -95,16 +104,37 @@ export const MyTrackList = () => {
             dataIndex: 'competitionUnit',
             key: 'competitionUnit.elapsedTime',
             render: (_value, source) => {
-                if(!source?.competitionUnit?.isCompleted) return 'on progress';
+                if (!source?.competitionUnit?.isCompleted) return 'in progress';
 
                 const startTime = new Date(source?.competitionUnit?.startTime).getTime();
                 const endTime = new Date(source?.competitionUnit?.endTime).getTime();
 
                 return timeMillisToHours(endTime - startTime);
             }
-        }
+        },
+        {
+            title: t(translations.my_tracks_page.action),
+            key: 'action',
+            render: (text, record) => {
+                return <Space size={10}>
+                    <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'kml')} src={KMLIcon} data-tip={t(translations.my_tracks_page.download_as_kml)} />
+                    <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'gpx')} src={GPXIcon} data-tip={t(translations.my_tracks_page.download_as_gpx)} />
+                    {record?.event?.isPrivate && <BiTrash onClick={() => showTrackDeleteModal(record)} data-tip={t(translations.tip.delete_this_track)} style={{ color: 'red', fontSize: '25px', cursor: 'pointer' }} />}
+                    <ReactTooltip />
+                </Space>;
+            }
+        },
     ];
 
+    const showTrackDeleteModal = (track) => {
+        setTrack(track);
+        setShowDeleteModal(true);
+    }
+
+    const performDownloadTrack = (e, track, type) => {
+        e.preventDefault();
+        downloadTrack(track, type);
+    }
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
@@ -137,8 +167,17 @@ export const MyTrackList = () => {
         getAll(page);
     }
 
+    const onTrackDeleted = () => {
+        getAll(pagination.page);
+    }
+
     return (
         <>
+            <DeleteTrackModal 
+                onTrackDeleted={onTrackDeleted} 
+                track={track} 
+                showDeleteModal={showDeleteModal} 
+                setShowDeleteModal={setShowDeleteModal} />
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
@@ -185,4 +224,10 @@ const NoImageContainer = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 4px;
+`;
+
+const DownloadButton = styled.img`
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
 `;
