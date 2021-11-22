@@ -9,7 +9,6 @@ import queryString from "querystring";
 import {
   normalizeSimplifiedTracksPingTime,
   generateRetrievedTimestamp,
-  generateStartTimeFetchAndTimeToLoad,
   generateVesselParticipantsLastPosition,
   normalizeSequencedGeometries,
   generateRaceLegsData,
@@ -230,8 +229,11 @@ export const PlaybackOldRace = (props) => {
       const isPlaying = isPlayingRef.current;
       _renderBoatsBasedOnElapsedTime(elapsedTime, isPlaying, defaultInterval);
       _renderLegsBasedOnElaspedTime(elapsedTime, isPlaying);
-      _checkForAvailableRaceDataAndRequestMoreIfNeeded(elapsedTime);
     }, defaultInterval);
+
+    setInterval(() => {
+      _requestMoreRaceDataFromServer(elapsedTimeRef.current + raceTimeRef.current.start);
+    }, 2000);
 
     return () => {
       clearInterval(intervalBoatRenderInterval);
@@ -252,9 +254,14 @@ export const PlaybackOldRace = (props) => {
 
   const _monitorWebsocketConnectionAndUpdateConnectionStatus = () => {
     if (connectionStatus === WebsocketConnectionStatus.open) dispatch(actions.setIsConnecting(false));
-    if (connectionStatus === WebsocketConnectionStatus.connecting) {
+    if ([WebsocketConnectionStatus.connecting, WebsocketConnectionStatus.closed, WebsocketConnectionStatus.closing].includes(connectionStatus)) {
       dispatch(actions.setIsConnecting(true));
+      if (!_checkIfRetreivedTimeStampIncludesCurrentTimestamp(elapsedTimeRef.current)) {
+        dispatch(actions.setIsPlaying(false));
+      }
     }
+
+    console.log(connectionStatus);
 
     _handleDebugIfEnabled("=== Connection Status ===");
     _handleDebugIfEnabled(connectionStatus);
@@ -348,9 +355,7 @@ export const PlaybackOldRace = (props) => {
     } else if (!isElapsedTimeLessThanRaceLength) {
       dispatch(actions.setElapsedTime(raceLengthRef.current));
     }
-
-    dispatch(actions.setElapsedTime(elapsedTime));
-    elapsedTimeRef.current = elapsedTime; // update the elapsed time ref for monitoring in event listeners.
+    elapsedTimeRef.current = time; // update the elapsed time ref for monitoring in event listeners.
   };
 
   const _getDesiredTimeToLoadBasedOnPlaybackSpeed = () => {
@@ -367,44 +372,21 @@ export const PlaybackOldRace = (props) => {
   }
 
   // Handle request more data
-  const _requestMoreRaceDataFromServer = (nextDataTime) => {
+  const _requestMoreRaceDataFromServer = (nextDataTime, isImmediately = false) => {
     // only request more data when connection is connecting.
     if (connectionStatus !== WebsocketConnectionStatus.connecting) return;
 
     let nextDateTimeCpy = nextDataTime;
-
     const startTime = raceTimeRef.current?.start || 0;
-    const retrievedTimestamps = retrievedTimestampsRef.current;
-    const raceLength = raceLengthRef.current;
 
-    const roundedTarget = Math.round((nextDateTimeCpy - startTime) / 1000) * 1000;
-    const roundedNextDateTime = roundedTarget + startTime;
-
-    // Check if the app retrieved the time
-    if (retrievedTimestamps.length && startTime) {
-      const generatedSetup = generateStartTimeFetchAndTimeToLoad(
-        retrievedTimestamps,
-        startTime,
-        roundedNextDateTime,
-        raceLength || 0
-      );
-
-      // Reject if the timestamps is retrieved
-      if (!generatedSetup) return;
-
-      // Overide and next data time
-      if (generatedSetup.nextDataTime) nextDateTimeCpy = generatedSetup.nextDataTime;
-    }
-
-    // Send the data via websocket
-    sendJsonMessage({
-      action: "playback",
-      data: {
-        competitionUnitId: competitionUnitId,
-        startTimeFetch: nextDateTimeCpy,
-        timeToLoad: _getDesiredTimeToLoadBasedOnPlaybackSpeed(),
-      },
-    });
+      sendJsonMessage({
+        action: "playback",
+        data: {
+          competitionUnitId: competitionUnitId,
+          startTimeFetch: nextDateTimeCpy,
+          timeToLoad: _getDesiredTimeToLoadBasedOnPlaybackSpeed()
+        },
+      });
   };
 
   const _playTheRaceAtClickedChoseTime = (targetTime) => {
@@ -417,7 +399,7 @@ export const PlaybackOldRace = (props) => {
 
     // Request more race data
     const nextDateTime = targetTime + raceTime.start;
-    _requestMoreRaceDataFromServer(nextDateTime);
+    _requestMoreRaceDataFromServer(nextDateTime, true);
   };
 
   const _renderBoatsBasedOnElapsedTime = (elapsedTime, isPlaying, interval) => {
@@ -427,17 +409,14 @@ export const PlaybackOldRace = (props) => {
 
     // If no retrieved timestamps
     if (!retrievedTimestamps.length) {
-      console.log('im not time');
       return;
     }
 
     if (!isPlaying) {
-      console.log('im not playing');
       return;
     }
 
     if (!Object.keys(vesselParticipants)?.length) {
-      console.log('im fucked')
       return;
     }
 
@@ -445,8 +424,6 @@ export const PlaybackOldRace = (props) => {
 
     eventEmitter.emit(RaceEmitterEvent.ping, mappedVPs);
     eventEmitter.emit(RaceEmitterEvent.track_update, mappedVPs);
-
-    console.log('still pinging');
 
     elapsedTimeRef.current = elapsedTime + interval;
 
@@ -479,7 +456,7 @@ export const PlaybackOldRace = (props) => {
     eventEmitter.emit(RaceEmitterEvent.render_legs, filteredRaceLegs);
   };
 
-  const _checkForAvailableRaceDataAndRequestMoreIfNeeded = (elapsedTime) => {
+  const _checkIfRetreivedTimeStampIncludesCurrentTimestamp = (elapsedTime) => {
     const retrievedTimestamps = retrievedTimestampsRef.current;
     const startRaceTime = raceTimeRef.current.start;
 
@@ -491,11 +468,12 @@ export const PlaybackOldRace = (props) => {
       if (!retrievedTimestamps.includes(selectedTime)) {
         const nearest = findNearestRetrievedTimestamp(retrievedTimestamps, selectedTime, 1000);
         if (!nearest.previous.length) {
-          _requestMoreRaceDataFromServer(startRaceTime + selectedTime);
-          break;
+          return false;
         }
       }
     }
+
+    return true;
   };
 
   const _updateCourseToRaceMapWhenHasNewData = (course) => {
