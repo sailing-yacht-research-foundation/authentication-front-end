@@ -54,7 +54,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0 10px;
     height: ${StyleConstants.NAV_BAR_HEIGHT};
     position: fixed;
-    z-index: 16;
+    z-index: 101;
     width: 100%;
     border-bottom: 1px solid #eee;
     display: flex;

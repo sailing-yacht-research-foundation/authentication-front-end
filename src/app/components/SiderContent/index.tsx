@@ -16,7 +16,6 @@ import { translations } from 'locales/translations';
 import { media } from 'styles/media';
 import { GiPathDistance, GiSailboat } from 'react-icons/gi';
 import { GoDatabase } from 'react-icons/go';
-import { isMobile } from 'utils/helpers';
 import { MdGroups } from 'react-icons/md';
 
 export const SiderContent = (props) => {
@@ -24,15 +23,14 @@ export const SiderContent = (props) => {
   const { toggled } = props;
 
   const items = [
-    { key: '1', paths: ['/', '/search'] },
-    { key: '13', paths: ['/events'], subMenuKey: 'events' },
-    { key: '14', paths: ['/races'], subMenuKey: 'events' },
-    { key: '15', paths: ['/boats'] },
-    { key: '12', paths: ['/data'] },
-    { key: '7', paths: ['/profile'], subMenuKey: 'profile' },
-    { key: '8', paths: ['/profile/change-password'], subMenuKey: 'profile' },
-    { key: '16', paths: ['/tracks'] },
-    { key: '17', paths: ['/groups'] },
+    { key: '1', paths: ['search'] },
+    { key: '14', paths: ['events'], subMenuKey: 'events' },
+    { key: '15', paths: ['boats'] },
+    { key: '12', paths: ['data'] },
+    { key: '8', paths: ['change-password'], subMenuKey: 'profile' },
+    { key: '7', paths: ['profile'], subMenuKey: 'profile' },
+    { key: '16', paths: ['tracks'] },
+    { key: '17', paths: ['groups'] },
   ];
 
   const history = useHistory();
@@ -60,6 +58,8 @@ export const SiderContent = (props) => {
       if (!filteredItems[0].subMenuKey) setOpenKey('');
       else setOpenKey(filteredItems[0].subMenuKey);
       setSelectedKey(filteredItems[0].key);
+    } else {
+      setSelectedKey("1");
     }
     setRenderedDefaultActive(true);
   }
@@ -70,7 +70,7 @@ export const SiderContent = (props) => {
   }
 
   return (
-    <SiderWrapper style={{ width: (toggled && !isMobile()) ? '100%' : 'auto' }}>
+    <SiderWrapper style={{ width: 'auto' }}>
       {renderedDefaultActive && <SyrfMenu
         defaultSelectedKeys={[selectedKey]}
         mode="inline"
@@ -78,7 +78,7 @@ export const SiderContent = (props) => {
         defaultOpenKeys={[openKey]}>
         <Logo
           onClick={navigateToHome}
-          style={{ margin: '20px auto', display: 'block', width: props.toggled ? 'auto' : '0px', cursor: 'pointer' }} />
+          style={{ margin: '20px auto', display: 'block', width: toggled ? 'auto' : '0px', cursor: 'pointer' }} />
         <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
           {t(translations.side_menu.search)}
         </SyrfMenuItem>
@@ -87,7 +87,7 @@ export const SiderContent = (props) => {
           {t(translations.side_menu.my_tracks)}
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="events" onClick={() => history.push('/events')} title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
+        <SyrfMenuItem key="14" onClick={() => history.push('/events')} title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
           {t(translations.side_menu.my_events)}
         </SyrfMenuItem>
 
@@ -131,6 +131,7 @@ export const SiderContent = (props) => {
 const SiderWrapper = styled.div`
   position: fixed;
   width: 256px;
+  overflow: hidden;
 
   ${media.large`
     width: auto;
@@ -141,6 +142,7 @@ const SiderWrapper = styled.div`
 `;
 
 const SyrfMenu = styled(Menu)`
+    width: 256px;
     background: ${StyleConstants.MAIN_TONE_COLOR};
     color: #fff;
     font-weight: 500;

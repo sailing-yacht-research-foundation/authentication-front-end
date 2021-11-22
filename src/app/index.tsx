@@ -54,7 +54,7 @@ import { UseLoginSlice } from './pages/LoginPage/slice';
 import { SiderContent } from './components/SiderContent';
 import { Header } from './components/Header';
 import { StyleConstants } from 'styles/StyleConstants';
-import { isMobile } from 'utils/helpers';
+import { screenWidthIsGreaterThan1024 } from 'utils/helpers';
 import { useSiderSlice } from './components/SiderContent/slice';
 import { useState } from 'react';
 import { TutorialModal } from './components/TutorialModal';
@@ -89,6 +89,8 @@ const PublicRoute = ({ component: Component, ...rest }) => {
   )
 }
 
+let siderToggled = true;
+
 export function App(props) {
 
   const dispatch = useDispatch();
@@ -114,8 +116,25 @@ export function App(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onWindowResize = () => {
+    // reduce number of dispatch with siderToggled flag
+    if (!screenWidthIsGreaterThan1024() && siderToggled) {
+      siderToggled = false;
+      dispatch(siderActions.setIsToggled(false));
+    } else if (screenWidthIsGreaterThan1024() && !siderToggled) {
+      siderToggled = true;
+      dispatch(siderActions.setIsToggled(true));
+      setIsDesktopSiderToggled(true);
+    }
+  }
+
   React.useEffect(() => {
-    initUserLocation(handleInitUserLocationSuccess, () => {})
+    initUserLocation(handleInitUserLocationSuccess, () => {});
+    window.addEventListener('resize', onWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', onWindowResize);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -127,7 +146,7 @@ export function App(props) {
   }
 
   const onSiderCollapsed = (collapsed) => {
-    if (isMobile()) {
+    if (!screenWidthIsGreaterThan1024()) {
       dispatch(siderActions.setIsToggled(false));
     } else {
       setIsDesktopSiderToggled(!collapsed);

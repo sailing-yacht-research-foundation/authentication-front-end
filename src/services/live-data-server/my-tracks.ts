@@ -35,7 +35,12 @@ export const downloadTrack = (track, type) => {
             document.body.appendChild(link);
             link.click();
         }).catch(error => {
-            toast.error(i18next.t(translations.misc.an_error_happended_when_downloading_your_track));
+
+            if (error?.response?.status === 404) {
+                toast.error(i18next.t(translations.misc.your_file_is_not_found));
+            } else {
+                toast.error(i18next.t(translations.misc.an_error_happended_when_downloading_your_track));
+            }
             return {
                 success: false,
                 error: error

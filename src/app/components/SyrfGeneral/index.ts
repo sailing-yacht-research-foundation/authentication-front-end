@@ -71,6 +71,10 @@ export const PageHeaderTextSmall = styled.h3`
 
 export const Wrapper = styled.div`
   margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
+
+  &:fullscreen {
+    background: #fff !important;
+}
 `;
 
 export const CreateButton = styled(Button)`
