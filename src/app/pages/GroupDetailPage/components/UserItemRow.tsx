@@ -29,7 +29,7 @@ export const UserItemRow = (props) => {
             <UserInnerContainer>
                 <UserAvatarContainer style={{ background: "url('/default-avatar.png')", backgroundSize: 'cover' }} />
                 <UserInforContainer>
-                    <UserName>{item?.member?.name} {renderTag()}</UserName>
+                    <UserName>{item?.member?.name || item?.email} {renderTag()}</UserName>
                     <UserDescription>{item?.isAdmin ? t(translations.group.admin) : t(translations.group.member)}</UserDescription>
                 </UserInforContainer>
             </UserInnerContainer>
