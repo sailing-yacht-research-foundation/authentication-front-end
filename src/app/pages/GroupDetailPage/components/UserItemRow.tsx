@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { translations } from 'locales/translations';
 import { GroupMemberStatus } from 'utils/constants';
-import { Tag } from 'antd'
+import { Tag } from 'antd';
+import { renderAvatar } from 'utils/user-utils';
 
 export const UserItemRow = (props) => {
 
@@ -27,7 +28,7 @@ export const UserItemRow = (props) => {
     return (
         <UserItem>
             <UserInnerContainer>
-                <UserAvatarContainer style={{ background: "url('/default-avatar.png')", backgroundSize: 'cover' }} />
+                <UserAvatarContainer style={{ background: `url('${renderAvatar(item?.member?.avatar)}')`, backgroundSize: 'cover' }} />
                 <UserInforContainer>
                     <UserName>{item?.member?.name || item?.email} {renderTag()}</UserName>
                     <UserDescription>{item?.isAdmin ? t(translations.group.admin) : t(translations.group.member)}</UserDescription>

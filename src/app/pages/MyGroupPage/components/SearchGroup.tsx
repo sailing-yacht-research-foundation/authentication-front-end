@@ -40,7 +40,7 @@ export const SearchGroup = () => {
             {invitationTotal > 0 && <InvitationCount onClick={() => setShowModal(true)} color="success">
                 {t(translations.group.number_of_invitations, { numberOfInvitations: invitationTotal })}
             </InvitationCount>}
-            <StyledSearchBar value={searchKeyword} onChange={setSearchKeyword} onSearch={searchForGroups} placeholder={t(translations.group.search_groups)} />
+            <StyledSearchBar allowClear={true} value={searchKeyword} onChange={setSearchKeyword} onSearch={searchForGroups} placeholder={t(translations.group.search_groups)} />
         </SearchBarWrapper>
     );
 }

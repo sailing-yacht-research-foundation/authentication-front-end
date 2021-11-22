@@ -267,8 +267,8 @@ export const assignAdmin = (groupId, memberId) => {
         })
 }
 
-export const searchMembers = (groupId, keyword) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/members?isAdmin_eq=false`, {
+export const searchMembers = (groupId, keyword, status) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/members?isAdmin_eq=false${status && `&status_eq=` + status}`, {
         params: {
             q: keyword
         }
