@@ -26,8 +26,19 @@ import { MdAddComment } from 'react-icons/md';
 import { SYRF_SERVER } from 'services/service-constants';
 import { selectSessionToken } from 'app/pages/LoginPage/slice/selectors';
 import 'whatwg-fetch';
+import useWebSocket, { ReadyState } from "react-use-websocket";
 
 export const ExpeditionServerActionButtons = (props) => {
+
+    const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
+
+    const sessionToken = useSelector(selectSessionToken);
+
+    const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
+        `${streamUrl}/authenticate?session_token=${sessionToken}`, {
+        shouldReconnect: () => true
+    }
+    );
 
     const { t } = useTranslation();
 
@@ -45,8 +56,6 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const { actions } = useCompetitionUnitManagerSlice();
 
-    const sessionToken = useSelector(selectSessionToken);
-
     const dispatch = useDispatch();
 
     const [udpDetail, setUdpDetail] = React.useState<any>({
@@ -56,7 +65,7 @@ export const ExpeditionServerActionButtons = (props) => {
         port: ''
     });
 
-    const [lastMessage, setLastMessage] = React.useState({
+    const [lastPingMessage, setLastPingMessage] = React.useState({
         message: '',
         from: {
             ipAddress: ''
@@ -73,6 +82,21 @@ export const ExpeditionServerActionButtons = (props) => {
     }
 
     const previousValue = usePrevious<{ lastSubscribedCompetitionUnitId: string }>({ lastSubscribedCompetitionUnitId });
+
+    // Listen last message from web socket
+    React.useEffect(() => {
+        // handleMessageFromWebsocket(lastMessage);
+
+        // if (lastMessage 
+        //     && lastMessage.type === 'data') {
+        //         console.log('dsadas');
+        // }
+
+        console.log(lastMessage);
+        // if ()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lastMessage]);
+
 
     React.useEffect(() => {
         checkForSubscribeStatus();
@@ -127,7 +151,7 @@ export const ExpeditionServerActionButtons = (props) => {
         const response = await getExpeditionByCompetitionUnitId(competitionUnit?.id || lastSubscribedCompetitionUnitIdRef.current);
 
         if (response.success) {
-            setLastMessage(response?.data?.lastPing);
+            setLastPingMessage(response?.data?.lastPing);
         }
     }
 
@@ -199,7 +223,7 @@ export const ExpeditionServerActionButtons = (props) => {
     return (
         <Wrapper>
             <Spin spinning={isLoading}>
-                {!subscribed && competitionUnit ? (<CreateButton icon={<MdAddComment style={{ marginRight: '5px' }} />} onClick={subscribe} >{t(translations.expedition_server_actions.subscribe_stream_to_expedition)}</CreateButton>) : (
+                {!subscribed && competitionUnit ? (<CreateButton icon={<MdAddComment style={{ marginRight: '5px' }} />} onClick={subscribe} >{t(translations.expedition_server_actions.stream_to_expedition)}</CreateButton>) : (
                     competitionUnit ? (<CreateButton icon={<AiFillInfoCircle style={{ marginRight: '5px' }} />} onClick={showUDPModalDetail} >{t(translations.expedition_server_actions.stream_to_expedition_detail)}</CreateButton>) : (
                         (<StyledConnectionButton onClick={() => showUDPModalDetail()} style={{ fontSize: '30px' }} />)
                     )
@@ -249,8 +273,8 @@ export const ExpeditionServerActionButtons = (props) => {
                         <Button onClick={() => copyToClipboard(udpDetail?.port)} shape={"round"} type="primary">{t(translations.expedition_server_actions.copy)}</Button>
                     </ModalUDPTitle>
                     {
-                        lastMessage?.message && <ModalUDPTitle>
-                            {t(translations.expedition_server_actions.last_message)} {lastMessage?.message}{t(translations.expedition_server_actions.from)} {lastMessage?.from?.ipAddress}{t(translations.expedition_server_actions.at)} {moment(lastMessage.timestamp).format(TIME_FORMAT.date_text_with_time)}
+                        lastPingMessage?.message && <ModalUDPTitle>
+                            {t(translations.expedition_server_actions.last_message)} {lastPingMessage?.message}{t(translations.expedition_server_actions.from)} {lastPingMessage?.from?.ipAddress}{t(translations.expedition_server_actions.at)} {moment(lastPingMessage.timestamp).format(TIME_FORMAT.date_text_with_time)}
                         </ModalUDPTitle>
                     }
                 </ModalBody>
