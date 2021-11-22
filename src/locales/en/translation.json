@@ -805,10 +805,11 @@
     "members_count": "{{membersCount}} members",
     "admins": "Admins ({{adminsCount}})",
     "members": "Members ({{membersCount}})",
-    "assign_new_admin": "Assign new admin",
+    "add_admins": "Add Admins",
     "manage": "Manage",
     "remove_as_admin": "Remove as Admin",
     "remove_from_group": "Remove from group",
+    "cancel_invitation": "Cancel invitation",
     "invite": "Invite",
     "are_you_sure_you_want_to_remove_person_out_of_this_group": "Are you sure you want to remove {{memberName}} from the group?",
     "this_people_will_no_longer_see_any": "{{memberName}} can no longer see any posts, events,... from this group. Do you really want to remove?",
@@ -865,6 +866,7 @@
     "please_choose_a_group": "Please choose a group from the list.",
     "successfully_added_this_event_as_group_admin": "Successfully added this event as group admin.",
     "assign_this_event_as_group_admin": "Assign this event as group admin.",
-    "requested": "Requested"
+    "requested": "Requested",
+    "set_as_admin": "Set as admin"
   }
 }
