@@ -121,7 +121,7 @@ export const AdminsManager = (props) => {
             <RemoveMemberFromGroupModal groupId={groupId} onMemberRemoved={onMemberRemoved} member={member} showModal={showRemoveFromGroupModal} setShowModal={setShowRemoveFromGroupModal} />
             <SectionTitleWrapper>
                 <SectionTitle>{t(translations.group.admins, { adminsCount: totalAdmins })}</SectionTitle>
-                {group?.isAdmin && <CreateButton onClick={() => setShowAssignModal(true)} icon={<RiAdminFill style={{ marginRight: '10px' }} />}>Assign new admin</CreateButton>}
+                {group?.isAdmin && <CreateButton onClick={() => setShowAssignModal(true)} icon={<RiAdminFill style={{ marginRight: '10px' }} />}>{t(translations.group.add_admins)}</CreateButton>}
             </SectionTitleWrapper>
             <Spin spinning={isGettingAdmins}>
                 <MemberList>

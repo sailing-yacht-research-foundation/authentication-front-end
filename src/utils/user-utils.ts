@@ -38,3 +38,12 @@ export const getProfilePicture = (user) => {
 export const checkForVerifiedField = (user, field) => {
     return field === 'email' ? user.emailVerified : user.attributes?.phoneNumberVerified;
 }
+
+export const renderAvatar = (picture) => {
+
+    if (picture && !isNaN(picture)) return `/default-avatars/avatar-${picture}.png`;
+
+    if (picture) return picture;
+
+    return NoAvatar;
+}

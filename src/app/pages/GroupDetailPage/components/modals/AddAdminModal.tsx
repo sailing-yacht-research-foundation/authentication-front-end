@@ -8,6 +8,7 @@ import { useParams } from 'react-router';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'utils/helpers';
+import { GroupMemberStatus } from 'utils/constants';
 
 export const AddAdminModal = (props) => {
 
@@ -52,7 +53,7 @@ export const AddAdminModal = (props) => {
     }
 
     const onSearch = async (keyword) => {
-        const response = await searchMembers(groupId, keyword);
+        const response = await searchMembers(groupId, keyword, GroupMemberStatus.accepted);
 
         if (response.success) {
             setResults(response.data.rows);
@@ -60,12 +61,16 @@ export const AddAdminModal = (props) => {
     }
 
     const renderSearchResults = () => {
-        return results.map(member => <Select.Option value={member.id}>{member.member?.name + ' - ' + member.email}</Select.Option>)
+        return results.map(member => <Select.Option value={member.id}>{member.member?.name} {member.email}</Select.Option>)
     }
+
+    React.useEffect(() => {
+        onSearch('');
+    },[]);
 
     return (
         <Modal
-            title={t(translations.group.assign_new_admin)}
+            title={t(translations.group.add_admins)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
             visible={showModal}
             onOk={setUserAsAdmin}
