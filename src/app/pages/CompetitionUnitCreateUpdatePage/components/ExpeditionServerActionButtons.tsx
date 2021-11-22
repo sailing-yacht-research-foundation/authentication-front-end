@@ -26,7 +26,8 @@ import { MdAddComment } from 'react-icons/md';
 import { SYRF_SERVER } from 'services/service-constants';
 import { selectSessionToken } from 'app/pages/LoginPage/slice/selectors';
 import 'whatwg-fetch';
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
+import { message } from 'antd';
 
 export const ExpeditionServerActionButtons = (props) => {
 
@@ -34,7 +35,7 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const sessionToken = useSelector(selectSessionToken);
 
-    const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
+    const { lastMessage } = useWebSocket(
         `${streamUrl}/authenticate?session_token=${sessionToken}`, {
         shouldReconnect: () => true
     }
@@ -85,15 +86,7 @@ export const ExpeditionServerActionButtons = (props) => {
 
     // Listen last message from web socket
     React.useEffect(() => {
-        // handleMessageFromWebsocket(lastMessage);
-
-        // if (lastMessage 
-        //     && lastMessage.type === 'data') {
-        //         console.log('dsadas');
-        // }
-
-        console.log(lastMessage);
-        // if ()
+        handleMessageFromWebsocket(lastMessage?.data)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lastMessage]);
 
@@ -146,6 +139,26 @@ export const ExpeditionServerActionButtons = (props) => {
 
         lastSubscribedCompetitionUnitIdRef.current = lastSubscribedCompetitionUnitId;
     }, [lastSubscribedCompetitionUnitId]);
+
+    const handleMessageFromWebsocket = (data) => {
+        if (!data) return;
+        const formattedData = JSON.parse(data);
+        if (formattedData.type !== 'data'
+            && formattedData.dataType !== 'expedition-ping-update') return;
+
+        setLastPingMessage({
+            ...lastPingMessage,
+            from: {
+                ipAddress: formattedData?.data?.from
+            },
+            message: formattedData?.data?.message,
+            timestamp: formattedData?.data.timestamp
+        });
+
+        if (!competitionUnit) {
+            message.success(t(translations.expedition_server_actions.stream_to_expedition_connected));
+        }
+    }
 
     const getExpeditionByCompetitionUnit = async () => {
         const response = await getExpeditionByCompetitionUnitId(competitionUnit?.id || lastSubscribedCompetitionUnitIdRef.current);
@@ -225,7 +238,7 @@ export const ExpeditionServerActionButtons = (props) => {
             <Spin spinning={isLoading}>
                 {!subscribed && competitionUnit ? (<CreateButton icon={<MdAddComment style={{ marginRight: '5px' }} />} onClick={subscribe} >{t(translations.expedition_server_actions.stream_to_expedition)}</CreateButton>) : (
                     competitionUnit ? (<CreateButton icon={<AiFillInfoCircle style={{ marginRight: '5px' }} />} onClick={showUDPModalDetail} >{t(translations.expedition_server_actions.stream_to_expedition_detail)}</CreateButton>) : (
-                        (<StyledConnectionButton onClick={() => showUDPModalDetail()} style={{ fontSize: '30px' }} />)
+                        (lastPingMessage?.from?.ipAddress && <StyledConnectionButton onClick={() => showUDPModalDetail()} style={{ fontSize: '30px' }} />)
                     )
                 )}
             </Spin>
