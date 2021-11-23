@@ -28,7 +28,6 @@ import { selectSessionToken } from 'app/pages/LoginPage/slice/selectors';
 import 'whatwg-fetch';
 import useWebSocket from "react-use-websocket";
 import { message } from 'antd';
-import { isJsonString } from 'utils/helpers';
 
 export const ExpeditionServerActionButtons = (props) => {
 
@@ -155,6 +154,7 @@ export const ExpeditionServerActionButtons = (props) => {
             formattedData = JSON.parse(data);
         } catch (e) {
             console.error(e);
+            message.error(t(translations.expedition_server_actions.error_when_handling_received_ping));
             return;
         }
 
