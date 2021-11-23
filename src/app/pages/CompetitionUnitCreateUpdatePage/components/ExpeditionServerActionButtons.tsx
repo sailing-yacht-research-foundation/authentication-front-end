@@ -55,6 +55,8 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const lastSubscribedCompetitionUnitIdRef = React.useRef<string>(lastSubscribedCompetitionUnitId);
 
+    const sessionTokenRef = React.useRef<string>(sessionToken);
+
     const { actions } = useCompetitionUnitManagerSlice();
 
     const dispatch = useDispatch();
@@ -98,6 +100,10 @@ export const ExpeditionServerActionButtons = (props) => {
         return () => {
             window.onbeforeunload = null;
             window.onunload = null;
+
+            if (!competitionUnit) {
+                unsubscribe(lastSubscribedCompetitionUnitIdRef?.current);
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -184,7 +190,7 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const unsubscribe = async (competitionUnitId) => {
         setIsLoading(true);
-        const response = await unsubscribeRace(competitionUnitId);
+        const response = await unsubscribeRace(competitionUnitId, sessionTokenRef.current);
         setIsLoading(false);
 
         if (response?.success) {
