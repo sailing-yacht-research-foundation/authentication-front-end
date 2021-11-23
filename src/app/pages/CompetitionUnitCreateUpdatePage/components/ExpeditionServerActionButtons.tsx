@@ -149,9 +149,14 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const handleMessageFromWebsocket = (data) => {
         let formattedData: any = {};
-        if (!data || !isJsonString(data)) return;
+        if (!data) return;
 
-        formattedData = JSON.parse(data);
+        try {
+            formattedData = JSON.parse(data);
+        } catch (e) {
+            console.error(e);
+            return;
+        }
 
         if (formattedData.type !== 'data'
             && formattedData.dataType !== 'expedition-ping-update') return;
