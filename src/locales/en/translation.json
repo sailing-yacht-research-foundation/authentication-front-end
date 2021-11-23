@@ -759,7 +759,7 @@
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",
-    "subscribe_stream_to_expedition":"Subscribe Expedition",
+    "stream_to_expedition":"Stream to Expedition",
     "stream_to_expedition_detail": "Stream To Expedition Detail",
     "udp_port": "UDP Port:",
     "udp_ip": "UDP IP:",
@@ -780,7 +780,9 @@
     "last_message": "Last message:",
     "from": ", from",
     "at": ", at",
-    "are_you_sure_you_want_to_leave": "Are you sure you want to leave SYRF? You are subscribing to a race, the connection will be terminated after closing our web app."
+    "are_you_sure_you_want_to_leave": "Are you sure you want to leave SYRF? You are subscribing to a race, the connection will be terminated after closing our web app.",
+    "stream_to_expedition_connected": "Stream to expedition connected!",
+    "error_when_handling_received_ping": "An unexpected error happened when receiving ping from server."
   },
   "agreement_modal": {
     "title": "There's a change to our agreements",

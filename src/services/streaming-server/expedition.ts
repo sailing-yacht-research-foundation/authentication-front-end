@@ -17,9 +17,15 @@ export const subscribe = (competitionUnitId) => {
     });
 }
 
-export const unsubscribe = (competitionUnitId) => {
+export const unsubscribe = (competitionUnitId, sessionToken = '') => {
+    const headers = {};
+    if (sessionToken) headers['Authorization'] = "Bearer " + sessionToken;
     return syrfService.post(`${SYRF_SERVER.STREAMING_SERVER}${SYRF_SERVER.API_VERSION}/expedition/unsubscribe`, {
         competitionUnitId: competitionUnitId
+    }, {
+        headers: {
+            ...headers
+        }
     }).then(response => {
         return {
             success: true,
