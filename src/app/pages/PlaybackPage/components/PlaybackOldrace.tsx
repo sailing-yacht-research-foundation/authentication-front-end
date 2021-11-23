@@ -142,9 +142,17 @@ export const PlaybackOldRace = (props) => {
   // Manage subscription of websocket
   useEffect(() => {
     if (connectionStatus === WebsocketConnectionStatus.open && isReady) {
-      dispatch(actions.setIsPlaying(true));
-      handleRequestMoreRaceData(lastRetrivedTimestampRef.current);
-      setIsLoading(false);
+      sendJsonMessage({
+        action: "playback",
+        data: {
+          competitionUnitId: competitionUnitId,
+          timeToLoad: getDesiredTimeToLoadBasedOnPlaybackSpeed(),
+        },
+      });
+      setTimeout(() => {
+        setIsLoading(false);
+        dispatch(actions.setIsPlaying(true));
+      }, 3000); // wait for render the time line
     }
 
     if ([WebsocketConnectionStatus.connecting, WebsocketConnectionStatus.closing, WebsocketConnectionStatus.closed].includes(connectionStatus)) {
@@ -394,6 +402,8 @@ export const PlaybackOldRace = (props) => {
       10: 300,
       50: 1500,
       100: 3000,
+      200: 6000,
+      500: 15000,
       1000: 30000
     }
 
@@ -403,7 +413,6 @@ export const PlaybackOldRace = (props) => {
   const handlePlaybackClickedPosition = (targetTime) => {
     if (!simplifiedTracksRef?.current || !eventEmitter) return;
     dispatch(actions.setIsPlaying(true));
-    eventEmitter.emit(RaceEmitterEvent.zoom_to_location);
     // Request more race data
     handleRequestMoreRaceData(targetTime);
   };
@@ -414,9 +423,18 @@ export const PlaybackOldRace = (props) => {
     const vesselParticipants = vesselParticipantsRef.current;
 
     // If no retrieved timestamps
-    if (!retrievedTimestamps.length) return;
-    if (!isPlaying) return;
-    if (!Object.keys(vesselParticipants)?.length) return;
+    if (!retrievedTimestamps.length) {
+      // console.log('i was here 1');
+      return;
+    }
+    if (!isPlaying) {
+      console.log('i was here 2')
+      return;
+    }
+    if (!Object.keys(vesselParticipants)?.length) {
+      console.log('i was here 3');
+      return;
+    }
 
     isStillFetchingFromBoatRenderRef.current = false;
     const mappedVPs = generateVesselParticipantsLastPosition(vesselParticipants, elapsedTime, retrievedTimestamps);

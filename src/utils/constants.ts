@@ -68,6 +68,8 @@ export const enum PlaybackSpeed {
     speed20X = 20,
     speed50X = 50,
     speed100X = 100,
+    speed200X = 200,
+    speed500X = 500,
     speed1000x = 1000
 }
 

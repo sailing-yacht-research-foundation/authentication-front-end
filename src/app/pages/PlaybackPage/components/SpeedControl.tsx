@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { usePlaybackSlice } from './slice';
 import { selectPlaybackSpeed } from './slice/selectors';
 
-const speeds = [1, 2, 5, 10, 20, 50, 100, 1000];
+const speeds = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
 
 export const SpeedControl = React.memo((props: any) => {
 
@@ -58,7 +58,7 @@ const SpeedContainerDropdown = styled.div`
     bottom: 100%;
     padding: 5px 5px;
     border: 1px solid #eee;
-    width: 55px;
+    width: 60px;
     border-radius: 10px;
     text-align: center;
 

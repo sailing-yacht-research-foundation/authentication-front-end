@@ -12,7 +12,7 @@ import { media } from 'styles/media';
 import moment from 'moment';
 import { SpeedControl } from './SpeedControl';
 import { BiTargetLock } from 'react-icons/bi';
-import { TIME_FORMAT } from 'utils/constants';
+import { RaceEmitterEvent, TIME_FORMAT } from 'utils/constants';
 import { Spin } from 'antd';
 
 const buttonStyle = {
@@ -54,7 +54,8 @@ export const Playback = (props) => {
     }
 
     const pauseUnPauseRace = () => {
-        dispatch(actions.setIsPlaying(!isPlaying));
+        if (!isLoading)
+            dispatch(actions.setIsPlaying(!isPlaying));
     }
 
     const backward = (miliseconds) => {
@@ -109,7 +110,7 @@ export const Playback = (props) => {
     }
 
     const backToRaceArea = () => {
-        emitter.emit('zoom-to-location');
+        emitter.emit(RaceEmitterEvent.zoom_to_location);
     }
 
     return (

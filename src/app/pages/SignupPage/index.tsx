@@ -1,20 +1,42 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row } from 'antd';
 import { SignupForm } from './components/SignupForm';
 import { Curtains } from "react-curtains";
-import { LeftPanel } from '../LoginPage/components/LeftPanel';
+import { SimpleVideoPlane } from 'app/pages/AboutPage/components/SimpleVideoPlane';
+import styled from 'styled-components';
 
 export const SignupPage = () => {
+
+  React.useEffect(() => {
+    window.onscroll = function () {
+      window.dispatchEvent(new Event('resize'));
+    }
+
+    return () => {
+      window.onscroll = null;
+    }
+  }, []);
+
   return (
-    <Row justify="center" align="middle" style={{ maxHeight: 'calc(100vh - 100vh)', paddingTop: '100vh', padding: '0 15px' }}>
-      <Col xl={12} lg={0} md={0} xs={0} sm={0}>
-        <Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
-          <LeftPanel />
-        </Curtains>
-      </Col>
-      <Col xl={12} lg={24} md={24} xs={24} sm={24}>
+    <>
+      <Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
+        <CurtainPlaneWrapper>
+          <SimpleVideoPlane />
+        </CurtainPlaneWrapper>
+      </Curtains>
+      <Row justify="center" align="middle" style={{ height: 'calc(100vh - 100px)', marginTop: '100px', padding: '0 15px' }}>
         <SignupForm />
-      </Col>
-    </Row>
+      </Row>
+    </>
   );
 }
+
+const CurtainPlaneWrapper = styled.div`
+position:fixed;
+padding:0;
+margin:0;
+top:0;
+left:0;
+width: 100%;
+height: 100%;
+`;
