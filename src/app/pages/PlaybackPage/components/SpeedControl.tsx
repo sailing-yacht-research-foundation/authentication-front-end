@@ -24,6 +24,7 @@ export const SpeedControl = React.memo((props: any) => {
 
     React.useEffect(() => {
         dispatch(actions.setPlaybackSpeed(0));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -35,7 +36,10 @@ export const SpeedControl = React.memo((props: any) => {
             {
                 showSpeedControl && <SpeedContainerDropdown>
                     {speeds.map(value => {
-                        return <a key={value} onClick={() => changeSpeed(value)}>{value + 'x'}</a>;
+                        return <a href="/" key={value} onClick={(e) => {
+                            e.preventDefault();
+                            changeSpeed(value);
+                        }}>{value + 'x'}</a>;
                     })}
                 </SpeedContainerDropdown>
             }

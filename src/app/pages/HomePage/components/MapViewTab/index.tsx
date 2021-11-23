@@ -21,11 +21,6 @@ type MapViewProps = {
     zoomToCurrentUserLocationIfAllowed: () => void;
 }
 
-const center = {
-    lng: -122.4,
-    lat: 37.8
-}
-
 const ZOOM = 13;
 
 export const MapViewTab = (props) => {

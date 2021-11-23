@@ -121,6 +121,7 @@ export const ExpeditionServerActionButtons = (props) => {
         }
 
         lastSubscribedCompetitionUnitIdRef.current = lastSubscribedCompetitionUnitId;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lastSubscribedCompetitionUnitId]);
 
     const getExpeditionByCompetitionUnit = async () => {

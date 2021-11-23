@@ -20,6 +20,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
 
     const [checked, setChecked] = React.useState(false);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
     const hideAssignModal = () => {

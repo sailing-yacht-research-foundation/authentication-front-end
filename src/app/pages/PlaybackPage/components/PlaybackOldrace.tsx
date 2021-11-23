@@ -8,7 +8,6 @@ import { useLocation } from "react-router";
 import queryString from "querystring";
 import {
   normalizeSimplifiedTracksPingTime,
-  selectLatestPositionOfSimplifiedTracks,
   generateRetrievedTimestamp,
   generateStartTimeFetchAndTimeToLoad,
   generateVesselParticipantsLastPosition,

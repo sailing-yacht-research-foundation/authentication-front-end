@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import Lottie from "react-lottie";
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { LottieMessage, LottieWrapper } from "app/components/SyrfGeneral";
-import { selectIsConnecting } from './slice/selectors';
 import { translations } from "locales/translations";
 import LoadingConnection from '../assets/loading-connection.json';
 

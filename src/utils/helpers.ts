@@ -192,6 +192,7 @@ export const insert3BetweenEachWord = (stringOfWords) => {
         if (!format.test(word)) {
             formattedWord.push(word);
         }
+        return word;
     });
 
     return formattedWord.join('~3 ') + '~3';
