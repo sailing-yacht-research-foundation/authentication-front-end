@@ -240,3 +240,17 @@ export const uppercaseFirstCharacter = (text) => {
     const type = String(text).toLowerCase();
     return type.charAt(0).toUpperCase() + type.slice(1);
 }
+
+/**
+ * Check if is json string.
+ * @param str 
+ * @returns boolean
+ */
+export const isJsonString = (str) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}

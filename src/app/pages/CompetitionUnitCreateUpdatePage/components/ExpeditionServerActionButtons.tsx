@@ -28,6 +28,7 @@ import { selectSessionToken } from 'app/pages/LoginPage/slice/selectors';
 import 'whatwg-fetch';
 import useWebSocket from "react-use-websocket";
 import { message } from 'antd';
+import { isJsonString } from 'utils/helpers';
 
 export const ExpeditionServerActionButtons = (props) => {
 
@@ -147,8 +148,11 @@ export const ExpeditionServerActionButtons = (props) => {
     }, [lastSubscribedCompetitionUnitId]);
 
     const handleMessageFromWebsocket = (data) => {
-        if (!data) return;
-        const formattedData = JSON.parse(data);
+        let formattedData: any = {};
+        if (!data || !isJsonString(data)) return;
+
+        formattedData = JSON.parse(data);
+
         if (formattedData.type !== 'data'
             && formattedData.dataType !== 'expedition-ping-update') return;
 
@@ -158,7 +162,7 @@ export const ExpeditionServerActionButtons = (props) => {
                 ipAddress: formattedData?.data?.from
             },
             message: formattedData?.data?.message,
-            timestamp: formattedData?.data.timestamp
+            timestamp: formattedData?.data?.timestamp
         });
 
         if (!competitionUnit) {
