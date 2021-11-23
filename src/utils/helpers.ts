@@ -14,6 +14,10 @@ export const isMobile = () => {
     return mobile;
 }
 
+export const screenWidthIsGreaterThan1024 = () => {
+    return document.body.clientWidth > 1024;
+} 
+
 export const stringToColour = (str) => {
     let hash = 0;
     let colour = '#';

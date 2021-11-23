@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { FiMap } from 'react-icons/fi';
 import { BsListUl, BsSearch } from 'react-icons/bs';
-import { isMobile } from 'utils/helpers';
+import { isMobile, screenWidthIsGreaterThan1024 } from 'utils/helpers';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { translations } from 'locales/translations';
@@ -133,7 +133,7 @@ export const Main = () => {
                     </ButtonCreateContainer>
                 }
             </StyledTabs>
-            {(showAdvancedSearch || !isMobile()) && <FilterPane defaultFocus close={() => dispatch(actions.setShowAdvancedSearch(false))} />}
+            {(showAdvancedSearch || screenWidthIsGreaterThan1024()) && <FilterPane defaultFocus close={() => dispatch(actions.setShowAdvancedSearch(false))} />}
             <ToggleFilterPane onClick={() => dispatch(actions.setShowAdvancedSearch(true))} >
                 <BsSearch size={25} color={StyleConstants.MAIN_TONE_COLOR} />
             </ToggleFilterPane>
@@ -179,7 +179,7 @@ const ToggleFilterPane = styled.div`
     box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
     cursor: pointer;
 
-    ${media.large`
+    ${media.medium`
         display: none;
     `}
 `;

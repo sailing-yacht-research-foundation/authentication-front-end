@@ -123,7 +123,7 @@ export const MobileMenuWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 10;
-  ${media.large`
+  ${media.medium`
     display: none;
   `}
 `;
