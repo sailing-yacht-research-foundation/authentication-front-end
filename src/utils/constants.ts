@@ -68,6 +68,7 @@ export const enum PlaybackSpeed {
     speed20X = 20,
     speed50X = 50,
     speed100X = 100,
+    speed1000x = 1000
 }
 
 export const enum RaceEmitterEvent {
@@ -76,4 +77,5 @@ export const enum RaceEmitterEvent {
     sequenced_courses_update = 'sequenced-courses-update',
     track_update = 'track-update',
     render_legs = 'render-legs',
+    leg_update = 'leg-update',
 }

@@ -19,7 +19,7 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceStatus } from "utils/constants";
+import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceStatus } from "utils/constants";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
@@ -80,8 +80,8 @@ export const PlaybackStreamRace = (props) => {
     return () => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
-        eventEmitter.off("ping", () => { });
-        eventEmitter.off("leg-update", () => { });
+        eventEmitter.off(RaceEmitterEvent.ping, () => { });
+        eventEmitter.off(RaceEmitterEvent.leg_update, () => { });
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
@@ -140,9 +140,22 @@ export const PlaybackStreamRace = (props) => {
   // Manage last message from websocket
   useEffect(() => {
     if (lastMessage) {
-      const parsedData = JSON.parse(lastMessage.data);
-      const { type, dataType, data } = parsedData;
-      if (type === "data" && dataType === "position") handleAddPosition(data);
+      let parsedData: any = {};
+      try {
+        parsedData = JSON.parse(lastMessage.data);
+        const { type, dataType, data } = parsedData;
+        if (type === "data") {
+          if (dataType === "position") {
+            handleAddPosition(data);
+          }
+
+          if (dataType === "viewers-count") {
+            handleSetViewsCount(data);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
 
       handleDebug("=== WS DATA ===");
       handleDebug(parsedData);
@@ -253,6 +266,11 @@ export const PlaybackStreamRace = (props) => {
   const handleResize = () => {
     if (mapElementRef.current) mapElementRef.current._container.style.height = `100%`;
   };
+
+  const handleSetViewsCount = (data) => {
+    if (data)
+      dispatch(actions.setViewsCount(data?.count || 0));
+  }
 
   // Noramalize data
   const handleNormalizeTracksData = () => {

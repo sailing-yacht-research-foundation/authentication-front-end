@@ -13,6 +13,7 @@ import moment from 'moment';
 import { SpeedControl } from './SpeedControl';
 import { BiTargetLock } from 'react-icons/bi';
 import { TIME_FORMAT } from 'utils/constants';
+import { Spin } from 'antd';
 
 const buttonStyle = {
     fontSize: '25px',
@@ -27,7 +28,7 @@ const playbackTime = {
 }
 
 export const Playback = (props) => {
-    const { onPlaybackTimeManualUpdate, emitter } = props;
+    const { onPlaybackTimeManualUpdate, emitter, isLoading } = props;
     const elapsedTime = useSelector(selectElapsedTime);
     const raceLength = useSelector(selectRaceLength);
     const isPlaying = useSelector(selectIsPlaying);
@@ -114,11 +115,12 @@ export const Playback = (props) => {
     return (
         <PlaybackWrapper>
             <PlaybackTopRightItemsContainer>
+                {isLoading && <RightItemContainer> <Spin spinning={true}></Spin></RightItemContainer>}
                 {renderViewsCount()}
                 <RightItemContainer>{moment(competitionUnitDetail?.approximateStart).format(TIME_FORMAT.date_text)}</RightItemContainer>
                 {renderSpeedControl()}
                 <RightItemContainer>
-                    <BackToRaceAreaButton onClick={backToRaceArea}/>
+                    <BackToRaceAreaButton onClick={backToRaceArea} />
                 </RightItemContainer>
             </PlaybackTopRightItemsContainer>
             <PlaybackLengthOutterContainer>
