@@ -15,7 +15,8 @@ export const MAP_DEFAULT_VALUE = {
 export const TIME_FORMAT = {
     number: 'YYYY-MM-DD',
     date_text_with_time: 'MMM. D, YYYY [at] h:mm A z',
-    date_text: 'MMM. D, YYYY'
+    date_text: 'MMM. D, YYYY',
+    time: 'HH:mm:ss'
 }
 
 export const MODE = {
