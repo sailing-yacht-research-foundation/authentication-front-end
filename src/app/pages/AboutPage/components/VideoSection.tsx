@@ -12,10 +12,6 @@ export const VideoSection = (props) => {
     const { t } = useTranslation();
 
     const history = useHistory();
-    
-    React.useEffect(() => {
-        window.dispatchEvent(new Event('resize'));
-    }, []);
 
     return (
         <Wrapper className="video-section">

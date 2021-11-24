@@ -20,7 +20,6 @@ import { eulaVersionsFilter } from 'utils/eula';
 import { PrivacyPolicyInterface } from 'types/PrivacyPolicy';
 import { privacypolicyVersionsFilter } from 'utils/privacy-policy';
 import styled from 'styled-components';
-import { media } from 'styles/media';
 
 const { Option } = Select;
 
@@ -297,15 +296,10 @@ export const SignupForm = () => {
 }
 
 const Wrapper = styled.div`
-    width: 100%;
-
-
-    ${media.medium`
-        padding: 0 200px;
-        padding-top: 100px;
-        height: 100vh;
-        overflow-y: scroll;
-        align-self: flex-start;
-        justify-self: flex-start;
-    `};
+    z-index: 10;
+    background: rgba(255,255,255,.8);
+    padding: 30px;
+    border-radius: 10px;
+    // height: 500px;
+    // overflow-y: scroll;
 `;

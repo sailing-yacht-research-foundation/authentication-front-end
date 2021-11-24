@@ -21,6 +21,7 @@ export const AddAdminModal = (props) => {
 
     const [results, setResults] = React.useState<any[]>([]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
     const hideAddAdminModal = () => {

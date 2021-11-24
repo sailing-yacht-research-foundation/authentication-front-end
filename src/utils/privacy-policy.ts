@@ -22,6 +22,8 @@ export const privacypolicyVersionsFilter = (versionList: PrivacyPolicyInterface[
     if (a.versionNumber[2] !== b.versionNumber[2]) {
       return a.versionNumber[2] - b.versionNumber[2];
     }
+
+    return 0;
   });
 
   // Select last privacy policy

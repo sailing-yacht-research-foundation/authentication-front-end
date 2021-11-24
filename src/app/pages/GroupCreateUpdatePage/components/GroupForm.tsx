@@ -1,13 +1,12 @@
 import React from 'react';
 import { Spin, Form, Divider, Select } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField, SyrfTextArea, SyrFieldDescription, SyrfFormSelect } from 'app/components/SyrfForm';
-import { DeleteButton, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
 import { toast } from 'react-toastify';
-import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { IoIosArrowBack } from 'react-icons/io';

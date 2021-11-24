@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import Lottie from "react-lottie";
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { LottieMessage, LottieWrapper } from "app/components/SyrfGeneral";
-import { selectIsConnecting } from './slice/selectors';
 import { translations } from "locales/translations";
 import LoadingConnection from '../assets/loading-connection.json';
 
@@ -20,17 +18,13 @@ const defaultOptions = {
 
 export const ConnectionLoader = React.memo(() => {
   const { t } = useTranslation();
-  const [connecting, setConnecting] = useState<boolean|undefined>(false);
-  const isConnecting = useSelector(selectIsConnecting);
+  const [connecting, setConnecting] = useState<boolean|undefined>(true);
 
   useEffect(() => {
-    if (isConnecting) setConnecting(isConnecting);
-    if (!isConnecting) {
-      setTimeout(() => {
-        setConnecting(isConnecting);
-      }, 2000)
-    }
-  }, [isConnecting])
+    setTimeout(() => {
+      setConnecting(false);
+    }, 1000);
+  }, [])
 
   if (!connecting) return null;
 

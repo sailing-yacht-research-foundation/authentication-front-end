@@ -16,7 +16,7 @@ export const isMobile = () => {
 
 export const screenWidthIsGreaterThan1024 = () => {
     return document.body.clientWidth > 1024;
-} 
+}
 
 export const stringToColour = (str) => {
     let hash = 0;
@@ -33,15 +33,16 @@ export const stringToColour = (str) => {
 }
 
 export const milisecondsToMinutes = (duration) => {
-    let seconds: any = Math.floor((duration / 1000) % 60),
-        minutes: any = Math.floor((duration / (1000 * 60)) % 60),
-        hours: any = Math.floor((duration / (1000 * 60 * 60)) % 24);
-        
-        hours = hours.toString().padStart(2, '0');
-        minutes= minutes.toString().padStart(2, '0');
-        seconds= seconds.toString().padStart(2, '0');
-
-    return hours + ":" + minutes + ":" + seconds;
+    // 1- Convert to seconds:
+    let seconds = Math.floor(duration / 1000);
+    // 2- Extract hours:
+    const hours = Math.floor(seconds / 3600); // 3,600 seconds in 1 hour
+    seconds = seconds % 3600; // seconds remaining after extracting hours
+    // 3- Extract minutes:
+    const minutes = Math.floor(seconds / 60); // 60 seconds in 1 minute
+    // 4- Keep only seconds not extracted to minutes:
+    seconds = seconds % 60;
+    return (String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0'));
 }
 
 export const debounce = (callback, time) => {
@@ -196,6 +197,7 @@ export const insert3BetweenEachWord = (stringOfWords) => {
         if (!format.test(word)) {
             formattedWord.push(word);
         }
+        return word;
     });
 
     return formattedWord.join('~3 ') + '~3';

@@ -7,6 +7,7 @@ import {
   getCompetitionUnitById,
   getCourseByCompetitionUnit,
   getLegsByCompetitionUnit,
+  getRaceViewsCount,
   getSimplifiedTracksByCompetitionUnit,
   getTimeByCompetitionUnit,
   searchScrapedRaceById,
@@ -30,7 +31,9 @@ export function* getVesselParticipants({ type, payload }) {
   const { vesselParticipantGroupId } = payload;
 
   const { data } = yield call(getVesselParticipantGroupById, vesselParticipantGroupId);
-  yield put(playbackActions.setVesselParticipants(data.vesselParticipants));
+
+  if (data)
+    yield put(playbackActions.setVesselParticipants(data.vesselParticipants));
 }
 
 export function* getSearchRaceDetail({ type, payload }) {
@@ -68,7 +71,10 @@ export function* getRaceData({ type, payload }) {
 
     // Old race
     if (competitionUnitResult.data.isCompleted) {
-      return yield put(playbackActions.setPlaybackType(PlaybackTypes.OLDRACE));
+       yield put(playbackActions.setPlaybackType(PlaybackTypes.OLDRACE));
+       const response = yield call(getRaceViewsCount, raceId);
+       if (response.success) yield put(playbackActions.setViewsCount(response?.data?.count));
+       return;
     }
 
     // Streaming race
