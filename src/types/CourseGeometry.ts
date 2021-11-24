@@ -12,10 +12,12 @@ export interface CourseGeometrySequenced {
   geometryType: string;
   order: number;
   points: CourseGeometryPoint[];
+  properties: any;
 }
 
 export interface MappedCourseGeometrySequenced {
   id?: string;
   geometryType: string;
   coordinates: number[][];
+  properties: any;
 }

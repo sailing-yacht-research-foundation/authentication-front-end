@@ -90,16 +90,29 @@ export const RaceMap = (props) => {
         coursesData[sequencedCourse.id || ""] = _initPointMarker({
           coordinate: { lat: coordinate[0], lon: coordinate[1] },
           id: sequencedCourse.id,
+          name: sequencedCourse?.properties?.name
         });
       }
 
       if (courseGeometryType === objectType.line
         || courseGeometryType === objectType.lineString) {
-        coursesData[sequencedCourse.id || ""] = _initPolyline(sequencedCourse.coordinates, "#000000", 3);
+        coursesData[sequencedCourse.id || ""] = _initPolyline({
+          coordinates: sequencedCourse.coordinates,
+          color: "#000000",
+          weight: 3,
+          name: sequencedCourse?.properties?.name,
+          id: sequencedCourse.id,
+        });
       }
 
       if (courseGeometryType === objectType.polygon) {
-        coursesData[sequencedCourse.id || ""] = _initPolygon(sequencedCourse.coordinates, "#000000", 3);
+        coursesData[sequencedCourse.id || ""] = _initPolygon({
+          coordinates: sequencedCourse.coordinates,
+          color: "#000000",
+          weight: 3,
+          name: sequencedCourse?.properties?.name,
+          id: sequencedCourse.id,
+        });
       }
     });
   }
@@ -339,28 +352,60 @@ export const RaceMap = (props) => {
       .addTo(map);
   };
 
-  const _initPolyline = (coordinates, color, weight = 1) => {
-    return L.polyline(coordinates)
+  const _initPolyline = ({ coordinates, color, weight = 1, id, name }) => {
+    const popupContent = ReactDOMServer.renderToString(<MarkerInfo name={name} identifier={id} />);
+    const marker = L.polyline(coordinates)
       .setStyle({
         weight,
         color,
       })
+      .bindPopup(popupContent)
       .addTo(map);
+
+      marker.on("click", function (e) {
+        marker.openPopup();
+      });
+  
+      marker.on("mouseover", function (e) {
+        marker.openPopup();
+      });
+  
+      marker.on("mouseout", function () {
+        marker.closePopup();
+      });
+
+      return marker;
   };
 
-  const _initPolygon = (coordinates, color, weight = 1) => {
-    return L.polygon(coordinates)
+  const _initPolygon = ({ coordinates, color, weight = 1, id, name }) => {
+    const popupContent = ReactDOMServer.renderToString(<MarkerInfo name={name} identifier={id} />);
+    const marker = L.polygon(coordinates)
       .setStyle({
         weight,
         color,
       })
+      .bindPopup(popupContent)
       .addTo(map);
+
+      marker.on("click", function (e) {
+        marker.openPopup();
+      });
+  
+      marker.on("mouseover", function (e) {
+        marker.openPopup();
+      });
+  
+      marker.on("mouseout", function () {
+        marker.closePopup();
+      });
+
+      return marker;
   };
 
   const _initPointMarker = (data) => {
-    const { coordinate, id } = data;
+    const { coordinate, id, name } = data;
 
-    const popupContent = ReactDOMServer.renderToString(<MarkerInfo coordinate={coordinate} identifier={id} />);
+    const popupContent = ReactDOMServer.renderToString(<MarkerInfo coordinate={coordinate} name={name} identifier={id} />);
 
     const marker = L.marker([coordinate.lat, coordinate.lon], {
       icon: new L.icon({
