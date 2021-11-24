@@ -424,15 +424,12 @@ export const PlaybackOldRace = (props) => {
 
     // If no retrieved timestamps
     if (!retrievedTimestamps.length) {
-      // console.log('i was here 1');
       return;
     }
     if (!isPlaying) {
-      console.log('i was here 2')
       return;
     }
     if (!Object.keys(vesselParticipants)?.length) {
-      console.log('i was here 3');
       return;
     }
 
