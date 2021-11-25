@@ -87,7 +87,7 @@ export const GroupList = () => {
     }
 
     React.useEffect(() => {
-        dispatch(actions.getGroups(1));
+        dispatch(actions.getGroups(groupCurrentPage));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

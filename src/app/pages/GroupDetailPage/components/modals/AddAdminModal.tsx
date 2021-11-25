@@ -84,13 +84,13 @@ export const AddAdminModal = (props) => {
                 style={{ width: '100%' }}
             >
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.group.select_a_member)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.group.select_or_search_a_member)}</SyrfFieldLabel>}
                     name="uuid"
                     rules={[{ required: true, message: t(translations.group.please_select_a_member_to_assign_him_as_admin) }]}
                 >
                     <SyrfFormSelect
                         showSearch
-                        placeholder={t(translations.group.select_a_member)}
+                        placeholder={t(translations.group.select_or_search_a_member)}
                         optionFilterProp="children"
                         onSearch={debounceSearch}
                     >

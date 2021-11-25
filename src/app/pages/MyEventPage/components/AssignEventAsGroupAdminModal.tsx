@@ -87,13 +87,13 @@ export const AssignEventAsGroupAdminModal = (props) => {
                     style={{ width: '100%' }}
                 >
                     <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.group.select_a_group)}</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.group.select_or_search_a_group)}</SyrfFieldLabel>}
                         name="groupId"
                         rules={[{ required: true, message: t(translations.group.please_choose_a_group) }]}
                     >
                         <SyrfFormSelect
                             showSearch
-                            placeholder={t(translations.group.select_a_group)}
+                            placeholder={t(translations.group.select_or_search_a_group)}
                             optionFilterProp="children"
                             onSearch={debounceSearch}
                         >
