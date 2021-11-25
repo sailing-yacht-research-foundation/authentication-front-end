@@ -389,3 +389,22 @@ export const assignEventAsGroupAdmin = (groupId: string, eventId: string, isIndi
             }
         })
 }
+
+export const uploadAvatar = (groupId, formData) => {
+    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/avatar-upload`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    .then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            sucess: false,
+            error: error
+        }
+    }); 
+}

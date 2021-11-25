@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleConstants } from 'styles/StyleConstants';
-import { getProfilePicture, getUserAttribute } from 'utils/user-utils';
 import { CameraFilled } from '@ant-design/icons';
 import { Image, Spin, Modal } from 'antd';
 import { toast } from 'react-toastify';
@@ -9,12 +8,12 @@ import Avatar from 'react-avatar-edit';
 import { dataURLtoFile } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { updateProfile, uploadAvatar } from 'services/live-data-server/user';
+import { uploadAvatar } from 'services/live-data-server/groups';
 
-export const ChangeAvatar = (props) => {
-    const { authUser } = props;
+export const GroupAvatar = (props) => {
+    const { group } = props;
 
-    const [isUploadingProfilePicture, setIsUploadingProfilePicture] = useState<boolean>(false);
+    const [isUploadingGroupAvatar, setIsUploadingGroupAvatar] = useState<boolean>(false);
 
     const [base64ConvertedURL, setBase64ConvertedURL] = React.useState<string>('');
 
@@ -28,39 +27,21 @@ export const ChangeAvatar = (props) => {
             return;
         }
 
-        const avatarFileName = `${(+ new Date())}-${String(authUser.username).substring(0, 8)}-profile-picture.png`;
+        const avatarFileName = `${(+ new Date())}-${group.id}.png`;
         let file = dataURLtoFile(base64ConvertedURL || imageData, avatarFileName);
 
-        setIsUploadingProfilePicture(true);
+        setIsUploadingGroupAvatar(true);
         setCropAvatarModalVisible(false);
 
         const formData = new FormData();
         formData.append("image", file);
-        const response = await uploadAvatar(formData);
+        const response = await uploadAvatar(group?.id, formData);
 
         onAfterUploadingAvatar();
 
         if (response.success) {
             const avatarUrl = response.data?.url;
-            if (authUser.attributes) {
-                const userData = {
-                    firstName: authUser.firstName,
-                    lastName: authUser.lastName,
-                    attributes: {
-                        picture: avatarUrl,
-                        language: getUserAttribute(authUser,'language'),
-                        locale: getUserAttribute(authUser,'locale'),
-                        bio: getUserAttribute(authUser,'bio'),
-                        sailing_number: getUserAttribute(authUser,'sailing_number'),
-                        birthdate: getUserAttribute(authUser,'birthdate'),
-                        address: getUserAttribute(authUser,'address'),
-                        phone_number: getUserAttribute(authUser,'phone_number'),
-                        showed_tour: getUserAttribute(authUser, 'showed_tour'),
-                    }
-                }
-                await updateProfile(userData);
-                props.cancelUpdateProfile();
-            }
+            /// change group avatar here
             toast.success(t(translations.profile_page.update_profile.upload_profile_picture_successfully));
         } else {
             if (response.error?.response && response.error?.response?.status === 400) // file too large
@@ -80,7 +61,7 @@ export const ChangeAvatar = (props) => {
 
     const onAfterUploadingAvatar = () => {
         setBase64ConvertedURL('');
-        setIsUploadingProfilePicture(false);
+        setIsUploadingGroupAvatar(false);
     }
 
     return (
@@ -100,10 +81,10 @@ export const ChangeAvatar = (props) => {
                     onCrop={onAvatarCropped}
                 />
             </Modal>
-            <Spin spinning={isUploadingProfilePicture} tip={t(translations.profile_page.update_profile.uploading)}>
+            <Spin spinning={isUploadingGroupAvatar} tip={t(translations.profile_page.update_profile.uploading)}>
                 <Wrapper>
                     <AvatarHolder>
-                        <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
+                        <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={group?.groupImage || '/default-avatar.jpeg'} />
                     </AvatarHolder>
                     <ChangeAvatarButton>
                         <CameraFilled style={{ color: StyleConstants.MAIN_TONE_COLOR, fontSize: '25px' }} onClick={() => setCropAvatarModalVisible(true)} size={20} />
