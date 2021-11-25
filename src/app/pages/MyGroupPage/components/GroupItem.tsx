@@ -83,7 +83,6 @@ export const GroupItemRow = (props) => {
                         <img src={renderAvatar(member.avatar)} alt={member.name} />
                     </GroupMemberItem>
                 )}
-                {memberCount > 5 && <GroupMemberItem>+{memberCount - 5}</GroupMemberItem>}
             </>)
         }
 
