@@ -691,6 +691,7 @@ export const MyEventForm = () => {
                                                 className: 'location-search-input',
                                             })}
                                             value={address}
+                                            allowClear
                                             autoCorrect="off"
                                         />
                                         {suggestions.length > 0 && <StyledPLaceDropdown>

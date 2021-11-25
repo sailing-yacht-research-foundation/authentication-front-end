@@ -93,6 +93,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
                     >
                         <SyrfFormSelect
                             showSearch
+                            allowClear
                             placeholder={t(translations.group.select_or_search_a_group)}
                             optionFilterProp="children"
                             onSearch={debounceSearch}

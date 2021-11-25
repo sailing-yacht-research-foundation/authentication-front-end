@@ -92,6 +92,7 @@ export const AddAdminModal = (props) => {
                         showSearch
                         placeholder={t(translations.group.select_or_search_a_member)}
                         optionFilterProp="children"
+                        allowClear
                         onSearch={debounceSearch}
                     >
                         {renderSearchResults()}
