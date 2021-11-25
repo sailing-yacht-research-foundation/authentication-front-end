@@ -28,7 +28,9 @@ export const UserItemRow = (props) => {
     return (
         <UserItem>
             <UserInnerContainer>
-                <UserAvatarContainer style={{ background: `url('${renderAvatar(item?.member?.avatar)}')`, backgroundSize: 'cover' }} />
+                <UserAvatarContainer>
+                    <img src={renderAvatar(item?.member?.avatar)} alt={item?.member?.name}/>
+                </UserAvatarContainer>
                 <UserInforContainer>
                     <UserName>{item?.member?.name || item?.email} {renderTag()}</UserName>
                     <UserDescription>{item?.isAdmin ? t(translations.group.admin) : t(translations.group.member)}</UserDescription>
@@ -54,10 +56,16 @@ const UserItem = styled.div`
 const UserAvatarContainer = styled.div`
     width: 35px;
     height: 35px;
-    border: 1px solid #eee;
-    border-radius: 50%;
     margin-right: 15px;
     flex: 0 0 auto;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 1px solid #eee;
+        border-radius: 50%;
+    }
 `;
 
 const UserInforContainer = styled.div`

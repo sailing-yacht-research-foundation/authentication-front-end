@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Spin, Tag } from 'antd';
+import { Button, Spin, Tag, Space } from 'antd';
 import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
@@ -8,11 +8,13 @@ import { toast } from 'react-toastify';
 import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { GroupMemberStatus } from 'utils/constants';
+import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupSlice } from '../slice';
 import { selectGroupCurrentPage, selectRequestedGroupCurrentPage } from '../slice/selectors';
+import { renderAvatar } from 'utils/user-utils';
+import ReactTooltip from 'react-tooltip';
 
 export const GroupItemRow = (props) => {
 
@@ -26,7 +28,7 @@ export const GroupItemRow = (props) => {
 
     const { actions } = useGroupSlice();
 
-    const { group, showGroupButton, memberCount, status, onGroupJoinRequested, isAdmin } = props;
+    const { group, showGroupButton, memberCount, status, onGroupJoinRequested, isAdmin, members } = props;
 
     const requestedGroupsCurrentPage = useSelector(selectRequestedGroupCurrentPage);
 
@@ -73,22 +75,43 @@ export const GroupItemRow = (props) => {
         handlePostJoinActions(response);
     }
 
+    const renderGroupMembers = () => {
+        if (members && Array.isArray(members)) {
+            return (<>
+                {members.map(member =>
+                    <GroupMemberItem data-tip={member.name}>
+                        <img src={renderAvatar(member.avatar)} alt={member.name} />
+                    </GroupMemberItem>
+                )}
+                {memberCount > 5 && <GroupMemberItem>+{memberCount - 5}</GroupMemberItem>}
+            </>)
+        }
+
+        return <></>;
+    }
+
     return (
         <GroupItem onClick={showGroupItemDetail}>
             <GroupItemAvatarContainer>
-                <GroupItemAvatar style={{ background: "url('/default-avatar.jpeg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
+                <img src={group.groupImage || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
             </GroupItemAvatarContainer>
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>
                 <GroupItemDescription>{group.description}</GroupItemDescription>
                 <GroupType>{group.groupType && uppercaseFirstCharacter(group.groupType) + ' • '} <VisibilityOfGroup visibility={group.visibility} /> • {t(translations.group.number_of_members, { numberOfMembers: renderNumberWithCommas(memberCount) })}</GroupType>
-                {isAdmin ? <Tag color="magenta">Admin</Tag> : <Tag>Member</Tag>}
+                <GroupMemberContainer>
+                    <Space size={7}>
+                        {renderGroupMembers()}
+                    </Space>
+                </GroupMemberContainer>
+                {isAdmin && <Tag color="magenta">Admin</Tag>}
             </GroupItemInfoContainer>
             <GroupItemAction>
                 <Spin spinning={isLoading}>
                     {renderButtonByStatus()}
                 </Spin>
             </GroupItemAction>
+            <ReactTooltip/>
         </GroupItem>
     )
 }
@@ -131,10 +154,36 @@ const GroupItemAction = styled.div`
 
 const GroupItemAvatarContainer = styled.div`
     margin-right: 10px;
-`;
-
-const GroupItemAvatar = styled.div`
+    flex: 0 0 auto;
     width: 55px;
     height: 55px;
-    border-radius: 50%;
+
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid #eee;
+    }
+`;
+
+const GroupMemberItem = styled.div`
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        border-radius: 50%;
+        border: 1px solid #eee;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+`;
+
+const GroupMemberContainer = styled.div`
+    display: flex;
+    margin: 7px 0;
 `;
