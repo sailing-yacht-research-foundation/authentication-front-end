@@ -65,11 +65,12 @@ export const EventAdmins = (props) => {
 
     const renderPlusMore = () => {
         if (headless) {
-            let count = individualEditors.length + groupEditors.length;
-            if (individualEditors.length > 5) count = individualEditors.length - 5;
-            if (groupEditors.length > 5) count = groupEditors.length -5;
-            if (count !== (individualEditors.length + groupEditors.length))
-                return <span>+{(count)} more</span>
+            let individualsCount = 0, groupsCount = 0, total = 0;
+            if (individualEditors.length > 5) individualsCount = (individualEditors.length - 5);
+            if (groupEditors.length > 5) groupsCount = (groupEditors.length - 5)
+            total = individualsCount + groupsCount;
+            if (total > 0)
+                return <span>+{(individualsCount + groupsCount)} more</span>;
         }
 
         return <></>;
