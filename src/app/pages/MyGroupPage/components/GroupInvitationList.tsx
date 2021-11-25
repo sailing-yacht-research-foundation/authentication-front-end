@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { InvitationItemRow } from './InvitationItem';
+import { GroupInvitationItemRow } from './GroupInvitationItemRow';
 import { getGroupInvitations } from 'services/live-data-server/groups';
 import { Spin } from 'antd';
 import { InvitationModal } from './InvitationModal';
@@ -47,13 +47,13 @@ export const GroupInvitationList = () => {
         }
     }
 
-    const reloadInvitationList = () => {
+    const reloadParentList = () => {
         getInvitations(1);
     }
 
     const renderInvitationItem = () => {
         if (pagination.rows.length > 0)
-            return pagination.rows.map(request => <InvitationItemRow reloadInvitationList={reloadInvitationList} setIsLoading={setIsLoading} request={request} />);
+            return pagination.rows.map(request => <GroupInvitationItemRow reloadParentList={reloadParentList} setIsLoading={setIsLoading} request={request} />);
         return <EmptyInvitationMessage>{t(translations.group.you_dont_have_any_invitations_right_now)}</EmptyInvitationMessage>
     }
 
@@ -64,7 +64,7 @@ export const GroupInvitationList = () => {
 
     return (
         <Wrapper>
-            <InvitationModal reloadInvitationList={reloadInvitationList} showModal={showModal} setShowModal={setShowModal} />
+            <InvitationModal reloadParentList={reloadParentList} showModal={showModal} setShowModal={setShowModal} />
             <TitleContainer>
                 <Title>{t(translations.group.invitations, { invitationsTotal: invitationTotals })}</Title>
                 {pagination.total > 10 && <SeeAll onClick={showInvitationModal}>{t(translations.group.see_all)}</SeeAll>}

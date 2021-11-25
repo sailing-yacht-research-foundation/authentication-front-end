@@ -45,3 +45,18 @@ export const selectIsGettingAdmins = createSelector(
     [selectDomain],
     group => group.isGettingAdmins,
 );
+
+export const selectGroupDetail = createSelector(
+    [selectDomain],
+    group => group.group,
+);
+
+export const selectIsGettingGroup = createSelector(
+    [selectDomain],
+    group => group.isGettingGroup,
+);
+
+export const selectGetGroupFailed = createSelector(
+    [selectDomain],
+    group => group.getGroupDetailFailed,
+);

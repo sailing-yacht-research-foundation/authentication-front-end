@@ -8,6 +8,7 @@ import { media } from 'styles/media';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { GroupAvatar } from './GroupAvatar';
+import { VisibilityOfGroup } from 'app/pages/MyGroupPage/components/VisibilityOfGroup';
 
 const enum GroupVisibility {
     public = 'PUBLIC',
@@ -21,26 +22,14 @@ export const LeftPane = (props) => {
 
     const { group } = props;
 
-    const renderGroupVisibility = (visibility) => {
-        switch (visibility) {
-            case GroupVisibility.private:
-                return <><AiFillLock /> {uppercaseFirstCharacter(visibility)}</>
-            case GroupVisibility.public:
-                return <><GiEarthAmerica /> {uppercaseFirstCharacter(visibility)}</>
-            default:
-                return <><MdOutlineAddModerator /> {uppercaseFirstCharacter(visibility)}</>
-        }
-    }
-
     return (
         <Wrapper>
             <SectionContainer className="center">
                 <GroupAvatar group={group} />
                 <GroupName>{group.groupName}</GroupName>
                 <GroupType>{uppercaseFirstCharacter(group.groupType)}</GroupType>
-                <GroupTypeAndMemeber>{renderGroupVisibility(group.visibility)} • {renderNumberWithCommas(group.memberCount)} members</GroupTypeAndMemeber>
+                <GroupTypeAndMemeber><VisibilityOfGroup visibility={group.visibility} /> • {renderNumberWithCommas(group.memberCount)} members</GroupTypeAndMemeber>
             </SectionContainer>
-
             {
                 group.description && <SectionContainer>
                     <SectionTitle>{t(translations.group.about)}</SectionTitle>

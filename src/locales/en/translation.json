@@ -341,7 +341,8 @@
     "races": "Races",
     "status_openregistration": "Open for Registration",
     "status_publicevent": "Public Event",
-    "status_privateevent": "Private Event"
+    "status_privateevent": "Private Event",
+    "admins": "Admins"
   },
   "competition_unit_list_page": {
     "name": "Name",
@@ -613,7 +614,8 @@
     "successfully_unregister": "Successfully unregistered this competitor to the class.",
     "an_error_happended_when_ungistering": "An error happened when unregistering the competitor from the class.",
     "action": "Action",
-    "competitor_already_assigned": "Competitior already assigned to this class!"
+    "competitor_already_assigned": "Competitior already assigned to this class!",
+    "save": "Save"
   },
   "event_detail_page": {
     "organized_by": "Organized By",
@@ -624,7 +626,8 @@
     "invite_friends": "Invite friends",
     "update_this_event": "Edit this event",
     "share": "Share",
-    "event_not_found": "Event not found!"
+    "event_not_found": "Event not found!",
+    "admins": "Admins"
   },
   "my_tracks_page": {
     "my_tracks": "My Tracks",
@@ -718,7 +721,8 @@
     "group_name": "Name of this group.",
     "group_visibility": "The visibility of this group towards other sailors.",
     "group_type": "Type of this group.",
-    "delete_this_track": "Delete this track"
+    "delete_this_track": "Delete this track",
+    "set_this_event_as_group_admin": "Set this event as a group admin"
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -748,18 +752,18 @@
     "event_name_is_required": "Event name is required.",
     "location_is_required": "Location is required.",
     "event_name_must_not_be_longer_than_150_chars": "Event name must not be longer than 150 characters.",
-    "race_name_must_not_be_longer_than_150_chars":"Race name must not be longer than 150 characters.",
+    "race_name_must_not_be_longer_than_150_chars": "Race name must not be longer than 150 characters.",
     "event_description_must_not_be_longer_than_255_chars": "Event description must not be longer than 150 characters.",
     "race_description_must_not_be_longer_than_255_chars": "Race description must not be longer than 255 characters.",
     "group_description_must_not_be_longer_than_255_chars": "Group description must not be longer than 255 characters.",
-    "email_must_be_valid":"Please input a valid email.",
+    "email_must_be_valid": "Please input a valid email.",
     "search_keyword_is_required": "Search keyword is required.",
     "group_name_is_required": "Group name is required.",
     "group_name_must_not_be_longer_than_100_chars": "Group name must not be longer than 100 characters."
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",
-    "stream_to_expedition":"Stream to Expedition",
+    "stream_to_expedition": "Stream to Expedition",
     "stream_to_expedition_detail": "Stream To Expedition Detail",
     "udp_port": "UDP Port:",
     "udp_ip": "UDP IP:",
@@ -829,9 +833,9 @@
     "are_you_sure_you_want_to_remove_this_admin": "Are you sure you want to remove this person as admin?",
     "this_person_will_no_longer_can": "{{memberName}} will no longer be able to manage members, events, posts... Are you sure you want to continue?",
     "successfully_remove_person_as_admin": "Successfully removed {{memberName}} as admin",
-    "join":"Join",
+    "join": "Join",
     "cancel": "Cancel",
-    "your_groups_will_be_shown_here":"Your groups will be shown here.",
+    "your_groups_will_be_shown_here": "Your groups will be shown here.",
     "your_results_will_be_shown_here": "Your results will be shown here.",
     "results": "Results",
     "see_all": "See all",
@@ -843,7 +847,7 @@
     "your_entered_group_name_is_not_correct": "You entered group name is not correct.",
     "removed_the_group": "Removed the group.",
     "are_you_sure_you_want_to_delete_this_group": "Are you really sure you want to delete this group.",
-    "hey_are_you_sure_you_want_to_delete_this_group":"Hey, Are you really sure you want to delete this group? All associated information will be deleted as well such as members, posts, events,... etc. Please double check by typing the group name in the field below and press ok.",
+    "hey_are_you_sure_you_want_to_delete_this_group": "Hey, Are you really sure you want to delete this group? All associated information will be deleted as well such as members, posts, events,... etc. Please double check by typing the group name in the field below and press ok.",
     "name_of_the_group": "Name Of The Group",
     "group_name_is_required": "Group name is required.",
     "please_input_group_name_to_continue": "Please input group name to continue",
@@ -872,12 +876,26 @@
     "please_select_a_member_to_assign_him_as_admin": "Please select a member to assign him as admin.",
     "declined": "Declined",
     "invitations_title": "Invitations",
-    "invididual_assignment_only": "Invidual Assignment Only",
+    "add_current_group_members": "Add current group members",
     "select_a_group": "Select a Group",
     "please_choose_a_group": "Please choose a group from the list.",
     "successfully_added_this_event_as_group_admin": "Successfully added this event as group admin.",
     "assign_this_event_as_group_admin": "Assign this event as group admin.",
     "requested": "Requested",
-    "set_as_admin": "Set as admin"
+    "set_as_admin": "Set as admin",
+    "please_choose_an_image_to_crop": "Please choose an image to crop!",
+    "upload_group_avatar_successfully": "Upload group avatar successfully!",
+    "change_group_avatar": "Change group avatar",
+    "uploading": "Uploading....",
+    "error_happened_when_upload_group_avatar": "An error happened when uploading your group avatar",
+    "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
+    "leave_your_invitees_a_message": "Leave your invitee a message",
+    "you_can_leave_your_invitees_a_message_so_that": "You can leave your invitees so that they will be notified to join your group",
+    "click_here_to_open_mail_app": "Click here to open mail app",
+    "your_inputted_emails_are_not_valid": "You inputted emails are not valid emails.",
+    "you_have_not_requested_to_join_any_groups": "You have not requested to join any groups",
+    "individual": "Individual",
+    "group": "Group",
+    "revoke": "Revoke"
   }
 }

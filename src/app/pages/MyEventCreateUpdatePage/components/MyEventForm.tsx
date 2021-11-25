@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Menu, Space, message, Switch } from 'antd';
+import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Menu, Space, message, Switch, Button } from 'antd';
 import { DeleteButton, PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -29,6 +29,8 @@ import { MODE } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { CoursesList } from './CoursesList';
 import tzLookup from 'tz-lookup';
+import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/AssignEventAsGroupAdminModal';
+import { GrGroup } from 'react-icons/gr';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -51,6 +53,8 @@ export const MyEventForm = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
+    const [showAssignModal, setShowAssignModal] = React.useState<boolean>(false);
+
     const [mode, setMode] = React.useState<string>('');
 
     const { eventId } = useParams<{ eventId: string }>();
@@ -58,7 +62,7 @@ export const MyEventForm = () => {
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
 
-    const [race, setRace] = React.useState<any>({});
+    const [event, setEvent] = React.useState<any>({});
 
     const [error, setError] = React.useState<any>({
         startTime: '',
@@ -137,7 +141,7 @@ export const MyEventForm = () => {
     const onEventSaved = (response, lat, lon) => {
         if (mode === MODE.CREATE) {
             toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
-            setRace(response.data);
+            setEvent(response.data);
             createDefaultVesselParticipantGroup(response.data);
             
             history.push(`/events/${response.data?.id}/update`);
@@ -265,7 +269,7 @@ export const MyEventForm = () => {
                 startDate: moment(response.data?.approximateStartTime),
                 startTime: moment(response.data?.approximateStartTime)
             });
-            setRace(response.data);
+            setEvent(response.data);
             setCoordinates({
                 lat: response.data.lat,
                 lng: response.data.lon
@@ -538,14 +542,19 @@ export const MyEventForm = () => {
         return current && current < currentStartDate.startOf('day');
     }
 
+    const showAssignEventAsGroupAdminModal = () => {
+        setShowAssignModal(true);
+      } 
+
     return (
         <Wrapper>
             <DeleteEventModal
-                race={race}
+                event={event}
                 onRaceDeleted={onRaceDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
+             <AssignEventAsGroupAdminModal showModal={showAssignModal} event={event} setShowModal={setShowAssignModal}/>
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => history.push("/events")}>
@@ -560,9 +569,10 @@ export const MyEventForm = () => {
                 </PageInfoOutterWrapper>
                 <Space size={10}>
                     {mode === MODE.UPDATE && <>
+                        <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}></Button>
                         <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                             style={{ marginRight: '5px' }}
-                            size={18} />}>{t(translations.my_event_create_update_page.delete)}</DeleteButton>
+                            size={18} />}></DeleteButton>
                     </>}
 
                 </Space>

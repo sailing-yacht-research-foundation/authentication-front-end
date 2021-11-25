@@ -9,6 +9,9 @@ import { dataURLtoFile } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { uploadAvatar } from 'services/live-data-server/groups';
+import { useDispatch } from 'react-redux';
+import { useGroupDetailSlice } from '../slice';
+import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 
 export const GroupAvatar = (props) => {
     const { group } = props;
@@ -21,9 +24,13 @@ export const GroupAvatar = (props) => {
 
     const { t } = useTranslation();
 
+    const dispatch = useDispatch();
+
+    const { actions } = useGroupDetailSlice();
+
     const onSubmitCroppedAvatar = async (imageData) => {
         if (base64ConvertedURL === '' && (!imageData || typeof imageData !== 'string')) {
-            toast.error(t(translations.profile_page.update_profile.please_choose_an_image_to_crop));
+            toast.error(t(translations.group.please_choose_an_image_to_crop));
             return;
         }
 
@@ -37,17 +44,15 @@ export const GroupAvatar = (props) => {
         formData.append("image", file);
         const response = await uploadAvatar(group?.id, formData);
 
-        onAfterUploadingAvatar();
-
         if (response.success) {
-            const avatarUrl = response.data?.url;
-            /// change group avatar here
-            toast.success(t(translations.profile_page.update_profile.upload_profile_picture_successfully));
+            onAfterUploadingAvatar();
+            toast.success(t(translations.group.upload_group_avatar_successfully));
+            dispatch(actions.getGroup(group.id));
         } else {
             if (response.error?.response && response.error?.response?.status === 400) // file too large
-                toast.error(t(translations.profile_page.update_profile.your_file_is_too_large_please_choose_another));
+                toast.error(t(translations.group.your_file_is_too_large_please_choose_another));
             else
-                toast.error(t(translations.profile_page.update_profile.error_happened_when_upload_profile_picture));
+                toast.error(t(translations.group.error_happened_when_upload_group_avatar));
         }
     }
 
@@ -67,7 +72,7 @@ export const GroupAvatar = (props) => {
     return (
         <>
             <Modal
-                title={t(translations.profile_page.update_profile.change_profile_picture)}
+                title={t(translations.group.change_group_avatar)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
                 visible={cropAvatarModalVisible}
                 onOk={onSubmitCroppedAvatar}
@@ -81,14 +86,16 @@ export const GroupAvatar = (props) => {
                     onCrop={onAvatarCropped}
                 />
             </Modal>
-            <Spin spinning={isUploadingGroupAvatar} tip={t(translations.profile_page.update_profile.uploading)}>
+            <Spin spinning={isUploadingGroupAvatar} tip={t(translations.group.uploading)}>
                 <Wrapper>
                     <AvatarHolder>
-                        <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={group?.groupImage || '/default-avatar.jpeg'} />
+                        <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={group?.groupImage || DEFAULT_GROUP_AVATAR} />
                     </AvatarHolder>
-                    <ChangeAvatarButton>
-                        <CameraFilled style={{ color: StyleConstants.MAIN_TONE_COLOR, fontSize: '25px' }} onClick={() => setCropAvatarModalVisible(true)} size={20} />
-                    </ChangeAvatarButton>
+                    {
+                        group?.isAdmin && <ChangeAvatarButton>
+                            <CameraFilled style={{ color: StyleConstants.MAIN_TONE_COLOR, fontSize: '25px' }} onClick={() => setCropAvatarModalVisible(true)} size={20} />
+                        </ChangeAvatarButton>
+                    }
                 </Wrapper>
             </Spin>
         </>

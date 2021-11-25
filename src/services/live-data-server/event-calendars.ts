@@ -18,8 +18,7 @@ export const getAll = () => {
 }
 
 export const getMany = (page) => {
-    const userId: any = localStorage.getItem('user_id');
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`, {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/my-events?isPrivate_eq=false`, {
         params: {
             page: page
         }
@@ -106,6 +105,40 @@ export const downloadIcalendarFile = (event) => {
         link.setAttribute('download', `${event.name}.ics`); //or any other extension
         document.body.appendChild(link);
         link.click();
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    })
+}
+
+export const getEditors = (eventId) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/editors`).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    })
+}
+
+export const removeEditor = (eventId, editorId) => {
+    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/remove-editors`, {
+        data: {
+            userIds: [
+                editorId
+            ]
+        }
+    }).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
     }).catch(error => {
         return {
             success: false,

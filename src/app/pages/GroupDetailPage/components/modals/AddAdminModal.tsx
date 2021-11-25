@@ -66,7 +66,8 @@ export const AddAdminModal = (props) => {
 
     React.useEffect(() => {
         onSearch('');
-    },[]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Modal

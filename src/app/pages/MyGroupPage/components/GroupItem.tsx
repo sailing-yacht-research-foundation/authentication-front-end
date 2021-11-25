@@ -1,17 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Spin } from 'antd';
-import { MdOutlineGroupAdd } from 'react-icons/md';
+import { Button, Spin, Tag } from 'antd';
+import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { GroupMemberStatus, GroupVisibility } from 'utils/constants';
-import { AiFillLock } from 'react-icons/ai';
-import { GiEarthAmerica } from 'react-icons/gi';
-import { MdOutlineAddModerator } from 'react-icons/md';
+import { GroupMemberStatus } from 'utils/constants';
+import { VisibilityOfGroup } from './VisibilityOfGroup';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGroupSlice } from '../slice';
+import { selectRequestedGroupCurrentPage } from '../slice/selectors';
 
 export const GroupItemRow = (props) => {
 
@@ -21,7 +22,13 @@ export const GroupItemRow = (props) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const { group, showGroupButton, memberCount, status, onGroupJoinRequested } = props;
+    const dispatch = useDispatch();
+
+    const { actions } = useGroupSlice();
+
+    const { group, showGroupButton, memberCount, status, onGroupJoinRequested, isAdmin } = props;
+
+    const requestedGroupsCurrentPage = useSelector(selectRequestedGroupCurrentPage);
 
     const renderButtonByStatus = () => {
         if (!showGroupButton) return <></>;
@@ -29,7 +36,7 @@ export const GroupItemRow = (props) => {
         if (status === GroupMemberStatus.requested)
             return <Button onClick={undoJoin} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</Button>
         if (!status)
-            return <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
+            return <Button onClick={joinGroup} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
     }
 
     const showGroupItemDetail = () => {
@@ -39,6 +46,7 @@ export const GroupItemRow = (props) => {
     const handlePostJoinActions = (response) => {
         if (response.success) {
             if (onGroupJoinRequested) onGroupJoinRequested();
+            dispatch(actions.getRequestedGroups(requestedGroupsCurrentPage));
         } else {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         }
@@ -49,7 +57,7 @@ export const GroupItemRow = (props) => {
         setIsLoading(true);
         const response = await leaveGroup(group.id);
         setIsLoading(false);
-        
+
         handlePostJoinActions(response);
     }
 
@@ -62,17 +70,6 @@ export const GroupItemRow = (props) => {
         handlePostJoinActions(response);
     }
 
-    const renderGroupVisibility = (visibility) => {
-        switch (visibility) {
-            case GroupVisibility.private:
-                return <><AiFillLock /> {uppercaseFirstCharacter(visibility)}</>
-            case GroupVisibility.public:
-                return <><GiEarthAmerica /> {uppercaseFirstCharacter(visibility)}</>
-            default:
-                return <><MdOutlineAddModerator /> {uppercaseFirstCharacter(visibility)}</>
-        }
-    }
-
     return (
         <GroupItem onClick={showGroupItemDetail}>
             <GroupItemAvatarContainer>
@@ -81,7 +78,8 @@ export const GroupItemRow = (props) => {
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>
                 <GroupItemDescription>{group.description}</GroupItemDescription>
-                <GroupType>{uppercaseFirstCharacter(group.groupType)} • {renderGroupVisibility(group.visibility)} • {t(translations.group.number_of_members, { numberOfMembers: renderNumberWithCommas(memberCount) })}</GroupType>
+                <GroupType>{group.groupType && uppercaseFirstCharacter(group.groupType) + ' • '} <VisibilityOfGroup visibility={group.visibility} /> • {t(translations.group.number_of_members, { numberOfMembers: renderNumberWithCommas(memberCount) })}</GroupType>
+                {isAdmin ? <Tag color="magenta">Admin</Tag> : <Tag>Member</Tag>}
             </GroupItemInfoContainer>
             <GroupItemAction>
                 <Spin spinning={isLoading}>
@@ -136,4 +134,4 @@ const GroupItemAvatar = styled.div`
     width: 55px;
     height: 55px;
     border-radius: 50%;
-`
+`;

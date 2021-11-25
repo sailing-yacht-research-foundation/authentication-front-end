@@ -82,3 +82,5 @@ export const enum RaceEmitterEvent {
     render_legs = 'render-legs',
     leg_update = 'leg-update',
 }
+
+export const DEFAULT_GROUP_AVATAR = '/default-avatar.jpeg';

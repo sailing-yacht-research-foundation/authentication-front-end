@@ -1,36 +1,39 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router';
-import { getGroupById } from 'services/live-data-server/groups';
 import styled from 'styled-components';
 import { LeftPane } from './LeftPane';
 import { Nav } from './Nav';
 import { Members } from './Members';
 import { Spin } from 'antd';
 import { media } from 'styles/media';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGroupDetailSlice } from '../slice';
+import { selectGetGroupFailed, selectGroupDetail, selectIsGettingGroup } from '../slice/selectors';
 
 export const Main = () => {
-    const [group, setGroup] = React.useState<any>({});
+    const group = useSelector(selectGroupDetail);
 
-    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const isLoading = useSelector(selectIsGettingGroup);
+
+    const getgroupFailed = useSelector(selectGetGroupFailed);
 
     const { groupId } = useParams<{ groupId: string }>();
 
     const history = useHistory();
 
-    const getGroupDetail = async () => {
-        setIsLoading(true);
-        const response = await getGroupById(groupId);
-        setIsLoading(false);
+    const dispatch = useDispatch();
 
-        if (response.success) {
-            setGroup(response.data);
-        } else {
-            history.goBack();
-        }
-    }
+    const { actions } = useGroupDetailSlice();
 
     React.useEffect(() => {
-        getGroupDetail();
+        if (getgroupFailed) {
+            history.push('/groups');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getgroupFailed]);
+
+    React.useEffect(() => {
+        dispatch(actions.getGroup(groupId));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

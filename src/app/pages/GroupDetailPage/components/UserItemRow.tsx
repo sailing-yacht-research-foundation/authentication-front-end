@@ -57,6 +57,7 @@ const UserAvatarContainer = styled.div`
     border: 1px solid #eee;
     border-radius: 50%;
     margin-right: 15px;
+    flex: 0 0 auto;
 `;
 
 const UserInforContainer = styled.div`

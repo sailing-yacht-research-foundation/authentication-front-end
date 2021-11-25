@@ -48,12 +48,15 @@ export const GroupList = () => {
 
     const searchKeyword = useSelector(selectSearchKeyword);
 
+    const groupCurrentPage = useSelector(selectGroupCurrentPage);
+
     const renderGroupItems = () => {
         if (groups.length > 0)
             return groups.map(group => <GroupItemRow
                 showGroupButton={false}
                 memberCount={group.memberCount}
                 group={group?.group}
+                isAdmin={group?.isAdmin}
                 status={group.status} />);
         return <span>{t(translations.group.your_groups_will_be_shown_here)}</span>
     }
@@ -64,6 +67,7 @@ export const GroupList = () => {
                 memberCount={group.memberCount}
                 status={group.userStatus}
                 showGroupButton={true}
+                isAdmin={group?.isAdmin}
                 onGroupJoinRequested={onGroupJoinRequested}
                 group={group} />);
         return <span>{t(translations.group.your_results_will_be_shown_here)}</span>
@@ -79,6 +83,7 @@ export const GroupList = () => {
 
     const onGroupJoinRequested = () => {
         dispatch(actions.searchForGroups({ keyword: searchKeyword, page: searchCurrentPage }));
+        dispatch(actions.getGroups(groupCurrentPage));
     }
 
     React.useEffect(() => {

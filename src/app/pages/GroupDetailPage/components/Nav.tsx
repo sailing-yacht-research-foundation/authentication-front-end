@@ -13,6 +13,9 @@ import { GroupMemberStatus } from 'utils/constants';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import { requestJoinGroup, leaveGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGroupDetailSlice } from '../slice';
+import { selectAdminCurrentPage, selectMemberCurrentPage } from '../slice/selectors';
 
 export const Nav = (props) => {
 
@@ -29,6 +32,14 @@ export const Nav = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [joinStatus, setJoinStatus] = React.useState<any>();
+
+    const dispatch = useDispatch();
+
+    const { actions } = useGroupDetailSlice();
+
+    const membersCurrentPage = useSelector(selectMemberCurrentPage);
+
+    const adminsCurrentPage = useSelector(selectAdminCurrentPage);
 
     const showDeleteGroupModal = (e) => {
         e.preventDefault();
@@ -49,7 +60,9 @@ export const Nav = (props) => {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         } else {
             if (response.data.status === GroupMemberStatus.accepted) {
-                window.location.reload();
+                dispatch(actions.getGroup(group.id));
+                dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
+                dispatch(actions.getAdmins({ groupId: group.id, page: adminsCurrentPage }));
             } else {
                 setJoinStatus(GroupMemberStatus.requested);
             }
