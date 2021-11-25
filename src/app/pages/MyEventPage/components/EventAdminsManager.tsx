@@ -112,7 +112,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
                 (individualEditors.length > 0 || groupEditors.length > 0) &&
                 <>
                     <PageHeaderContainer>
-                        <PageHeaderTextSmall>{t(translations.event_detail_page.admins)}</PageHeaderTextSmall>
+                        <PageHeaderTextSmall>{t(translations.event_detail_page.admins)} ({individualEditors.length + groupEditors.length})</PageHeaderTextSmall>
                     </PageHeaderContainer>
                     <EditorWrapper>
                         {renderIndividualEditors()}
