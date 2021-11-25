@@ -108,7 +108,7 @@ const EditorItem = styled.div`
     width: 45px;
     height: 45px;
     &:not(:last-child) {
-        margin-right: 15px;
+        margin-right: 7px;
     }
 
     img {
