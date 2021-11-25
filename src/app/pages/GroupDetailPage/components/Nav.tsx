@@ -59,9 +59,9 @@ export const Nav = (props) => {
         if (!response.success) {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         } else {
+            dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
             if (response.data.status === GroupMemberStatus.accepted) {
                 dispatch(actions.getGroup(group.id));
-                dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
                 dispatch(actions.getAdmins({ groupId: group.id, page: adminsCurrentPage }));
             } else {
                 setJoinStatus(GroupMemberStatus.requested);
@@ -78,6 +78,7 @@ export const Nav = (props) => {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         } else {
             setJoinStatus(null);
+            dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
         }
     }
 

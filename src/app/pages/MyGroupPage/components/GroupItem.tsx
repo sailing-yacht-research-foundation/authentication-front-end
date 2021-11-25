@@ -12,7 +12,7 @@ import { GroupMemberStatus } from 'utils/constants';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupSlice } from '../slice';
-import { selectRequestedGroupCurrentPage } from '../slice/selectors';
+import { selectGroupCurrentPage, selectRequestedGroupCurrentPage } from '../slice/selectors';
 
 export const GroupItemRow = (props) => {
 
@@ -30,13 +30,15 @@ export const GroupItemRow = (props) => {
 
     const requestedGroupsCurrentPage = useSelector(selectRequestedGroupCurrentPage);
 
+    const groupCurrentPage = useSelector(selectGroupCurrentPage);
+
     const renderButtonByStatus = () => {
         if (!showGroupButton) return <></>;
 
         if (status === GroupMemberStatus.requested)
-            return <Button onClick={undoJoin} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</Button>
+            return <Button onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</Button>
         if (!status)
-            return <Button onClick={joinGroup} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
+            return <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
     }
 
     const showGroupItemDetail = () => {
@@ -47,6 +49,7 @@ export const GroupItemRow = (props) => {
         if (response.success) {
             if (onGroupJoinRequested) onGroupJoinRequested();
             dispatch(actions.getRequestedGroups(requestedGroupsCurrentPage));
+            dispatch(actions.getGroups(groupCurrentPage));
         } else {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         }
