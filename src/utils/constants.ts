@@ -59,6 +59,7 @@ export const enum WebsocketConnectionStatus {
     closing = "closing",
     closed = "closed",
     uninstantiated = "uninstantiated",
+    error = "error"
 }
 
 export const enum PlaybackSpeed {
