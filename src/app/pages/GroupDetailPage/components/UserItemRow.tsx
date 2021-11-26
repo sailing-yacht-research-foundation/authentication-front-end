@@ -5,10 +5,11 @@ import { translations } from 'locales/translations';
 import { GroupMemberStatus } from 'utils/constants';
 import { Tag } from 'antd';
 import { renderAvatar } from 'utils/user-utils';
+import { media } from 'styles/media';
 
 export const UserItemRow = (props) => {
 
-    const { item } = props;
+    const { item, pendingJoinRequest } = props;
 
     const { t } = useTranslation();
 
@@ -26,7 +27,7 @@ export const UserItemRow = (props) => {
     }
 
     return (
-        <UserItem>
+        <UserItem className={pendingJoinRequest ? 'breakline' : ''}>
             <UserInnerContainer>
                 <UserAvatarContainer>
                     <img src={renderAvatar(item?.member?.avatar)} alt={item?.member?.name}/>
@@ -50,6 +51,16 @@ const UserItem = styled.div`
         padding-bottom: 15px;
         margin-bottom: 15px;
         border-bottom: 1px solid #eee;
+    }
+
+    &.breakline {
+        flex-direction: column;
+        align-items: flex-start;
+
+        ${media.medium`
+            flex-direction: row;
+            align-items: flex-start;
+        `}
     }
 `;
 
