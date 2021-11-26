@@ -90,3 +90,8 @@ export const selectIsModalLoading = createSelector(
     [selectDomain],
     group => group.isModalLoading,
 );
+
+export const selectPerformedSearch = createSelector(
+    [selectDomain],
+    group => group.performedSearch,
+);

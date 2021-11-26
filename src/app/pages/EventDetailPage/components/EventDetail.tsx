@@ -102,11 +102,9 @@ export const EventDetail = () => {
                 <EventActions>
                     <Space>
                         {
-                            userId && event.createdById === userId ? (
+                            userId && event.createdById === userId && (
                                 <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
 
-                            ) : (
-                                <Button icon={<FaCalendarPlus style={{ marginRight: '5px' }} />} shape="round" type="primary">{t(translations.event_detail_page.attend_this_event)}</Button>
                             )
                         }
                         <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />

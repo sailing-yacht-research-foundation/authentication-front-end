@@ -11,6 +11,7 @@ export interface GroupDetailState {
     group: any;
     isGettingGroup: boolean;
     getGroupDetailFailed: boolean;
+    acceptedMemberResults: any[];
   }
   
   export type ContainerState = GroupDetailState;

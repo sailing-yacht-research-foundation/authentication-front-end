@@ -15,7 +15,8 @@ export const initialState: GroupDetailState = {
     isGettingMembers: false,
     group: {},
     getGroupDetailFailed: false,
-    isGettingGroup: false
+    isGettingGroup: false,
+    acceptedMemberResults: []
 };
 
 const slice = createSlice({
@@ -57,7 +58,11 @@ const slice = createSlice({
         },
         setIsGettingGroup(state, action: PayloadAction<boolean>) {
             state.isGettingGroup = action.payload;
-        }
+        },
+        setAcceptedMemberResults(state, action: PayloadAction<any[]>) {
+            state.acceptedMemberResults = action.payload;
+        },
+        searchAcceptedMembers(state, action: PayloadAction<any>) {}
     },
 });
 

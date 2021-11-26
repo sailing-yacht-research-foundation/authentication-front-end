@@ -33,6 +33,7 @@ export const SearchGroup = () => {
     const setSearchKeyword = (e) => {
         const value = e.target?.value;
         dispatch(actions.setSearchKeyword(value));
+        dispatch(actions.setPerformedSearch(false));
         if (value.length === 0) {
             dispatch(actions.setSearchResults([]));
         } else {

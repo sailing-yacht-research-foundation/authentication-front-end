@@ -14,7 +14,8 @@ import {
     selectSearchKeyword,
     selectSearchResults,
     selectSearchCurrentPage,
-    selectSearchTotalPage
+    selectSearchTotalPage,
+    selectPerformedSearch
 } from '../slice/selectors';
 import { GroupItemRow } from './GroupItem';
 import { useGroupSlice } from '../slice';
@@ -50,6 +51,8 @@ export const GroupList = () => {
 
     const groupCurrentPage = useSelector(selectGroupCurrentPage);
 
+    const isPerformedSearch = useSelector(selectPerformedSearch);
+
     const renderGroupItems = () => {
         if (groups.length > 0)
             return groups.map(group => <GroupItemRow
@@ -72,7 +75,7 @@ export const GroupList = () => {
                 members={group?.members}
                 onGroupJoinRequested={onGroupJoinRequested}
                 group={group} />);
-        return <span>{t(translations.group.your_results_will_be_shown_here)}</span>
+        return <span>{t(translations.group.no_results_found)}</span>
     }
 
     const onPaginationChanged = (page) => {
@@ -84,7 +87,8 @@ export const GroupList = () => {
     }
 
     const onGroupJoinRequested = () => {
-        dispatch(actions.searchForGroups({ keyword: searchKeyword, page: searchCurrentPage }));
+        if (searchKeyword.length > 0)
+            dispatch(actions.searchForGroups({ keyword: searchKeyword, page: searchCurrentPage }));
         dispatch(actions.getGroups(groupCurrentPage));
     }
 
@@ -97,7 +101,7 @@ export const GroupList = () => {
         <Wrapper>
             <SearchGroup />
             {
-                results.length === 0 ? (
+                results.length === 0 && !isPerformedSearch ? (
                     <>
                         <GroupListContainer>
                             <h3>{t(translations.group.my_groups)}</h3>

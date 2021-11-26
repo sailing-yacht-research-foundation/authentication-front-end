@@ -17,6 +17,7 @@ export interface GroupState {
     requestedGroupTotalPage: number;
     isGettingRequestedGroups: boolean;
     isModalLoading: boolean;
+    performedSearch: boolean;
   }
   
   export type ContainerState = GroupState;

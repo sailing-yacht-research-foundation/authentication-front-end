@@ -424,7 +424,9 @@
     "error_enddate_should_selected": "End date should be selected",
     "error_endtime_should_selected": "End time should be selected",
     "error_endtime_shouldgreater_starttime": "End time should be greater than start time",
-    "error_starttime_shouldgreater_currenttime": "Start time should be greater than current time"
+    "error_starttime_shouldgreater_currenttime": "Start time should be greater than current time",
+    "successfully_revoked": "Successfully revoked.",
+    "an_error_happened_when_performing_your_request":"An unexpected error happened when performing your request."
   },
   "course_list": {
     "name": "Name",
@@ -722,7 +724,7 @@
     "group_visibility": "The visibility of this group towards other sailors.",
     "group_type": "Type of this group.",
     "delete_this_track": "Delete this track",
-    "set_this_event_as_group_admin": "Set this event as a group admin"
+    "set_this_event_as_group_admin": "Set groups as admins for this event."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -880,7 +882,7 @@
     "select_or_search_a_group": "Select or search a Group",
     "please_choose_a_group": "Please choose a group from the list.",
     "successfully_added_this_event_as_group_admin": "Successfully added this event as group admin.",
-    "assign_this_event_as_group_admin": "Assign this event as group admin.",
+    "assign_this_event_as_group_admin": "Assign groups as admins for this event",
     "requested": "Requested",
     "set_as_admin": "Set as admin",
     "please_choose_an_image_to_crop": "Please choose an image to crop!",
@@ -889,13 +891,14 @@
     "uploading": "Uploading....",
     "error_happened_when_upload_group_avatar": "An error happened when uploading your group avatar",
     "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
-    "leave_your_invitees_a_message": "Leave your invitees a message",
-    "you_can_leave_your_invitees_a_message_so_that": "You can leave your invitees so that they will be notified to join your group",
+    "leave_your_invitees_a_message": "Leave a message to your invitees",
+    "you_can_leave_your_invitees_a_message_so_that": "You can leave a message to your invitees so that they will be notified to join your group",
     "click_here_to_open_mail_app": "Click here to open mail app",
     "your_inputted_emails_are_not_valid": "You inputted emails are not valid emails.",
     "you_have_not_requested_to_join_any_groups": "You have not requested to join any groups",
     "individual": "Individual",
     "group": "Group",
-    "revoke": "Revoke"
+    "revoke": "Revoke",
+    "no_results_found": "No results found."
   }
 }

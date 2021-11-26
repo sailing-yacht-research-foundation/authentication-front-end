@@ -106,6 +106,8 @@ export const InviteUserModal = (props) => {
                 </Form>
             </Modal>
             <Modal visible={showInvitationModal} title={t(translations.group.leave_your_invitees_a_message)}
+                okText={'Close'}
+                cancelButtonProps={{ style: { display: 'none' } }}
                 onOk={() => setShowInvitationModal(false)}
                 onCancel={() => setShowInvitationModal(false)}>
                 <LottieWrapper>

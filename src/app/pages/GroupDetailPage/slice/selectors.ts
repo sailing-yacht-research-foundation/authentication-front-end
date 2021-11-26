@@ -60,3 +60,8 @@ export const selectGetGroupFailed = createSelector(
     [selectDomain],
     group => group.getGroupDetailFailed,
 );
+
+export const selectAcceptedMemberResults = createSelector(
+    [selectDomain],
+    group => group.acceptedMemberResults,
+);

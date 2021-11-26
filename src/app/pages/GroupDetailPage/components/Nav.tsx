@@ -10,7 +10,7 @@ import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { GroupMemberStatus } from 'utils/constants';
-import { MdOutlineGroupAdd } from 'react-icons/md';
+import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { requestJoinGroup, leaveGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
@@ -111,7 +111,7 @@ export const Nav = (props) => {
     const renderButtonByStatus = () => {
         let button = <></>;
         if (joinStatus === GroupMemberStatus.requested)
-            button = <CreateButton onClick={undoJoin} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</CreateButton>
+            button = <CreateButton onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.cancel)}</CreateButton>
         if (!joinStatus)
             button = <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
 

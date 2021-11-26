@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Select } from 'antd';
 import { SyrfFieldLabel } from 'app/components/SyrfForm';
-import { assignAdmin, searchMembers } from 'services/live-data-server/groups';
+import { assignAdmin } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { SyrfFormSelect } from 'app/components/SyrfForm';
 import { useParams } from 'react-router';
@@ -9,6 +9,9 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'utils/helpers';
 import { GroupMemberStatus } from 'utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAcceptedMemberResults } from '../../slice/selectors';
+import { useGroupDetailSlice } from '../../slice';
 
 export const AddAdminModal = (props) => {
 
@@ -20,7 +23,11 @@ export const AddAdminModal = (props) => {
 
     const { showModal, setShowModal, onAdminAdded } = props;
 
-    const [results, setResults] = React.useState<any[]>([]);
+    const { actions } = useGroupDetailSlice();
+
+    const dispatch = useDispatch();
+
+    const results = useSelector(selectAcceptedMemberResults);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
@@ -53,11 +60,7 @@ export const AddAdminModal = (props) => {
     }
 
     const onSearch = async (keyword) => {
-        const response = await searchMembers(groupId, keyword, GroupMemberStatus.accepted);
-
-        if (response.success) {
-            setResults(response.data.rows);
-        }
+        dispatch(actions.searchAcceptedMembers({ groupId, keyword, status: GroupMemberStatus.accepted }));
     }
 
     const renderSearchResults = () => {

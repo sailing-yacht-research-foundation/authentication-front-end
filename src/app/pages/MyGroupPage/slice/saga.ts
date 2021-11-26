@@ -24,6 +24,7 @@ export function* getGroups({ type, payload }) {
 export function* searchForGroups({type, payload }) {
     const { keyword, page } = payload;
 
+    yield put(groupActions.setPerformedSearch(true));
     yield put(groupActions.setIsLoading(true));
     const response = yield call(searchGroups, keyword, page);
     yield put(groupActions.setIsLoading(false));
@@ -33,6 +34,7 @@ export function* searchForGroups({type, payload }) {
         yield put(groupActions.setSearchResults(response.data?.rows));
         yield put(groupActions.setSearchCurrentPage(response.data?.page));
         yield put(groupActions.setSearchTotalPage(response.data?.count));
+    } else {
     }
 }
 

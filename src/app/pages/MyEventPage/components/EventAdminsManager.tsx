@@ -9,6 +9,7 @@ import { renderAvatar } from 'utils/user-utils';
 import ReactTooltip from 'react-tooltip';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { revokeGroupAsEditor } from 'services/live-data-server/groups';
+import { toast } from 'react-toastify';
 
 export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
 
@@ -28,13 +29,17 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
         setIsLoading(false);
 
         if (response.success) {
-            if (response?.data?.individualEditors?.length > 0) {
                 setIndividualEditors(response?.data?.individualEditors);
-            }
-
-            if (response?.data?.groupEditors?.length > 0) {
                 setGroupEditors(response?.data?.groupEditors);
-            }
+        }
+    }
+
+    const onAfterRevoked = (response) => {
+        if (response.success) {
+            toast.success(t(translations.my_event_create_update_page.successfully_revoked));
+            getAdmins();
+        } else {
+            toast.success(t(translations.my_event_create_update_page.an_error_happened_when_performing_your_request));
         }
     }
 
@@ -44,10 +49,8 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
         const response = await revokeGroupAsEditor(group.id, event.id);
         setIsLoading(false);
 
-
-        if (response.success) {
-            getAdmins();
-        }
+        onAfterRevoked(response);
+        
     }
 
     const revokeIndividual = async (individual) => {
@@ -56,9 +59,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
         const response = await removeEditor(event.id, individual.id);
         setIsLoading(false);
 
-        if (response.success) {
-            getAdmins();
-        }
+        onAfterRevoked(response);
     }
 
     const renderGroupEditors = () => {
@@ -72,13 +73,14 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
                         <EditorName>{editor?.group?.groupName}</EditorName>
                         <span>{t(translations.group.group)}</span>
                     </EditorRightInfoInner>
-                    <EditorRevokeButton onClick={() => revokeGroup(editor?.group)} danger>Revoke</EditorRevokeButton>
+                    <EditorRevokeButton onClick={() => revokeGroup(editor?.group)} danger>{t(translations.group.revoke)}</EditorRevokeButton>
                 </EditorItemRightInfo>
             </EditorItem>
         });
     }
 
     const renderIndividualEditors = () => {
+        const userId: any = localStorage.getItem('user_id');
         return individualEditors.map(editor => {
             return <EditorItem data-tip={editor?.user?.name}>
                 <EditorItemAvatarContainer>
@@ -89,7 +91,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
                         <EditorName>{editor?.user?.name}</EditorName>
                         <span>{t(translations.group.individual)}</span>
                     </EditorRightInfoInner>
-                    <EditorRevokeButton onClick={() => revokeIndividual(editor?.user)} danger>{t(translations.group.revoke)}</EditorRevokeButton>
+                    {userId !== editor.user?.id && <EditorRevokeButton onClick={() => revokeIndividual(editor?.user)} danger>{t(translations.group.revoke)}</EditorRevokeButton>}
                 </EditorItemRightInfo>
             </EditorItem>
         });

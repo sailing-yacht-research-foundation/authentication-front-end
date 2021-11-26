@@ -21,7 +21,8 @@ export const initialState: GroupState = {
     requestedGroupsCurrentPage: 1,
     requestedGroups: [],
     isGettingRequestedGroups: false,
-    isModalLoading: false
+    isModalLoading: false,
+    performedSearch: false,
 };
 
 const slice = createSlice({
@@ -82,6 +83,9 @@ const slice = createSlice({
         },
         setIsModalLoading(state, action: PayloadAction<boolean>) {
             state.isModalLoading = action.payload;
+        },
+        setPerformedSearch(state, action: PayloadAction<boolean>) {
+            state.performedSearch = action.payload;
         }
     },
 });
