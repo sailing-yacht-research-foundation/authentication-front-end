@@ -57,7 +57,7 @@ export const GroupList = () => {
                 memberCount={group.memberCount}
                 group={group?.group}
                 isAdmin={group?.isAdmin}
-                members={group?.members}
+                members={group?.group?.members}
                 status={group.status} />);
         return <span>{t(translations.group.your_groups_will_be_shown_here)}</span>
     }
