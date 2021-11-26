@@ -87,13 +87,17 @@ export const GroupList = () => {
     }
 
     const onGroupJoinRequested = () => {
+        getGroupsOrSearchGroups();
+    }
+
+    const getGroupsOrSearchGroups = () => {
         if (searchKeyword.length > 0)
             dispatch(actions.searchForGroups({ keyword: searchKeyword, page: searchCurrentPage }));
         dispatch(actions.getGroups(groupCurrentPage));
     }
 
     React.useEffect(() => {
-        dispatch(actions.getGroups(groupCurrentPage));
+        getGroupsOrSearchGroups();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

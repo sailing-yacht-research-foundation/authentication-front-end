@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectAdminCurrentPage, selectMemberCurrentPage } from '../slice/selectors';
+import { useGroupSlice } from 'app/pages/MyGroupPage/slice';
 
 export const Nav = (props) => {
 
@@ -36,6 +37,8 @@ export const Nav = (props) => {
     const dispatch = useDispatch();
 
     const { actions } = useGroupDetailSlice();
+
+    const groupsListActions = useGroupSlice();
 
     const membersCurrentPage = useSelector(selectMemberCurrentPage);
 
