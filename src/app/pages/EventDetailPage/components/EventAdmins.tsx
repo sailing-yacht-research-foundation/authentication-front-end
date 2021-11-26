@@ -102,6 +102,7 @@ export const EventAdmins = (props) => {
 
 const EditorWrapper = styled.div`
     display: flex;
+    align-items: center;
 `;
 
 const EditorItem = styled.div`
