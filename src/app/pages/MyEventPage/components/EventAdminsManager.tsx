@@ -137,6 +137,7 @@ const EditorItem = styled.div`
     
     &:not(:last-child) {
         border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
     }
 `;
 
