@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Table, Space, Spin, Tag, Button } from 'antd';
+import { Table, Space, Spin, Tag } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsChangingPage, selectResults } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
@@ -20,8 +20,7 @@ import { downloadIcalendarFile } from 'services/live-data-server/event-calendars
 import ReactTooltip from 'react-tooltip';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { RaceList } from './RaceList';
-import { GrGroup } from 'react-icons/gr';
-import { AssignEventAsGroupAdminModal } from './AssignEventAsGroupAdminModal';
+import { EventAdmins } from 'app/pages/EventDetailPage/components/EventAdmins';
 
 const defaultOptions = {
   loop: true,
@@ -91,6 +90,12 @@ export const EventList = () => {
         + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
     },
     {
+      title: t(translations.my_event_list_page.admins),
+      dataIndex: 'admin',
+      key: 'admin',
+      render: (value, record) => <EventAdmins headless event={record} />
+    },
+    {
       title: t(translations.my_event_list_page.created_date),
       dataIndex: 'createdAt',
       key: 'createdAt',
@@ -100,23 +105,18 @@ export const EventList = () => {
       title: 'Action',
       key: 'action',
       render: (text, record) => {
-        const userId = localStorage.getItem('user_id');
-        if ((userId && record.createdById === userId) || (uuid === record.createdById))
-          return <Space size="middle">
-            <Button onClick={() => showAssignEventAsGroupAdminModal(record)} data-tip="Set this event as a group admin" icon={<GrGroup style={{ marginRight: '5px' }} />}></Button>
-            <DownloadButton data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
-              downloadIcalendarFile(record);
-            }} type="primary">
-              <AiOutlineCalendar />
-            </DownloadButton>
-            <BorderedButton onClick={() => {
-              history.push(`/events/${record.id}/update`)
-            }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
-            <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
-            <ReactTooltip />
-          </Space>;
-
-        return <></>;
+        return <Space size="middle">
+          <DownloadButton data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
+            downloadIcalendarFile(record);
+          }} type="primary">
+            <AiOutlineCalendar />
+          </DownloadButton>
+          <BorderedButton onClick={() => {
+            history.push(`/events/${record.id}/update`)
+          }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
+          <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
+          <ReactTooltip />
+        </Space>;
       }
     },
   ];
@@ -141,8 +141,6 @@ export const EventList = () => {
 
   const isChangingPage = useSelector(selectIsChangingPage);
 
-  const [showAssignModal, setShowAssignModal] = React.useState<boolean>(false);
-
   React.useEffect(() => {
     dispatch(actions.getEvents(1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,11 +164,6 @@ export const EventList = () => {
     dispatch(actions.getEvents(page));
   }
 
-  const showAssignEventAsGroupAdminModal = (event) => {
-    setShowAssignModal(true);
-    setEvent(event);
-  } 
-
   const renderExpandedRowRender = (record) => {
     return (
       <div>
@@ -187,7 +180,6 @@ export const EventList = () => {
         showDeleteModal={showDeleteModal}
         setShowDeleteModal={setShowDeleteModal}
       />
-      <AssignEventAsGroupAdminModal showModal={showAssignModal} event={event} setShowModal={setShowAssignModal}/>
       {mappedResults.length > 0 ? (
         <Spin spinning={isChangingPage}>
           <TableWrapper>

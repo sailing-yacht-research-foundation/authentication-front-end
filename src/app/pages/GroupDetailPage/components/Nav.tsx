@@ -10,9 +10,12 @@ import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { GroupMemberStatus } from 'utils/constants';
-import { MdOutlineGroupAdd } from 'react-icons/md';
+import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { requestJoinGroup, leaveGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGroupDetailSlice } from '../slice';
+import { selectAdminCurrentPage, selectMemberCurrentPage } from '../slice/selectors';
 
 export const Nav = (props) => {
 
@@ -29,6 +32,14 @@ export const Nav = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [joinStatus, setJoinStatus] = React.useState<any>();
+
+    const dispatch = useDispatch();
+
+    const { actions } = useGroupDetailSlice();
+
+    const membersCurrentPage = useSelector(selectMemberCurrentPage);
+
+    const adminsCurrentPage = useSelector(selectAdminCurrentPage);
 
     const showDeleteGroupModal = (e) => {
         e.preventDefault();
@@ -48,8 +59,10 @@ export const Nav = (props) => {
         if (!response.success) {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         } else {
+            dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
             if (response.data.status === GroupMemberStatus.accepted) {
-                window.location.reload();
+                dispatch(actions.getGroup(group.id));
+                dispatch(actions.getAdmins({ groupId: group.id, page: adminsCurrentPage }));
             } else {
                 setJoinStatus(GroupMemberStatus.requested);
             }
@@ -65,6 +78,7 @@ export const Nav = (props) => {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         } else {
             setJoinStatus(null);
+            dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
         }
     }
 
@@ -97,7 +111,7 @@ export const Nav = (props) => {
     const renderButtonByStatus = () => {
         let button = <></>;
         if (joinStatus === GroupMemberStatus.requested)
-            button = <CreateButton onClick={undoJoin} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</CreateButton>
+            button = <CreateButton onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.cancel)}</CreateButton>
         if (!joinStatus)
             button = <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
 

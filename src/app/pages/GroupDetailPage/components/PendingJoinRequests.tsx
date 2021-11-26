@@ -38,7 +38,7 @@ export const PendingJoinRequests = (props) => {
     const memberCurrentPage = useSelector(selectMemberCurrentPage);
 
     const renderRequests = () => {
-        return pagination.rows.map(item => <UserItemRow item={item} buttons={renderActionButton(item)} />);
+        return pagination.rows.map(item => <UserItemRow pendingJoinRequest item={item} buttons={renderActionButton(item)} />);
     }
 
     const onPaginationChanged = (page) => {
@@ -68,6 +68,9 @@ export const PendingJoinRequests = (props) => {
         if (response.success) {
             getJoinRequests(pagination.page);
             dispatch(actions.getMembers({ groupId, page: memberCurrentPage }));
+            if (GroupMemberStatus.accepted === status) {
+                dispatch(actions.searchAcceptedMembers({ groupId, keyword: '', status }));
+            }
         } else {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         }

@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from "@redux-saga/core/effects";
 import { toast } from "react-toastify";
-import { getMembers, getAdmins } from "services/live-data-server/groups";
+import { getMembers, getAdmins, getGroupById, searchMembers } from "services/live-data-server/groups";
 import { groupDetailActions } from ".";
 
 export function* getGroupMembers({ type, payload }) {
@@ -33,7 +33,33 @@ export function* getGroupAdmins({ type, payload }) {
     }
 }
 
+export function* getGroup({ type, payload }) {
+    const groupId = payload;
+
+    yield put(groupDetailActions.setIsGettingGroup(true));
+    const response = yield call(getGroupById, groupId);
+    yield put(groupDetailActions.setIsGettingGroup(false));
+
+    if (response.success) {
+        yield put(groupDetailActions.setGroup(response.data));
+    } else {
+        yield put(groupDetailActions.setGetGroupFailed(true));
+        toast.error('Oops! There is an error getting this group information');
+    }
+}
+
+export function* searchAcceptedMembers({ type, payload }) {
+    const { groupId, keyword, status } = payload;
+    const response = yield call(searchMembers, groupId, keyword, status);
+    
+    if (response.success) {
+        yield put(groupDetailActions.setAcceptedMemberResults(response.data.rows));
+    }
+}
+
 export default function* groupSaga() {
     yield takeLatest(groupDetailActions.getAdmins.type, getGroupAdmins);
     yield takeLatest(groupDetailActions.getMembers.type, getGroupMembers);
+    yield takeLatest(groupDetailActions.getGroup.type, getGroup);
+    yield takeLatest(groupDetailActions.searchAcceptedMembers.type, searchAcceptedMembers);
 }

@@ -7,6 +7,8 @@ import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { media } from 'styles/media';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { GroupAvatar } from './GroupAvatar';
+import { VisibilityOfGroup } from 'app/pages/MyGroupPage/components/VisibilityOfGroup';
 
 const enum GroupVisibility {
     public = 'PUBLIC',
@@ -20,26 +22,14 @@ export const LeftPane = (props) => {
 
     const { group } = props;
 
-    const renderGroupVisibility = (visibility) => {
-        switch (visibility) {
-            case GroupVisibility.private:
-                return <><AiFillLock /> {uppercaseFirstCharacter(visibility)}</>
-            case GroupVisibility.public:
-                return <><GiEarthAmerica /> {uppercaseFirstCharacter(visibility)}</>
-            default:
-                return <><MdOutlineAddModerator /> {uppercaseFirstCharacter(visibility)}</>
-        }
-    }
-
     return (
         <Wrapper>
-            <SectionContainer style={{ textAlign: 'center' }}>
-                <GroupAvatar style={{ background: "url('/default-avatar.jpeg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
+            <SectionContainer className="center">
+                <GroupAvatar group={group} />
                 <GroupName>{group.groupName}</GroupName>
                 <GroupType>{uppercaseFirstCharacter(group.groupType)}</GroupType>
-                <GroupTypeAndMemeber>{renderGroupVisibility(group.visibility)} • {renderNumberWithCommas(group.memberCount)} members</GroupTypeAndMemeber>
+                <GroupTypeAndMemeber><VisibilityOfGroup visibility={group.visibility} /> • {renderNumberWithCommas(group.memberCount)} members</GroupTypeAndMemeber>
             </SectionContainer>
-
             {
                 group.description && <SectionContainer>
                     <SectionTitle>{t(translations.group.about)}</SectionTitle>
@@ -66,9 +56,17 @@ const SectionContainer = styled.div`
     border-radius: 10px;
     border: 1px solid #eee;
     padding: 15px;
+    text-overflow: ellipsis;
 
     &:not(:last-child) {
         margin-bottom: 15px;
+    }
+
+    &.center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
     }
 `;
 
@@ -76,13 +74,9 @@ const GroupTypeAndMemeber = styled.span`
     color: hsl(210, 8%, 45%);
 `;
 
-const GroupName = styled.h2``;
-
-const GroupAvatar = styled.div`
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin: 15px auto;
+const GroupName = styled.h2`
+    margin-top: 20px;
+    text-align: center;
 `;
 
 const SectionTitle = styled.h3`

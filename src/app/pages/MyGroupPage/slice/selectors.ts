@@ -11,11 +11,6 @@ export const selectGroups = createSelector(
     group => group.groups,
 );
 
-export const selectMembers = createSelector(
-    [selectDomain],
-    group => group.members,
-);
-
 export const selectInvitations = createSelector(
     [selectDomain],
     group => group.invitations,
@@ -46,16 +41,6 @@ export const selectInvitationTotalPage = createSelector(
     group => group.invitationsTotalPage,
 );
 
-export const selectMemberCurrentPage = createSelector(
-    [selectDomain],
-    group => group.memberCurrentPage,
-);
-
-export const selectMemberTotalPage = createSelector(
-    [selectDomain],
-    group => group.memberTotalPage,
-);
-
 export const selectIsLoading = createSelector(
     [selectDomain],
     group => group.isLoading,
@@ -81,3 +66,32 @@ export const selectSearchKeyword = createSelector(
     group => group.searchKeyword,
 );
 
+export const selectRequestedGroups = createSelector(
+    [selectDomain],
+    group => group.requestedGroups,
+);
+
+export const selectRequestedGroupTotalPage = createSelector(
+    [selectDomain],
+    group => group.requestedGroupTotalPage,
+);
+
+export const selectRequestedGroupCurrentPage = createSelector(
+    [selectDomain],
+    group => group.requestedGroupsCurrentPage,
+);
+
+export const selectIsGettingRequestedGroups = createSelector(
+    [selectDomain],
+    group => group.isGettingRequestedGroups,
+);
+
+export const selectIsModalLoading = createSelector(
+    [selectDomain],
+    group => group.isModalLoading,
+);
+
+export const selectPerformedSearch = createSelector(
+    [selectDomain],
+    group => group.performedSearch,
+);

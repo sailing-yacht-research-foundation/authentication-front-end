@@ -7,14 +7,17 @@ export interface GroupState {
     invitations: any[];
     groups: any[];
     isChangingPage: boolean;
-    memberCurrentPage: number;
-    memberTotalPage: number;
-    members: any[];
     isLoading: boolean;
     searchKeyword: string;
     groupResults: any[];
     groupSearchCurrentPage: number;
     groupSearchTotalPage: number;
+    requestedGroups: any[];
+    requestedGroupsCurrentPage: number;
+    requestedGroupTotalPage: number;
+    isGettingRequestedGroups: boolean;
+    isModalLoading: boolean;
+    performedSearch: boolean;
   }
   
   export type ContainerState = GroupState;

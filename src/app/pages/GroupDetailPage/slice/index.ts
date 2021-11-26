@@ -13,6 +13,10 @@ export const initialState: GroupDetailState = {
     members: [],
     isGettingAdmins: false,
     isGettingMembers: false,
+    group: {},
+    getGroupDetailFailed: false,
+    isGettingGroup: false,
+    acceptedMemberResults: []
 };
 
 const slice = createSlice({
@@ -44,7 +48,21 @@ const slice = createSlice({
         },
         setIsGettingMembers(state, action: PayloadAction<boolean>) {
             state.isGettingMembers = action.payload;
-        }
+        },
+        setGroup(state, action: PayloadAction<any>) {
+            state.group = action.payload;
+        },
+        getGroup(state, action: PayloadAction<string>) {},
+        setGetGroupFailed(state, action: PayloadAction<boolean>) {
+            state.getGroupDetailFailed = action.payload;
+        },
+        setIsGettingGroup(state, action: PayloadAction<boolean>) {
+            state.isGettingGroup = action.payload;
+        },
+        setAcceptedMemberResults(state, action: PayloadAction<any[]>) {
+            state.acceptedMemberResults = action.payload;
+        },
+        searchAcceptedMembers(state, action: PayloadAction<any>) {}
     },
 });
 

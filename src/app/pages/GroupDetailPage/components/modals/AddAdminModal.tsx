@@ -1,13 +1,17 @@
 import React from 'react';
 import { Modal, Form, Select } from 'antd';
 import { SyrfFieldLabel } from 'app/components/SyrfForm';
-import { assignAdmin, searchMembers } from 'services/live-data-server/groups';
+import { assignAdmin } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { SyrfFormSelect } from 'app/components/SyrfForm';
 import { useParams } from 'react-router';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'utils/helpers';
+import { GroupMemberStatus } from 'utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAcceptedMemberResults } from '../../slice/selectors';
+import { useGroupDetailSlice } from '../../slice';
 
 export const AddAdminModal = (props) => {
 
@@ -19,7 +23,11 @@ export const AddAdminModal = (props) => {
 
     const { showModal, setShowModal, onAdminAdded } = props;
 
-    const [results, setResults] = React.useState<any[]>([]);
+    const { actions } = useGroupDetailSlice();
+
+    const dispatch = useDispatch();
+
+    const results = useSelector(selectAcceptedMemberResults);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
@@ -52,20 +60,21 @@ export const AddAdminModal = (props) => {
     }
 
     const onSearch = async (keyword) => {
-        const response = await searchMembers(groupId, keyword);
-
-        if (response.success) {
-            setResults(response.data.rows);
-        }
+        dispatch(actions.searchAcceptedMembers({ groupId, keyword, status: GroupMemberStatus.accepted }));
     }
 
     const renderSearchResults = () => {
-        return results.map(member => <Select.Option value={member.id}>{member.member?.name + ' - ' + member.email}</Select.Option>)
+        return results.map(member => <Select.Option value={member.id}>{member.member?.name} {member.email}</Select.Option>)
     }
+
+    React.useEffect(() => {
+        onSearch('');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Modal
-            title={t(translations.group.assign_new_admin)}
+            title={t(translations.group.add_admins)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
             visible={showModal}
             onOk={setUserAsAdmin}
@@ -78,14 +87,15 @@ export const AddAdminModal = (props) => {
                 style={{ width: '100%' }}
             >
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.group.select_a_member)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.group.select_or_search_a_member)}</SyrfFieldLabel>}
                     name="uuid"
                     rules={[{ required: true, message: t(translations.group.please_select_a_member_to_assign_him_as_admin) }]}
                 >
                     <SyrfFormSelect
                         showSearch
-                        placeholder={t(translations.group.select_a_member)}
+                        placeholder={t(translations.group.select_or_search_a_member)}
                         optionFilterProp="children"
+                        allowClear
                         onSearch={debounceSearch}
                     >
                         {renderSearchResults()}

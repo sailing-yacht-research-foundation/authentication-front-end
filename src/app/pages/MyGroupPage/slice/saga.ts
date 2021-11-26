@@ -4,6 +4,7 @@
 
 import { call, put, takeLatest } from "@redux-saga/core/effects";
 import { getGroupInvitations, getMyGroups, searchGroups } from "services/live-data-server/groups";
+import { GroupMemberStatus } from "utils/constants";
 import { groupActions } from ".";
 
 export function* getGroups({ type, payload }) {
@@ -23,6 +24,7 @@ export function* getGroups({ type, payload }) {
 export function* searchForGroups({type, payload }) {
     const { keyword, page } = payload;
 
+    yield put(groupActions.setPerformedSearch(true));
     yield put(groupActions.setIsLoading(true));
     const response = yield call(searchGroups, keyword, page);
     yield put(groupActions.setIsLoading(false));
@@ -32,15 +34,16 @@ export function* searchForGroups({type, payload }) {
         yield put(groupActions.setSearchResults(response.data?.rows));
         yield put(groupActions.setSearchCurrentPage(response.data?.page));
         yield put(groupActions.setSearchTotalPage(response.data?.count));
+    } else {
     }
 }
 
 export function* getInvitations({ type, payload }) {
     const { page, invitationType } = payload;
 
-    yield put(groupActions.setIsLoading(true));
+    yield put(groupActions.setIsModalLoading(true));
     const response = yield call(getGroupInvitations, page, invitationType);
-    yield put(groupActions.setIsLoading(false));
+    yield put(groupActions.setIsModalLoading(false));
 
     if (response.success) {
         yield put(groupActions.setInvitations(response.data?.rows));
@@ -49,8 +52,25 @@ export function* getInvitations({ type, payload }) {
     }
 }
 
+export function* getRequestedGroups({ type, payload }) {
+    const page = payload;
+
+    yield put(groupActions.setisGettingRequestedGroups(true));
+    const response = yield call(getGroupInvitations, page, GroupMemberStatus.requested);
+    yield put(groupActions.setisGettingRequestedGroups(false));
+
+    if (response.success) {
+        yield put(groupActions.setRequestedGroups(response.data?.rows));
+        yield put(groupActions.setRequestedGroupCurrentPage(page));
+        yield put(groupActions.setRequestedGroupTotalPage(response.data?.count));
+    } else {
+        yield put(groupActions.setRequestedGroups([]));
+    }
+}
+
 export default function* groupSaga() {
     yield takeLatest(groupActions.getGroups.type, getGroups);
     yield takeLatest(groupActions.getGroupInvitations.type, getInvitations);
     yield takeLatest(groupActions.searchForGroups.type, searchForGroups);
+    yield takeLatest(groupActions.getRequestedGroups.type, getRequestedGroups);
 }

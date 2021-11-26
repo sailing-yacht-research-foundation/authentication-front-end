@@ -39,6 +39,25 @@ export const searchMyGroups = (keyword) => {
         })
 }
 
+export const searchGroupForAssigns = (keyword) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/my-assignable-groups`, {
+        params: {
+            q: keyword
+        }
+    })
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        })
+}
+
 export const searchGroups = (searchKeyword, page) => {
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups?q=${searchKeyword}`, {
         params: {
@@ -267,8 +286,8 @@ export const assignAdmin = (groupId, memberId) => {
         })
 }
 
-export const searchMembers = (groupId, keyword) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/members?isAdmin_eq=false`, {
+export const searchMembers = (groupId, keyword, status) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/members?isAdmin_eq=false${status && `&status_eq=` + status}`, {
         params: {
             q: keyword
         }
@@ -388,4 +407,42 @@ export const assignEventAsGroupAdmin = (groupId: string, eventId: string, isIndi
                 error: error
             }
         })
+}
+
+export const uploadAvatar = (groupId, formData) => {
+    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/avatar-upload`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    .then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            sucess: false,
+            error: error
+        }
+    }); 
+}
+
+export const revokeGroupAsEditor = (groupId, eventId) => {
+    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/revoke-admin-event`, {
+        data: {
+            calendarEventId: eventId
+        }
+    })
+    .then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            sucess: false,
+            error: error
+        }
+    }); 
 }

@@ -8,6 +8,10 @@ export interface GroupDetailState {
     members: any[];
     isGettingAdmins: boolean;
     isGettingMembers: boolean;
+    group: any;
+    isGettingGroup: boolean;
+    getGroupDetailFailed: boolean;
+    acceptedMemberResults: any[];
   }
   
   export type ContainerState = GroupDetailState;

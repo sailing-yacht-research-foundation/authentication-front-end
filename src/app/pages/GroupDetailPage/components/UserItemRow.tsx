@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { translations } from 'locales/translations';
 import { GroupMemberStatus } from 'utils/constants';
-import { Tag } from 'antd'
+import { Tag } from 'antd';
+import { renderAvatar } from 'utils/user-utils';
+import { media } from 'styles/media';
 
 export const UserItemRow = (props) => {
 
-    const { item } = props;
+    const { item, pendingJoinRequest } = props;
 
     const { t } = useTranslation();
 
@@ -25,11 +27,13 @@ export const UserItemRow = (props) => {
     }
 
     return (
-        <UserItem>
+        <UserItem className={pendingJoinRequest ? 'breakline' : ''}>
             <UserInnerContainer>
-                <UserAvatarContainer style={{ background: "url('/default-avatar.png')", backgroundSize: 'cover' }} />
+                <UserAvatarContainer>
+                    <img src={renderAvatar(item?.member?.avatar)} alt={item?.member?.name}/>
+                </UserAvatarContainer>
                 <UserInforContainer>
-                    <UserName>{item?.member?.name} {renderTag()}</UserName>
+                    <UserName>{item?.member?.name || item?.email} {renderTag()}</UserName>
                     <UserDescription>{item?.isAdmin ? t(translations.group.admin) : t(translations.group.member)}</UserDescription>
                 </UserInforContainer>
             </UserInnerContainer>
@@ -48,14 +52,31 @@ const UserItem = styled.div`
         margin-bottom: 15px;
         border-bottom: 1px solid #eee;
     }
+
+    &.breakline {
+        flex-direction: column;
+        align-items: flex-start;
+
+        ${media.medium`
+            flex-direction: row;
+            align-items: flex-start;
+        `}
+    }
 `;
 
 const UserAvatarContainer = styled.div`
     width: 35px;
     height: 35px;
-    border: 1px solid #eee;
-    border-radius: 50%;
     margin-right: 15px;
+    flex: 0 0 auto;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 1px solid #eee;
+        border-radius: 50%;
+    }
 `;
 
 const UserInforContainer = styled.div`
@@ -74,13 +95,12 @@ const UserDescription = styled.span`
 
 const UserInnerContainer = styled.div`
     display: flex;
-    flex: .5;
 `;
 
 const UserActionButtonContainer = styled.div`
-    flex: .5;
     display: flex;
     justify-content: flex-end;
+    margin-left: auto;
 `;
 
 const StyledTag = styled(Tag)`

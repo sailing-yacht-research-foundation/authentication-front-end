@@ -14,6 +14,7 @@ import { translations } from 'locales/translations';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
+import { EventAdmins } from './EventAdmins';
 
 let userId;
 
@@ -82,8 +83,8 @@ export const EventDetail = () => {
         anyone_canregist: t(translations.tip.anyone_can_register_event_and_tracking),
         anyone_canview: t(translations.tip.anyone_can_search_view_event),
         only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
-      }
-    
+    }
+
 
     return (
         <Spin spinning={isFetchingEvent}>
@@ -101,11 +102,9 @@ export const EventDetail = () => {
                 <EventActions>
                     <Space>
                         {
-                            userId && event.createdById === userId ? (
+                            userId && event.createdById === userId && (
                                 <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
 
-                            ) : (
-                                <Button icon={<FaCalendarPlus style={{ marginRight: '5px' }} />} shape="round" type="primary">{t(translations.event_detail_page.attend_this_event)}</Button>
                             )
                         }
                         <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
@@ -114,7 +113,7 @@ export const EventDetail = () => {
             </PageHeaderContainerResponsive>
 
             <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
-            
+
             <EventDescriptionContainer>
                 <EventSection>
                     <EventSectionHeading>{t(translations.event_detail_page.about_this_event)}</EventSectionHeading>
@@ -129,9 +128,17 @@ export const EventDetail = () => {
                 </EventSection>
             </EventDescriptionContainer>
 
-            <EventSection>
-                {event.id && <RaceList event={event} />}
-            </EventSection>
+            {event.id &&
+                <>
+                    <EventSection>
+                        <RaceList event={event} />
+                    </EventSection>
+
+                    <EventSection>
+                        <EventAdmins event={event} />
+                    </EventSection>
+                </>
+            }
         </Spin>
     );
 }

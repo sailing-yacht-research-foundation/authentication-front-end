@@ -223,6 +223,7 @@ export const PlaybackOldRace = (props) => {
   useEffect(() => {
     raceTimeRef.current = raceTime;
     handleRequestMoreRaceData(0); // start getting race data when the start time is available.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceTime]);
 
   useEffect(() => {

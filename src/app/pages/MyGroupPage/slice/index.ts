@@ -11,15 +11,18 @@ export const initialState: GroupState = {
     invitationsTotalPage: 0,
     invitations: [],
     groups: [],
-    members: [],
-    memberCurrentPage: 1,
-    memberTotalPage: 0,
     isChangingPage: false,
     isLoading: false,
     groupResults: [],
     searchKeyword: '',
     groupSearchCurrentPage: 1,
-    groupSearchTotalPage: 1
+    groupSearchTotalPage: 1,
+    requestedGroupTotalPage: 1,
+    requestedGroupsCurrentPage: 1,
+    requestedGroups: [],
+    isGettingRequestedGroups: false,
+    isModalLoading: false,
+    performedSearch: false,
 };
 
 const slice = createSlice({
@@ -31,15 +34,6 @@ const slice = createSlice({
         },
         setGroups(state, action: PayloadAction<any[]>) {
             state.groups = action.payload;
-        },
-        setMembers(state, action: PayloadAction<any[]>) {
-            state.members = action.payload;
-        },
-        setCurrentMemberPage(state, action: PayloadAction<number>) {
-            state.memberCurrentPage = action.payload;
-        },
-        setMemberTotalPage(state, action: PayloadAction<number>) {
-            state.memberTotalPage = action.payload;
         },
         setCurrentGroupPage(state, action: PayloadAction<number>) {
             state.groupCurrentPage = action.payload;
@@ -73,6 +67,25 @@ const slice = createSlice({
         },
         setSearchTotalPage(state, action: PayloadAction<number>) {
             state.groupSearchTotalPage = action.payload;
+        },
+        setRequestedGroups(state, action: PayloadAction<any[]>) {
+            state.requestedGroups = action.payload;
+        },
+        setRequestedGroupCurrentPage(state, action: PayloadAction<number>) {
+            state.requestedGroupsCurrentPage = action.payload;
+        },
+        setRequestedGroupTotalPage(state, action: PayloadAction<number>) {
+            state.requestedGroupTotalPage = action.payload;
+        },
+        getRequestedGroups(state, action: PayloadAction<number>) {},
+        setisGettingRequestedGroups(state, action: PayloadAction<boolean>) {
+            state.isGettingRequestedGroups = action.payload;
+        },
+        setIsModalLoading(state, action: PayloadAction<boolean>) {
+            state.isModalLoading = action.payload;
+        },
+        setPerformedSearch(state, action: PayloadAction<boolean>) {
+            state.performedSearch = action.payload;
         }
     },
 });

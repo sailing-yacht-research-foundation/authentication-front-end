@@ -1,17 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Spin } from 'antd';
-import { MdOutlineGroupAdd } from 'react-icons/md';
+import { Button, Spin, Tag, Space } from 'antd';
+import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { GroupMemberStatus, GroupVisibility } from 'utils/constants';
-import { AiFillLock } from 'react-icons/ai';
-import { GiEarthAmerica } from 'react-icons/gi';
-import { MdOutlineAddModerator } from 'react-icons/md';
+import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
+import { VisibilityOfGroup } from './VisibilityOfGroup';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGroupSlice } from '../slice';
+import { selectGroupCurrentPage, selectRequestedGroupCurrentPage } from '../slice/selectors';
+import { renderAvatar } from 'utils/user-utils';
+import ReactTooltip from 'react-tooltip';
 
 export const GroupItemRow = (props) => {
 
@@ -21,13 +24,21 @@ export const GroupItemRow = (props) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const { group, showGroupButton, memberCount, status, onGroupJoinRequested } = props;
+    const dispatch = useDispatch();
+
+    const { actions } = useGroupSlice();
+
+    const { group, showGroupButton, memberCount, status, onGroupJoinRequested, isAdmin, members } = props;
+
+    const requestedGroupsCurrentPage = useSelector(selectRequestedGroupCurrentPage);
+
+    const groupCurrentPage = useSelector(selectGroupCurrentPage);
 
     const renderButtonByStatus = () => {
         if (!showGroupButton) return <></>;
 
         if (status === GroupMemberStatus.requested)
-            return <Button onClick={undoJoin} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.pending)}</Button>
+            return <Button onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.cancel)}</Button>
         if (!status)
             return <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
     }
@@ -39,6 +50,8 @@ export const GroupItemRow = (props) => {
     const handlePostJoinActions = (response) => {
         if (response.success) {
             if (onGroupJoinRequested) onGroupJoinRequested();
+            dispatch(actions.getRequestedGroups(requestedGroupsCurrentPage));
+            dispatch(actions.getGroups(groupCurrentPage));
         } else {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         }
@@ -49,7 +62,7 @@ export const GroupItemRow = (props) => {
         setIsLoading(true);
         const response = await leaveGroup(group.id);
         setIsLoading(false);
-        
+
         handlePostJoinActions(response);
     }
 
@@ -62,32 +75,42 @@ export const GroupItemRow = (props) => {
         handlePostJoinActions(response);
     }
 
-    const renderGroupVisibility = (visibility) => {
-        switch (visibility) {
-            case GroupVisibility.private:
-                return <><AiFillLock /> {uppercaseFirstCharacter(visibility)}</>
-            case GroupVisibility.public:
-                return <><GiEarthAmerica /> {uppercaseFirstCharacter(visibility)}</>
-            default:
-                return <><MdOutlineAddModerator /> {uppercaseFirstCharacter(visibility)}</>
+    const renderGroupMembers = () => {
+        if (members && Array.isArray(members)) {
+            return (<>
+                {members.map(member =>
+                    <GroupMemberItem data-tip={member.name}>
+                        <img src={renderAvatar(member.avatar)} alt={member.name} />
+                    </GroupMemberItem>
+                )}
+            </>)
         }
+
+        return <></>;
     }
 
     return (
         <GroupItem onClick={showGroupItemDetail}>
             <GroupItemAvatarContainer>
-                <GroupItemAvatar style={{ background: "url('/default-avatar.jpeg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
+                <img src={group.groupImage || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
             </GroupItemAvatarContainer>
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>
                 <GroupItemDescription>{group.description}</GroupItemDescription>
-                <GroupType>{uppercaseFirstCharacter(group.groupType)} • {renderGroupVisibility(group.visibility)} • {t(translations.group.number_of_members, { numberOfMembers: renderNumberWithCommas(memberCount) })}</GroupType>
+                <GroupType>{group.groupType && uppercaseFirstCharacter(group.groupType) + ' • '} <VisibilityOfGroup visibility={group.visibility} /> • {t(translations.group.number_of_members, { numberOfMembers: renderNumberWithCommas(memberCount) })}</GroupType>
+                <GroupMemberContainer>
+                    <Space size={7}>
+                        {renderGroupMembers()}
+                    </Space>
+                </GroupMemberContainer>
+                {isAdmin && <Tag color="magenta">Admin</Tag>}
             </GroupItemInfoContainer>
             <GroupItemAction>
                 <Spin spinning={isLoading}>
                     {renderButtonByStatus()}
                 </Spin>
             </GroupItemAction>
+            <ReactTooltip/>
         </GroupItem>
     )
 }
@@ -130,10 +153,36 @@ const GroupItemAction = styled.div`
 
 const GroupItemAvatarContainer = styled.div`
     margin-right: 10px;
-`;
-
-const GroupItemAvatar = styled.div`
+    flex: 0 0 auto;
     width: 55px;
     height: 55px;
-    border-radius: 50%;
-`
+
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid #eee;
+    }
+`;
+
+const GroupMemberItem = styled.div`
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        border-radius: 50%;
+        border: 1px solid #eee;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+`;
+
+const GroupMemberContainer = styled.div`
+    display: flex;
+    margin: 7px 0;
+`;
