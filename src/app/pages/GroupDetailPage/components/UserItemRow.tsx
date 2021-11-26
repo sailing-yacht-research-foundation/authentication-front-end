@@ -84,13 +84,12 @@ const UserDescription = styled.span`
 
 const UserInnerContainer = styled.div`
     display: flex;
-    flex: .5;
 `;
 
 const UserActionButtonContainer = styled.div`
-    flex: .5;
     display: flex;
     justify-content: flex-end;
+    margin-left: auto;
 `;
 
 const StyledTag = styled(Tag)`
