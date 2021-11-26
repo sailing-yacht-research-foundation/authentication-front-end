@@ -4,27 +4,33 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 export const MarkerInfo = (props) => {
-    const { coordinate, identifier } = props;
+    const { coordinate, identifier, name } = props;
 
     const { t } = useTranslation();
 
     const isIdentifierExist = !!identifier;
     const identifierElement = isIdentifierExist ? (
-        <RacerInfoContainer>
+        name ? (<RacerInfoContainer>
             <RacerInfoTitle>
-                {t(translations.playback_page.identifier)}: 
+                {t(translations.playback_page.name)}:
+            </RacerInfoTitle>
+            <br />
+            {name}
+        </RacerInfoContainer>) : (<RacerInfoContainer>
+            <RacerInfoTitle>
+                {t(translations.playback_page.identifier)}:
             </RacerInfoTitle>
             <br />
             {identifier}
-        </RacerInfoContainer>
+        </RacerInfoContainer>)
     ) : undefined;
 
-    const isCoordinateExist = !!(coordinate.lat || coordinate.lon);
+    const isCoordinateExist = coordinate && !!(coordinate.lat || coordinate.lon);
     const coordinateElement = isCoordinateExist ? (
         <RacerInfoContainer>
-            {isIdentifierExist && <hr/>}
+            {isIdentifierExist && <hr />}
             <RacerInfoTitle>
-                {t(translations.playback_page.coordinate)} 
+                {t(translations.playback_page.coordinate)}
                 <span style={{ color: '#999' }}>{t(translations.playback_page.lat_lon)}</span>:
             </RacerInfoTitle>
             [{coordinate.lat}, {coordinate.lon}]

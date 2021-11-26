@@ -320,6 +320,7 @@ export const normalizeSequencedGeometries = (
       id: sG.id,
       geometryType: sG.geometryType,
       coordinates: coordinates,
+      properties: sG?.properties
     };
   });
 };
