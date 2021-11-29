@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
 import { supportedSearchCriteria } from 'utils/constants';
-import { insert3BetweenEachWord } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {
@@ -13,7 +12,7 @@ export const search = (params) => {
 
     query.bool.must.push({
         query_string: {
-            query: parseKeyword(insert3BetweenEachWord(params.keyword))
+            query: parseKeyword(params.keyword)
         }
     });
 

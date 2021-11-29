@@ -36,7 +36,7 @@ export const ResultSuggestion = (props) => {
     const caretPosition = React.useRef<number>(0);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 1000), []);
+    const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 300), []);
 
     const getSuggestionItems = async (keyword) => {
         let criteriaMatched: any[] = [];
@@ -44,6 +44,9 @@ export const ResultSuggestion = (props) => {
 
         if (keyword.indexOf(' ', caretPosition.current) === -1) searchKeyWord = keyword;
 
+        const splittedColonSearchKeyword = searchKeyWord.split(':');
+        searchKeyWord = splittedColonSearchKeyword[splittedColonSearchKeyword.length - 1];
+        
         const searchKeyWordAsArray = searchKeyWord.split(' ');
 
         if (!keyword || !searchKeyWord) {
