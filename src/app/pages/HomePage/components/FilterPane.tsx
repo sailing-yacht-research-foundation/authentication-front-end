@@ -16,6 +16,7 @@ import { TIME_FORMAT } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
 import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
+import ContentEditable from 'react-contenteditable'
 
 export const FilterPane = (props) => {
 
@@ -24,6 +25,8 @@ export const FilterPane = (props) => {
     const searchKeyword = useSelector(selectSearchKeyword);
 
     const searchInputRef = React.createRef<Input>();
+
+    const mutableEditableRef = React.useRef<any>();
 
     const { t } = useTranslation();
 
@@ -42,6 +45,8 @@ export const FilterPane = (props) => {
     const toDate = useSelector(selectToDate);
 
     const [keyword, setKeyword] = React.useState<string>('');
+
+    const text = React.useRef('');
 
     useEffect(() => {
         if (defaultFocus && searchInputRef) {
@@ -113,7 +118,8 @@ export const FilterPane = (props) => {
                             name="name"
                             rules={[{ required: true, message: t(translations.forms.search_keyword_is_required) }]}
                         >
-                            <Input ref={searchInputRef}
+                            {/* <Input ref={searchInputRef}
+                                style={{ display: 'none' }}
                                 value={searchKeyword}
                                 onChange={e => {
                                     dispatch(actions.setKeyword(e.target.value));
@@ -123,9 +129,14 @@ export const FilterPane = (props) => {
                                 autoComplete="off"
                                 autoCapitalize="none"
                                 allowClear={true}
-                            />
-                            <CriteriaSuggestion keyword={keyword} searchBarRef={searchInputRef} />
-                            <ResultSuggestion isFilterPane keyword={keyword} searchBarRef={searchInputRef} />
+                            /> */}
+                            <div className="contenteditable-search" contentEditable ref={mutableEditableRef} onBlur={() => { }} onKeyPress={(e) => {
+                                const target = e.target as HTMLDivElement;
+                                dispatch(actions.setKeyword(target.innerText));
+                                setKeyword(target.innerText);
+                            }}></div>
+                            <CriteriaSuggestion keyword={keyword} searchBarRef={mutableEditableRef} />
+                            <ResultSuggestion searchBarRef={mutableEditableRef} isFilterPane keyword={keyword}/>
                         </Form.Item>
                     </div>
                     <Row gutter={24}>
@@ -191,7 +202,7 @@ export const FilterPane = (props) => {
                     </Form.Item>
                 </Form>
             </Spin>
-        </Wrapper>
+        </Wrapper >
     )
 }
 

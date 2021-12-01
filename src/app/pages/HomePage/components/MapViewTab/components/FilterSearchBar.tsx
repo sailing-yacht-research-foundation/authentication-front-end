@@ -72,7 +72,7 @@ export const FilterSearchBar = (props) => {
 
     return (
         <SearchBarWrapper ref={searchBarWrapperRef}>
-            <SearchBarInnerWrapper>
+            {/* <SearchBarInnerWrapper>
                 <StyledSearchBar
                     data-tip={t(translations.tip.search_for_races_using_different_criteria)}
                     ref={searchBarRef}
@@ -101,7 +101,7 @@ export const FilterSearchBar = (props) => {
                     dispatch(actions.setShowAdvancedSearch(true));
                 }}>{t(translations.home_page.map_view_tab.advanced_search)}</a>
             </AdvancedSearchTextWrapper>
-            <ReactTooltip />
+            <ReactTooltip /> */}
         </SearchBarWrapper>
     )
 }

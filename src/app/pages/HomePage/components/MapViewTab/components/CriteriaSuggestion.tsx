@@ -2,7 +2,8 @@ import { SuggestionCriteria, SuggestionInnerWrapper, SuggestionWrapper } from 'a
 import { useHomeSlice } from 'app/pages/HomePage/slice';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { supportedSearchCriteria } from 'utils/constants';
+import { formatterSupportedSearchCriteria } from 'utils/constants';
+import { extractTextFromHTML, placeCaretAtEnd } from 'utils/helpers';
 
 export const CriteriaSuggestion = (props) => {
 
@@ -18,14 +19,16 @@ export const CriteriaSuggestion = (props) => {
 
     const getSuggestionItems = () => {
         let criteriaMatched: any[] = [];
-        let lastword: any = keyword.match(/(?:\s|^)([\S]+)$/i) || '';
+        console.log(keyword);
+        let lastword: any = extractTextFromHTML(keyword.match(/(?:\s|^)([\S]+)$/i) || '');
 
         if (lastword.length > 0)
             lastword = lastword[0];
 
         if (lastword.length === 0) return [];
-        supportedSearchCriteria.forEach(criteria => {
-            if (criteria.includes(lastword.trim()) && !keyword.includes(criteria + ':')) {
+
+        formatterSupportedSearchCriteria.forEach(criteria => {
+            if (criteria.toLowerCase().includes(lastword.trim()) && !keyword.includes(criteria.toLowerCase() + ':')) {
                 criteriaMatched.unshift(criteria);
             }
         });
@@ -40,19 +43,25 @@ export const CriteriaSuggestion = (props) => {
         const lastWordPosition = keyword.match(/(?:\s|^)([\S]+)$/i).index;
         const words = keyword.split(' ');
         const wordsLength = words.length;
+        const pilledCriteria = `<span class="pill">${criteria}</span>&nbsp;`;
 
         dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition)));
 
         if (wordsLength === 1) {
-            dispatch(actions.setKeyword(criteria + ':'));
+            dispatch(actions.setKeyword(pilledCriteria));
+            searchBarRef.current.innerHTML = pilledCriteria;
         } else if (wordsLength > 1) {
-            dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition) + ' ' + criteria + ':'));
+            searchBarRef.current.innerHTML = (keyword.substring(0, lastWordPosition) + ' ' + pilledCriteria);
+            dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition) + ' ' + pilledCriteria));
+            console.log(lastWordPosition);
+            console.log(keyword.substring(0, lastWordPosition) + ' ' + pilledCriteria);
         }
 
         if (searchBarRef.current) {
             searchBarRef.current.focus();
         }
 
+        placeCaretAtEnd(searchBarRef.current);
         setShowSuggestion(false);
     }
 

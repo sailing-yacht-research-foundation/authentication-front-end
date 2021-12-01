@@ -35,6 +35,17 @@ export const supportedSearchCriteria = [
     'unstructured_text'
 ];
 
+export const formatterSupportedSearchCriteria = [
+    'Name:',
+    'Start City:',
+    'Start Country:',
+    'Boat Names:',
+    'Boat Models:',
+    'Handicap Rules;',
+    'Source:',
+    'Unstructured Text:'
+];
+
 export const enum GroupMemberStatus {
     invited = 'INVITED',
     requested = 'REQUESTED',

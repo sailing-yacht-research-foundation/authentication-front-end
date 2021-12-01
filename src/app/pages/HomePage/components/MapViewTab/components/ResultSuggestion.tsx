@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSuggestion } from 'services/live-data-server/competition-units';
 import styled from 'styled-components';
 import { supportedSearchCriteria } from 'utils/constants';
-import { debounce, isMobile } from 'utils/helpers';
+import { debounce, extractTextFromHTML, getCaretPosition, isMobile } from 'utils/helpers';
 
 const enum Criteria {
     NAME = 'name',
@@ -39,10 +39,12 @@ export const ResultSuggestion = (props) => {
     const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 300), []);
 
     const getSuggestionItems = async (keyword) => {
+        // keyword = extractContent(keyword);
+        const caretPosition = getCaretPosition(searchBarRef.current);
         let criteriaMatched: any[] = [];
-        let searchKeyWord = keyword.slice(0, keyword.indexOf(' ', caretPosition.current));
+        let searchKeyWord = keyword.slice(0, keyword.indexOf(' ', caretPosition));
 
-        if (keyword.indexOf(' ', caretPosition.current) === -1) searchKeyWord = keyword;
+        if (keyword.indexOf(' ', caretPosition) === -1) searchKeyWord = keyword;
 
         const splittedColonSearchKeyword = searchKeyWord.split(':');
         searchKeyWord = splittedColonSearchKeyword[splittedColonSearchKeyword.length - 1];
@@ -104,7 +106,7 @@ export const ResultSuggestion = (props) => {
     }
 
     const getSuggestionFieldFromSearchQuery = (keyword) => {
-        const currentKeywordAtCaretPosition = keyword.substring(0, caretPosition.current);
+        const currentKeywordAtCaretPosition = keyword.substring(0, getCaretPosition(searchBarRef.current));
         const currentKeywordAtCaretPositionLength = currentKeywordAtCaretPosition.split(' ').length;
         const splittedKeyword = currentKeywordAtCaretPosition.split(' ');
         let criteria = Criteria.NAME;
@@ -148,13 +150,6 @@ export const ResultSuggestion = (props) => {
 
         setCriteria([]);
     }
-
-    React.useEffect(() => {
-        if (searchBarRef.current) {
-            caretPosition.current = searchBarRef.current?.input.selectionEnd;
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchBarRef]);
 
     React.useEffect(() => {
         if (isSearching) {
