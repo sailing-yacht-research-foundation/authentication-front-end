@@ -120,8 +120,9 @@ export const ResultSuggestion = (props) => {
         if (wordsLength === 1) {
             // and that word includes the criteria, we include it
             if (keyword.includes(':')) {
-                dispatch(actions.setKeyword([keyword.split(':')[0], criteria].join(':')));
-                searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria([keyword.split(':')[0], criteria].join(':'));
+                const parsedKeyword = [keyword.split(':')[0], criteria].join(':').trim();
+                dispatch(actions.setKeyword(parsedKeyword));
+                searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria(parsedKeyword);
             } else { // that word does not include the criteria, we append the whole criteria.
                 dispatch(actions.setKeyword(criteria));
                 searchBarRef.current.innerHTML = criteria;
