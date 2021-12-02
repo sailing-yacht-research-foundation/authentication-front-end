@@ -1,6 +1,6 @@
 import { SuggestionCriteria, SuggestionInnerWrapper, SuggestionWrapper } from 'app/components/SyrfGeneral';
 import { useHomeSlice } from 'app/pages/HomePage/slice';
-import { selectIsSearching, selectResults } from 'app/pages/HomePage/slice/selectors';
+import { selectIsSearching } from 'app/pages/HomePage/slice/selectors';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSuggestion } from 'services/live-data-server/competition-units';

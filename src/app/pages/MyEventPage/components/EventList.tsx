@@ -31,8 +31,6 @@ const defaultOptions = {
   }
 };
 
-const uuid = localStorage.getItem('uuid');
-
 export const EventList = () => {
 
   const { t } = useTranslation();

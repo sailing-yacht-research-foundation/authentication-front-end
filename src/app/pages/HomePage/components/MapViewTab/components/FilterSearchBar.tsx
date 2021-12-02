@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Spin } from 'antd';
+import { Spin } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
