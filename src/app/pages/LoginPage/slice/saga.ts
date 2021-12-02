@@ -14,7 +14,7 @@ import i18next from "i18next";
 export function* getAuthUser() {
     const response = yield call(getAuthorizedUser);
 
-    if (response.success) {
+    if (response?.success) {
         yield put(loginActions.setUser(JSON.parse(JSON.stringify(response.user))));
     } else {
         if (response?.error?.response?.status === 401) {

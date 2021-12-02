@@ -11,9 +11,10 @@ exports[`<LoginPage /> should render and match the snapshot 1`] = `
   }
 >
   <Col
-    lg={12}
+    lg={0}
     md={0}
     sm={0}
+    xl={12}
     xs={0}
   >
     <Curtains$1
@@ -23,9 +24,10 @@ exports[`<LoginPage /> should render and match the snapshot 1`] = `
     </Curtains$1>
   </Col>
   <Col
-    lg={12}
+    lg={24}
     md={24}
     sm={24}
+    xl={12}
     xs={24}
   >
     <LoginForm />

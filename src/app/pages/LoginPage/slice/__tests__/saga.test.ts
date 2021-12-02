@@ -20,7 +20,6 @@ describe('login Saga', () => {
       user: {}
     };
 
-    getAuthUserIterator.next();
     const putDescriptor = getAuthUserIterator.next(response).value;
     
     expect(putDescriptor).toEqual(

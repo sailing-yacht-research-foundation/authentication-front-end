@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { renewToken } from 'services/live-data-server/auth';
-import { store } from 'index';
+import { store } from 'store/configureStore';
 import { loginActions } from 'app/pages/LoginPage/slice';
 import { message } from 'antd';
 import i18next from 'i18next';
