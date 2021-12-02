@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { media } from 'styles/media';
 import { Button } from 'antd';
+import { RiCloseCircleFill } from 'react-icons/ri';
 
 export const PageHeaderContainer = styled.div`
     display: flex;
@@ -176,4 +177,13 @@ export const SuggestionInnerWrapper = styled.div`
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
+`;
+
+export const ContentEditableTextRemover = styled(RiCloseCircleFill)`
+    position: absolute;
+    right: 0;
+    top: 27%;
+    right: 5px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.25);
 `;

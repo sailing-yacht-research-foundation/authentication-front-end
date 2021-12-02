@@ -2,7 +2,7 @@ import { SuggestionCriteria, SuggestionInnerWrapper, SuggestionWrapper } from 'a
 import { useHomeSlice } from 'app/pages/HomePage/slice';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { formatterSupportedSearchCriteria } from 'utils/constants';
+import { CRITERIA_TO_RAW_CRITERIA, formatterSupportedSearchCriteria } from 'utils/constants';
 import { extractTextFromHTML, placeCaretAtEnd } from 'utils/helpers';
 
 export const CriteriaSuggestion = (props) => {
@@ -19,8 +19,7 @@ export const CriteriaSuggestion = (props) => {
 
     const getSuggestionItems = () => {
         let criteriaMatched: any[] = [];
-        console.log(keyword);
-        let lastword: any = extractTextFromHTML(keyword.match(/(?:\s|^)([\S]+)$/i) || '');
+        let lastword: any = extractTextFromHTML(keyword).match(/(?:\s|^)([\S]+)$/i) || '';
 
         if (lastword.length > 0)
             lastword = lastword[0];
@@ -40,21 +39,20 @@ export const CriteriaSuggestion = (props) => {
     }
 
     const appendCriteria = (criteria) => {
+        let keyword = searchBarRef.current.innerHTML;
         const lastWordPosition = keyword.match(/(?:\s|^)([\S]+)$/i).index;
         const words = keyword.split(' ');
         const wordsLength = words.length;
-        const pilledCriteria = `<span class="pill">${criteria}</span>&nbsp;`;
+        const pilledCriteria = `<span contenteditable="true" class="pill">${criteria}:</span>&nbsp;`;
 
-        dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition)));
+        dispatch(actions.setKeyword(keyword.substring(0, CRITERIA_TO_RAW_CRITERIA[criteria])));
 
         if (wordsLength === 1) {
             dispatch(actions.setKeyword(pilledCriteria));
             searchBarRef.current.innerHTML = pilledCriteria;
         } else if (wordsLength > 1) {
             searchBarRef.current.innerHTML = (keyword.substring(0, lastWordPosition) + ' ' + pilledCriteria);
-            dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition) + ' ' + pilledCriteria));
-            console.log(lastWordPosition);
-            console.log(keyword.substring(0, lastWordPosition) + ' ' + pilledCriteria);
+            dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition) + ' ' + CRITERIA_TO_RAW_CRITERIA[criteria]));
         }
 
         if (searchBarRef.current) {

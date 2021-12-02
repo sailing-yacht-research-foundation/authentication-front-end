@@ -1,12 +1,12 @@
 import { SuggestionCriteria, SuggestionInnerWrapper, SuggestionWrapper } from 'app/components/SyrfGeneral';
 import { useHomeSlice } from 'app/pages/HomePage/slice';
-import { selectIsSearching } from 'app/pages/HomePage/slice/selectors';
+import { selectIsSearching, selectResults } from 'app/pages/HomePage/slice/selectors';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSuggestion } from 'services/live-data-server/competition-units';
 import styled from 'styled-components';
 import { supportedSearchCriteria } from 'utils/constants';
-import { debounce, extractTextFromHTML, getCaretPosition, isMobile } from 'utils/helpers';
+import { debounce, getCaretPosition, isMobile, placeCaretAtEnd, replaceCriteriaWithPilledCriteria } from 'utils/helpers';
 
 const enum Criteria {
     NAME = 'name',
@@ -33,33 +33,26 @@ export const ResultSuggestion = (props) => {
 
     const isSearching = useSelector(selectIsSearching);
 
-    const caretPosition = React.useRef<number>(0);
+    const caretPosition = React.useRef<any>();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 300), []);
+    const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 100), []);
 
     const getSuggestionItems = async (keyword) => {
-        // keyword = extractContent(keyword);
         const caretPosition = getCaretPosition(searchBarRef.current);
         let criteriaMatched: any[] = [];
-        let searchKeyWord = keyword.slice(0, keyword.indexOf(' ', caretPosition));
+        let searchKeyWord = keyword.slice(0, caretPosition);
 
-        if (keyword.indexOf(' ', caretPosition) === -1) searchKeyWord = keyword;
-
-        const splittedColonSearchKeyword = searchKeyWord.split(':');
-        searchKeyWord = splittedColonSearchKeyword[splittedColonSearchKeyword.length - 1];
-        
-        const searchKeyWordAsArray = searchKeyWord.split(' ');
-
+        // no search keyword or keyword given, stop suggesting
         if (!keyword || !searchKeyWord) {
             setCriteria([]);
             return;
         }
 
-        searchKeyWord = searchKeyWordAsArray[searchKeyWordAsArray.length - 1];
-
+        // get the last words in the right side of the last colon within the caret position length.
         if (searchKeyWord.includes(':')) {
-            searchKeyWord = searchKeyWord.split(':')[1];
+            const splittedSearchKeyword = searchKeyWord.split(':');
+            searchKeyWord = splittedSearchKeyword[splittedSearchKeyword.length - 1];
         }
 
         const criteriaSuggestionItem = supportedSearchCriteria.find(criteria => {
@@ -84,7 +77,7 @@ export const ResultSuggestion = (props) => {
 
     const findArrayItemByKey = (array, keyword) => {
         return array.find(item => {
-            return String(item).toLowerCase().includes(keyword);
+            return String(item).toLowerCase().includes(keyword.trim());
         });
     }
 
@@ -122,31 +115,26 @@ export const ResultSuggestion = (props) => {
     }
 
     const appendCriteria = (criteria) => {
-        const lastWordPosition = keyword.match(/(?:\s|^)([\S]+)$/i).index;
-        const words = keyword.split(' ');
-        const wordsLength = words.length;
-        const lastWord = words[wordsLength - 1];
-        const firstWord = words[0];
-
-        dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition)));
-
+        const wordsLength = keyword.split(' ').length;
+        // in case we have one word
         if (wordsLength === 1) {
-            if (firstWord.includes(':')) {
-                dispatch(actions.setKeyword(firstWord.split(':')[0] + ':' + criteria));
-            } else {
+            // and that word includes the criteria, we include it
+            if (keyword.includes(':')) {
+                dispatch(actions.setKeyword([keyword.split(':')[0], criteria].join(':')));
+                searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria([keyword.split(':')[0], criteria].join(':'));
+            } else { // that word does not include the criteria, we append the whole criteria.
                 dispatch(actions.setKeyword(criteria));
+                searchBarRef.current.innerHTML = criteria;
             }
-        } else if (wordsLength > 1) {
-            if (lastWord.includes(':')) {
-                dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition) + ' ' + lastWord.split(':')[0] + ':' + criteria));
-            } else {
-                dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition) + ' ' + criteria));
-            }
+        } else {// we have more than 1 word
+            const wordsFromBeginningToCaretPosition = keyword.slice(0, caretPosition.current);
+            const splittedWords = wordsFromBeginningToCaretPosition.split(':').slice(0, -1).join(":") + ':';
+            const wordsFromCaretPositionToEnd = keyword.slice(caretPosition.current, -1);
+            dispatch(actions.setKeyword([splittedWords, criteria, wordsFromCaretPositionToEnd].join(' ')));
+            searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria([splittedWords, criteria, wordsFromCaretPositionToEnd].join(' '));
         }
 
-        if (searchBarRef.current) {
-            searchBarRef.current.focus();
-        }
+        placeCaretAtEnd(searchBarRef.current);
 
         setCriteria([]);
     }
@@ -160,6 +148,7 @@ export const ResultSuggestion = (props) => {
 
     React.useEffect(() => {
         debounceSuggestion(keyword);
+        caretPosition.current = getCaretPosition(searchBarRef.current);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [keyword]);
 

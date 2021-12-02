@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { SelectLanguage } from './components/SelectLanguage';
 import { UserDropdown } from './components/UserDropdown';
 import { Link, useLocation } from 'react-router-dom';
-import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { selectIsAuthenticated, selectRefreshToken } from 'app/pages/LoginPage/slice/selectors';
 import { media } from 'styles/media';
 import { useHistory } from 'react-router';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
@@ -15,6 +15,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import ReactGA from 'react-ga4';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { selectLastSubscribedCompetitionUnitId } from 'app/pages/CompetitionUnitCreateUpdatePage/slice/selectors';
+import { logout as ldsLogout } from 'services/live-data-server/auth';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -33,7 +34,10 @@ export const Nav = () => {
 
   const location = useLocation();
 
-  const logout = () => {
+  const refreshToken = useSelector(selectRefreshToken);
+
+  const logout = async () => {
+    await ldsLogout(refreshToken);
     dispatch(loginActions.setLogout());
     history.push('/signin');
   }

@@ -22,7 +22,7 @@ export function* getAuthUser() {
         if (refreshTokenResponse.success) {
             yield put(loginActions.setSessionToken(refreshTokenResponse.data.newtoken));
             yield put(loginActions.setRefreshToken(refreshTokenResponse.data.refresh_token));
-            window.location.reload();
+            // window.location.reload();
             return;
         }
         

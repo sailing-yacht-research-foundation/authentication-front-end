@@ -128,3 +128,19 @@ export const sendForgotPassword = (email) => {
         }
     })
 }
+
+export const logout = (refresh_token) => {
+    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/logout`, {
+        refresh_token
+    })
+    .then(response => {
+        return {
+            success: true,
+        }
+    }).catch(error => {
+        return {
+            sucess: false,
+            error: error
+        }
+    })
+}

@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
+import { CRITERIA_TO_RAW_CRITERIA, formatterSupportedSearchCriteria, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
 
 /**
  * Check if is mobile
@@ -245,35 +246,34 @@ export const uppercaseFirstCharacter = (text) => {
 
 /**Extract text from html  */
 export const extractTextFromHTML = (s) => {
-    var span = document.createElement('span');
+    let span = document.createElement('span');
     span.innerHTML = s;
     return span.textContent || span.innerText;
 };
 
-export const getCaretPosition = (editableDiv) => {
-    var caretPos = 0,
-        sel, range;
-    if (window.getSelection) {
-        sel = window.getSelection();
-        if (sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            if (range.commonAncestorContainer.parentNode == editableDiv) {
-                caretPos = range.endOffset;
-            }
+export const getCaretPosition = (element) => {
+    let caretOffset = 0;
+
+    if (window.getSelection !== null) {
+        let range = window?.getSelection()?.getRangeAt(0);
+        if (range) {
+            let preCaretRange = range.cloneRange();
+            preCaretRange.selectNodeContents(element);
+            preCaretRange.setEnd(range.endContainer, range.endOffset);
+            caretOffset = preCaretRange.toString().length;
         }
     }
-    return caretPos;
+    return caretOffset;
 }
-
 
 export const placeCaretAtEnd = (el) => {
     el.focus();
     if (typeof window.getSelection != "undefined"
         && typeof document.createRange != "undefined") {
-        var range = document.createRange();
+        let range = document.createRange();
         range.selectNodeContents(el);
         range.collapse(false);
-        var sel = window.getSelection();
+        let sel = window.getSelection();
         if (sel) {
             sel.removeAllRanges();
             sel.addRange(range);
@@ -281,24 +281,18 @@ export const placeCaretAtEnd = (el) => {
     }
 }
 
+export const replaceCriteriaWithPilledCriteria = (string) => {
+    supportedSearchCriteria.forEach(criteria => {
+        string = string.replace(criteria + ':', `<span contenteditable="true" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
+    });
 
-export function setCaret(target, isStart = false) {
-    const range = document.createRange();
-    const sel = window.getSelection();
-    if (isStart) {
-        const newText = document.createTextNode('');
-        target.appendChild(newText);
-        range.setStart(target.childNodes[0], 0);
-    }
-    else {
-        range.selectNodeContents(target);
-    }
-    range.collapse(isStart);
-    console.log(sel);
-    if (sel) {
-        sel.removeAllRanges();
-        sel.addRange(range);
-    }
-    target.focus();
-    target.select();
+    return string;
+}
+
+export const replaceFormattedCriteriaWithRawCriteria = (string): string => {
+    formatterSupportedSearchCriteria.forEach(criteria => {
+        string = string.replace(criteria, CRITERIA_TO_RAW_CRITERIA[criteria]);
+    });
+
+    return string;
 }
