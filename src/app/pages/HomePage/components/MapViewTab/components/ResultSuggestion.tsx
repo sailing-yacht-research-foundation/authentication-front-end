@@ -131,8 +131,9 @@ export const ResultSuggestion = (props) => {
             const wordsFromBeginningToCaretPosition = keyword.slice(0, caretPosition.current);
             const splittedWords = wordsFromBeginningToCaretPosition.split(':').slice(0, -1).join(":") + ':';
             const wordsFromCaretPositionToEnd = keyword.substr(caretPosition.current);
-            dispatch(actions.setKeyword([splittedWords, criteria, wordsFromCaretPositionToEnd].join(' ').trim()));
-            searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria([splittedWords, criteria, wordsFromCaretPositionToEnd.length === 1 ? '' : wordsFromCaretPositionToEnd].join(' ').trim());
+            const parsedKeyword = [splittedWords, criteria, wordsFromCaretPositionToEnd.length === 1 ? '' : wordsFromCaretPositionToEnd].join(' ').trim();
+            dispatch(actions.setKeyword(parsedKeyword));
+            searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria(parsedKeyword);
         }
 
         placeCaretAtEnd(searchBarRef.current);
