@@ -129,9 +129,9 @@ export const ResultSuggestion = (props) => {
         } else {// we have more than 1 word
             const wordsFromBeginningToCaretPosition = keyword.slice(0, caretPosition.current);
             const splittedWords = wordsFromBeginningToCaretPosition.split(':').slice(0, -1).join(":") + ':';
-            const wordsFromCaretPositionToEnd = keyword.slice(caretPosition.current, -1);
-            dispatch(actions.setKeyword([splittedWords, criteria, wordsFromCaretPositionToEnd].join(' ')));
-            searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria([splittedWords, criteria, wordsFromCaretPositionToEnd].join(' '));
+            const wordsFromCaretPositionToEnd = keyword.substr(caretPosition.current);
+            dispatch(actions.setKeyword([splittedWords, criteria, wordsFromCaretPositionToEnd].join(' ').trim()));
+            searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria([splittedWords, criteria, wordsFromCaretPositionToEnd.length === 1 ? '' : wordsFromCaretPositionToEnd].join(' ').trim());
         }
 
         placeCaretAtEnd(searchBarRef.current);

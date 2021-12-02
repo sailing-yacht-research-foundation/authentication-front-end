@@ -231,7 +231,7 @@ export const GlobalStyle = createGlobalStyle`
   [contenteditable="true"].contenteditable-search {
     overflow: hidden;
     display:block;
-    white-space:nowrap;
+    white-space: pre-wrap
     box-sizing: border-box;
     margin: 0;
     position: relative;
