@@ -3,7 +3,7 @@
  */
 
 import { loginActions } from ".";
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest, delay } from 'redux-saga/effects';
 import { anonymousLogin, renewToken } from "services/live-data-server/auth";
 import { selectIsSyrfServiceAuthenticated, selectRefreshToken } from "./selectors";
 import { getUser } from "services/live-data-server/user";
@@ -12,23 +12,17 @@ import { translations } from "locales/translations";
 import i18next from "i18next";
 
 export function* getAuthUser() {
-    const refreshToken = yield select(selectRefreshToken);
     const response = yield call(getAuthorizedUser);
-    
-    if (response.success)
+
+    if (response.success) {
         yield put(loginActions.setUser(JSON.parse(JSON.stringify(response.user))));
-    else { // the user is not authenticated, or the user is deleted.
-        const refreshTokenResponse = yield call(renewToken, refreshToken);
-        if (refreshTokenResponse.success) {
-            yield put(loginActions.setSessionToken(refreshTokenResponse.data.newtoken));
-            yield put(loginActions.setRefreshToken(refreshTokenResponse.data.refresh_token));
-            window.location.reload();
-            return;
+    } else {
+        if (response?.error?.response?.status === 401) {
+            yield delay(3000);
+            yield put(loginActions.getUser());
         }
-        
-        yield put(loginActions.setLogout());
-        toast.info(i18next.t(translations.app.your_session_is_expired));
     }
+
 }
 
 export function* syrfServiceAnonymousLogin() {
