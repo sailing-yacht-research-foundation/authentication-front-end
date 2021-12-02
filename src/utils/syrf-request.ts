@@ -2,6 +2,9 @@ import axios from 'axios';
 import { renewToken } from 'services/live-data-server/auth';
 import { store } from 'index';
 import { loginActions } from 'app/pages/LoginPage/slice';
+import { message } from 'antd';
+import i18next from 'i18next';
+import { translations } from 'locales/translations';
 
 let isCallingRefresh = false;
 
@@ -48,6 +51,7 @@ class Request {
                     localStorage.setItem('refresh_token', response?.data?.refresh_token);
                 } else {
                     store.dispatch(loginActions.setLogout());
+                    message.info(i18next.t(translations.app.your_session_is_expired));
                 }
             }
         }
