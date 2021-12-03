@@ -255,12 +255,15 @@ export const getCaretPosition = (element) => {
     let caretOffset = 0;
 
     if (window.getSelection !== null) {
-        let range = window?.getSelection()?.getRangeAt(0);
-        if (range) {
-            let preCaretRange = range.cloneRange();
-            preCaretRange.selectNodeContents(element);
-            preCaretRange.setEnd(range.endContainer, range.endOffset);
-            caretOffset = preCaretRange.toString().length;
+        let sel = window.getSelection && window.getSelection();
+        if (sel && sel.rangeCount > 0) {
+            let range = window?.getSelection()?.getRangeAt(0);
+            if (range) {
+                let preCaretRange = range.cloneRange();
+                preCaretRange.selectNodeContents(element);
+                preCaretRange.setEnd(range.endContainer, range.endOffset);
+                caretOffset = preCaretRange.toString().length;
+            }
         }
     }
     return caretOffset;

@@ -223,7 +223,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .pill {
     background-color: rgb(45, 183, 245);
-    color: #fff;
+    color: #fff !important;
     padding: 3px 3px;
     border-radius: 5px;
   }
@@ -231,7 +231,7 @@ export const GlobalStyle = createGlobalStyle`
   [contenteditable="true"].contenteditable-search {
     overflow: hidden;
     display:block;
-    white-space: pre-wrap
+    white-space: pre-wrap;
     box-sizing: border-box;
     margin: 0;
     position: relative;
@@ -244,7 +244,13 @@ export const GlobalStyle = createGlobalStyle`
     transition: all 0.3s;
     outline:none;
     cursor: auto;
-} 
+    min-height:25px;
+  } 
+
+  [contenteditable="true"].contenteditable-search * {
+    color: rgba(0, 0, 0, 0.85);
+  }
+
   [contenteditable="true"].contenteditable-search br {
       display:none;
   }
@@ -258,6 +264,7 @@ export const GlobalStyle = createGlobalStyle`
     content: attr(placeholder);
     color: hsl(210,8%,55%);
     pointer-events: none;
+    white-space: nowrap;
     display: block; /* For Firefox */
   }
 `;

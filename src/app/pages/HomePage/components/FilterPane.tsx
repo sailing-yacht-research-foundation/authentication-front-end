@@ -142,6 +142,7 @@ export const FilterPane = (props) => {
                                     autoCorrect="off"
                                     autoCapitalize="none"
                                     ref={mutableEditableRef}
+                                   
                                     onInput={(e) => {
                                         const target = e.target as HTMLDivElement;
                                         setTimeout(() => {
@@ -277,4 +278,5 @@ const ContentEditableSearchBarWrapper = styled.div`
     padding-right: 20px;
     border: 1px solid #d9d9d9;
     border-radius: 2px;
+    min-height: 32px;
 `;

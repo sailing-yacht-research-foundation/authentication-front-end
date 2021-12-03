@@ -93,6 +93,7 @@ export const FilterSearchBar = (props) => {
         <SearchBarWrapper ref={searchBarWrapperRef}>
             <SearchBarInnerWrapper>
                 <span className="contenteditable-search"
+                    style={{whiteSpace:'nowrap', lineHeight: '30px'}}
                     contentEditable
                     data-tip={t(translations.tip.search_for_races_using_different_criteria)}
                     autoCorrect="off"
@@ -150,8 +151,8 @@ const SearchBarInnerWrapper = styled.div`
     position: relative;
     border-radius: 10px;
     box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
     padding-left: 70px;
     padding-right: 25px;
     white-space: nowrap;

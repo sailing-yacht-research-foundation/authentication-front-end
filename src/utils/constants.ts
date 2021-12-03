@@ -63,7 +63,7 @@ export const RAW_CRITERIA_TO_CRITERIA = {
     'start_country': 'Start Country',
     'boat_names': 'Boat Name',
     'boat_models': 'Boat Model',
-    'Handicap_rules': 'Handicap Rule',
+    'handicap_rules': 'Handicap Rule',
     'source': 'Source',
     'unstructured_text': 'Unstructured Text'
 }
