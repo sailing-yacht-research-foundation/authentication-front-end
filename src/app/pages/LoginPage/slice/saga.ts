@@ -3,31 +3,33 @@
  */
 
 import { loginActions } from ".";
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest, delay } from 'redux-saga/effects';
 import { anonymousLogin, renewToken } from "services/live-data-server/auth";
-import { selectIsSyrfServiceAuthenticated, selectRefreshToken } from "./selectors";
+import { selectGetProfileAttemptsCount, selectIsSyrfServiceAuthenticated, selectRefreshToken } from "./selectors";
 import { getUser } from "services/live-data-server/user";
 import { toast } from "react-toastify";
 import { translations } from "locales/translations";
 import i18next from "i18next";
+import { message } from "antd";
+
+const MAX_RETRY_TIMES = 5;
 
 export function* getAuthUser() {
-    const refreshToken = yield select(selectRefreshToken);
     const response = yield call(getAuthorizedUser);
-    
-    if (response.success)
+    const attemptsCount = yield select(selectGetProfileAttemptsCount);
+
+    if (response?.success) {
         yield put(loginActions.setUser(JSON.parse(JSON.stringify(response.user))));
-    else { // the user is not authenticated, or the user is deleted.
-        const refreshTokenResponse = yield call(renewToken, refreshToken);
-        if (refreshTokenResponse.success) {
-            yield put(loginActions.setSessionToken(refreshTokenResponse.data.newtoken));
-            yield put(loginActions.setRefreshToken(refreshTokenResponse.data.refresh_token));
-            window.location.reload();
-            return;
+    } else {
+        if (response?.error?.response?.status === 401) {
+            if (attemptsCount < MAX_RETRY_TIMES) {
+                yield delay(3000);
+                yield put(loginActions.setFailedGetProfileAttemptsCount(attemptsCount + 1));
+                yield put(loginActions.getUser());
+            } else {
+                message.info(i18next.t(translations.misc.there_is_a_problem_with_our_server));
+            }
         }
-        
-        yield put(loginActions.setLogout());
-        toast.info(i18next.t(translations.app.your_session_is_expired));
     }
 }
 

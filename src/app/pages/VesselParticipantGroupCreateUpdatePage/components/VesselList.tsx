@@ -179,7 +179,8 @@ export const VesselList = (props) => {
                 publicName: `Boat ${i + 1}`,
                 lengthInMeters: null,
                 orcJsonPolars: {},
-                bulkCreated: true
+                bulkCreated: true,
+                scope: eventId
             });
         }
         setIsLoading(false);

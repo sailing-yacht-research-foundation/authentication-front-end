@@ -34,4 +34,9 @@ export const selectUserCoordinate = createSelector(
 export const selectRefreshToken = createSelector(
   [selectDomain],
   (loginState) => loginState.refresh_token
+);
+
+export const selectGetProfileAttemptsCount = createSelector(
+  [selectDomain],
+  (loginState) => loginState.get_profile_attempts_count
 )

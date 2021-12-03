@@ -7,7 +7,7 @@ exports[`<ResultItem /> should render and match the snapshot 1`] = `
       size={5}
     >
       <GiPositionMarker />
-      undefined, California Coast
+      California Coast
     </Space>
   </styled.div>
   <styled.h3>
