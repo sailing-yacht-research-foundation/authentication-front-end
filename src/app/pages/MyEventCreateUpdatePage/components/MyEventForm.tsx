@@ -124,12 +124,12 @@ export const MyEventForm = () => {
             isOpen: isOpen
         };
 
-        if (mode === MODE.CREATE)
+        if (mode === MODE.CREATE) 
             response = await create(data);
-        else
+        else {
             response = await update(eventId, data);
-
-        setIsSavingEvent(false);
+            setIsSavingEvent(false);
+        }
 
         if (response.success) {
             onEventSaved(response, lat, lon);
@@ -143,8 +143,6 @@ export const MyEventForm = () => {
             toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
             setEvent(response.data);
             createDefaultVesselParticipantGroup(response.data);
-            
-            history.push(`/events/${response.data?.id}/update`);
             setCoordinates({
                 lat: lat,
                 lng: lon
@@ -170,6 +168,8 @@ export const MyEventForm = () => {
 
         await createCompetitionUnit(event.id, data);
         setMode(MODE.UPDATE);
+        history.push(`/events/${event.id}/update`);
+        setIsSavingEvent(false);
         if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -260,7 +260,7 @@ export const MyEventForm = () => {
 
     const initData = async () => {
         setIsSavingEvent(true);
-        const response = await get(eventId);
+        const response = await get(eventId || event?.id);
         setIsSavingEvent(false);
 
         if (response.success) {
@@ -942,19 +942,19 @@ export const MyEventForm = () => {
                 mode === MODE.UPDATE && (
                     <>
                         <SyrfFormWrapper ref={raceListRef} style={{ marginTop: '30px' }}>
-                            <CompetitionUnitList eventId={eventId} />
+                            <CompetitionUnitList eventId={eventId || event.id} />
                         </SyrfFormWrapper>
 
                         <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                            <VesselParticipantGroupList eventId={eventId} />
+                            <VesselParticipantGroupList eventId={eventId || event.id} />
                         </SyrfFormWrapper>
 
                         <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                            <ParticipantList eventId={eventId} />
+                            <ParticipantList eventId={eventId || event.id} />
                         </SyrfFormWrapper>
 
                         <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                            <CoursesList eventId={eventId} />
+                            <CoursesList eventId={eventId || event.id} />
                         </SyrfFormWrapper>
                     </>
                 )
