@@ -85,7 +85,7 @@ export const FilterSearchBar = (props) => {
             setShowSuggestion(true);
         }
         if (inputTimeout) clearTimeout(inputTimeout);
-        setTimeout(() => {
+        inputTimeout = setTimeout(() => {
             dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
             setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText));
         }, 100)
