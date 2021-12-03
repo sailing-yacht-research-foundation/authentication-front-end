@@ -46,7 +46,7 @@ export const ResultSuggestion = (props) => {
     const keywordRef = React.useRef<string>('');
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 100), []);
+    const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 300), []);
 
     const getSuggestionItems = async (keyword) => {
         const caretPosition = getCaretPosition(searchBarRef.current);

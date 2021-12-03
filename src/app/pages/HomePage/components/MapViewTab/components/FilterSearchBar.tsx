@@ -16,6 +16,8 @@ import { removeWholeTextNodeOnBackSpace, replaceFormattedCriteriaWithRawCriteria
 import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 export const FilterSearchBar = (props) => {
 
+    let inputTimeout;
+
     const { setIsFocusingOnSearchInput } = props;
 
     const searchKeyword = useSelector(selectSearchKeyword);
@@ -82,7 +84,7 @@ export const FilterSearchBar = (props) => {
         if (!showSuggestion) {
             setShowSuggestion(true);
         }
-
+        if (inputTimeout) clearTimeout(inputTimeout);
         setTimeout(() => {
             dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
             setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText));

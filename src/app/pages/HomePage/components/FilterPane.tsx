@@ -21,6 +21,8 @@ import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 
 export const FilterPane = (props) => {
 
+    let inputTimeout;
+
     const { defaultFocus } = props;
 
     const searchKeyword = useSelector(selectSearchKeyword);
@@ -150,10 +152,11 @@ export const FilterPane = (props) => {
                                     }}
                                     onInput={(e) => {
                                         const target = e.target as HTMLDivElement;
-                                        setTimeout(() => {
+                                        if (inputTimeout) clearTimeout(inputTimeout);
+                                        inputTimeout = setTimeout(() => {
                                             dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
                                             setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText));
-                                        }, 100)
+                                        }, 100);
                                     }}></span>
                                 {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={() => {
                                     dispatch(actions.setKeyword(''));
