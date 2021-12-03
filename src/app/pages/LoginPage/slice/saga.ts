@@ -18,7 +18,7 @@ export function* getAuthUser() {
     const response = yield call(getAuthorizedUser);
     const attemptsCount = yield select(selectGetProfileAttemptsCount);
 
-    if (!response?.success) {
+    if (response?.success) {
         yield put(loginActions.setUser(JSON.parse(JSON.stringify(response.user))));
     } else {
         if (response?.error?.response?.status === 401) {
@@ -31,7 +31,6 @@ export function* getAuthUser() {
             }
         }
     }
-
 }
 
 export function* syrfServiceAnonymousLogin() {
