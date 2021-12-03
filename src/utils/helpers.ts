@@ -286,7 +286,7 @@ export const placeCaretAtEnd = (el) => {
 
 export const replaceCriteriaWithPilledCriteria = (string) => {
     supportedSearchCriteria.forEach(criteria => {
-        string = string.replace(criteria + ':', `<span contenteditable="true" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
+        string = string.replace(criteria + ':', `<span contenteditable="false" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
     });
 
     return string;
@@ -298,4 +298,13 @@ export const replaceFormattedCriteriaWithRawCriteria = (string): string => {
     });
 
     return string;
+}
+
+export const removeWholeTextNodeOnBackSpace = (e) => {
+    if (e.key === "Backspace") {
+        var selection = document.getSelection();
+        // if caret is at the begining of the text node (0), remove previous element
+        if (selection && selection?.anchorOffset === 0)
+            selection?.anchorNode?.previousSibling?.parentNode?.removeChild(selection?.anchorNode?.previousSibling)
+    }
 }

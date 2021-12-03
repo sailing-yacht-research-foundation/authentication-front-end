@@ -15,7 +15,13 @@ export const CriteriaSuggestion = (props) => {
 
     const { actions } = useHomeSlice();
 
-    const [showSuggestion, setShowSuggestion] = React.useState<boolean>(false);
+    const [selectedCriteria, setSelectedCriteria] = React.useState<string>('');
+
+    const selectedCriteriaRef = React.useRef<string>('');
+
+    const suggestionItems = React.useRef<any[]>([]);
+
+    const selectedIndex = React.useRef<number>(0);
 
     const getSuggestionItems = () => {
         let criteriaMatched: any[] = [];
@@ -32,18 +38,15 @@ export const CriteriaSuggestion = (props) => {
             }
         });
 
-        if (showSuggestion)
-            return criteriaMatched;
-
-        return [];
+        return criteriaMatched;
     }
 
     const appendCriteria = (criteria) => {
         let keyword = searchBarRef.current.innerHTML;
-        const lastWordPosition = keyword.match(/(?:\s|^)([\S]+)$/i).index;
+        const lastWordPosition = keyword.match(/(?:\s|^)([\S]+)$/i).index || -1;
         const words = keyword.split(' ');
         const wordsLength = words.length;
-        const pilledCriteria = `<span contenteditable="true" class="pill">${criteria}:</span>&nbsp;`;
+        const pilledCriteria = `<span contenteditable="false" class="pill">${criteria}:</span>&nbsp;`;
 
         dispatch(actions.setKeyword(keyword.substring(0, CRITERIA_TO_RAW_CRITERIA[criteria])));
 
@@ -60,18 +63,72 @@ export const CriteriaSuggestion = (props) => {
         }
 
         placeCaretAtEnd(searchBarRef.current);
-        setShowSuggestion(false);
+        hideSuggestions();
     }
 
     const renderSuggestionCriteria = () => {
-        return getSuggestionItems().map(criteria => {
-            return <SuggestionCriteria onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
+        return suggestionItems?.current?.map(criteria => {
+            return <SuggestionCriteria className={selectedCriteria === criteria ? 'active' : ''} onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
         });
     }
 
+    const handleSelectionUsingArrowKey = (e) => {
+        e = e || window.event;
+
+        if (suggestionItems.current.length === 0) return;
+
+        if (e.keyCode === 38) { // arrow up
+            selectedIndex.current--;
+            handleSelectIndexSelection();
+        }
+        else if (e.keyCode === 40) { // arrow down
+            selectedIndex.current++;
+            handleSelectIndexSelection();
+        }
+        else if (e.keyCode === 13) { // enter keycode
+            if (selectedCriteriaRef.current) {
+                appendCriteria(selectedCriteriaRef.current);
+            }
+        }
+        else if (e.keyCode === 27) { // esc
+            hideSuggestions();
+        }
+    }
+
+    const handleSelectIndexSelection = () => {
+        const numberOfSuggestions = suggestionItems.current.length - 1;
+        if (selectedIndex.current > numberOfSuggestions) {
+            selectedIndex.current = 0;
+        } else if (selectedIndex.current < 0) {
+            selectedIndex.current = numberOfSuggestions;
+        }
+        setSelectedCriteria(suggestionItems.current[selectedIndex.current]);
+        selectedCriteriaRef.current = suggestionItems.current[selectedIndex.current];
+    }
+
+    const hideSuggestions = () => {
+        suggestionItems.current = [];
+        setSelectedCriteria('');
+        selectedCriteriaRef.current = ''
+    }
+
     React.useEffect(() => {
-        if (keyword.length > 0) setShowSuggestion(true);
+        if (keyword.length > 0) {
+            suggestionItems.current = getSuggestionItems();
+            selectedIndex.current = (suggestionItems?.current?.length - 1);
+        } else {
+            hideSuggestions();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [keyword]);
+
+    React.useEffect(() => {
+        document.onkeydown = handleSelectionUsingArrowKey;
+        return () => {
+            document.onkeydown = null;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <SuggestionWrapper>

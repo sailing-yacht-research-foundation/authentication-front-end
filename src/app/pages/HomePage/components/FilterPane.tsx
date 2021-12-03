@@ -16,7 +16,7 @@ import { TIME_FORMAT } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
 import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
-import { replaceFormattedCriteriaWithRawCriteria, replaceCriteriaWithPilledCriteria } from 'utils/helpers';
+import { replaceFormattedCriteriaWithRawCriteria, replaceCriteriaWithPilledCriteria, removeWholeTextNodeOnBackSpace } from 'utils/helpers';
 import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 
 export const FilterPane = (props) => {
@@ -48,6 +48,8 @@ export const FilterPane = (props) => {
     const [keyword, setKeyword] = React.useState<string>('');
 
     const [initedSearchBar, setInitedSearchBar] = React.useState<boolean>(false);
+
+    const [showSuggestion, setShowSuggestion] = React.useState<boolean>(false);
 
     useEffect(() => {
         if (defaultFocus && searchInputRef) {
@@ -142,7 +144,10 @@ export const FilterPane = (props) => {
                                     autoCorrect="off"
                                     autoCapitalize="none"
                                     ref={mutableEditableRef}
-                                   
+                                    onKeyDown={(e) => {
+                                        removeWholeTextNodeOnBackSpace(e);
+                                        setShowSuggestion(true);
+                                    }}
                                     onInput={(e) => {
                                         const target = e.target as HTMLDivElement;
                                         setTimeout(() => {
@@ -156,8 +161,13 @@ export const FilterPane = (props) => {
                                     mutableEditableRef.current.innerHTML = '';
                                 }} />}
                             </ContentEditableSearchBarWrapper>
-                            <CriteriaSuggestion keyword={keyword} searchBarRef={mutableEditableRef} />
-                            <ResultSuggestion searchBarRef={mutableEditableRef} isFilterPane keyword={keyword} />
+                            {
+                                showSuggestion && <>
+                                    <CriteriaSuggestion keyword={keyword} searchBarRef={mutableEditableRef} />
+                                    <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={mutableEditableRef} isFilterPane keyword={keyword} />
+                                </>
+                            }
+
                         </Form.Item>
                     </div>
                     <Row gutter={24}>

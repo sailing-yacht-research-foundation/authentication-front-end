@@ -12,7 +12,7 @@ import { ReactComponent as SYRFLogo } from '../../assets/logo-dark.svg';
 import { CriteriaSuggestion } from './CriteriaSuggestion';
 import ReactTooltip from 'react-tooltip';
 import { ResultSuggestion } from './ResultSuggestion';
-import { replaceFormattedCriteriaWithRawCriteria } from 'utils/helpers';
+import { removeWholeTextNodeOnBackSpace, replaceFormattedCriteriaWithRawCriteria } from 'utils/helpers';
 import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 export const FilterSearchBar = (props) => {
 
@@ -93,7 +93,7 @@ export const FilterSearchBar = (props) => {
         <SearchBarWrapper ref={searchBarWrapperRef}>
             <SearchBarInnerWrapper>
                 <span className="contenteditable-search"
-                    style={{whiteSpace:'nowrap', lineHeight: '30px'}}
+                    style={{ whiteSpace: 'nowrap', lineHeight: '30px' }}
                     contentEditable
                     data-tip={t(translations.tip.search_for_races_using_different_criteria)}
                     autoCorrect="off"
@@ -103,6 +103,9 @@ export const FilterSearchBar = (props) => {
                     placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)}
                     onKeyUp={searchForRaces}
                     ref={searchBarRef}
+                    onKeyDown={(e) => {
+                        removeWholeTextNodeOnBackSpace(e);
+                    }}
                     onInput={handleInput}></span>
                 {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={() => {
                     dispatch(actions.setKeyword(''));
@@ -114,7 +117,7 @@ export const FilterSearchBar = (props) => {
                 {
                     showSuggestion && <>
                         <CriteriaSuggestion searchBarRef={searchBarRef} keyword={keyword} />
-                        <ResultSuggestion searchBarRef={searchBarRef} keyword={keyword} />
+                        <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={searchBarRef} keyword={keyword} />
                     </>
                 }
 

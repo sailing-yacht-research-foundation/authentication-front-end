@@ -21,7 +21,7 @@ const enum Criteria {
 
 export const ResultSuggestion = (props) => {
 
-    const { keyword, searchBarRef, isFilterPane } = props;
+    const { keyword, searchBarRef, isFilterPane, setShowSuggestion } = props;
 
     const wrapperRef = React.useRef<any>();
 
@@ -34,6 +34,16 @@ export const ResultSuggestion = (props) => {
     const isSearching = useSelector(selectIsSearching);
 
     const caretPosition = React.useRef<any>();
+
+    const [selectedCriteria, setSelectedCriteria] = React.useState<string>('');
+
+    const selectedCriteriaRef = React.useRef<string>('');
+
+    const suggestionItems = React.useRef<any[]>([]);
+
+    const selectedIndex = React.useRef<number>(-1);
+
+    const keywordRef = React.useRef<string>('');
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 100), []);
@@ -115,7 +125,8 @@ export const ResultSuggestion = (props) => {
     }
 
     const appendCriteria = (criteria) => {
-        const wordsLength = keyword.split(' ').length;
+        const keyword = keywordRef.current;
+        const wordsLength = keywordRef.current.split(' ').length;
         // in case we have one word
         if (wordsLength === 1) {
             // and that word includes the criteria, we include it
@@ -137,8 +148,49 @@ export const ResultSuggestion = (props) => {
         }
 
         placeCaretAtEnd(searchBarRef.current);
+        hideSuggestions();
+    }
 
+    const hideSuggestions = () => {
         setCriteria([]);
+        suggestionItems.current = [];
+        setSelectedCriteria('');
+        selectedCriteriaRef.current = '';
+        if (setShowSuggestion) setShowSuggestion(false);
+    }
+
+    const handleSelectIndexSelection = (numberOfSuggestions) => {
+        if (selectedIndex.current > numberOfSuggestions) {
+            selectedIndex.current = 0;
+        } else if (selectedIndex.current < 0) {
+            selectedIndex.current = numberOfSuggestions;
+        }
+        setSelectedCriteria(suggestionItems.current[selectedIndex.current]);
+        selectedCriteriaRef.current = suggestionItems.current[selectedIndex.current];
+    }
+
+    const handleSelectionUsingArrowKey = (e) => {
+        e = e || window.event;
+        const numberOfSuggestions = suggestionItems.current.length - 1;
+
+        if (suggestionItems.current.length === 0) return;
+
+        if (e.keyCode === 38) { // arrow up
+            selectedIndex.current--;
+            handleSelectIndexSelection(numberOfSuggestions);
+        }
+        else if (e.keyCode === 40) { // arrow down
+            selectedIndex.current++;
+            handleSelectIndexSelection(numberOfSuggestions);
+        }
+        else if (e.keyCode === 13) { // enter keycode
+            if (selectedCriteriaRef.current) {
+                appendCriteria(selectedCriteriaRef.current);
+            }
+        }
+        else if (e.keyCode === 27) { // esc
+            hideSuggestions();
+        }
     }
 
     React.useEffect(() => {
@@ -151,12 +203,26 @@ export const ResultSuggestion = (props) => {
     React.useEffect(() => {
         debounceSuggestion(keyword);
         caretPosition.current = getCaretPosition(searchBarRef.current);
+        keywordRef.current = keyword;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [keyword]);
 
+    React.useEffect(() => {
+        document.onkeyup = handleSelectionUsingArrowKey;
+        return () => {
+            document.onkeydown = null;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+        suggestionItems.current = criteria;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [criteria]);
+
     const renderSuggestionCriteria = () => {
-        return criteria.map(criteria => {
-            return <SuggestionCriteria onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
+        return criteria.map((criteria, index) => {
+            return <SuggestionCriteria key={index} className={selectedCriteria === criteria ? 'active' : ''} onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
         });
     }
 

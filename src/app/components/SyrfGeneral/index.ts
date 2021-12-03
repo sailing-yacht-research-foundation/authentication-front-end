@@ -167,7 +167,7 @@ export const SuggestionCriteria = styled.div`
     border-bottom: 1px solid #eee;
     cursor: pointer;
     
-    :hover {
+    :hover, &.active {
         background: ${StyleConstants.MAIN_TONE_COLOR};
         color: #fff;
     }
