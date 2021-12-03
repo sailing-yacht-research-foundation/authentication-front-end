@@ -19,9 +19,11 @@ export const CriteriaSuggestion = (props) => {
 
     const selectedCriteriaRef = React.useRef<string>('');
 
-    const suggestionItems = React.useRef<any[]>([]);
+    const suggestionItemsRef = React.useRef<any[]>([]);
 
     const selectedIndex = React.useRef<number>(0);
+
+    const [suggestionItems, setSuggestionItems] = React.useState<any[]>([]); 
 
     const getSuggestionItems = () => {
         let criteriaMatched: any[] = [];
@@ -67,7 +69,7 @@ export const CriteriaSuggestion = (props) => {
     }
 
     const renderSuggestionCriteria = () => {
-        return suggestionItems?.current?.map(criteria => {
+        return suggestionItems.map(criteria => {
             return <SuggestionCriteria className={selectedCriteria === criteria ? 'active' : ''} onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
         });
     }
@@ -75,7 +77,7 @@ export const CriteriaSuggestion = (props) => {
     const handleSelectionUsingArrowKey = (e) => {
         e = e || window.event;
 
-        if (suggestionItems.current.length === 0) return;
+        if (suggestionItemsRef.current.length === 0) return;
 
         if (e.keyCode === 38) { // arrow up
             selectedIndex.current--;
@@ -96,26 +98,28 @@ export const CriteriaSuggestion = (props) => {
     }
 
     const handleSelectIndexSelection = () => {
-        const numberOfSuggestions = suggestionItems.current.length - 1;
+        const numberOfSuggestions = suggestionItemsRef.current.length - 1;
         if (selectedIndex.current > numberOfSuggestions) {
             selectedIndex.current = 0;
         } else if (selectedIndex.current < 0) {
             selectedIndex.current = numberOfSuggestions;
         }
-        setSelectedCriteria(suggestionItems.current[selectedIndex.current]);
-        selectedCriteriaRef.current = suggestionItems.current[selectedIndex.current];
+        setSelectedCriteria(suggestionItemsRef.current[selectedIndex.current]);
+        selectedCriteriaRef.current = suggestionItemsRef.current[selectedIndex.current];
     }
 
     const hideSuggestions = () => {
-        suggestionItems.current = [];
+        suggestionItemsRef.current = [];
         setSelectedCriteria('');
         selectedCriteriaRef.current = ''
+        setSuggestionItems([]);
     }
 
     React.useEffect(() => {
         if (keyword.length > 0) {
-            suggestionItems.current = getSuggestionItems();
-            selectedIndex.current = (suggestionItems?.current?.length - 1);
+            suggestionItemsRef.current = getSuggestionItems();
+            setSuggestionItems(getSuggestionItems());
+            selectedIndex.current = (suggestionItemsRef?.current?.length - 1);
         } else {
             hideSuggestions();
         }
