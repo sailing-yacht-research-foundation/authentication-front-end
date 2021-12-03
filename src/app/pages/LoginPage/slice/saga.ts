@@ -5,21 +5,27 @@
 import { loginActions } from ".";
 import { call, put, select, takeLatest, delay } from 'redux-saga/effects';
 import { anonymousLogin, renewToken } from "services/live-data-server/auth";
-import { selectIsSyrfServiceAuthenticated, selectRefreshToken } from "./selectors";
+import { selectGetProfileAttemptsCount, selectIsSyrfServiceAuthenticated, selectRefreshToken } from "./selectors";
 import { getUser } from "services/live-data-server/user";
 import { toast } from "react-toastify";
 import { translations } from "locales/translations";
 import i18next from "i18next";
 
+const MAX_RETRY_TIME = 5;
+
 export function* getAuthUser() {
     const response = yield call(getAuthorizedUser);
+    const attemptsCount = yield select(selectGetProfileAttemptsCount);
 
     if (response?.success) {
         yield put(loginActions.setUser(JSON.parse(JSON.stringify(response.user))));
     } else {
         if (response?.error?.response?.status === 401) {
-            yield delay(3000);
-            yield put(loginActions.getUser());
+            if (attemptsCount < MAX_RETRY_TIME) {
+                yield delay(3000);
+                yield put(loginActions.setFailedGetProfileAttemptsCount(attemptsCount + 1));
+                yield put(loginActions.getUser());
+            }
         }
     }
 

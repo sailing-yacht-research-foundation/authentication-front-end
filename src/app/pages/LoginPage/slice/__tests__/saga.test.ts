@@ -1,7 +1,8 @@
-import { put, takeLatest, call } from 'redux-saga/effects';
+import { put, takeLatest, select } from 'redux-saga/effects';
 import * as slice from '..';
 
 import loginSaga, { getAuthUser } from '../saga';
+import { selectGetProfileAttemptsCount } from '../selectors';
 
 describe('login Saga', () => {
   let getAuthUserIterator: ReturnType<typeof getAuthUser>;
@@ -21,9 +22,11 @@ describe('login Saga', () => {
     };
 
     const putDescriptor = getAuthUserIterator.next(response).value;
-    
+
+    getAuthUserIterator.next();
+
     expect(putDescriptor).toEqual(
-      put(slice.loginActions.setUser({})),
+      select(selectGetProfileAttemptsCount)
     );
 
     const iteration = getAuthUserIterator.next();

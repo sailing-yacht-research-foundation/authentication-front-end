@@ -6,6 +6,7 @@ export interface LoginState {
   syrf_authenticated: boolean;
   user_coordinate?: null | Coordinate;
   refresh_token?: string;
+  get_profile_attempts_count?: number;
 }
 
 export type ContainerState = LoginState
