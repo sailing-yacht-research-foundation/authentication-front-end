@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Spin } from 'antd';
+import { Spin } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,11 @@ import { ReactComponent as SYRFLogo } from '../../assets/logo-dark.svg';
 import { CriteriaSuggestion } from './CriteriaSuggestion';
 import ReactTooltip from 'react-tooltip';
 import { ResultSuggestion } from './ResultSuggestion';
+import { removeWholeTextNodeOnBackSpace, replaceFormattedCriteriaWithRawCriteria } from 'utils/helpers';
+import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 export const FilterSearchBar = (props) => {
+
+    let inputTimeout;
 
     const { setIsFocusingOnSearchInput } = props;
 
@@ -30,11 +34,13 @@ export const FilterSearchBar = (props) => {
 
     const { t } = useTranslation();
 
-    const searchBarWrapperRef = React.useRef<any>()
+    const searchBarWrapperRef = React.useRef<any>();
 
-    const searchBarRef = React.createRef<Input>();
+    const searchBarRef = React.useRef<any>();
 
     const [keyword, setKeyword] = React.useState<string>('');
+
+    const [showSuggestion, setShowSuggestion] = React.useState<boolean>(false);
 
     const handleOnSearchInputFocus = () => {
         window.scrollTo(0, 0);
@@ -67,33 +73,56 @@ export const FilterSearchBar = (props) => {
                 search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
             });
             window.scrollTo(0, 0);
+
+            setShowSuggestion(false);
         }
+    }
+
+    const handleInput = (e) => {
+        const target = e.target as HTMLDivElement;
+
+        if (!showSuggestion) {
+            setShowSuggestion(true);
+        }
+        if (inputTimeout) clearTimeout(inputTimeout);
+        inputTimeout = setTimeout(() => {
+            dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
+            setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText));
+        }, 100)
     }
 
     return (
         <SearchBarWrapper ref={searchBarWrapperRef}>
             <SearchBarInnerWrapper>
-                <StyledSearchBar
+                <span className="contenteditable-search"
+                    style={{ whiteSpace: 'nowrap', lineHeight: '30px' }}
+                    contentEditable
                     data-tip={t(translations.tip.search_for_races_using_different_criteria)}
-                    ref={searchBarRef}
-                    type={'search'}
-                    value={searchKeyword}
-                    onChange={(e) => {
-                        dispatch(actions.setKeyword(e.target.value));
-                        setKeyword(e.target.value);
-                    }}
-                    onKeyUp={searchForRaces}
+                    autoCorrect="off"
+                    autoCapitalize="none"
                     onFocus={handleOnSearchInputFocus}
                     onBlur={handleOnSearchInputBlur}
-                    autoComplete="off"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    allowClear={true}
-                    placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)} />
+                    placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)}
+                    onKeyUp={searchForRaces}
+                    ref={searchBarRef}
+                    onKeyDown={(e) => {
+                        removeWholeTextNodeOnBackSpace(e);
+                    }}
+                    onInput={handleInput}></span>
+                {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={() => {
+                    dispatch(actions.setKeyword(''));
+                    setKeyword('');
+                    searchBarRef.current.innerHTML = '';
+                }} />}
                 <SearchBarLogo />
                 <StyledSpin spinning={isSearching}></StyledSpin>
-                <CriteriaSuggestion searchBarRef={searchBarRef} keyword={keyword} />
-                <ResultSuggestion searchBarRef={searchBarRef} keyword={keyword}/>
+                {
+                    showSuggestion && <>
+                        <CriteriaSuggestion searchBarRef={searchBarRef} keyword={keyword} />
+                        <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={searchBarRef} keyword={keyword} />
+                    </>
+                }
+
             </SearchBarInnerWrapper>
             <AdvancedSearchTextWrapper>
                 <a href="/" onClick={(e) => {
@@ -125,6 +154,14 @@ const SearchBarWrapper = styled.div`
 
 const SearchBarInnerWrapper = styled.div`
     position: relative;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(9,32,77,0.12),0 0 2px rgba(29,17,51,0.12);
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 70px;
+    padding-right: 25px;
+    white-space: nowrap;
+    background: #fff;
 `;
 
 const SearchBarLogo = styled(SYRFLogo)`
@@ -134,23 +171,6 @@ const SearchBarLogo = styled(SYRFLogo)`
     width: 45px;
     height: 45px;
     z-index: 10;
-`;
-
-const StyledSearchBar = styled(Input)`
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 70px;
-    padding-right: 10px;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-
-    ::placeholder {
-        font-weight: 500;
-        text-overflow:ellipsis;
-        white-space:nowrap;
-    }
 `;
 
 const AdvancedSearchTextWrapper = styled.div`

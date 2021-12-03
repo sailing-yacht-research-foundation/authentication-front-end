@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSuggestion } from 'services/live-data-server/competition-units';
 import styled from 'styled-components';
 import { supportedSearchCriteria } from 'utils/constants';
-import { debounce, isMobile } from 'utils/helpers';
+import { debounce, getCaretPosition, isMobile, placeCaretAtEnd, replaceCriteriaWithPilledCriteria } from 'utils/helpers';
 
 const enum Criteria {
     NAME = 'name',
@@ -21,7 +21,7 @@ const enum Criteria {
 
 export const ResultSuggestion = (props) => {
 
-    const { keyword, searchBarRef, isFilterPane } = props;
+    const { keyword, searchBarRef, isFilterPane, setShowSuggestion } = props;
 
     const wrapperRef = React.useRef<any>();
 
@@ -33,28 +33,36 @@ export const ResultSuggestion = (props) => {
 
     const isSearching = useSelector(selectIsSearching);
 
-    const caretPosition = React.useRef<number>(0);
+    const caretPosition = React.useRef<any>();
+
+    const [selectedCriteria, setSelectedCriteria] = React.useState<string>('');
+
+    const selectedCriteriaRef = React.useRef<string>('');
+
+    const suggestionItems = React.useRef<any[]>([]);
+
+    const selectedIndex = React.useRef<number>(-1);
+
+    const keywordRef = React.useRef<string>('');
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 1000), []);
+    const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestionItems(keyword), 300), []);
 
     const getSuggestionItems = async (keyword) => {
+        const caretPosition = getCaretPosition(searchBarRef.current);
         let criteriaMatched: any[] = [];
-        let searchKeyWord = keyword.slice(0, keyword.indexOf(' ', caretPosition.current));
+        let searchKeyWord = keyword.slice(0, caretPosition);
 
-        if (keyword.indexOf(' ', caretPosition.current) === -1) searchKeyWord = keyword;
-
-        const searchKeyWordAsArray = searchKeyWord.split(' ');
-
+        // no search keyword or keyword given, stop suggesting
         if (!keyword || !searchKeyWord) {
             setCriteria([]);
             return;
         }
 
-        searchKeyWord = searchKeyWordAsArray[searchKeyWordAsArray.length - 1];
-
+        // get the last words in the right side of the last colon within the caret position length.
         if (searchKeyWord.includes(':')) {
-            searchKeyWord = searchKeyWord.split(':')[1];
+            const splittedSearchKeyword = searchKeyWord.split(':');
+            searchKeyWord = splittedSearchKeyword[splittedSearchKeyword.length - 1];
         }
 
         const criteriaSuggestionItem = supportedSearchCriteria.find(criteria => {
@@ -79,7 +87,7 @@ export const ResultSuggestion = (props) => {
 
     const findArrayItemByKey = (array, keyword) => {
         return array.find(item => {
-            return String(item).toLowerCase().includes(keyword);
+            return String(item).toLowerCase().includes(keyword.trim());
         });
     }
 
@@ -101,7 +109,7 @@ export const ResultSuggestion = (props) => {
     }
 
     const getSuggestionFieldFromSearchQuery = (keyword) => {
-        const currentKeywordAtCaretPosition = keyword.substring(0, caretPosition.current);
+        const currentKeywordAtCaretPosition = keyword.substring(0, getCaretPosition(searchBarRef.current));
         const currentKeywordAtCaretPositionLength = currentKeywordAtCaretPosition.split(' ').length;
         const splittedKeyword = currentKeywordAtCaretPosition.split(' ');
         let criteria = Criteria.NAME;
@@ -117,41 +125,73 @@ export const ResultSuggestion = (props) => {
     }
 
     const appendCriteria = (criteria) => {
-        const lastWordPosition = keyword.match(/(?:\s|^)([\S]+)$/i).index;
-        const words = keyword.split(' ');
-        const wordsLength = words.length;
-        const lastWord = words[wordsLength - 1];
-        const firstWord = words[0];
-
-        dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition)));
-
+        const keyword = keywordRef.current;
+        const wordsLength = keywordRef.current.split(' ').length;
+        // in case we have one word
         if (wordsLength === 1) {
-            if (firstWord.includes(':')) {
-                dispatch(actions.setKeyword(firstWord.split(':')[0] + ':' + criteria));
-            } else {
+            // and that word includes the criteria, we include it
+            if (keyword.includes(':')) {
+                const parsedKeyword = [keyword.split(':')[0], criteria].join(':').trim();
+                dispatch(actions.setKeyword(parsedKeyword));
+                searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria(parsedKeyword);
+            } else { // that word does not include the criteria, we append the whole criteria.
                 dispatch(actions.setKeyword(criteria));
+                searchBarRef.current.innerHTML = criteria;
             }
-        } else if (wordsLength > 1) {
-            if (lastWord.includes(':')) {
-                dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition) + ' ' + lastWord.split(':')[0] + ':' + criteria));
-            } else {
-                dispatch(actions.setKeyword(keyword.substring(0, lastWordPosition) + ' ' + criteria));
-            }
+        } else {// we have more than 1 word
+            const wordsFromBeginningToCaretPosition = keyword.slice(0, caretPosition.current);
+            const splittedWords = wordsFromBeginningToCaretPosition.split(':').slice(0, -1).join(":") + ':';
+            const wordsFromCaretPositionToEnd = keyword.substr(caretPosition.current);
+            const parsedKeyword = [splittedWords, criteria, wordsFromCaretPositionToEnd.length === 1 ? '' : wordsFromCaretPositionToEnd].join(' ').trim();
+            dispatch(actions.setKeyword(parsedKeyword));
+            searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria(parsedKeyword);
         }
 
-        if (searchBarRef.current) {
-            searchBarRef.current.focus();
-        }
-
-        setCriteria([]);
+        placeCaretAtEnd(searchBarRef.current);
+        hideSuggestions();
     }
 
-    React.useEffect(() => {
-        if (searchBarRef.current) {
-            caretPosition.current = searchBarRef.current?.input.selectionEnd;
+    const hideSuggestions = () => {
+        setCriteria([]);
+        suggestionItems.current = [];
+        setSelectedCriteria('');
+        selectedCriteriaRef.current = '';
+        if (setShowSuggestion) setShowSuggestion(false);
+    }
+
+    const handleSelectIndexSelection = (numberOfSuggestions) => {
+        if (selectedIndex.current > numberOfSuggestions) {
+            selectedIndex.current = 0;
+        } else if (selectedIndex.current < 0) {
+            selectedIndex.current = numberOfSuggestions;
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchBarRef]);
+        setSelectedCriteria(suggestionItems.current[selectedIndex.current]);
+        selectedCriteriaRef.current = suggestionItems.current[selectedIndex.current];
+    }
+
+    const handleSelectionUsingArrowKey = (e) => {
+        e = e || window.event;
+        const numberOfSuggestions = suggestionItems.current.length - 1;
+
+        if (suggestionItems.current.length === 0) return;
+
+        if (e.keyCode === 38) { // arrow up
+            selectedIndex.current--;
+            handleSelectIndexSelection(numberOfSuggestions);
+        }
+        else if (e.keyCode === 40) { // arrow down
+            selectedIndex.current++;
+            handleSelectIndexSelection(numberOfSuggestions);
+        }
+        else if (e.keyCode === 13) { // enter keycode
+            if (selectedCriteriaRef.current) {
+                appendCriteria(selectedCriteriaRef.current);
+            }
+        }
+        else if (e.keyCode === 27) { // esc
+            hideSuggestions();
+        }
+    }
 
     React.useEffect(() => {
         if (isSearching) {
@@ -162,12 +202,27 @@ export const ResultSuggestion = (props) => {
 
     React.useEffect(() => {
         debounceSuggestion(keyword);
+        caretPosition.current = getCaretPosition(searchBarRef.current);
+        keywordRef.current = keyword;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [keyword]);
 
+    React.useEffect(() => {
+        document.onkeyup = handleSelectionUsingArrowKey;
+        return () => {
+            document.onkeydown = null;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+        suggestionItems.current = criteria;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [criteria]);
+
     const renderSuggestionCriteria = () => {
-        return criteria.map(criteria => {
-            return <SuggestionCriteria onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
+        return criteria.map((criteria, index) => {
+            return <SuggestionCriteria key={index} className={selectedCriteria === criteria ? 'active' : ''} onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
         });
     }
 

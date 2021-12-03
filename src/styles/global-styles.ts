@@ -220,4 +220,51 @@ export const GlobalStyle = createGlobalStyle`
   .ant-modal-header {
     padding-right: 56px;
   }
+
+  .pill {
+    background-color: rgb(45, 183, 245);
+    color: #fff !important;
+    padding: 3px 3px;
+    border-radius: 5px;
+  }
+
+  [contenteditable="true"].contenteditable-search {
+    overflow: hidden;
+    display:block;
+    white-space: pre-wrap;
+    box-sizing: border-box;
+    margin: 0;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    line-height: 1.5715;
+    background-color: #fff;
+    transition: all 0.3s;
+    outline:none;
+    cursor: auto;
+    min-height:25px;
+  } 
+
+  [contenteditable="true"].contenteditable-search * {
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  [contenteditable="true"].contenteditable-search br {
+      display:none;
+  }
+
+  [contenteditable="true"].contenteditable-search * {
+      display:inline;
+      white-space:nowrap;
+  }
+
+  [contenteditable=true]:empty:before{
+    content: attr(placeholder);
+    color: hsl(210,8%,55%);
+    pointer-events: none;
+    white-space: nowrap;
+    display: block; /* For Firefox */
+  }
 `;

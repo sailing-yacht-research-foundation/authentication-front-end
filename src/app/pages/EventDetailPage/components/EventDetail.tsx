@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, message, Space, Spin, Tag } from 'antd';
 import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
-import { FaCalendarPlus, FaSave } from 'react-icons/fa';
+import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
 import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';

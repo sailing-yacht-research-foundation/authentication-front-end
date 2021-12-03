@@ -16,14 +16,20 @@ import { TIME_FORMAT } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
 import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
+import { replaceFormattedCriteriaWithRawCriteria, replaceCriteriaWithPilledCriteria, removeWholeTextNodeOnBackSpace } from 'utils/helpers';
+import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 
 export const FilterPane = (props) => {
+
+    let inputTimeout;
 
     const { defaultFocus } = props;
 
     const searchKeyword = useSelector(selectSearchKeyword);
 
     const searchInputRef = React.createRef<Input>();
+
+    const mutableEditableRef = React.useRef<any>();
 
     const { t } = useTranslation();
 
@@ -42,6 +48,10 @@ export const FilterPane = (props) => {
     const toDate = useSelector(selectToDate);
 
     const [keyword, setKeyword] = React.useState<string>('');
+
+    const [initedSearchBar, setInitedSearchBar] = React.useState<boolean>(false);
+
+    const [showSuggestion, setShowSuggestion] = React.useState<boolean>(false);
 
     useEffect(() => {
         if (defaultFocus && searchInputRef) {
@@ -80,8 +90,17 @@ export const FilterPane = (props) => {
             from_date: fromDate && moment(fromDate).isValid() ? moment(fromDate) : '',
             to_date: toDate && moment(toDate).isValid() ? moment(toDate) : ''
         });
+
+        if (!initedSearchBar) {
+            setTimeout(() => {
+                if (mutableEditableRef.current)
+                    mutableEditableRef.current.innerHTML = replaceCriteriaWithPilledCriteria(searchKeyword);
+                setInitedSearchBar(true);
+            }, 100);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchKeyword, fromDate, toDate]);
+
     return (
         <Wrapper {...props}>
             <FilterHeader>
@@ -114,18 +133,44 @@ export const FilterPane = (props) => {
                             rules={[{ required: true, message: t(translations.forms.search_keyword_is_required) }]}
                         >
                             <Input ref={searchInputRef}
+                                style={{ display: 'none' }}
                                 value={searchKeyword}
                                 onChange={e => {
                                     dispatch(actions.setKeyword(e.target.value));
                                     setKeyword(e.target.value);
                                 }}
-                                autoCorrect="off"
-                                autoComplete="off"
-                                autoCapitalize="none"
-                                allowClear={true}
                             />
-                            <CriteriaSuggestion keyword={keyword} searchBarRef={searchInputRef} />
-                            <ResultSuggestion isFilterPane keyword={keyword} searchBarRef={searchInputRef} />
+                            <ContentEditableSearchBarWrapper>
+                                <span className="contenteditable-search"
+                                    contentEditable
+                                    autoCorrect="off"
+                                    autoCapitalize="none"
+                                    ref={mutableEditableRef}
+                                    onKeyDown={(e) => {
+                                        removeWholeTextNodeOnBackSpace(e);
+                                        setShowSuggestion(true);
+                                    }}
+                                    onInput={(e) => {
+                                        const target = e.target as HTMLDivElement;
+                                        if (inputTimeout) clearTimeout(inputTimeout);
+                                        inputTimeout = setTimeout(() => {
+                                            dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
+                                            setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText));
+                                        }, 100);
+                                    }}></span>
+                                {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={() => {
+                                    dispatch(actions.setKeyword(''));
+                                    setKeyword('');
+                                    mutableEditableRef.current.innerHTML = '';
+                                }} />}
+                            </ContentEditableSearchBarWrapper>
+                            {
+                                showSuggestion && <>
+                                    <CriteriaSuggestion keyword={keyword} searchBarRef={mutableEditableRef} />
+                                    <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={mutableEditableRef} isFilterPane keyword={keyword} />
+                                </>
+                            }
+
                         </Form.Item>
                     </div>
                     <Row gutter={24}>
@@ -191,7 +236,7 @@ export const FilterPane = (props) => {
                     </Form.Item>
                 </Form>
             </Spin>
-        </Wrapper>
+        </Wrapper >
     )
 }
 
@@ -238,4 +283,13 @@ const StyledAiFillCloseCircle = styled(AiFillCloseCircle)`
     ${media.large`
         display: none;
     `}
+`;
+
+const ContentEditableSearchBarWrapper = styled.div`
+    position: relative;
+    padding: 4px 11px;
+    padding-right: 20px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    min-height: 32px;
 `;

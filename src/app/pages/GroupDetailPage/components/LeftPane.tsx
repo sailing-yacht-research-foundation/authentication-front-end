@@ -1,20 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { AiFillLock } from 'react-icons/ai';
-import { GiEarthAmerica } from 'react-icons/gi';
-import { MdOutlineAddModerator } from 'react-icons/md';
 import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { media } from 'styles/media';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { GroupAvatar } from './GroupAvatar';
 import { VisibilityOfGroup } from 'app/pages/MyGroupPage/components/VisibilityOfGroup';
-
-const enum GroupVisibility {
-    public = 'PUBLIC',
-    private = 'PRIVATE',
-    moderated = 'MODERATED'
-}
 
 export const LeftPane = (props) => {
 

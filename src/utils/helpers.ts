@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
+import { CRITERIA_TO_RAW_CRITERIA, formatterSupportedSearchCriteria, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
 
 /**
  * Check if is mobile
@@ -241,4 +242,69 @@ export const uppercaseFirstCharacter = (text) => {
     if (!text) return '';
     const type = String(text).toLowerCase();
     return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
+/**Extract text from html  */
+export const extractTextFromHTML = (s) => {
+    let span = document.createElement('span');
+    span.innerHTML = s;
+    return span.textContent || span.innerText;
+};
+
+export const getCaretPosition = (element) => {
+    let caretOffset = 0;
+
+    if (window.getSelection !== null) {
+        let sel = window.getSelection && window.getSelection();
+        if (sel && sel.rangeCount > 0) {
+            let range = window?.getSelection()?.getRangeAt(0);
+            if (range) {
+                let preCaretRange = range.cloneRange();
+                preCaretRange.selectNodeContents(element);
+                preCaretRange.setEnd(range.endContainer, range.endOffset);
+                caretOffset = preCaretRange.toString().length;
+            }
+        }
+    }
+    return caretOffset;
+}
+
+export const placeCaretAtEnd = (el) => {
+    el.focus();
+    if (typeof window.getSelection != "undefined"
+        && typeof document.createRange != "undefined") {
+        let range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        let sel = window.getSelection();
+        if (sel) {
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    }
+}
+
+export const replaceCriteriaWithPilledCriteria = (string) => {
+    supportedSearchCriteria.forEach(criteria => {
+        string = string.replace(criteria + ':', `<span contenteditable="false" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
+    });
+
+    return string;
+}
+
+export const replaceFormattedCriteriaWithRawCriteria = (string): string => {
+    formatterSupportedSearchCriteria.forEach(criteria => {
+        string = string.replace(criteria, CRITERIA_TO_RAW_CRITERIA[criteria]);
+    });
+
+    return string;
+}
+
+export const removeWholeTextNodeOnBackSpace = (e) => {
+    if (e.key === "Backspace") {
+        var selection = document.getSelection();
+        // if caret is at the begining of the text node (0), remove previous element
+        if (selection && selection?.anchorOffset === 0)
+            selection?.anchorNode?.previousSibling?.parentNode?.removeChild(selection?.anchorNode?.previousSibling)
+    }
 }
