@@ -1,1581 +1,1602 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<SignupForm /> should render and match the snapshot 1`] = `
-<Spin
-  size="default"
-  spinning={false}
-  tip="Signing you up..."
-  wrapperClassName=""
->
-  <ForwardRef(InternalForm)
-    initialValues={
-      Object {
-        "birthdate": "2002-01-01T00:00:00.000Z",
-        "email": "",
-        "language": "en",
-        "locale": "us",
-        "name": "",
-        "password": "",
-      }
-    }
-    layout="vertical"
-    name="basic"
-    onFinish={[Function]}
+<styled.div>
+  <Spin
+    size="default"
+    spinning={false}
+    tip="Signing you up..."
+    wrapperClassName=""
   >
-    <FormItem
-      label="Email"
-      name="email"
-      rules={
-        Array [
-          Object {
-            "required": true,
-            "type": "email",
-          },
-        ]
-      }
-    >
-      <Input
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect="off"
-        type="text"
-      />
-    </FormItem>
-    <Row
-      gutter={24}
-    >
-      <Col
-        lg={12}
-        md={12}
-        sm={24}
-        xs={24}
-      >
-        <FormItem
-          label="First Name"
-          name="first_name"
-          rules={
-            Array [
-              Object {
-                "max": 15,
-                "required": true,
-              },
-            ]
-          }
-        >
-          <Input
-            autoComplete="off"
-            autoCorrect="off"
-            type="text"
-          />
-        </FormItem>
-      </Col>
-      <Col
-        lg={12}
-        md={12}
-        sm={24}
-        xs={24}
-      >
-        <FormItem
-          label="Last Name"
-          name="last_name"
-          rules={
-            Array [
-              Object {
-                "max": 15,
-                "required": true,
-              },
-            ]
-          }
-        >
-          <Input
-            autoComplete="off"
-            autoCorrect="off"
-            type="text"
-          />
-        </FormItem>
-      </Col>
-    </Row>
-    <FormItem
-      label="Password"
-      name="password"
-      rules={
-        Array [
-          Object {
-            "max": 16,
-            "min": 8,
-            "required": true,
-          },
-          Object {
-            "message": "Password must not contain blank space.",
-            "pattern": /\\^\\\\S\\+\\$/,
-          },
-        ]
-      }
-    >
-      <Password
-        action="click"
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect="off"
-        iconRender={[Function]}
-        visibilityToggle={true}
-      />
-    </FormItem>
-    <FormItem
-      label="Password Confirmation"
-      name="passwordConfirmation"
-      rules={
-        Array [
-          Object {
-            "message": "Please confirm your password!",
-            "required": true,
-          },
-          [Function],
-        ]
-      }
-    >
-      <Password
-        action="click"
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect="off"
-        iconRender={[Function]}
-        visibilityToggle={true}
-      />
-    </FormItem>
-    <FormItem
-      label="Date of Birth"
-      name="birthdate"
-      rules={
-        Array [
-          Object {
-            "required": true,
-            "type": "date",
-          },
-        ]
-      }
-    >
-      <Picker
-        dateRender={[Function]}
-        disabledDate={[Function]}
-        showToday={false}
-        style={
-          Object {
-            "width": "100%",
-          }
+    <ForwardRef(InternalForm)
+      initialValues={
+        Object {
+          "birthdate": "2002-01-01T00:00:00.000Z",
+          "email": "",
+          "language": "en",
+          "locale": "us",
+          "name": "",
+          "password": "",
         }
-      />
-    </FormItem>
-    <Divider />
-    <FormItem
-      label="Country"
-      name="locale"
-      rules={
-        Array [
-          Object {
-            "required": true,
-          },
-        ]
       }
+      layout="vertical"
+      name="basic"
+      onFinish={[Function]}
     >
-      <ForwardRef(InternalSelect)
-        filterOption={[Function]}
-        placeholder="Select a country"
-        showSearch={true}
+      <FormItem
+        label="Email"
+        name="email"
+        rules={
+          Array [
+            Object {
+              "message": "Email is required.",
+              "required": true,
+            },
+            Object {
+              "message": "Please input a valid email.",
+              "type": "email",
+            },
+          ]
+        }
       >
-        <Option
-          value="ab"
-        >
-          Abkhazia
-        </Option>
-        <Option
-          value="ac"
-        >
-          Ascension Island
-        </Option>
-        <Option
-          value="ad"
-        >
-          Andorra
-        </Option>
-        <Option
-          value="ae"
-        >
-          United Arab Emirates
-        </Option>
-        <Option
-          value="af"
-        >
-          Afghanistan
-        </Option>
-        <Option
-          value="ag"
-        >
-          Antigua and Barbuda
-        </Option>
-        <Option
-          value="ai"
-        >
-          Anguilla
-        </Option>
-        <Option
-          value="al"
-        >
-          Albania
-        </Option>
-        <Option
-          value="am"
-        >
-          Armenia
-        </Option>
-        <Option
-          value="ao"
-        >
-          Angola
-        </Option>
-        <Option
-          value="aq"
-        >
-          Antarctica
-        </Option>
-        <Option
-          value="ar"
-        >
-          Argentina
-        </Option>
-        <Option
-          value="as"
-        >
-          American Samoa
-        </Option>
-        <Option
-          value="at"
-        >
-          Austria
-        </Option>
-        <Option
-          value="au"
-        >
-          Australia
-        </Option>
-        <Option
-          value="aw"
-        >
-          Aruba
-        </Option>
-        <Option
-          value="ax"
-        >
-          Åland Islands
-        </Option>
-        <Option
-          value="az"
-        >
-          Azerbaijan
-        </Option>
-        <Option
-          value="ba"
-        >
-          Bosnia and Herzegovina
-        </Option>
-        <Option
-          value="bb"
-        >
-          Barbados
-        </Option>
-        <Option
-          value="bd"
-        >
-          Bangladesh
-        </Option>
-        <Option
-          value="be"
-        >
-          Belgium
-        </Option>
-        <Option
-          value="bf"
-        >
-          Burkina Faso
-        </Option>
-        <Option
-          value="bg"
-        >
-          Bulgaria
-        </Option>
-        <Option
-          value="bh"
-        >
-          Bahrain
-        </Option>
-        <Option
-          value="bi"
-        >
-          Burundi
-        </Option>
-        <Option
-          value="bj"
-        >
-          Benin
-        </Option>
-        <Option
-          value="bl"
-        >
-          Saint Barthélemy
-        </Option>
-        <Option
-          value="bm"
-        >
-          Bermuda
-        </Option>
-        <Option
-          value="bn"
-        >
-          Brunei Darussalam
-        </Option>
-        <Option
-          value="bo"
-        >
-          Bolivia
-        </Option>
-        <Option
-          value="bq"
-        >
-          Bonaire, Sint Eustatius and Saba
-        </Option>
-        <Option
-          value="br"
-        >
-          Brazil
-        </Option>
-        <Option
-          value="bs"
-        >
-          Bahamas
-        </Option>
-        <Option
-          value="bt"
-        >
-          Bhutan
-        </Option>
-        <Option
-          value="bv"
-        >
-          Bouvet Island
-        </Option>
-        <Option
-          value="bw"
-        >
-          Botswana
-        </Option>
-        <Option
-          value="by"
-        >
-          Belarus
-        </Option>
-        <Option
-          value="bz"
-        >
-          Belize
-        </Option>
-        <Option
-          value="ca"
-        >
-          Canada
-        </Option>
-        <Option
-          value="cc"
-        >
-          Cocos (Keeling) Islands
-        </Option>
-        <Option
-          value="cd"
-        >
-          Congo, Democratic Republic of the
-        </Option>
-        <Option
-          value="cf"
-        >
-          Central African Republic
-        </Option>
-        <Option
-          value="cg"
-        >
-          Congo
-        </Option>
-        <Option
-          value="ch"
-        >
-          Switzerland
-        </Option>
-        <Option
-          value="ci"
-        >
-          Cote d'Ivoire
-        </Option>
-        <Option
-          value="ck"
-        >
-          Cook Islands
-        </Option>
-        <Option
-          value="cl"
-        >
-          Chile
-        </Option>
-        <Option
-          value="cm"
-        >
-          Cameroon
-        </Option>
-        <Option
-          value="cn"
-        >
-          China
-        </Option>
-        <Option
-          value="co"
-        >
-          Colombia
-        </Option>
-        <Option
-          value="cr"
-        >
-          Costa Rica
-        </Option>
-        <Option
-          value="cu"
-        >
-          Cuba
-        </Option>
-        <Option
-          value="cv"
-        >
-          Cape Verde
-        </Option>
-        <Option
-          value="cw"
-        >
-          Curaçao
-        </Option>
-        <Option
-          value="cx"
-        >
-          Christmas Island
-        </Option>
-        <Option
-          value="cy"
-        >
-          Cyprus
-        </Option>
-        <Option
-          value="cz"
-        >
-          Czech Republic
-        </Option>
-        <Option
-          value="de"
-        >
-          Germany
-        </Option>
-        <Option
-          value="dj"
-        >
-          Djibouti
-        </Option>
-        <Option
-          value="dk"
-        >
-          Denmark
-        </Option>
-        <Option
-          value="dm"
-        >
-          Dominica
-        </Option>
-        <Option
-          value="do"
-        >
-          Dominican Republic
-        </Option>
-        <Option
-          value="dz"
-        >
-          Algeria
-        </Option>
-        <Option
-          value="ec"
-        >
-          Ecuador
-        </Option>
-        <Option
-          value="ee"
-        >
-          Estonia
-        </Option>
-        <Option
-          value="eg"
-        >
-          Egypt
-        </Option>
-        <Option
-          value="eh"
-        >
-          Western Sahara
-        </Option>
-        <Option
-          value="er"
-        >
-          Eritrea
-        </Option>
-        <Option
-          value="es"
-        >
-          Spain
-        </Option>
-        <Option
-          value="et"
-        >
-          Ethiopia
-        </Option>
-        <Option
-          value="fi"
-        >
-          Finland
-        </Option>
-        <Option
-          value="fj"
-        >
-          Fiji
-        </Option>
-        <Option
-          value="fk"
-        >
-          Falkland Islands
-        </Option>
-        <Option
-          value="fm"
-        >
-          Federated States of Micronesia
-        </Option>
-        <Option
-          value="fo"
-        >
-          Faroe Islands
-        </Option>
-        <Option
-          value="fr"
-        >
-          France
-        </Option>
-        <Option
-          value="ga"
-        >
-          Gabon
-        </Option>
-        <Option
-          value="gb"
-        >
-          United Kingdom
-        </Option>
-        <Option
-          value="gd"
-        >
-          Grenada
-        </Option>
-        <Option
-          value="ge"
-        >
-          Georgia
-        </Option>
-        <Option
-          value="gf"
-        >
-          French Guiana
-        </Option>
-        <Option
-          value="gg"
-        >
-          Guernsey
-        </Option>
-        <Option
-          value="gh"
-        >
-          Ghana
-        </Option>
-        <Option
-          value="gi"
-        >
-          Gibraltar
-        </Option>
-        <Option
-          value="gl"
-        >
-          Greenland
-        </Option>
-        <Option
-          value="gm"
-        >
-          Gambia
-        </Option>
-        <Option
-          value="gn"
-        >
-          Guinea
-        </Option>
-        <Option
-          value="gp"
-        >
-          Guadeloupe
-        </Option>
-        <Option
-          value="gq"
-        >
-          Equatorial Guinea
-        </Option>
-        <Option
-          value="gr"
-        >
-          Greece
-        </Option>
-        <Option
-          value="gs"
-        >
-          South Georgia and the South Sandwich Islands
-        </Option>
-        <Option
-          value="gt"
-        >
-          Guatemala
-        </Option>
-        <Option
-          value="gu"
-        >
-          Guam
-        </Option>
-        <Option
-          value="gw"
-        >
-          Guinea-Bissau
-        </Option>
-        <Option
-          value="gy"
-        >
-          Guyana
-        </Option>
-        <Option
-          value="hk"
-        >
-          Hong Kong
-        </Option>
-        <Option
-          value="hm"
-        >
-          Heard Island and McDonald Islands
-        </Option>
-        <Option
-          value="hn"
-        >
-          Honduras
-        </Option>
-        <Option
-          value="hr"
-        >
-          Croatia
-        </Option>
-        <Option
-          value="ht"
-        >
-          Haiti
-        </Option>
-        <Option
-          value="hu"
-        >
-          Hungary
-        </Option>
-        <Option
-          value="id"
-        >
-          Indonesia
-        </Option>
-        <Option
-          value="ie"
-        >
-          Ireland
-        </Option>
-        <Option
-          value="il"
-        >
-          Israel
-        </Option>
-        <Option
-          value="im"
-        >
-          Isle of Man
-        </Option>
-        <Option
-          value="in"
-        >
-          India
-        </Option>
-        <Option
-          value="io"
-        >
-          British Indian Ocean Territory
-        </Option>
-        <Option
-          value="iq"
-        >
-          Iraq
-        </Option>
-        <Option
-          value="ir"
-        >
-          Iran
-        </Option>
-        <Option
-          value="is"
-        >
-          Iceland
-        </Option>
-        <Option
-          value="it"
-        >
-          Italy
-        </Option>
-        <Option
-          value="je"
-        >
-          Jersey
-        </Option>
-        <Option
-          value="jm"
-        >
-          Jamaica
-        </Option>
-        <Option
-          value="jo"
-        >
-          Jordan
-        </Option>
-        <Option
-          value="jp"
-        >
-          Japan
-        </Option>
-        <Option
-          value="ke"
-        >
-          Kenya
-        </Option>
-        <Option
-          value="kg"
-        >
-          Kyrgyzstan
-        </Option>
-        <Option
-          value="kh"
-        >
-          Cambodia
-        </Option>
-        <Option
-          value="ki"
-        >
-          Kiribati
-        </Option>
-        <Option
-          value="km"
-        >
-          Comoros
-        </Option>
-        <Option
-          value="kn"
-        >
-          Saint Kitts and Nevis
-        </Option>
-        <Option
-          value="kp"
-        >
-          North Korea
-        </Option>
-        <Option
-          value="kr"
-        >
-          South Korea
-        </Option>
-        <Option
-          value="kw"
-        >
-          Kuwait
-        </Option>
-        <Option
-          value="ky"
-        >
-          Cayman Islands
-        </Option>
-        <Option
-          value="kz"
-        >
-          Kazakhstan
-        </Option>
-        <Option
-          value="la"
-        >
-          Laos
-        </Option>
-        <Option
-          value="lb"
-        >
-          Lebanon
-        </Option>
-        <Option
-          value="lc"
-        >
-          Saint Lucia
-        </Option>
-        <Option
-          value="li"
-        >
-          Liechtenstein
-        </Option>
-        <Option
-          value="lk"
-        >
-          Sri Lanka
-        </Option>
-        <Option
-          value="lr"
-        >
-          Liberia
-        </Option>
-        <Option
-          value="ls"
-        >
-          Lesotho
-        </Option>
-        <Option
-          value="lt"
-        >
-          Lithuania
-        </Option>
-        <Option
-          value="lu"
-        >
-          Luxembourg
-        </Option>
-        <Option
-          value="lv"
-        >
-          Latvia
-        </Option>
-        <Option
-          value="ly"
-        >
-          Libya
-        </Option>
-        <Option
-          value="ma"
-        >
-          Morocco
-        </Option>
-        <Option
-          value="mc"
-        >
-          Monaco
-        </Option>
-        <Option
-          value="md"
-        >
-          Moldova
-        </Option>
-        <Option
-          value="me"
-        >
-          Montenegro
-        </Option>
-        <Option
-          value="mf"
-        >
-          Saint Martin (French Part)
-        </Option>
-        <Option
-          value="mg"
-        >
-          Madagascar
-        </Option>
-        <Option
-          value="mh"
-        >
-          Marshall Islands
-        </Option>
-        <Option
-          value="mk"
-        >
-          North Macedonia
-        </Option>
-        <Option
-          value="ml"
-        >
-          Mali
-        </Option>
-        <Option
-          value="mm"
-        >
-          Burma
-        </Option>
-        <Option
-          value="mn"
-        >
-          Mongolia
-        </Option>
-        <Option
-          value="mo"
-        >
-          Macao
-        </Option>
-        <Option
-          value="mp"
-        >
-          Northern Mariana Islands
-        </Option>
-        <Option
-          value="mq"
-        >
-          Martinique
-        </Option>
-        <Option
-          value="mr"
-        >
-          Mauritania
-        </Option>
-        <Option
-          value="ms"
-        >
-          Montserrat
-        </Option>
-        <Option
-          value="mt"
-        >
-          Malta
-        </Option>
-        <Option
-          value="mu"
-        >
-          Mauritius
-        </Option>
-        <Option
-          value="mv"
-        >
-          Maldives
-        </Option>
-        <Option
-          value="mw"
-        >
-          Malawi
-        </Option>
-        <Option
-          value="mx"
-        >
-          Mexico
-        </Option>
-        <Option
-          value="my"
-        >
-          Malaysia
-        </Option>
-        <Option
-          value="mz"
-        >
-          Mozambique
-        </Option>
-        <Option
-          value="na"
-        >
-          Namibia
-        </Option>
-        <Option
-          value="nc"
-        >
-          New Caledonia
-        </Option>
-        <Option
-          value="ne"
-        >
-          Niger
-        </Option>
-        <Option
-          value="nf"
-        >
-          Norfolk Island
-        </Option>
-        <Option
-          value="ng"
-        >
-          Nigeria
-        </Option>
-        <Option
-          value="ni"
-        >
-          Nicaragua
-        </Option>
-        <Option
-          value="nl"
-        >
-          Netherlands
-        </Option>
-        <Option
-          value="no"
-        >
-          Norway
-        </Option>
-        <Option
-          value="np"
-        >
-          Nepal
-        </Option>
-        <Option
-          value="nr"
-        >
-          Nauru
-        </Option>
-        <Option
-          value="nu"
-        >
-          Niue
-        </Option>
-        <Option
-          value="nz"
-        >
-          New Zealand
-        </Option>
-        <Option
-          value="om"
-        >
-          Oman
-        </Option>
-        <Option
-          value="os"
-        >
-          South Ossetia
-        </Option>
-        <Option
-          value="pa"
-        >
-          Panama
-        </Option>
-        <Option
-          value="pe"
-        >
-          Peru
-        </Option>
-        <Option
-          value="pf"
-        >
-          French Polynesia
-        </Option>
-        <Option
-          value="pg"
-        >
-          Papua New Guinea
-        </Option>
-        <Option
-          value="ph"
-        >
-          Philippines
-        </Option>
-        <Option
-          value="pk"
-        >
-          Pakistan
-        </Option>
-        <Option
-          value="pl"
-        >
-          Poland
-        </Option>
-        <Option
-          value="pm"
-        >
-          Saint Pierre and Miquelon
-        </Option>
-        <Option
-          value="pn"
-        >
-          Pitcairn
-        </Option>
-        <Option
-          value="pr"
-        >
-          Puerto Rico
-        </Option>
-        <Option
-          value="ps"
-        >
-          Palestine
-        </Option>
-        <Option
-          value="pt"
-        >
-          Portugal
-        </Option>
-        <Option
-          value="pw"
-        >
-          Palau
-        </Option>
-        <Option
-          value="py"
-        >
-          Paraguay
-        </Option>
-        <Option
-          value="qa"
-        >
-          Qatar
-        </Option>
-        <Option
-          value="re"
-        >
-          Reunion
-        </Option>
-        <Option
-          value="ro"
-        >
-          Romania
-        </Option>
-        <Option
-          value="rs"
-        >
-          Serbia
-        </Option>
-        <Option
-          value="ru"
-        >
-          Russia
-        </Option>
-        <Option
-          value="rw"
-        >
-          Rwanda
-        </Option>
-        <Option
-          value="sa"
-        >
-          Saudi Arabia
-        </Option>
-        <Option
-          value="sb"
-        >
-          Solomon Islands
-        </Option>
-        <Option
-          value="sc"
-        >
-          Seychelles
-        </Option>
-        <Option
-          value="sd"
-        >
-          Sudan
-        </Option>
-        <Option
-          value="se"
-        >
-          Sweden
-        </Option>
-        <Option
-          value="sg"
-        >
-          Singapore
-        </Option>
-        <Option
-          value="sh"
-        >
-          Saint Helena
-        </Option>
-        <Option
-          value="si"
-        >
-          Slovenia
-        </Option>
-        <Option
-          value="sj"
-        >
-          Svalbard and Jan Mayen
-        </Option>
-        <Option
-          value="sk"
-        >
-          Slovakia
-        </Option>
-        <Option
-          value="sl"
-        >
-          Sierra Leone
-        </Option>
-        <Option
-          value="sm"
-        >
-          San Marino
-        </Option>
-        <Option
-          value="sn"
-        >
-          Senegal
-        </Option>
-        <Option
-          value="so"
-        >
-          Somalia
-        </Option>
-        <Option
-          value="sr"
-        >
-          Suriname
-        </Option>
-        <Option
-          value="ss"
-        >
-          South Sudan
-        </Option>
-        <Option
-          value="st"
-        >
-          Sao Tome and Principe
-        </Option>
-        <Option
-          value="sv"
-        >
-          El Salvador
-        </Option>
-        <Option
-          value="sx"
-        >
-          Sint Maarten
-        </Option>
-        <Option
-          value="sy"
-        >
-          Syria
-        </Option>
-        <Option
-          value="sz"
-        >
-          Swaziland
-        </Option>
-        <Option
-          value="ta"
-        >
-          Tristan da Cunha
-        </Option>
-        <Option
-          value="tc"
-        >
-          Turks and Caicos Islands
-        </Option>
-        <Option
-          value="td"
-        >
-          Chad
-        </Option>
-        <Option
-          value="tf"
-        >
-          French Southern Territories
-        </Option>
-        <Option
-          value="tg"
-        >
-          Togo
-        </Option>
-        <Option
-          value="th"
-        >
-          Thailand
-        </Option>
-        <Option
-          value="tj"
-        >
-          Tajikistan
-        </Option>
-        <Option
-          value="tk"
-        >
-          Tokelau
-        </Option>
-        <Option
-          value="tl"
-        >
-          Timor-Leste
-        </Option>
-        <Option
-          value="tm"
-        >
-          Turkmenistan
-        </Option>
-        <Option
-          value="tn"
-        >
-          Tunisia
-        </Option>
-        <Option
-          value="to"
-        >
-          Tonga
-        </Option>
-        <Option
-          value="tr"
-        >
-          Turkey
-        </Option>
-        <Option
-          value="tt"
-        >
-          Trinidad and Tobago
-        </Option>
-        <Option
-          value="tv"
-        >
-          Tuvalu
-        </Option>
-        <Option
-          value="tw"
-        >
-          Taiwan
-        </Option>
-        <Option
-          value="tz"
-        >
-          Tanzania
-        </Option>
-        <Option
-          value="ua"
-        >
-          Ukraine
-        </Option>
-        <Option
-          value="ug"
-        >
-          Uganda
-        </Option>
-        <Option
-          value="um"
-        >
-          United States Minor Outlying Islands
-        </Option>
-        <Option
-          value="us"
-        >
-          United States
-        </Option>
-        <Option
-          value="uy"
-        >
-          Uruguay
-        </Option>
-        <Option
-          value="uz"
-        >
-          Uzbekistan
-        </Option>
-        <Option
-          value="va"
-        >
-          Holy See (Vatican City State)
-        </Option>
-        <Option
-          value="vc"
-        >
-          Saint Vincent and the Grenadines
-        </Option>
-        <Option
-          value="ve"
-        >
-          Venezuela
-        </Option>
-        <Option
-          value="vg"
-        >
-          Virgin Islands, British
-        </Option>
-        <Option
-          value="vi"
-        >
-          Virgin Islands, U.S.
-        </Option>
-        <Option
-          value="vn"
-        >
-          Vietnam
-        </Option>
-        <Option
-          value="vu"
-        >
-          Vanuatu
-        </Option>
-        <Option
-          value="wf"
-        >
-          Wallis and Futuna
-        </Option>
-        <Option
-          value="ws"
-        >
-          Samoa
-        </Option>
-        <Option
-          value="xk"
-        >
-          Kosovo
-        </Option>
-        <Option
-          value="ye"
-        >
-          Yemen
-        </Option>
-        <Option
-          value="yt"
-        >
-          Mayotte
-        </Option>
-        <Option
-          value="za"
-        >
-          South Africa
-        </Option>
-        <Option
-          value="zm"
-        >
-          Zambia
-        </Option>
-        <Option
-          value="zw"
-        >
-          Zimbabwe
-        </Option>
-      </ForwardRef(InternalSelect)>
-    </FormItem>
-    <FormItem
-      label="Language"
-      name="language"
-      rules={
-        Array [
-          Object {
-            "required": true,
-          },
-        ]
-      }
-    >
-      <ForwardRef(InternalSelect)
-        filterOption={[Function]}
-        placeholder="Select a language"
+        <Input
+          autoCapitalize="none"
+          autoComplete="off"
+          autoCorrect="off"
+          type="text"
+        />
+      </FormItem>
+      <Row
+        gutter={24}
       >
-        <Option
-          value="zh"
+        <Col
+          lg={12}
+          md={12}
+          sm={24}
+          xs={24}
         >
-          中文
-        </Option>
-        <Option
-          value="nl"
+          <FormItem
+            label="First Name"
+            name="first_name"
+            rules={
+              Array [
+                Object {
+                  "message": "First name is required.",
+                  "required": true,
+                },
+                Object {
+                  "max": 15,
+                  "message": "First name cannot be longer than 15 characters",
+                },
+              ]
+            }
+          >
+            <Input
+              autoComplete="off"
+              autoCorrect="off"
+              type="text"
+            />
+          </FormItem>
+        </Col>
+        <Col
+          lg={12}
+          md={12}
+          sm={24}
+          xs={24}
         >
-          Nederlands
-        </Option>
-        <Option
-          value="en"
-        >
-          English
-        </Option>
-        <Option
-          value="de"
-        >
-          Deutsch
-        </Option>
-        <Option
-          value="es"
-        >
-          Español
-        </Option>
-        <Option
-          value="it"
-        >
-          Italiano
-        </Option>
-        <Option
-          value="fr"
-        >
-          Français
-        </Option>
-      </ForwardRef(InternalSelect)>
-    </FormItem>
-    <Divider />
-    <FormItem
-      name="eula_agree"
-      rules={
-        Array [
-          Object {
-            "validator": [Function],
-          },
-        ]
-      }
-      valuePropName="checked"
-    >
-      <Checkbox>
-        Agree to 
-        <Link
-          to="eula"
-        >
-          EULA
-        </Link>
-      </Checkbox>
-    </FormItem>
-    <FormItem
-      name="pp_agree"
-      rules={
-        Array [
-          Object {
-            "validator": [Function],
-          },
-        ]
-      }
-      valuePropName="checked"
-    >
-      <Checkbox
-        value={1}
+          <FormItem
+            label="Last Name"
+            name="last_name"
+            rules={
+              Array [
+                Object {
+                  "message": "Last name is required.",
+                  "required": true,
+                },
+                Object {
+                  "max": 15,
+                  "message": "Last name cannot be longer than 15 characters.",
+                },
+              ]
+            }
+          >
+            <Input
+              autoComplete="off"
+              autoCorrect="off"
+              type="text"
+            />
+          </FormItem>
+        </Col>
+      </Row>
+      <FormItem
+        label="Password"
+        name="password"
+        rules={
+          Array [
+            Object {
+              "message": "Password is required.",
+              "required": true,
+            },
+            Object {
+              "message": "Password must not contain blank space.",
+              "pattern": /\\^\\\\S\\+\\$/,
+            },
+            Object {
+              "max": 16,
+              "message": "Password must be between 8 and 16 characters",
+              "min": 8,
+            },
+          ]
+        }
       >
-        Agree to 
-          
-        <Link
-          to="privacy-policy"
+        <Password
+          action="click"
+          autoCapitalize="none"
+          autoComplete="off"
+          autoCorrect="off"
+          iconRender={[Function]}
+          visibilityToggle={true}
+        />
+      </FormItem>
+      <FormItem
+        label="Password Confirmation"
+        name="passwordConfirmation"
+        rules={
+          Array [
+            Object {
+              "message": "Please confirm your password!",
+              "required": true,
+            },
+            [Function],
+          ]
+        }
+      >
+        <Password
+          action="click"
+          autoCapitalize="none"
+          autoComplete="off"
+          autoCorrect="off"
+          iconRender={[Function]}
+          visibilityToggle={true}
+        />
+      </FormItem>
+      <FormItem
+        label="Date of Birth"
+        name="birthdate"
+        rules={
+          Array [
+            Object {
+              "type": "date",
+            },
+            Object {
+              "message": "Birth date is required.",
+              "required": true,
+            },
+          ]
+        }
+      >
+        <Picker
+          dateRender={[Function]}
+          disabledDate={[Function]}
+          showToday={false}
+          style={
+            Object {
+              "width": "100%",
+            }
+          }
+        />
+      </FormItem>
+      <Divider />
+      <FormItem
+        label="Country"
+        name="locale"
+        rules={
+          Array [
+            Object {
+              "required": true,
+            },
+          ]
+        }
+      >
+        <ForwardRef(InternalSelect)
+          filterOption={[Function]}
+          placeholder="Select a country"
+          showSearch={true}
         >
-          Privacy Policy
-        </Link>
-      </Checkbox>
-    </FormItem>
-    <FormItem
-      name="email_not_shared"
-      rules={
-        Array [
-          Object {
-            "validator": [Function],
-          },
-        ]
-      }
-      valuePropName="checked"
-    >
-      <Checkbox
-        value={1}
+          <Option
+            value="ab"
+          >
+            Abkhazia
+          </Option>
+          <Option
+            value="ac"
+          >
+            Ascension Island
+          </Option>
+          <Option
+            value="ad"
+          >
+            Andorra
+          </Option>
+          <Option
+            value="ae"
+          >
+            United Arab Emirates
+          </Option>
+          <Option
+            value="af"
+          >
+            Afghanistan
+          </Option>
+          <Option
+            value="ag"
+          >
+            Antigua and Barbuda
+          </Option>
+          <Option
+            value="ai"
+          >
+            Anguilla
+          </Option>
+          <Option
+            value="al"
+          >
+            Albania
+          </Option>
+          <Option
+            value="am"
+          >
+            Armenia
+          </Option>
+          <Option
+            value="ao"
+          >
+            Angola
+          </Option>
+          <Option
+            value="aq"
+          >
+            Antarctica
+          </Option>
+          <Option
+            value="ar"
+          >
+            Argentina
+          </Option>
+          <Option
+            value="as"
+          >
+            American Samoa
+          </Option>
+          <Option
+            value="at"
+          >
+            Austria
+          </Option>
+          <Option
+            value="au"
+          >
+            Australia
+          </Option>
+          <Option
+            value="aw"
+          >
+            Aruba
+          </Option>
+          <Option
+            value="ax"
+          >
+            Åland Islands
+          </Option>
+          <Option
+            value="az"
+          >
+            Azerbaijan
+          </Option>
+          <Option
+            value="ba"
+          >
+            Bosnia and Herzegovina
+          </Option>
+          <Option
+            value="bb"
+          >
+            Barbados
+          </Option>
+          <Option
+            value="bd"
+          >
+            Bangladesh
+          </Option>
+          <Option
+            value="be"
+          >
+            Belgium
+          </Option>
+          <Option
+            value="bf"
+          >
+            Burkina Faso
+          </Option>
+          <Option
+            value="bg"
+          >
+            Bulgaria
+          </Option>
+          <Option
+            value="bh"
+          >
+            Bahrain
+          </Option>
+          <Option
+            value="bi"
+          >
+            Burundi
+          </Option>
+          <Option
+            value="bj"
+          >
+            Benin
+          </Option>
+          <Option
+            value="bl"
+          >
+            Saint Barthélemy
+          </Option>
+          <Option
+            value="bm"
+          >
+            Bermuda
+          </Option>
+          <Option
+            value="bn"
+          >
+            Brunei Darussalam
+          </Option>
+          <Option
+            value="bo"
+          >
+            Bolivia
+          </Option>
+          <Option
+            value="bq"
+          >
+            Bonaire, Sint Eustatius and Saba
+          </Option>
+          <Option
+            value="br"
+          >
+            Brazil
+          </Option>
+          <Option
+            value="bs"
+          >
+            Bahamas
+          </Option>
+          <Option
+            value="bt"
+          >
+            Bhutan
+          </Option>
+          <Option
+            value="bv"
+          >
+            Bouvet Island
+          </Option>
+          <Option
+            value="bw"
+          >
+            Botswana
+          </Option>
+          <Option
+            value="by"
+          >
+            Belarus
+          </Option>
+          <Option
+            value="bz"
+          >
+            Belize
+          </Option>
+          <Option
+            value="ca"
+          >
+            Canada
+          </Option>
+          <Option
+            value="cc"
+          >
+            Cocos (Keeling) Islands
+          </Option>
+          <Option
+            value="cd"
+          >
+            Congo, Democratic Republic of the
+          </Option>
+          <Option
+            value="cf"
+          >
+            Central African Republic
+          </Option>
+          <Option
+            value="cg"
+          >
+            Congo
+          </Option>
+          <Option
+            value="ch"
+          >
+            Switzerland
+          </Option>
+          <Option
+            value="ci"
+          >
+            Cote d'Ivoire
+          </Option>
+          <Option
+            value="ck"
+          >
+            Cook Islands
+          </Option>
+          <Option
+            value="cl"
+          >
+            Chile
+          </Option>
+          <Option
+            value="cm"
+          >
+            Cameroon
+          </Option>
+          <Option
+            value="cn"
+          >
+            China
+          </Option>
+          <Option
+            value="co"
+          >
+            Colombia
+          </Option>
+          <Option
+            value="cr"
+          >
+            Costa Rica
+          </Option>
+          <Option
+            value="cu"
+          >
+            Cuba
+          </Option>
+          <Option
+            value="cv"
+          >
+            Cape Verde
+          </Option>
+          <Option
+            value="cw"
+          >
+            Curaçao
+          </Option>
+          <Option
+            value="cx"
+          >
+            Christmas Island
+          </Option>
+          <Option
+            value="cy"
+          >
+            Cyprus
+          </Option>
+          <Option
+            value="cz"
+          >
+            Czech Republic
+          </Option>
+          <Option
+            value="de"
+          >
+            Germany
+          </Option>
+          <Option
+            value="dj"
+          >
+            Djibouti
+          </Option>
+          <Option
+            value="dk"
+          >
+            Denmark
+          </Option>
+          <Option
+            value="dm"
+          >
+            Dominica
+          </Option>
+          <Option
+            value="do"
+          >
+            Dominican Republic
+          </Option>
+          <Option
+            value="dz"
+          >
+            Algeria
+          </Option>
+          <Option
+            value="ec"
+          >
+            Ecuador
+          </Option>
+          <Option
+            value="ee"
+          >
+            Estonia
+          </Option>
+          <Option
+            value="eg"
+          >
+            Egypt
+          </Option>
+          <Option
+            value="eh"
+          >
+            Western Sahara
+          </Option>
+          <Option
+            value="er"
+          >
+            Eritrea
+          </Option>
+          <Option
+            value="es"
+          >
+            Spain
+          </Option>
+          <Option
+            value="et"
+          >
+            Ethiopia
+          </Option>
+          <Option
+            value="fi"
+          >
+            Finland
+          </Option>
+          <Option
+            value="fj"
+          >
+            Fiji
+          </Option>
+          <Option
+            value="fk"
+          >
+            Falkland Islands
+          </Option>
+          <Option
+            value="fm"
+          >
+            Federated States of Micronesia
+          </Option>
+          <Option
+            value="fo"
+          >
+            Faroe Islands
+          </Option>
+          <Option
+            value="fr"
+          >
+            France
+          </Option>
+          <Option
+            value="ga"
+          >
+            Gabon
+          </Option>
+          <Option
+            value="gb"
+          >
+            United Kingdom
+          </Option>
+          <Option
+            value="gd"
+          >
+            Grenada
+          </Option>
+          <Option
+            value="ge"
+          >
+            Georgia
+          </Option>
+          <Option
+            value="gf"
+          >
+            French Guiana
+          </Option>
+          <Option
+            value="gg"
+          >
+            Guernsey
+          </Option>
+          <Option
+            value="gh"
+          >
+            Ghana
+          </Option>
+          <Option
+            value="gi"
+          >
+            Gibraltar
+          </Option>
+          <Option
+            value="gl"
+          >
+            Greenland
+          </Option>
+          <Option
+            value="gm"
+          >
+            Gambia
+          </Option>
+          <Option
+            value="gn"
+          >
+            Guinea
+          </Option>
+          <Option
+            value="gp"
+          >
+            Guadeloupe
+          </Option>
+          <Option
+            value="gq"
+          >
+            Equatorial Guinea
+          </Option>
+          <Option
+            value="gr"
+          >
+            Greece
+          </Option>
+          <Option
+            value="gs"
+          >
+            South Georgia and the South Sandwich Islands
+          </Option>
+          <Option
+            value="gt"
+          >
+            Guatemala
+          </Option>
+          <Option
+            value="gu"
+          >
+            Guam
+          </Option>
+          <Option
+            value="gw"
+          >
+            Guinea-Bissau
+          </Option>
+          <Option
+            value="gy"
+          >
+            Guyana
+          </Option>
+          <Option
+            value="hk"
+          >
+            Hong Kong
+          </Option>
+          <Option
+            value="hm"
+          >
+            Heard Island and McDonald Islands
+          </Option>
+          <Option
+            value="hn"
+          >
+            Honduras
+          </Option>
+          <Option
+            value="hr"
+          >
+            Croatia
+          </Option>
+          <Option
+            value="ht"
+          >
+            Haiti
+          </Option>
+          <Option
+            value="hu"
+          >
+            Hungary
+          </Option>
+          <Option
+            value="id"
+          >
+            Indonesia
+          </Option>
+          <Option
+            value="ie"
+          >
+            Ireland
+          </Option>
+          <Option
+            value="il"
+          >
+            Israel
+          </Option>
+          <Option
+            value="im"
+          >
+            Isle of Man
+          </Option>
+          <Option
+            value="in"
+          >
+            India
+          </Option>
+          <Option
+            value="io"
+          >
+            British Indian Ocean Territory
+          </Option>
+          <Option
+            value="iq"
+          >
+            Iraq
+          </Option>
+          <Option
+            value="ir"
+          >
+            Iran
+          </Option>
+          <Option
+            value="is"
+          >
+            Iceland
+          </Option>
+          <Option
+            value="it"
+          >
+            Italy
+          </Option>
+          <Option
+            value="je"
+          >
+            Jersey
+          </Option>
+          <Option
+            value="jm"
+          >
+            Jamaica
+          </Option>
+          <Option
+            value="jo"
+          >
+            Jordan
+          </Option>
+          <Option
+            value="jp"
+          >
+            Japan
+          </Option>
+          <Option
+            value="ke"
+          >
+            Kenya
+          </Option>
+          <Option
+            value="kg"
+          >
+            Kyrgyzstan
+          </Option>
+          <Option
+            value="kh"
+          >
+            Cambodia
+          </Option>
+          <Option
+            value="ki"
+          >
+            Kiribati
+          </Option>
+          <Option
+            value="km"
+          >
+            Comoros
+          </Option>
+          <Option
+            value="kn"
+          >
+            Saint Kitts and Nevis
+          </Option>
+          <Option
+            value="kp"
+          >
+            North Korea
+          </Option>
+          <Option
+            value="kr"
+          >
+            South Korea
+          </Option>
+          <Option
+            value="kw"
+          >
+            Kuwait
+          </Option>
+          <Option
+            value="ky"
+          >
+            Cayman Islands
+          </Option>
+          <Option
+            value="kz"
+          >
+            Kazakhstan
+          </Option>
+          <Option
+            value="la"
+          >
+            Laos
+          </Option>
+          <Option
+            value="lb"
+          >
+            Lebanon
+          </Option>
+          <Option
+            value="lc"
+          >
+            Saint Lucia
+          </Option>
+          <Option
+            value="li"
+          >
+            Liechtenstein
+          </Option>
+          <Option
+            value="lk"
+          >
+            Sri Lanka
+          </Option>
+          <Option
+            value="lr"
+          >
+            Liberia
+          </Option>
+          <Option
+            value="ls"
+          >
+            Lesotho
+          </Option>
+          <Option
+            value="lt"
+          >
+            Lithuania
+          </Option>
+          <Option
+            value="lu"
+          >
+            Luxembourg
+          </Option>
+          <Option
+            value="lv"
+          >
+            Latvia
+          </Option>
+          <Option
+            value="ly"
+          >
+            Libya
+          </Option>
+          <Option
+            value="ma"
+          >
+            Morocco
+          </Option>
+          <Option
+            value="mc"
+          >
+            Monaco
+          </Option>
+          <Option
+            value="md"
+          >
+            Moldova
+          </Option>
+          <Option
+            value="me"
+          >
+            Montenegro
+          </Option>
+          <Option
+            value="mf"
+          >
+            Saint Martin (French Part)
+          </Option>
+          <Option
+            value="mg"
+          >
+            Madagascar
+          </Option>
+          <Option
+            value="mh"
+          >
+            Marshall Islands
+          </Option>
+          <Option
+            value="mk"
+          >
+            North Macedonia
+          </Option>
+          <Option
+            value="ml"
+          >
+            Mali
+          </Option>
+          <Option
+            value="mm"
+          >
+            Burma
+          </Option>
+          <Option
+            value="mn"
+          >
+            Mongolia
+          </Option>
+          <Option
+            value="mo"
+          >
+            Macao
+          </Option>
+          <Option
+            value="mp"
+          >
+            Northern Mariana Islands
+          </Option>
+          <Option
+            value="mq"
+          >
+            Martinique
+          </Option>
+          <Option
+            value="mr"
+          >
+            Mauritania
+          </Option>
+          <Option
+            value="ms"
+          >
+            Montserrat
+          </Option>
+          <Option
+            value="mt"
+          >
+            Malta
+          </Option>
+          <Option
+            value="mu"
+          >
+            Mauritius
+          </Option>
+          <Option
+            value="mv"
+          >
+            Maldives
+          </Option>
+          <Option
+            value="mw"
+          >
+            Malawi
+          </Option>
+          <Option
+            value="mx"
+          >
+            Mexico
+          </Option>
+          <Option
+            value="my"
+          >
+            Malaysia
+          </Option>
+          <Option
+            value="mz"
+          >
+            Mozambique
+          </Option>
+          <Option
+            value="na"
+          >
+            Namibia
+          </Option>
+          <Option
+            value="nc"
+          >
+            New Caledonia
+          </Option>
+          <Option
+            value="ne"
+          >
+            Niger
+          </Option>
+          <Option
+            value="nf"
+          >
+            Norfolk Island
+          </Option>
+          <Option
+            value="ng"
+          >
+            Nigeria
+          </Option>
+          <Option
+            value="ni"
+          >
+            Nicaragua
+          </Option>
+          <Option
+            value="nl"
+          >
+            Netherlands
+          </Option>
+          <Option
+            value="no"
+          >
+            Norway
+          </Option>
+          <Option
+            value="np"
+          >
+            Nepal
+          </Option>
+          <Option
+            value="nr"
+          >
+            Nauru
+          </Option>
+          <Option
+            value="nu"
+          >
+            Niue
+          </Option>
+          <Option
+            value="nz"
+          >
+            New Zealand
+          </Option>
+          <Option
+            value="om"
+          >
+            Oman
+          </Option>
+          <Option
+            value="os"
+          >
+            South Ossetia
+          </Option>
+          <Option
+            value="pa"
+          >
+            Panama
+          </Option>
+          <Option
+            value="pe"
+          >
+            Peru
+          </Option>
+          <Option
+            value="pf"
+          >
+            French Polynesia
+          </Option>
+          <Option
+            value="pg"
+          >
+            Papua New Guinea
+          </Option>
+          <Option
+            value="ph"
+          >
+            Philippines
+          </Option>
+          <Option
+            value="pk"
+          >
+            Pakistan
+          </Option>
+          <Option
+            value="pl"
+          >
+            Poland
+          </Option>
+          <Option
+            value="pm"
+          >
+            Saint Pierre and Miquelon
+          </Option>
+          <Option
+            value="pn"
+          >
+            Pitcairn
+          </Option>
+          <Option
+            value="pr"
+          >
+            Puerto Rico
+          </Option>
+          <Option
+            value="ps"
+          >
+            Palestine
+          </Option>
+          <Option
+            value="pt"
+          >
+            Portugal
+          </Option>
+          <Option
+            value="pw"
+          >
+            Palau
+          </Option>
+          <Option
+            value="py"
+          >
+            Paraguay
+          </Option>
+          <Option
+            value="qa"
+          >
+            Qatar
+          </Option>
+          <Option
+            value="re"
+          >
+            Reunion
+          </Option>
+          <Option
+            value="ro"
+          >
+            Romania
+          </Option>
+          <Option
+            value="rs"
+          >
+            Serbia
+          </Option>
+          <Option
+            value="ru"
+          >
+            Russia
+          </Option>
+          <Option
+            value="rw"
+          >
+            Rwanda
+          </Option>
+          <Option
+            value="sa"
+          >
+            Saudi Arabia
+          </Option>
+          <Option
+            value="sb"
+          >
+            Solomon Islands
+          </Option>
+          <Option
+            value="sc"
+          >
+            Seychelles
+          </Option>
+          <Option
+            value="sd"
+          >
+            Sudan
+          </Option>
+          <Option
+            value="se"
+          >
+            Sweden
+          </Option>
+          <Option
+            value="sg"
+          >
+            Singapore
+          </Option>
+          <Option
+            value="sh"
+          >
+            Saint Helena
+          </Option>
+          <Option
+            value="si"
+          >
+            Slovenia
+          </Option>
+          <Option
+            value="sj"
+          >
+            Svalbard and Jan Mayen
+          </Option>
+          <Option
+            value="sk"
+          >
+            Slovakia
+          </Option>
+          <Option
+            value="sl"
+          >
+            Sierra Leone
+          </Option>
+          <Option
+            value="sm"
+          >
+            San Marino
+          </Option>
+          <Option
+            value="sn"
+          >
+            Senegal
+          </Option>
+          <Option
+            value="so"
+          >
+            Somalia
+          </Option>
+          <Option
+            value="sr"
+          >
+            Suriname
+          </Option>
+          <Option
+            value="ss"
+          >
+            South Sudan
+          </Option>
+          <Option
+            value="st"
+          >
+            Sao Tome and Principe
+          </Option>
+          <Option
+            value="sv"
+          >
+            El Salvador
+          </Option>
+          <Option
+            value="sx"
+          >
+            Sint Maarten
+          </Option>
+          <Option
+            value="sy"
+          >
+            Syria
+          </Option>
+          <Option
+            value="sz"
+          >
+            Swaziland
+          </Option>
+          <Option
+            value="ta"
+          >
+            Tristan da Cunha
+          </Option>
+          <Option
+            value="tc"
+          >
+            Turks and Caicos Islands
+          </Option>
+          <Option
+            value="td"
+          >
+            Chad
+          </Option>
+          <Option
+            value="tf"
+          >
+            French Southern Territories
+          </Option>
+          <Option
+            value="tg"
+          >
+            Togo
+          </Option>
+          <Option
+            value="th"
+          >
+            Thailand
+          </Option>
+          <Option
+            value="tj"
+          >
+            Tajikistan
+          </Option>
+          <Option
+            value="tk"
+          >
+            Tokelau
+          </Option>
+          <Option
+            value="tl"
+          >
+            Timor-Leste
+          </Option>
+          <Option
+            value="tm"
+          >
+            Turkmenistan
+          </Option>
+          <Option
+            value="tn"
+          >
+            Tunisia
+          </Option>
+          <Option
+            value="to"
+          >
+            Tonga
+          </Option>
+          <Option
+            value="tr"
+          >
+            Turkey
+          </Option>
+          <Option
+            value="tt"
+          >
+            Trinidad and Tobago
+          </Option>
+          <Option
+            value="tv"
+          >
+            Tuvalu
+          </Option>
+          <Option
+            value="tw"
+          >
+            Taiwan
+          </Option>
+          <Option
+            value="tz"
+          >
+            Tanzania
+          </Option>
+          <Option
+            value="ua"
+          >
+            Ukraine
+          </Option>
+          <Option
+            value="ug"
+          >
+            Uganda
+          </Option>
+          <Option
+            value="um"
+          >
+            United States Minor Outlying Islands
+          </Option>
+          <Option
+            value="us"
+          >
+            United States
+          </Option>
+          <Option
+            value="uy"
+          >
+            Uruguay
+          </Option>
+          <Option
+            value="uz"
+          >
+            Uzbekistan
+          </Option>
+          <Option
+            value="va"
+          >
+            Holy See (Vatican City State)
+          </Option>
+          <Option
+            value="vc"
+          >
+            Saint Vincent and the Grenadines
+          </Option>
+          <Option
+            value="ve"
+          >
+            Venezuela
+          </Option>
+          <Option
+            value="vg"
+          >
+            Virgin Islands, British
+          </Option>
+          <Option
+            value="vi"
+          >
+            Virgin Islands, U.S.
+          </Option>
+          <Option
+            value="vn"
+          >
+            Vietnam
+          </Option>
+          <Option
+            value="vu"
+          >
+            Vanuatu
+          </Option>
+          <Option
+            value="wf"
+          >
+            Wallis and Futuna
+          </Option>
+          <Option
+            value="ws"
+          >
+            Samoa
+          </Option>
+          <Option
+            value="xk"
+          >
+            Kosovo
+          </Option>
+          <Option
+            value="ye"
+          >
+            Yemen
+          </Option>
+          <Option
+            value="yt"
+          >
+            Mayotte
+          </Option>
+          <Option
+            value="za"
+          >
+            South Africa
+          </Option>
+          <Option
+            value="zm"
+          >
+            Zambia
+          </Option>
+          <Option
+            value="zw"
+          >
+            Zimbabwe
+          </Option>
+        </ForwardRef(InternalSelect)>
+      </FormItem>
+      <FormItem
+        label="Language"
+        name="language"
+        rules={
+          Array [
+            Object {
+              "required": true,
+            },
+          ]
+        }
       >
-        Agree that my provided email address is only used by me
-      </Checkbox>
-    </FormItem>
-    <FormItem>
-      <Styled(Button)
-        htmlType="submit"
-        type="primary"
+        <ForwardRef(InternalSelect)
+          filterOption={[Function]}
+          placeholder="Select a language"
+        >
+          <Option
+            value="zh"
+          >
+            中文
+          </Option>
+          <Option
+            value="nl"
+          >
+            Nederlands
+          </Option>
+          <Option
+            value="en"
+          >
+            English
+          </Option>
+          <Option
+            value="de"
+          >
+            Deutsch
+          </Option>
+          <Option
+            value="es"
+          >
+            Español
+          </Option>
+          <Option
+            value="it"
+          >
+            Italiano
+          </Option>
+          <Option
+            value="fr"
+          >
+            Français
+          </Option>
+        </ForwardRef(InternalSelect)>
+      </FormItem>
+      <Divider />
+      <FormItem
+        name="eula_agree"
+        rules={
+          Array [
+            Object {
+              "validator": [Function],
+            },
+          ]
+        }
+        valuePropName="checked"
       >
-        Sign Up
-      </Styled(Button)>
-    </FormItem>
-  </ForwardRef(InternalForm)>
-</Spin>
+        <Checkbox>
+          Agree to 
+          <Link
+            to="eula"
+          >
+            EULA
+          </Link>
+        </Checkbox>
+      </FormItem>
+      <FormItem
+        name="pp_agree"
+        rules={
+          Array [
+            Object {
+              "validator": [Function],
+            },
+          ]
+        }
+        valuePropName="checked"
+      >
+        <Checkbox
+          value={1}
+        >
+          Agree to 
+            
+          <Link
+            to="privacy-policy"
+          >
+            Privacy Policy
+          </Link>
+        </Checkbox>
+      </FormItem>
+      <FormItem
+        name="email_not_shared"
+        rules={
+          Array [
+            Object {
+              "validator": [Function],
+            },
+          ]
+        }
+        valuePropName="checked"
+      >
+        <Checkbox
+          value={1}
+        >
+          Agree that my provided email address is only used by me
+        </Checkbox>
+      </FormItem>
+      <FormItem>
+        <Styled(Button)
+          htmlType="submit"
+          type="primary"
+        >
+          Sign Up
+        </Styled(Button)>
+      </FormItem>
+    </ForwardRef(InternalForm)>
+  </Spin>
+</styled.div>
 `;

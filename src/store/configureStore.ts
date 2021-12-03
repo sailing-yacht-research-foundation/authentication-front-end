@@ -31,3 +31,5 @@ export function configureAppStore() {
 
   return store;
 }
+
+export const store = configureAppStore();

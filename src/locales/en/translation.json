@@ -280,7 +280,8 @@
     "want_to_take_a_quick_tour": "Want to take a quick tour?",
     "look_like_you_are_new": "Looks like your are new here {{username}}, Do you want to take a quick tour with us?",
     "an_error_happended_when_downloading_your_track": "An error happened when downloading your track.",
-    "your_file_is_not_found": "Your file is not found."
+    "your_file_is_not_found": "Your file is not found.",
+    "there_is_a_problem_with_our_server": "There is a problem with our server, please try again later."
   },
   "playback_page": {
     "competitor": "Competitor:",
