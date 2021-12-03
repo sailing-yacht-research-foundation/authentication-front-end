@@ -187,12 +187,20 @@ export const MyEventForm = () => {
     }
 
     const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
-        
+
         if (selector === 'start') {
             form.setFieldsValue({
                 lat: lat,
                 lon: lon
             });
+            
+            // end location is null
+            if (!form.getFieldValue('endLat') && !form.getFieldValue('endLon')) {
+                form.setFieldsValue({
+                    endLat: lat,
+                    endLon: lon
+                });
+            }
         } else {
             form.setFieldsValue({
                 endLat: lat,
@@ -219,6 +227,10 @@ export const MyEventForm = () => {
                     if (selector === 'start') {
                         form.setFieldsValue({ location: address });
                         setAddress(address);
+                        // end location is null, set address to end address 
+                        if (!form.getFieldValue('endLocation')) {
+                            setEndAddress(address);
+                        }
                     } else {
                         form.setFieldsValue({ endLocation: address });
                         setEndAddress(address);
