@@ -12,7 +12,7 @@ import { translations } from "locales/translations";
 import i18next from "i18next";
 import { message } from "antd";
 
-const MAX_RETRIES_TIME = 5;
+const MAX_RETRY_TIMES = 5;
 
 export function* getAuthUser() {
     const response = yield call(getAuthorizedUser);
@@ -22,7 +22,7 @@ export function* getAuthUser() {
         yield put(loginActions.setUser(JSON.parse(JSON.stringify(response.user))));
     } else {
         // if (response?.error?.response?.status === 401) {
-            if (attemptsCount < MAX_RETRIES_TIME) {
+            if (attemptsCount < MAX_RETRY_TIMES) {
                 yield delay(3000);
                 yield put(loginActions.setFailedGetProfileAttemptsCount(attemptsCount + 1));
                 yield put(loginActions.getUser());
