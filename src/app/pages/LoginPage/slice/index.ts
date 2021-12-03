@@ -53,8 +53,6 @@ const slice = createSlice({
       state.syrf_authenticated = action.payload;
     },
     setFailedGetProfileAttemptsCount(state, action: PayloadAction<number>) {
-      console.log(action.payload);
-      console.log(' cai dmdsa');
       state.get_profile_attempts_count = action.payload;
     }
   },

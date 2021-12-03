@@ -10,23 +10,26 @@ import { getUser } from "services/live-data-server/user";
 import { toast } from "react-toastify";
 import { translations } from "locales/translations";
 import i18next from "i18next";
+import { message } from "antd";
 
-const MAX_RETRY_TIME = 5;
+const MAX_RETRIES_TIME = 5;
 
 export function* getAuthUser() {
     const response = yield call(getAuthorizedUser);
     const attemptsCount = yield select(selectGetProfileAttemptsCount);
 
-    if (response?.success) {
+    if (!response?.success) {
         yield put(loginActions.setUser(JSON.parse(JSON.stringify(response.user))));
     } else {
-        if (response?.error?.response?.status === 401) {
-            if (attemptsCount < MAX_RETRY_TIME) {
+        // if (response?.error?.response?.status === 401) {
+            if (attemptsCount < MAX_RETRIES_TIME) {
                 yield delay(3000);
                 yield put(loginActions.setFailedGetProfileAttemptsCount(attemptsCount + 1));
                 yield put(loginActions.getUser());
+            } else {
+                message.info(i18next.t(translations.misc.there_is_a_problem_with_our_server));
             }
-        }
+        // }
     }
 
 }
