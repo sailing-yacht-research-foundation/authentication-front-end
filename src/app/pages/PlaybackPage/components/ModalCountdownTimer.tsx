@@ -2,19 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import moment from "moment";
 
 import { timeMillisToHours } from "utils/time";
 import { selectCompetitionUnitDetail, selectTimeBeforeRaceBegin } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
 import { translations } from "locales/translations";
+import { useHistory } from "react-router";
 
 export const ModalCountdownTimer = React.memo(() => {
   const dispatch = useDispatch();
   const { actions } = usePlaybackSlice();
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
   const timeBeforeRaceBegin = useSelector(selectTimeBeforeRaceBegin);
+  const history = useHistory();
 
   const [composedTime, setComposedTime] = useState("00:00:00");
 
@@ -40,6 +42,19 @@ export const ModalCountdownTimer = React.memo(() => {
   const isMoreThen5Minutes = (timeBeforeRaceBegin && timeBeforeRaceBegin > 300000) || false;
   const renderedDate = moment(new Date(competitionUnitDetail?.startTime)).format("LLLL");
 
+  const goBack = () => {
+    if (history.action !== "POP") {
+      history.goBack();
+      const currentPathname = history.location.pathname;
+
+      setTimeout(() => {
+        if (currentPathname === window.location.pathname) history.goBack();
+      }, 100);
+    } else {
+      history.push('/');
+    }
+  }
+
   return (
     <div>
       <Container>
@@ -55,9 +70,10 @@ export const ModalCountdownTimer = React.memo(() => {
           <br />
           <span style={{ fontSize: "24px", fontWeight: 500 }}>{composedTime}</span>
           <br />
-          <span style={{ color: "#999", fontSize: "14px" }}>
+          <span style={{ color: "#999", fontSize: "14px", display: 'block' }}>
             {t(translations.playback_page.countdown_timer_on)} {renderedDate}
           </span>
+          <Button onClick={goBack} type="link">{t(translations.playback_page.go_back)}</Button>
         </p>
       </Modal>
     </div>
