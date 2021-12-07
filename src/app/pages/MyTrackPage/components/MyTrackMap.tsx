@@ -158,6 +158,7 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
     }
 
     const createResultMarker = (race) => {
+        if (!race) return;
         if (typeof race.approximateStartLocation?.coordinates[1] === 'undefined') return; // not rendering result with no longlat.
         let marker = L.marker(L.latLng(race.approximateStartLocation?.coordinates[1], race.approximateStartLocation?.coordinates[0]), {
             icon: L.divIcon({

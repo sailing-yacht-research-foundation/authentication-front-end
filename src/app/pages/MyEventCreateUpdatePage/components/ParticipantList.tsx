@@ -45,8 +45,9 @@ export const ParticipantList = (props) => {
             title: t(translations.participant_list.tracker_url),
             dataIndex: 'trackerUrl',
             key: 'trackerUrl',
-            render: text => {
-                return <CreateButton data-tip={t(translations.tip.copy_competitor_tracker_link)} onClick={() => copyToClipboard(text)} icon={<AiFillCopy style={{ marginRight: '10px' }} />}>Copy</CreateButton>
+            render: (text, record) => {
+                if (record.vesselParticipants?.length > 0)
+                    return <CreateButton data-tip={t(translations.tip.copy_competitor_tracker_link)} onClick={() => copyToClipboard(text)} icon={<AiFillCopy style={{ marginRight: '10px' }} />}>Copy</CreateButton>
             },
         },
         {
@@ -62,7 +63,7 @@ export const ParticipantList = (props) => {
                         history.push(`/events/${record.calendarEventId}/competitors/${record.id}/update`)
                     }} type="primary">{t(translations.participant_list.update)}</BorderedButton>
                     <BorderedButton data-tip={t(translations.tip.delete_competitor)} danger onClick={() => showDeleteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
-                    <ReactTooltip/>
+                    <ReactTooltip />
                 </Space>
             ),
         },

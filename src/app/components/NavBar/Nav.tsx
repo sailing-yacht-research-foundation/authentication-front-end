@@ -36,8 +36,8 @@ export const Nav = () => {
 
   const refreshToken = useSelector(selectRefreshToken);
 
-  const logout = async () => {
-    await ldsLogout(refreshToken);
+  const logout = () => {
+    ldsLogout(refreshToken);
     dispatch(loginActions.setLogout());
     history.push('/signin');
   }
