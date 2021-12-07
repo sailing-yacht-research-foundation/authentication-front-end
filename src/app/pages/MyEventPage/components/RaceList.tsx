@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Table } from 'antd';
+import { Spin, Table, Space } from 'antd';
 import moment from 'moment';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
@@ -7,12 +7,16 @@ import { translations } from 'locales/translations';
 import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
+import { BorderedButton } from 'app/components/SyrfGeneral';
+import { useHistory } from 'react-router';
 
 export const RaceList = (props) => {
 
     const { t } = useTranslation();
 
     const { event } = props;
+
+    const history = useHistory();
 
     const columns = [
         {
@@ -42,13 +46,17 @@ export const RaceList = (props) => {
             title: 'Action',
             key: 'action',
             render: (text, record) => {
-                if (record?.id
-                    && record?.status === RaceStatus.ON_GOING)
-                return <ExpeditionServerActionButtons competitionUnit={record} />;
-      
-              return <></>;
+                return <Space size="middle">
+                    {record?.id
+                        && record?.status === RaceStatus.ON_GOING && <ExpeditionServerActionButtons competitionUnit={record} />}
+                    <BorderedButton onClick={() => {
+                        history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
+                    }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
+                </Space>;
+
+                return <></>;
             }
-          },
+        },
     ];
 
     const [pagination, setPagination] = React.useState<any>({

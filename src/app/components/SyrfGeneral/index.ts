@@ -187,3 +187,18 @@ export const ContentEditableTextRemover = styled(RiCloseCircleFill)`
     cursor: pointer;
     color: rgba(0, 0, 0, 0.25);
 `;
+
+export const DownloadButton = styled(BorderedButton)`
+background: #DC6E1E;
+border: 1px solid #fff;
+font-size: 20px;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+:hover, :focus {
+    background: #DC6E1E;
+    border: 1px solid #fff;
+}
+`;

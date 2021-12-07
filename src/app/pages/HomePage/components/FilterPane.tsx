@@ -87,8 +87,8 @@ export const FilterPane = (props) => {
     React.useEffect(() => {
         form.setFieldsValue({ // reset the email to the last state.
             name: searchKeyword,
-            from_date: fromDate && moment(fromDate).isValid() ? moment(fromDate) : '',
-            to_date: toDate && moment(toDate).isValid() ? moment(toDate) : ''
+            from_date: fromDate && moment(fromDate).isValid() ? moment(fromDate) : form.getFieldValue('from_date'),
+            to_date: toDate && moment(toDate).isValid() ? moment(toDate) : form.getFieldValue('to_date'),
         });
 
         if (!initedSearchBar) {
@@ -100,6 +100,11 @@ export const FilterPane = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchKeyword, fromDate, toDate]);
+
+    const onContentEditableKeydown = (e) => {
+        removeWholeTextNodeOnBackSpace(e);
+        setShowSuggestion(true);
+    }
 
     return (
         <Wrapper {...props}>
@@ -146,10 +151,7 @@ export const FilterPane = (props) => {
                                     autoCorrect="off"
                                     autoCapitalize="none"
                                     ref={mutableEditableRef}
-                                    onKeyDown={(e) => {
-                                        removeWholeTextNodeOnBackSpace(e);
-                                        setShowSuggestion(true);
-                                    }}
+                                    onKeyDown={onContentEditableKeydown}
                                     onInput={(e) => {
                                         const target = e.target as HTMLDivElement;
                                         if (inputTimeout) clearTimeout(inputTimeout);
@@ -166,7 +168,7 @@ export const FilterPane = (props) => {
                             </ContentEditableSearchBarWrapper>
                             {
                                 showSuggestion && <>
-                                    <CriteriaSuggestion keyword={keyword} searchBarRef={mutableEditableRef} />
+                                    <CriteriaSuggestion form={form} keyword={keyword} searchBarRef={mutableEditableRef} />
                                     <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={mutableEditableRef} isFilterPane keyword={keyword} />
                                 </>
                             }
