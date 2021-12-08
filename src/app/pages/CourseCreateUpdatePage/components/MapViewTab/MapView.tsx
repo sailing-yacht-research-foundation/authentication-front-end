@@ -33,6 +33,7 @@ type CourseGeometry = {
     properties: any;
     order: number;
     id: string;
+    points: any[];
 };
 
 const LAYER_TYPE = {
@@ -194,38 +195,30 @@ export const MapView = React.forwardRef((props, ref) => {
     }
 
     const drawGeometries = (courseSequencedGeometriesData, drawnItems) => {
-        let coordinates;
         courseSequencedGeometriesData.forEach(geometry => {
             let geoJsonGroup;
 
             switch (geometry.geometryType) {
                 case GEOMETRY_TYPE.line:
-                    geoJsonGroup = L.polyline(geometry.coordinates).addTo(map);
-                    if (geometry.coordinates[0]?.length > 0 && Array.isArray(geometry.coordinates[0][0])) {
-                        coordinates = geometry.coordinates[0][0];
-                    } else {
-                        coordinates = geometry.coordinates[0];
-                    }
+                    geoJsonGroup = L.polyline([geometry.points.map(function (point) {
+                        return point.position;
+                    })]).addTo(map);
                     geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.line;
                     break;
                 case GEOMETRY_TYPE.point:
-                    geoJsonGroup = L.marker(geometry.coordinates[0], {
+                    geoJsonGroup = L.marker(geometry.points[0].position, {
                         icon: L.divIcon({
                             html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#fff', fontSize: '35px' }} />),
                             iconSize: [20, 20],
                             className: 'my-race'
                         })
                     }).addTo(map);
-                    coordinates = geometry.coordinates[0];
                     geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.point;
                     break;
                 case GEOMETRY_TYPE.polygon:
-                    geoJsonGroup = L.polygon(geometry.coordinates).addTo(map);
-                    if (geometry.coordinates[0]?.length > 0 && Array.isArray(geometry.coordinates[0][0])) {
-                        coordinates = geometry.coordinates[0][0];
-                    } else {
-                        coordinates = geometry.coordinates[0];
-                    }
+                    geoJsonGroup = L.polygon([geometry.points.map(function (point) {
+                        return point.position;
+                    })]).addTo(map);
                     geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
             }
@@ -234,8 +227,6 @@ export const MapView = React.forwardRef((props, ref) => {
             geoJsonGroup.options._name = geometry.properties.name;
             registerLayerNameAndTooltipClickEvent(geoJsonGroup);
             addNonGroupLayers(geoJsonGroup, drawnItems);
-
-            map.setView(coordinates, 13);
         })
     }
 
@@ -284,27 +275,35 @@ export const MapView = React.forwardRef((props, ref) => {
                 });
                 if (geometry) {
                     geometry = JSON.parse(JSON.stringify(geometry));
+                    geometry.points = [];
                     switch (layer.options._geometry_type) {
                         case GEOMETRY_TYPE.point:
-                            geometry.coordinates = [
-                                [layer.getLatLng().lat, layer.getLatLng().lng]
-                            ];
+                            geometry.points = [{
+                                position: [layer.getLatLng().lat, layer.getLatLng().lng]
+                            }];
                             break;
                         case GEOMETRY_TYPE.polygon:
-                            geometry.coordinates = layer.getLatLngs().map(points => {
-                                return points.map(point => {
-                                    return [point.lat, point.lng];
+                            layer.getLatLngs().forEach(points => {
+                                points.forEach(point => {
+                                    geometry.points.push({
+                                        position: [point.lat, point.lng]
+                                    });
                                 });
                             });
                             break;
                         case GEOMETRY_TYPE.line:
-                            geometry.coordinates = layer.getLatLngs().map(function (points) {
-                                if (points.map)
-                                    return points.map(function (point) {
-                                        return [point.lat, point.lng];
+                            layer.getLatLngs().forEach(function (points) {
+                                if (points.forEach) {
+                                    points.forEach(function (point) {
+                                        geometry.points.push({
+                                            position: [point.lat, point.lng]
+                                        });
+                                    })
+                                } else {
+                                    geometry.points.push({
+                                        position: [points.lat, points.lng]
                                     });
-
-                                return [points.lat, points.lng];
+                                }
                             });
                             break;
                     }
@@ -327,30 +326,34 @@ export const MapView = React.forwardRef((props, ref) => {
                         name: geometryName.current
                     },
                     order: layerOrder.current,
+                    points: []
                 };
 
             switch (layerType) {
                 case LAYER_TYPE.marker:
                     geometry.geometryType = GEOMETRY_TYPE.point;
-                    geometry.coordinates = [
-                        [layer.getLatLng().lat, layer.getLatLng().lng]
-                    ];
+                    geometry.points.push({
+                        position: [layer.getLatLng().lat, layer.getLatLng().lng]
+                    })
                     layer.options._geometry_type = GEOMETRY_TYPE.point;
                     break;
                 case LAYER_TYPE.polygon:
                     geometry.geometryType = GEOMETRY_TYPE.polygon;
-                    geometry.coordinates = layer.getLatLngs().map(points => {
-                        return points.map(point => {
-                            return [point.lat, point.lng];
+                    layer.getLatLngs().forEach(points => {
+                        points.forEach(point => {
+                            geometry.points.push({
+                                position: [point.lat, point.lng]
+                            })
                         });
                     });
-                    geometry.coordinates = geometry.coordinates[0];
                     layer.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
                 case LAYER_TYPE.polyline:
                     geometry.geometryType = GEOMETRY_TYPE.line;
-                    geometry.coordinates = layer.getLatLngs().map(function (point) {
-                        return [point.lat, point.lng];
+                    layer.getLatLngs().forEach(function (point) {
+                        geometry.points.push({
+                            position: [point.lat, point.lng]
+                        });
                     });
                     layer.options._geometry_type = GEOMETRY_TYPE.line;
                     break;
