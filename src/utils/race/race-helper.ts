@@ -8,96 +8,6 @@ import {
   VesselParticipantPosition,
 } from "types/VesselParticipant";
 
-export const calculateTrackPingTime = (tracks: any[]) => {
-  const timeOffset = tracks[0].first_ping_time;
-  let pingIndex = 0;
-  for (let trackIndex in tracks) {
-    const track = tracks[trackIndex];
-    track.first_ping_time = track.first_ping_time - timeOffset;
-    for (let positionIndex in track.track) {
-      track.track[positionIndex][3] = track.track[positionIndex][3] - timeOffset;
-      track.track[positionIndex][2] = pingIndex;
-      pingIndex++;
-    }
-  }
-};
-
-export const getLastTrackPingTime = (tracks: any[]) => {
-  let lastTrack = tracks[tracks.length - 1];
-  let greatestPingTime = 0;
-
-  for (let positionIndex in lastTrack.track) {
-    if (lastTrack.track[positionIndex][3] > greatestPingTime) {
-      greatestPingTime = lastTrack.track[positionIndex][3];
-    }
-  }
-
-  return greatestPingTime;
-};
-
-export const collectTrackDataFromGeoJson = (trackData, markData) => {
-  const tracks: any[] = [];
-
-  trackData.default.features.forEach((boatFeature) => {
-    if (boatFeature.geometry.coordinates.length > 0) {
-      tracks.push({
-        type: "boat",
-        id: boatFeature.properties.competitor_id,
-        first_ping_time: boatFeature.geometry.coordinates[0][3],
-        track: boatFeature.geometry.coordinates,
-        competitor_name: boatFeature.properties.competitor_name,
-        competitor_sail_number: boatFeature.properties.competitor_sail_number,
-      });
-    }
-  });
-
-  markData.default.features.forEach((markFeature) => {
-    if (markFeature.geometry.coordinates.length > 0) {
-      tracks.push({
-        type: "mark",
-        id: markFeature.properties.mark_id,
-        first_ping_time: markFeature.geometry.coordinates[0][3],
-        track: markFeature.geometry.coordinates,
-      });
-    }
-  });
-
-  return tracks;
-};
-
-export const toSimplifiedGeoJson = (message) => {
-  return {
-    type: "FeatureCollection",
-    crs: {
-      type: "name",
-      properties: {
-        name: "EPSG:3857",
-      },
-    },
-    features: [
-      {
-        type: "Feature",
-        geometry: message.simplified?.geometry ? message.simplified?.geometry : {},
-      },
-    ],
-  };
-};
-
-export const simplifiedGeoJsonTrackToLastHeading = (geojson) => {
-  if (!geojson.features[0].geometry.coordinates) return;
-
-  let lastIndex = geojson.features[0].geometry.coordinates.length - 1;
-  let lastPoint = geojson.features[0].geometry.coordinates[lastIndex];
-  let secondLastPoint = geojson.features[0].geometry.coordinates[lastIndex - 1];
-
-  let point1 = turf.point(lastPoint);
-  let point2 = turf.point(secondLastPoint);
-
-  let bearing = turf.bearing(point2, point1);
-
-  return bearing;
-};
-
 export const generateLastHeading = (coordinate1, coordinate2) => {
   const point1 = turf.point(coordinate1);
   const point2 = turf.point(coordinate2);
@@ -116,7 +26,7 @@ export const generateLastArray = (arrayData: any[], maxSize: number) => {
   if (length - maxSize < 0) limit = 0;
 
   // Select latest positions
-  for (let index = length - 1; index >= (limit + 1); index--) {
+  for (let index = length - 1; index >= limit; index--) {
     result.push(arrayData[index]);
   }
 
@@ -124,7 +34,6 @@ export const generateLastArray = (arrayData: any[], maxSize: number) => {
 };
 
 export const formatCoordinatesObjectToArray = (coordinatesObject: { lat: number; lon: number }[]) => {
-  // result: [..., [lat, lon], ...]
   const result: any[] = [];
 
   for (let index = 0; index < coordinatesObject.length; index++) {
@@ -133,46 +42,6 @@ export const formatCoordinatesObjectToArray = (coordinatesObject: { lat: number;
   }
 
   return result;
-};
-
-export const simulateThirdParameter = (geojson) => {
-  let coords: any[] = [];
-  let index = 0;
-
-  if (geojson.features[0].geometry.coordinates)
-    geojson.features[0].geometry.coordinates.forEach((point) => {
-      let p = [point[1], point[0], index % 360];
-      index += 10;
-      coords.push(p);
-    });
-
-  return coords;
-};
-
-export const simulateThirdParameterForCourse = (coordinates) => {
-  let coords: any[] = [];
-  let index = 0;
-
-  if (coordinates.length > 2) {
-    coordinates.forEach((point) => {
-      let p = [point[1], point[0], index % 360];
-      index += 10;
-      coords.push(p);
-    });
-  } else {
-    let p = [coordinates[1], coordinates[0], index % 360];
-    index += 10;
-    coords.push(p);
-  }
-
-  return coords;
-};
-
-export const sortTrackFirstPingTime = (tracks: any[]) => {
-  tracks.sort(function (a, b) {
-    if (a.first_ping_time === b.first_ping_time) return 0;
-    return a.first_ping_time < b.first_ping_time ? -1 : 1;
-  });
 };
 
 export const normalizeSimplifiedTracksPingTime = (startTime: number, simplifiedTracks: SimplifiedTrack[]) => {
@@ -189,6 +58,20 @@ export const normalizeSimplifiedTracksPingTime = (startTime: number, simplifiedT
 
   return normalizedSimplifiedTracks;
 };
+
+export const turnTracksToVesselParticipantsData = (vesselParticipants, tracks) => {
+  tracks.forEach(track => {
+    vesselParticipants[track.vesselParticipantId].positions = track.tracks.map(t => {
+      return {
+        lon: t.position[0],
+        lat: t.position[1],
+        timestamp: t.pingTime
+      }
+    })
+  })
+
+  return vesselParticipants;
+}
 
 export const selectLatestPositionOfSimplifiedTracks = (targetTime: number, simplifiedTracks: SimplifiedTrack[]) => {
   if (targetTime < 0 || !simplifiedTracks.length) return [];
@@ -222,49 +105,6 @@ export const generateRetrievedTimestamp = (vesselParticipants: VesselParticipant
   availableTimestamps.sort((a, b) => a - b);
 
   return availableTimestamps;
-};
-
-export const generateStartTimeFetchAndTimeToLoad = (
-  retrievedTimestamps: number[],
-  startTime: number,
-  nextDataTime: number,
-  raceLength: number
-) => {
-  const target = nextDataTime - startTime;
-  const retrievedTsCopy = [...retrievedTimestamps];
-
-  // If targetted time retrieved
-  if (retrievedTimestamps.includes(target)) {
-    // ** Find the data to check (only check for the next 30 seconds)
-    const maxTime = target + 30 * 1000;
-    let nextDataTimeCpy = nextDataTime;
-
-    for (let index = target; index <= maxTime; index += 1000) {
-      const dataTarget = index;
-
-      if (!retrievedTsCopy.includes(dataTarget)) {
-        nextDataTimeCpy = dataTarget + startTime;
-        break;
-      }
-
-      if (index === maxTime) {
-        return false;
-      }
-    }
-
-    return { nextDataTime: nextDataTimeCpy, timeToLoad: 30 };
-  }
-
-  // If targetted time not retrieved,
-
-  // ** Check if the nearest target is available
-  const nearestTimetamps = findNearestRetrievedTimestamp(retrievedTimestamps, target, 1000);
-  if (nearestTimetamps.previous.length) {
-    return false;
-  }
-
-  // *** get the next 30 seconds
-  return { timeToLoad: 30, nextDataTime };
 };
 
 export const generateVesselParticipantsLastPosition = (vesselParticipantsObject, selectedTimestamp: number, retrievedTimestamps: number[]) => {

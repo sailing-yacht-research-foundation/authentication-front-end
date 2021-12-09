@@ -163,7 +163,6 @@ export function* getOldRaceDate({ type, payload }) {
 
   yield put(playbackActions.getRaceLength({ raceId }));
   yield put(playbackActions.getRaceLegs({ raceId }));
-  yield put(playbackActions.getRaceSimplifiedTracks({ raceId }));
   yield put(playbackActions.getRaceCourseDetail({ raceId }));
 }
 

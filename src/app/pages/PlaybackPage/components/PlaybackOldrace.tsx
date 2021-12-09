@@ -1,7 +1,6 @@
 import "leaflet/dist/leaflet.css";
 
 import React, { useEffect, useRef, useState } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MapContainer } from "react-leaflet";
 import styled from "styled-components";
 import { useLocation } from "react-router";
@@ -13,6 +12,7 @@ import {
   normalizeSequencedGeometries,
   generateRaceLegsData,
   limitRaceLegsDataByElapsedTime,
+  turnTracksToVesselParticipantsData,
 } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
@@ -25,7 +25,6 @@ import {
   selectRaceCourseDetail,
   selectRaceLegs,
   selectRaceLength,
-  selectRaceSimplifiedTracks,
   selectRaceTime,
   selectVesselParticipants,
 } from "./slice/selectors";
@@ -37,15 +36,16 @@ import { Leaderboard } from "./Leaderboard";
 import { Playback } from "./Playback";
 import { RaceMap } from "./RaceMap";
 import { ConnectionLoader } from './ConnectionLoader';
+import websocketWorker from "../workers/old-race-worker";
+import { getSimplifiedTracksByCompetitionUnit } from "services/live-data-server/competition-units";
+
+const worker = new Worker(websocketWorker);
+
+const eventEmitter = new EventEmitter();
 
 export const PlaybackOldRace = (props) => {
+
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [socketUrl, setSocketUrl] = useState(streamUrl);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
 
   const [participantsData, setParticipantsData] = useState([]);
   const [isReady, setIsReady] = useState(false);
@@ -78,26 +78,13 @@ export const PlaybackOldRace = (props) => {
   const raceCourseDetail = useSelector(selectRaceCourseDetail);
   const raceLegs = useSelector(selectRaceLegs);
   const raceTime = useSelector(selectRaceTime);
-  const raceSimplifiedTracks = useSelector(selectRaceSimplifiedTracks);
   const raceLength = useSelector(selectRaceLength);
   const userCoordinate = useSelector(selectUserCoordinate);
   const playbackSpeed = useSelector(selectPlaybackSpeed);
 
-  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
-    `${streamUrl}/authenticate?session_token=${sessionToken}`, {
-    shouldReconnect: () => true
-  }
-  );
-
   const { actions } = usePlaybackSlice();
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: WebsocketConnectionStatus.connecting,
-    [ReadyState.OPEN]: WebsocketConnectionStatus.open,
-    [ReadyState.CLOSING]: WebsocketConnectionStatus.closing,
-    [ReadyState.CLOSED]: WebsocketConnectionStatus.closed,
-    [ReadyState.UNINSTANTIATED]: WebsocketConnectionStatus.uninstantiated,
-  }[readyState];
+  const [connectionStatus, setConnectionStatus] = React.useState(WebsocketConnectionStatus.uninstantiated);
 
   useEffect(() => {
     return () => {
@@ -116,13 +103,13 @@ export const PlaybackOldRace = (props) => {
 
   useEffect(() => {
     playbackSpeedRef.current = playbackSpeed; // update the ref everytime the speed updates.
+    worker.postMessage({
+      action: 'SendDataToWorker',
+      data: {
+        playbackSpeed: playbackSpeed
+      }
+    });
   }, [playbackSpeed]);
-
-  // Set socket url
-  useEffect(() => {
-    if (sessionToken) setSocketUrl(`${streamUrl}/authenticate?session_token=${sessionToken}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionToken]);
 
   useEffect(() => {
     // Get vessel participants
@@ -142,24 +129,22 @@ export const PlaybackOldRace = (props) => {
   // Manage subscription of websocket
   useEffect(() => {
     if (connectionStatus === WebsocketConnectionStatus.open && isReady) {
-      sendJsonMessage({
-        action: "playback",
+      worker.postMessage({
+        action: 'SendWSMessage',
         data: {
-          competitionUnitId: competitionUnitId,
-          timeToLoad: getDesiredTimeToLoadBasedOnPlaybackSpeed(),
-        },
-      });
+          action: "playback",
+          data: {
+            competitionUnitId: competitionUnitId,
+            startTimeFetch: raceTime.start,
+            timeToLoad: 50,
+          },
+        }
+      })
       setTimeout(() => {
         setIsLoading(false);
         dispatch(actions.setIsPlaying(true));
       }, 3000); // wait for render the time line
     }
-
-    if ([WebsocketConnectionStatus.connecting, WebsocketConnectionStatus.closing, WebsocketConnectionStatus.closed].includes(connectionStatus)) {
-      dispatch(actions.setIsPlaying(false));
-      setIsLoading(true);
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus, competitionUnitId, isReady]);
 
@@ -174,20 +159,6 @@ export const PlaybackOldRace = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus]);
-
-  // Normalized simplified tracks
-  useEffect(() => {
-    if (raceTime?.start && raceSimplifiedTracks?.length) {
-      const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(raceTime.start, raceSimplifiedTracks);
-      simplifiedTracksRef.current = normalizedSimplifiedTracks;
-    }
-  }, [raceSimplifiedTracks, raceTime]);
-
-  // Listen last message from web socket
-  useEffect(() => {
-    handleMessageFromWebsocket(lastMessage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastMessage]);
 
   // Set vessel participants, update format to object
   useEffect(() => {
@@ -216,13 +187,29 @@ export const PlaybackOldRace = (props) => {
       handleDebug("=== Vessel Participants ===");
       handleDebug(vesselParticipantsObject);
       handleDebug("===========================");
+
+      worker.postMessage({
+        action: 'SendDataToWorker',
+        data: {
+          vesselParticipants: vesselParticipantsRef.current,
+          competitionUnitId: competitionUnitId
+        }
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vesselParticipants]);
 
   useEffect(() => {
     raceTimeRef.current = raceTime;
-    handleRequestMoreRaceData(0); // start getting race data when the start time is available.
+    worker.postMessage({
+      action: 'SendDataToWorker',
+      data: {
+        raceTime: raceTime
+      }
+    })
+    if (raceTime?.start) {
+      getSimplifiedTracks();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceTime]);
 
@@ -254,19 +241,22 @@ export const PlaybackOldRace = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceCourseDetail]);
 
-  // Map available time
   useEffect(() => {
-    const mapInterval = setInterval(() => {
-      const vesselParticipants = vesselParticipantsRef.current;
-      if (!!Object.keys(vesselParticipants).length) {
-        handleMapRetrievedTimestamps(vesselParticipants);
-      }
-    }, 100);
+    worker.postMessage({
+      action: 'initWS',
+      url: `${streamUrl}/authenticate?session_token=${sessionToken}`
+    });
 
-    return () => {
-      clearInterval(mapInterval);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    worker.addEventListener('message', function (e) {
+      const data = e.data;
+      if (data.action === 'SetConnectionStatus') {
+        setConnectionStatus(data.data);
+      } else if (data.action === 'UpdateWorkerDataToMainThread') {
+        vesselParticipantsRef.current = data?.data?.vesselParticipants;
+        if (data?.data?.retrievedTimestamps.length > 0)
+          retrievedTimestampsRef.current = data?.data?.retrievedTimestamps;
+      }
+    })
   }, []);
 
   // Count the elapsed time
@@ -295,6 +285,22 @@ export const PlaybackOldRace = (props) => {
     console.log(value);
   };
 
+  const getSimplifiedTracks = async () => {
+    const response = await getSimplifiedTracksByCompetitionUnit(String(competitionUnitId));
+    if (response.success) {
+      const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(raceTime.start, response.data);
+      simplifiedTracksRef.current = normalizedSimplifiedTracks;
+      vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
+      handleMapRetrievedTimestamps(vesselParticipantsRef.current);
+      worker.postMessage({
+        action: 'SendDataToWorker',
+        data: {
+          vesselParticipants: vesselParticipantsRef.current
+        }
+      });
+    }
+  }
+
   // Map retrieved timestamps
   const handleMapRetrievedTimestamps = (vesselParticipantsObject) => {
     const vesselParticipants = Object.keys(vesselParticipantsObject).map((key) => vesselParticipantsObject[key]);
@@ -320,47 +326,6 @@ export const PlaybackOldRace = (props) => {
     }
   }
 
-  // Handle message from websocket
-  const handleMessageFromWebsocket = (lastMessage) => {
-    if (!lastMessage?.data) return;
-    const wsData = JSON.parse(lastMessage.data);
-
-    if (wsData?.type === "data" && wsData?.dataType === "position") handleAddNewPosition(wsData.data);
-
-    handleDebug("=== WS DATA ===");
-    handleDebug(wsData);
-    handleDebug("===============");
-  };
-
-  // Handle add new position to each vessel partiicpant
-  const handleAddNewPosition = (source: any) => {
-    const data = { ...source };
-    const vesselParticipants = vesselParticipantsRef.current;
-    const raceTime = raceTimeRef.current;
-
-    if (!Object.keys(vesselParticipants)?.length || !data?.raceData?.vesselParticipantId || !raceTime.start) return;
-
-    const currentVesselParticipantId = data?.raceData?.vesselParticipantId;
-    if (!vesselParticipants[currentVesselParticipantId]) return;
-
-    const selectedVesselParticipant = { ...vesselParticipants[currentVesselParticipantId] };
-
-    data.raceData = undefined;
-    data.timestamp = data.timestamp - raceTime.start;
-
-    if (selectedVesselParticipant.positions?.length) {
-      const similarTimestampPosition = selectedVesselParticipant.positions.filter(
-        (position) => position.timestamp === data.timestamp
-      );
-      if (similarTimestampPosition.length) return;
-    }
-
-    selectedVesselParticipant.positions.push(data);
-    selectedVesselParticipant.positions.sort((posA, posB) => posA.timestamp - posB.timestamp);
-
-    vesselParticipants[currentVesselParticipantId] = selectedVesselParticipant;
-  };
-
   const handleSetElapsedTime = (elapsedTime) => {
     const time = (playbackSpeedRef.current !== PlaybackSpeed.speed1X)
       ? elapsedTime + (playbackSpeedRef.current * 1000) : elapsedTime; // we bypass playback 1x, only add time to other speeds
@@ -368,6 +333,12 @@ export const PlaybackOldRace = (props) => {
 
     if (isElapsedTimeLessThanRaceLength) {
       dispatch(actions.setElapsedTime(time));
+      worker.postMessage({
+        action: 'SendDataToWorker',
+        data: {
+          elapsedTime: elapsedTime
+        }
+      });
     } else if (!isElapsedTimeLessThanRaceLength) {
       dispatch(actions.setElapsedTime(raceLengthRef.current));
       dispatch(actions.setIsPlaying(false));
@@ -384,32 +355,18 @@ export const PlaybackOldRace = (props) => {
     const startTime = raceTimeRef.current?.start || 0;
     let nextDateTimeCpy = nextDataTime + startTime;
 
-    // Send the data via websocket
-    sendJsonMessage({
-      action: "playback",
+    worker.postMessage({
+      action: 'SendWSMessage',
       data: {
-        competitionUnitId: competitionUnitId,
-        startTimeFetch: nextDateTimeCpy,
-        timeToLoad: getDesiredTimeToLoadBasedOnPlaybackSpeed(),
-      },
-    });
+        action: "playback",
+        data: {
+          competitionUnitId: competitionUnitId,
+          startTimeFetch: nextDateTimeCpy,
+          timeToLoad: 50,
+        },
+      }
+    })
   };
-
-  const getDesiredTimeToLoadBasedOnPlaybackSpeed = () => {
-    const timeToLoadBasedOnSpeed = { // time is 30x the speed.
-      1: 30,
-      2: 60,
-      5: 150,
-      10: 300,
-      50: 1500,
-      100: 3000,
-      200: 6000,
-      500: 15000,
-      1000: 30000
-    }
-
-    return timeToLoadBasedOnSpeed[playbackSpeedRef.current];
-  }
 
   const handlePlaybackClickedPosition = (targetTime) => {
     if (!simplifiedTracksRef?.current || !eventEmitter) return;
