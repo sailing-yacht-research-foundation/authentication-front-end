@@ -140,10 +140,10 @@ export const PlaybackOldRace = (props) => {
           },
         }
       })
+      handleSetIsConnecting(false);
       setTimeout(() => {
         setIsLoading(false);
         dispatch(actions.setIsPlaying(true));
-        handleSetIsConnecting(false);
       }, 3000); // wait for render the time line
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

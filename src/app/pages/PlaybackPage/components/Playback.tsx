@@ -114,11 +114,12 @@ export const Playback = (props) => {
     }
 
     const renderRaceLengthBaseOnPlaybackType = () => {
+        const isLive = raceLength === elapsedTime && raceLength !== 0;
         if (playbackType === PlaybackTypes.OLDRACE) {
             return <>{milisecondsToMinutes(raceLength)}</>;
         }
 
-        return <>Live <LiveDot></LiveDot></>;
+        return <>Live <LiveDot className={isLive ? 'live' : ''}></LiveDot></>;
     }
 
     return (
@@ -299,8 +300,12 @@ const BackToRaceAreaButton = styled(BiTargetLock)`
 const LiveDot = styled.span`
     width: 7px;
     height: 7px;
-    background: #ff0000;
+    background: #606060;
     border-radius: 50%;
     display: inline-block;
     margin-left: 10px;
+
+    &.live {
+        background: #ff0000;
+    }
 `;
