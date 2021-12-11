@@ -34,7 +34,7 @@ export const GroupInvitationList = () => {
 
     const getInvitations = async (page) => {
         setIsLoading(true);
-        const response = await getGroupInvitations(page, GroupMemberStatus.invited);
+        const response = await getGroupInvitations(page, GroupMemberStatus.INVITED);
         setIsLoading(false);
 
         if (response.success) {

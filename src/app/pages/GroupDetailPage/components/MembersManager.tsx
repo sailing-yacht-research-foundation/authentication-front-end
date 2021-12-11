@@ -104,12 +104,12 @@ export const MembersManager = (props) => {
         const menu = (
             <Menu>
                 {
-                    GroupMemberStatus.accepted === member.status && <Menu.Item key="2">
+                    GroupMemberStatus.ACCEPTED === member.status && <Menu.Item key="2">
                         <a onClick={(e) => setMemberAsAdmin(e, member)} href="/">{t(translations.group.set_as_admin)}</a>
                     </Menu.Item>
                 }
                 <Menu.Item key="1">
-                    <a onClick={(e) => removeFromGroup(e, member)} href="/">{t(member.status === GroupMemberStatus.invited ? translations.group.cancel_invitation : translations.group.remove_from_group)}</a>
+                    <a onClick={(e) => removeFromGroup(e, member)} href="/">{t(member.status === GroupMemberStatus.INVITED ? translations.group.cancel_invitation : translations.group.remove_from_group)}</a>
                 </Menu.Item>
             </Menu>
         );

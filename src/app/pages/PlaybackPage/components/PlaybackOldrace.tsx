@@ -29,7 +29,7 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, PlaybackSpeed, RaceEmitterEvent, WebsocketConnectionStatus } from "utils/constants";
+import { MAP_DEFAULT_VALUE, PlaybackSpeed, RaceEmitterEvent, WebsocketConnectionStatus, WorkerEvent } from "utils/constants";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
@@ -67,7 +67,6 @@ export const PlaybackOldRace = (props) => {
   const raceLegsRef = useRef<any>();
   const isStillFetchingFromBoatRenderRef = useRef<boolean>(false);
   const playbackSpeedRef = useRef<any>(PlaybackSpeed.speed1X);
-  const lastRetrivedTimestampRef = useRef<number>(0);
 
   const competitionUnitId = useSelector(selectCompetitionUnitId);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
@@ -84,16 +83,17 @@ export const PlaybackOldRace = (props) => {
 
   const { actions } = usePlaybackSlice();
 
-  const [connectionStatus, setConnectionStatus] = React.useState(WebsocketConnectionStatus.uninstantiated);
+  const [connectionStatus, setConnectionStatus] = React.useState(WebsocketConnectionStatus.UNINSTANTIATED);
 
   useEffect(() => {
+    handleSetIsConnecting(true);
     return () => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
-        eventEmitter.off(RaceEmitterEvent.ping, () => { });
-        eventEmitter.off(RaceEmitterEvent.track_update, () => { });
-        eventEmitter.off(RaceEmitterEvent.sequenced_courses_update, () => { });
-        eventEmitter.off(RaceEmitterEvent.zoom_to_location, () => { });
+        eventEmitter.off(RaceEmitterEvent.PING, () => { });
+        eventEmitter.off(RaceEmitterEvent.TRACK_UPDATE, () => { });
+        eventEmitter.off(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, () => { });
+        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
@@ -104,7 +104,7 @@ export const PlaybackOldRace = (props) => {
   useEffect(() => {
     playbackSpeedRef.current = playbackSpeed; // update the ref everytime the speed updates.
     worker.postMessage({
-      action: 'SendDataToWorker',
+      action: WorkerEvent.SEND_DATA_TO_WORKER,
       data: {
         playbackSpeed: playbackSpeed
       }
@@ -128,9 +128,9 @@ export const PlaybackOldRace = (props) => {
 
   // Manage subscription of websocket
   useEffect(() => {
-    if (connectionStatus === WebsocketConnectionStatus.open && isReady) {
+    if (connectionStatus === WebsocketConnectionStatus.OPEN && isReady) {
       worker.postMessage({
-        action: 'SendWSMessage',
+        action: WorkerEvent.SEND_WS_MESSAGE,
         data: {
           action: "playback",
           data: {
@@ -143,6 +143,7 @@ export const PlaybackOldRace = (props) => {
       setTimeout(() => {
         setIsLoading(false);
         dispatch(actions.setIsPlaying(true));
+        handleSetIsConnecting(false);
       }, 3000); // wait for render the time line
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,9 +151,6 @@ export const PlaybackOldRace = (props) => {
 
   // Manage message of websocket status
   useEffect(() => {
-    if (connectionStatus === WebsocketConnectionStatus.open) handleSetIsConnecting(false);
-    if (connectionStatus === WebsocketConnectionStatus.connecting) handleSetIsConnecting(true);
-
     handleDebug("=== Connection Status ===");
     handleDebug(connectionStatus);
     handleDebug("=========================");
@@ -189,7 +187,7 @@ export const PlaybackOldRace = (props) => {
       handleDebug("===========================");
 
       worker.postMessage({
-        action: 'SendDataToWorker',
+        action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           vesselParticipants: vesselParticipantsRef.current,
           competitionUnitId: competitionUnitId
@@ -202,7 +200,7 @@ export const PlaybackOldRace = (props) => {
   useEffect(() => {
     raceTimeRef.current = raceTime;
     worker.postMessage({
-      action: 'SendDataToWorker',
+      action: WorkerEvent.SEND_DATA_TO_WORKER,
       data: {
         raceTime: raceTime
       }
@@ -249,12 +247,18 @@ export const PlaybackOldRace = (props) => {
 
     worker.addEventListener('message', function (e) {
       const data = e.data;
-      if (data.action === 'SetConnectionStatus') {
+      if (data.action === WorkerEvent.SET_CONNECTION_STATUS) {
         setConnectionStatus(data.data);
-      } else if (data.action === 'UpdateWorkerDataToMainThread') {
+      } else if (data.action === WorkerEvent.UPDATE_WORKER_DATA_TO_MAIN_THREAD) {
         vesselParticipantsRef.current = data?.data?.vesselParticipants;
         if (data?.data?.retrievedTimestamps.length > 0)
           retrievedTimestampsRef.current = data?.data?.retrievedTimestamps;
+      } else if (data.action === WorkerEvent.COURSE_MARK_UPDATE) {
+        updateCourseMarksPosition(data.data);
+      } else if (data.action === WorkerEvent.NEW_PARTICIPANT_JOINED) {
+        addNewVesselParticipantToTheRace(data.data);
+      } else if (data.action === WorkerEvent.VESSEL_PARTICIPANT_REMOVED) {
+        removeVesselParticipantFromTheRace(data.data);
       }
     })
   }, []);
@@ -276,6 +280,48 @@ export const PlaybackOldRace = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const addNewVesselParticipantToTheRace = (data) => {
+    const { vesselParticipant, vessel } = data;
+    const { id } = vesselParticipant;
+
+    if (vesselParticipantsRef?.current[id]) return;
+
+    vesselParticipantsRef.current[id] = {
+      ...vesselParticipant,
+      deviceType: "boat",
+      color: stringToColour(vesselParticipant.id),
+      positions: [],
+      lastPosition: {},
+      participant: {
+        competitor_name: vessel?.publicName,
+        competitior_sail_number: vessel?.vesselParticipantId,
+      },
+    };
+
+    worker.postMessage({
+      action: WorkerEvent.SEND_DATA_TO_WORKER,
+      data: {
+        vesselParticipants: vesselParticipantsRef.current
+      }
+    });
+  }
+
+  const removeVesselParticipantFromTheRace = (data) => {
+    const { vesselParticipant } = data;
+    const { id } = vesselParticipant;
+
+    if (vesselParticipantsRef?.current[id]) {
+      delete vesselParticipantsRef?.current[id];
+      worker.postMessage({
+        action: WorkerEvent.SEND_DATA_TO_WORKER,
+        data: {
+          vesselParticipants: vesselParticipantsRef.current
+        }
+      });
+      eventEmitter.emit(RaceEmitterEvent.REMOVE_PARTICIPANT, id);
+    }
+  }
+
   const handleSetIsConnecting = (value = false) => {
     dispatch(actions.setIsConnecting(value));
   };
@@ -293,7 +339,7 @@ export const PlaybackOldRace = (props) => {
       vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
       handleMapRetrievedTimestamps(vesselParticipantsRef.current);
       worker.postMessage({
-        action: 'SendDataToWorker',
+        action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           vesselParticipants: vesselParticipantsRef.current
         }
@@ -311,19 +357,13 @@ export const PlaybackOldRace = (props) => {
     retrievedTimestampsRef.current = retrievedTimestamps;
     dispatch(actions.setRetrievedTimestamps(retrievedTimestamps));
 
-    getMoreDataBasedOnLastReceivedTimestamp(retrievedTimestamps);
-
     handleDebug("=== Retrieved Timestamps ===");
     handleDebug(retrievedTimestamps);
     handleDebug("============================");
   };
 
-  const getMoreDataBasedOnLastReceivedTimestamp = (retrievedTimestamps) => {
-    const latestReceivedTimestamp = retrievedTimestamps[retrievedTimestamps.length - 1];
-    if (latestReceivedTimestamp > 0 && lastRetrivedTimestampRef.current < latestReceivedTimestamp) {
-      lastRetrivedTimestampRef.current = latestReceivedTimestamp;
-      handleRequestMoreRaceData(lastRetrivedTimestampRef.current);
-    }
+  const updateCourseMarksPosition = (data) => {
+    eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE_MARK, data);
   }
 
   const handleSetElapsedTime = (elapsedTime) => {
@@ -334,7 +374,7 @@ export const PlaybackOldRace = (props) => {
     if (isElapsedTimeLessThanRaceLength) {
       dispatch(actions.setElapsedTime(time));
       worker.postMessage({
-        action: 'SendDataToWorker',
+        action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           elapsedTime: elapsedTime
         }
@@ -343,36 +383,10 @@ export const PlaybackOldRace = (props) => {
       dispatch(actions.setElapsedTime(raceLengthRef.current));
       dispatch(actions.setIsPlaying(false));
     }
-
-    if (lastRetrivedTimestampRef.current < elapsedTimeRef.current
-      && lastRetrivedTimestampRef.current !== 0) {
-      handleRequestMoreRaceData(elapsedTimeRef.current);
-    }
-  };
-
-  // Handle request more data
-  const handleRequestMoreRaceData = (nextDataTime) => {
-    const startTime = raceTimeRef.current?.start || 0;
-    let nextDateTimeCpy = nextDataTime + startTime;
-
-    worker.postMessage({
-      action: 'SendWSMessage',
-      data: {
-        action: "playback",
-        data: {
-          competitionUnitId: competitionUnitId,
-          startTimeFetch: nextDateTimeCpy,
-          timeToLoad: 50,
-        },
-      }
-    })
   };
 
   const handlePlaybackClickedPosition = (targetTime) => {
-    if (!simplifiedTracksRef?.current || !eventEmitter) return;
     dispatch(actions.setIsPlaying(true));
-    // Request more race data
-    handleRequestMoreRaceData(targetTime);
   };
 
   const handleRenderTheBoat = (elapsedTime, isPlaying, interval) => {
@@ -394,7 +408,7 @@ export const PlaybackOldRace = (props) => {
     isStillFetchingFromBoatRenderRef.current = false;
     const mappedVPs = generateVesselParticipantsLastPosition(vesselParticipants, elapsedTime, retrievedTimestamps);
 
-    eventEmitter.emit(RaceEmitterEvent.ping, mappedVPs);
+    eventEmitter.emit(RaceEmitterEvent.PING, mappedVPs);
 
     // Set elapsed time
     handleSetElapsedTime(elapsedTime + interval);
@@ -424,7 +438,7 @@ export const PlaybackOldRace = (props) => {
     });
 
     const filteredRaceLegs = limitRaceLegsDataByElapsedTime(mappedRaceLegs, elapsedTime);
-    eventEmitter.emit(RaceEmitterEvent.render_legs, filteredRaceLegs);
+    eventEmitter.emit(RaceEmitterEvent.RENDER_REGS, filteredRaceLegs);
   };
 
   const handleRenderCourseDetail = (course) => {
@@ -434,7 +448,7 @@ export const PlaybackOldRace = (props) => {
     const mappedSequencedGeometries = normalizeSequencedGeometries(sequencedGeometries);
 
     setTimeout(() => {
-      eventEmitter.emit(RaceEmitterEvent.sequenced_courses_update, mappedSequencedGeometries);
+      eventEmitter.emit(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, mappedSequencedGeometries);
     }, 500);
   };
 
@@ -469,7 +483,7 @@ export const PlaybackOldRace = (props) => {
         easeLinearity={0}
       >
         <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-          <Leaderboard participantsData={participantsData}></Leaderboard>
+          <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
         </LeaderboardContainer>
         <RaceMap emitter={eventEmitter} />
       </MapContainer>

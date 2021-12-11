@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Lottie from "react-lottie";
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { LottieMessage, LottieWrapper } from "app/components/SyrfGeneral";
+import { selectIsConnecting } from './slice/selectors';
 import { translations } from "locales/translations";
 import LoadingConnection from '../assets/loading-connection.json';
 
 const defaultOptions = {
-  loop: false,
+  loop: true,
   autoplay: true,
   animationData: LoadingConnection,
   rendererSettings: {
@@ -16,29 +18,22 @@ const defaultOptions = {
   },
 };
 
-export const ConnectionLoader = React.memo(() => {
+export const ConnectionLoader = () => {
   const { t } = useTranslation();
-  const [connecting, setConnecting] = useState<boolean|undefined>(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setConnecting(false);
-    }, 1000);
-  }, [])
-
-  if (!connecting) return null;
+  const isConnecting = useSelector(selectIsConnecting);
 
   return (
-    <ConnectionStatusContainer>
-      <div>
-        <LottieWrapper>
-          <Lottie options={defaultOptions} height={400} width={200} />
-          <LottieMessage>{t(translations.playback_page.connecting)}</LottieMessage>
-        </LottieWrapper>
-      </div>
-    </ConnectionStatusContainer>
-  )
-});
+    <>
+      {isConnecting && <ConnectionStatusContainer>
+        <div>
+          <LottieWrapper>
+            <Lottie options={defaultOptions} height={400} width={200} />
+            <LottieMessage>{t(translations.playback_page.connecting)}</LottieMessage>
+          </LottieWrapper>
+        </div>
+      </ConnectionStatusContainer>}
+    </>)
+};
 
 const ConnectionStatusContainer = styled.div`
   position: absolute;

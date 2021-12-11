@@ -110,7 +110,15 @@ export const Playback = (props) => {
     }
 
     const backToRaceArea = () => {
-        emitter.emit(RaceEmitterEvent.zoom_to_location);
+        emitter.emit(RaceEmitterEvent.ZOOM_TO_LOCATION);
+    }
+
+    const renderRaceLengthBaseOnPlaybackType = () => {
+        if (playbackType === PlaybackTypes.OLDRACE) {
+            return <>{milisecondsToMinutes(raceLength)}</>;
+        }
+
+        return <>Live <LiveDot></LiveDot></>;
     }
 
     return (
@@ -126,13 +134,13 @@ export const Playback = (props) => {
             </PlaybackTopRightItemsContainer>
             <PlaybackLengthOutterContainer>
                 <PlaybackLengthContainer>
-                    <TimeText>{milisecondsToMinutes(elapsedTime)}</TimeText>
+                    <TimeText>{PlaybackTypes.OLDRACE === playbackType && milisecondsToMinutes(elapsedTime)}</TimeText>
                     <ProgressBarWrapper>
                         <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                         </ProgressBar>
                     </ProgressBarWrapper>
-                    <TimeText>{milisecondsToMinutes(raceLength)}</TimeText>
+                    <TimeText style={{ justifyContent: 'flex-end' }}>{renderRaceLengthBaseOnPlaybackType()}</TimeText>
                 </PlaybackLengthContainer>
             </PlaybackLengthOutterContainer>
             <PlayBackControlContainer>
@@ -198,14 +206,16 @@ const ProgressBarWrapper = styled.div`
     width: 100%;
     position: absolute;
     top: 30px;
-    padding: 0 15px;
+    left: 0;
+    padding: 0 10px;
 
     ${media.medium`
         padding: 0;
         margin-top: 0;
         position: relative;
-        width: 87%;
+        width: 85%;
         top: 0;
+        flex: 1 1 auto;
     `}
 
 `;
@@ -263,9 +273,9 @@ const PlaybackLengthContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
     margin: 5px 0px;
     padding: 0 5px;
+    width: 100%;
 
     ${media.medium`
         width: 90%;
@@ -276,9 +286,21 @@ const TimeText = styled.span`
     color: ${StyleConstants.MAIN_TONE_COLOR};
     font-size: 14px;
     margin: 0 5px;
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
 `;
 
 const BackToRaceAreaButton = styled(BiTargetLock)`
     font-size: 20px;
     cursor: pointer;
-`
+`;
+
+const LiveDot = styled.span`
+    width: 7px;
+    height: 7px;
+    background: #ff0000;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+`;

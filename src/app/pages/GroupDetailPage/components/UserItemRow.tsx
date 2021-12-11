@@ -15,11 +15,11 @@ export const UserItemRow = (props) => {
 
     const renderTag = () => {
         switch (item.status) {
-            case GroupMemberStatus.invited:
+            case GroupMemberStatus.INVITED:
                 return <StyledTag color="cyan">{t(translations.group.pending)}</StyledTag>;
-            case GroupMemberStatus.requested:
+            case GroupMemberStatus.REQUESTED:
                 return <StyledTag color="cyan">{t(translations.group.requested)}</StyledTag>;
-            case GroupMemberStatus.declined:
+            case GroupMemberStatus.DECLINED:
                 return <StyledTag color="magenta">{t(translations.group.declined)}</StyledTag>;
             default:
                 return <></>;

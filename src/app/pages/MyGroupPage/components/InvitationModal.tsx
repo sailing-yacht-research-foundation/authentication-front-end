@@ -41,7 +41,7 @@ export const InvitationModal = (props) => {
     }
 
     const onPaginationChanged = (page) => {
-        dispatch(actions.getGroupInvitations({ page: page, invitationType: GroupMemberStatus.invited }));
+        dispatch(actions.getGroupInvitations({ page: page, invitationType: GroupMemberStatus.INVITED }));
     }
 
     const hideInvitationModal = () => {
@@ -53,7 +53,7 @@ export const InvitationModal = (props) => {
     }
 
     React.useEffect(() => {
-        dispatch(actions.getGroupInvitations({ page: 1, invitationType: GroupMemberStatus.invited }));
+        dispatch(actions.getGroupInvitations({ page: 1, invitationType: GroupMemberStatus.INVITED }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

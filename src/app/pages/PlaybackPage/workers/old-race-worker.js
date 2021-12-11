@@ -1,7 +1,30 @@
 
 /* eslint-disable */
-// worker.js
+// playback oldrace worker.
+
+// have to refined because worker does not support module import.
+
 const workercode = () => {
+    const workerEvent = {
+        SEND_DATA_TO_WORKER: 'SendDataToWorker',
+        SEND_WS_MESSAGE: 'SendWSMessage',
+        INIT_WS: 'initWS',
+        SET_CONNECTION_STATUS: 'SetConnectionStatus',
+        UPDATE_DATA_TO_MAIN_THREAD: 'UpdateWorkerDataToMainThread',
+        COURSE_MARK_UPDATE: 'CourseMarkUpdate',
+        UPDATE_WORKER_DATA_TO_MAIN_THREAD: 'UpdateWorkerDataToMainThread',
+        NEW_PARTICIPANT_JOINED: 'NewParticipantJoined',
+        VESSEL_PARTICIPANT_REMOVED: 'VesselParticipantRemoved'
+    };
+    
+    const wsMessageDataType = {
+        POSITION: 'position',
+        VIEWER_COUNT: 'viewers-count',
+        NEW_PARTICIPANT_JOINED: 'new-participant-joined',
+        VESSEL_PARTICIPANT_REMOVED: 'vessel-participant-removed',
+        MAKR_TRACK: 'mark-track'
+    }
+
     let ws = null;
     let wsURL = '';
     let raceTime;
@@ -10,43 +33,29 @@ const workercode = () => {
     let competitionUnitId = '';
     let elapsedTime = 0;
     let playbackSpeed = 1;
-    const timeToLoad = 50;
+    const timeToLoad = 100;
     let lastRetrievedTimestamp = 0;
-    let canRequestMore = true;
+    let receivingData = false;
+    let lastTimeReceivedMessageFromWS = new Date();
+    let hasMoreData = true;
 
     self.addEventListener('message', function (e) {
         const data = e.data;
-        if (data.action === 'initWS') {
+        if (data.action === workerEvent.INIT_WS) {
             initWS(data);
-        } else if (data.action === 'SendWSMessage') {
+        } else if (data.action === workerEvent.SEND_WS_MESSAGE) {
             try {
                 ws.send(JSON.stringify(data.data));
             } catch (e) {
                 console.warn(e);
             }
-        } else if (data.action === 'SendDataToWorker') {
-            if (data?.data?.vesselParticipants) {
-                vesselParticipants = data?.data?.vesselParticipants;
-            }
-            if (data?.data?.raceTime) {
-                raceTime = data?.data?.raceTime;
-            }
-
-            if (data?.data?.competitionUnitId) {
-                competitionUnitId = data?.data?.competitionUnitId;
-            }
-
-            if (data?.data?.retrievedTimestamps) {
-                retrievedTimestamps = data?.data?.retrievedTimestamps;
-            }
-
-            if (data?.data?.elapsedTime) {
-                elapsedTime = data?.data?.elapsedTime;
-            }
-
-            if (data?.data?.playbackSpeed) {
-                playbackSpeed = data?.data?.playbackSpeed;
-            }
+        } else if (data.action === workerEvent.SEND_DATA_TO_WORKER) {
+            vesselParticipants = data?.data?.vesselParticipants ?? vesselParticipants;
+            raceTime = data?.data?.raceTime ?? raceTime;
+            competitionUnitId = data?.data?.competitionUnitId ?? competitionUnitId;
+            retrievedTimestamps = data?.data?.retrievedTimestamps ?? retrievedTimestamps;
+            elapsedTime = data?.data?.elapsedTime ?? elapsedTime;
+            playbackSpeed = data?.data?.playbackSpeed ?? playbackSpeed;
         }
 
     }, false);
@@ -61,28 +70,51 @@ const workercode = () => {
     function initWebsocketEvents(ws) {
         ws.onopen = () => {
             self.postMessage({
-                action: 'SetConnectionStatus',
+                action: workerEvent.SET_CONNECTION_STATUS,
                 data: 'open'
             });
         }
         ws.onclose = (e) => {
             self.postMessage({
-                action: 'SetConnectionStatus',
+                action: workerEvent.SET_CONNECTION_STATUS,
                 data: 'closed'
             });
             handleReconnect();
         }
         ws.onerror = (e) => {
             self.postMessage({
-                action: 'SetConnectionStatus',
+                action: workerEvent.SET_CONNECTION_STATUS,
                 data: 'closed'
             });
             handleReconnect();
         }
         ws.onmessage = (message) => {
             if (!message?.data) return;
+
             const wsData = JSON.parse(message?.data);
-            if (wsData?.type === "data" && wsData?.dataType === "position") processData(wsData.data);
+
+            if (wsData?.type === 'data') {
+                if (wsData?.dataType === wsMessageDataType.POSITION) {
+                    processData(wsData.data);
+                } else if (wsData?.dataType === wsMessageDataType.MAKR_TRACK) {
+                    self.postMessage({
+                        action: workerEvent.COURSE_MARK_UPDATE,
+                        data: wsData.data
+                    })
+                } else if (wsData?.dataType === wsMessageDataType.NEW_PARTICIPANT_JOINED) {
+                    self.postMessage({
+                        action: workerEvent.NEW_PARTICIPANT_JOINED,
+                        data: wsData.data
+                    })
+                } else if (wsData?.dataType === wsMessageDataType.VESSEL_PARTICIPANT_REMOVED) {
+                    self.postMessage({
+                        action: workerEvent.VESSEL_PARTICIPANT_REMOVED,
+                        data: wsData.data
+                    })
+                }
+            } else if (wsData?.type === 'command') {
+                hasMoreData = wsData?.data?.hasMoreData;
+            }
         }
     }
 
@@ -94,7 +126,7 @@ const workercode = () => {
     setInterval(function () {
         requestMoreDataIfNeeded();
         self.postMessage({
-            action: 'UpdateWorkerDataToMainThread',
+            action: workerEvent.UPDATE_WORKER_DATA_TO_MAIN_THREAD,
             data: {
                 vesselParticipants: vesselParticipants,
                 retrievedTimestamps: retrievedTimestamps
@@ -130,9 +162,8 @@ const workercode = () => {
 
         mapRetrievedTimestamps();
 
-        if (((lastRetrievedTimestamp - elapsedTime) / 1000) > timeToLoad) {
-            canRequestMore = true;
-        }
+        receivingData = true;
+        lastTimeReceivedMessageFromWS = new Date();
     }
 
     function mapRetrievedTimestamps() {
@@ -146,17 +177,47 @@ const workercode = () => {
     }
 
     function requestMoreDataIfNeeded() {
-        if (!lastRetrievedTimestamp || !raceTime || playbackSpeed > 5 || !canRequestMore) return;
-        let timeToLoadAt = lastRetrievedTimestamp + raceTime.start;
-        ws.send(JSON.stringify({
-            action: "playback",
-            data: {
-                competitionUnitId: competitionUnitId,
-                startTimeFetch: timeToLoadAt,
-                timeToLoad: timeToLoad,
-            },
-        }));
-        canRequestMore = false;
+        const seconds = (((new Date())).getTime() - lastTimeReceivedMessageFromWS.getTime()) / 1000;
+
+        if (seconds > 10) receivingData = false;
+
+        const canRequestMoreData = lastRetrievedTimestamp
+            && raceTime
+            && playbackSpeed < 5
+            && ((lastRetrievedTimestamp - elapsedTime <= 50000) && elapsedTime !== 0)
+            && !receivingData
+            && hasMoreData;
+
+        if (canRequestMoreData) {
+            let timeToLoadAt = 0;
+            if (lastRetrievedTimestamp > elapsedTime) {
+                timeToLoadAt = lastRetrievedTimestamp + raceTime.start;
+            } else {
+                timeToLoadAt = elapsedTime + raceTime.start;
+            }
+
+            try {
+                ws.send(JSON.stringify({
+                    action: "playback",
+                    data: {
+                        competitionUnitId: competitionUnitId,
+                        startTimeFetch: timeToLoadAt,
+                        timeToLoad: timeToLoad,
+                    },
+                }));
+
+                ws.send(JSON.stringify({
+                    action: "playback",
+                    data: {
+                        competitionUnitId: competitionUnitId,
+                        startTimeFetch: timeToLoadAt + 50000,
+                        timeToLoad: timeToLoad,
+                    },
+                }));
+            } catch (e) {
+                console.error(e);
+            }
+        }
     }
 
     function generateRetrievedTimestamp(vesselParticipants) {
@@ -174,7 +235,7 @@ const workercode = () => {
         availableTimestamps.sort((a, b) => a - b);
 
         return availableTimestamps;
-    };
+    }
 };
 
 let code = workercode.toString();

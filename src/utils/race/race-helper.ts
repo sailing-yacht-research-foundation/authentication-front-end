@@ -61,13 +61,14 @@ export const normalizeSimplifiedTracksPingTime = (startTime: number, simplifiedT
 
 export const turnTracksToVesselParticipantsData = (vesselParticipants, tracks) => {
   tracks.forEach(track => {
-    vesselParticipants[track.vesselParticipantId].positions = track.tracks.map(t => {
-      return {
-        lon: t.position[0],
-        lat: t.position[1],
-        timestamp: t.pingTime
-      }
-    })
+    if (vesselParticipants[track?.vesselParticipantId]?.positions)
+      vesselParticipants[track?.vesselParticipantId].positions = track.tracks.map(t => {
+        return {
+          lon: t.position[0],
+          lat: t.position[1],
+          timestamp: t.pingTime
+        }
+      })
   })
 
   return vesselParticipants;
@@ -124,7 +125,7 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
       // Only interpolate when no timestamp available
       const nearestPos = findNearestPositions(vP.positions, selectedTimestamp, 1000, { excludeSelectedTimestamp: true });
       const interpolatedPosition = interpolateNearestPositions(nearestPos, selectedTimestamp);
-      
+
       if (interpolatedPosition) {
         lastPosition.lat = interpolatedPosition.lat;
         lastPosition.lon = interpolatedPosition.lon;
