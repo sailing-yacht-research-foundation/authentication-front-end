@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Lottie from "react-lottie";
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';

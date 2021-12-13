@@ -35,9 +35,11 @@ const workercode = () => {
     let playbackSpeed = 1;
     const timeToLoad = 100;
     let lastRetrievedTimestamp = 0;
+    let receivedTimestamps = [];
     let receivingData = false;
     let lastTimeReceivedMessageFromWS = new Date();
     let hasMoreData = true;
+    let elapsedTimeHasBeenChanged = false;
 
     self.addEventListener('message', function (e) {
         const data = e.data;
@@ -54,10 +56,14 @@ const workercode = () => {
             raceTime = data?.data?.raceTime ?? raceTime;
             competitionUnitId = data?.data?.competitionUnitId ?? competitionUnitId;
             retrievedTimestamps = data?.data?.retrievedTimestamps ?? retrievedTimestamps;
-            elapsedTime = data?.data?.elapsedTime ?? elapsedTime;
             playbackSpeed = data?.data?.playbackSpeed ?? playbackSpeed;
+            let newElapsedTime = data?.data?.elapsedTime ?? elapsedTime;
+            if (newElapsedTime < elapsedTime) {
+                elapsedTimeHasBeenChanged = true;
+                lastRetrievedTimestamp = newElapsedTime;
+            }
+            elapsedTime = newElapsedTime;
         }
-
     }, false);
 
     function initWS(data) {
@@ -97,7 +103,6 @@ const workercode = () => {
                 if (wsData?.dataType === wsMessageDataType.POSITION) {
                     processData(wsData.data);
                 } else if (wsData?.dataType === wsMessageDataType.MARK_TRACK) {
-                    console.log(wsData?.dataType);
                     self.postMessage({
                         action: workerEvent.COURSE_MARK_UPDATE,
                         data: wsData.data
@@ -113,7 +118,6 @@ const workercode = () => {
                         data: wsData.data
                     })
                 }
-                console.log(wsData?.dataType);
             } else if (wsData?.type === 'command') {
                 hasMoreData = wsData?.data?.hasMoreData;
             }
@@ -139,14 +143,17 @@ const workercode = () => {
     function processData(source) {
         const data = Object.assign({}, source);
 
-        if (!Object.keys(vesselParticipants)?.length || !data?.vesselParticipantId || !raceTime.start) return;
+        if (!Object.keys(vesselParticipants)?.length || !data?.vesselParticipantId || !raceTime?.start) return;
 
         const currentVesselParticipantId = data?.vesselParticipantId;
         if (!vesselParticipants[currentVesselParticipantId]) return;
 
         const selectedVesselParticipant = Object.assign({}, vesselParticipants[currentVesselParticipantId]);
 
-        lastRetrievedTimestamp = data.tracks[data.tracks.length - 1].timestamp - raceTime.start;
+        const lastTimestampOfTrack = data.tracks[data?.tracks?.length - 1]?.timestamp - raceTime.start;
+        if (lastTimestampOfTrack > lastRetrievedTimestamp && !elapsedTimeHasBeenChanged) {
+            lastRetrievedTimestamp = lastTimestampOfTrack;
+        }
 
         data?.tracks?.forEach(track => {
             let trackData = Object.assign({}, track);
@@ -159,8 +166,10 @@ const workercode = () => {
             }
 
             selectedVesselParticipant.positions.push(trackData);
+            receivedTimestamps.push(trackData.timestamp);
         });
-
+        receivedTimestamps = receivedTimestamps.filter((x, i, a) => a.indexOf(x) == i);
+        receivedTimestamps.sort((a, b) => a - b);
         selectedVesselParticipant.positions.sort((posA, posB) => posA.timestamp - posB.timestamp);
         vesselParticipants[currentVesselParticipantId] = selectedVesselParticipant;
 
@@ -183,12 +192,11 @@ const workercode = () => {
     function requestMoreDataIfNeeded() {
         const seconds = (((new Date())).getTime() - lastTimeReceivedMessageFromWS.getTime()) / 1000;
 
-        if (seconds > 10) receivingData = false;
+        if (seconds > 5) receivingData = false;
 
         const canRequestMoreData = lastRetrievedTimestamp
             && raceTime
-            && playbackSpeed <= 5
-            && ((lastRetrievedTimestamp - elapsedTime <= 50000) && elapsedTime !== 0)
+            && playbackSpeed < 5
             && !receivingData
             && hasMoreData;
 
@@ -200,6 +208,8 @@ const workercode = () => {
                 timeToLoadAt = elapsedTime + raceTime.start;
             }
 
+            if ((elaspedTimeInReceivedTimestamps(receivedTimestamps, timeToLoadAt + 1500, timeToLoadAt + 2500) && elapsedTime !== 0)) return;
+
             try {
                 ws.send(JSON.stringify({
                     action: "playback_v2",
@@ -209,16 +219,7 @@ const workercode = () => {
                         timeToLoad: timeToLoad,
                     },
                 }));
-
-                ws.send(JSON.stringify({
-                    action: "playback_v2",
-                    data: {
-                        competitionUnitId: competitionUnitId,
-                        startTimeFetch: timeToLoadAt + 50000,
-                        timeToLoad: timeToLoad,
-                    },
-                }));
-                console.log('requesting...');
+                elapsedTimeHasBeenChanged = false;
             } catch (e) {
                 console.error(e);
             }
@@ -240,6 +241,17 @@ const workercode = () => {
         availableTimestamps.sort((a, b) => a - b);
 
         return availableTimestamps;
+    }
+
+    function elaspedTimeInReceivedTimestamps(array, lower, upper) {
+        let result = false;
+        for (let i = 0; i < array.length; i++) {
+            if (upper > array[i] && lower < array[i]) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 };
 
