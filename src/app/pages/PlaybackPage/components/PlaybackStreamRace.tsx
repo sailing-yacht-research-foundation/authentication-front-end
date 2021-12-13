@@ -33,10 +33,8 @@ import { useTranslation } from "react-i18next";
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [socketUrl, setSocketUrl] = useState(streamUrl);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
+  const [,setSocketUrl] = useState(streamUrl);
+  const [eventEmitter,] = useState(new EventEmitter());
 
   const [participantsData, setParticipantsData] = useState([]);
   const [raceIdentity, setRaceIdentity] = useState({ name: "Race name", description: "Race description" });
@@ -89,6 +87,12 @@ export const PlaybackStreamRace = (props) => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
         eventEmitter.off(RaceEmitterEvent.PING, () => { });
+        eventEmitter.off(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, () => { });
+        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
+        eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
+        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
+        eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
+        eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
         eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
       }
       dispatch(actions.setElapsedTime(0));

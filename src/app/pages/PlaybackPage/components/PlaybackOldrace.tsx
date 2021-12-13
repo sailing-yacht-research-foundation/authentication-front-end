@@ -42,10 +42,6 @@ import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
 import { message } from "antd";
 
-const worker = new Worker(websocketWorker);
-
-const eventEmitter = new EventEmitter();
-
 export const PlaybackOldRace = (props) => {
 
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -53,6 +49,10 @@ export const PlaybackOldRace = (props) => {
   const [participantsData, setParticipantsData] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [eventEmitter,] = useState(new EventEmitter());
+
+  const [worker,] = useState(new Worker(websocketWorker));
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -96,9 +96,13 @@ export const PlaybackOldRace = (props) => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
         eventEmitter.off(RaceEmitterEvent.PING, () => { });
-        eventEmitter.off(RaceEmitterEvent.TRACK_UPDATE, () => { });
         eventEmitter.off(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, () => { });
         eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
+        eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
+        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
+        eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
+        eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
+        worker.terminate();
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
