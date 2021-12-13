@@ -274,7 +274,7 @@ export const RaceMap = (props) => {
 
       const markerIcon = L.divIcon({
         labelAnchor: [0, 0],
-        popupAnchor: [0, -8],
+        popupAnchor: [8, -8],
         iconAnchor: [0, 0],
         iconSize: [0, 0],
         html: ReactDOMServer.renderToString(renderedBoatIcon),
@@ -462,6 +462,7 @@ export const RaceMap = (props) => {
         iconUrl: MarkIcon,
         iconSize: [40, 40],
         iconAnchor: [14, 32],
+        popupAnchor: [5, -15]
       }),
     })
       .bindPopup(popupContent)

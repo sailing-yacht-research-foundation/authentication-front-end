@@ -304,7 +304,9 @@
     "watch_without_app_installation": "doesn’t let mobile users watch their races without installing their app.",
     "next_time": "Next time, use SYRF’s LivePing app for universal, mobile friendly race tracking and playback.",
     "live_ping_lets_viewers": "LivePing lets viewers watch the race from their browser, and is the only tracking app to #StopThePingParade.",
-    "name": "Name"
+    "name": "Name",
+    "competitor_joined": "Competitor {{competitor_name}} with boat {{boat_name}} joined the race.",
+    "boat_left_the_race": "Boat {{boat_name}} left the race."
   },
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",

@@ -27,6 +27,8 @@ import { Leaderboard } from "./Leaderboard";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
 import { ExpeditionServerActionButtons } from "app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons";
+import { translations } from "locales/translations";
+import { useTranslation } from "react-i18next";
 
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -57,8 +59,8 @@ export const PlaybackStreamRace = (props) => {
 
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
     `${streamUrl}/authenticate?session_token=${sessionToken}`, {
-      shouldReconnect: () => true
-    }
+    shouldReconnect: () => true
+  }
   );
 
   const groupedPosition = useRef<any>({});
@@ -71,6 +73,8 @@ export const PlaybackStreamRace = (props) => {
   const mapElementRef = useRef<any>();
 
   const { actions } = usePlaybackSlice();
+
+  const { t } = useTranslation();
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "connecting",
@@ -185,7 +189,7 @@ export const PlaybackStreamRace = (props) => {
       });
     }
 
-    if (connectionStatus ===  WebsocketConnectionStatus.CONNECTING) {
+    if (connectionStatus === WebsocketConnectionStatus.CONNECTING) {
       dispatch(actions.setIsPlaying(false));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -280,23 +284,35 @@ export const PlaybackStreamRace = (props) => {
   };
 
   const addNewBoatToTheRace = (data) => {
-    const { vesselParticipant, vessel } = data;
+    const { vesselParticipant, vessel, participant } = data;
     const { id } = vesselParticipant;
 
     if (groupedPosition?.current[id]) return;
 
     const currentValue = groupedPosition.current;
 
-    groupedPosition.current[id] = { id: id, vessel, vesselParticipantId: id, positions: currentValue?.[id]?.positions || [] };
+    groupedPosition.current[id] = {
+      id: id,
+      vessel,
+      vesselParticipantId: id,
+      positions: currentValue?.[id]?.positions || [],
+      deviceType: 'boat',
+      participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },
+      color: stringToColour(id),
+      leaderPosition: Object.keys(groupedPosition.current)?.length + 1,
+    };
+
+    message.info(t(translations.playback_page.competitor_joined, { competitor_name: participant?.publicName, boat_name: vessel?.publicName }));
   }
 
   const removeBoatFromTheRace = (data) => {
     const { vesselParticipant } = data;
-    const { id } = vesselParticipant;
+    const { id, vessel } = vesselParticipant;
 
     if (groupedPosition?.current[id]) {
       delete groupedPosition?.current[id];
       eventEmitter.emit(RaceEmitterEvent.REMOVE_PARTICIPANT, id);
+      message.info(t(translations.playback_page.boat_left_the_race, { boat_name: vessel?.publicName }));
     }
   }
 

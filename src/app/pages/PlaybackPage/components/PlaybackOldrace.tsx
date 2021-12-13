@@ -38,6 +38,9 @@ import { RaceMap } from "./RaceMap";
 import { ConnectionLoader } from './ConnectionLoader';
 import websocketWorker from "../workers/old-race-worker";
 import { getSimplifiedTracksByCompetitionUnit } from "services/live-data-server/competition-units";
+import { useTranslation } from "react-i18next";
+import { translations } from "locales/translations";
+import { message } from "antd";
 
 const worker = new Worker(websocketWorker);
 
@@ -84,6 +87,8 @@ export const PlaybackOldRace = (props) => {
   const { actions } = usePlaybackSlice();
 
   const [connectionStatus, setConnectionStatus] = React.useState(WebsocketConnectionStatus.UNINSTANTIATED);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     handleSetIsConnecting(true);
@@ -132,11 +137,11 @@ export const PlaybackOldRace = (props) => {
       worker.postMessage({
         action: WorkerEvent.SEND_WS_MESSAGE,
         data: {
-          action: "playback",
+          action: "playback_v2",
           data: {
             competitionUnitId: competitionUnitId,
             startTimeFetch: raceTime.start,
-            timeToLoad: 50,
+            timeToLoad: 70,
           },
         }
       })
@@ -281,7 +286,7 @@ export const PlaybackOldRace = (props) => {
   }, []);
 
   const addNewVesselParticipantToTheRace = (data) => {
-    const { vesselParticipant, vessel } = data;
+    const { vesselParticipant, vessel, participant } = data;
     const { id } = vesselParticipant;
 
     if (vesselParticipantsRef?.current[id]) return;
@@ -304,11 +309,13 @@ export const PlaybackOldRace = (props) => {
         vesselParticipants: vesselParticipantsRef.current
       }
     });
+
+    message.info(t(translations.playback_page.competitor_joined, { competitor_name: participant.publicName, boat_name: vessel.publicName }));
   }
 
   const removeVesselParticipantFromTheRace = (data) => {
     const { vesselParticipant } = data;
-    const { id } = vesselParticipant;
+    const { id, vessel } = vesselParticipant;
 
     if (vesselParticipantsRef?.current[id]) {
       delete vesselParticipantsRef?.current[id];
@@ -319,6 +326,7 @@ export const PlaybackOldRace = (props) => {
         }
       });
       eventEmitter.emit(RaceEmitterEvent.REMOVE_PARTICIPANT, id);
+      message.info(t(translations.playback_page.boat_left_the_race, { boat_name: vessel?.publicName }));
     }
   }
 

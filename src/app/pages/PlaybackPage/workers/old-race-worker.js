@@ -16,13 +16,13 @@ const workercode = () => {
         NEW_PARTICIPANT_JOINED: 'NewParticipantJoined',
         VESSEL_PARTICIPANT_REMOVED: 'VesselParticipantRemoved'
     };
-    
+
     const wsMessageDataType = {
         POSITION: 'position',
         VIEWER_COUNT: 'viewers-count',
         NEW_PARTICIPANT_JOINED: 'new-participant-joined',
         VESSEL_PARTICIPANT_REMOVED: 'vessel-participant-removed',
-        MAKR_TRACK: 'mark-track'
+        MARK_TRACK: 'mark-track'
     }
 
     let ws = null;
@@ -96,7 +96,8 @@ const workercode = () => {
             if (wsData?.type === 'data') {
                 if (wsData?.dataType === wsMessageDataType.POSITION) {
                     processData(wsData.data);
-                } else if (wsData?.dataType === wsMessageDataType.MAKR_TRACK) {
+                } else if (wsData?.dataType === wsMessageDataType.MARK_TRACK) {
+                    console.log(wsData?.dataType);
                     self.postMessage({
                         action: workerEvent.COURSE_MARK_UPDATE,
                         data: wsData.data
@@ -112,6 +113,7 @@ const workercode = () => {
                         data: wsData.data
                     })
                 }
+                console.log(wsData?.dataType);
             } else if (wsData?.type === 'command') {
                 hasMoreData = wsData?.data?.hasMoreData;
             }
@@ -137,27 +139,29 @@ const workercode = () => {
     function processData(source) {
         const data = Object.assign({}, source);
 
-        if (!Object.keys(vesselParticipants)?.length || !data?.raceData?.vesselParticipantId || !raceTime.start) return;
+        if (!Object.keys(vesselParticipants)?.length || !data?.vesselParticipantId || !raceTime.start) return;
 
-        const currentVesselParticipantId = data?.raceData?.vesselParticipantId;
+        const currentVesselParticipantId = data?.vesselParticipantId;
         if (!vesselParticipants[currentVesselParticipantId]) return;
 
         const selectedVesselParticipant = Object.assign({}, vesselParticipants[currentVesselParticipantId]);
 
-        data.raceData = undefined;
-        data.timestamp = data.timestamp - raceTime.start;
-        lastRetrievedTimestamp = data.timestamp;
+        lastRetrievedTimestamp = data.tracks[data.tracks.length - 1].timestamp - raceTime.start;
 
-        if (selectedVesselParticipant.positions?.length) {
-            const similarTimestampPosition = selectedVesselParticipant.positions.filter(
-                (position) => position.timestamp === data.timestamp
-            );
-            if (similarTimestampPosition.length) return;
-        }
+        data?.tracks?.forEach(track => {
+            let trackData = Object.assign({}, track);
+            trackData.timestamp = track.timestamp - raceTime.start;
+            if (selectedVesselParticipant.positions?.length) {
+                const similarTimestampPosition = selectedVesselParticipant.positions.filter(
+                    (position) => position.timestamp === trackData.timestamp
+                );
+                if (similarTimestampPosition.length) return;
+            }
 
-        selectedVesselParticipant.positions.push(data);
+            selectedVesselParticipant.positions.push(trackData);
+        });
+
         selectedVesselParticipant.positions.sort((posA, posB) => posA.timestamp - posB.timestamp);
-
         vesselParticipants[currentVesselParticipantId] = selectedVesselParticipant;
 
         mapRetrievedTimestamps();
@@ -183,7 +187,7 @@ const workercode = () => {
 
         const canRequestMoreData = lastRetrievedTimestamp
             && raceTime
-            && playbackSpeed < 5
+            && playbackSpeed <= 5
             && ((lastRetrievedTimestamp - elapsedTime <= 50000) && elapsedTime !== 0)
             && !receivingData
             && hasMoreData;
@@ -198,7 +202,7 @@ const workercode = () => {
 
             try {
                 ws.send(JSON.stringify({
-                    action: "playback",
+                    action: "playback_v2",
                     data: {
                         competitionUnitId: competitionUnitId,
                         startTimeFetch: timeToLoadAt,
@@ -207,13 +211,14 @@ const workercode = () => {
                 }));
 
                 ws.send(JSON.stringify({
-                    action: "playback",
+                    action: "playback_v2",
                     data: {
                         competitionUnitId: competitionUnitId,
                         startTimeFetch: timeToLoadAt + 50000,
                         timeToLoad: timeToLoad,
                     },
                 }));
+                console.log('requesting...');
             } catch (e) {
                 console.error(e);
             }
