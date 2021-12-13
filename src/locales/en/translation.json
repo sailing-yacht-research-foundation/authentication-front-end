@@ -619,7 +619,7 @@
     "successfully_unregister": "Successfully unregistered this competitor to the class.",
     "an_error_happended_when_ungistering": "An error happened when unregistering the competitor from the class.",
     "action": "Action",
-    "competitor_already_assigned": "Competitior already assigned to this class!",
+    "competitor_already_assigned": "This competitor already assigned!",
     "save": "Save"
   },
   "event_detail_page": {
