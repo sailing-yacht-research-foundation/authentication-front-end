@@ -266,7 +266,7 @@ export const PlaybackOldRace = (props) => {
         removeVesselParticipantFromTheRace(data.data);
       }
     })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Count the elapsed time
