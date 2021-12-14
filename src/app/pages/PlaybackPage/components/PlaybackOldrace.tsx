@@ -151,6 +151,9 @@ export const PlaybackOldRace = (props) => {
           },
         }
       });
+    }
+
+    if (isReady) {
       setTimeout(() => {
         setIsLoading(false);
         dispatch(actions.setIsPlaying(true));
