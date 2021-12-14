@@ -152,13 +152,6 @@ export const PlaybackOldRace = (props) => {
         }
       });
     }
-
-    if (isReady) {
-      setTimeout(() => {
-        setIsLoading(false);
-        dispatch(actions.setIsPlaying(true));
-      }, 3000); // wait for render the time line
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus, competitionUnitId, isReady]);
 
@@ -356,12 +349,18 @@ export const PlaybackOldRace = (props) => {
       simplifiedTracksRef.current = normalizedSimplifiedTracks;
       vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
       handleMapRetrievedTimestamps(vesselParticipantsRef.current);
+      
       worker.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           vesselParticipants: vesselParticipantsRef.current
         }
       });
+
+      if (isReady) {
+        setIsLoading(false);
+        dispatch(actions.setIsPlaying(true));
+      }
     }
   }
 
