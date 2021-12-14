@@ -147,7 +147,7 @@ export const PlaybackOldRace = (props) => {
           data: {
             competitionUnitId: competitionUnitId,
             startTimeFetch: raceTime.start,
-            timeToLoad: 70,
+            timeToLoad: 30,
           },
         }
       });

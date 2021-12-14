@@ -33,7 +33,7 @@ const workercode = () => {
     let competitionUnitId = '';
     let elapsedTime = 0;
     let playbackSpeed = 1;
-    const timeToLoad = 100;
+    const timeToLoad = 30;
     let lastRetrievedTimestamp = 0;
     let receivedTimestamps = [];
     let receivingData = false;
