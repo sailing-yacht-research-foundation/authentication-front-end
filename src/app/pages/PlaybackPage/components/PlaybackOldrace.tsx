@@ -67,7 +67,6 @@ export const PlaybackOldRace = (props) => {
   const elapsedTimeRef = useRef<number>(0);
   const isPlayingRef = useRef<boolean | undefined>();
   const raceLegsRef = useRef<any>();
-  const isStillFetchingFromBoatRenderRef = useRef<boolean>(false);
   const playbackSpeedRef = useRef<any>(PlaybackSpeed.speed1X);
 
   const competitionUnitId = useSelector(selectCompetitionUnitId);
@@ -151,9 +150,7 @@ export const PlaybackOldRace = (props) => {
             timeToLoad: 70,
           },
         }
-      })
-      console.log(raceTime.start);
-      console.log(sessionToken);
+      });
       setTimeout(() => {
         setIsLoading(false);
         dispatch(actions.setIsPlaying(true));
@@ -423,7 +420,6 @@ export const PlaybackOldRace = (props) => {
       return;
     }
 
-    isStillFetchingFromBoatRenderRef.current = false;
     const mappedVPs = generateVesselParticipantsLastPosition(vesselParticipants, elapsedTime, retrievedTimestamps);
 
     eventEmitter.emit(RaceEmitterEvent.PING, mappedVPs);

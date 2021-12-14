@@ -113,12 +113,15 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
     (key) => vesselParticipantsObject[key]
   );
 
-  const updatedVPs = vesselParticipants.map((vP) => {
+  let updatedVPs = vesselParticipants.filter(vp => {
+    return vp.positions.length > 0;
+  });
+
+  updatedVPs = updatedVPs.map((vP) => {
     const filteredPositions = vP.positions.filter((pos) => pos.timestamp <= selectedTimestamp);
     filteredPositions.sort((a, b) => b.timestamp - a.timestamp);
 
     const lastPosition = filteredPositions[0] || { lat: 0, lon: 0 };
-
 
     const isRetrievedTimestampExist = retrievedTimestamps.includes(selectedTimestamp);
     if (!isRetrievedTimestampExist) {
