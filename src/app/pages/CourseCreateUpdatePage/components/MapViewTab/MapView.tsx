@@ -231,7 +231,7 @@ export const MapView = React.forwardRef((props, ref) => {
             }
 
             geoJsonGroup.options._id = geometry.id;
-            geoJsonGroup.options._name = geometry.properties.name;
+            geoJsonGroup.options._name = geometry.properties?.name || 'Unnamed';
             registerLayerNameAndTooltipClickEvent(geoJsonGroup);
             addNonGroupLayers(geoJsonGroup, drawnItems);
 

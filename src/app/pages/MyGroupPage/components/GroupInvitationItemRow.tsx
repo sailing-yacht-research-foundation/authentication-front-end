@@ -33,7 +33,7 @@ export const GroupInvitationItemRow = (props) => {
         setIsLoading(false);
 
         if (response.success) {
-            dispatch(actions.getGroupInvitations({ page: invitationCurrentPage, invitationType: GroupMemberStatus.invited }));
+            dispatch(actions.getGroupInvitations({ page: invitationCurrentPage, invitationType: GroupMemberStatus.INVITED }));
             dispatch(actions.getGroups(groupCurrentPage));
             if (reloadParentList) reloadParentList();
             if (setPerformedAction)
@@ -49,7 +49,7 @@ export const GroupInvitationItemRow = (props) => {
         setIsLoading(false);
 
         if (response.success) {
-            dispatch(actions.getGroupInvitations({ page: invitationCurrentPage, invitationType: GroupMemberStatus.invited }));
+            dispatch(actions.getGroupInvitations({ page: invitationCurrentPage, invitationType: GroupMemberStatus.INVITED }));
             if (reloadParentList) reloadParentList();
             if (setPerformedAction)
                 setPerformedAction(true);

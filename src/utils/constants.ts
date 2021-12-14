@@ -69,10 +69,10 @@ export const RAW_CRITERIA_TO_CRITERIA = {
 }
 
 export const enum GroupMemberStatus {
-    invited = 'INVITED',
-    requested = 'REQUESTED',
-    accepted = 'ACCEPTED',
-    declined = 'DECLINED'
+    INVITED = 'INVITED',
+    REQUESTED = 'REQUESTED',
+    ACCEPTED = 'ACCEPTED',
+    DECLINED = 'DECLINED'
 };
 
 export const enum GroupVisibility {
@@ -87,12 +87,12 @@ export const enum RaceStatus {
 }
 
 export const enum WebsocketConnectionStatus {
-    connecting = "connecting",
-    open = "open",
-    closing = "closing",
-    closed = "closed",
-    uninstantiated = "uninstantiated",
-    error = "error"
+    CONNECTING = "connecting",
+    OPEN = "open",
+    CLOSING = "closing",
+    CLOSED = "closed",
+    UNINSTANTIATED = "uninstantiated",
+    ERROR = "error"
 }
 
 export const enum PlaybackSpeed {
@@ -109,12 +109,35 @@ export const enum PlaybackSpeed {
 }
 
 export const enum RaceEmitterEvent {
-    ping = 'ping',
-    zoom_to_location = 'zoom-to-location',
-    sequenced_courses_update = 'sequenced-courses-update',
-    track_update = 'track-update',
-    render_legs = 'render-legs',
-    leg_update = 'leg-update',
+    PING = 'ping',
+    ZOOM_TO_LOCATION = 'zoom-to-location',
+    SEQUENCED_COURSE_UPDATE = 'sequenced-courses-update',
+    TRACK_UPDATE = 'track-update',
+    RENDER_REGS = 'render-legs',
+    LEG_UPDATE = 'leg-update',
+    REMOVE_PARTICIPANT = 'remove-vesselparticipant',
+    UPDATE_COURSE_MARK = 'update-course-mark',
+    ZOOM_TO_PARTICIPANT = 'zoom-to-participant'
 }
 
 export const DEFAULT_GROUP_AVATAR = '/default-avatar.jpeg';
+
+export enum WorkerEvent {
+    SEND_DATA_TO_WORKER = 'SendDataToWorker',
+    SEND_WS_MESSAGE = 'SendWSMessage',
+    INIT_WS = 'initWS',
+    SET_CONNECTION_STATUS = 'SetConnectionStatus',
+    UPDATE_DATA_TO_MAIN_THREAD = 'UpdateWorkerDataToMainThread',
+    COURSE_MARK_UPDATE = 'CourseMarkUpdate',
+    UPDATE_WORKER_DATA_TO_MAIN_THREAD = 'UpdateWorkerDataToMainThread',
+    NEW_PARTICIPANT_JOINED = 'NewParticipantJoined',
+    VESSEL_PARTICIPANT_REMOVED = 'VesselParticipantRemoved'
+};
+
+export enum WSMessageDataType {
+    POSITION = 'position',
+    VIEWER_COUNT = 'viewers-count',
+    NEW_PARTICIPANT_JOINED = 'new-participant-joined',
+    VESSEL_PARTICIPANT_REMOVED = 'vessel-participant-removed',
+    MAKR_TRACK = 'mark-track'
+}

@@ -25,7 +25,8 @@ const objectType = {
   point: 'point',
   lineString: 'linestring',
   line: 'line',
-  polygon: 'polygon'
+  polygon: 'polygon',
+  polyline: 'polyline'
 };
 
 export const RaceMap = (props) => {
@@ -49,29 +50,59 @@ export const RaceMap = (props) => {
 
     if (emitter) {
       // Zoom to specific race location
-      emitter.on(RaceEmitterEvent.zoom_to_location, () => {
+      emitter.on(RaceEmitterEvent.ZOOM_TO_LOCATION, () => {
         _zoomToRaceLocation(current)
       });
 
       // Render the boat
-      emitter.on(RaceEmitterEvent.ping, (participants) => {
+      emitter.on(RaceEmitterEvent.PING, (participants) => {
         _updateBoats(participants, current);
         _updateTrack(participants, current);
       });
 
       // Update the courses
-      emitter.on(RaceEmitterEvent.sequenced_courses_update, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
+      emitter.on(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
         const coursesData = {};
+
         _prepareCourseData(sequencedCourses, coursesData);
         _attachCoursesToMap(coursesData); // Attach prepared course data to map
       });
 
-      emitter.on(RaceEmitterEvent.render_legs, (raceLegs: NormalizedRaceLeg[]) => {
+      emitter.on(RaceEmitterEvent.UPDATE_COURSE_MARK, (courseMarkData) => {
+        _updateCourseMark(courseMarkData);
+      });
+
+      emitter.on(RaceEmitterEvent.REMOVE_PARTICIPANT, (id) => {
+        _removeVesselParticipant(id);
+      })
+
+      emitter.on(RaceEmitterEvent.RENDER_REGS, (raceLegs: NormalizedRaceLeg[]) => {
         _updateLegs(raceLegs);
       });
+
+      emitter.on(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, (participant) => {
+        _zoomToParticipant(participant);
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const _zoomToParticipant = (participant) => {
+    const boat = raceStatus?.current?.boats[participant?.id];
+
+    if (boat && boat?.layer instanceof L.Marker) {
+      let markers = document.querySelectorAll<HTMLElement>('.leaflet-marker-pane > *');
+      markers.forEach(marker => {
+        marker.style.transition = 'none';
+      });
+      map.setView(boat?.layer.getLatLng(), 20);
+      setTimeout(() => {
+        markers.forEach(marker => {
+          marker.style.transition = 'transform .3s linear';;
+        });
+      }, 50);
+    }
+  }
 
   const _prepareCourseData = (sequencedCourses, coursesData) => {
     if (!sequencedCourses.length) return;
@@ -94,8 +125,7 @@ export const RaceMap = (props) => {
         });
       }
 
-      if (courseGeometryType === objectType.line
-        || courseGeometryType === objectType.lineString) {
+      if ([objectType.line, objectType.lineString, objectType.polyline].includes(courseGeometryType)) {
         coursesData[sequencedCourse.id || ""] = _initPolyline({
           coordinates: sequencedCourse.coordinates,
           color: "#000000",
@@ -157,7 +187,7 @@ export const RaceMap = (props) => {
         current.boats
       );
 
-      current.boats = _attachMarkersToMap(current.boats);
+      current.boats = _attachBoatsToMap(current.boats);
     }
   }
 
@@ -244,7 +274,7 @@ export const RaceMap = (props) => {
 
       const markerIcon = L.divIcon({
         labelAnchor: [0, 0],
-        popupAnchor: [0, -8],
+        popupAnchor: [8, -8],
         iconAnchor: [0, 0],
         iconSize: [0, 0],
         html: ReactDOMServer.renderToString(renderedBoatIcon),
@@ -325,7 +355,7 @@ export const RaceMap = (props) => {
     return localBoats;
   };
 
-  const _attachMarkersToMap = (boats) => {
+  const _attachBoatsToMap = (boats) => {
     const localBoats = { ...boats };
     Object.keys(localBoats).forEach((k) => {
       if (!localBoats[k].attached) {
@@ -338,10 +368,30 @@ export const RaceMap = (props) => {
   };
 
   const _attachCoursesToMap = (courses) => {
+    raceStatus.current.courses = courses;
     Object.keys(courses).forEach((k) => {
       courses[k].addTo(map);
     });
   };
+
+  const _updateCourseMark = (courseMarkData) => {
+    const { raceData, lat, lon } = courseMarkData;
+    let course = raceStatus?.current?.courses[raceData?.coursePointId];
+    if (!course) return;
+
+    if (course instanceof L.Marker)
+      course.setLatLng([lat, lon]);
+  }
+
+  const _removeVesselParticipant = (vesselParticipantId) => {
+    const boat = raceStatus?.current?.boats[vesselParticipantId];
+    if (!boat) return;
+
+    if (boat.layer instanceof L.Marker) {
+      map.removeLayer(boat.layer);
+      delete raceStatus?.current?.boats[vesselParticipantId];
+    }
+  }
 
   const _attachPolylineToMap = (coordinates, color, weight = 1) => {
     return L.polyline(coordinates)
@@ -362,19 +412,19 @@ export const RaceMap = (props) => {
       .bindPopup(popupContent)
       .addTo(map);
 
-      marker.on("click", function (e) {
-        marker.openPopup();
-      });
-  
-      marker.on("mouseover", function (e) {
-        marker.openPopup();
-      });
-  
-      marker.on("mouseout", function () {
-        marker.closePopup();
-      });
+    marker.on("click", function (e) {
+      marker.openPopup();
+    });
 
-      return marker;
+    marker.on("mouseover", function (e) {
+      marker.openPopup();
+    });
+
+    marker.on("mouseout", function () {
+      marker.closePopup();
+    });
+
+    return marker;
   };
 
   const _initPolygon = ({ coordinates, color, weight = 1, id, name }) => {
@@ -387,19 +437,19 @@ export const RaceMap = (props) => {
       .bindPopup(popupContent)
       .addTo(map);
 
-      marker.on("click", function (e) {
-        marker.openPopup();
-      });
-  
-      marker.on("mouseover", function (e) {
-        marker.openPopup();
-      });
-  
-      marker.on("mouseout", function () {
-        marker.closePopup();
-      });
+    marker.on("click", function (e) {
+      marker.openPopup();
+    });
 
-      return marker;
+    marker.on("mouseover", function (e) {
+      marker.openPopup();
+    });
+
+    marker.on("mouseout", function () {
+      marker.closePopup();
+    });
+
+    return marker;
   };
 
   const _initPointMarker = (data) => {
@@ -412,6 +462,7 @@ export const RaceMap = (props) => {
         iconUrl: MarkIcon,
         iconSize: [40, 40],
         iconAnchor: [14, 32],
+        popupAnchor: [5, -15]
       }),
     })
       .bindPopup(popupContent)
@@ -482,6 +533,22 @@ export const RaceMap = (props) => {
         accessToken: "your.mapbox.access.token",
       }
     ).addTo(map);
+
+    map.on('zoomstart', () => {
+      let markers = document.querySelectorAll<HTMLElement>('.leaflet-marker-pane > *');
+      markers.forEach(marker => {
+        marker.style.transition = 'none';
+      })
+    });
+
+    map.on('zoomend', () => {
+      let markers = document.querySelectorAll<HTMLElement>('.leaflet-marker-pane > *');
+      setTimeout(() => {
+        markers.forEach(marker => {
+          marker.style.transition = 'transform .3s linear';
+        })
+      }, 50);
+    })
   };
 
   return <></>;

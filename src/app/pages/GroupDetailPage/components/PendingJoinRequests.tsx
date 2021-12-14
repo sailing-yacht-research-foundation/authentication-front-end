@@ -68,7 +68,7 @@ export const PendingJoinRequests = (props) => {
         if (response.success) {
             getJoinRequests(pagination.page);
             dispatch(actions.getMembers({ groupId, page: memberCurrentPage }));
-            if (GroupMemberStatus.accepted === status) {
+            if (GroupMemberStatus.ACCEPTED === status) {
                 dispatch(actions.searchAcceptedMembers({ groupId, keyword: '', status }));
             }
         } else {
@@ -84,10 +84,10 @@ export const PendingJoinRequests = (props) => {
     const renderActionButton = (member) => {
         return (
             <Space size={10}>
-                <Button type="primary" onClick={() => decideJoinRequest(member, GroupMemberStatus.accepted)} icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
+                <Button type="primary" onClick={() => decideJoinRequest(member, GroupMemberStatus.ACCEPTED)} icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
                     {t(translations.group.accept)}
                 </Button>
-                <Button onClick={() => decideJoinRequest(member, GroupMemberStatus.declined)} icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
+                <Button onClick={() => decideJoinRequest(member, GroupMemberStatus.DECLINED)} icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
                     {t(translations.group.reject)}
                 </Button>
             </Space>
