@@ -123,7 +123,7 @@ export const MyEventForm = () => {
             approximateStartTime_zone: approximateStartTime_zone,
             approximateEndTime_zone: approximateEndTime_zone,
             isPrivate: false,
-            isOpen: isOpen ? isOpen : false
+            isOpen: !!isOpen
         };
 
         if (mode === MODE.CREATE)
@@ -199,7 +199,7 @@ export const MyEventForm = () => {
                 lat: lat,
                 lon: lon
             });
-            
+
             // end location is null
             if (!form.getFieldValue('endLat') && !form.getFieldValue('endLon')) {
                 form.setFieldsValue({
