@@ -310,7 +310,8 @@
   },
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",
-    "error_happened": "Service is unavailable"
+    "error_happened": "Service is unavailable",
+    "our_service_is_temporary_unavailable_at_the_moment": "Our service is temporary unavailable at the moment."
   },
   "data_page": {
     "syrf_race_data": "SYRF Race Data",

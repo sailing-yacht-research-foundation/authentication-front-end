@@ -42,6 +42,9 @@ import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
 import { message } from "antd";
 
+let worker;
+let eventEmitter;
+
 export const PlaybackOldRace = (props) => {
 
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -49,10 +52,6 @@ export const PlaybackOldRace = (props) => {
   const [participantsData, setParticipantsData] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [eventEmitter,] = useState(new EventEmitter());
-
-  const [worker,] = useState(new Worker(websocketWorker));
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -92,6 +91,8 @@ export const PlaybackOldRace = (props) => {
 
   useEffect(() => {
     handleSetIsConnecting(true);
+    worker = new Worker(websocketWorker);
+    eventEmitter = new EventEmitter();
     return () => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
@@ -103,6 +104,8 @@ export const PlaybackOldRace = (props) => {
         eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
         eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
         worker.terminate();
+        eventEmitter = undefined;
+        worker = undefined;
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
@@ -149,7 +152,8 @@ export const PlaybackOldRace = (props) => {
           },
         }
       })
-      handleSetIsConnecting(false);
+      console.log(raceTime.start);
+      console.log(sessionToken);
       setTimeout(() => {
         setIsLoading(false);
         dispatch(actions.setIsPlaying(true));
@@ -190,6 +194,7 @@ export const PlaybackOldRace = (props) => {
 
       vesselParticipantsRef.current = vesselParticipantsObject;
       setIsReady(true);
+      handleSetIsConnecting(false);
 
       handleDebug("=== Vessel Participants ===");
       handleDebug(vesselParticipantsObject);
