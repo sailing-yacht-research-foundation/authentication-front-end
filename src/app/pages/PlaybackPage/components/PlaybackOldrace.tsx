@@ -187,7 +187,6 @@ export const PlaybackOldRace = (props) => {
 
       vesselParticipantsRef.current = vesselParticipantsObject;
       setIsReady(true);
-      handleSetIsConnecting(false);
 
       handleDebug("=== Vessel Participants ===");
       handleDebug(vesselParticipantsObject);
@@ -349,7 +348,7 @@ export const PlaybackOldRace = (props) => {
       simplifiedTracksRef.current = normalizedSimplifiedTracks;
       vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
       handleMapRetrievedTimestamps(vesselParticipantsRef.current);
-      
+
       worker.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
@@ -357,10 +356,9 @@ export const PlaybackOldRace = (props) => {
         }
       });
 
-      if (isReady) {
-        setIsLoading(false);
-        dispatch(actions.setIsPlaying(true));
-      }
+      setIsLoading(false);
+      dispatch(actions.setIsPlaying(true));
+      handleSetIsConnecting(false);
     }
   }
 

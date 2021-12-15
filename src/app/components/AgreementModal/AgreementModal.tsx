@@ -37,7 +37,7 @@ export const AgreementModal = React.memo(() => {
   React.useEffect(() => {
     if (!isAuthenticated) setIsModalOpen(false);
     else {
-      if (getUserAttribute(user, 'showed_tour') && getUserAttribute(user, 'showed_tour') === 'true') {
+      if (getUserAttribute(user, 'showed_tour') && String(getUserAttribute(user, 'showed_tour')) === 'true') {
         handleCheckIsAcceptAgreement(location, user);
       }
     }
