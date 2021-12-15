@@ -7,7 +7,7 @@ import { extractTextFromHTML, placeCaretAtEnd } from 'utils/helpers';
 
 export const CriteriaSuggestion = (props) => {
 
-    const { keyword, searchBarRef } = props;
+    const { keyword, searchBarRef, form } = props;
 
     const wrapperRef = React.useRef<any>();
 
@@ -23,7 +23,7 @@ export const CriteriaSuggestion = (props) => {
 
     const selectedIndex = React.useRef<number>(0);
 
-    const [suggestionItems, setSuggestionItems] = React.useState<any[]>([]); 
+    const [suggestionItems, setSuggestionItems] = React.useState<any[]>([]);
 
     const getSuggestionItems = () => {
         let criteriaMatched: any[] = [];
@@ -77,7 +77,15 @@ export const CriteriaSuggestion = (props) => {
     const handleSelectionUsingArrowKey = (e) => {
         e = e || window.event;
 
-        if (suggestionItemsRef.current.length === 0) return;
+        const suggestionItemsLength = suggestionItemsRef.current.length;
+
+        if (e.keyCode === 13) { // enter keycode
+            if (suggestionItemsLength === 0 && form) {
+                form.submit();
+            }
+        }
+
+        if (suggestionItemsLength === 0) return;
 
         if (e.keyCode === 38) { // arrow up
             selectedIndex.current--;
@@ -90,6 +98,10 @@ export const CriteriaSuggestion = (props) => {
         else if (e.keyCode === 13) { // enter keycode
             if (selectedCriteriaRef.current) {
                 appendCriteria(selectedCriteriaRef.current);
+            } else {
+                if (suggestionItemsLength > 0) { // have suggestion
+                    appendCriteria(suggestionItemsRef.current[suggestionItemsLength - 1]);
+                }
             }
         }
         else if (e.keyCode === 27) { // esc

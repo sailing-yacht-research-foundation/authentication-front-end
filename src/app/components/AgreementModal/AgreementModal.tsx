@@ -16,6 +16,7 @@ import { PrivacyPolicyInterface } from 'types/PrivacyPolicy';
 import { privacypolicyVersionsFilter } from 'utils/privacy-policy';
 import { translations } from 'locales/translations';
 import { updateAgreements } from 'services/live-data-server/user';
+import { getUserAttribute } from 'utils/user-utils';
 
 export const AgreementModal = React.memo(() => {
   
@@ -35,7 +36,11 @@ export const AgreementModal = React.memo(() => {
 
   React.useEffect(() => {
     if (!isAuthenticated) setIsModalOpen(false);
-    else handleCheckIsAcceptAgreement(location, user);
+    else {
+      if (getUserAttribute(user, 'showed_tour') && String(getUserAttribute(user, 'showed_tour')) === 'true') {
+        handleCheckIsAcceptAgreement(location, user);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, location, user]);
 

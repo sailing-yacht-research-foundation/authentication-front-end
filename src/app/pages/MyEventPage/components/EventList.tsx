@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
-import { BorderedButton, LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, DownloadButton, LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
@@ -61,7 +61,6 @@ export const EventList = () => {
         return (
           <StatusContainer>
             {record?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
-            {record?.isOpen && <StyledTag data-tip={translate.anyone_canview} color="purple">{translate.status_public}</StyledTag>}
             {!record?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
           </StatusContainer>
         );
@@ -206,21 +205,6 @@ export const EventList = () => {
     </>
   );
 };
-
-const DownloadButton = styled(BorderedButton)`
-    background: #DC6E1E;
-    border: 1px solid #fff;
-    font-size: 20px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    :hover, :focus {
-        background: #DC6E1E;
-        border: 1px solid #fff;
-    }
-`;
 
 const StatusContainer = styled.div`
     max-width: 250px;

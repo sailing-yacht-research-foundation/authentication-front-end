@@ -17,6 +17,7 @@ import { media } from 'styles/media';
 import { GiPathDistance, GiSailboat } from 'react-icons/gi';
 import { GoDatabase } from 'react-icons/go';
 import { MdGroups } from 'react-icons/md';
+import { Link } from '../Link';
 
 export const SiderContent = (props) => {
 
@@ -79,31 +80,37 @@ export const SiderContent = (props) => {
         <Logo
           onClick={navigateToHome}
           style={{ margin: '20px auto', display: 'block', width: toggled ? 'auto' : '0px', cursor: 'pointer' }} />
-        <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" onClick={() => history.push('/')} icon={<SearchOutlined />}>
-          {t(translations.side_menu.search)}
+        <SyrfMenuItem className="search-step" title={t(translations.side_menu.search)} key="1" icon={<SearchOutlined />}>
+          <StyledLink to={'/'}>{t(translations.side_menu.search)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="16" onClick={() => history.push('/tracks')} title={t(translations.side_menu.my_tracks)} icon={<GiPathDistance />}>
-          {t(translations.side_menu.my_tracks)}
+        <SyrfMenuItem key="16" title={t(translations.side_menu.my_tracks)} icon={<GiPathDistance />}>
+          <StyledLink to={'/tracks'}>{t(translations.side_menu.my_tracks)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="14" onClick={() => history.push('/events')} title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
-          {t(translations.side_menu.my_events)}
+        <SyrfMenuItem key="14" title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
+          <StyledLink to={'/events'}>{t(translations.side_menu.my_events)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="17" onClick={() => history.push('/groups')} title={t(translations.side_menu.groups)} icon={<MdGroups />}>
-          {t(translations.side_menu.groups)}
+        <SyrfMenuItem key="17" title={t(translations.side_menu.groups)} icon={<MdGroups />}>
+          <StyledLink to={'/groups'}>{t(translations.side_menu.groups)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem title={t(translations.side_menu.vessels)} icon={<GiSailboat />} onClick={() => history.push('/boats')} key="15">{t(translations.side_menu.vessels)}</SyrfMenuItem>
+        <SyrfMenuItem title={t(translations.side_menu.vessels)} icon={<GiSailboat />} key="15">
+          <StyledLink to={'/boats'}>{t(translations.side_menu.vessels)}</StyledLink>
+        </SyrfMenuItem>
 
-        <SyrfMenuItem key="12" onClick={() => history.push('/data')} title={t(translations.side_menu.data)} icon={<GoDatabase />}>
-          {t(translations.side_menu.data)}
+        <SyrfMenuItem key="12" title={t(translations.side_menu.data)} icon={<GoDatabase />}>
+          <StyledLink to={'/data'}>{t(translations.side_menu.data)}</StyledLink>
         </SyrfMenuItem>
 
         <SyrfSubmenu key="profile" icon={<UserOutlined />} title={t(translations.side_menu.profile.title)}>
-          <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />} onClick={() => history.push('/profile')}>{t(translations.side_menu.profile.name)}</SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} onClick={() => history.push('/profile/change-password')} key="8">{t(translations.side_menu.profile.change_password)}</SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />}>
+            <StyledLink to={'/profile'}>{t(translations.side_menu.profile.name)}</StyledLink>
+          </SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} key="8">
+            <StyledLink to={'/profile/change-password'}>{t(translations.side_menu.profile.change_password)}</StyledLink>
+          </SyrfMenuItem>
           {/* <SyrfMenuItem title={t(translations.side_menu.profile.notification_setting)} icon={<BellOutlined />} onClick={() => history.push('/profile')} key="9">{t(translations.side_menu.profile.notification_setting)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.profile_setting)} icon={<SettingOutlined />} onClick={() => history.push('/profile')} key="10">{t(translations.side_menu.profile.profile_setting)}</SyrfMenuItem> hide this because of task SNS-393 */}
         </SyrfSubmenu>
@@ -166,7 +173,19 @@ const SyrfMenuItem = styled(Menu.Item)`
     line-height: 50px !important;
     width: 256px !important;
 
+    a {
+      color: #fff;
+    }
+
+    &.ant-menu-item-selected a {
+      color: #1890ff;
+    }
+
     ${media.large`
       width: auto !important;
     `}
 `;
+
+const StyledLink = styled(Link)`
+    text-decoration: none !important;
+`

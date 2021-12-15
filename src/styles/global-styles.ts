@@ -267,4 +267,8 @@ export const GlobalStyle = createGlobalStyle`
     white-space: nowrap;
     display: block; /* For Firefox */
   }
+
+  .reactour__popover {
+    padding: 24px 40px !important;
+  }
 `;

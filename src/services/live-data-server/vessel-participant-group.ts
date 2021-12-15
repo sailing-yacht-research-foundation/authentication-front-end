@@ -18,7 +18,7 @@ export const getVesselParticipantGroups = () => {
 
 export const getVesselParticipantGroupsByEventId = (calendarEventId, page) => {
   const userId: any = localStorage.getItem('user_id');
-  return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups?calendarEventId_eq=${calendarEventId}&${!!userId ? `&createdById_eq=${userId}` : ''}`, {
+  return syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/groups`, {
     page: page
   }).then(response => {
     return {
