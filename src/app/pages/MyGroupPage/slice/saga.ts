@@ -56,7 +56,7 @@ export function* getRequestedGroups({ type, payload }) {
     const page = payload;
 
     yield put(groupActions.setisGettingRequestedGroups(true));
-    const response = yield call(getGroupInvitations, page, GroupMemberStatus.requested);
+    const response = yield call(getGroupInvitations, page, GroupMemberStatus.REQUESTED);
     yield put(groupActions.setisGettingRequestedGroups(false));
 
     if (response.success) {

@@ -9,31 +9,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
 import { useLocation } from "react-router";
 import queryString from "querystring";
-import { generateLastHeading } from "utils/race/race-helper";
+import { generateLastHeading, normalizeSequencedGeometries } from "utils/race/race-helper";
 import { Playback } from "./Playback";
 import {
   selectCompetitionUnitDetail,
   selectCompetitionUnitId,
   selectElapsedTime,
   selectIsPlaying,
+  selectRaceCourseDetail,
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceStatus } from "utils/constants";
+import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceStatus, WebsocketConnectionStatus, WSMessageDataType } from "utils/constants";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { Leaderboard } from "./Leaderboard";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
 import { ExpeditionServerActionButtons } from "app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons";
+import { translations } from "locales/translations";
+import { useTranslation } from "react-i18next";
 
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [socketUrl, setSocketUrl] = useState(streamUrl);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [eventEmitter, setEventEmitter] = useState(new EventEmitter());
+  const [,setSocketUrl] = useState(streamUrl);
+  const [eventEmitter,] = useState(new EventEmitter());
 
   const [participantsData, setParticipantsData] = useState([]);
   const [raceIdentity, setRaceIdentity] = useState({ name: "Race name", description: "Race description" });
@@ -52,9 +53,12 @@ export const PlaybackStreamRace = (props) => {
   const elapsedTime = useSelector(selectElapsedTime);
   const sessionToken = useSelector(selectSessionToken);
   const userCoordinate = useSelector(selectUserCoordinate);
+  const raceCourseDetail = useSelector(selectRaceCourseDetail);
 
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
-    `${streamUrl}/authenticate?session_token=${sessionToken}`
+    `${streamUrl}/authenticate?session_token=${sessionToken}`, {
+    shouldReconnect: () => true
+  }
   );
 
   const groupedPosition = useRef<any>({});
@@ -68,6 +72,8 @@ export const PlaybackStreamRace = (props) => {
 
   const { actions } = usePlaybackSlice();
 
+  const { t } = useTranslation();
+
   const connectionStatus = {
     [ReadyState.CONNECTING]: "connecting",
     [ReadyState.OPEN]: "open",
@@ -80,8 +86,14 @@ export const PlaybackStreamRace = (props) => {
     return () => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
-        eventEmitter.off(RaceEmitterEvent.ping, () => { });
-        eventEmitter.off(RaceEmitterEvent.leg_update, () => { });
+        eventEmitter.off(RaceEmitterEvent.PING, () => { });
+        eventEmitter.off(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, () => { });
+        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
+        eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
+        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
+        eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
+        eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
+        eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
@@ -101,6 +113,7 @@ export const PlaybackStreamRace = (props) => {
       dispatch(
         actions.getVesselParticipants({ vesselParticipantGroupId: competitionUnitDetail.vesselParticipantGroupId })
       );
+      dispatch(actions.getRaceCourseDetail({ raceId: competitionUnitDetail.id }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competitionUnitDetail]);
@@ -144,13 +157,17 @@ export const PlaybackStreamRace = (props) => {
       try {
         parsedData = JSON.parse(lastMessage.data);
         const { type, dataType, data } = parsedData;
-        if (type === "data") {
-          if (dataType === "position") {
+        if (type === 'data') {
+          if (dataType === WSMessageDataType.POSITION) {
             handleAddPosition(data);
-          }
-
-          if (dataType === "viewers-count") {
+          } else if (dataType === WSMessageDataType.VIEWER_COUNT) {
             handleSetViewsCount(data);
+          } else if (dataType === WSMessageDataType.NEW_PARTICIPANT_JOINED) {
+            addNewBoatToTheRace(data);
+          } else if (dataType === WSMessageDataType.VESSEL_PARTICIPANT_REMOVED) {
+            removeBoatFromTheRace(data);
+          } else if (dataType === WSMessageDataType.MAKR_TRACK) {
+            updateCourseMarksPosition(data);
           }
         }
       } catch (e) {
@@ -166,17 +183,17 @@ export const PlaybackStreamRace = (props) => {
 
   // Manage subscription of websocket
   useEffect(() => {
-    if (connectionStatus === "open") {
+    if (connectionStatus === WebsocketConnectionStatus.OPEN) {
       dispatch(actions.setIsPlaying(true));
       sendJsonMessage({
-        action: "subscribe",
+        action: 'subscribe',
         data: {
           competitionUnitId: competitionUnitId,
         },
       });
     }
 
-    if (connectionStatus === "connecting") {
+    if (connectionStatus === WebsocketConnectionStatus.CONNECTING) {
       dispatch(actions.setIsPlaying(false));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -184,8 +201,8 @@ export const PlaybackStreamRace = (props) => {
 
   // Manage message of websocket status
   useEffect(() => {
-    if (connectionStatus === "open") message.success("Connected!");
-    if (connectionStatus === "connecting") message.info("Connecting...");
+    if (connectionStatus === WebsocketConnectionStatus.OPEN) message.success("Connected!");
+    if (connectionStatus === WebsocketConnectionStatus.CONNECTING) message.info("Connecting...");
 
     handleDebug("=== Connection Status ===");
     handleDebug(connectionStatus);
@@ -193,6 +210,16 @@ export const PlaybackStreamRace = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectionStatus]);
+
+  useEffect(() => {
+    handleRenderCourseDetail(raceCourseDetail);
+
+    handleDebug("=== Course Detail ===");
+    handleDebug(raceCourseDetail);
+    handleDebug("=====================");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [raceCourseDetail]);
 
   // Normalize data every 1 second
   useEffect(() => {
@@ -249,6 +276,53 @@ export const PlaybackStreamRace = (props) => {
       handleResize();
     }, 200);
   }, [raceIdentity]);
+
+
+  const handleRenderCourseDetail = (course) => {
+    const sequencedGeometries = course.courseSequencedGeometries;
+
+    if (!sequencedGeometries) return;
+    const mappedSequencedGeometries = normalizeSequencedGeometries(sequencedGeometries);
+
+    eventEmitter.emit(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, mappedSequencedGeometries);
+  };
+
+  const addNewBoatToTheRace = (data) => {
+    const { vesselParticipant, vessel, participant } = data;
+    const { id } = vesselParticipant;
+
+    if (groupedPosition?.current[id]) return;
+
+    const currentValue = groupedPosition.current;
+
+    groupedPosition.current[id] = {
+      id: id,
+      vessel,
+      vesselParticipantId: id,
+      positions: currentValue?.[id]?.positions || [],
+      deviceType: 'boat',
+      participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },
+      color: stringToColour(id),
+      leaderPosition: Object.keys(groupedPosition.current)?.length + 1,
+    };
+
+    message.info(t(translations.playback_page.competitor_joined, { competitor_name: participant?.publicName, boat_name: vessel?.publicName }));
+  }
+
+  const removeBoatFromTheRace = (data) => {
+    const { vesselParticipant } = data;
+    const { id, vessel } = vesselParticipant;
+
+    if (groupedPosition?.current[id]) {
+      delete groupedPosition?.current[id];
+      eventEmitter.emit(RaceEmitterEvent.REMOVE_PARTICIPANT, id);
+      message.info(t(translations.playback_page.boat_left_the_race, { boat_name: vessel?.publicName }));
+    }
+  }
+
+  const updateCourseMarksPosition = (data) => {
+    eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE_MARK, data);
+  }
 
   const handleDebug = (value) => {
     if (parsedQueryString?.dbg !== "true") return;
@@ -328,8 +402,8 @@ export const PlaybackStreamRace = (props) => {
     });
 
     // Emit latest event
-    eventEmitter.emit("ping", currentPositions);
-    eventEmitter.emit("leg-update", currentPositions);
+    eventEmitter.emit(RaceEmitterEvent.PING, currentPositions);
+    eventEmitter.emit(RaceEmitterEvent.LEG_UPDATE, currentPositions);
     handleUpdateLeaderPosition(currentPositions);
 
     handleDebug("=== Current Positions ===");
@@ -411,7 +485,7 @@ export const PlaybackStreamRace = (props) => {
         easeLinearity={0}
       >
         <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-          <Leaderboard participantsData={participantsData}></Leaderboard>
+          <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
           <ModalCountdownTimer />
         </LeaderboardContainer>
         <RaceMap emitter={eventEmitter} />

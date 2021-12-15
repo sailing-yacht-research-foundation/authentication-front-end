@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { CaretDownOutlined } from "@ant-design/icons";
 import styled from "styled-components";
+import { RaceEmitterEvent } from "utils/constants";
+import ReactTooltip from "react-tooltip";
 
-export const Leaderboard = ({ participantsData = [] }) => {
+export const Leaderboard = ({ participantsData = [], emitter }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleIsOpenChange = () => {
@@ -12,11 +14,15 @@ export const Leaderboard = ({ participantsData = [] }) => {
     const cpyParticipantsData = [...participantsData];
     const sortedParticipantsByLeaderboard = !!cpyParticipantsData.length
         ? cpyParticipantsData.sort((a: any, b: any): number => {
-              return a?.leaderPosition - b?.leaderPosition;
-          })
+            return a?.leaderPosition - b?.leaderPosition;
+        })
         : [];
 
     if (participantsData?.length <= 1) return null;
+
+    const zoomToParticipant = (participant) => {
+        emitter?.emit(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, participant);
+    }
 
     return (
         <Wrapper>
@@ -36,7 +42,7 @@ export const Leaderboard = ({ participantsData = [] }) => {
                     <div>
                         {sortedParticipantsByLeaderboard.map((participant: any) => {
                             return (
-                                <div key={participant.id} style={{ margin: "8px 0px" }}>
+                                <div data-tip={`Click to move to ${participant?.participant?.competitor_name} location`} onClick={() => zoomToParticipant(participant)} key={participant.id} style={{ margin: "8px 0px" }}>
                                     <div style={{ borderBottom: `2px solid ${participant?.color}` }}>
                                         <p style={{ marginBottom: "0px" }}>
                                             {participant?.participant?.competitor_name}
@@ -48,6 +54,7 @@ export const Leaderboard = ({ participantsData = [] }) => {
                     </div>
                 )}
             </ContentContainer>
+            <ReactTooltip/>
         </Wrapper>
     );
 };

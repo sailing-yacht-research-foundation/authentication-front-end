@@ -305,11 +305,14 @@
     "next_time": "Next time, use SYRF’s LivePing app for universal, mobile friendly race tracking and playback.",
     "live_ping_lets_viewers": "LivePing lets viewers watch the race from their browser, and is the only tracking app to #StopThePingParade.",
     "name": "Name",
-    "go_back": "Go back"
+    "go_back": "Go back",
+    "competitor_joined": "Competitor {{competitor_name}} with boat {{boat_name}} joined the race.",
+    "boat_left_the_race": "Boat {{boat_name}} left the race."
   },
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",
-    "error_happened": "Service is unavailable"
+    "error_happened": "Service is unavailable",
+    "our_service_is_temporary_unavailable_at_the_moment": "Our service is temporary unavailable at the moment."
   },
   "data_page": {
     "syrf_race_data": "SYRF Race Data",

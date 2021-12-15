@@ -60,11 +60,11 @@ export const Nav = (props) => {
             toast.error(t(translations.group.an_error_happened_when_performing_your_request));
         } else {
             dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
-            if (response.data.status === GroupMemberStatus.accepted) {
+            if (response.data.status === GroupMemberStatus.ACCEPTED) {
                 dispatch(actions.getGroup(group.id));
                 dispatch(actions.getAdmins({ groupId: group.id, page: adminsCurrentPage }));
             } else {
-                setJoinStatus(GroupMemberStatus.requested);
+                setJoinStatus(GroupMemberStatus.REQUESTED);
             }
         }
     }
@@ -110,7 +110,7 @@ export const Nav = (props) => {
 
     const renderButtonByStatus = () => {
         let button = <></>;
-        if (joinStatus === GroupMemberStatus.requested)
+        if (joinStatus === GroupMemberStatus.REQUESTED)
             button = <CreateButton onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.cancel)}</CreateButton>
         if (!joinStatus)
             button = <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
@@ -138,7 +138,7 @@ export const Nav = (props) => {
                     </Spin>
                     <InnerWrapper>
                         <NavItem className="active">{t(translations.group.members_nav)}</NavItem>
-                        {group?.groupMemberId && group.status === GroupMemberStatus.accepted &&
+                        {group?.groupMemberId && group.status === GroupMemberStatus.ACCEPTED &&
                             <NavItem>{renderActionButton()}</NavItem>}
                     </InnerWrapper>
                 </RightSectionWrapper>

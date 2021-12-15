@@ -60,7 +60,7 @@ export const AddAdminModal = (props) => {
     }
 
     const onSearch = async (keyword) => {
-        dispatch(actions.searchAcceptedMembers({ groupId, keyword, status: GroupMemberStatus.accepted }));
+        dispatch(actions.searchAcceptedMembers({ groupId, keyword, status: GroupMemberStatus.ACCEPTED }));
     }
 
     const renderSearchResults = () => {

@@ -37,7 +37,7 @@ export const GroupItemRow = (props) => {
     const renderButtonByStatus = () => {
         if (!showGroupButton) return <></>;
 
-        if (status === GroupMemberStatus.requested)
+        if (status === GroupMemberStatus.REQUESTED)
             return <Button onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.cancel)}</Button>
         if (!status)
             return <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>

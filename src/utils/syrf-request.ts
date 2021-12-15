@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { renewToken } from 'services/live-data-server/auth';
+import { anonymousLogin, renewToken } from 'services/live-data-server/auth';
 import { store } from 'store/configureStore';
 import { loginActions } from 'app/pages/LoginPage/slice';
 import { message } from 'antd';
@@ -36,22 +36,41 @@ class Request {
     }
 
     async onRequestSuccess(response) {
+        let retried = localStorage.getItem('tried_getting_token');
+        if (retried) localStorage.removeItem('tried_getting_token');
+
         return response;
     }
 
     async onRequestFailure(err) {
-        if (err.response && err.response?.status === 401) {
-            const refreshToken = localStorage.getItem('refresh_token');
-            if (refreshToken && !isCallingRefresh) {
-                isCallingRefresh = true;
-                let response = await renewToken(refreshToken);
-                isCallingRefresh = false;
-                if (response.success) {
-                    localStorage.setItem('session_token', response?.data?.newtoken);
-                    localStorage.setItem('refresh_token', response?.data?.refresh_token);
+        if (err.response) {
+            if (err.response?.status === 401) {
+                const refreshToken = localStorage.getItem('refresh_token');
+                if (refreshToken && !isCallingRefresh) {
+                    isCallingRefresh = true;
+                    let response = await renewToken(refreshToken);
+                    isCallingRefresh = false;
+                    if (response.success) {
+                        localStorage.setItem('session_token', response?.data?.newtoken);
+                        localStorage.setItem('refresh_token', response?.data?.refresh_token);
+                    } else {
+                        store.dispatch(loginActions.setLogout());
+                        message.info(i18next.t(translations.app.your_session_is_expired));
+                    }
+                }
+            } else if (err.response?.status === 400
+                && err.response?.data?.errorCode === 'E003') {
+                let retried = localStorage.getItem('tried_getting_token');
+                if (!retried) {
+                    let responseData: any = await anonymousLogin();
+                    if (responseData.data) {
+                        localStorage.setItem('session_token', responseData.data?.token);
+                        localStorage.setItem('refresh_token', responseData.data?.refresh_token);
+                    }
+                    localStorage.setItem('tried_getting_token', '1');
+                    window.location.reload();
                 } else {
-                    store.dispatch(loginActions.setLogout());
-                    message.info(i18next.t(translations.app.your_session_is_expired));
+                    message.info(i18next.t(translations.app.our_service_is_temporary_unavailable_at_the_moment));
                 }
             }
         }
