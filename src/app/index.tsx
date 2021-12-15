@@ -62,6 +62,7 @@ import { TourProvider } from '@reactour/tour';
 import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
+import { PublicProfilePage } from './pages/PublicProfilePage/Loadable';
 
 const { Sider, Content } = Layout;
 
@@ -184,8 +185,8 @@ export function App(props) {
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/change-password'} component={ChangePasswordPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={ProfilePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/change-password'} component={ChangePasswordPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account'} component={ProfilePage} />
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
@@ -214,6 +215,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/:profileId'} component={PublicProfilePage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />
