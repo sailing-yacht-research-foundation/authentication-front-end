@@ -106,11 +106,6 @@ export const PlaybackPage = (props) => {
   const handleHistoryGoBack = () => {
     if (history.action !== "POP") {
       history.goBack();
-      const currentPathname = history.location.pathname;
-
-      setTimeout(() => {
-        if (currentPathname === window.location.pathname) history.goBack();
-      }, 100);
     } else {
       history.push('/');
     }
