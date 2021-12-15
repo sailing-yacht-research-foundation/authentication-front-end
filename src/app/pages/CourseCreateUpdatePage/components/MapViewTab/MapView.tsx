@@ -275,31 +275,21 @@ export const MapView = React.forwardRef((props, ref) => {
                 });
                 if (geometry) {
                     geometry = JSON.parse(JSON.stringify(geometry));
-                    geometry.points = [];
                     switch (layer.options._geometry_type) {
                         case GEOMETRY_TYPE.point:
-                            geometry.points = [{
-                                position: [layer.getLatLng().lat, layer.getLatLng().lng]
-                            }];
+                            geometry.points[0].position = [layer.getLatLng().lat, layer.getLatLng().lng]
                             break;
                         case GEOMETRY_TYPE.polygon:
-                            layer.getLatLngs().forEach(points => {
-                                points.forEach(point => {
-                                    geometry.points.push({
-                                        position: [point.lat, point.lng]
-                                    });
-                                });
-                            });
-                            break;
                         case GEOMETRY_TYPE.line:
-                            layer.getLatLngs().forEach(function (points) {
-                                if (points.forEach) {
-                                    points.forEach(function (point) {
-                                        geometry.points.push({
-                                            position: [point.lat, point.lng]
-                                        });
-                                    })
-                                }
+                            layer.getLatLngs().forEach(points => {
+                                points.forEach((point, index) => {
+                                    if (!geometry.points[index]) {
+                                        geometry.points[index] = {
+                                            position: []
+                                        }
+                                    }
+                                    geometry.points[index].position = [point.lat, point.lng]
+                                });
                             });
                             break;
                     }
