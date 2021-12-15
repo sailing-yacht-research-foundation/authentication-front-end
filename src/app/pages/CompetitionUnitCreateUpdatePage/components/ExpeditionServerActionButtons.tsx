@@ -253,14 +253,14 @@ export const ExpeditionServerActionButtons = (props) => {
         <Wrapper>
             {competitionUnit ? (
                 <Spin spinning={isLoading}>
-                    {!subscribed ? (<CreateButton icon={<MdAddComment style={{ marginRight: '5px' }} />} onClick={subscribe} >{t(translations.expedition_server_actions.stream_to_expedition)}</CreateButton>) : (<CreateButton icon={<AiFillInfoCircle style={{ marginRight: '5px' }} />} onClick={showUDPModalDetail} >{t(translations.expedition_server_actions.stream_to_expedition_detail)}</CreateButton>)}
+                    {!subscribed ? (<CreateButton icon={<MdAddComment style={{ marginRight: '5px' }} />} onClick={subscribe} >{t(translations.expedition_server_actions.stream_to_expedition)}</CreateButton>) : (<CreateButton icon={<AiFillInfoCircle style={{ marginRight: '5px' }} />} onClick={showUDPModalDetail} >{t(translations.expedition_server_actions.stream_to_expedition)}</CreateButton>)}
                 </Spin>) : (
                 lastPingMessage?.from?.ipAddress && <Spin spinning={isLoading}>
                     <StyledConnectionButton onClick={() => showUDPModalDetail()} style={{ fontSize: '30px' }} />
                 </Spin>
             )}
             <Modal
-                title={t(translations.expedition_server_actions.stream_to_expedition_detail)}
+                title={t(translations.expedition_server_actions.stream_to_expedition)}
                 visible={showUDPModal}
                 onCancel={() => setShowUDPModal(false)}
                 footer={null}

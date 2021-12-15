@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, message, Space, Spin, Tag } from 'antd';
-import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { DownloadButton, GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
 import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
-import { get } from 'services/live-data-server/event-calendars';
+import { downloadIcalendarFile, get } from 'services/live-data-server/event-calendars';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -15,6 +15,7 @@ import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
+import { AiOutlineCalendar } from 'react-icons/ai';
 
 let userId;
 
@@ -107,6 +108,11 @@ export const EventDetail = () => {
 
                             )
                         }
+                        <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
+                            downloadIcalendarFile(event);
+                        }}>
+                            <AiOutlineCalendar  style={{ fontSize: '23px' }}/>
+                        </Button>
                         <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
                     </Space>
                 </EventActions>

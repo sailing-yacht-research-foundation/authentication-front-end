@@ -7,6 +7,11 @@ import ReactDOMServer from 'react-dom/server';
 let marker;
 let endMarker;
 
+const options = {
+    START: 'start',
+    END: 'end'
+}
+
 export const Map = (props) => {
 
     const { onMapClicked, coordinates, endCoordinates, zoom, noMarkerInteraction, setFormChanged, option } = props;
@@ -96,6 +101,11 @@ export const Map = (props) => {
 
     React.useEffect(() => {
         selectedOption.current = option;
+        if (option === options.START && coordinates) {
+                map.setView(coordinates, 10);
+        } else if (option === options.END && endCoordinates){
+            map.setView(endCoordinates, 10);
+        }
     }, [option])
 
     return (

@@ -140,7 +140,10 @@ export const ResultSuggestion = (props) => {
             }
         } else {// we have more than 1 word
             const wordsFromBeginningToCaretPosition = keyword.slice(0, caretPosition.current);
-            const splittedWords = wordsFromBeginningToCaretPosition.split(':').slice(0, -1).join(":") + ':';
+
+            let splittedWords = wordsFromBeginningToCaretPosition.split(':').slice(0, -1).join(":") + ':';
+            if (splittedWords === ':') splittedWords = '';
+
             const wordsFromCaretPositionToEnd = keyword.substr(caretPosition.current);
             const parsedKeyword = [splittedWords, criteria, wordsFromCaretPositionToEnd.length === 1 ? '' : wordsFromCaretPositionToEnd].join(' ').trim();
             dispatch(actions.setKeyword(parsedKeyword));

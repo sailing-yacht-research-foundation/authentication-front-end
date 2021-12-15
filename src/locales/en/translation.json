@@ -305,6 +305,7 @@
     "next_time": "Next time, use SYRF’s LivePing app for universal, mobile friendly race tracking and playback.",
     "live_ping_lets_viewers": "LivePing lets viewers watch the race from their browser, and is the only tracking app to #StopThePingParade.",
     "name": "Name",
+    "go_back": "Go back",
     "competitor_joined": "Competitor {{competitor_name}} with boat {{boat_name}} joined the race.",
     "boat_left_the_race": "Boat {{boat_name}} left the race."
   },
@@ -621,7 +622,7 @@
     "successfully_unregister": "Successfully unregistered this competitor to the class.",
     "an_error_happended_when_ungistering": "An error happened when unregistering the competitor from the class.",
     "action": "Action",
-    "competitor_already_assigned": "Competitior already assigned to this class!",
+    "competitor_already_assigned": "This competitor already assigned!",
     "save": "Save"
   },
   "event_detail_page": {
