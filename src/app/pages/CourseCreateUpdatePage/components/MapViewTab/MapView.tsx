@@ -299,10 +299,6 @@ export const MapView = React.forwardRef((props, ref) => {
                                             position: [point.lat, point.lng]
                                         });
                                     })
-                                } else {
-                                    geometry.points.push({
-                                        position: [points.lat, points.lng]
-                                    });
                                 }
                             });
                             break;
