@@ -4,7 +4,7 @@ import { PublicProfile } from './components/PublicProfile';
 
 export const PublicProfilePage = () => {
     return (
-        <Row justify="center" align="top" style={{ minHeight: '100vh', background: '#f7f7f9' }}>
+        <Row justify="center" align="top" style={{ minHeight: '100vh', background: '#f7f7f9', marginTop: '70px' }}>
             <PublicProfile />
         </Row>
     )
