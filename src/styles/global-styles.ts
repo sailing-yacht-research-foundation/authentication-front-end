@@ -271,4 +271,11 @@ export const GlobalStyle = createGlobalStyle`
   .reactour__popover {
     padding: 24px 40px !important;
   }
+
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid #eee;
+  }
 `;
