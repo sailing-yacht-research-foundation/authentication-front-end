@@ -113,7 +113,7 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
     (key) => vesselParticipantsObject[key]
   );
 
-  let updatedVPs = vesselParticipants.map((vP) => {
+  const updatedVPs = vesselParticipants.map((vP) => {
     const filteredPositions = vP.positions.filter((pos) => pos.timestamp <= selectedTimestamp);
     filteredPositions.sort((a, b) => b.timestamp - a.timestamp);
 
