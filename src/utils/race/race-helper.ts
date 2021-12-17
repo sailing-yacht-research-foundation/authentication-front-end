@@ -113,15 +113,14 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
     (key) => vesselParticipantsObject[key]
   );
 
-  let updatedVPs = vesselParticipants.filter(vp => {
-    return vp.positions.length > 0;
-  });
-
-  updatedVPs = updatedVPs.map((vP) => {
+  const updatedVPs = vesselParticipants.map((vP) => {
     const filteredPositions = vP.positions.filter((pos) => pos.timestamp <= selectedTimestamp);
     filteredPositions.sort((a, b) => b.timestamp - a.timestamp);
 
-    const lastPosition = filteredPositions[0] || { lat: 0, lon: 0 };
+    const lastPosition = filteredPositions[0];
+
+    if (!lastPosition)
+      return;
 
     const isRetrievedTimestampExist = retrievedTimestamps.includes(selectedTimestamp);
     if (!isRetrievedTimestampExist) {
@@ -135,7 +134,7 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
       }
     }
 
-    const currentCoordinateForHeading = [lastPosition.lon || 0, lastPosition.lat || 0];
+    const currentCoordinateForHeading = [lastPosition.lon, lastPosition.lat];
     const previousCoordinateForHeading =
       filteredPositions[1]?.lon && filteredPositions[1]?.lat
         ? [filteredPositions[1].lon, filteredPositions[1].lat]
@@ -147,10 +146,10 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
       ...vP,
       positions: filteredPositions,
       lastPosition,
-    };
+    };// filter here because the boat will have the position later.
   });
 
-  return updatedVPs;
+  return updatedVPs.filter(Boolean);
 };
 
 export const normalizeSequencedGeometries = (
