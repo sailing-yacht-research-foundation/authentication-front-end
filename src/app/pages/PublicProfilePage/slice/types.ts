@@ -10,6 +10,8 @@ export interface PublicProfileState {
     followingTotalPage: number;
     profile: any;
     isModalLoading: boolean;
+    getProfileFailed: boolean;
+    isLoadingProfile: boolean;
 }
 
 export type ContainerState = PublicProfileState

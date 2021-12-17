@@ -45,6 +45,8 @@ import { MyTrackPage } from './pages/MyTrackPage/Loadable';
 import { MyGroupsPage } from './pages/MyGroupPage/Loadable';
 import { GroupDetailPage } from './pages/GroupDetailPage/Loadable';
 import { GroupCreateUpdatePage } from './pages/GroupCreateUpdatePage/Loadable';
+import { PublicProfilePage } from './pages/PublicProfilePage/Loadable';
+import { ProfileSearchPage } from './pages/ProfileSearchPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -62,7 +64,6 @@ import { TourProvider } from '@reactour/tour';
 import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
-import { PublicProfilePage } from './pages/PublicProfilePage/Loadable';
 
 const { Sider, Content } = Layout;
 
@@ -215,6 +216,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/search'} component={ProfileSearchPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/:profileId'} component={PublicProfilePage} />
               <Route component={NotFoundPage} />
             </Switch>

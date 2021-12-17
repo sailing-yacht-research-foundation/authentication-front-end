@@ -20,7 +20,7 @@ export const FollowingModal = ({ profileId, showModal, setShowModal }) => {
 
     const renderFollowers = () => {
         return followings.map(following => {
-            return <UserFollowerFollowingRow profile={following} />
+            return <UserFollowerFollowingRow profileId={following.followingId} profile={following} />
         })
     }
 
@@ -29,8 +29,8 @@ export const FollowingModal = ({ profileId, showModal, setShowModal }) => {
     }
 
     React.useEffect(() => {
-        dispatch(actions.getFollowing({ page: 1, profileId }))
-    }, []);
+        dispatch(actions.getFollowing({ page: 1, profileId }));
+    }, [profileId]);
 
     return (
         <Modal
@@ -40,7 +40,7 @@ export const FollowingModal = ({ profileId, showModal, setShowModal }) => {
             cancelButtonProps={{ style: { display: 'none' } }}
             okButtonProps={{ style: { display: 'none' } }}>
             <InfiniteScroll
-                pageStart={2}
+                pageStart={1}
                 loadMore={getFollowing}
                 hasMore={followingCurrentPage < followingTotalPage}
                 loader={<Spin spinning={true}></Spin>}>

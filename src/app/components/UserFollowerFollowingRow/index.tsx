@@ -1,10 +1,29 @@
 import { Button } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { followProfile } from 'services/live-data-server/profile';
 import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
 
-export const UserFollowerFollowingRow = ({ profile }) => {
+export const UserFollowerFollowingRow = ({ profile, profileId }) => {
+
+    const [followStatus, setFollowStatus] = React.useState();
+
+    const follow = async () => {
+        const response = await followProfile(profileId);
+
+        if (response.success) {
+            console.log(response);
+        }
+    }
+
+    const unfollow = () => {
+
+    }
+
+    const renderFollowButton = () => {
+        return <FollowButton onClick={() => follow()} type="link">Follow</FollowButton>;
+    }
     
     return (
         <PeopleItem>
@@ -13,11 +32,11 @@ export const UserFollowerFollowingRow = ({ profile }) => {
                     <img src={renderAvatar(profile.avatar)} className="avatar-img" />
                 </PeopleAvatar>
                 <PeopleInfo>
-                    <PeopleName to={`/profile/${profile.id}`}>{profile.name}</PeopleName>
+                    <PeopleName to={`/profile/${profile.id || profileId}`}>{profile.name}</PeopleName>
                     <PeopleAlsoFollow>{profile.followerCount} followers</PeopleAlsoFollow>
                 </PeopleInfo>
             </PeopleInnerWrapper>
-            <FollowButton type="link">Follow</FollowButton>
+            { renderFollowButton() }
         </PeopleItem>
     );
 }

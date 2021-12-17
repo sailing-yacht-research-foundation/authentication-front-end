@@ -9,7 +9,9 @@ import { toast } from "react-toastify";
 
 function* getProfile({ type, payload }) {
     const profileId = payload;
+    yield put(publicProfileActions.setIsLoadingProfile(true));
     const response = yield call(getProfileById, profileId);
+    yield put(publicProfileActions.setIsLoadingProfile(false));
 
     if (response.success) {
         yield put(publicProfileActions.setProfile(response.data));
@@ -19,6 +21,7 @@ function* getProfile({ type, payload }) {
         } else {
             toast.error('There is an error showing this user profile.');
         }
+        yield put(publicProfileActions.setGetProfileFailed(true));
     }
 }
 
@@ -35,7 +38,6 @@ function* getProfileFollowers({ type, payload }) {
         yield put(publicProfileActions.setFollowerTotalPage(response.data?.count < 10 ? 1 : Math.ceil(response.data?.count / 10)));
     } else {
         yield put(publicProfileActions.setFollowers([]));
-        toast.error('An error happened when getting this profile\'s followers');
     }
 }
 
@@ -52,7 +54,6 @@ function* getProfileFollowing({ type, payload }) {
             yield put(publicProfileActions.setFollowingTotalPage(response.data?.count < 10 ? 1 : Math.ceil(response.data?.count / 10)));
     } else {
         yield put(publicProfileActions.setFollowing([]));
-        toast.error('An error happened when getting this profile\'s followers');
     }
 }
 

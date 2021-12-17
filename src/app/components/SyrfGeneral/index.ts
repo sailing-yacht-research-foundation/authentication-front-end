@@ -202,3 +202,10 @@ justify-content: center;
     border: 1px solid #fff;
 }
 `;
+
+
+export const SpinLoadMoreContainer = styled.div`
+    display: block;
+    text-align: center;
+    padding: 10px;
+`;

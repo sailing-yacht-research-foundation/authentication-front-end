@@ -17,8 +17,13 @@ export const getProfileById = (profileId) => {
         })
 }
 
-export const getTopRecommandation = (locale) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/recommendations/top?locale=${locale}`)
+export const getTopRecommandation = ({locale, page, size}) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/recommendations/top?locale=${locale}`, {
+        params: {
+            page: page,
+            size: size || 10
+        }
+    })
         .then(response => {
             return {
                 success: true,
@@ -32,8 +37,13 @@ export const getTopRecommandation = (locale) => {
         })
 }
 
-export const getHotRecommandation = (locale) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/recommendations/hot?locale=${locale}`)
+export const getHotRecommandation = ({ locale, page, size }) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/recommendations/hot?locale=${locale}`, {
+        params: {
+            page: page,
+            size: size || 10
+        }
+    })
         .then(response => {
             return {
                 success: true,
@@ -47,7 +57,7 @@ export const getHotRecommandation = (locale) => {
         })
 }
 
-export const follow = (profileId) => {
+export const followProfile = (profileId) => {
     return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/follow/${profileId}`)
         .then(response => {
             return {
@@ -62,7 +72,7 @@ export const follow = (profileId) => {
         })
 }
 
-export const unfollow = (profileId) => {
+export const unfollowProfile = (profileId) => {
     return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/unfollow/${profileId}`)
         .then(response => {
             return {
@@ -130,6 +140,21 @@ export const getFollowers = (profileId) => {
 
 export const getFollowings = (profileId) => {
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/following/${profileId}`)
+        .then(response => {
+            return {
+                success: true,
+                data: response.data
+            }
+        }).catch(error => {
+            return {
+                success: false,
+                error: error
+            }
+        })
+}
+
+export const searchForProfiles = (keyword, locale) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/search?name=${keyword}&locale=${locale}`)
         .then(response => {
             return {
                 success: true,

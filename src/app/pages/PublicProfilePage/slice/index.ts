@@ -14,7 +14,9 @@ export const initialState: PublicProfileState = {
     followingTotalRecords: 0,
     isModalLoading: false,
     followerTotalPage: 0,
-    followingTotalPage: 0
+    followingTotalPage: 0,
+    getProfileFailed: false,
+    isLoadingProfile: false,
 };
 
 const slice = createSlice({
@@ -54,6 +56,12 @@ const slice = createSlice({
         setFollowingTotalPage(state, action: PayloadAction<number>) {
             state.followingTotalPage = action.payload;
         },
+        setGetProfileFailed(state, action: PayloadAction<boolean>) {
+            state.getProfileFailed = action.payload;
+        },
+        setIsLoadingProfile(state, action: PayloadAction<boolean>) {
+            state.isLoadingProfile = action.payload;
+        }
     },
 });
 

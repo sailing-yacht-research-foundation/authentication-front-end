@@ -2,9 +2,10 @@ import React from 'react';
 import { Modal, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../../slice';
-import { selectFollowerCurrentPage, selectFollowers, selectFollowerTotalPage, selectFollowerTotalRecords } from '../../slice/selectors';
+import { selectFollowerCurrentPage, selectFollowers, selectFollowerTotalPage } from '../../slice/selectors';
 import { UserFollowerFollowingRow } from 'app/components/UserFollowerFollowingRow';
 import InfiniteScroll from 'react-infinite-scroller';
+import { SpinLoadMoreContainer } from 'app/components/SyrfGeneral';
 
 export const FollowerModal = ({ profileId, showModal, setShowModal }) => {
 
@@ -20,7 +21,7 @@ export const FollowerModal = ({ profileId, showModal, setShowModal }) => {
 
     const renderFollowers = () => {
         return followers.map(follower => {
-            return <UserFollowerFollowingRow profile={follower} />
+            return <UserFollowerFollowingRow profile={follower} profileId={follower.followerId} />
         })
     }
 
@@ -30,25 +31,23 @@ export const FollowerModal = ({ profileId, showModal, setShowModal }) => {
 
     React.useEffect(() => {
         dispatch(actions.getFollowers({ page: 1, profileId }))
-    }, []);
-
-    React.useEffect(() => {
-    }, [followerTotalPage, followerCurrentPage]);
+    }, [profileId]);
 
     return (
         <Modal
             visible={showModal}
             onCancel={() => setShowModal(false)}
             title={'Followers'}
-            cancelButtonProps={{ style: { display: 'none' } }}
-            okButtonProps={{ style: { display: 'none' } }}>
+            footer={null}
+            >
             <InfiniteScroll
                 pageStart={1}
                 loadMore={getFollowers}
                 hasMore={followerCurrentPage < followerTotalPage}
-                loader={<Spin spinning={true}></Spin>}>
-
-                {renderFollowers()}
+                loader={<SpinLoadMoreContainer><Spin spinning={true}></Spin></SpinLoadMoreContainer>}>
+                <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                    {renderFollowers()}
+                </div>
             </InfiniteScroll>
         </Modal >
     )

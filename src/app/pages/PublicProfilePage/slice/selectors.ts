@@ -12,48 +12,56 @@ export const selectProfile = createSelector(
 );
 
 export const selectFollowers = createSelector(
-    [selectDomain],
-    siderState => siderState.followers,
-  );
+  [selectDomain],
+  siderState => siderState.followers,
+);
 
-  export const selectFollowing = createSelector(
-    [selectDomain],
-    siderState => siderState.following,
-  );
+export const selectFollowing = createSelector(
+  [selectDomain],
+  siderState => siderState.following,
+);
 
-  export const selectFollowerCurrentPage = createSelector(
-    [selectDomain],
-    siderState => siderState.currentFollowerPage,
-  );
+export const selectFollowerCurrentPage = createSelector(
+  [selectDomain],
+  siderState => siderState.currentFollowerPage,
+);
 
+export const selectFollowingCurrentPage = createSelector(
+  [selectDomain],
+  siderState => siderState.currentFollowingPage,
+);
 
-  export const selectFollowingCurrentPage = createSelector(
-    [selectDomain],
-    siderState => siderState.currentFollowingPage,
-  );
+export const selectFollowerTotalRecords = createSelector(
+  [selectDomain],
+  siderState => siderState.followerTotalRecords,
+);
 
+export const selectFollowingTotalRecords = createSelector(
+  [selectDomain],
+  siderState => siderState.followingTotalRecords,
+);
 
-  export const selectFollowerTotalRecords = createSelector(
-    [selectDomain],
-    siderState => siderState.followerTotalRecords,
-  );
+export const selectFollowerTotalPage = createSelector(
+  [selectDomain],
+  siderState => siderState.followerTotalPage,
+);
 
-  export const selectFollowingTotalRecords = createSelector(
-    [selectDomain],
-    siderState => siderState.followingTotalRecords,
-  );
+export const selectFollowingTotalPage = createSelector(
+  [selectDomain],
+  siderState => siderState.followingTotalPage,
+);
 
-  export const selectFollowerTotalPage = createSelector(
-    [selectDomain],
-    siderState => siderState.followerTotalPage,
-  );
+export const selectModalLoading = createSelector(
+  [selectDomain],
+  siderState => siderState.isModalLoading,
+);
 
-  export const selectFollowingTotalPage = createSelector(
-    [selectDomain],
-    siderState => siderState.followingTotalPage,
-  );
+export const selectGetProfileFailed = createSelector(
+  [selectDomain],
+  siderState => siderState.getProfileFailed,
+);
 
-  export const selectModalLoading = createSelector(
-    [selectDomain],
-    siderState => siderState.isModalLoading,
-  );
+export const selectIsLoadingProfile = createSelector(
+  [selectDomain],
+  siderState => siderState.isLoadingProfile,
+);

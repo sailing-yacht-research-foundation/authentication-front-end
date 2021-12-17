@@ -32,6 +32,7 @@ export const SiderContent = (props) => {
     { key: '7', paths: ['account'], subMenuKey: 'profile' },
     { key: '16', paths: ['tracks'] },
     { key: '17', paths: ['groups'] },
+    { key: '18', paths: ['discover-friends'], subMenuKey: 'profile' },
   ];
 
   const history = useHistory();
@@ -110,6 +111,9 @@ export const SiderContent = (props) => {
           </SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} key="8">
             <StyledLink to={'/account/change-password'}>{t(translations.side_menu.profile.change_password)}</StyledLink>
+          </SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} key="8">
+            <StyledLink to={'/profile/search'}>{t(translations.side_menu.profile.discover_friends)}</StyledLink>
           </SyrfMenuItem>
           {/* <SyrfMenuItem title={t(translations.side_menu.profile.notification_setting)} icon={<BellOutlined />} onClick={() => history.push('/profile')} key="9">{t(translations.side_menu.profile.notification_setting)}</SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.profile_setting)} icon={<SettingOutlined />} onClick={() => history.push('/profile')} key="10">{t(translations.side_menu.profile.profile_setting)}</SyrfMenuItem> hide this because of task SNS-393 */}

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button } from 'antd';
+import { Button, Image, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../slice';
-import { selectProfile } from '../slice/selectors';
+import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile } from '../slice/selectors';
 import { FollowerModal } from './modals/FollowerModal';
 import { FollowingModal } from './modals/FollowingModal';
-import InfiniteScroll from 'react-infinite-scroller';
+import { renderAvatar } from 'utils/user-utils';
 
 export const PublicProfile = () => {
 
@@ -17,17 +17,21 @@ export const PublicProfile = () => {
 
     const profile = useSelector(selectProfile);
 
-    const [followStatus, setFollowStatus] = useState();
-
     const location = useLocation();
 
     const dispatch = useDispatch();
+
+    const history = useHistory();
 
     const { actions } = usePublicProfileSlice();
 
     const [showFollowerModal, setShowFollowerModal] = React.useState<boolean>(false);
 
     const [showFollowingModal, setShowFollowingModal] = React.useState<boolean>(false);
+
+    const getProfileFailed = useSelector(selectGetProfileFailed);
+
+    const isLoadingProfile = useSelector(selectIsLoadingProfile);
 
     const getUserProfile = async () => {
         dispatch(actions.getProfile(profileId));
@@ -43,16 +47,24 @@ export const PublicProfile = () => {
     }
 
     React.useEffect(() => {
+        if (getProfileFailed)
+            history.push('/');
+    }, [getProfileFailed]);
+
+    React.useEffect(() => {
         getUserProfile();
+        setShowFollowingModal(false);
+        setShowFollowerModal(false);
     }, [location]);
 
     return (
         <Wrapper>
             <FollowerModal profileId={profileId} showModal={showFollowerModal} setShowModal={setShowFollowerModal} />
             <FollowingModal profileId={profileId} showModal={showFollowingModal} setShowModal={setShowFollowingModal} />
+            <Spin spinning={isLoadingProfile}>
             <InfoSection>
                 <AvatarWrapper>
-                    <img src="https://1.bp.blogspot.com/--JFmzWfIZcE/X6kMkOZdzUI/AAAAAAAAA8c/8c1NpUOMdWYZOKHeWxQvwyVCyXjK_U28QCLcBGAsYHQ/s1280/Neumorphism%2BProfile%2BCard%2BUI%2BDesign%2Busing%2Bonly%2BHTML%2B%2526%2BCSS.webp" />
+                    <Image src={renderAvatar(profile.avatar)} />
                 </AvatarWrapper>
                 <ProfileName>{profile.name}</ProfileName>
                 <ProfileBio>{profile.bio}</ProfileBio>
@@ -68,6 +80,7 @@ export const PublicProfile = () => {
                     <InfoTitle>Following</InfoTitle>
                 </InfoItem>
             </SubInfoSection>
+            </Spin>
         </Wrapper>
     );
 }
@@ -87,6 +100,8 @@ const AvatarWrapper = styled.div`
     height: 130px;
     display: inline-block;
     margin-top: 30px;
+    border-radius: 50%;
+    overflow: hidden;
 
     img {
         border-radius: 50%;

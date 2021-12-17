@@ -153,7 +153,8 @@
       "name": "My Profile",
       "change_password": "Change Password",
       "notification_setting": "Notification Settings",
-      "profile_setting": "Profile Settings"
+      "profile_setting": "Profile Settings",
+      "discover_friends": "Discover friends."
     },
     "app_connection": "App Connections",
     "organizational_membership": "Organizational Memberships",
