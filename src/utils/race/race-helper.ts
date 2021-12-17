@@ -113,11 +113,7 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
     (key) => vesselParticipantsObject[key]
   );
 
-  let updatedVPs = vesselParticipants.filter(vp => {
-    return vp.positions.length > 0;
-  });
-
-  updatedVPs = updatedVPs.map((vP) => {
+  let updatedVPs = vesselParticipants.map((vP) => {
     const filteredPositions = vP.positions.filter((pos) => pos.timestamp <= selectedTimestamp);
     filteredPositions.sort((a, b) => b.timestamp - a.timestamp);
 
@@ -150,7 +146,7 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
     };
   });
 
-  return updatedVPs;
+  return updatedVPs.filter(vp => vp.positions.length > 0);// filter here because the boat will have the position later.
 };
 
 export const normalizeSequencedGeometries = (
