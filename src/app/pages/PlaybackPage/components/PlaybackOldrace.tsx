@@ -355,11 +355,11 @@ export const PlaybackOldRace = (props) => {
           vesselParticipants: vesselParticipantsRef.current
         }
       });
-
-      setIsLoading(false);
-      dispatch(actions.setIsPlaying(true));
-      handleSetIsConnecting(false);
     }
+
+    setIsLoading(false);
+    dispatch(actions.setIsPlaying(true));
+    handleSetIsConnecting(false); // move out of the response check because sometimes the simplified tracks is not found and it block user from viewing the race using websocket.
   }
 
   // Map retrieved timestamps
