@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Image, Spin } from 'antd';
@@ -8,6 +8,12 @@ import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile } from '.
 import { FollowerModal } from './modals/FollowerModal';
 import { FollowingModal } from './modals/FollowingModal';
 import { renderAvatar } from 'utils/user-utils';
+import { FollowStatus } from 'utils/constants';
+import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
+import { BsCheck, BsPlus, BsCheck2All } from 'react-icons/bs';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
+import { UnfollowConfirmModal } from 'app/components/SocialProfile/UnfollowConfirmModal';
 
 export const PublicProfile = () => {
 
@@ -29,21 +35,64 @@ export const PublicProfile = () => {
 
     const [showFollowingModal, setShowFollowingModal] = React.useState<boolean>(false);
 
+    const [showConfirmUnfollowModal, setShowUnfollowConfirmModal] = React.useState<boolean>(false);
+
+
     const getProfileFailed = useSelector(selectGetProfileFailed);
 
     const isLoadingProfile = useSelector(selectIsLoadingProfile);
 
+    const [followStatus, setFollowStatus] = React.useState<any>(null);
+
+    const { t } = useTranslation();
+
     const getUserProfile = async () => {
-        dispatch(actions.getProfile(profileId));
+        dispatch(actions.getProfile(profileId || currentUserId));
+    }
+
+    const follow = async () => {
+        const response = await followProfile(profile.id);
+        if (response.success) {
+            setFollowStatus(response?.data?.status);
+            handlePostFollowUnfollowAction();
+        }
+    }
+
+    const unfollow = async () => {
+        const response = await unfollowProfile(profile.id);
+        setShowUnfollowConfirmModal(false);
+        if (response.success) {
+            setFollowStatus(response?.data?.status);
+            handlePostFollowUnfollowAction();
+        }
+    }
+
+    const handlePostFollowUnfollowAction = () => {
+        dispatch(actions.getFollowing({ profileId: profile.id, page: 1 }));
+        dispatch(actions.getFollowers({ profileId: profile.id, page: 1 }));
+        getUserProfile();
     }
 
     const renderFollowButton = () => {
-        // if (currentUserId !== profile.id) {
-        //     if (!profile.isFollowed)
-        //         return <FollowButton onClick={() => followProfile()} shape="round">Follow</FollowButton>;
-        return <FollowButton type='primary' shape="round">Following</FollowButton>;
-        // }
-        return <></>;
+        if (currentUserId === profile.id)
+            return <></>;
+
+        if (!followStatus)
+            return <FollowButton icon={<BsPlus style={{ fontSize: '20px' }} />} onClick={follow} shape="round">{t(translations.public_profile.follow)}</FollowButton>;
+        else if (followStatus === FollowStatus.ACCEPTED)
+            return <FollowButton icon={<BsCheck2All style={{ fontSize: '20px', marginRight: '5px' }} />} type='primary' onClick={()=> setShowUnfollowConfirmModal(true)} shape="round">{t(translations.public_profile.following)}</FollowButton>;
+        else if (followStatus === FollowStatus.REQUESTED)
+            return <FollowButton icon={<BsCheck style={{ fontSize: '20px' }} />} type='primary' onClick={()=> setShowUnfollowConfirmModal(true)} shape="round">{t(translations.public_profile.requested)}</FollowButton>;
+    }
+
+    const showFollowersModal = () => {
+        if (profile.followerCount > 0 && (!profile.isPrivate || currentUserId === profile.id))
+            setShowFollowerModal(true)
+    }
+
+    const showFollowingsModal = () => {
+        if (profile.followingCount > 0 && (!profile.isPrivate || currentUserId === profile.id))
+            setShowFollowingModal(true)
     }
 
     React.useEffect(() => {
@@ -57,29 +106,41 @@ export const PublicProfile = () => {
         setShowFollowerModal(false);
     }, [location]);
 
+    React.useEffect(() => {
+        if (profile.id) {
+            setFollowStatus(profile.followStatus);
+        }
+    }, [profile]);
+
     return (
         <Wrapper>
-            <FollowerModal profileId={profileId} showModal={showFollowerModal} setShowModal={setShowFollowerModal} />
-            <FollowingModal profileId={profileId} showModal={showFollowingModal} setShowModal={setShowFollowingModal} />
+            <UnfollowConfirmModal profileName={profile.name} unfollow={unfollow} visible={showConfirmUnfollowModal} hideModal={()=>setShowUnfollowConfirmModal(false)}/>
+            {
+                profile.id && (!profile.isPrivate || currentUserId === profile.id) && <>
+                    <FollowerModal reloadParent={handlePostFollowUnfollowAction} profileId={profileId || currentUserId} showModal={showFollowerModal} setShowModal={setShowFollowerModal} />
+                    <FollowingModal reloadParent={handlePostFollowUnfollowAction} profileId={profileId || currentUserId} showModal={showFollowingModal} setShowModal={setShowFollowingModal} />
+                </>
+            }
             <Spin spinning={isLoadingProfile}>
-            <InfoSection>
-                <AvatarWrapper>
-                    <Image src={renderAvatar(profile.avatar)} />
-                </AvatarWrapper>
-                <ProfileName>{profile.name}</ProfileName>
-                <ProfileBio>{profile.bio}</ProfileBio>
-                {renderFollowButton()}
-            </InfoSection>
-            <SubInfoSection>
-                <InfoItem onClick={() => { if (profile.followerCount > 0) setShowFollowerModal(true) }}>
-                    <InfoNumber>{profile.followerCount}</InfoNumber>
-                    <InfoTitle>Followers</InfoTitle>
-                </InfoItem>
-                <InfoItem onClick={() => { if (profile.followingCount > 0) setShowFollowingModal(true) }}>
-                    <InfoNumber>{profile.followingCount}</InfoNumber>
-                    <InfoTitle>Following</InfoTitle>
-                </InfoItem>
-            </SubInfoSection>
+                <InfoSection>
+                    <AvatarWrapper>
+                        <Image src={renderAvatar(profile.avatar)} />
+                    </AvatarWrapper>
+                    <ProfileName>{profile.name}</ProfileName>
+                    <ProfileBio>{profile.bio}</ProfileBio>
+                    {renderFollowButton()}
+                    {profile.isPrivate && <div>{t(translations.public_profile.profile_is_private)}</div>}
+                </InfoSection>
+                <SubInfoSection>
+                    <InfoItem onClick={showFollowersModal}>
+                        <InfoNumber>{profile.followerCount}</InfoNumber>
+                        <InfoTitle>{t(translations.public_profile.followers)}</InfoTitle>
+                    </InfoItem>
+                    <InfoItem onClick={showFollowingsModal}>
+                        <InfoNumber>{profile.followingCount}</InfoNumber>
+                        <InfoTitle>{t(translations.public_profile.following)}</InfoTitle>
+                    </InfoItem>
+                </SubInfoSection>
             </Spin>
         </Wrapper>
     );
@@ -147,10 +208,4 @@ const InfoNumber = styled.h3`
     font-weight: bold;
 `;
 
-const InfoTitle = styled.span`
-
-`;
-
-const FollowedBy = styled.div`
-    color: rgba(142,142,142,1);
-`;
+const InfoTitle = styled.span``;

@@ -2,6 +2,7 @@ import React from 'react';
 import { Row } from 'antd';
 import { Main } from './components/Main';
 import styled from 'styled-components';
+import { media } from 'styles/media';
 
 export const ProfileSearchPage = () => {
     return (
@@ -14,8 +15,12 @@ export const ProfileSearchPage = () => {
 }
 
 const Wrapper = styled.div`
-    width: 75%;
+    width: 100%;
     display: flex;
     justify-content: center;
     flex-direction: row;
+
+    ${media.medium`
+        width: 75%;
+    `};
 `;

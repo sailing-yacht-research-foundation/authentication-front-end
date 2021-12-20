@@ -2,11 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { getHotRecommandation, getTopRecommandation } from 'services/live-data-server/profile';
 import { getUserAttribute } from 'utils/user-utils';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { UserFollowerFollowingRow } from 'app/components/UserFollowerFollowingRow';
+import { UserFollowerFollowingRow } from 'app/components/SocialProfile/UserFollowerFollowingRow';
 import { InfluencerModal } from './InfluencerModal';
 import { PeopleYouMayKnowModal } from './PeopleYouMayKnowModal';
+import { usePublicProfileSlice } from 'app/pages/PublicProfilePage/slice';
+import { useTranslation } from 'react-i18next';
+import { translations } from 'locales/translations';
 
 export const PeopleYouMayKnow = () => {
 
@@ -21,6 +24,12 @@ export const PeopleYouMayKnow = () => {
     const [showInfluencerModal, setShowInfluencerModal] = React.useState<boolean>(false);
 
     const [showPeopleYouMayKnowModal, setShowPeopleYouMayKnowModal] = React.useState<boolean>(false);
+
+    const dispatch = useDispatch();
+
+    const { t } = useTranslation();
+
+    const { actions } = usePublicProfileSlice();
 
     const getRecommandedProfiles = async () => {
         const response = await getTopRecommandation({ locale: getUserAttribute(user, 'locale'), page: 1, size: 4 });
@@ -53,21 +62,28 @@ export const PeopleYouMayKnow = () => {
         }
     }, [user]);
 
+    const reloadCurrentListAndUserFollowersFollowings = () => {
+        getRecommandedProfiles();
+        getInfluencers();
+        dispatch(actions.getFollowers({ profileId: currentUserId, page: 1 }));
+        dispatch(actions.getFollowing({ profileId: currentUserId, page: 1 }));
+    }
+
     const renderRecommendedProfiles = () => {
         return recommendations.map(profile => {
-            return <UserFollowerFollowingRow profile={profile} profileId={profile.id} />
+            return <UserFollowerFollowingRow reloadParentList={reloadCurrentListAndUserFollowersFollowings} profile={profile} profileId={profile.id} />
         });
     }
 
     return (
-        <Wrapper>
+        <>
             <InfluencerModal showModal={showInfluencerModal} setShowModal={setShowInfluencerModal} />
             <PeopleYouMayKnowModal showModal={showPeopleYouMayKnowModal} setShowModal={setShowPeopleYouMayKnowModal} />
             {recommendations.length > 0 &&
                 <>
                     <TitleWrapper>
-                        <Title>People you may know</Title>
-                        <SeeMore onClick={() => setShowPeopleYouMayKnowModal(true)}>See more</SeeMore>
+                        <Title>{t(translations.public_profile.people_you_may_know)}</Title>
+                        <SeeMore onClick={() => setShowPeopleYouMayKnowModal(true)}>{t(translations.public_profile.see_more)}</SeeMore>
                     </TitleWrapper>
                     <PeopleList>
                         {renderRecommendedProfiles()}
@@ -78,23 +94,17 @@ export const PeopleYouMayKnow = () => {
             {influencers.length > 0 &&
                 <>
                     <TitleWrapper>
-                        <Title>Top influencers</Title>
-                        <SeeMore onClick={() => setShowInfluencerModal(true)}>See more</SeeMore>
+                        <Title>{t(translations.public_profile.top_influencers)}</Title>
+                        <SeeMore onClick={() => setShowInfluencerModal(true)}>{t(translations.public_profile.see_more)}</SeeMore>
                     </TitleWrapper>
                     <PeopleList>
                         {renderInfluencers()}
                     </PeopleList>
                 </>
             }
-        </Wrapper>
+        </>
     );
 }
-
-const Wrapper = styled.div`
-    flex: .3;
-    margin-left: 15px;
-    padding: 10px;
-`;
 
 const TitleWrapper = styled.div`
     display: flex;

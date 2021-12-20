@@ -209,3 +209,9 @@ export const SpinLoadMoreContainer = styled.div`
     text-align: center;
     padding: 10px;
 `;
+
+export const PaginationContainer = styled.div`
+text-align: right;
+
+margin: 25px 0;
+`;

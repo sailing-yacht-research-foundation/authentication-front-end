@@ -141,3 +141,8 @@ export enum WSMessageDataType {
     VESSEL_PARTICIPANT_REMOVED = 'vessel-participant-removed',
     MAKR_TRACK = 'mark-track'
 }
+
+export enum FollowStatus {
+    REQUESTED = 'REQUESTED',
+    ACCEPTED = 'ACCEPTED'
+}

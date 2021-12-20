@@ -28,7 +28,7 @@ function* getProfile({ type, payload }) {
 function* getProfileFollowers({ type, payload }) {
     const { profileId, page } = payload;
     yield put(publicProfileActions.setModalLoading(true));
-    const response = yield call(getFollowers, profileId);
+    const response = yield call(getFollowers, profileId, page);
     yield put(publicProfileActions.setModalLoading(false));
 
     if (response.success) {
@@ -44,14 +44,14 @@ function* getProfileFollowers({ type, payload }) {
 function* getProfileFollowing({ type, payload }) {
     const { profileId, page } = payload;
     yield put(publicProfileActions.setModalLoading(true));
-    const response = yield call(getFollowings, profileId);
+    const response = yield call(getFollowings, profileId, page);
     yield put(publicProfileActions.setModalLoading(false));
 
     if (response.success) {
         yield put(publicProfileActions.setCurrentFollowingPage(page));
         yield put(publicProfileActions.setTotalFollowingRecords(response.data?.count));
         yield put(publicProfileActions.setFollowing(response.data?.rows));
-            yield put(publicProfileActions.setFollowingTotalPage(response.data?.count < 10 ? 1 : Math.ceil(response.data?.count / 10)));
+        yield put(publicProfileActions.setFollowingTotalPage(response.data?.count < 10 ? 1 : Math.ceil(response.data?.count / 10)));
     } else {
         yield put(publicProfileActions.setFollowing([]));
     }

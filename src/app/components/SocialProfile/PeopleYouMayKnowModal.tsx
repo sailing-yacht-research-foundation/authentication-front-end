@@ -1,15 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Modal, Spin } from 'antd';
+import { Modal, Spin, Pagination } from 'antd';
+import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { UserFollowerFollowingRow } from 'app/components/UserFollowerFollowingRow';
-import { getHotRecommandation } from 'services/live-data-server/profile';
+import { UserFollowerFollowingRow } from 'app/components/SocialProfile/UserFollowerFollowingRow';
+import { getTopRecommandation } from 'services/live-data-server/profile';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getUserAttribute } from 'utils/user-utils';
-import InfiniteScroll from 'react-infinite-scroller';
+import { PaginationContainer } from 'app/components/SyrfGeneral';
 
-export const InfluencerModal = (props) => {
+export const PeopleYouMayKnowModal = (props) => {
 
     const { t } = useTranslation();
 
@@ -19,6 +20,8 @@ export const InfluencerModal = (props) => {
 
     const user = useSelector(selectUser);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const renderProfiles = () => {
         return pagination.rows.map(profile => <UserFollowerFollowingRow profile={profile} profileId={profile.id} />);
     }
@@ -26,20 +29,22 @@ export const InfluencerModal = (props) => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        totalPages: 1,
     });
 
-    const getInfluencers = async (page) => {
-        const response = await getHotRecommandation({ locale: getUserAttribute(user, 'locale'), page, size: 10 });
+    const getPeopleYouMayKnow = async (page) => {
+        setIsLoading(true);
+        const response = await getTopRecommandation({ locale: getUserAttribute(user, 'locale'), page, size: 10 });
+        setIsLoading(false);
 
         if (response.success) {
             const rows = response.data?.rows.filter(profile => currentUserId !== profile.id);
             setPagination({
                 ...pagination,
-                rows: [...pagination.rows, ...rows],
+                rows: rows,
                 total: response?.data?.count,
                 page: page,
-                totalPages: response.data?.count < 10 ? 1 : Math.ceil(response.data?.count / 10)
             })
         }
     }
@@ -53,27 +58,20 @@ export const InfluencerModal = (props) => {
 
     React.useEffect(() => {
         if (user)
-            getInfluencers(1);
+            getPeopleYouMayKnow(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     return (
-        <Modal visible={showModal} title={'Top influencers'} footer={null} onCancel={hideModal}>
-            <InfiniteScroll
-                pageStart={1}
-                loadMore={getInfluencers}
-                hasMore={pagination.page < pagination.totalPages}
-                loader={<SpinContainer><Spin style={{ textAlign: 'center' }} spinning={true}></Spin></SpinContainer>}>
-                <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                    {renderProfiles()}
-                </div>
-            </InfiniteScroll>
-        </Modal>
+        <Modal visible={showModal} title={'People you may know'} footer={null} onCancel={hideModal}>
+            <Spin spinning={isLoading}>
+                {renderProfiles()}
+                {
+                    pagination.total > 10 && <PaginationContainer>
+                        <Pagination current={pagination.page} onChange={(page) => getPeopleYouMayKnow(page)} total={pagination.total} />
+                    </PaginationContainer>
+                }
+            </Spin>
+        </Modal >
     );
 }
-
-const SpinContainer = styled.div`
-    display: block;
-    text-align: center;
-    padding: 10px;
-`;

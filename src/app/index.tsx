@@ -217,6 +217,7 @@ export function App(props) {
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/search'} component={ProfileSearchPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={PublicProfilePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/:profileId'} component={PublicProfilePage} />
               <Route component={NotFoundPage} />
             </Switch>

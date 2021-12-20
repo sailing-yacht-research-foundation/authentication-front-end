@@ -10,6 +10,7 @@ import ReactTooltip from 'react-tooltip';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { revokeGroupAsEditor } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
 
@@ -22,6 +23,8 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
     const [groupEditors, setGroupEditors] = React.useState<any[]>([]);
 
     const [individualEditors, setIndividualEditors] = React.useState<any[]>([]);
+
+    const history = useHistory();
 
     const getAdmins = async () => {
         setIsLoading(true);
@@ -70,7 +73,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
                 </EditorItemAvatarContainer>
                 <EditorItemRightInfo>
                     <EditorRightInfoInner>
-                        <EditorName>{editor?.group?.groupName}</EditorName>
+                        <EditorName onClick={()=> history.push(`/groups/${editor?.group?.id}`)}>{editor?.group?.groupName}</EditorName>
                         <span>{t(translations.group.group)}</span>
                     </EditorRightInfoInner>
                     <EditorRevokeButton onClick={() => revokeGroup(editor?.group)} danger>{t(translations.group.revoke)}</EditorRevokeButton>
@@ -88,7 +91,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
                 </EditorItemAvatarContainer>
                 <EditorItemRightInfo>
                     <EditorRightInfoInner>
-                        <EditorName>{editor?.user?.name}</EditorName>
+                        <EditorName onClick={()=> history.push(`/profile/${editor?.user?.id}`)}>{editor?.user?.name}</EditorName>
                         <span>{t(translations.group.individual)}</span>
                     </EditorRightInfoInner>
                     {userId !== editor.user?.id && <EditorRevokeButton onClick={() => revokeIndividual(editor?.user)} danger>{t(translations.group.revoke)}</EditorRevokeButton>}
@@ -122,7 +125,6 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
                     </EditorWrapper>
                     <ReactTooltip />
                 </>
-
             }
         </Spin>
     )
@@ -166,6 +168,7 @@ const EditorItemRightInfo = styled.div`
 `;
 
 const EditorName = styled.h4`
+    cursor: pointer;
 `;
 
 const EditorRightInfoInner = styled.div`
