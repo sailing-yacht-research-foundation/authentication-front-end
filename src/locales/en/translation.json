@@ -144,7 +144,9 @@
     "last_name_is_required": "Last name is required",
     "first_name_cannot_be_longer": "First name cannot be longer than 15 characters",
     "last_name_cannot_be_longer": "Last name cannot be longer than 15 characters.",
-    "eula": "EULA"
+    "eula": "EULA",
+    "agree_over_18": "I'm over 18 or have guardian's consent",
+    "you_should_make_sure_you_are_18_or_over": "You should make sure you are 18 or older or have guardian's consent."
   },
   "side_menu": {
     "deal": "Deals",
