@@ -44,7 +44,7 @@ export const SignupForm = () => {
     const { t } = useTranslation();
 
     const onFinish = async (values) => {
-        const { email, password, locale, language, birthdate, first_name, last_name } = values;
+        const { email, password, locale, language, first_name, last_name } = values;
 
         setIsSigningUp(true);
 
@@ -56,7 +56,6 @@ export const SignupForm = () => {
             attributes: {
                 locale: locale,
                 language: language,
-                birthdate: birthdate ? birthdate.format(TIME_FORMAT.number) : moment('2002-01-01').format(TIME_FORMAT.number),
                 picture: String(Math.floor(Math.random() * 20) + 1),
             },
             enabled: true,
@@ -106,8 +105,7 @@ export const SignupForm = () => {
                         email: '',
                         name: '',
                         password: '',
-                        locale: 'us',
-                        birthdate: moment('2002-01-01 00:00:00').utcOffset('+0000')
+                        locale: 'us'
                     }}
                     onFinish={onFinish}
                 >
@@ -179,35 +177,6 @@ export const SignupForm = () => {
                         ]}
                     >
                         <Input.Password autoComplete="off" autoCapitalize="none" autoCorrect="off" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label={t(translations.signup_page.date_of_birth)}
-                        name="birthdate"
-                        rules={[{ type: 'date' }, {
-                            required: true, message: t(translations.forms.birth_date_is_required)
-                        }]}
-                    >
-                        <DatePicker
-                            ref="datePickerRef"
-                            showToday={false}
-                            style={{ width: '100%' }}
-                            disabledDate={current => {
-                                return disabledDates.some(date =>
-                                    current.isBetween(
-                                        moment(date["start"], format),
-                                        moment(date["end"], format)
-                                    )
-                                );
-                            }}
-                            dateRender={current => {
-                                return (
-                                    <div className="ant-picker-cell-inner">
-                                        {current.date()}
-                                    </div>
-                                );
-                            }}
-                        />
                     </Form.Item>
 
                     <Divider />
@@ -282,6 +251,15 @@ export const SignupForm = () => {
                         },
                     ]}>
                         <Checkbox value={1}>{t(translations.signup_page.agree_that_my_provided_email_address_is_only_shared_by_me)}</Checkbox>
+                    </Form.Item>
+
+                    <Form.Item name="over_18" valuePropName="checked" rules={[
+                        {
+                            validator: (_, value) =>
+                                value ? Promise.resolve() : Promise.reject(new Error(t(translations.signup_page.you_should_make_sure_you_are_18_or_over))),
+                        },
+                    ]}>
+                        <Checkbox>{t(translations.signup_page.agree_over_18)}</Checkbox>
                     </Form.Item>
 
                     <Form.Item>
