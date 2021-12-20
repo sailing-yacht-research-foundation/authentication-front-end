@@ -166,6 +166,7 @@ const SyrfMenu = styled(Menu)`
     height: calc(100vh - 50px);
     border-right: none;
     overflow-y: auto;
+    overflow-x: hidden;
 `;
 
 const SyrfSubmenu = styled(Menu.SubMenu)`
