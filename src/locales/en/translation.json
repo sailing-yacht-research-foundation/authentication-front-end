@@ -736,7 +736,7 @@
     "group_visibility": "The visibility of this group towards other sailors.",
     "group_type": "Type of this group.",
     "delete_this_track": "Delete this track",
-    "set_this_event_as_group_admin": "Set groups as admins for this event."
+    "set_this_event_as_group_admin": "Set or assign admins for this event."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
