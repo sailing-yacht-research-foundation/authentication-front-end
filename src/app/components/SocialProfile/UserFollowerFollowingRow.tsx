@@ -76,7 +76,7 @@ export const UserFollowerFollowingRow = (props) => {
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id || profileId}`}>{profile.name}</PeopleName>
-                    <PeopleAlsoFollow>{t(translations.public_profile.number_followers, { numberOfFollowers: profile.followerCount })}</PeopleAlsoFollow>
+                    <PeopleAlsoFollow>{t(translations.public_profile.number_followers, { numberOfFollowers: profile.followerCount || profile.followerGained })}</PeopleAlsoFollow>
                 </PeopleInfo>
             </PeopleInnerWrapper>
             <FollowButtonOuter>

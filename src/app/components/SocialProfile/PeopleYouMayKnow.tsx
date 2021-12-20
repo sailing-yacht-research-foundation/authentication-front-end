@@ -50,7 +50,7 @@ export const PeopleYouMayKnow = () => {
     }
 
     const renderInfluencers = () => {
-        return recommendations.map(profile => {
+        return influencers.map(profile => {
             return <UserFollowerFollowingRow profile={profile} profileId={profile.id} />
         });
     }
