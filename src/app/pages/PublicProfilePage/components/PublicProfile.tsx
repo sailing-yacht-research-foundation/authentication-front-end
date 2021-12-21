@@ -79,9 +79,9 @@ export const PublicProfile = () => {
         if (!followStatus)
             return <FollowButton icon={<BsPlus style={{ fontSize: '20px' }} />} onClick={follow} shape="round">{t(translations.public_profile.follow)}</FollowButton>;
         else if (followStatus === FollowStatus.ACCEPTED)
-            return <FollowButton icon={<BsCheck2All style={{ fontSize: '20px', marginRight: '5px' }} />} type='primary' onClick={()=> setShowUnfollowConfirmModal(true)} shape="round">{t(translations.public_profile.following)}</FollowButton>;
+            return <FollowButton icon={<BsCheck2All style={{ fontSize: '20px', marginRight: '5px' }} />} type='primary' onClick={() => setShowUnfollowConfirmModal(true)} shape="round">{t(translations.public_profile.following)}</FollowButton>;
         else if (followStatus === FollowStatus.REQUESTED)
-            return <FollowButton icon={<BsCheck style={{ fontSize: '20px' }} />} type='primary' onClick={()=> setShowUnfollowConfirmModal(true)} shape="round">{t(translations.public_profile.requested)}</FollowButton>;
+            return <FollowButton icon={<BsCheck style={{ fontSize: '20px' }} />} type='primary' onClick={() => setShowUnfollowConfirmModal(true)} shape="round">{t(translations.public_profile.requested)}</FollowButton>;
     }
 
     const showFollowersModal = () => {
@@ -97,12 +97,14 @@ export const PublicProfile = () => {
     React.useEffect(() => {
         if (getProfileFailed)
             history.push('/');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getProfileFailed]);
 
     React.useEffect(() => {
         getUserProfile();
         setShowFollowingModal(false);
         setShowFollowerModal(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
 
     React.useEffect(() => {
@@ -113,7 +115,7 @@ export const PublicProfile = () => {
 
     return (
         <Wrapper>
-            <UnfollowConfirmModal profileName={profile.name} unfollow={unfollow} visible={showConfirmUnfollowModal} hideModal={()=>setShowUnfollowConfirmModal(false)}/>
+            <UnfollowConfirmModal profileName={profile.name} unfollow={unfollow} visible={showConfirmUnfollowModal} hideModal={() => setShowUnfollowConfirmModal(false)} />
             {
                 profile.id && (!profile.isPrivate || currentUserId === profile.id) && <>
                     <FollowerModal reloadParent={handlePostFollowUnfollowAction} profileId={profileId || currentUserId} showModal={showFollowerModal} setShowModal={setShowFollowerModal} />

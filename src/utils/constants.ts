@@ -111,7 +111,7 @@ export const enum PlaybackSpeed {
 export const enum RaceEmitterEvent {
     PING = 'ping',
     ZOOM_TO_LOCATION = 'zoom-to-location',
-    SEQUENCED_COURSE_UPDATE = 'sequenced-courses-update',
+    RENDER_SEQUENCED_COURSE = 'render-sequenced-courses',
     TRACK_UPDATE = 'track-update',
     RENDER_REGS = 'render-legs',
     LEG_UPDATE = 'leg-update',

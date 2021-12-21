@@ -87,7 +87,7 @@ export const PlaybackStreamRace = (props) => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
         eventEmitter.off(RaceEmitterEvent.PING, () => { });
-        eventEmitter.off(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, () => { });
+        eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
         eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
         eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
         eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
@@ -284,27 +284,27 @@ export const PlaybackStreamRace = (props) => {
     if (!sequencedGeometries) return;
     const mappedSequencedGeometries = normalizeSequencedGeometries(sequencedGeometries);
 
-    eventEmitter.emit(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, mappedSequencedGeometries);
+    eventEmitter.emit(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, mappedSequencedGeometries);
   };
 
   const addNewBoatToTheRace = (data) => {
-    const { vesselParticipant, vessel, participant } = data;
+    const { vesselParticipant, vessel, participant, position } = data;
     const { id } = vesselParticipant;
 
     if (groupedPosition?.current[id]) return;
-
-    const currentValue = groupedPosition.current;
 
     groupedPosition.current[id] = {
       id: id,
       vessel,
       vesselParticipantId: id,
-      positions: currentValue?.[id]?.positions || [],
+      positions: [position.lat, position.lon] || [],
       deviceType: 'boat',
       participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },
       color: stringToColour(id),
       leaderPosition: Object.keys(groupedPosition.current)?.length + 1,
     };
+
+    receivedPositionData.current = true;
 
     message.info(t(translations.playback_page.competitor_joined, { competitor_name: participant?.publicName, boat_name: vessel?.publicName }));
   }
@@ -315,6 +315,7 @@ export const PlaybackStreamRace = (props) => {
 
     if (groupedPosition?.current[id]) {
       delete groupedPosition?.current[id];
+      normalizedPositions.current = [...normalizedPositions.current].filter(vp => vp.id !== id);
       eventEmitter.emit(RaceEmitterEvent.REMOVE_PARTICIPANT, id);
       message.info(t(translations.playback_page.boat_left_the_race, { boat_name: vessel?.publicName }));
     }

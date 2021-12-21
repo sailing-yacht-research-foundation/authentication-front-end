@@ -23,10 +23,10 @@ export const Map = (props) => {
         map.on('click', (e) => {
             const selectedOpt = selectedOption.current;
             onMapClicked(e.latlng.wrap().lat, e.latlng.wrap().lng, selectedOpt);
-            
+
             if (selectedOpt === "start") setMarker(e.latlng);
             else setEndMarker(e.latlng);
-            
+
             if (setFormChanged) {
                 setFormChanged(true);
             }
@@ -102,10 +102,11 @@ export const Map = (props) => {
     React.useEffect(() => {
         selectedOption.current = option;
         if (option === options.START && coordinates) {
-                map.setView(coordinates, 10);
-        } else if (option === options.END && endCoordinates){
+            map.setView(coordinates, 10);
+        } else if (option === options.END && endCoordinates) {
             map.setView(endCoordinates, 10);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [option])
 
     return (
