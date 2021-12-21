@@ -9,7 +9,7 @@ import { searchForProfiles } from "services/live-data-server/profile";
  
  function* searchProfiles({ type, payload }) {
      const { name, locale } = payload;
-     if (!name || String(name).length === 0) {
+     if (!name) {
         yield put(profileSearchActions.setResults([]));
         return;
      }

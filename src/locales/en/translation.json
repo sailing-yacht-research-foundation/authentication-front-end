@@ -437,7 +437,7 @@
     "error_starttime_shouldgreater_currenttime": "Start time should be greater than current time",
     "successfully_revoked": "Successfully revoked.",
     "an_error_happened_when_performing_your_request":"An unexpected error happened when performing your request.",
-    "successfully_assigned_people_as_editor": "Success fully assigned this person as editor!"
+    "successfully_assigned_people_as_editor": "Successfully assigned this person as editor!"
   },
   "course_list": {
     "name": "Name",
@@ -922,7 +922,7 @@
     "follow": "Follow",
     "Unfollow": "Unfollow",
     "start_searching_by_typing_something": "Start searching by typing something.",
-    "search_people": "Search peopel...",
+    "search_people": "Search people...",
     "see_more": "See more",
     "accept": "Accept",
     "reject": "Reject",
@@ -932,7 +932,7 @@
     "you_dont_have_any_follow_requests":"You don't have any follow requests at the moment.",
     "requested_to_follow_you": "Requested to follow you.",
     "unfollow_people": "Unfollow {{profileName}}",
-    "are_you_sure_to_unfollow": "Are you sure to unfollow {{profileName}}?",
+    "are_you_sure_to_unfollow": "Are you sure you want to unfollow {{profileName}}?",
     "search_or_select_people": "Search or select a person."
   }
 }

@@ -35,7 +35,7 @@ export const FollowingModal = ({ profileId, showModal, setShowModal, reloadParen
     const hideModal = () => {
         setShowModal(false);
         if (performedAction) {
-        reloadParent();
+            reloadParent();
         }
     }
 
