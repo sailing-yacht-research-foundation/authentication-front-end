@@ -12,6 +12,8 @@ import { MyEventListState } from 'app/pages/MyEventPage/slice/types';
 import { GroupState } from 'app/pages/MyGroupPage/slice/types';
 import { GroupDetailState } from 'app/pages/GroupDetailPage/slice/types';
 import { competitionUnitManagerState } from 'app/pages/CompetitionUnitCreateUpdatePage/slice/types';
+import { PublicProfileState } from 'app/pages/PublicProfilePage/slice/types';
+import { ProfileSearchState } from 'app/pages/ProfileSearchPage/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -35,5 +37,7 @@ export interface RootState {
   group?: GroupState;
   groupDetail?: GroupDetailState;
   competitionUnitManager?: competitionUnitManagerState;
+  publicProfile?: PublicProfileState;
+  profileSearch?: ProfileSearchState
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

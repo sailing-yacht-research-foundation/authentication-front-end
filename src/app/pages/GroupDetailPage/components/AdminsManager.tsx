@@ -48,7 +48,7 @@ export const AdminsManager = (props) => {
 
     const renderMembers = () => {
         if (admins.length > 0)
-            return admins.map(item => <UserItemRow item={item} buttons={renderActionButton(item)} />);
+            return admins.map((item, index) => <UserItemRow key={index} item={item} buttons={renderActionButton(item)} />);
 
         return <span>{t(translations.group.we_dont_have_any_admins_right_now)}</span>
     }

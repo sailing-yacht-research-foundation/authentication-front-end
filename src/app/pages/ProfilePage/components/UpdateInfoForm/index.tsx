@@ -66,6 +66,7 @@ export const UpdateInfo = (props) => {
         bio,
         first_name,
         last_name,
+        isPrivate
     }) => {
 
         setIsUpdatingProfile(true);
@@ -83,7 +84,8 @@ export const UpdateInfo = (props) => {
                 phone_number: phone_number ? removePlusFromPhoneNumber(phone_number) : '',
                 picture: getUserAttribute(authUser, 'picture'),
                 showed_tour: getUserAttribute(authUser, 'showed_tour'),
-            }
+            },
+            isPrivate: !!isPrivate
         });
 
         if (response.success) {
@@ -152,7 +154,8 @@ export const UpdateInfo = (props) => {
                             instagram: getUserAttribute(authUser, 'instagram'),
                             twitter: getUserAttribute(authUser, 'twitter'),
                             language: getUserAttribute(authUser, 'language'),
-                            country: getUserAttribute(authUser, 'locale')
+                            country: getUserAttribute(authUser, 'locale'),
+                            isPrivate: authUser.isPrivate
                         }}
                         onFinish={onFinish}
                     >

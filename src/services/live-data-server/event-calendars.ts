@@ -127,6 +127,24 @@ export const getEditors = (eventId) => {
     })
 }
 
+export const addEditor = (eventId, editorId) => {
+    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/add-editors`, {
+        userIds: [
+            editorId
+        ]
+    }).then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    })
+}
+
 export const removeEditor = (eventId, editorId) => {
     return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/remove-editors`, {
         data: {

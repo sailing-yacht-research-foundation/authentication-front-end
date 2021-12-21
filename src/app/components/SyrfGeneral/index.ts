@@ -202,3 +202,16 @@ justify-content: center;
     border: 1px solid #fff;
 }
 `;
+
+
+export const SpinLoadMoreContainer = styled.div`
+    display: block;
+    text-align: center;
+    padding: 10px;
+`;
+
+export const PaginationContainer = styled.div`
+text-align: right;
+
+margin: 25px 0;
+`;

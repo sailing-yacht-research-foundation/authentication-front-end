@@ -49,7 +49,7 @@ export const MembersManager = (props) => {
 
     const renderMembers = () => {
         if (members.length > 0)
-            return members.map(item => <UserItemRow item={item} buttons={renderActionButton(item)} />);
+            return members.map((item, index) => <UserItemRow key={index} item={item} buttons={renderActionButton(item)} />);
 
         return <span>{t(translations.group.we_dont_have_any_members_right_now)}</span>
     }

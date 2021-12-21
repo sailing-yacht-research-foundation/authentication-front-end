@@ -82,7 +82,11 @@ export const LoginForm = (props) => {
           <Form
             {...layout}
             name="basic"
-            initialValues={{ remember: true }}
+            initialValues={{
+              remember: true,
+              email: '',
+              password: ''
+            }}
             onFinish={onFinish}
           >
             <Form.Item

@@ -79,7 +79,10 @@ export const GroupItemRow = (props) => {
         if (members && Array.isArray(members)) {
             return (<>
                 {members.map(member =>
-                    <GroupMemberItem data-tip={member.name}>
+                    <GroupMemberItem onClick={e => {
+                        e.stopPropagation();
+                        history.push(`/profile/${member.userId}`)
+                    }} data-tip={member.name}>
                         <img src={renderAvatar(member.avatar)} alt={member.name} />
                     </GroupMemberItem>
                 )}

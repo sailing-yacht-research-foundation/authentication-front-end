@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
 import ReactTooltip from 'react-tooltip';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
+import { useHistory } from 'react-router-dom';
 
 const editorHeadlessStyles = {
     width: '25px',
@@ -26,6 +27,8 @@ export const EventAdmins = (props) => {
     const [groupEditors, setGroupEditors] = React.useState<any[]>([]);
 
     const [individualEditors, setIndividualEditors] = React.useState<any[]>([]);
+
+    const history = useHistory();
 
     const getAdmins = async () => {
         setIsLoading(true);
@@ -47,7 +50,7 @@ export const EventAdmins = (props) => {
         let editors = groupEditors;
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
         return editors.map(editor => {
-            return <EditorItem style={headless ? editorHeadlessStyles : {}} data-tip={editor?.group?.groupName}>
+            return <EditorItem onClick={()=> history.push(`/groups/${editor?.group?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.group?.groupName}>
                 <img alt={editor?.group?.groupName} src={editor?.group?.groupImage || DEFAULT_GROUP_AVATAR} />
             </EditorItem>
         });
@@ -57,7 +60,7 @@ export const EventAdmins = (props) => {
         let editors = individualEditors;
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
         return individualEditors.map(editor => {
-            return <EditorItem style={headless ? editorHeadlessStyles : {}} data-tip={editor?.user?.name}>
+            return <EditorItem onClick={()=> history.push(`/profile/${editor?.user?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.user?.name}>
                 <img alt={editor?.user?.name} src={renderAvatar(editor?.user?.avatar)} />
             </EditorItem>
         });
@@ -108,6 +111,7 @@ const EditorWrapper = styled.div`
 const EditorItem = styled.div`
     width: 45px;
     height: 45px;
+    cursor: pointer;
     &:not(:last-child) {
         margin-right: 7px;
     }

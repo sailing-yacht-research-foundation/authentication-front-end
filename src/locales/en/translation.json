@@ -152,10 +152,12 @@
     "deal": "Deals",
     "profile": {
       "title": "Profile",
-      "name": "My Profile",
+      "name": "My Account",
       "change_password": "Change Password",
       "notification_setting": "Notification Settings",
-      "profile_setting": "Profile Settings"
+      "profile_setting": "Profile Settings",
+      "discover_friends": "Discover Friends",
+      "my_profile": "My Profile"
     },
     "app_connection": "App Connections",
     "organizational_membership": "Organizational Memberships",
@@ -226,7 +228,8 @@
       "password_security": "Password & Security",
       "problem_updating_profile": "There are problem updating your profile.",
       "error_happened_when_upload_profile_picture": "An error happened when uploading your profile picture",
-      "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file."
+      "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
+      "profile_mode": "Profile Mode"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!",
@@ -314,7 +317,8 @@
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",
     "error_happened": "Service is unavailable",
-    "our_service_is_temporary_unavailable_at_the_moment": "Our service is temporary unavailable at the moment."
+    "our_service_is_temporary_unavailable_at_the_moment": "Our service is temporary unavailable at the moment.",
+    "an_error_happened_when_performing_your_request": "An unexpected error happened when performing your request."
   },
   "data_page": {
     "syrf_race_data": "SYRF Race Data",
@@ -434,7 +438,8 @@
     "error_endtime_shouldgreater_starttime": "End time should be greater than start time",
     "error_starttime_shouldgreater_currenttime": "Start time should be greater than current time",
     "successfully_revoked": "Successfully revoked.",
-    "an_error_happened_when_performing_your_request":"An unexpected error happened when performing your request."
+    "an_error_happened_when_performing_your_request":"An unexpected error happened when performing your request.",
+    "successfully_assigned_people_as_editor": "Successfully assigned this person as editor!"
   },
   "course_list": {
     "name": "Name",
@@ -718,6 +723,7 @@
     "world_sailing_number": "Your world Sailing Number",
     "phone_number": "Your phone number.",
     "language": "Your spoken language.",
+    "profile_mode": "Either private or public",
     "delete_account": "Delete all your associated information.",
     "new_password": "Your new password.",
     "password_confirmation": "Please confirm you new password.",
@@ -732,7 +738,7 @@
     "group_visibility": "The visibility of this group towards other sailors.",
     "group_type": "Type of this group.",
     "delete_this_track": "Delete this track",
-    "set_this_event_as_group_admin": "Set groups as admins for this event."
+    "set_this_event_as_group_admin": "Set or assign admins for this event."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -890,7 +896,7 @@
     "select_or_search_a_group": "Select or search a Group",
     "please_choose_a_group": "Please choose a group from the list.",
     "successfully_added_this_event_as_group_admin": "Successfully added this event as group admin.",
-    "assign_this_event_as_group_admin": "Assign groups as admins for this event",
+    "assign_admins_for_this_event": "Assign admins for this event",
     "requested": "Requested",
     "set_as_admin": "Set as admin",
     "please_choose_an_image_to_crop": "Please choose an image to crop!",
@@ -908,5 +914,27 @@
     "group": "Group",
     "revoke": "Revoke",
     "no_results_found": "No results found."
+  },
+  "public_profile": {
+    "people_you_may_know": "People you may know",
+    "profile_is_private": "This profile is private",
+    "number_followers": "{{numberOfFollowers}} followers",
+    "number_following": "{{numberOfFollowing}} following",
+    "top_influencers":  "Top Influencers",
+    "follow": "Follow",
+    "Unfollow": "Unfollow",
+    "start_searching_by_typing_something": "Start searching by typing something.",
+    "search_people": "Search people...",
+    "see_more": "See more",
+    "accept": "Accept",
+    "reject": "Reject",
+    "followers": "Followers",
+    "following": "Following",
+    "requested": "Requested",
+    "you_dont_have_any_follow_requests":"You don't have any follow requests at the moment.",
+    "requested_to_follow_you": "Requested to follow you.",
+    "unfollow_people": "Unfollow {{profileName}}",
+    "are_you_sure_to_unfollow": "Are you sure you want to unfollow {{profileName}}?",
+    "search_or_select_people": "Search or select a person."
   }
 }
