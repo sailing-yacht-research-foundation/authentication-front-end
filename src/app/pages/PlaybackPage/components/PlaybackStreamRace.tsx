@@ -298,6 +298,7 @@ export const PlaybackStreamRace = (props) => {
       vessel,
       vesselParticipantId: id,
       positions: [position.lat, position.lon] || [],
+      lastPosition: { lon: position.lon, lat: position.lat }, 
       deviceType: 'boat',
       participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },
       color: stringToColour(id),
