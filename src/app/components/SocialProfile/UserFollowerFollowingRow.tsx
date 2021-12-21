@@ -62,21 +62,21 @@ export const UserFollowerFollowingRow = (props) => {
         if (!followStatus)
             return <Spin spinning={isLoading}><FollowButton type='link' onClick={follow}>{t(translations.public_profile.follow)}</FollowButton></Spin>;
         else if (followStatus === FollowStatus.ACCEPTED)
-            return <Spin spinning={isLoading}><FollowButton type='link' onClick={()=>setShowUnfollowModal(true)}>{t(translations.public_profile.following)}</FollowButton></Spin>;
+            return <Spin spinning={isLoading}><FollowButton type='link' onClick={() => setShowUnfollowModal(true)}>{t(translations.public_profile.following)}</FollowButton></Spin>;
         else if (followStatus === FollowStatus.REQUESTED)
-            return <Spin spinning={isLoading}><FollowButton type='link' onClick={()=>setShowUnfollowModal(true)}>{t(translations.public_profile.requested)}</FollowButton></Spin>;
+            return <Spin spinning={isLoading}><FollowButton type='link' onClick={() => setShowUnfollowModal(true)}>{t(translations.public_profile.requested)}</FollowButton></Spin>;
     }
 
     return (
         <PeopleItem>
-            <UnfollowConfirmModal profileName={profile.name} visible={showUnfollowModal} unfollow={unfollow} hideModal={()=>setShowUnfollowModal(false)}/>
+            <UnfollowConfirmModal profileName={profile.name} visible={showUnfollowModal} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} />
             <PeopleInnerWrapper>
                 <PeopleAvatar>
                     <img src={renderAvatar(profile.avatar)} className="avatar-img" />
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id || profileId}`}>{profile.name}</PeopleName>
-                    <PeopleAlsoFollow>{t(translations.public_profile.number_followers, { numberOfFollowers: profile.followerCount || profile.followerGained })}</PeopleAlsoFollow>
+                    {(profile.followerCount || profile.followerGained) && <PeopleAlsoFollow>{t(translations.public_profile.number_followers, { numberOfFollowers: profile.followerCount || profile.followerGained })}</PeopleAlsoFollow>}
                 </PeopleInfo>
             </PeopleInnerWrapper>
             <FollowButtonOuter>
