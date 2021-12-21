@@ -6,7 +6,7 @@ import { media } from 'styles/media';
 
 export const ProfileSearchPage = () => {
     return (
-        <Row justify="center" align="top" style={{ minHeight: '100vh', background: '#f7f7f9', marginTop: '70px' }}>
+        <Row justify="center" align="top" style={{ minHeight: 'calc(100vh - 70px)', background: '#f7f7f9', marginTop: '70px' }}>
             <Wrapper>
                 <Main />
             </Wrapper>
