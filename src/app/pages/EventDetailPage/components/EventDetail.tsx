@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, message, Space, Spin, Tag } from 'antd';
-import { DownloadButton, GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
 import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
-import { downloadIcalendarFile, get } from 'services/live-data-server/event-calendars';
+import { downloadIcalendarFile, get, getEditors } from 'services/live-data-server/event-calendars';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -33,6 +33,8 @@ export const EventDetail = () => {
     const history = useHistory();
 
     const { t } = useTranslation();
+
+    const [editors, setEditors] = React.useState<string[]>([]);
 
     React.useEffect(() => {
         fetchEvent();
@@ -62,6 +64,11 @@ export const EventDetail = () => {
             } else {
                 setEndCoordinates(null);
             }
+
+            const editorResponse = await getEditors(data.id);
+            if (editorResponse.success) {
+                setEditors(editorResponse?.data?.individualEditors.map(editor => editor?.user?.id));
+            }
         } else {
             message.error(t(translations.event_detail_page.event_not_found));
             history.push('/events');
@@ -86,7 +93,6 @@ export const EventDetail = () => {
         only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
     }
 
-
     return (
         <Spin spinning={isFetchingEvent}>
             <PageHeaderContainerResponsive>
@@ -103,15 +109,14 @@ export const EventDetail = () => {
                 <EventActions>
                     <Space>
                         {
-                            userId && event.createdById === userId && (
+                            editors.includes(userId) && (
                                 <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
-
                             )
                         }
                         <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
                             downloadIcalendarFile(event);
                         }}>
-                            <AiOutlineCalendar  style={{ fontSize: '23px' }}/>
+                            <AiOutlineCalendar style={{ fontSize: '23px' }} />
                         </Button>
                         <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
                     </Space>
@@ -137,7 +142,7 @@ export const EventDetail = () => {
             {event.id &&
                 <>
                     <EventSection>
-                        <RaceList event={event} />
+                        <RaceList editors={editors} event={event} />
                     </EventSection>
 
                     <EventSection>
