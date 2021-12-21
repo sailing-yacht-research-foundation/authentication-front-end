@@ -9,10 +9,13 @@ import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getUserAttribute } from 'utils/user-utils';
 import { PaginationContainer } from 'app/components/SyrfGeneral';
+import { useLocation } from 'react-router-dom';
 
 export const PeopleYouMayKnowModal = (props) => {
 
     const { t } = useTranslation();
+
+    const location = useLocation();
 
     const { showModal, setShowModal, reloadParentList } = props;
 
@@ -57,13 +60,17 @@ export const PeopleYouMayKnowModal = (props) => {
     }
 
     React.useEffect(() => {
+        hideModal();
+    }, [location]);
+
+    React.useEffect(() => {
         if (user)
             getPeopleYouMayKnow(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     return (
-        <Modal visible={showModal} title={'People you may know'} footer={null} onCancel={hideModal}>
+        <Modal visible={showModal} title={t(translations.public_profile.people_you_may_know)} footer={null} onCancel={hideModal}>
             <Spin spinning={isLoading}>
                 {renderProfiles()}
                 {

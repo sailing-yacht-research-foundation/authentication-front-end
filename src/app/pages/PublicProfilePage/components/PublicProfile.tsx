@@ -37,7 +37,6 @@ export const PublicProfile = () => {
 
     const [showConfirmUnfollowModal, setShowUnfollowConfirmModal] = React.useState<boolean>(false);
 
-
     const getProfileFailed = useSelector(selectGetProfileFailed);
 
     const isLoadingProfile = useSelector(selectIsLoadingProfile);
