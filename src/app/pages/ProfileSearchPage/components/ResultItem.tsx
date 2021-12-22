@@ -73,6 +73,7 @@ const PeopleItem = styled.div`
        margin-bottom: 10px;
        border-bottom: 1px solid #eee;
     }
+    overflow: hidden;
 `;
 
 const PeopleInfo = styled.div`
