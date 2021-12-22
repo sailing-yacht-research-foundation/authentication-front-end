@@ -17,9 +17,11 @@ import { PlaybackOldRace } from "./components/PlaybackOldrace";
 import { PlaybackMobileIssue } from './components/PlaybackMobileIssue';
 import { Share } from "./components/Share";
 import { FullScreen } from './components/FullScreen';
+import { translations } from "locales/translations";
+import { useTranslation } from "react-i18next";
 
 export const PlaybackPage = (props) => {
-  const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "" });
+  const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "" });
   const location = useLocation();
   const parsedQueryString: any = queryString.parse(
     location.search.includes("?") ? location.search.substring(1) : location.search
@@ -38,6 +40,8 @@ export const PlaybackPage = (props) => {
   const { actions } = usePlaybackSlice();
 
   const history = useHistory();
+
+  const { t } = useTranslation();
 
   // Init detail
   useEffect(() => {
@@ -63,6 +67,7 @@ export const PlaybackPage = (props) => {
     if (playbackType === PlaybackTypes.SCRAPEDRACE) {
       if (searchRaceData.id) {
         setRaceIdentity({
+          ...raceIdentity,
           name: searchRaceData?.name,
           description: "",
         });
@@ -73,7 +78,8 @@ export const PlaybackPage = (props) => {
       if (competitionUnitDetail.id) {
         setRaceIdentity({
           name: competitionUnitDetail?.name,
-          description: "",
+          description: competitionUnitDetail?.description,
+          eventName: competitionUnitDetail?.calendarEvent?.name
         });
       }
     }
@@ -122,6 +128,7 @@ export const PlaybackPage = (props) => {
             <PageHeadingContainer>
               <div>
                 <PageHeading>{raceIdentity.name}</PageHeading>
+                {raceIdentity.eventName && <span>{t(translations.playback_page.event)} {raceIdentity.eventName}</span>}
                 {raceIdentity.description && <PageDescription>{raceIdentity.description}</PageDescription>}
               </div>
 
