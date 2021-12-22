@@ -119,7 +119,7 @@ const LinkStyled = styled(Link)`
 const DropDownWrapper = styled.div`
   display: none;
 
-  ${media.large`
+  ${media.medium`
     display: flex;
   `}
 `;
@@ -146,7 +146,7 @@ const AboutLink = styled(LinkStyled)`
 
 const StyledButtonCreate = styled(Button)`
   display: none;
-  ${media.large`
+  ${media.medium`
     display: block;
     margin: 0 15px;
     margin-top: 13px;
