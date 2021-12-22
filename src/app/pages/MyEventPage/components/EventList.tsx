@@ -15,7 +15,7 @@ import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
-import { TIME_FORMAT } from 'utils/constants';
+import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import ReactTooltip from 'react-tooltip';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -117,7 +117,7 @@ export const EventList = () => {
           <BorderedButton onClick={() => {
             history.push(`/events/${record.id}/update`)
           }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
-          <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>
+          {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>}
           <ReactTooltip />
         </Space>;
       }
