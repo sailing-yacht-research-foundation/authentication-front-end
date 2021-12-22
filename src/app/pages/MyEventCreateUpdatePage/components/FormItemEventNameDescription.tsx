@@ -35,9 +35,9 @@ export const FormItemEventNameDescription = () => {
             </Form.Item>
 
             <Form.Item
-                label={<SyrfFieldLabel>Open for Registration</SyrfFieldLabel>}
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}
                 name="isOpen"
-                data-tip={"Opening the registration means anyone can register for the event and start tracking for it from the mobile app"}
+                data-tip={t(translations.tip.regatta)}
                 valuePropName="checked"
             >
                 <Switch />

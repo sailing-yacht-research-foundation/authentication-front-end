@@ -351,7 +351,7 @@
     "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
     "download_icalendar": "Download Icalendar",
     "races": "Races",
-    "status_openregistration": "Open for Registration",
+    "status_openregistration": "Open Regatta",
     "status_publicevent": "Public Event",
     "status_privateevent": "Private Event",
     "admins": "Admins",
@@ -446,7 +446,8 @@
     "successfully_scheduled_this_event": "Successfully scheduled this event.",
     "event_is_opened_for_registration": "Event is opened for registration.",
     "event_is_closed_for_registration": "Event is closed for registration.",
-    "successfully_closed_this_event": "Successfully closed this event."
+    "successfully_closed_this_event": "Successfully closed this event.",
+    "open_regatta": "Open Regatta"
   },
   "course_list": {
     "name": "Name",
@@ -750,7 +751,8 @@
     "schedule_event": "Start to schedule this event.",
     "click_to_make_this_event_open_for_registration": "Click to make this event open for registration.",
     "click_to_make_this_event_close_for_registration": "Click to make this event close for registration.",
-    "click_to_close_this_event_and_make_it_completed": "Click to close this event and make it completed."
+    "click_to_close_this_event_and_make_it_completed": "Click to close this event and make it completed.",
+    "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app"
   },
   "forms": {
     "first_name_is_required": "First name is required.",
