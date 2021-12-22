@@ -12,6 +12,7 @@ import { HiLockClosed } from 'react-icons/hi';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { GoChecklist } from 'react-icons/go';
 import { BiTrash } from 'react-icons/bi';
+import ReactTooltip from 'react-tooltip';
 
 export const ActionButtons = ({
     mode,
@@ -82,10 +83,10 @@ export const ActionButtons = ({
     return (
         <Space size={10}>
             {mode === MODE.UPDATE && <>
-                <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}></Button>
+                <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.assign_admins)}</Button>
                 {
                     event.status === EventState.DRAFT && <>
-                        <Spin spinning={isChangingStatus}><Button onClick={scheduleEvent} data-tip={t(translations.tip.schedule_event)} icon={<ScheduleOutlined style={{ marginRight: '5px' }} />}></Button></Spin>
+                        <Spin spinning={isChangingStatus}><Button onClick={scheduleEvent} data-tip={t(translations.tip.schedule_event)} icon={<ScheduleOutlined style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.schedule_event)}</Button></Spin>
                         <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                             style={{ marginRight: '5px' }}
                             size={18} />}></DeleteButton>
@@ -93,13 +94,13 @@ export const ActionButtons = ({
                 }
                 {
                     event.isOpen && <Spin spinning={isOpeningClosingRegistration}>
-                        {event.allowRegistration ? (<Button data-tip={t(translations.tip.click_to_make_this_event_close_for_registration)} onClick={() => toggleRegistration(false)} icon={<HiLockClosed style={{ marginRight: '5px' }} />}></Button>)
-                            : (<Button onClick={() => toggleRegistration(true)} data-tip={t(translations.tip.click_to_make_this_event_open_for_registration)} icon={< GiArchiveRegister style={{ marginRight: '5px' }} />}></Button>)}
+                        {event.allowRegistration ? (<Button data-tip={t(translations.tip.click_to_make_this_event_close_for_registration)} onClick={() => toggleRegistration(false)} icon={<HiLockClosed style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_registration)}</Button>)
+                            : (<Button onClick={() => toggleRegistration(true)} data-tip={t(translations.tip.click_to_make_this_event_open_for_registration)} icon={< GiArchiveRegister style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.open_registration)}</Button>)}
                     </Spin>
                 }
                 {
                     event.status === EventState.ON_GOING &&
-                    <Spin spinning={isChangingStatus}><Button onClick={closeRace} data-tip={t(translations.tip.click_to_close_this_event_and_make_it_completed)} icon={< GoChecklist style={{ marginRight: '5px' }} />}></Button></Spin>
+                    <Spin spinning={isChangingStatus}><Button onClick={closeRace} data-tip={t(translations.tip.click_to_close_this_event_and_make_it_completed)} icon={< GoChecklist style={{ marginRight: '5px' }} />}></Button>{t(translations.my_event_create_update_page.close_event)}</Spin>
                 }
             </>}
         </Space>

@@ -447,7 +447,12 @@
     "event_is_opened_for_registration": "Event is opened for registration.",
     "event_is_closed_for_registration": "Event is closed for registration.",
     "successfully_closed_this_event": "Successfully closed this event.",
-    "open_regatta": "Open Regatta"
+    "open_regatta": "Open Regatta",
+    "schedule_event":"Schedule Event",
+    "close_event": "Close Event",
+    "open_registration": "Open Registration",
+    "close_registration": "Close Registration",
+    "assign_admins": "Assign Admins"
   },
   "course_list": {
     "name": "Name",
