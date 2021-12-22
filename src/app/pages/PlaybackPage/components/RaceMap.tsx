@@ -81,15 +81,23 @@ export const RaceMap = (props) => {
 
       emitter.on(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, (participant) => {
         _zoomToParticipant(participant);
+      });
+
+      emitter.on(RaceEmitterEvent.UPDATE_COURSE, (courses: MappedCourseGeometrySequenced) => {
+        current.courseData = JSON.parse(JSON.stringify(courses));
+        _updateCourse(courses);
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const _updateCourse = (courseGeometries) => {
+    console.log(courseGeometries);
+    _drawCourse(courseGeometries);
+  }
+
   const _drawCourse = (sequencedCourses) => {
-    const coursesData = {};
-    _prepareCourseData(sequencedCourses, coursesData);
-    _attachCoursesToMap(coursesData); // Attach prepared course data to map
+    _attachCoursesToMap(_prepareCourseData(sequencedCourses)); // Attach prepared course data to map
   }
 
   const _zoomToParticipant = (participant) => {
@@ -109,9 +117,11 @@ export const RaceMap = (props) => {
     }
   }
 
-  const _prepareCourseData = (sequencedCourses, coursesData) => {
-    if (!sequencedCourses.length) return;
+  const _prepareCourseData = (sequencedCourses) => {
+    const coursesData = {};
     const currentCourses = raceStatus.current.courses;
+
+    if (!sequencedCourses.length) return;
 
     // Remove course layers
     if (Object.keys(currentCourses).length) {
@@ -150,6 +160,8 @@ export const RaceMap = (props) => {
         });
       }
     });
+
+    return coursesData;
   }
 
   const _updateLegs = (raceLegs) => {

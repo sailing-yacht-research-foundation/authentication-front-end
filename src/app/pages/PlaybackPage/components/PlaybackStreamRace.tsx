@@ -168,6 +168,8 @@ export const PlaybackStreamRace = (props) => {
             removeBoatFromTheRace(data);
           } else if (dataType === WSMessageDataType.MAKR_TRACK) {
             updateCourseMarksPosition(data);
+          } else if (dataType === WSMessageDataType.COURSE_UPDATED) {
+            eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE, normalizeSequencedGeometries(data.courseSequencedGeometries));
           }
         }
       } catch (e) {

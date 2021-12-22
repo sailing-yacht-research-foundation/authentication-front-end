@@ -117,7 +117,8 @@ export const enum RaceEmitterEvent {
     LEG_UPDATE = 'leg-update',
     REMOVE_PARTICIPANT = 'remove-vesselparticipant',
     UPDATE_COURSE_MARK = 'update-course-mark',
-    ZOOM_TO_PARTICIPANT = 'zoom-to-participant'
+    ZOOM_TO_PARTICIPANT = 'zoom-to-participant',
+    UPDATE_COURSE = 'update-course'
 }
 
 export const DEFAULT_GROUP_AVATAR = '/default-avatar.jpeg';
@@ -139,7 +140,8 @@ export enum WSMessageDataType {
     VIEWER_COUNT = 'viewers-count',
     NEW_PARTICIPANT_JOINED = 'new-participant-joined',
     VESSEL_PARTICIPANT_REMOVED = 'vessel-participant-removed',
-    MAKR_TRACK = 'mark-track'
+    MAKR_TRACK = 'mark-track',
+    COURSE_UPDATED = 'course-updated'
 }
 
 export enum FollowStatus {
