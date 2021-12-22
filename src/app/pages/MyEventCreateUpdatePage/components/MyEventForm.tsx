@@ -1,6 +1,6 @@
 import React from 'react';
-import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Menu, Space, message, Switch, Button } from 'antd';
-import { DeleteButton, PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { Spin, Form, DatePicker, Row, Col, Divider, Select, TimePicker, Menu, message, Switch } from 'antd';
+import { PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -12,9 +12,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { CompetitionUnitList } from './CompetitionUnitList';
-import { MAP_DEFAULT_VALUE } from 'utils/constants';
-import { BiTrash } from 'react-icons/bi';
+import { MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -23,14 +21,15 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
-import { ParticipantList } from './ParticipantList';
-import { VesselParticipantGroupList } from './VesselParticipantGroupList';
-import { MODE } from 'utils/constants';
 import { renderTimezoneInUTCOffset } from 'utils/helpers';
-import { CoursesList } from './CoursesList';
 import tzLookup from 'tz-lookup';
 import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/AssignEventAsGroupAdminModal';
-import { GrGroup } from 'react-icons/gr';
+import { ActionButtons } from './ActionButtons';
+import { EventChildLists } from './EventChildLists';
+import { FormItemEventNameDescription } from './FormItemEventNameDescription';
+import { FormItemHidden } from './FormItemHidden';
+import { FormItemStartLocationAddress } from './FormItemStartLocationAddress';
+import { FormItemEndLocationAddress } from './FormItemEndLocationAddress';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -597,15 +596,7 @@ export const MyEventForm = () => {
                         <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                <Space size={10}>
-                    {mode === MODE.UPDATE && <>
-                        <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}></Button>
-                        <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                            style={{ marginRight: '5px' }}
-                            size={18} />}></DeleteButton>
-                    </>}
-
-                </Space>
+                <ActionButtons event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} showAssignEventAsGroupAdminModal={showAssignEventAsGroupAdminModal} />
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSavingEvent}>
@@ -622,136 +613,15 @@ export const MyEventForm = () => {
                             endDate: moment().add(1, 'days')
                         }}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.name)}</SyrfFieldLabel>}
-                            name="name"
-                            className="event-name-step"
-                            data-tip={t(translations.tip.name_of_the_event)}
-                            rules={[{ required: true, message: t(translations.forms.event_name_is_required) },
-                            {
-                                max: 150, message: t(translations.forms.event_name_must_not_be_longer_than_150_chars)
-                            }]}
-                        >
-                            <SyrfInputField autoCorrect="off" />
-                        </Form.Item>
-
-                        <Form.Item
-                            rules={[{ max: 255, message: t(translations.forms.event_description_must_not_be_longer_than_255_chars) }]}
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
-                            name="description"
-                            className="event-description-step"
-                            data-multiline={true}
-                            data-tip={t(translations.tip.event_description)}
-                        >
-                            <SyrfTextArea autoCorrect="off" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>Open for Registration</SyrfFieldLabel>}
-                            name="isOpen"
-                            data-tip={"Opening the registration means anyone can register for the event and start tracking for it from the mobile app"}
-                            valuePropName="checked"
-                        >
-                            <Switch />
-                        </Form.Item>
+                        <FormItemEventNameDescription />
 
                         <Divider />
 
-                        <Row gutter={24} style={{ display: 'none' }}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.longitude)}</SyrfFieldLabel>}
-                                    name="lon"
-                                    rules={[{ required: true }]}
-                                >
-                                    <SyrfInputField disabled />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.latitude)}</SyrfFieldLabel>}
-                                    name="lat"
-                                    rules={[{ required: true }]}
-                                >
-                                    <SyrfInputField disabled />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.latitude)}</SyrfFieldLabel>}
-                                    name="endLat"
-                                    rules={[{ required: false }]}
-                                >
-                                    <SyrfInputField disabled />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.latitude)}</SyrfFieldLabel>}
-                                    name="endLon"
-                                    rules={[{ required: false }]}
-                                >
-                                    <SyrfInputField disabled />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        <FormItemHidden />
 
                         <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoosedLocation={onChoosedLocation} />
 
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_location)}</SyrfFieldLabel>}
-                            name="location"
-                            className="event-location-step"
-                            data-tip={t(translations.tip.event_location_start)}
-                            rules={[{ required: true, message: t(translations.forms.location_is_required) }]}
-                        >
-                            <PlacesAutocomplete
-                                value={address}
-                                onChange={handleAddressChange}
-                                onSelect={handleSelectAddress}
-                            >
-                                {({ getInputProps, suggestions, getSuggestionItemProps }) => {
-                                    return (
-                                        <>
-                                            <SyrfInputField
-                                                {...getInputProps({
-                                                    placeholder: t(translations.profile_page.update_profile.search_places),
-                                                    className: 'location-search-input',
-                                                })}
-                                                value={address}
-                                                allowClear
-                                                autoCorrect="off"
-                                            />
-                                            {suggestions.length > 0 && <StyledPLaceDropdown>
-                                                {suggestions.map((suggestion) => {
-                                                    const className = suggestion.active
-                                                        ? 'suggestion-item--active'
-                                                        : 'suggestion-item';
-                                                    // inline style for demonstration purpose
-                                                    const style = suggestion.active
-                                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                                    return (
-                                                        <Menu.Item
-                                                            {...getSuggestionItemProps(suggestion, {
-                                                                className,
-                                                                style,
-                                                            })}
-                                                            key={suggestion.index}
-                                                        >
-                                                            <span>{suggestion.description}</span>
-                                                        </Menu.Item>
-                                                    );
-                                                })}
-                                            </StyledPLaceDropdown>}
-                                        </>
-                                    )
-                                }}
-                            </PlacesAutocomplete>
-                        </Form.Item>
+                        <FormItemStartLocationAddress address={address} handleAddressChange={handleAddressChange} handleSelectAddress={handleSelectAddress} />
 
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
@@ -831,56 +701,7 @@ export const MyEventForm = () => {
                             </Col>
                         </Row>
 
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_location)}</SyrfFieldLabel>}
-                            name="endLocation"
-                            className="event-location-step"
-                            data-tip={t(translations.tip.event_location_end)}
-                        >
-                            <PlacesAutocomplete
-                                value={address}
-                                onChange={handleEndAddressChange}
-                                onSelect={handleSelectEndAddress}
-                            >
-                                {({ getInputProps, suggestions, getSuggestionItemProps }) => {
-                                    return (
-                                        <>
-                                            <SyrfInputField
-                                                {...getInputProps({
-                                                    placeholder: t(translations.profile_page.update_profile.search_places),
-                                                    className: 'location-search-input',
-                                                })}
-                                                allowClear
-                                                value={endAddress}
-                                                autoCorrect="off"
-                                            />
-                                            {suggestions.length > 0 && <StyledPLaceDropdown>
-                                                {suggestions.map((suggestion) => {
-                                                    const className = suggestion.active
-                                                        ? 'suggestion-item--active'
-                                                        : 'suggestion-item';
-                                                    // inline style for demonstration purpose
-                                                    const style = suggestion.active
-                                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                                    return (
-                                                        <Menu.Item
-                                                            {...getSuggestionItemProps(suggestion, {
-                                                                className,
-                                                                style,
-                                                            })}
-                                                            key={suggestion.index}
-                                                        >
-                                                            <span>{suggestion.description}</span>
-                                                        </Menu.Item>
-                                                    );
-                                                })}
-                                            </StyledPLaceDropdown>}
-                                        </>
-                                    )
-                                }}
-                            </PlacesAutocomplete>
-                        </Form.Item>
+                        <FormItemEndLocationAddress address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
                         <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
@@ -970,29 +791,7 @@ export const MyEventForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-
-            {
-                mode === MODE.UPDATE && (
-                    <>
-                        <SyrfFormWrapper ref={raceListRef} style={{ marginTop: '30px' }}>
-                            <CompetitionUnitList eventId={eventId || event.id} />
-                        </SyrfFormWrapper>
-
-                        <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                            <VesselParticipantGroupList eventId={eventId || event.id} />
-                        </SyrfFormWrapper>
-
-                        <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                            <ParticipantList eventId={eventId || event.id} />
-                        </SyrfFormWrapper>
-
-                        <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                            <CoursesList eventId={eventId || event.id} />
-                        </SyrfFormWrapper>
-                    </>
-                )
-            }
-
+            <EventChildLists eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
             <ReactTooltip />
         </Wrapper>
     )
@@ -1005,12 +804,4 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 100%;
     margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
-`;
-
-const StyledPLaceDropdown = styled(Menu)`
-    position: absolute;
-    z-index: 2;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    width: 100%;
 `;

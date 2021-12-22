@@ -354,7 +354,8 @@
     "status_openregistration": "Open for Registration",
     "status_publicevent": "Public Event",
     "status_privateevent": "Private Event",
-    "admins": "Admins"
+    "admins": "Admins",
+    "status": "Status"
   },
   "competition_unit_list_page": {
     "name": "Name",
@@ -418,6 +419,7 @@
     "end_date": "End Date",
     "end_time": "End Time",
     "external_url": "Event Website",
+    "status": "State of This Event",
     "longitude": "Longitude",
     "latitude": "Latitude",
     "save_event": "Save event",
@@ -438,8 +440,13 @@
     "error_endtime_shouldgreater_starttime": "End time should be greater than start time",
     "error_starttime_shouldgreater_currenttime": "Start time should be greater than current time",
     "successfully_revoked": "Successfully revoked.",
-    "an_error_happened_when_performing_your_request":"An unexpected error happened when performing your request.",
-    "successfully_assigned_people_as_editor": "Successfully assigned this person as editor!"
+    "an_error_happened_when_performing_your_request": "An unexpected error happened when performing your request.",
+    "successfully_assigned_people_as_editor": "Successfully assigned this person as editor!",
+    "select_a_state": "Select a state",
+    "successfully_scheduled_this_event": "Successfully scheduled this event.",
+    "event_is_opened_for_registration": "Event is opened for registration.",
+    "event_is_closed_for_registration": "Event is closed for registration.",
+    "successfully_closed_this_event": "Successfully closed this event."
   },
   "course_list": {
     "name": "Name",
@@ -738,7 +745,12 @@
     "group_visibility": "The visibility of this group towards other sailors.",
     "group_type": "Type of this group.",
     "delete_this_track": "Delete this track",
-    "set_this_event_as_group_admin": "Set or assign admins for this event."
+    "set_this_event_as_group_admin": "Set or assign admins for this event.",
+    "status": "Status of an event",
+    "schedule_event": "Start to schedule this event.",
+    "click_to_make_this_event_open_for_registration": "Click to make this event open for registration.",
+    "click_to_make_this_event_close_for_registration": "Click to make this event close for registration.",
+    "click_to_close_this_event_and_make_it_completed": "Click to close this event and make it completed."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -920,7 +932,7 @@
     "profile_is_private": "This profile is private",
     "number_followers": "{{numberOfFollowers}} followers",
     "number_following": "{{numberOfFollowing}} following",
-    "top_influencers":  "Top Influencers",
+    "top_influencers": "Top Influencers",
     "follow": "Follow",
     "Unfollow": "Unfollow",
     "start_searching_by_typing_something": "Start searching by typing something.",
@@ -931,7 +943,7 @@
     "followers": "Followers",
     "following": "Following",
     "requested": "Requested",
-    "you_dont_have_any_follow_requests":"You don't have any follow requests at the moment.",
+    "you_dont_have_any_follow_requests": "You don't have any follow requests at the moment.",
     "requested_to_follow_you": "Requested to follow you.",
     "unfollow_people": "Unfollow {{profileName}}",
     "are_you_sure_to_unfollow": "Are you sure you want to unfollow {{profileName}}?",

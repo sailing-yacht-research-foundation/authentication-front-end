@@ -90,7 +90,13 @@ export const EventList = () => {
       title: t(translations.my_event_list_page.admins),
       dataIndex: 'admin',
       key: 'admin',
-      render: (value, record) => <EventAdmins headless event={record} />
+      render: (_, record) => <EventAdmins headless event={record} />
+    },
+    {
+      title: t(translations.my_event_list_page.status),
+      dataIndex: 'status',
+      key: 'status',
+      render: (value) => value,
     },
     {
       title: t(translations.my_event_list_page.created_date),

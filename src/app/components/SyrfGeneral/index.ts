@@ -215,3 +215,11 @@ text-align: right;
 
 margin: 25px 0;
 `;
+
+export const StyledPLaceDropdown = styled(Menu)`
+    position: absolute;
+    z-index: 2;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    width: 100%;
+`;
