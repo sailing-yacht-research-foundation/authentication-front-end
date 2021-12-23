@@ -119,7 +119,7 @@ export const generateVesselParticipantsLastPosition = (vesselParticipantsObject,
 
     const lastPosition = filteredPositions[0];
 
-    if (!lastPosition)
+    if (!lastPosition) // eslint-disable-next-line
       return;
 
     const isRetrievedTimestampExist = retrievedTimestamps.includes(selectedTimestamp);
@@ -163,7 +163,8 @@ export const normalizeSequencedGeometries = (
       id: sG.id,
       geometryType: sG.geometryType,
       coordinates: coordinates,
-      properties: sG?.properties
+      properties: sG?.properties,
+      points: sG?.points
     };
   });
 };

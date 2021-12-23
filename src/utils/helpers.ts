@@ -309,11 +309,11 @@ export const removeWholeTextNodeOnBackSpace = (e) => {
     }
 }
 
-export const formatRequestPromiseResponse = (requestPromise) => {
+export const formatServicePromiseResponse = (requestPromise) => {
     return requestPromise.then(response => {
         return {
             success: true,
-            data: response.data
+            data: response?.data
         }
     }).catch(error => {
         return {

@@ -52,7 +52,7 @@ export const ResultItem = ({ profile }) => {
             <UnfollowConfirmModal profileName={profile.name} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} visible={showUnfollowModal} />
             <PeopleInnerWrapper>
                 <PeopleAvatar>
-                    <img src={renderAvatar(profile.avatar)} className="avatar-img" />
+                    <img alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id}`}>{profile.name}</PeopleName>

@@ -1,5 +1,5 @@
 import { SYRF_SERVER } from "services/service-constants";
-import { formatRequestPromiseResponse } from "utils/helpers";
+import { formatServicePromiseResponse } from "utils/helpers";
 import syrfRequest from "utils/syrf-request";
 
 
@@ -34,11 +34,11 @@ export const updateProfile = (data) => {
 }
 
 export const deleteUserAccount = () => {
-    return formatRequestPromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`))
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`))
 }
 
 export const changePassword = (password) => {
-    return formatRequestPromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/reset-password/`, {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/reset-password/`, {
         value: password,
         temporary: false,
         type: 'password'
@@ -46,7 +46,7 @@ export const changePassword = (password) => {
 }
 
 export const uploadAvatar = (formData) => {
-    return formatRequestPromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/avatar-upload`, formData, {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/avatar-upload`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -54,5 +54,5 @@ export const uploadAvatar = (formData) => {
 }
 
 export const updateAgreements = (data) => {
-    return formatRequestPromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/accept-eula`, data))
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/accept-eula`, data))
 }

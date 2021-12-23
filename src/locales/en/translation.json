@@ -312,7 +312,8 @@
     "name": "Name",
     "go_back": "Go back",
     "competitor_joined": "Competitor {{competitor_name}} with boat {{boat_name}} joined the race.",
-    "boat_left_the_race": "Boat {{boat_name}} left the race."
+    "boat_left_the_race": "Boat {{boat_name}} left the race.",
+    "event": "Event: "
   },
   "app": {
     "your_session_is_expired": "Your session is expired, please login again.",

@@ -38,7 +38,7 @@ export const InfluencerModal = (props) => {
         setIsLoading(true);
         const response = await getHotRecommandation({ locale: getUserAttribute(user, 'locale'), page, size: 10 });
         setIsLoading(false);
-        
+
         if (response.success) {
             const rows = response.data?.rows.filter(profile => currentUserId !== profile.id);
             setPagination({
@@ -59,6 +59,7 @@ export const InfluencerModal = (props) => {
 
     React.useEffect(() => {
         hideModal();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
 
     React.useEffect(() => {

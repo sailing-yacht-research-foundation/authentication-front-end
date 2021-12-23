@@ -1,6 +1,4 @@
-import { translations } from 'locales/translations';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { debounce } from 'utils/helpers';
@@ -13,8 +11,6 @@ export const SearchProfilesAutoComplete = ({ keyword, user }) => {
     const history = useHistory();
 
     const [results, setResults] = React.useState<any[]>([]);
-
-    const { t } = useTranslation();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSuggestion = React.useCallback(debounce((keyword) => getSuggestions(keyword), 300), []);
@@ -108,8 +104,4 @@ const RightInfoContainer = styled.div`
 const Name = styled.h3`
     margin-bottom: 5px;
     font-size: 14px;
-`;
-
-const Info = styled.span`
-
 `;
