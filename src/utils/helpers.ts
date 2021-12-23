@@ -1,6 +1,5 @@
 import i18next from 'i18next';
 import * as L from 'leaflet';
-import { i18n } from 'locales/i18n';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
@@ -320,7 +319,7 @@ export const showToastMessageOnRequestError = (error) => {
             toast.error(i18next.t(translations.app.resource_is_not_found));
         } else {
             const serverMessage = error?.response?.data?.message;
-            toast.error(serverMessage || i18next.t(translations.app.an_error_happened_when_performing_your_request));
+            toast.error(serverMessage || i18next.t(translations.app.oops_an_unexpected_error_happended_when_performing_your_request));
         }
     } else {
         toast.error(i18next.t(translations.app.you_are_offline));

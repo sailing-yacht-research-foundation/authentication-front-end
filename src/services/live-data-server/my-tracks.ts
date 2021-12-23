@@ -1,6 +1,3 @@
-import i18next from 'i18next';
-import { translations } from 'locales/translations';
-import { toast } from 'react-toastify';
 import { SYRF_SERVER } from 'services/service-constants';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
