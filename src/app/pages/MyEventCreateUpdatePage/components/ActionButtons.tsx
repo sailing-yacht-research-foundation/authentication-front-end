@@ -86,10 +86,10 @@ export const ActionButtons = ({
                 <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.assign_admins)}</Button>
                 {
                     event.status === EventState.DRAFT && <>
-                        <Spin spinning={isChangingStatus}><Button onClick={scheduleEvent} data-tip={t(translations.tip.schedule_event)} icon={<ScheduleOutlined style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.schedule_event)}</Button></Spin>
+                        <Spin spinning={isChangingStatus}><Button onClick={scheduleEvent} data-tip={t(translations.tip.schedule_event)} icon={<ScheduleOutlined style={{ marginRight: '5px', position: 'relative', top: '-2px' }} />}>{t(translations.my_event_create_update_page.schedule_event)}</Button></Spin>
                         <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                             style={{ marginRight: '5px' }}
-                            size={18} />}></DeleteButton>
+                            size={18} />}>{ t(translations.my_event_create_update_page.delete)}</DeleteButton>
                     </>
                 }
                 {
@@ -100,7 +100,7 @@ export const ActionButtons = ({
                 }
                 {
                     event.status === EventState.ON_GOING &&
-                    <Spin spinning={isChangingStatus}><Button onClick={closeRace} data-tip={t(translations.tip.click_to_close_this_event_and_make_it_completed)} icon={< GoChecklist style={{ marginRight: '5px' }} />}></Button>{t(translations.my_event_create_update_page.close_event)}</Spin>
+                    <Spin spinning={isChangingStatus}><Button onClick={closeRace} data-tip={t(translations.tip.click_to_close_this_event_and_make_it_completed)} icon={< GoChecklist style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_event)}</Button></Spin>
                 }
             </>}
         </Space>
