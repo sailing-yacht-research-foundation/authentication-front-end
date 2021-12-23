@@ -92,7 +92,6 @@ export const RaceMap = (props) => {
   }, []);
 
   const _updateCourse = (courseGeometries) => {
-    console.log(courseGeometries);
     _drawCourse(courseGeometries);
   }
 
@@ -397,11 +396,12 @@ export const RaceMap = (props) => {
     let sequencedGeometries = raceStatus.current.courseData;
 
     sequencedGeometries.forEach(geometry => {
-      geometry?.points?.forEach(point => {
+      geometry?.points?.some(point => {
         if (point.id === pointIdToUpdate) {
           point.position = [lat, lon];
-          return;
+          return true;
         }
+        return false;
       })
     });
 
