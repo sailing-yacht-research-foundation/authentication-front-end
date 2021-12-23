@@ -83,15 +83,11 @@ export const ActionButtons = ({
     return (
         <Space size={10}>
             {mode === MODE.UPDATE && <>
-                <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.assign_admins)}</Button>
                 {
-                    event.status === EventState.DRAFT && <>
-                        <Spin spinning={isChangingStatus}><Button onClick={scheduleEvent} data-tip={t(translations.tip.schedule_event)} icon={<ScheduleOutlined style={{ marginRight: '5px', position: 'relative', top: '-2px' }} />}>{t(translations.my_event_create_update_page.schedule_event)}</Button></Spin>
-                        <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                            style={{ marginRight: '5px' }}
-                            size={18} />}>{ t(translations.my_event_create_update_page.delete)}</DeleteButton>
-                    </>
+                    event.status === EventState.ON_GOING &&
+                    <Spin spinning={isChangingStatus}><Button onClick={closeRace} data-tip={t(translations.tip.click_to_close_this_event_and_make_it_completed)} icon={< GoChecklist style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_event)}</Button></Spin>
                 }
+                <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.assign_admins)}</Button>
                 {
                     event.isOpen && <Spin spinning={isOpeningClosingRegistration}>
                         {event.allowRegistration ? (<Button data-tip={t(translations.tip.click_to_make_this_event_close_for_registration)} onClick={() => toggleRegistration(false)} icon={<HiLockClosed style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_registration)}</Button>)
@@ -99,8 +95,12 @@ export const ActionButtons = ({
                     </Spin>
                 }
                 {
-                    event.status === EventState.ON_GOING &&
-                    <Spin spinning={isChangingStatus}><Button onClick={closeRace} data-tip={t(translations.tip.click_to_close_this_event_and_make_it_completed)} icon={< GoChecklist style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_event)}</Button></Spin>
+                    event.status === EventState.DRAFT && <>
+                        <Spin spinning={isChangingStatus}><Button onClick={scheduleEvent} data-tip={t(translations.tip.schedule_event)} icon={<ScheduleOutlined style={{ marginRight: '5px', position: 'relative', top: '-2px' }} />}>{t(translations.my_event_create_update_page.schedule_event)}</Button></Spin>
+                        <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                            style={{ marginRight: '5px' }}
+                            size={18} />}>{ t(translations.my_event_create_update_page.delete)}</DeleteButton>
+                    </>
                 }
             </>}
         </Space>
