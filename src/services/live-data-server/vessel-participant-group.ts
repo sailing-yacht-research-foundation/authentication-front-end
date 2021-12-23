@@ -3,8 +3,7 @@ import { formatServicePromiseResponse } from "utils/helpers";
 import syrfService from 'utils/syrf-request';
 
 export const getVesselParticipantGroups = () => {
-  return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups`, {
-  }))
+  return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups`))
 }
 
 export const getVesselParticipantGroupsByEventId = (calendarEventId, page) => {
@@ -22,10 +21,8 @@ export const getAllVesselParticipantGroups = (page) => {
   }))
 }
 
-
 export const getVesselParticipantGroupById = (id) => {
-  return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups/${id}`, {
-  }))
+  return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups/${id}`))
 };
 
 export const create = (data) => {
