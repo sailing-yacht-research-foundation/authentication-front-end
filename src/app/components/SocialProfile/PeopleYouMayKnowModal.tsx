@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Modal, Spin, Pagination } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -61,6 +60,7 @@ export const PeopleYouMayKnowModal = (props) => {
 
     React.useEffect(() => {
         hideModal();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
 
     React.useEffect(() => {

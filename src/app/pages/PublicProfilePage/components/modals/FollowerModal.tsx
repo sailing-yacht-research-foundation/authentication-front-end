@@ -40,7 +40,8 @@ export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent
     }
 
     React.useEffect(() => {
-        dispatch(actions.getFollowers({ page: 1, profileId }))
+        dispatch(actions.getFollowers({ page: 1, profileId }));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [profileId]);
 
     return (

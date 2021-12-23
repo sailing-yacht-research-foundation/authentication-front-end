@@ -1,9 +1,8 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Input, Form, Select, Divider, DatePicker, Checkbox, Spin, Row, Col } from 'antd';
+import { Input, Form, Select, Divider, Checkbox, Spin, Row, Col } from 'antd';
 import { toast } from 'react-toastify';
-import moment from 'moment';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +13,6 @@ import * as eulaVersions from 'app/pages/EULAPage/components/eulaVersions';
 import * as privacyPolicyVersions from 'app/pages/PrivacyPolicyPage/components/privacyPolicyVersions';
 import { translations } from 'locales/translations';
 import { register } from 'services/live-data-server/auth';
-import { TIME_FORMAT } from 'utils/constants';
 import { EulaInterface } from 'types/Eula';
 import { eulaVersionsFilter } from 'utils/eula';
 import { PrivacyPolicyInterface } from 'types/PrivacyPolicy';
@@ -22,15 +20,6 @@ import { privacypolicyVersionsFilter } from 'utils/privacy-policy';
 import styled from 'styled-components';
 
 const { Option } = Select;
-
-const format = "DD.MM.YYYY HH:mm";
-
-const disabledDates = [
-    {
-        start: "29.12.2002 13:00",
-        end: moment().format(format)
-    },
-];
 
 export const SignupForm = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(false);

@@ -41,6 +41,7 @@ export const FollowingModal = ({ profileId, showModal, setShowModal, reloadParen
 
     React.useEffect(() => {
         dispatch(actions.getFollowing({ page: 1, profileId }));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [profileId]);
 
     return (

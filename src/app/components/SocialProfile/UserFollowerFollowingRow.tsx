@@ -72,7 +72,7 @@ export const UserFollowerFollowingRow = (props) => {
             <UnfollowConfirmModal profileName={profile.name} visible={showUnfollowModal} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} />
             <PeopleInnerWrapper>
                 <PeopleAvatar>
-                    <img src={renderAvatar(profile.avatar)} className="avatar-img" />
+                    <img alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id || profileId}`}>{profile.name}</PeopleName>
