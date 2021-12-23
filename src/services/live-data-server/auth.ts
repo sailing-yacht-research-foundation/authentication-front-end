@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SYRF_SERVER } from "services/service-constants";
+import { formatServicePromiseResponse } from "utils/helpers";
 import syrfRequest from "utils/syrf-request";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -68,20 +69,9 @@ export const validateToken = (token) => {
 
 
 export const renewToken = (refreshToken) => {
-    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/renew-token`, {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/renew-token`, {
         refresh_token: refreshToken
-    })
-    .then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    })
+    }));
 }
 
 export const register = (data) => {
@@ -100,47 +90,17 @@ export const register = (data) => {
 }
 
 export const verifyEmail = () => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/send-verify-email`)
-    .then(response => {
-        return {
-            success: true,
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    })
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/send-verify-email`));
 }
 
 export const sendForgotPassword = (email) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/forget-password`, {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/forget-password`, {
         email: email
-    })
-    .then(response => {
-        return {
-            success: true,
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    })
+    }));
 }
 
 export const logout = (refresh_token) => {
-    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/logout`, {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/logout`, {
         refresh_token
-    })
-    .then(response => {
-        return {
-            success: true,
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    })
+    }));
 }

@@ -1,4 +1,5 @@
 import { SYRF_SERVER } from "services/service-constants";
+import { formatServicePromiseResponse } from "utils/helpers";
 import syrfRequest from "utils/syrf-request";
 
 
@@ -33,67 +34,25 @@ export const updateProfile = (data) => {
 }
 
 export const deleteUserAccount = () => {
-    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`)
-    .then(response => {
-        return {
-            success: true
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    })
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`))
 }
 
 export const changePassword = (password) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/reset-password/`, {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/reset-password/`, {
         value: password,
         temporary: false,
         type: 'password'
-    })
-    .then(response => {
-        return {
-            success: true
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    });
+    }))
 }
 
 export const uploadAvatar = (formData) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/avatar-upload`, formData, {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/avatar-upload`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    })
-    .then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    }); 
+    }))
 }
 
 export const updateAgreements = (data) => {
-    return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/accept-eula`, data)
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/accept-eula`, data))
 }
