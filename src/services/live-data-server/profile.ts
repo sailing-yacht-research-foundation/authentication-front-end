@@ -1,4 +1,3 @@
-import { UserDeleteOutlined } from '@ant-design/icons';
 import { SYRF_SERVER } from 'services/service-constants';
 import syrfRequest from 'utils/syrf-request';
 

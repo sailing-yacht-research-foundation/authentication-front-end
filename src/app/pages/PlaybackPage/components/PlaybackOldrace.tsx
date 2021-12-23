@@ -96,7 +96,7 @@ export const PlaybackOldRace = (props) => {
       if (eventEmitter) {
         eventEmitter.removeAllListeners();
         eventEmitter.off(RaceEmitterEvent.PING, () => { });
-        eventEmitter.off(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, () => { });
+        eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
         eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
         eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
         eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
@@ -288,7 +288,7 @@ export const PlaybackOldRace = (props) => {
   }, []);
 
   const addNewVesselParticipantToTheRace = (data) => {
-    const { vesselParticipant, vessel, participant } = data;
+    const { vesselParticipant, vessel, participant, position } = data;
     const { id } = vesselParticipant;
 
     if (vesselParticipantsRef?.current[id]) return;
@@ -297,8 +297,11 @@ export const PlaybackOldRace = (props) => {
       ...vesselParticipant,
       deviceType: "boat",
       color: stringToColour(vesselParticipant.id),
-      positions: [],
-      lastPosition: {},
+      positions: [position.lat, position.lon],
+      lastPosition: {
+        lat: position.lat,
+        lon: position.lon
+      },
       participant: {
         competitor_name: vessel?.publicName,
         competitior_sail_number: vessel?.vesselParticipantId,
@@ -462,7 +465,7 @@ export const PlaybackOldRace = (props) => {
     const mappedSequencedGeometries = normalizeSequencedGeometries(sequencedGeometries);
 
     setTimeout(() => {
-      eventEmitter.emit(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, mappedSequencedGeometries);
+      eventEmitter.emit(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, mappedSequencedGeometries);
     }, 500);
   };
 

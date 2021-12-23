@@ -4,7 +4,7 @@ import { useMap } from "react-leaflet";
 import ReactDOMServer from "react-dom/server";
 import copy from "copy-to-clipboard";
 import { message } from "antd";
-import { formatCoordinatesObjectToArray, generateLastArray } from "utils/race/race-helper";
+import { formatCoordinatesObjectToArray, generateLastArray, normalizeSequencedGeometries } from "utils/race/race-helper";
 import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
 import { PlayerInfo } from "./PlayerInfo";
@@ -42,6 +42,7 @@ export const RaceMap = (props) => {
     isTracksAttached: false,
     isParticipantsDataAvailable: false,
     zoomedToRaceLocation: false,
+    courseData: [] /// sequenced courses raw data.
   });
 
   useEffect(() => {
@@ -61,11 +62,9 @@ export const RaceMap = (props) => {
       });
 
       // Update the courses
-      emitter.on(RaceEmitterEvent.SEQUENCED_COURSE_UPDATE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
-        const coursesData = {};
-
-        _prepareCourseData(sequencedCourses, coursesData);
-        _attachCoursesToMap(coursesData); // Attach prepared course data to map
+      emitter.on(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
+        current.courseData = JSON.parse(JSON.stringify(sequencedCourses)); // save this for later update.
+        _drawCourse(sequencedCourses);
       });
 
       emitter.on(RaceEmitterEvent.UPDATE_COURSE_MARK, (courseMarkData) => {
@@ -82,10 +81,23 @@ export const RaceMap = (props) => {
 
       emitter.on(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, (participant) => {
         _zoomToParticipant(participant);
+      });
+
+      emitter.on(RaceEmitterEvent.UPDATE_COURSE, (courses: MappedCourseGeometrySequenced) => {
+        current.courseData = JSON.parse(JSON.stringify(courses));
+        _updateCourse(courses);
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const _updateCourse = (courseGeometries) => {
+    _drawCourse(courseGeometries);
+  }
+
+  const _drawCourse = (sequencedCourses) => {
+    _attachCoursesToMap(_prepareCourseData(sequencedCourses)); // Attach prepared course data to map
+  }
 
   const _zoomToParticipant = (participant) => {
     const boat = raceStatus?.current?.boats[participant?.id];
@@ -104,9 +116,11 @@ export const RaceMap = (props) => {
     }
   }
 
-  const _prepareCourseData = (sequencedCourses, coursesData) => {
-    if (!sequencedCourses.length) return;
+  const _prepareCourseData = (sequencedCourses) => {
+    const coursesData = {};
     const currentCourses = raceStatus.current.courses;
+
+    if (!sequencedCourses.length) return;
 
     // Remove course layers
     if (Object.keys(currentCourses).length) {
@@ -145,6 +159,8 @@ export const RaceMap = (props) => {
         });
       }
     });
+
+    return coursesData;
   }
 
   const _updateLegs = (raceLegs) => {
@@ -376,11 +392,20 @@ export const RaceMap = (props) => {
 
   const _updateCourseMark = (courseMarkData) => {
     const { raceData, lat, lon } = courseMarkData;
-    let course = raceStatus?.current?.courses[raceData?.coursePointId];
-    if (!course) return;
+    const pointIdToUpdate = raceData?.coursePointId;
+    let sequencedGeometries = raceStatus.current.courseData;
 
-    if (course instanceof L.Marker)
-      course.setLatLng([lat, lon]);
+    sequencedGeometries.forEach(geometry => {
+      geometry?.points?.some(point => {
+        if (point.id === pointIdToUpdate) {
+          point.position = [lat, lon];
+          return true;
+        }
+        return false;
+      })
+    });
+
+    _drawCourse(normalizeSequencedGeometries(sequencedGeometries));
   }
 
   const _removeVesselParticipant = (vesselParticipantId) => {
