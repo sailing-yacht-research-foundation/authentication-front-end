@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { deleteGroup } from 'services/live-data-server/groups';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const DeleteGroupModal = (props) => {
 
@@ -26,7 +27,7 @@ export const DeleteGroupModal = (props) => {
             toast.success(t(translations.delete_vessel_participant_group_modal.successfully_deleted));
             onGroupDeleted();
         } else {
-            toast.error(t(translations.delete_vessel_participant_group_modal.an_unexpected_error));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

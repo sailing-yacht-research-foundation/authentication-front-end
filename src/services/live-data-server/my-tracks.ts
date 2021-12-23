@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import { translations } from 'locales/translations';
 import { toast } from 'react-toastify';
 import { SYRF_SERVER } from 'services/service-constants';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const getAllTracks = (page, size = 10) => {
@@ -35,12 +36,7 @@ export const downloadTrack = (track, type) => {
             document.body.appendChild(link);
             link.click();
         }).catch(error => {
-
-            if (error?.response?.status === 404) {
-                toast.error(i18next.t(translations.misc.your_file_is_not_found));
-            } else {
-                toast.error(i18next.t(translations.misc.an_error_happended_when_downloading_your_track));
-            }
+            showToastMessageOnRequestError(error);
             return {
                 success: false,
                 error: error

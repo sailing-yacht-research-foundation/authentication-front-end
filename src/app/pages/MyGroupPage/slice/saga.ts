@@ -5,6 +5,7 @@
 import { call, put, takeLatest } from "@redux-saga/core/effects";
 import { getGroupInvitations, getMyGroups, searchGroups } from "services/live-data-server/groups";
 import { GroupMemberStatus } from "utils/constants";
+import { showToastMessageOnRequestError } from "utils/helpers";
 import { groupActions } from ".";
 
 export function* getGroups({ type, payload }) {
@@ -35,6 +36,7 @@ export function* searchForGroups({type, payload }) {
         yield put(groupActions.setSearchCurrentPage(response.data?.page));
         yield put(groupActions.setSearchTotalPage(response.data?.count));
     } else {
+        showToastMessageOnRequestError(response.error);
     }
 }
 

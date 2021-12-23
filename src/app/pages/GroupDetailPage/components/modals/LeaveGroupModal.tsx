@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { leaveGroup } from 'services/live-data-server/groups';
 import { useHistory } from 'react-router';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const LeaveGroupModal = (props) => {
 
@@ -32,7 +33,7 @@ export const LeaveGroupModal = (props) => {
                 toast.error(t(translations.group.please_assign_other_admin_before_leaving_the_group));
                 return;
             }
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

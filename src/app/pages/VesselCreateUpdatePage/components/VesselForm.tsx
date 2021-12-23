@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { MODE } from 'utils/constants';
 import { IoIosArrowBack } from 'react-icons/io';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const VesselForm = () => {
     const history = useHistory();
@@ -67,7 +68,7 @@ export const VesselForm = () => {
             history.push(`/boats/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
-            toast.error(t(translations.vessel_create_update_page.an_error_happened));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

@@ -8,6 +8,7 @@ import { registerParticipantsToVesselParticipant, unregisterParticipantFromVesse
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { media } from 'styles/media';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const AssignVesselParticipantModal = (props) => {
 
@@ -100,7 +101,7 @@ export const AssignVesselParticipantModal = (props) => {
                 && response.error?.response?.status === 422) {
                 toast.error(t(translations.assign_vessel_participant_modal.competitor_already_assigned));
             } else {
-                toast.error(t(translations.assign_vessel_participant_modal.an_error_happended_when_registering));
+                showToastMessageOnRequestError(response.error);
             }
         }
     }
@@ -114,7 +115,7 @@ export const AssignVesselParticipantModal = (props) => {
             toast.success(t(translations.assign_vessel_participant_modal.successfully_unregister));
             getVesselParticipantByEventId(pagination.page);
         } else {
-            toast.error(t(translations.assign_vessel_participant_modal.an_error_happended_when_ungistering));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

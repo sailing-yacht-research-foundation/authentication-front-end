@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const DeleteGroupModal = (props) => {
 
@@ -34,7 +35,7 @@ export const DeleteGroupModal = (props) => {
                     toast.success(t(translations.group.removed_the_group));
                     history.push('/groups');
                 } else {
-                    toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+                    showToastMessageOnRequestError(response.error);
                 }
             })
             .catch(info => {

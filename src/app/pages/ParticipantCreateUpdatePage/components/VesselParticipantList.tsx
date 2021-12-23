@@ -14,6 +14,7 @@ import {
     PageHeaderTextSmall
 } from 'app/components/SyrfGeneral';
 import ReactTooltip from 'react-tooltip';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const VesselParticipantList = (props) => {
 
@@ -108,7 +109,7 @@ export const VesselParticipantList = (props) => {
                 && response.error?.response?.status === 422) {
                 toast.error(t(translations.assign_vessel_participant_modal.competitor_already_assigned));
             } else {
-                toast.error(t(translations.assign_vessel_participant_modal.an_error_happended_when_registering));
+                showToastMessageOnRequestError(response.error);
             }
         }
     }
@@ -120,7 +121,7 @@ export const VesselParticipantList = (props) => {
             toast.success(t(translations.assign_vessel_participant_modal.successfully_unregister));
             getVesselParticipantByEventId(pagination.page);
         } else {
-            toast.error(t(translations.assign_vessel_participant_modal.an_error_happended_when_ungistering));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

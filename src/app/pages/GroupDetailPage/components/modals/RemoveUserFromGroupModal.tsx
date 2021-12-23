@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { removeMemberFromTheGroup } from 'services/live-data-server/groups';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const RemoveMemberFromGroupModal = (props) => {
 
@@ -27,7 +28,7 @@ export const RemoveMemberFromGroupModal = (props) => {
             toast.success(t(translations.group.successfully_removed_this_person_from_the_group, { memberName:member.member?.name }));
             onMemberRemoved();
         } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

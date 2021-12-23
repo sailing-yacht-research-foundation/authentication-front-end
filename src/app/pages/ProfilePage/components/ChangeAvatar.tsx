@@ -6,7 +6,7 @@ import { Image, Spin, Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Avatar from 'react-avatar-edit';
-import { dataURLtoFile } from 'utils/helpers';
+import { dataURLtoFile, showToastMessageOnRequestError } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { updateProfile, uploadAvatar } from 'services/live-data-server/user';
@@ -48,13 +48,13 @@ export const ChangeAvatar = (props) => {
                     lastName: authUser.lastName,
                     attributes: {
                         picture: avatarUrl,
-                        language: getUserAttribute(authUser,'language'),
-                        locale: getUserAttribute(authUser,'locale'),
-                        bio: getUserAttribute(authUser,'bio'),
-                        sailing_number: getUserAttribute(authUser,'sailing_number'),
-                        birthdate: getUserAttribute(authUser,'birthdate'),
-                        address: getUserAttribute(authUser,'address'),
-                        phone_number: getUserAttribute(authUser,'phone_number'),
+                        language: getUserAttribute(authUser, 'language'),
+                        locale: getUserAttribute(authUser, 'locale'),
+                        bio: getUserAttribute(authUser, 'bio'),
+                        sailing_number: getUserAttribute(authUser, 'sailing_number'),
+                        birthdate: getUserAttribute(authUser, 'birthdate'),
+                        address: getUserAttribute(authUser, 'address'),
+                        phone_number: getUserAttribute(authUser, 'phone_number'),
                         showed_tour: getUserAttribute(authUser, 'showed_tour'),
                     }
                 }
@@ -66,7 +66,7 @@ export const ChangeAvatar = (props) => {
             if (response.error?.response && response.error?.response?.status === 400) // file too large
                 toast.error(t(translations.profile_page.update_profile.your_file_is_too_large_please_choose_another));
             else
-                toast.error(t(translations.profile_page.update_profile.error_happened_when_upload_profile_picture));
+                showToastMessageOnRequestError(response.error);
         }
     }
 

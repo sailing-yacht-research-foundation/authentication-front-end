@@ -15,7 +15,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { create, getById, update } from 'services/live-data-server/courses';
-import { addNonGroupLayers } from 'utils/helpers';
+import { addNonGroupLayers, showToastMessageOnRequestError } from 'utils/helpers';
 import ReactDOMServer from 'react-dom/server';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -442,7 +442,7 @@ export const MapView = React.forwardRef((props, ref) => {
                 toast.success(t(translations.course_create_update_page.successfully_created_your_course));
                 setMode(MODE.UPDATE);
             } else {
-                toast.error(t(translations.course_create_update_page.an_unexpected_error));
+                showToastMessageOnRequestError(response.error);
             }
 
             goBack();
