@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
 import { supportedSearchCriteria } from 'utils/constants';
+import { formatRequestPromiseResponse } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {
@@ -50,149 +51,53 @@ export const search = (params) => {
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
-    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
 
 export const create = (calendarEventId, data) => {
-    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
+    return formatRequestPromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
         ...data
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    }))
 }
 
 export const getAllByCalendarEventId = (calendarEventId, page, size = 10) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
         params: {
             page: page,
             size: size,
         }
-    })
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    }));
 }
 
 export const getAllCompetitionUnits = (page) => {
     const userId: any = localStorage.getItem('user_id');
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
         }
-    })
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    }))
 }
 
 export const get = (calendarEventId, competitionUnitId) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`)
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`))
 }
 
 export const update = (calendarEventId, competitionUnitId, data) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`, {
+    return formatRequestPromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`, {
         ...data
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    }))
 }
 
 export const deleteCompetitionUnit = (calendarEventId, competitionUnitId) => {
-    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`)
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    return formatRequestPromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`))
 }
 
 export const getCompetitionUnitList = () => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units`, {
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units`))
 }
 
 export const getCompetitionUnitById = (id) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}`, {
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}`));
 };
 
 export const searchScrapedRaceById = (id: string) => {
@@ -206,110 +111,39 @@ export const searchScrapedRaceById = (id: string) => {
 
     searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "url", "source"];
 
-    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
 
 export const cloneCourse = (fromCompetitionUnitId, toCompetitionUnitId, newName) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${toCompetitionUnitId}/clone-course`, {
+    return formatRequestPromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${toCompetitionUnitId}/clone-course`, {
         cloneFromCompetitionId: fromCompetitionUnitId,
         newName: newName
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    }))
 }
 
 export const getAllCompetitionUnitsByEventIdWithSort = (calendarEventId, page) => {
     const userId: any = localStorage.getItem('user_id');
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units?sort=createdAt&srdir=-1${!!userId ? `&createdById_eq=${userId}` : ''}`, {
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units?sort=createdAt&srdir=-1${!!userId ? `&createdById_eq=${userId}` : ''}`, {
         params: {
             page: page
         }
-    })
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    }))
 }
 
 export const getSimplifiedTracksByCompetitionUnit = (id: string) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/simplified-tracks`).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/simplified-tracks`))
 }
 
 export const getLegsByCompetitionUnit = (id: string) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/legs`).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/legs`))
 }
 
 export const getTimeByCompetitionUnit = (id: string) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/time`).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/time`))
 }
 
 export const getCourseByCompetitionUnit = (id: string) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/course`).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/course`))
 }
 
 const parseKeyword = (keyword) => {
@@ -353,29 +187,9 @@ export const getSuggestion = (fieldName, word) => {
         }
     };
 
-    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
 
 export const getRaceViewsCount = (competitionUnitId) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/viewers-count`).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    });
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/viewers-count`));
 }

@@ -148,7 +148,7 @@ export enum FollowStatus {
 }
 
 export enum EventState {
-    SHEDULED = 'SHEDULED',
+    SCHEDULED = 'SCHEDULED',
     DRAFT = 'DRAFT',
     CANCELED = 'CANCELED',
     COMPLETED = 'COMPLETED',

@@ -308,3 +308,17 @@ export const removeWholeTextNodeOnBackSpace = (e) => {
             selection?.anchorNode?.previousSibling?.parentNode?.removeChild(selection?.anchorNode?.previousSibling)
     }
 }
+
+export const formatRequestPromiseResponse = (requestPromise) => {
+    return requestPromise.then(response => {
+        return {
+            success: true,
+            data: response.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}

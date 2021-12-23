@@ -39,7 +39,7 @@ export const ActionButtons = ({
             toast.success(t(translations.my_event_create_update_page.successfully_scheduled_this_event));
             setEvent({
                 ...event,
-                status: EventState.SHEDULED
+                status: EventState.SCHEDULED
             })
         } else {
             toast.error(t(translations.app.an_error_happened_when_performing_your_request));

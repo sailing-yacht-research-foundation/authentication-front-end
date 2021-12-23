@@ -1,100 +1,39 @@
 import { SYRF_SERVER } from 'services/service-constants';
+import { EventState } from 'utils/constants';
+import { formatRequestPromiseResponse } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const getAll = () => {
     const userId: any = localStorage.getItem('user_id');
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`)
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`))
 }
 
 export const getMany = (page) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/my-events?isPrivate_eq=false`, {
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/my-events?isPrivate_eq=false`, {
         params: {
             page: page
         }
-    })
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    }))
 }
 
 export const get = (id) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${id}`)
-        .then(response => {
-            return {
-                success: true,
-                data: response.data
-            }
-        }).catch(error => {
-            return {
-                success: false,
-                error: error
-            }
-        })
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${id}`))
 }
 
 export const create = (data) => {
-    return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events`, {
+    return formatRequestPromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events`, {
         ...data
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    }))
 }
 
 export const update = (id, data) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${id}`, {
+    return formatRequestPromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${id}`, {
         ...data
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    }));
 }
 
 export const deleteEvent = (id) => {
-    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${id}`).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    return formatRequestPromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${id}`))
 }
 
 export const downloadIcalendarFile = (event) => {
@@ -114,100 +53,39 @@ export const downloadIcalendarFile = (event) => {
 }
 
 export const getEditors = (eventId) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/editors`).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    return formatRequestPromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/editors`))
 }
 
 export const addEditor = (eventId, editorId) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/add-editors`, {
+    return formatRequestPromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/add-editors`, {
         userIds: [
             editorId
         ]
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    }))
 }
 
 export const removeEditor = (eventId, editorId) => {
-    return syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/remove-editors`, {
+    return formatRequestPromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/remove-editors`, {
         data: {
             userIds: [
                 editorId
             ]
         }
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    }));
 }
 
 export const scheduleCalendarEvent = (eventId) => {
-    return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/status`, {
-        status: 'SCHEDULED'
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    return formatRequestPromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/status`, {
+        status: EventState.SCHEDULED
+    }));
 }
 
 export const toggleOpenForRegistration = (eventId: string, allowRegistration: boolean) => {
-    return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/manage-registration`, {
+    return formatRequestPromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/manage-registration`, {
         allowRegistration
-    }).then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    }));
 }
 
 export const closeCalendarEvent = (eventId: string) => {
-    return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/stop`)
-    .then(response => {
-        return {
-            success: true,
-            data: response.data
-        }
-    }).catch(error => {
-        return {
-            success: false,
-            error: error
-        }
-    })
+    return formatRequestPromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/stop`))
 }
