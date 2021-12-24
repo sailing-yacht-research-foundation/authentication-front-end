@@ -275,7 +275,8 @@ export const MapView = React.forwardRef((props, ref) => {
                 });
                 if (geometry) {
                     geometry = JSON.parse(JSON.stringify(geometry));
-                    switch (layer.options._geometry_type) {
+                    const geometryType = layer.options._geometry_type;
+                    switch (geometryType) {
                         case GEOMETRY_TYPE.point:
                             geometry.points[0].position = [layer.getLatLng().lat, layer.getLatLng().lng]
                             break;
@@ -291,6 +292,9 @@ export const MapView = React.forwardRef((props, ref) => {
                                     geometry.points[index].position = [point.lat, point.lng]
                                 });
                             });
+                            if (geometryType === GEOMETRY_TYPE.polygon) { // polygon only, making this polygon first position & last position the same as discussed with Aan.
+                                geometry.points[geometry.points.length - 1].position = geometry.points[0].position;
+                            }
                             break;
                     }
                     mutableCouseSequencedGeometries.current.push(geometry);
@@ -332,6 +336,7 @@ export const MapView = React.forwardRef((props, ref) => {
                             })
                         });
                     });
+                    geometry.points[geometry.points.length - 1].position = geometry.points[0].position; // making this polygon first position & last position the same as discussed with Aan.
                     layer.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
                 case LAYER_TYPE.polyline:
