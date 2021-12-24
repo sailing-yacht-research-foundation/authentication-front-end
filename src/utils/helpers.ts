@@ -325,3 +325,17 @@ export const showToastMessageOnRequestError = (error) => {
         toast.error(i18next.t(translations.app.you_are_offline));
     }
 }
+
+export const formatServicePromiseResponse = (requestPromise) => {
+    return requestPromise.then(response => {
+        return {
+            success: true,
+            data: response?.data
+        }
+    }).catch(error => {
+        return {
+            success: false,
+            error: error
+        }
+    });
+}

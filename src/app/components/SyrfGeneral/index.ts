@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { media } from 'styles/media';
-import { Button } from 'antd';
+import { Button, Menu } from 'antd';
 import { RiCloseCircleFill } from 'react-icons/ri';
 
 export const PageHeaderContainer = styled.div`
@@ -214,4 +214,12 @@ export const PaginationContainer = styled.div`
 text-align: right;
 
 margin: 25px 0;
+`;
+
+export const StyledPLaceDropdown = styled(Menu)`
+    position: absolute;
+    z-index: 2;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    width: 100%;
 `;
