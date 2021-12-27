@@ -294,7 +294,6 @@ export const MapView = React.forwardRef((props, ref) => {
                             });
                             if (geometryType === GEOMETRY_TYPE.polygon) { // polygon only, making this polygon first position & last position the same as discussed with Aan.
                                 makeSureFirstPointAndLastPointOfPolygonAreTheSame(geometry);
-                                console.log(geometry);
                             }
                             break;
                     }
