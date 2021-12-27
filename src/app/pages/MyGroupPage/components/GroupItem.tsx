@@ -5,7 +5,7 @@ import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
-import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
+import { renderNumberWithCommas, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
@@ -53,7 +53,7 @@ export const GroupItemRow = (props) => {
             dispatch(actions.getRequestedGroups(requestedGroupsCurrentPage));
             dispatch(actions.getGroups(groupCurrentPage));
         } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -79,7 +79,10 @@ export const GroupItemRow = (props) => {
         if (members && Array.isArray(members)) {
             return (<>
                 {members.map(member =>
-                    <GroupMemberItem data-tip={member.name}>
+                    <GroupMemberItem onClick={e => {
+                        e.stopPropagation();
+                        history.push(`/profile/${member.userId}`)
+                    }} data-tip={member.name}>
                         <img src={renderAvatar(member.avatar)} alt={member.name} />
                     </GroupMemberItem>
                 )}

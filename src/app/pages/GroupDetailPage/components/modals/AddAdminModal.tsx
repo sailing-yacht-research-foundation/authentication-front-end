@@ -7,7 +7,7 @@ import { SyrfFormSelect } from 'app/components/SyrfForm';
 import { useParams } from 'react-router';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'utils/helpers';
+import { debounce, showToastMessageOnRequestError } from 'utils/helpers';
 import { GroupMemberStatus } from 'utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAcceptedMemberResults } from '../../slice/selectors';
@@ -51,7 +51,7 @@ export const AddAdminModal = (props) => {
                     hideAddAdminModal();
                     onAdminAdded();
                 } else {
-                    toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+                    showToastMessageOnRequestError(response.error);
                 }
             })
             .catch(info => {

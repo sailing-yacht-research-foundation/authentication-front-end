@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue } from 'utils/helpers';
+import { renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { create as createVessel } from 'services/live-data-server/vessels';
@@ -111,7 +111,7 @@ export const VesselList = (props) => {
             toast.success(t(translations.vessel_participant_group_create_update_page.successfully_added_to_group));
             getAllUserVesselParticipants();
         } else {
-            toast.error(t(translations.vessel_participant_group_create_update_page.an_error_happened_when_adding_vessel_to_this_group));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -133,7 +133,7 @@ export const VesselList = (props) => {
                 toast.success(t(translations.vessel_participant_group_create_update_page.successfully_removed_vessel_from_the_group));
                 getAllUserVesselParticipants();
             } else {
-                toast.error(t(translations.vessel_participant_group_create_update_page.an_error_happened_when_removing_vessel_from_this_group));
+                showToastMessageOnRequestError(response.error);
             }
         }
     }

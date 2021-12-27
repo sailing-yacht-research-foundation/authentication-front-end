@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'antd';
 import { SyrfFieldLabel, SyrfInputField } from 'app/components/SyrfForm';
-import { checkIfEmailIsValid } from 'utils/helpers';
+import { checkIfEmailIsValid, showToastMessageOnRequestError } from 'utils/helpers';
 import { inviteUsersViaEmails } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { translations } from 'locales/translations';
@@ -66,7 +66,7 @@ export const InviteUserModal = (props) => {
                     setShowInvitationModal(true);
                     setEmails(processedEmails);
                 } else {
-                    toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+                    showToastMessageOnRequestError(response.error);
                 }
             })
             .catch(info => {

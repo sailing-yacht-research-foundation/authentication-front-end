@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { deleteParticipant } from 'services/live-data-server/participants';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const DeleteParticipantModal = (props) => {
 
@@ -26,7 +27,7 @@ export const DeleteParticipantModal = (props) => {
             toast.success(t(translations.delete_participant_modal.successfully_deleted, { name: participant.publicName }));
             onParticipantDeleted();
         } else {
-            toast.error(t(translations.delete_participant_modal.an_unexpected_error));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

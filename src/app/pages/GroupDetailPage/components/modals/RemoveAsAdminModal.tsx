@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { removeAsAdmin } from 'services/live-data-server/groups';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const RemoveAsAdminModal = (props) => {
 
@@ -27,7 +28,7 @@ export const RemoveAsAdminModal = (props) => {
             toast.success(t(translations.group.successfully_remove_person_as_admin, { memberName: member?.member?.name }));
             onAdminRemoved();
         } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

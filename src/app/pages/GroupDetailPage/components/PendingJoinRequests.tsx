@@ -14,6 +14,7 @@ import { GroupMemberStatus } from 'utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectMemberCurrentPage } from '../slice/selectors';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const PendingJoinRequests = (props) => {
 
@@ -72,7 +73,7 @@ export const PendingJoinRequests = (props) => {
                 dispatch(actions.searchAcceptedMembers({ groupId, keyword: '', status }));
             }
         } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

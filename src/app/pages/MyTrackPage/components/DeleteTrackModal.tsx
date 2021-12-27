@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 import { translations } from 'locales/translations';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const DeleteTrackModal = (props) => {
 
@@ -26,7 +27,7 @@ export const DeleteTrackModal = (props) => {
             toast.success(t(translations.delete_track_modal.successfully_deleted, { name: track?.event?.name }));
             onTrackDeleted();
         } else {
-            toast.error(t(translations.delete_track_modal.an_unexpected_error));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

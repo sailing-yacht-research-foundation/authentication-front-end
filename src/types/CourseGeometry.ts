@@ -20,4 +20,5 @@ export interface MappedCourseGeometrySequenced {
   geometryType: string;
   coordinates: number[][];
   properties: any;
+  points: any[];
 }

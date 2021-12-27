@@ -6,12 +6,15 @@ import { GroupMemberStatus } from 'utils/constants';
 import { Tag } from 'antd';
 import { renderAvatar } from 'utils/user-utils';
 import { media } from 'styles/media';
+import { useHistory } from 'react-router-dom';
 
 export const UserItemRow = (props) => {
 
     const { item, pendingJoinRequest } = props;
 
     const { t } = useTranslation();
+
+    const history = useHistory();
 
     const renderTag = () => {
         switch (item.status) {
@@ -33,7 +36,7 @@ export const UserItemRow = (props) => {
                     <img src={renderAvatar(item?.member?.avatar)} alt={item?.member?.name}/>
                 </UserAvatarContainer>
                 <UserInforContainer>
-                    <UserName>{item?.member?.name || item?.email} {renderTag()}</UserName>
+                    <UserName onClick={()=> history.push(`/profile/${item?.member?.id}`)}>{item?.member?.name || item?.email} {renderTag()}</UserName>
                     <UserDescription>{item?.isAdmin ? t(translations.group.admin) : t(translations.group.member)}</UserDescription>
                 </UserInforContainer>
             </UserInnerContainer>
@@ -86,6 +89,7 @@ const UserInforContainer = styled.div`
 
 const UserName = styled.a`
     font-weight: bold;
+    cursor: pointer;
 `;
 
 const UserDescription = styled.span`

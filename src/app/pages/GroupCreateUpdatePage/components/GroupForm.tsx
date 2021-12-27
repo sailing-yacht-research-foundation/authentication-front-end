@@ -14,6 +14,7 @@ import { MODE } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
 import { createGroup, updateGroup, getGroupById } from 'services/live-data-server/groups';
 import { DeleteGroupModal } from './DeleteGroupModal';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 const groupVisibilities = [
     {
@@ -101,7 +102,7 @@ export const GroupForm = () => {
             history.push(`/groups/${response?.data?.id}`);
             setMode(MODE.UPDATE);
         } else {
-            toast.error(t(translations.group_create_update_page.an_error_happened));
+            showToastMessageOnRequestError(response.error)
         }
     }
 

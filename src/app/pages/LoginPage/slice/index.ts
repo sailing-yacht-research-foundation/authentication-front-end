@@ -39,6 +39,7 @@ const slice = createSlice({
     setLogout(state) {
       state.is_authenticated = false;
       state.session_token = '';
+      state.refresh_token = '';
       state.user = {};
       localStorage.removeItem('user');
       localStorage.removeItem('session_token');

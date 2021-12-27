@@ -53,8 +53,6 @@ export const RaceList = (props) => {
                         history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                 </Space>;
-
-                return <></>;
             }
         },
     ];

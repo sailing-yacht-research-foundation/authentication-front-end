@@ -7,7 +7,6 @@ import { SiderToggle } from '../NavBar/SiderToggle';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 
-
 export const HeaderContent = (props) => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
 

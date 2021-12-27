@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Select, Col, Row, Form, DatePicker, Menu } from 'antd';
+import { Select, Col, Row, Form, DatePicker, Menu, Switch } from 'antd';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import moment from 'moment';
 import styled from 'styled-components';
@@ -111,7 +111,7 @@ export const PrivateUserInformation = (props) => {
 
     const renderCountryCodeList = (countryCodeList: string[]) => {
         return countryCodeList.map((countryCode) => {
-            return <SailingNumberSuggestionItem onClick={() => {handleCountryCodeSuggestionClick(countryCode)}} key={countryCode}>{countryCode}</SailingNumberSuggestionItem>
+            return <SailingNumberSuggestionItem onClick={() => { handleCountryCodeSuggestionClick(countryCode) }} key={countryCode}>{countryCode}</SailingNumberSuggestionItem>
         });
     };
 
@@ -141,39 +141,40 @@ export const PrivateUserInformation = (props) => {
                 >
                     {({ getInputProps, suggestions, getSuggestionItemProps }) => {
                         return (
-                        <>
-                            <SyrfInputField
-                                {...getInputProps({
-                                    placeholder: t(translations.profile_page.update_profile.search_places),
-                                    className: 'location-search-input',
-                                })}
-                                value={address}
-                                autoCorrect="off"
-                            />
-                            {suggestions.length > 0 && <StyledPLaceDropdown>
-                                {suggestions.map((suggestion) => {
-                                    const className = suggestion.active
-                                        ? 'suggestion-item--active'
-                                        : 'suggestion-item';
-                                    // inline style for demonstration purpose
-                                    const style = suggestion.active
-                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                    return (
-                                        <Menu.Item
-                                            {...getSuggestionItemProps(suggestion, {
-                                                className,
-                                                style,
-                                            })}
-                                            key={suggestion.index}
-                                        >
-                                            <span>{suggestion.description}</span>
-                                        </Menu.Item>
-                                    );
-                                })}
-                            </StyledPLaceDropdown>}
-                        </>
-                    )}}
+                            <>
+                                <SyrfInputField
+                                    {...getInputProps({
+                                        placeholder: t(translations.profile_page.update_profile.search_places),
+                                        className: 'location-search-input',
+                                    })}
+                                    value={address}
+                                    autoCorrect="off"
+                                />
+                                {suggestions.length > 0 && <StyledPLaceDropdown>
+                                    {suggestions.map((suggestion) => {
+                                        const className = suggestion.active
+                                            ? 'suggestion-item--active'
+                                            : 'suggestion-item';
+                                        // inline style for demonstration purpose
+                                        const style = suggestion.active
+                                            ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                            : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                        return (
+                                            <Menu.Item
+                                                {...getSuggestionItemProps(suggestion, {
+                                                    className,
+                                                    style,
+                                                })}
+                                                key={suggestion.index}
+                                            >
+                                                <span>{suggestion.description}</span>
+                                            </Menu.Item>
+                                        );
+                                    })}
+                                </StyledPLaceDropdown>}
+                            </>
+                        )
+                    }}
                 </PlacesAutocomplete>
             </Form.Item>
 
@@ -271,8 +272,19 @@ export const PrivateUserInformation = (props) => {
                         </SyrfFormSelect>
                     </Form.Item>
                 </Col>
+
+                <Col xs={24} sm={24} md={12} lg={12}>
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.profile_mode)}</SyrfFieldLabel>}
+                        name="isPrivate"
+                        data-tip={t(translations.tip.profile_mode)}
+                        valuePropName="checked"
+                    >
+                        <Switch checkedChildren={'Private'} unCheckedChildren={'Public'} />
+                    </Form.Item>
+                </Col>
             </Row>
-            <ReactTooltip/>
+            <ReactTooltip />
         </Wrapper>
     )
 }

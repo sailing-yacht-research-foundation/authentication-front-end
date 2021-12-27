@@ -14,8 +14,8 @@ export const ProfileTabs = (props) => {
 
     return (
         <Tabs>
-            <TabItem className={location.pathname === '/profile' ? 'active' : ''} to="/profile">{t(translations.profile_page.update_profile.account_settings)}</TabItem>
-            <TabItem className={location.pathname === '/profile/change-password' ? 'active' : ''} to="/profile/change-password">{t(translations.profile_page.update_profile.password_security)}</TabItem>
+            <TabItem className={location.pathname === '/account' ? 'active' : ''} to="/account">{t(translations.profile_page.update_profile.account_settings)}</TabItem>
+            <TabItem className={location.pathname === '/account/change-password' ? 'active' : ''} to="/account/change-password">{t(translations.profile_page.update_profile.password_security)}</TabItem>
         </Tabs>
     )
 }

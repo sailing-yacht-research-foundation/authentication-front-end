@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { deleteCourse } from 'services/live-data-server/courses';
 import { translations } from 'locales/translations';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const CourseDeleteModal = (props) => {
 
@@ -26,7 +27,7 @@ export const CourseDeleteModal = (props) => {
             toast.success(t(translations.delete_course_modal.successfully_deleted));
             onCourseDeleted();
         } else {
-            toast.error(t(translations.delete_course_modal.an_unexpected_error));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

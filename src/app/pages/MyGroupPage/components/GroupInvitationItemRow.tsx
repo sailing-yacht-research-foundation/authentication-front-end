@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
-import { uppercaseFirstCharacter } from 'utils/helpers';
+import { showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
 import { Link } from 'react-router-dom';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
 
@@ -39,7 +39,7 @@ export const GroupInvitationItemRow = (props) => {
             if (setPerformedAction)
                 setPerformedAction(true);
         } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -54,7 +54,7 @@ export const GroupInvitationItemRow = (props) => {
             if (setPerformedAction)
                 setPerformedAction(true);
         } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

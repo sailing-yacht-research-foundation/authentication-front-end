@@ -15652,6 +15652,13 @@ react-image-file-resizer@^0.4.4:
   resolved "https://registry.yarnpkg.com/react-image-file-resizer/-/react-image-file-resizer-0.4.7.tgz#74b33a03832c0771c6c03b037bae9ba6baf10703"
   integrity sha512-Dak7Ecrd6WEV5LjqoRYFI49ASn7eB1VTlrw6dri9HeIMS6aJang4nli6q5xeckEMY+7QwgqgWqAQD5tgkm4bJg==
 
+react-infinite-scroller@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroller/-/react-infinite-scroller-1.2.4.tgz#f67eaec4940a4ce6417bebdd6e3433bfc38826e9"
+  integrity sha512-/oOa0QhZjXPqaD6sictN2edFMsd3kkMiE19Vcz5JDgHpzEJVqYcmq+V3mkwO88087kvKGe1URNksHEOt839Ubw==
+  dependencies:
+    prop-types "^15.5.8"
+
 react-instagram-login@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/react-instagram-login/-/react-instagram-login-1.4.0.tgz#c2419d1569a0144f0220de17e0fc3294545218ae"

@@ -15,7 +15,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { create, getById, update } from 'services/live-data-server/courses';
-import { addNonGroupLayers } from 'utils/helpers';
+import { addNonGroupLayers, showToastMessageOnRequestError } from 'utils/helpers';
 import ReactDOMServer from 'react-dom/server';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -275,7 +275,8 @@ export const MapView = React.forwardRef((props, ref) => {
                 });
                 if (geometry) {
                     geometry = JSON.parse(JSON.stringify(geometry));
-                    switch (layer.options._geometry_type) {
+                    const geometryType = layer.options._geometry_type;
+                    switch (geometryType) {
                         case GEOMETRY_TYPE.point:
                             geometry.points[0].position = [layer.getLatLng().lat, layer.getLatLng().lng]
                             break;
@@ -291,6 +292,9 @@ export const MapView = React.forwardRef((props, ref) => {
                                     geometry.points[index].position = [point.lat, point.lng]
                                 });
                             });
+                            if (geometryType === GEOMETRY_TYPE.polygon) { // polygon only, making this polygon first position & last position the same as discussed with Aan.
+                                enclosePolygonPoints(geometry);
+                            }
                             break;
                     }
                     mutableCouseSequencedGeometries.current.push(geometry);
@@ -332,6 +336,7 @@ export const MapView = React.forwardRef((props, ref) => {
                             })
                         });
                     });
+                    enclosePolygonPoints(geometry);
                     layer.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
                 case LAYER_TYPE.polyline:
@@ -354,6 +359,17 @@ export const MapView = React.forwardRef((props, ref) => {
             dispatch(actions.setCourseSequencedGeometries(JSON.parse(JSON.stringify(mutableCouseSequencedGeometries.current))));
             layerOrder.current++;
         });
+    }
+
+    const enclosePolygonPoints = (geometry) => {
+        const firstPoint = geometry?.points[0];
+        const lastPoint = geometry?.points[geometry?.points?.length - 1];
+        if (firstPoint?.position[0] !== lastPoint?.position[0] &&
+            firstPoint?.position[1] !== lastPoint?.position[1]) { // lon & lat comparison.
+            geometry.points.push({
+                position: [firstPoint?.position[0], firstPoint?.position[1]]
+            });
+        }
     }
 
     const registerLayerNameAndTooltipClickEvent = (layer) => {
@@ -442,7 +458,7 @@ export const MapView = React.forwardRef((props, ref) => {
                 toast.success(t(translations.course_create_update_page.successfully_created_your_course));
                 setMode(MODE.UPDATE);
             } else {
-                toast.error(t(translations.course_create_update_page.an_unexpected_error));
+                showToastMessageOnRequestError(response.error);
             }
 
             goBack();

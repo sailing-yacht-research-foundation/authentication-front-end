@@ -8,6 +8,7 @@ import { PaginationContainer } from 'app/pages/GroupDetailPage/components/Member
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { GroupMemberStatus } from 'utils/constants';
+import { GroupInvitationItemRow } from './GroupInvitationItemRow';
 
 export const RequestedModal = (props) => {
 
@@ -30,8 +31,8 @@ export const RequestedModal = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const renderInvitationItem = () => {
-        // if (invitations.length > 0)
-        //     return invitations.map(request => <InvitationItemRow setIsLoading={setIsLoading} request={request} />);
+        if (invitations.length > 0)
+            return invitations.map(request => <GroupInvitationItemRow setIsLoading={setIsLoading} request={request} />);
         return <EmptyInvitationMessage>{t(translations.group.you_dont_have_any_invitations_right_now)}</EmptyInvitationMessage>
     }
 

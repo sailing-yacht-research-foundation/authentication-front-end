@@ -11,9 +11,6 @@ import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper, BorderedButton 
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 
-
-const uuid = localStorage.getItem('uuid');
-
 export const RaceList = (props) => {
 
     const { t } = useTranslation();
@@ -50,7 +47,7 @@ export const RaceList = (props) => {
             width: '20%',
             render: (text, record) => {
                 const userId = localStorage.getItem('user_id');
-                if ((userId && userId === record.createdById) || (uuid === record.createdById))
+                if (props?.editors?.includes(userId))
                     return <Space size="middle">
                         <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
@@ -119,7 +116,7 @@ export const RaceList = (props) => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            
+
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.event_detail_page.races)}</PageHeaderTextSmall>
