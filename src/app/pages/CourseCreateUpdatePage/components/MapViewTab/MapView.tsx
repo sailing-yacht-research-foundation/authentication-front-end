@@ -362,7 +362,7 @@ export const MapView = React.forwardRef((props, ref) => {
         });
     }
 
-    const makeSureFirstPointAndLastPointOfPolygonIsTheSame = (geometry) => {
+    const makeSureFirstPointAndLastPointOfPolygonAreTheSame = (geometry) => {
         const firstPoint = geometry?.points[0];
         const lastPoint = geometry?.points[geometry?.points?.length - 1];
         if (firstPoint?.position[0] !== lastPoint?.position[0] &&
