@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
-import { renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import tzLookup from 'tz-lookup';
 import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/AssignEventAsGroupAdminModal';
 import { ActionButtons } from './ActionButtons';
@@ -137,7 +137,7 @@ export const MyEventForm = () => {
         if (response.success) {
             onEventSaved(response, { lat, lon }, { lat: endLat || lat, lon: endLon || lon });
         } else {
-            toast.error(t(translations.my_event_create_update_page.an_error_happened_when_saving_event));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -307,7 +307,7 @@ export const MyEventForm = () => {
                 onChoosedLocation(endLat, endLon, true, true, 'end');
             }
         } else {
-            message.error(t(translations.my_event_create_update_page.event_not_found));
+            showToastMessageOnRequestError(response.error);
             history.push('/events');
         }
     }

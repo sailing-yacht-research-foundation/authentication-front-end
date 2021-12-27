@@ -11,6 +11,7 @@ import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { revokeGroupAsEditor } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
 
@@ -42,7 +43,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
             toast.success(t(translations.my_event_create_update_page.successfully_revoked));
             getAdmins();
         } else {
-            toast.success(t(translations.my_event_create_update_page.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

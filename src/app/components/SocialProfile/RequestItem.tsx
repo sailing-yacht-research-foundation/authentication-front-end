@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { renderAvatar } from '../../../utils/user-utils';
 import { acceptFollowRequest, rejectFollowRequest } from '../../../services/live-data-server/profile';
 import { translations } from 'locales/translations';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const RequestItem = (props) => {
 
@@ -26,7 +27,7 @@ export const RequestItem = (props) => {
         if (response.success) {
             if (reloadParentList && typeof reloadParentList === 'function') reloadParentList();
         } else {
-            toast.error(t(translations.app.error_happened));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -38,7 +39,7 @@ export const RequestItem = (props) => {
         if (response.success) {
             if (reloadParentList && typeof reloadParentList === 'function') reloadParentList();
         } else {
-            toast.error(t(translations.app.error_happened));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

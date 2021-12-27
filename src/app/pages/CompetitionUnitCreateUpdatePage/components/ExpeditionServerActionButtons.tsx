@@ -28,6 +28,7 @@ import { selectSessionToken } from 'app/pages/LoginPage/slice/selectors';
 import 'whatwg-fetch';
 import useWebSocket from "react-use-websocket";
 import { message } from 'antd';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const ExpeditionServerActionButtons = (props) => {
 
@@ -194,7 +195,7 @@ export const ExpeditionServerActionButtons = (props) => {
             showUDPModalDetail();
             dispatch(actions.setLastSubscribedCompetitionUnitId(competitionUnit?.id));
         } else {
-            toast.error(t(translations.expedition_server_actions.an_error_happened_when_subscribe_this_race));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -208,7 +209,7 @@ export const ExpeditionServerActionButtons = (props) => {
             if (competitionUnitId === lastSubscribedCompetitionUnitId)
                 dispatch(actions.setLastSubscribedCompetitionUnitId(''));
         } else {
-            toast.error(t(translations.expedition_server_actions.an_error_happened_when_unsubscribe_this_race));
+            showToastMessageOnRequestError(response.error);
         }
 
         setShowUDPModal(false);
@@ -224,7 +225,7 @@ export const ExpeditionServerActionButtons = (props) => {
             setShowUDPModal(true);
             getExpeditionByCompetitionUnit();
         } else {
-            toast.error(t(translations.expedition_server_actions.an_error_happened_when_getting_udp_server_detail))
+            showToastMessageOnRequestError(response.error);
         }
     }
 

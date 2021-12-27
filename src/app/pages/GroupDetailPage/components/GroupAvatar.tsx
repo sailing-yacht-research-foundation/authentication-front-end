@@ -5,7 +5,7 @@ import { Image, Spin, Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Avatar from 'react-avatar-edit';
-import { dataURLtoFile } from 'utils/helpers';
+import { dataURLtoFile, showToastMessageOnRequestError } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { uploadAvatar } from 'services/live-data-server/groups';
@@ -52,7 +52,7 @@ export const GroupAvatar = (props) => {
             if (response.error?.response && response.error?.response?.status === 400) // file too large
                 toast.error(t(translations.group.your_file_is_too_large_please_choose_another));
             else
-                toast.error(t(translations.group.error_happened_when_upload_group_avatar));
+                showToastMessageOnRequestError(response.error);
         }
     }
 

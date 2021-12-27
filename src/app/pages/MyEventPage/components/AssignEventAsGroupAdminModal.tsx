@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'utils/helpers';
+import { debounce, showToastMessageOnRequestError } from 'utils/helpers';
 import { EventAdminsManager } from './EventAdminsManager';
 import { searchForProfiles } from 'services/live-data-server/profile';
 import { useSelector } from 'react-redux';
@@ -65,7 +65,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
             toast.success(t(translations.group.successfully_added_this_event_as_group_admin));
             adminsManagerRef?.current?.getAdmins();
         } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -79,7 +79,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
             toast.success(t(translations.my_event_create_update_page.successfully_assigned_people_as_editor));
             adminsManagerRef?.current?.getAdmins();
         } else {
-            toast.error(t(translations.app.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

@@ -16,7 +16,7 @@ import { selectMembers, selecTotalMembers, selectMemberCurrentPage, selectAdminC
 import { useGroupDetailSlice } from '../slice';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { renderNumberWithCommas } from 'utils/helpers';
+import { renderNumberWithCommas, showToastMessageOnRequestError } from 'utils/helpers';
 import { GroupMemberStatus } from 'utils/constants';
 
 export const MembersManager = (props) => {
@@ -89,7 +89,7 @@ export const MembersManager = (props) => {
                 toast.info(t(translations.group.this_member_has_not_accepted_the_invitation_to_join_group));
                 return;
             }
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error)
         }
     }
 

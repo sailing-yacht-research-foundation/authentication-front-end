@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectAdminCurrentPage, selectMemberCurrentPage } from '../slice/selectors';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const Nav = (props) => {
 
@@ -57,7 +58,7 @@ export const Nav = (props) => {
         setIsLoading(false);
 
         if (!response.success) {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         } else {
             dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
             if (response.data.status === GroupMemberStatus.ACCEPTED) {
@@ -75,7 +76,7 @@ export const Nav = (props) => {
         setIsLoading(false);
 
         if (!response.success) {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         } else {
             setJoinStatus(null);
             dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));

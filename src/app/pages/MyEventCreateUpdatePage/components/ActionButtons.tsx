@@ -12,7 +12,7 @@ import { HiLockClosed } from 'react-icons/hi';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { GoChecklist } from 'react-icons/go';
 import { BiTrash } from 'react-icons/bi';
-import ReactTooltip from 'react-tooltip';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const ActionButtons = ({
     mode,
@@ -42,7 +42,7 @@ export const ActionButtons = ({
                 status: EventState.SCHEDULED
             })
         } else {
-            toast.error(t(translations.app.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -62,7 +62,7 @@ export const ActionButtons = ({
                 toast.info(t(translations.my_event_create_update_page.event_is_closed_for_registration));
             }
         } else {
-            toast.error(t(translations.app.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -76,7 +76,7 @@ export const ActionButtons = ({
             });
             toast.success(t(translations.my_event_create_update_page.successfully_closed_this_event));
         } else {
-            toast.error(t(translations.app.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

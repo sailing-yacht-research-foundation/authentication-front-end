@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { deleteUserAccount } from 'services/live-data-server/user';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const DeleteUserModal = (props) => {
 
@@ -27,7 +28,7 @@ export const DeleteUserModal = (props) => {
         if (response.success) {
             onUserDeleted();
         } else {
-            toast.error(t(translations.profile_page.error_encounted_when_delete_account));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

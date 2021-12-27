@@ -16,6 +16,7 @@ import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGr
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const VesselParticipantGroupForm = () => {
     const history = useHistory();
@@ -69,7 +70,7 @@ export const VesselParticipantGroupForm = () => {
             history.push(`/events/${eventId}/classes/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
         } else {
-            toast.error(t(translations.vessel_participant_group_create_update_page.an_error_happened));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
