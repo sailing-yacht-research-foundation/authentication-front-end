@@ -293,7 +293,7 @@ export const MapView = React.forwardRef((props, ref) => {
                                 });
                             });
                             if (geometryType === GEOMETRY_TYPE.polygon) { // polygon only, making this polygon first position & last position the same as discussed with Aan.
-                                makeSureFirstPointAndLastPointOfPolygonIsTheSame(geometry);
+                                makeSureFirstPointAndLastPointOfPolygonAreTheSame(geometry);
                                 console.log(geometry);
                             }
                             break;
@@ -337,7 +337,7 @@ export const MapView = React.forwardRef((props, ref) => {
                             })
                         });
                     });
-                    makeSureFirstPointAndLastPointOfPolygonIsTheSame(geometry);
+                    makeSureFirstPointAndLastPointOfPolygonAreTheSame(geometry);
                     layer.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
                 case LAYER_TYPE.polyline:
