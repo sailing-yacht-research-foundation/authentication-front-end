@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Switch } from 'antd';
+import { Form } from 'antd';
 import { SyrfFieldLabel, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -33,16 +33,6 @@ export const FormItemEventNameDescription = () => {
             >
                 <SyrfTextArea autoCorrect="off" />
             </Form.Item>
-
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}
-                name="isOpen"
-                data-tip={t(translations.tip.regatta)}
-                valuePropName="checked"
-            >
-                <Switch />
-            </Form.Item>
-
         </>
     )
 }

@@ -12,7 +12,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
+import { EventState, MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -644,7 +644,7 @@ export const MyEventForm = () => {
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
-                                {t(translations.my_event_create_update_page.save_event)}
+                                {t(event.status === EventState.DRAFT ? translations.my_event_create_update_page.save_draft : translations.my_event_create_update_page.save_event)}
                             </SyrfFormButton>
                         </Form.Item>
                     </Form>
