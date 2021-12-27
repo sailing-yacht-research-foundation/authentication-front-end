@@ -293,7 +293,8 @@ export const MapView = React.forwardRef((props, ref) => {
                                 });
                             });
                             if (geometryType === GEOMETRY_TYPE.polygon) { // polygon only, making this polygon first position & last position the same as discussed with Aan.
-                                geometry.points[geometry.points.length - 1].position = geometry.points[0].position;
+                                makeSureFirstPointAndLastPointOfPolygonIsTheSame(geometry);
+                                console.log(geometry);
                             }
                             break;
                     }
@@ -336,7 +337,7 @@ export const MapView = React.forwardRef((props, ref) => {
                             })
                         });
                     });
-                    geometry.points[geometry.points.length - 1].position = geometry.points[0].position; // making this polygon first position & last position the same as discussed with Aan.
+                    makeSureFirstPointAndLastPointOfPolygonIsTheSame(geometry);
                     layer.options._geometry_type = GEOMETRY_TYPE.polygon;
                     break;
                 case LAYER_TYPE.polyline:
@@ -359,6 +360,17 @@ export const MapView = React.forwardRef((props, ref) => {
             dispatch(actions.setCourseSequencedGeometries(JSON.parse(JSON.stringify(mutableCouseSequencedGeometries.current))));
             layerOrder.current++;
         });
+    }
+
+    const makeSureFirstPointAndLastPointOfPolygonIsTheSame = (geometry) => {
+        const firstPoint = geometry?.points[0];
+        const lastPoint = geometry?.points[geometry?.points?.length - 1];
+        if (firstPoint?.position[0] !== lastPoint?.position[0] &&
+            firstPoint?.position[1] !== lastPoint?.position[1]) { // lon & lat comparison.
+            geometry.points.push({
+                position: [firstPoint?.position[0], firstPoint?.position[1]]
+            });
+        }
     }
 
     const registerLayerNameAndTooltipClickEvent = (layer) => {
