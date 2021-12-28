@@ -450,7 +450,10 @@ export const addMultipleFieldCriteriaIfSearchByAllFields = (keyword) => {
  */
 export const priotizePointForNameFieldIfExists = (result) => {
     const parsedResult: string[] = [];
-    if (result.includes('name:')) {
+    const otherCriteriaInTheKeyword = supportedSearchCriteria.filter(criteria => criteria !== 'name').some(criteria => {
+        return result.includes(criteria);
+    });
+    if (result.includes('name:') && otherCriteriaInTheKeyword) {
         const splittedSearchWordPhrases = result.split(' AND ');
         splittedSearchWordPhrases.forEach(phrase => {
             if (phrase.includes('name:')) {

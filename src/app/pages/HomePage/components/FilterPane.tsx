@@ -75,6 +75,8 @@ export const FilterPane = (props) => {
         if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
         params.sort = sort;
 
+        if (name.includes('<span')) return;
+
         dispatch(actions.setPage(1));
         dispatch(actions.setKeyword(params.keyword ?? ''));
         dispatch(actions.setFromDate(params.from_date ?? ''));
