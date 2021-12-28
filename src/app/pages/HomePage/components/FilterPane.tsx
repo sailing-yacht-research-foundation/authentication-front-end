@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Form, Input, DatePicker, Row, Col, Spin } from 'antd';
+import { Form, Input, DatePicker, Row, Col, Spin, Select } from 'antd';
 import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
@@ -11,7 +11,7 @@ import { translations } from 'locales/translations';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHomeSlice } from '../slice';
 import moment from 'moment';
-import { selectIsSearching, selectFromDate, selectSearchKeyword, selectToDate } from '../slice/selectors';
+import { selectIsSearching, selectFromDate, selectSearchKeyword, selectToDate, selectSortType } from '../slice/selectors';
 import { TIME_FORMAT } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
@@ -47,6 +47,8 @@ export const FilterPane = (props) => {
 
     const toDate = useSelector(selectToDate);
 
+    const sortType = useSelector(selectSortType);
+
     const [keyword, setKeyword] = React.useState<string>('');
 
     const [initedSearchBar, setInitedSearchBar] = React.useState<boolean>(false);
@@ -65,17 +67,20 @@ export const FilterPane = (props) => {
         dispatch(actions.setShowAdvancedSearch(false));
         window.scroll(0, 0);
 
-        const { name, from_date, to_date } = values;
+        const { name, from_date, to_date, sort } = values;
         const params: any = {};
 
         params.keyword = name;
         if (from_date) params.from_date = moment(from_date).format(TIME_FORMAT.number);
         if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
+        
+        params.sort = sort;
 
         dispatch(actions.setPage(1));
         dispatch(actions.setKeyword(params.keyword ?? ''));
         dispatch(actions.setFromDate(params.from_date ?? ''));
         dispatch(actions.setToDate(params.to_date ?? ''));
+        dispatch(actions.setSortType(params.sort));
         dispatch(actions.searchRaces(params));
 
         history.push({
@@ -89,6 +94,7 @@ export const FilterPane = (props) => {
             name: searchKeyword,
             from_date: fromDate && moment(fromDate).isValid() ? moment(fromDate) : form.getFieldValue('from_date'),
             to_date: toDate && moment(toDate).isValid() ? moment(toDate) : form.getFieldValue('to_date'),
+            sort: sortType,
         });
 
         if (!initedSearchBar) {
@@ -104,6 +110,12 @@ export const FilterPane = (props) => {
     const onContentEditableKeydown = (e) => {
         removeWholeTextNodeOnBackSpace(e);
         setShowSuggestion(true);
+    }
+
+    const renderDateSortList = () => {
+        return ['Desc', 'Asc'].map((value, index) => {
+            return <Select.Option key={index} value={String(value).toLowerCase()}>{value}</Select.Option>
+        });
     }
 
     return (
@@ -130,6 +142,7 @@ export const FilterPane = (props) => {
                     onFinish={onFormSubmit}
                     initialValues={{
                         name: searchKeyword,
+                        sort: 'desc'
                     }}>
                     <div style={{ position: 'relative' }}>
                         <Form.Item
@@ -230,6 +243,12 @@ export const FilterPane = (props) => {
                             </Form.Item>
                         </Col>
                     </Row>
+
+                    <Form.Item name="sort" label={t(translations.home_page.filter_tab.sort)}>
+                        <Select>
+                            { renderDateSortList() }
+                        </Select>
+                    </Form.Item>
 
                     <Form.Item>
                         <SyrfFormButton type="primary" htmlType="submit">

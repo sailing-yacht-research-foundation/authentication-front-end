@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
-import { supportedSearchCriteria } from 'utils/constants';
-import { formatServicePromiseResponse } from 'utils/helpers';
+import { formatServicePromiseResponse, parseKeyword } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {
@@ -20,11 +19,11 @@ export const search = (params) => {
     if (params.hasOwnProperty('from_date')
         && params.from_date !== ''
         && moment(params.from_date).isValid()) {
-        params.from_date = params.from_date + ' 00:00:00';
+        params.from_date = params.from_date;
         query.bool.must.push({
             range: {
                 "approx_start_time_ms": {
-                    "gte": moment(params.from_date).unix() * 1000,
+                    "gte": moment(params.from_date).set({ hour: 0, minute: 0, second: 0 }).unix() * 1000,
                 }
             }
         });
@@ -33,11 +32,11 @@ export const search = (params) => {
     if (params.hasOwnProperty('to_date')
         && params.to_date !== ''
         && moment(params.to_date).isValid()) {
-        params.to_date = params.to_date + ' 23:59:59';
+        params.to_date = params.to_date;
         query.bool.must.push({
             range: {
                 "approx_start_time_ms": {
-                    "lt": moment(params.to_date).unix() * 1000,
+                    "lt": moment(params.to_date).set({ hour: 23, minute: 59, second: 59 }).unix() * 1000,
                 }
             }
         });
@@ -45,6 +44,14 @@ export const search = (params) => {
 
     const searchParams: any = {
         query: query,
+        sort: [
+            {
+
+                "approx_start_time_ms": params.sort
+
+            },
+            "_score"
+        ]
     };
 
     searchParams._source = ["id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event", "event_description"]; // only the fields we need
@@ -144,31 +151,6 @@ export const getTimeByCompetitionUnit = (id: string) => {
 
 export const getCourseByCompetitionUnit = (id: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/course`))
-}
-
-const parseKeyword = (keyword) => {
-    const words = keyword.split(' ');
-    let parseWords: any[] = [];
-    let result = '';
-    words.forEach((word, index) => {
-        let splittedWord = word.split(':');
-        if (splittedWord.length > 1 && supportedSearchCriteria.includes(splittedWord[0]) && index !== 0) {
-            splittedWord.splice(0, 0, 'AND');
-        }
-        parseWords.push(splittedWord);
-    });
-
-    parseWords.forEach(words => {
-        words.forEach((w, i) => {
-            if (supportedSearchCriteria.includes(w)) {
-                result += (w + ':');
-            } else {
-                result += w + ' ';
-            }
-        });
-    });
-
-    return result.trim();
 }
 
 export const getSuggestion = (fieldName, word) => {

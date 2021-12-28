@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
-import { CRITERIA_TO_RAW_CRITERIA, formatterSupportedSearchCriteria, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
+import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
 
 /**
  * Check if is mobile
@@ -252,6 +252,11 @@ export const extractTextFromHTML = (s) => {
     return span.textContent || span.innerText;
 };
 
+/**
+ * Get caret at current position index from contenteditable string.
+ * @param element 
+ * @returns 
+ */
 export const getCaretPosition = (element) => {
     let caretOffset = 0;
 
@@ -270,6 +275,10 @@ export const getCaretPosition = (element) => {
     return caretOffset;
 }
 
+/**
+ * Place caret at the end of the search field.
+ * @param el
+ */
 export const placeCaretAtEnd = (el) => {
     el.focus();
     if (typeof window.getSelection != "undefined"
@@ -285,6 +294,11 @@ export const placeCaretAtEnd = (el) => {
     }
 }
 
+/**
+ * Replace criteria with pilled criteria
+ * @param string 
+ * @returns String pilled criteria.
+ */
 export const replaceCriteriaWithPilledCriteria = (string) => {
     supportedSearchCriteria.forEach(criteria => {
         string = string.replace(criteria + ':', `<span contenteditable="false" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
@@ -293,14 +307,23 @@ export const replaceCriteriaWithPilledCriteria = (string) => {
     return string;
 }
 
+/**
+ * Replace formatted criteria with raw criteria
+ * @param string 
+ * @returns 
+ */
 export const replaceFormattedCriteriaWithRawCriteria = (string): string => {
-    formatterSupportedSearchCriteria.forEach(criteria => {
+    formattedSupportedSearchCriteria.forEach(criteria => {
         string = string.replace(criteria, CRITERIA_TO_RAW_CRITERIA[criteria]);
     });
 
     return string;
 }
 
+/**
+ * Remove whole text node (pilled criteria) on backspace.
+ * @param event
+ */
 export const removeWholeTextNodeOnBackSpace = (e) => {
     if (e.key === "Backspace") {
         var selection = document.getSelection();
@@ -310,6 +333,10 @@ export const removeWholeTextNodeOnBackSpace = (e) => {
     }
 }
 
+/**
+ * Show toast message base on request's response.
+ * @param error 
+ */
 export const showToastMessageOnRequestError = (error) => {
     if (error?.response) {
         const errorCode = error?.response.status;
@@ -326,6 +353,11 @@ export const showToastMessageOnRequestError = (error) => {
     }
 }
 
+/**
+ * Format request's response promise.
+ * @param requestPromise 
+ * @returns Formatted promise response.
+ */
 export const formatServicePromiseResponse = (requestPromise) => {
     return requestPromise.then(response => {
         return {
@@ -338,4 +370,98 @@ export const formatServicePromiseResponse = (requestPromise) => {
             error: error
         }
     });
+}
+
+/**
+ * Parse search keyword.
+ * @param keyword 
+ * @returns parsed search keyword.
+ */
+export const parseKeyword = (keyword) => {
+    keyword = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
+    const words = keyword.trim().split(' ');
+    let parseWords: any[] = [];
+    let result = '';
+
+    words.forEach((word, index) => {
+        word = word.trim();
+        let splittedWord = word.split(':');
+        if (splittedWord.length > 1 && supportedSearchCriteria.includes(splittedWord[0]) && index !== 0) {
+            splittedWord.splice(0, 0, 'AND');
+        }
+        parseWords.push(splittedWord);
+    });
+
+    parseWords = parseWords.flat();
+
+    parseWords.forEach((word, i) => {
+        const nextWord = parseWords[i + 1];
+        word = word.trim();
+
+        if (supportedSearchCriteria.includes(word)) {
+            result += (word + ':(');
+        } else {
+            if (i === 0) {
+                result += 'name:(';
+            }
+
+            if (nextWord === 'AND') {
+                result += (word + ') ');
+            }
+            else {
+                if (typeof nextWord === 'undefined') {
+                    result += (word + ')')
+                } else {
+                    result += (word + ' ');
+                }
+            }
+        }
+    });
+
+    result = priotizePointForNameFieldIfExists(result);
+
+    return result.trim();
+}
+
+/**
+ * Change all_fields criteria to all criteria.
+ * @param keyword 
+ * @returns 
+ */
+export const addMultipleFieldCriteriaIfSearchByAllFields = (keyword) => {
+    if (keyword.includes('all_fields')) {
+        const parseResults: string[] = [];
+        keyword = keyword.split(':')[1];
+        supportedSearchCriteria.forEach(criteria => {
+            parseResults.push(criteria + ':');
+            parseResults.push(keyword);
+        });
+
+        return parseResults.join(' ');
+    }
+
+    return keyword;
+}
+
+/**
+ * Priotize point for name criteria.
+ * @param result 
+ * @returns search keyword.
+ */
+export const priotizePointForNameFieldIfExists = (result) => {
+    const parsedResult: string[] = [];
+    if (result.includes('name:')) {
+        const splittedSearchWordPhrases = result.split(' AND ');
+        splittedSearchWordPhrases.forEach(phrase => {
+            if (phrase.includes('name:')) {
+                parsedResult.push('(' + phrase + ')^3');
+            } else {
+                parsedResult.push('(' + phrase + ')^2');
+            }
+        });
+    }
+    if (parsedResult.length > 0)
+        return parsedResult.join(' AND ');
+
+    return result;
 }

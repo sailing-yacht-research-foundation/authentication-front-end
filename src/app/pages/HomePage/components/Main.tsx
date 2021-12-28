@@ -79,6 +79,7 @@ export const Main = () => {
             dispatch(actions.setKeyword(params.keyword ?? ''));
             dispatch(actions.setFromDate(params.from_date ?? ''));
             dispatch(actions.setToDate(params.to_date ?? ''));
+            dispatch(actions.setSortType(params.sort ?? ''));
             dispatch(actions.searchRaces(params));
         }
     }

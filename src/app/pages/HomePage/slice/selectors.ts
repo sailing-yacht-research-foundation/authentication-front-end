@@ -50,3 +50,8 @@ export const selectShowAdvancedSearch = createSelector(
   [selectDomain],
   homeState => homeState.show_advanced_search,
 );
+
+export const selectSortType = createSelector(
+  [selectDomain],
+  homeState => homeState.sort,
+);

@@ -54,7 +54,7 @@ export const ResultSuggestion = (props) => {
         let searchKeyWord = keyword.slice(0, caretPosition);
 
         // no search keyword or keyword given, stop suggesting
-        if (!keyword || !searchKeyWord) {
+        if (!keyword || !searchKeyWord || keyword.includes('all_fields')) {
             setCriteria([]);
             return;
         }
