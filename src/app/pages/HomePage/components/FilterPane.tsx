@@ -81,11 +81,6 @@ export const FilterPane = (props) => {
         dispatch(actions.setToDate(params.to_date ?? ''));
         dispatch(actions.setSortType(params.sort));
         dispatch(actions.searchRaces(params));
-
-        history.push({
-            pathname: '/',
-            search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
-        });
     }
 
     React.useEffect(() => {
@@ -245,7 +240,7 @@ export const FilterPane = (props) => {
 
                     <Form.Item name="sort" label={t(translations.home_page.filter_tab.sort)}>
                         <Select>
-                            { renderDateSortList() }
+                            {renderDateSortList()}
                         </Select>
                     </Form.Item>
 

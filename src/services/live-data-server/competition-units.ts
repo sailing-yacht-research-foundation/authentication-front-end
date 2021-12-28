@@ -58,6 +58,8 @@ export const search = (params) => {
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
+    window?.history?.pushState('', 'syrf.io', '/?' + Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&'));
+
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
 
