@@ -20,6 +20,7 @@ describe('home Saga', () => {
 
     it('should set races if races are returned from server', () => {
         const response = {
+            success: true,
             data: {
                 hits: {
                     hits: [],
@@ -55,6 +56,7 @@ describe('home Saga', () => {
         );
 
         let putDescriptor = searchRaceIterator.next().value;
+
         expect(putDescriptor).toEqual(
             put(slice.homeActions.setTotal(response.data?.hits.total.value))
         );
@@ -70,6 +72,7 @@ describe('home Saga', () => {
 
     it('should not set races if races if results count is zero', () => {
         const response = {
+            success: true,
             data: {
                 hits: {
                     hits: [],
