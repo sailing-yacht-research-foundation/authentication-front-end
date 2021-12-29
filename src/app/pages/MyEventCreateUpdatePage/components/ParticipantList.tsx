@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Dropdown, Space, Spin, Table, Menu } from 'antd';
+import { Dropdown, Space, Spin, Table, Menu, Button } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillCopy, AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
@@ -8,10 +8,11 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
 import styled from 'styled-components';
-import { AssignVesselParticipantModal } from './AssignVesselParticipantModal';
+import { AssignVesselParticipantModal } from './modals/AssignVesselParticipantModal';
 import { toast } from 'react-toastify';
 import { DownOutlined } from '@ant-design/icons';
 import ReactTooltip from 'react-tooltip';
+import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -33,7 +34,7 @@ export const ParticipantList = (props) => {
             render: text => text,
         },
         {
-            title: t(translations.participant_list.assigned_vessels),
+            title: 'Boat Name',
             dataIndex: 'vesselName',
             key: 'vesselName',
             render: (text, record) => {
@@ -42,28 +43,12 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
-            title: t(translations.participant_list.tracker_url),
-            dataIndex: 'trackerUrl',
-            key: 'trackerUrl',
-            render: (text, record) => {
-                if (record.vesselParticipants?.length > 0)
-                    return <CreateButton data-tip={t(translations.tip.copy_competitor_tracker_link)} onClick={() => copyToClipboard(text)} icon={<AiFillCopy style={{ marginRight: '10px' }} />}>Copy</CreateButton>
-            },
-        },
-        {
             title: t(translations.participant_list.action),
             key: 'action',
             fixed: true,
             render: (text, record) => (
                 <Space size={10}>
-                    <AssignButton data-tip={t(translations.tip.assign_competitor)} onClick={() => {
-                        showAssignParticipantModal(record);
-                    }} type="primary">{t(translations.participant_list.assign)}</AssignButton>
-                    <BorderedButton data-tip={t(translations.tip.update_competitor)} onClick={() => {
-                        history.push(`/events/${record.calendarEventId}/competitors/${record.id}/update`)
-                    }} type="primary">{t(translations.participant_list.update)}</BorderedButton>
-                    <BorderedButton data-tip={t(translations.tip.delete_competitor)} danger onClick={() => showDeleteParticipanModal(record)}>{t(translations.participant_list.delete)}</BorderedButton>
-                    <ReactTooltip />
+                    <Button danger>Remove this competitor</Button>
                 </Space>
             ),
         },
@@ -182,6 +167,7 @@ export const ParticipantList = (props) => {
 
     return (
         <>
+            {/* <CompetitorInviteModal/> */}
             <DeleteParticipantModal
                 participant={participant}
                 onParticipantDeleted={onParticipantDeleted}
@@ -199,7 +185,7 @@ export const ParticipantList = (props) => {
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
                     <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => history.push(`/events/${eventId}/competitors/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.participant_list.create)}</CreateButton>
+                        size={18} />}>Invite</CreateButton>
                 </PageHeaderContainer>
                 <FilterWrapper>
                     <Dropdown overlay={menu}>
