@@ -273,7 +273,12 @@ export const removeWholeTextNodeOnBackSpace = (e) => {
  * Show toast message base on request's response.
  * @param error 
  */
-export const showToastMessageOnRequestError = (error) => {
+export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '') => {
+    if (priotizedMessageToShow) {
+        toast.error(priotizedMessageToShow); // show the priotized message first.
+        return;
+    }
+
     if (error?.response) {
         const errorCode = error?.response.status;
         if (errorCode === 500) {
