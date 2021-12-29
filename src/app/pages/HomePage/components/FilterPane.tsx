@@ -75,7 +75,8 @@ export const FilterPane = (props) => {
         if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
         params.sort = sort;
 
-        if (name.includes('<span')) return;
+        const keywordIsPilledCriteria = name.includes('</span>');
+        if (keywordIsPilledCriteria) return; // not searching if the keyword is not inputted when the pill inserted and user performs search.
 
         dispatch(actions.setPage(1));
         dispatch(actions.setKeyword(params.keyword ?? ''));

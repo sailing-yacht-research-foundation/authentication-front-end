@@ -108,18 +108,6 @@ export const dataURLtoFile = (dataurl, filename) => {
 }
 
 /**
- * Convert JS File image to base64
- * @param file 
- * @returns new Promise
- */
-export const toBase64 = file => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-});
-
-/**
  * Format phone number to the right format
  * @param phoneNumber
  */
@@ -165,58 +153,6 @@ export const renderTimezoneInUTCOffset = (timezone) => {
     if (offset > 0) return '+' + offset;
 
     return offset;
-}
-
-/**
- * Insert new ~3 when search.
- * @param keyword 
- * @returns 
- */
-export const insert3ToLastWordWhenSearch = (keyword) => {
-    let value = keyword;
-    let lastWord: any = keyword.match(/(?:\s|^)([\S]+)$/i);
-    if (lastWord) {
-        lastWord = lastWord[0];
-    }
-
-    if (lastWord && !Array.isArray(lastWord) && !lastWord!.includes('~3')) {
-        value = value.substr(0, value.length) + '~3' + value.substr(value.length);
-    }
-
-    return value;
-}
-/**
- * Insert 3~ between each word when append suggestion
- * @param stringOfWords 
- * @returns 
- */
-export const insert3BetweenEachWord = (stringOfWords) => {
-    //eslint-disable-next-line
-    const format = /[ `!@#$%^&*()+\-=\[\]{};'"\\|,.<>\/?~]/;
-    const formattedWord: any[] = [];
-
-    stringOfWords.split(' ').map(word => {
-        if (!format.test(word)) {
-            formattedWord.push(word);
-        }
-        return word;
-    });
-
-    return formattedWord.join('~3 ') + '~3';
-}
-
-/**
- * Remove all ~3 after word.
- * @param stringOfWords 
- * @returns 
- */
-export const remove3AfterEachWord = (stringOfWords) => {
-    return stringOfWords.split(' ').map((word, index) => {
-        if (word.includes('~3')) {
-            word = word.slice(0, -2);
-        }
-        return word;
-    }).join(' ');
 }
 
 /**
@@ -378,8 +314,10 @@ export const formatServicePromiseResponse = (requestPromise) => {
  * @returns parsed search keyword.
  */
 export const parseKeyword = (keyword) => {
-    keyword = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
-    const words = keyword.trim().split(' ');
+    keyword = keyword.replace(/([\!\*\+\=\<\>\&\|\(\)\[\]\{\}\^\~\?\\/"])/g, "\\$1"); // escape special characters that will make the elastic search crash.
+    const { expression, processedKeyword } = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
+
+    const words = processedKeyword.trim().split(' ');
     let parseWords: any[] = [];
     let result = '';
 
@@ -387,12 +325,12 @@ export const parseKeyword = (keyword) => {
         word = word.trim();
         let splittedWord = word.split(':');
         if (splittedWord.length > 1 && supportedSearchCriteria.includes(splittedWord[0]) && index !== 0) {
-            splittedWord.splice(0, 0, 'AND');
+            splittedWord.splice(0, 0, expression);
         }
         parseWords.push(splittedWord);
     });
 
-    parseWords = parseWords.flat();
+    parseWords = parseWords.flat().filter(word => word).filter(Boolean);
 
     parseWords.forEach((word, i) => {
         const nextWord = parseWords[i + 1];
@@ -405,7 +343,7 @@ export const parseKeyword = (keyword) => {
                 result += 'name:(';
             }
 
-            if (nextWord === 'AND') {
+            if (nextWord === expression) {
                 result += (word + ') ');
             }
             else {
@@ -418,7 +356,7 @@ export const parseKeyword = (keyword) => {
         }
     });
 
-    result = priotizePointForNameFieldIfExists(result);
+    result = priotizePointForNameFieldIfExists(result, expression);
 
     return result.trim();
 }
@@ -432,15 +370,15 @@ export const addMultipleFieldCriteriaIfSearchByAllFields = (keyword) => {
     if (keyword.includes('all_fields')) {
         const parseResults: string[] = [];
         keyword = keyword.split(':')[1];
-        supportedSearchCriteria.forEach(criteria => {
+        supportedSearchCriteria.filter(criteria => criteria !== 'all_fields').forEach(criteria => {
             parseResults.push(criteria + ':');
             parseResults.push(keyword);
         });
 
-        return parseResults.join(' ');
+        return { expression: 'OR', processedKeyword: parseResults.join(' ') };
     }
 
-    return keyword;
+    return { expression: 'AND', processedKeyword: keyword };
 }
 
 /**
@@ -448,13 +386,13 @@ export const addMultipleFieldCriteriaIfSearchByAllFields = (keyword) => {
  * @param result 
  * @returns search keyword.
  */
-export const priotizePointForNameFieldIfExists = (result) => {
+export const priotizePointForNameFieldIfExists = (result, expression) => {
     const parsedResult: string[] = [];
     const otherCriteriaInTheKeyword = supportedSearchCriteria.filter(criteria => criteria !== 'name').some(criteria => {
         return result.includes(criteria);
     });
     if (result.includes('name:') && otherCriteriaInTheKeyword) {
-        const splittedSearchWordPhrases = result.split(' AND ');
+        const splittedSearchWordPhrases = result.split(` ${expression} `);
         splittedSearchWordPhrases.forEach(phrase => {
             if (phrase.includes('name:')) {
                 parsedResult.push('(' + phrase + ')^3');
@@ -464,7 +402,7 @@ export const priotizePointForNameFieldIfExists = (result) => {
         });
     }
     if (parsedResult.length > 0)
-        return parsedResult.join(' AND ');
+        return parsedResult.join(` ${expression} `);
 
     return result;
 }

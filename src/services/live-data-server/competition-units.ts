@@ -12,8 +12,9 @@ export const search = (params) => {
 
     query.bool.must.push({
         query_string: {
-            query: parseKeyword(params.keyword)
-        }
+            query: parseKeyword(params.keyword),
+        },
+
     });
 
     if (params.hasOwnProperty('from_date')
@@ -43,15 +44,27 @@ export const search = (params) => {
     }
 
     const searchParams: any = {
-        query: query,
-        sort: [
+        query: {
+            "function_score": {                
+                query: query,
+                "field_value_factor": {
+                    "field": "start_year",
+                    "factor": 1
+                },
+            }
+        },
+        sort: params.sort ? [
             {
-
-                "approx_start_time_ms": params.sort
-
+                "_score": {
+                    "order": params.sort
+                }
             },
-            "_score"
-        ]
+            {
+                "approx_start_time_ms": {
+                    "order": params.sort
+                }
+            }
+        ] : []
     };
 
     searchParams._source = ["id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event", "event_description"]; // only the fields we need
