@@ -323,7 +323,7 @@ export const parseKeyword = (keyword) => {
     const { expression, processedKeyword } = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
 
     const words = processedKeyword.trim().split(' ');
-    let parseWords: any[] = [];
+    let parsedWords: any[] = [];
     let result = '';
 
     words.forEach((word, index) => {
@@ -332,13 +332,13 @@ export const parseKeyword = (keyword) => {
         if (splittedWord.length > 1 && supportedSearchCriteria.includes(splittedWord[0]) && index !== 0) {
             splittedWord.splice(0, 0, expression);
         }
-        parseWords.push(splittedWord);
+        parsedWords.push(splittedWord);
     });
 
-    parseWords = parseWords.flat().filter(word => word).filter(Boolean);
+    parsedWords = parsedWords.flat().filter(word => word).filter(Boolean);
 
-    parseWords.forEach((word, i) => {
-        const nextWord = parseWords[i + 1];
+    parsedWords.forEach((word, i) => {
+        const nextWord = parsedWords[i + 1];
         word = word.trim();
 
         if (supportedSearchCriteria.includes(word)) {

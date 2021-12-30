@@ -44,21 +44,9 @@ export const search = (params) => {
     }
 
     const searchParams: any = {
-        query: {
-            "function_score": {                
-                query: query,
-                "field_value_factor": {
-                    "field": "start_year",
-                    "factor": 1
-                },
-            }
-        },
+        query: query,
         sort: params.sort ? [
-            {
-                "_score": {
-                    "order": params.sort
-                }
-            },
+           "_score",
             {
                 "approx_start_time_ms": {
                     "order": params.sort

@@ -31,7 +31,7 @@ export function* searchRaces(action) {
             yield put(homeActions.setResults(response.data?.hits?.hits));
         }
     } else {
-        const priotizedErrorMessage = response?.error?.response?.data?.data?.error?.root_cause[0]?.reason;
+        const priotizedErrorMessage = response.error?.response?.data?.data?.error?.root_cause[0]?.reason;
         showToastMessageOnRequestError(response.error, priotizedErrorMessage);
     }
 }
