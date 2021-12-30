@@ -237,7 +237,9 @@ export const placeCaretAtEnd = (el) => {
  */
 export const replaceCriteriaWithPilledCriteria = (string) => {
     supportedSearchCriteria.forEach(criteria => {
-        string = string.replace(criteria + ':', `<span contenteditable="false" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
+        const convertedRawCriteria = RAW_CRITERIA_TO_CRITERIA[criteria];
+        if (convertedRawCriteria)
+            string = string.replace(criteria + ':', `<span contenteditable="false" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
     });
 
     return string;
@@ -250,7 +252,9 @@ export const replaceCriteriaWithPilledCriteria = (string) => {
  */
 export const replaceFormattedCriteriaWithRawCriteria = (string): string => {
     formattedSupportedSearchCriteria.forEach(criteria => {
-        string = string.replace(criteria, CRITERIA_TO_RAW_CRITERIA[criteria]);
+        const convertedSupportedCriteria = CRITERIA_TO_RAW_CRITERIA[criteria];
+        if (convertedSupportedCriteria)
+            string = string.replace(criteria, CRITERIA_TO_RAW_CRITERIA[criteria]);
     });
 
     return string;
