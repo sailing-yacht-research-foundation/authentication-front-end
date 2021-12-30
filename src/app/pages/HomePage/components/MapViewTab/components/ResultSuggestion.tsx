@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSuggestion } from 'services/live-data-server/competition-units';
 import styled from 'styled-components';
 import { supportedSearchCriteria } from 'utils/constants';
-import { debounce, getCaretPosition, isMobile, placeCaretAtEnd, replaceCriteriaWithPilledCriteria } from 'utils/helpers';
+import { debounce, extractTextFromHTML, getCaretPosition, isMobile, placeCaretAtEnd, replaceCriteriaWithPilledCriteria } from 'utils/helpers';
 
 const enum Criteria {
     NAME = 'name',
@@ -51,7 +51,7 @@ export const ResultSuggestion = (props) => {
     const getSuggestionItems = async (keyword) => {
         const caretPosition = getCaretPosition(searchBarRef.current);
         let criteriaMatched: any[] = [];
-        let searchKeyWord = keyword.slice(0, caretPosition);
+        let searchKeyWord = extractTextFromHTML(searchBarRef.current.innerText).slice(0, caretPosition);
 
         // no search keyword or keyword given, stop suggesting
         if (!keyword || !searchKeyWord || keyword.includes('all_fields')) {
