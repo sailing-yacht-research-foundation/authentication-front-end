@@ -21,8 +21,6 @@ import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 
 export const FilterPane = (props) => {
 
-    let inputTimeout;
-
     const { defaultFocus } = props;
 
     const searchKeyword = useSelector(selectSearchKeyword);
@@ -164,11 +162,7 @@ export const FilterPane = (props) => {
                                     onKeyDown={onContentEditableKeydown}
                                     onInput={(e) => {
                                         const target = e.target as HTMLDivElement;
-                                        if (inputTimeout) clearTimeout(inputTimeout);
-                                        inputTimeout = setTimeout(() => {
-                                            dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
-                                            setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText));
-                                        }, 100);
+                                        dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
                                     }}></span>
                                 {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={() => {
                                     dispatch(actions.setKeyword(''));
@@ -178,8 +172,8 @@ export const FilterPane = (props) => {
                             </ContentEditableSearchBarWrapper>
                             {
                                 showSuggestion && <>
-                                    <CriteriaSuggestion form={form} keyword={keyword} searchBarRef={mutableEditableRef} />
-                                    <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={mutableEditableRef} isFilterPane keyword={keyword} />
+                                    <CriteriaSuggestion form={form} keyword={searchKeyword} searchBarRef={mutableEditableRef} />
+                                    <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={mutableEditableRef} isFilterPane keyword={searchKeyword} />
                                 </>
                             }
 

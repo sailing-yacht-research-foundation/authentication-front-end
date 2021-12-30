@@ -3,7 +3,7 @@
  */
 
 import { homeActions } from ".";
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { search } from "services/live-data-server/competition-units";
 import { toast } from "react-toastify";
 import i18next from 'i18next';
@@ -23,7 +23,7 @@ export function* searchRaces(action) {
 
     if (response.success) {
         if (response.data?.hits?.total?.value === 0) {
-            toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: searchKeyword }));
+            toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: params.keyword }));
             yield put(homeActions.setResults([]));
             yield put(homeActions.setTotal(0));
         } else {
@@ -39,5 +39,5 @@ export function* searchRaces(action) {
 }
 
 export default function* homeSaga() {
-    yield takeEvery(homeActions.searchRaces.type, searchRaces);
+    yield takeLatest(homeActions.searchRaces.type, searchRaces);
 }
