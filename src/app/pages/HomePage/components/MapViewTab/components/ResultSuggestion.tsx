@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSuggestion } from 'services/live-data-server/competition-units';
 import styled from 'styled-components';
 import { supportedSearchCriteria } from 'utils/constants';
-import { debounce, extractTextFromHTML, getCaretPosition, isMobile, placeCaretAtEnd, replaceCriteriaWithPilledCriteria } from 'utils/helpers';
+import { debounce, extractTextFromHTML, getCaretPosition, isMobile, placeCaretAtEnd, replaceCriteriaWithPilledCriteria, replaceFormattedCriteriaWithRawCriteria } from 'utils/helpers';
 
 const enum Criteria {
     NAME = 'name',
@@ -51,7 +51,7 @@ export const ResultSuggestion = (props) => {
     const getSuggestionItems = async (keyword) => {
         const caretPosition = getCaretPosition(searchBarRef.current);
         let criteriaMatched: any[] = [];
-        let searchKeyWord = extractTextFromHTML(searchBarRef.current.innerText).slice(0, caretPosition);
+        let searchKeyWord = searchBarRef.current?.innerText.slice(0, caretPosition);
 
         // no search keyword or keyword given, stop suggesting
         if (!keyword || !searchKeyWord || keyword.includes('all_fields')) {
@@ -131,7 +131,7 @@ export const ResultSuggestion = (props) => {
         if (wordsLength === 1) {
             // and that word includes the criteria, we include it
             if (keyword.includes(':')) {
-                const parsedKeyword = [keyword.split(':')[0], criteria].join(':').trim();
+                const parsedKeyword = replaceFormattedCriteriaWithRawCriteria([keyword.split(':')[0], criteria].join(':').trim());
                 dispatch(actions.setKeyword(parsedKeyword));
                 searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria(parsedKeyword);
             } else { // that word does not include the criteria, we append the whole criteria.
@@ -145,7 +145,7 @@ export const ResultSuggestion = (props) => {
             if (splittedWords === ':') splittedWords = '';
 
             const wordsFromCaretPositionToEnd = keyword.substr(caretPosition.current);
-            const parsedKeyword = [splittedWords, criteria, wordsFromCaretPositionToEnd.length === 1 ? '' : wordsFromCaretPositionToEnd].join(' ').trim();
+            const parsedKeyword = replaceFormattedCriteriaWithRawCriteria([splittedWords, criteria, wordsFromCaretPositionToEnd.length === 1 ? '' : wordsFromCaretPositionToEnd].join(' ').trim());
             dispatch(actions.setKeyword(parsedKeyword));
             searchBarRef.current.innerHTML = replaceCriteriaWithPilledCriteria(parsedKeyword);
         }
@@ -206,7 +206,7 @@ export const ResultSuggestion = (props) => {
     React.useEffect(() => {
         debounceSuggestion(keyword);
         caretPosition.current = getCaretPosition(searchBarRef.current);
-        keywordRef.current = keyword;
+        keywordRef.current = searchBarRef.current?.innerText;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [keyword]);
 
