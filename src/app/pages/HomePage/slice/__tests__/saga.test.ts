@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { search } from 'services/live-data-server/competition-units';
 import * as slice from '..';
 
@@ -126,7 +126,7 @@ describe('home Saga Init', () => {
     it('should start task to watch for searchRaces action', () => {
         const takeLatestDescriptor = homeIterator.next().value;
         expect(takeLatestDescriptor).toEqual(
-            takeEvery(slice.homeActions.searchRaces.type, searchRaces),
+            takeLatest(slice.homeActions.searchRaces.type, searchRaces),
         );
     });
 });
