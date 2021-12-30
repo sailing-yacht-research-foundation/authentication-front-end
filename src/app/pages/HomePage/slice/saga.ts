@@ -34,6 +34,8 @@ export function* searchRaces(action) {
         const priotizedErrorMessage = response.error?.response?.data?.data?.error?.root_cause[0]?.reason;
         showToastMessageOnRequestError(response.error, priotizedErrorMessage);
     }
+
+    window?.history?.pushState('', 'syrf.io', '/?' + Object.entries({...params, keyword: searchKeyword }).map(([key, val]) => `${key}=${val}`).join('&'));
 }
 
 export default function* homeSaga() {

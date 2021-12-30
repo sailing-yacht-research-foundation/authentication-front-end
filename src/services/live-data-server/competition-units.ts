@@ -20,7 +20,6 @@ export const search = (params) => {
     if (params.hasOwnProperty('from_date')
         && params.from_date !== ''
         && moment(params.from_date).isValid()) {
-        params.from_date = params.from_date;
         query.bool.must.push({
             range: {
                 "approx_start_time_ms": {
@@ -33,7 +32,6 @@ export const search = (params) => {
     if (params.hasOwnProperty('to_date')
         && params.to_date !== ''
         && moment(params.to_date).isValid()) {
-        params.to_date = params.to_date;
         query.bool.must.push({
             range: {
                 "approx_start_time_ms": {
@@ -58,8 +56,6 @@ export const search = (params) => {
     searchParams._source = ["id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event", "event_description"]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
-
-    window?.history?.pushState('', 'syrf.io', '/?' + Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&'));
 
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
