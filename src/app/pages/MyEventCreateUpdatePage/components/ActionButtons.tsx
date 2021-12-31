@@ -1,8 +1,7 @@
 import React from 'react';
-import { Space, Button, Spin } from 'antd';
+import { Spin, Dropdown, Menu } from 'antd';
 import { EventState, MODE } from 'utils/constants';
 import { useTranslation } from 'react-i18next';
-import { DeleteButton } from 'app/components/SyrfGeneral';
 import { closeCalendarEvent, scheduleCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
 import { translations } from 'locales/translations';
 import { toast } from 'react-toastify';
@@ -11,7 +10,7 @@ import { ScheduleOutlined } from '@ant-design/icons';
 import { HiLockClosed } from 'react-icons/hi';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { GoChecklist } from 'react-icons/go';
-import { BiTrash } from 'react-icons/bi';
+import { BiImport, BiTrash } from 'react-icons/bi';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const ActionButtons = ({
@@ -20,7 +19,8 @@ export const ActionButtons = ({
     event,
     setShowDeleteModal,
     setEvent,
-    eventId
+    eventId,
+    setShowImportEventModal
 }) => {
 
     const { t } = useTranslation();
@@ -28,7 +28,6 @@ export const ActionButtons = ({
     const [isChangingStatus, setIsChangingStatus] = React.useState<boolean>(false);
 
     const [isOpeningClosingRegistration, setIsOpeningClosingRegistration] = React.useState<boolean>(false);
-
 
     const scheduleEvent = async () => {
         setIsChangingStatus(true);
@@ -80,29 +79,75 @@ export const ActionButtons = ({
         }
     }
 
+    const menus = [
+        {
+            name: t(translations.my_event_create_update_page.import_external_data),
+            show: [EventState.DRAFT, EventState.ON_GOING, EventState.SCHEDULED].includes(event.status),
+            icon: <BiImport />,
+            spinning: false,
+            handler: () => setShowImportEventModal(true)
+        },
+        {
+            name: t(translations.my_event_create_update_page.assign_admins),
+            show: true,
+            icon: <GrGroup />,
+            spinning: false,
+            handler: () => showAssignEventAsGroupAdminModal()
+        },
+        {
+            name: t(translations.my_event_create_update_page.schedule_event),
+            show: event.status === EventState.DRAFT,
+            icon: <ScheduleOutlined />,
+            spinning: isChangingStatus,
+            handler: () => scheduleEvent()
+        },
+        {
+            name: t(translations.my_event_create_update_page.open_registration),
+            show: event.isOpen && event.allowRegistration === false,
+            handler: () => toggleRegistration(true),
+            icon: <GiArchiveRegister />,
+            spinning: isOpeningClosingRegistration
+        },
+        {
+            name: t(translations.my_event_create_update_page.close_registration),
+            show: event.isOpen && event.allowRegistration === true,
+            handler: () => toggleRegistration(false),
+            icon: <HiLockClosed />,
+            spinning: isOpeningClosingRegistration
+        },
+        {
+            name: t(translations.my_event_create_update_page.close_event),
+            handler: () => closeRace(),
+            show: event.status === EventState.ON_GOING,
+            icon: <GoChecklist />,
+            spinning: isChangingStatus
+        },
+        {
+            name: t(translations.my_event_create_update_page.delete),
+            show: event.status === EventState.DRAFT,
+            handler: () => setShowDeleteModal(true),
+            icon: <BiTrash />,
+            spinning: false
+        }
+    ];
+
+    const menu = (
+        <Menu>
+            {menus.map((menu, index) => menu.show && <Spin spinning={menu.spinning}>
+                <Menu.Item key={index} onClick={menu.handler} icon={menu.icon}>
+                    {menu.name}
+                </Menu.Item>
+            </Spin>)}
+        </Menu>
+    );
+
     return (
-        <Space size={10}>
-            {mode === MODE.UPDATE && <>
-                {
-                    event.status === EventState.ON_GOING &&
-                    <Spin spinning={isChangingStatus}><Button onClick={closeRace} data-tip={t(translations.tip.click_to_close_this_event_and_make_it_completed)} icon={< GoChecklist style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_event)}</Button></Spin>
-                }
-                <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.assign_admins)}</Button>
-                {
-                    event.isOpen && <Spin spinning={isOpeningClosingRegistration}>
-                        {event.allowRegistration ? (<Button data-tip={t(translations.tip.click_to_make_this_event_close_for_registration)} onClick={() => toggleRegistration(false)} icon={<HiLockClosed style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_registration)}</Button>)
-                            : (<Button onClick={() => toggleRegistration(true)} data-tip={t(translations.tip.click_to_make_this_event_open_for_registration)} icon={< GiArchiveRegister style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.open_registration)}</Button>)}
-                    </Spin>
-                }
-                {
-                    event.status === EventState.DRAFT && <>
-                        <Spin spinning={isChangingStatus}><Button onClick={scheduleEvent} data-tip={t(translations.tip.schedule_event)} icon={<ScheduleOutlined style={{ marginRight: '5px', position: 'relative', top: '-2px' }} />}>{t(translations.my_event_create_update_page.schedule_event)}</Button></Spin>
-                        <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                            style={{ marginRight: '5px' }}
-                            size={18} />}>{ t(translations.my_event_create_update_page.delete)}</DeleteButton>
-                    </>
-                }
-            </>}
-        </Space>
+        <>
+            {
+                mode === MODE.UPDATE && <Dropdown.Button overlay={menu} placement="bottomCenter">
+                    {t(translations.my_event_create_update_page.event_options)}
+                </Dropdown.Button>
+            }
+        </>
     )
 }

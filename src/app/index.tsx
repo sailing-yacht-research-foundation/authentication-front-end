@@ -47,6 +47,7 @@ import { GroupDetailPage } from './pages/GroupDetailPage/Loadable';
 import { GroupCreateUpdatePage } from './pages/GroupCreateUpdatePage/Loadable';
 import { PublicProfilePage } from './pages/PublicProfilePage/Loadable';
 import { ProfileSearchPage } from './pages/ProfileSearchPage/Loadable';
+import { ExternalCredentialsManagePage } from './pages/ExternalCredentialsManagePage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -188,6 +189,7 @@ export function App(props) {
               <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/change-password'} component={ChangePasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account'} component={ProfilePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/integrations'} component={ExternalCredentialsManagePage} />
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
               <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
