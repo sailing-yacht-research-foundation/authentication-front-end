@@ -2,7 +2,7 @@ import React from 'react';
 import { Spin, Dropdown, Menu } from 'antd';
 import { EventState, MODE } from 'utils/constants';
 import { useTranslation } from 'react-i18next';
-import { closeCalendarEvent, scheduleCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
+import { cancelCalendarEvent, closeCalendarEvent, scheduleCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
 import { translations } from 'locales/translations';
 import { toast } from 'react-toastify';
 import { GrGroup } from 'react-icons/gr';
@@ -12,6 +12,7 @@ import { GiArchiveRegister } from 'react-icons/gi';
 import { GoChecklist } from 'react-icons/go';
 import { BiImport, BiTrash } from 'react-icons/bi';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { MdFreeCancellation } from 'react-icons/md';
 
 export const ActionButtons = ({
     mode,
@@ -65,7 +66,7 @@ export const ActionButtons = ({
         }
     }
 
-    const closeRace = async () => {
+    const closeEvent = async () => {
         const response = await closeCalendarEvent(eventId);
 
         if (response.success) {
@@ -74,6 +75,22 @@ export const ActionButtons = ({
                 status: EventState.COMPLETED
             });
             toast.success(t(translations.my_event_create_update_page.successfully_closed_this_event));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
+    const cancelEvent = async () => {
+        setIsChangingStatus(true);
+        const response = await cancelCalendarEvent(eventId);
+        setIsChangingStatus(false);
+
+        if (response.success) {
+            toast.success(t(translations.my_event_create_update_page.successfully_canceled_this_event));
+            setEvent({
+                ...event,
+                status: EventState.CANCELED
+            })
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -102,22 +119,29 @@ export const ActionButtons = ({
             handler: () => scheduleEvent()
         },
         {
+            name: t(translations.my_event_create_update_page.cancel_event),
+            show: event.status === EventState.SCHEDULED,
+            icon: <MdFreeCancellation />,
+            spinning: isChangingStatus,
+            handler: () => cancelEvent()
+        },
+        {
             name: t(translations.my_event_create_update_page.open_registration),
-            show: event.isOpen && event.allowRegistration === false,
+            show: event.isOpen && event.allowRegistration === false && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
             handler: () => toggleRegistration(true),
             icon: <GiArchiveRegister />,
             spinning: isOpeningClosingRegistration
         },
         {
             name: t(translations.my_event_create_update_page.close_registration),
-            show: event.isOpen && event.allowRegistration === true,
+            show: event.isOpen && event.allowRegistration === true && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
             handler: () => toggleRegistration(false),
             icon: <HiLockClosed />,
             spinning: isOpeningClosingRegistration
         },
         {
             name: t(translations.my_event_create_update_page.close_event),
-            handler: () => closeRace(),
+            handler: () => closeEvent(),
             show: event.status === EventState.ON_GOING,
             icon: <GoChecklist />,
             spinning: isChangingStatus

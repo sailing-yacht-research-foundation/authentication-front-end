@@ -447,6 +447,7 @@
     "event_is_opened_for_registration": "Event is opened for registration.",
     "event_is_closed_for_registration": "Event is closed for registration.",
     "successfully_closed_this_event": "Successfully closed this event.",
+    "successfully_canceled_this_event": "Successfully canceled this event.",
     "open_regatta": "Open Regatta",
     "schedule_event":"Schedule Event",
     "close_event": "Close Event",
@@ -461,7 +462,8 @@
     "credential_is_required": "Credential is required.",
     "event_is_required": "Event is required.",
     "we_are_importing_event_data_to_this_event": "We are importing your event data to this event. You will see them soon.",
-    "event_options": "Event options"
+    "event_options": "Event options",
+    "cancel_event": "Cancel Event"
   },
   "course_list": {
     "name": "Name",
