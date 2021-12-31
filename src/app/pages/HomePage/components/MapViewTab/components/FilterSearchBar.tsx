@@ -66,6 +66,7 @@ export const FilterSearchBar = (props) => {
             dispatch(actions.setKeyword(params.keyword ?? ''));
             dispatch(actions.setFromDate(''));
             dispatch(actions.setToDate(''));
+            dispatch(actions.setSortType(''));
             dispatch(actions.searchRaces(params));
 
             history.push({

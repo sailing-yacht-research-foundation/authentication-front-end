@@ -13,7 +13,7 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { useHomeSlice } from '../slice';
 import { useHistory, useLocation } from 'react-router';
-import { selectFromDate, selectSearchKeyword, selectShowAdvancedSearch, selectToDate } from '../slice/selectors';
+import { selectFromDate, selectSearchKeyword, selectShowAdvancedSearch, selectSortType, selectToDate } from '../slice/selectors';
 import { media } from 'styles/media';
 import { FilterPane } from './FilterPane';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -35,6 +35,8 @@ export const Main = () => {
     const fromDate = useSelector(selectFromDate);
 
     const toDate = useSelector(selectToDate);
+
+    const sortType = useSelector(selectSortType);
 
     const history = useHistory();
 
@@ -79,6 +81,7 @@ export const Main = () => {
             dispatch(actions.setKeyword(params.keyword ?? ''));
             dispatch(actions.setFromDate(params.from_date ?? ''));
             dispatch(actions.setToDate(params.to_date ?? ''));
+            dispatch(actions.setSortType(params.sort ?? ''));
             dispatch(actions.searchRaces(params));
         }
     }
@@ -89,6 +92,7 @@ export const Main = () => {
         params.page = page;
         params.size = pageSize;
         params.keyword = searchKeyword;
+        params.sort = sortType;
 
         if (fromDate !== '') params.from_date = fromDate;
         if (toDate !== '') params.to_date = toDate;

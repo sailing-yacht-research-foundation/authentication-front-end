@@ -4,7 +4,6 @@
 
  import { profileSearchActions } from ".";
  import { put, takeLatest, call } from 'redux-saga/effects';
- import { toast } from "react-toastify";
 import { searchForProfiles } from "services/live-data-server/profile";
 import { showToastMessageOnRequestError } from "utils/helpers";
  
