@@ -44,12 +44,12 @@ export const search = (params) => {
     const searchParams: any = {
         query: query,
         sort: params.sort ? [
+            "_score",
             {
                 "approx_start_time_ms": {
                     "order": params.sort
                 }
             },
-            "_score",
         ] : []
     };
 
