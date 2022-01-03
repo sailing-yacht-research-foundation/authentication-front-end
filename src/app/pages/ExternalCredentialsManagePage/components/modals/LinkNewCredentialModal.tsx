@@ -30,7 +30,7 @@ export const LinkNewCredentialModal = (props) => {
         setIsLoading(false);
 
         if (response.success) {
-            if (response?.data?.isSuccess) {
+            if (response.data?.isSuccess) {
                 toast.success(t(translations.credentail_manager_page.successfully_linked_new_credential_to_your_account));
                 hideModal();
             } else {
