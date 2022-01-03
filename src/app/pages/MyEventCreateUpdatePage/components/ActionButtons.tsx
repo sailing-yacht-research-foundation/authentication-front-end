@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Dropdown, Menu } from 'antd';
+import { Spin, Dropdown, Menu, Button, Space } from 'antd';
 import { EventState, MODE } from 'utils/constants';
 import { useTranslation } from 'react-i18next';
 import { cancelCalendarEvent, closeCalendarEvent, scheduleCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
@@ -13,6 +13,9 @@ import { GoChecklist } from 'react-icons/go';
 import { BiImport, BiTrash } from 'react-icons/bi';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { MdFreeCancellation } from 'react-icons/md';
+import styled from 'styled-components';
+import { media } from 'styles/media';
+import { DeleteButton } from 'app/components/SyrfGeneral';
 
 export const ActionButtons = ({
     mode,
@@ -102,56 +105,64 @@ export const ActionButtons = ({
             show: [EventState.DRAFT, EventState.ON_GOING, EventState.SCHEDULED].includes(event.status),
             icon: <BiImport />,
             spinning: false,
-            handler: () => setShowImportEventModal(true)
+            handler: () => setShowImportEventModal(true),
+            isDelete: false,
         },
         {
             name: t(translations.my_event_create_update_page.assign_admins),
             show: true,
             icon: <GrGroup />,
             spinning: false,
-            handler: () => showAssignEventAsGroupAdminModal()
+            handler: () => showAssignEventAsGroupAdminModal(),
+            isDelete: false,
         },
         {
             name: t(translations.my_event_create_update_page.schedule_event),
             show: event.status === EventState.DRAFT,
             icon: <ScheduleOutlined />,
             spinning: isChangingStatus,
-            handler: () => scheduleEvent()
+            handler: () => scheduleEvent(),
+            isDelete: false,
         },
         {
             name: t(translations.my_event_create_update_page.cancel_event),
             show: event.status === EventState.SCHEDULED,
             icon: <MdFreeCancellation />,
             spinning: isChangingStatus,
-            handler: () => cancelEvent()
+            handler: () => cancelEvent(),
+            isDelete: false,
         },
         {
             name: t(translations.my_event_create_update_page.open_registration),
             show: event.isOpen && event.allowRegistration === false && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
             handler: () => toggleRegistration(true),
             icon: <GiArchiveRegister />,
-            spinning: isOpeningClosingRegistration
+            spinning: isOpeningClosingRegistration,
+            isDelete: false,
         },
         {
             name: t(translations.my_event_create_update_page.close_registration),
             show: event.isOpen && event.allowRegistration === true && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
             handler: () => toggleRegistration(false),
             icon: <HiLockClosed />,
-            spinning: isOpeningClosingRegistration
+            spinning: isOpeningClosingRegistration,
+            isDelete: false,
         },
         {
             name: t(translations.my_event_create_update_page.close_event),
             handler: () => closeEvent(),
             show: event.status === EventState.ON_GOING,
             icon: <GoChecklist />,
-            spinning: isChangingStatus
+            spinning: isChangingStatus,
+            isDelete: false,
         },
         {
             name: t(translations.my_event_create_update_page.delete),
             show: event.status === EventState.DRAFT,
             handler: () => setShowDeleteModal(true),
             icon: <BiTrash />,
-            spinning: false
+            spinning: false,
+            isDelete: true
         }
     ];
 
@@ -168,10 +179,43 @@ export const ActionButtons = ({
     return (
         <>
             {
-                mode === MODE.UPDATE && <Dropdown.Button overlay={menu} placement="bottomCenter">
-                    {t(translations.my_event_create_update_page.event_options)}
-                </Dropdown.Button>
+                mode === MODE.UPDATE &&
+                <>
+                    <MobileButtonsWrapper>
+                        <Dropdown.Button overlay={menu} placement="bottomCenter">
+                            {t(translations.my_event_create_update_page.event_options)}
+                        </Dropdown.Button>
+                    </MobileButtonsWrapper>
+                    <DesktopButtonsWrapper>
+                        <Space size={10}>
+                            {menus.map((item, index) => {
+                                return item.show && <Spin key={index} spinning={item.spinning}>
+                                    {!item.isDelete ? <Button onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</Button> :
+                                        <DeleteButton onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</DeleteButton>}
+                                </Spin>
+                            })}
+                        </Space>
+                    </DesktopButtonsWrapper>
+                </>
             }
         </>
     )
 }
+
+const DesktopButtonsWrapper = styled.div`
+    display: none;    
+    ${media.medium`
+        display: block;
+    `}
+`;
+
+const MobileButtonsWrapper = styled.div`
+    display: block;
+    ${media.medium`
+        display: none;
+    `}
+`;
+
+const IconWrapper = styled.span`
+    margin-right: 5px;
+`;

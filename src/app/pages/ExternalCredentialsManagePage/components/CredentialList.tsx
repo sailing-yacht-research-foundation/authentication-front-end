@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { DeleteButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, TableWrapper } from 'app/components/SyrfGeneral';
-import { Table, Spin, Button } from 'antd';
+import { BorderedButton, DeleteButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, TableWrapper } from 'app/components/SyrfGeneral';
+import { Table, Spin, Button, Space } from 'antd';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-credentials.json';
 import { getCredentialByPage } from 'services/live-data-server/external-platform';
@@ -13,6 +13,7 @@ import { CreateButton } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { LinkNewCredentialModal } from './modals/LinkNewCredentialModal';
 import { DeleteCredentialModal } from 'app/pages/VesselListPage/components/DeleteCredentialModal';
+import { MODE } from 'utils/constants';
 
 const defaultOptions = {
     loop: true,
@@ -48,9 +49,12 @@ export const CredentialList = (props) => {
             title: t(translations.credentail_manager_page.action),
             key: 'action',
             render: (text, record) => {
-                return <DeleteButton danger onClick={() => {
+                return <Space size={10}>
+                    <BorderedButton type="primary" onClick={()=> showUpdateCredentialModal(record)}>{t(translations.credentail_manager_page.edit)}</BorderedButton>
+                    <DeleteButton danger onClick={() => {
                     showDeleteCredentialModal(record)
-                }}>{t(translations.credentail_manager_page.unlink)}</DeleteButton>;
+                }}>{t(translations.credentail_manager_page.unlink)}</DeleteButton>
+                </Space>;
             }
         },
     ];
@@ -68,6 +72,8 @@ export const CredentialList = (props) => {
     const [credential, setCredential] = React.useState<any>({});
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
+
+    const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
     React.useEffect(() => {
         getAll(1);
@@ -98,16 +104,27 @@ export const CredentialList = (props) => {
         setCredential(credential);
     }
 
+    const showUpdateCredentialModal = (credential) => {
+        setShowCreateModal(true);
+        setMode(MODE.UPDATE);
+        setCredential(credential);
+    }
+
     const onCredentialDeleted = () => {
         getAll(pagination.page);
     }
 
+    const showCreateCredentialModal = () => {
+        setMode(MODE.CREATE);
+        setCredential({});
+        setShowCreateModal(true);
+    }
 
     return (
         <Wrapper>
             <ProfileTabs />
             <DeleteCredentialModal onCredentialDeleted={onCredentialDeleted} credential={credential} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal}/>
-            <LinkNewCredentialModal reloadParent={() => getAll(pagination.page)} showModal={showCreateModal} setShowModal={setShowCreateModal} />
+            <LinkNewCredentialModal mode={mode} credential={credential} reloadParent={() => getAll(pagination.page)} showModal={showCreateModal} setShowModal={setShowCreateModal} />
             <>
                 <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                     <PageInfoContainer>
@@ -116,7 +133,7 @@ export const CredentialList = (props) => {
                     </PageInfoContainer>
                     <CreateButton
                         data-tip={t(translations.tip.link_a_new_credential_to_your_account)}
-                        onClick={() => setShowCreateModal(true)} icon={<AiFillPlusCircle
+                        onClick={showCreateCredentialModal} icon={<AiFillPlusCircle
                             style={{ marginRight: '5px' }}
                             size={18} />}>{t(translations.credentail_manager_page.link_new_credential)}</CreateButton>
                 </PageHeaderContainerResponsive>

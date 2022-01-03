@@ -7,6 +7,7 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { submitNewCredential } from 'services/live-data-server/external-platform';
+import { MODE } from 'utils/constants';
 
 export const LinkNewCredentialModal = (props) => {
 
@@ -14,7 +15,7 @@ export const LinkNewCredentialModal = (props) => {
 
     const [form] = Form.useForm();
 
-    const { showModal, setShowModal, reloadParent } = props;
+    const { showModal, setShowModal, reloadParent, credential, mode } = props;
 
     const [isLoading, setIsLoading] = React.useState(false);
 
@@ -31,7 +32,7 @@ export const LinkNewCredentialModal = (props) => {
 
         if (response.success) {
             if (response.data?.isSuccess) {
-                toast.success(t(translations.credentail_manager_page.successfully_linked_new_credential_to_your_account));
+                toast.success(t(translations.credentail_manager_page.successfully_linked_this_credential_to_your_account));
                 hideModal();
             } else {
                 toast.info(t(translations.credentail_manager_page.there_is_something_wrong_with_your_credential));
@@ -51,7 +52,7 @@ export const LinkNewCredentialModal = (props) => {
 
     return (
         <Modal
-            title={t(translations.credentail_manager_page.link_new_credential)}
+            title={t(mode === MODE.CREATE ? translations.credentail_manager_page.link_new_credential : translations.credentail_manager_page.edit_credential)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
             visible={showModal}
             footer={null}
@@ -65,7 +66,8 @@ export const LinkNewCredentialModal = (props) => {
                     onFinish={onFinish}
                     style={{ width: '100%' }}
                     initialValues={{
-                      source: 'YACHTSCORING'  
+                      source: 'YACHTSCORING',
+                      username: credential?.userId || ''
                     }}
                 >
                     <Form.Item
@@ -96,7 +98,7 @@ export const LinkNewCredentialModal = (props) => {
 
                     <Form.Item>
                         <SyrfFormButton type="primary" htmlType="submit">
-                            {t(translations.credentail_manager_page.link)}
+                            {t(mode === MODE.CREATE ? translations.credentail_manager_page.link : translations.credentail_manager_page.edit)}
                         </SyrfFormButton>
                     </Form.Item>
                 </Form>

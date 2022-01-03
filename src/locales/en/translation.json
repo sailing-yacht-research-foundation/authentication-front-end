@@ -953,8 +953,9 @@
     "this_is_where_you_can_manage_your_credential_you_linked": "This is where you can manage your linked credentials from YachtScoring,...",
     "you_havent_linked_any_credentials": "You haven't linked any credentials.",
     "link_new_credential": "Link New Credential",
+    "edit_credential": "Edit Credential",
     "link": "Link",
-    "successfully_linked_new_credential_to_your_account": "Successfully linked new credential to your account.",
+    "successfully_linked_this_credential_to_your_account": "Successfully linked this credential to your account.",
     "username": "Username",
     "password": "Password",
     "source": "Source",
@@ -962,7 +963,8 @@
     "password_is_required": "Password is required.",
     "there_is_something_wrong_with_your_credential": "There is something wrong with your credential, please try again.",
     "action": "Action",
-    "unlink": "Unlink"
+    "unlink": "Unlink",
+    "edit": "Edit"
   },
   "delete_credential_modal": {
     "successfully_deleted": "Successfully unlinked the credential",
