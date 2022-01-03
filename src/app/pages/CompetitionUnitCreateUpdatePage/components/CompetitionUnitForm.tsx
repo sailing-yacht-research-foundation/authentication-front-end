@@ -260,7 +260,7 @@ export const CompetitionUnitForm = () => {
         const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
         const eventDateTime = new Date(eventData?.approximateStartTime);
 
-        if (selectedDateTime.getTime() > eventDateTime.getTime()) {
+        if (selectedDateTime.getTime() >= eventDateTime.getTime()) {
             return {
                 isValid: true,
                 errors: { startDate: null, startTime: null }
