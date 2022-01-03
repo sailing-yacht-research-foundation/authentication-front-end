@@ -33,7 +33,7 @@ import { useTranslation } from "react-i18next";
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
 
-  const [,setSocketUrl] = useState(streamUrl);
+  const [, setSocketUrl] = useState(streamUrl);
   const [eventEmitter,] = useState(new EventEmitter());
 
   const [participantsData, setParticipantsData] = useState([]);
@@ -299,8 +299,8 @@ export const PlaybackStreamRace = (props) => {
       id: id,
       vessel,
       vesselParticipantId: id,
-      positions: [position.lat, position.lon] || [],
-      lastPosition: { lon: position.lon, lat: position.lat }, 
+      positions: [position.lat, position.lon],
+      lastPosition: { lon: position.lon, lat: position.lat },
       deviceType: 'boat',
       participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },
       color: stringToColour(id),
@@ -468,6 +468,10 @@ export const PlaybackStreamRace = (props) => {
 
   return (
     <div style={{ height: "100%" }}>
+      <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
+        <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
+        <ModalCountdownTimer />
+      </LeaderboardContainer>
       <MapContainer
         style={{
           height: "100vh",
@@ -488,10 +492,6 @@ export const PlaybackStreamRace = (props) => {
         duration={0}
         easeLinearity={0}
       >
-        <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-          <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
-          <ModalCountdownTimer />
-        </LeaderboardContainer>
         <RaceMap emitter={eventEmitter} />
 
         {competitionUnitDetail?.id

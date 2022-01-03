@@ -27,7 +27,7 @@ export const Leaderboard = ({ participantsData = [], emitter }) => {
     return (
         <Wrapper>
             <HeaderContainer onClick={handleIsOpenChange}>
-                <p style={{ marginBottom: "0px" }}>
+                <p style={{ marginBottom: "0px", fontSize:'12px' }}>
                     <strong>Leader board</strong>
                 </p>
 
@@ -42,7 +42,7 @@ export const Leaderboard = ({ participantsData = [], emitter }) => {
                     <div>
                         {sortedParticipantsByLeaderboard.map((participant: any) => {
                             return (
-                                <div data-tip={`Click to move to ${participant?.participant?.competitor_name} location`} onClick={() => zoomToParticipant(participant)} key={participant.id} style={{ margin: "8px 0px" }}>
+                                <div data-tip={`Click to move to ${participant?.participant?.competitor_name} location`} onClick={() => zoomToParticipant(participant)} key={participant.id} style={{ margin: "8px 0px", cursor: 'pointer' }}>
                                     <div style={{ borderBottom: `2px solid ${participant?.color}` }}>
                                         <p style={{ marginBottom: "0px" }}>
                                             {participant?.participant?.competitor_name}
