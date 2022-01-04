@@ -9,7 +9,7 @@ const { getEventDetail } = require('./services');
 const moment = require('moment');
 const { getRaceTitleAndDescription, replaceOpenGraphTagsContent } = require('./helpers');
 
-const defaultOpenGraphImage = '/hero-homepage-3.jpg';
+const defaultOpenGraphImage = `${process.env.SITE_URL}/hero-homepage-3.jpg`;
 const defaultTitle = "SYRF - The home of sailing.";
 const defaultDescription = "Sailing Yacht Research Foundation";
 const buildPath = process.env.BUILD_FOLDER_PATH;
