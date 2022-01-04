@@ -16,7 +16,7 @@ import { translations } from 'locales/translations';
 import { media } from 'styles/media';
 import { GiPathDistance, GiSailboat } from 'react-icons/gi';
 import { GoDatabase } from 'react-icons/go';
-import { MdGroups } from 'react-icons/md';
+import { MdGroups, MdOutlineAccountTree } from 'react-icons/md';
 import { Link } from '../Link';
 import { FaUserFriends } from 'react-icons/fa';
 import { ImProfile } from 'react-icons/im';
@@ -26,15 +26,16 @@ export const SiderContent = (props) => {
   const { toggled } = props;
 
   const items = [
-    { key: '14', paths: ['events'], subMenuKey: 'events' },
-    { key: '15', paths: ['boats'] },
-    { key: '12', paths: ['data'] },
-    { key: '8', paths: ['change-password'], subMenuKey: 'profile' },
+    { key: '3', paths: ['events'], subMenuKey: 'events' },
+    { key: '5', paths: ['boats'] },
+    { key: '6', paths: ['data'] },
+    { key: '8', paths: ['integrations'], subMenuKey: 'profile' },
+    { key: '9', paths: ['change-password'], subMenuKey: 'profile' },
     { key: '7', paths: ['account'], subMenuKey: 'profile' },
-    { key: '16', paths: ['tracks'] },
-    { key: '17', paths: ['groups'] },
-    { key: '20', paths: ['profile/search'], subMenuKey: 'profile' },
-    { key: '19', paths: ['profile'], subMenuKey: 'profile' },
+    { key: '2', paths: ['tracks'] },
+    { key: '4', paths: ['groups'] },
+    { key: '10', paths: ['profile/search'], subMenuKey: 'profile' },
+    { key: '11', paths: ['profile'], subMenuKey: 'profile' },
     { key: '1', paths: ['search'] },
   ];
 
@@ -88,23 +89,23 @@ export const SiderContent = (props) => {
           <StyledLink to={'/'}>{t(translations.side_menu.search)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="16" title={t(translations.side_menu.my_tracks)} icon={<GiPathDistance />}>
+        <SyrfMenuItem key="2" title={t(translations.side_menu.my_tracks)} icon={<GiPathDistance />}>
           <StyledLink to={'/tracks'}>{t(translations.side_menu.my_tracks)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="14" title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
+        <SyrfMenuItem key="3" title={t(translations.side_menu.my_events)} icon={<CalendarOutlined />}>
           <StyledLink to={'/events'}>{t(translations.side_menu.my_events)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="17" title={t(translations.side_menu.groups)} icon={<MdGroups />}>
+        <SyrfMenuItem key="4" title={t(translations.side_menu.groups)} icon={<MdGroups />}>
           <StyledLink to={'/groups'}>{t(translations.side_menu.groups)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem title={t(translations.side_menu.vessels)} icon={<GiSailboat />} key="15">
+        <SyrfMenuItem title={t(translations.side_menu.vessels)} icon={<GiSailboat />} key="5">
           <StyledLink to={'/boats'}>{t(translations.side_menu.vessels)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem key="12" title={t(translations.side_menu.data)} icon={<GoDatabase />}>
+        <SyrfMenuItem key="6" title={t(translations.side_menu.data)} icon={<GoDatabase />}>
           <StyledLink to={'/data'}>{t(translations.side_menu.data)}</StyledLink>
         </SyrfMenuItem>
 
@@ -112,34 +113,19 @@ export const SiderContent = (props) => {
           <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />}>
             <StyledLink to={'/account'}>{t(translations.side_menu.profile.name)}</StyledLink>
           </SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} key="8">
+          <SyrfMenuItem title={t(translations.side_menu.profile.integrations)} key="8" icon={<MdOutlineAccountTree />}>
+            <StyledLink to={'/account/integrations'}>{t(translations.side_menu.profile.integrations)}</StyledLink>
+          </SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} key="9">
             <StyledLink to={'/account/change-password'}>{t(translations.side_menu.profile.change_password)}</StyledLink>
           </SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<FaUserFriends />} key="20">
+          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<FaUserFriends />} key="10">
             <StyledLink to={'/profile/search'}>{t(translations.side_menu.profile.discover_friends)}</StyledLink>
           </SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<ImProfile />} key="19">
+          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<ImProfile />} key="11">
             <StyledLink to={'/profile'}>{t(translations.side_menu.profile.my_profile)}</StyledLink>
           </SyrfMenuItem>
-          {/* <SyrfMenuItem title={t(translations.side_menu.profile.notification_setting)} icon={<BellOutlined />} onClick={() => history.push('/profile')} key="9">{t(translations.side_menu.profile.notification_setting)}</SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.profile_setting)} icon={<SettingOutlined />} onClick={() => history.push('/profile')} key="10">{t(translations.side_menu.profile.profile_setting)}</SyrfMenuItem> hide this because of task SNS-393 */}
         </SyrfSubmenu>
-        {/* 
-        <SyrfMenuItem key="3" title={t(translations.side_menu.app_connection)} icon={<ApiOutlined />}>
-          {t(translations.side_menu.app_connection)}
-        </SyrfMenuItem>
-
-        <SyrfMenuItem key="4" title={t(translations.side_menu.organizational_membership)} icon={<CrownOutlined />}>
-          {t(translations.side_menu.organizational_membership)}
-        </SyrfMenuItem>
-
-        <SyrfMenuItem key="5" title={t(translations.side_menu.my_data)} icon={<HeatMapOutlined />}>
-          {t(translations.side_menu.my_data)}
-        </SyrfMenuItem>
-
-        <SyrfMenuItem key="6" title={t(translations.side_menu.test_data)} icon={<SlidersOutlined />}>
-          {t(translations.side_menu.test_data)}
-        </SyrfMenuItem> hide this because of task SNS-393 */}
       </SyrfMenu>}
     </SiderWrapper>
   )

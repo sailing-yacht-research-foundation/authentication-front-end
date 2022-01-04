@@ -12,10 +12,15 @@ export const ProfileTabs = (props) => {
 
     const location = useLocation();
 
+    const tabs = [
+        { path: '/account', name: t(translations.profile_page.update_profile.account_settings) },
+        { path: '/account/change-password', name: t(translations.profile_page.update_profile.password_security) },
+        { path: '/account/integrations', name: t(translations.profile_page.update_profile.integrations) },
+    ];
+
     return (
         <Tabs>
-            <TabItem className={location.pathname === '/account' ? 'active' : ''} to="/account">{t(translations.profile_page.update_profile.account_settings)}</TabItem>
-            <TabItem className={location.pathname === '/account/change-password' ? 'active' : ''} to="/account/change-password">{t(translations.profile_page.update_profile.password_security)}</TabItem>
+            {tabs.map(tab => <TabItem className={location.pathname === tab.path ? 'active' : ''} to={tab.path}>{tab.name}</TabItem>)}
         </Tabs>
     )
 }
