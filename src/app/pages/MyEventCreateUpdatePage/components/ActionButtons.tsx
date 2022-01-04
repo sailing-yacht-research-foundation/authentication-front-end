@@ -187,7 +187,7 @@ export const ActionButtons = ({
                         </Dropdown.Button>
                     </MobileButtonsWrapper>
                     <DesktopButtonsWrapper>
-                        <Space size={10}>
+                        <Space size={10} wrap style={{ justifyContent: 'flex-end' }}>
                             {menus.map((item, index) => {
                                 return item.show && <Spin key={index} spinning={item.spinning}>
                                     {!item.isDelete ? <Button onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</Button> :
@@ -203,7 +203,7 @@ export const ActionButtons = ({
 }
 
 const DesktopButtonsWrapper = styled.div`
-    display: none;    
+    display: none;
     ${media.medium`
         display: block;
     `}
