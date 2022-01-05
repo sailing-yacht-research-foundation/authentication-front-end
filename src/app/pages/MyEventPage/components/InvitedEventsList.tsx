@@ -1,39 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Table, Space, Spin, Tag, Button } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectIsChangingPage, selectResults } from '../slice/selectors';
-import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
-import NoResult from '../assets/no-results.json'
+import Invitation from '../assets/invitation.json'
 import { translations } from 'locales/translations';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
-import { useHistory } from 'react-router';
-import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
-import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
-import { RaceList } from './RaceList';
-import { EventAdmins } from 'app/pages/EventDetailPage/components/EventAdmins';
 import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
-import { RegisterEventModal } from 'app/pages/MyEventCreateUpdatePage/components/modals/RegisterEventModal';
+import { RegisterEventModal } from 'app/pages/MyEventPage/components/modals/RegisterEventModal';
+import { getMyInvitedEvents } from 'services/live-data-server/participants';
+import { RejectInviteRequestModal } from './modals/RejectInviteRequestModal';
 
 const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: NoResult,
+    animationData: Invitation,
     rendererSettings: {
         preserveAspectRatio: 'xMidYMid slice'
     }
 };
 
-export const InvitedEventLists = () => {
+export const InvitedEventLists = (props) => {
 
     const { t } = useTranslation();
+
+    const { reloadInvitationCount } = props;
 
     const translate = {
         status_open_regis: t(translations.my_event_list_page.status_openregistration),
@@ -50,7 +46,7 @@ export const InvitedEventLists = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/events/${record.id}`}>{text}</Link>;
+                return <Link to={`/events/${record?.event.id}`}>{record?.event.name}</Link>;
             },
         },
         {
@@ -60,130 +56,111 @@ export const InvitedEventLists = () => {
             render: (isOpen, record) => {
                 return (
                     <StatusContainer>
-                        {record?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
-                        {!record?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
+                        {record?.event.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
+                        {!record?.event.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
                     </StatusContainer>
                 );
             }
-        },
-        {
-            title: t(translations.my_event_list_page.city),
-            dataIndex: 'city',
-            key: 'city',
-            render: (text) => renderEmptyValue(text),
-        },
-        {
-            title: t(translations.my_event_list_page.country),
-            dataIndex: 'country',
-            key: 'country',
-            render: (text) => renderEmptyValue(text),
         },
         {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
             render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time)
-                + ' ' + record.approximateStartTime_zone + ' '
-                + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
+                + ' ' + record?.event.approximateStartTime_zone + ' '
+                + renderTimezoneInUTCOffset(record?.event.approximateStartTime_zone),
         },
         {
-            title: t(translations.my_event_list_page.admins),
-            dataIndex: 'admin',
-            key: 'admin',
-            render: (_, record) => <EventAdmins headless event={record} />
-        },
-        {
-            title: t(translations.my_event_list_page.status),
-            dataIndex: 'status',
-            key: 'status',
-            render: (value) => value,
-        },
-        {
-            title: t(translations.my_event_list_page.created_date),
+            title: t(translations.my_event_list_page.invited_at),
             dataIndex: 'createdAt',
             key: 'createdAt',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text),
+            render: (value, record) => moment(record?.createdAt).format(TIME_FORMAT.date_text),
         },
         {
             title: 'Action',
             key: 'action',
             render: (text, record) => {
                 return <Space size="middle">
-                    <Button type="primary" icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
+                    <Button type="primary" onClick={() => acceptInviteRequest(record)} icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
                         {t(translations.group.accept)}
                     </Button>
-                    <Button icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
+                    <Button onClick={() => rejectInviteRequest(record)} icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
                         {t(translations.group.reject)}
                     </Button>
-
                 </Space>;
             }
         },
     ];
 
-    const results = useSelector(selectResults);
+    const [pagination, setPagination] = React.useState<any>({
+        page: 1,
+        total: 0,
+        rows: []
+    });
 
-    const page = useSelector(selectPage);
+    const [showRejectConfirmModal, setShowRejectConfirmModal] = React.useState<boolean>(false);
 
-    const total = useSelector(selectTotal);
+    const [showAcceptModal, setShowAcceptModal] = React.useState<boolean>(false);
 
-    const dispatch = useDispatch();
+    const [request, setRequest] = React.useState<any>({});
 
-    const { actions } = useMyEventListSlice();
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+    const getInvitations = async (page) => {
+        setIsLoading(true);
+        const response = await getMyInvitedEvents(page);
+        setIsLoading(false);
 
-    const [event, setEvent] = React.useState<any>({});
-
-    const [mappedResults, setMappedResults] = React.useState<any[]>([]);
-
-    const isChangingPage = useSelector(selectIsChangingPage);
+        if (response.success) {
+            setPagination({
+                ...pagination,
+                page: page,
+                total: response?.data?.count,
+                rows: response.data?.rows,
+            });
+        }
+    }
 
     React.useEffect(() => {
-        dispatch(actions.getEvents(1));
+        getInvitations(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    React.useEffect(() => {
-        const resultsWithKey = results.map((result) => ({ ...result, key: result.id }))
-        setMappedResults(resultsWithKey);
-    }, [results]);
-
     const onPaginationChanged = (page) => {
-        dispatch(actions.getEvents(page));
+        getInvitations(page);
     }
 
-
-    const onRaceDeleted = () => {
-        dispatch(actions.getEvents(page));
+    const acceptInviteRequest = (request) => {
+        setRequest(request);
+        setShowAcceptModal(true);
     }
 
-    const renderExpandedRowRender = (record) => {
-        return (
-            <div>
-                <RaceList event={record} />
-            </div>
-        );
+    const rejectInviteRequest = (request) => {
+        setRequest(request);
+        setShowRejectConfirmModal(true);
+    }
+
+    const reloadParent = () => {
+        getInvitations(pagination.page)
+        reloadInvitationCount();
     }
 
     return (
         <>
-            <RegisterEventModal/>
-            {mappedResults.length > 0 ? (
-                <Spin spinning={isChangingPage}>
+            <RegisterEventModal reloadParent={reloadParent} request={request} showModal={showAcceptModal} setShowModal={setShowAcceptModal} />
+            <RejectInviteRequestModal reloadParent={reloadParent} showModal={showRejectConfirmModal} setShowModal={setShowRejectConfirmModal} request={request} />
+            {pagination.rows.length > 0 ? (
+                <Spin spinning={isLoading}>
                     <TableWrapper>
                         <Table
                             scroll={{ x: "max-content" }}
                             columns={columns}
-                            dataSource={mappedResults}
+                            dataSource={pagination.rows}
                             pagination={{
                                 defaultPageSize: 10,
-                                current: page,
-                                total: total,
+                                current: pagination.page,
+                                total: pagination.total,
                                 onChange: onPaginationChanged,
-                            }}
-                            expandable={{
-                                expandedRowRender: record => renderExpandedRowRender(record)
                             }}
                         />
                     </TableWrapper>
@@ -191,7 +168,7 @@ export const InvitedEventLists = () => {
             ) : (
                 <LottieWrapper>
                     <Lottie options={defaultOptions} height={400} width={400} />
-                    <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_event)}</LottieMessage>
+                    <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_invitation)}</LottieMessage>
                 </LottieWrapper>
             )}
         </>

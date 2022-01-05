@@ -157,3 +157,9 @@ export enum EventState {
     COMPLETED = 'COMPLETED',
     ON_GOING = 'ONGOING'
 }
+
+export enum ParticipantInvitationStatus  {
+    BLOCKED = 'BLOCKED',
+    INVITED = 'INVITED',
+    ACCEPTED = 'ACCEPTED'
+}

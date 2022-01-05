@@ -1,210 +1,172 @@
 import React from 'react';
-import { Modal, Form, Select, Switch, Spin, Tabs } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton } from 'app/components/SyrfForm';
-import { assignEventAsGroupAdmin, searchGroupForAssigns } from 'services/live-data-server/groups';
+import { Modal, Spin, Input, Button } from 'antd';
 import { toast } from 'react-toastify';
-import { SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'utils/helpers';
-import { searchForProfiles } from 'services/live-data-server/profile';
+import { debounce, showToastMessageOnRequestError } from 'utils/helpers';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getUserAttribute, renderAvatar } from 'utils/user-utils';
-import { addEditor } from 'services/live-data-server/event-calendars';
 import styled from 'styled-components';
+import { searchForProfiles } from 'services/live-data-server/profile';
+import { Link } from 'react-router-dom';
+import { inviteCompetitor } from 'services/live-data-server/event-calendars';
+import { getAllByCalendarEventId } from 'services/live-data-server/participants';
 
 export const CompetitorInviteModal = (props) => {
 
     const { t } = useTranslation();
 
-    const [groupForm] = Form.useForm();
-
-    const [individualForm] = Form.useForm();
-
-    const { showModal, setShowModal, event } = props;
+    const { showModal, setShowModal, eventId } = props;
 
     const [isLoading, setIsLoading] = React.useState(false);
 
     const [results, setResults] = React.useState<any[]>([]);
 
-    const [people, setPeople] = React.useState<any[]>([]);
-
-    const [checked, setChecked] = React.useState(false);
+    const [participants, setParticipants] = React.useState<any[]>([]);
 
     const user = useSelector(selectUser);
-
-    const adminsManagerRef = React.useRef<any>();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSearchPeople = React.useCallback(debounce((keyword) => onSearchPeople(keyword), 300), []);
 
     const hideAssignModal = () => {
         setShowModal(false);
-        groupForm.setFieldsValue({
-            groupId: ''
-        });
-        setChecked(false);
-    }
-
-    const onFinish = async (values) => {
-        const { groupId } = values;
-        setIsLoading(true);
-        const response = await assignEventAsGroupAdmin(groupId, event.id, checked);
-        setIsLoading(false);
-
-        if (response.success) {
-            toast.success(t(translations.group.successfully_added_this_event_as_group_admin));
-            adminsManagerRef?.current?.getAdmins();
-        } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
-        }
-    }
-
-    const onSubmitPeople = async (values) => {
-        const { personId } = values;
-        setIsLoading(true);
-        const response = await addEditor(personId, event.id);
-        setIsLoading(false);
-
-        if (response.success) {
-            toast.success(t(translations.my_event_create_update_page.successfully_assigned_people_as_editor));
-            adminsManagerRef?.current?.getAdmins();
-        } else {
-            toast.error(t(translations.app.an_error_happened_when_performing_your_request));
-        }
-    }
-
-    const onSearch = async (keyword) => {
-        const response = await searchGroupForAssigns(keyword);
-
-        if (response.success) {
-            setResults(response.data.rows);
-        }
     }
 
     const onSearchPeople = async (keyword) => {
-        const response = await searchForProfiles(keyword, getUserAttribute(user, 'locale'));
+        if (!keyword) {
+            setResults([]);
+            return;
+        }
 
-        if (response.success) {
-            setPeople(response.data.rows);
+        setIsLoading(true);
+        const response = await searchForProfiles(keyword, getUserAttribute(user, 'locale'));
+        setIsLoading(false);
+
+        if (!response.success) {
+            showToastMessageOnRequestError(response.error);
+        } else {
+            setResults(response.data?.rows.filter(item => !participants.includes(item.id)));
         }
     }
 
-    const renderSearchResults = () => {
-        return results.map(group => <Select.Option value={group.id}>{group?.groupName}</Select.Option>)
+    const updateResultList = (userProfileId) => {
+        setResults(results.filter(profile => profile.id !== userProfileId));
     }
 
-    const renderPeopleResults = () => {
-        return people.map(p => <Select.Option value={p.id}><PeopleAvatar src={renderAvatar(p.avatar)} /> {p?.name}</Select.Option>)
+    const getAllParticipants = async () => {
+        const response = await getAllByCalendarEventId(eventId, 1, 100);
+
+        if (response.success) {
+            setParticipants(response.data?.rows?.map(participant => participant.userProfileId).filter(Boolean));
+        }
     }
 
     React.useEffect(() => {
-        onSearch('');
+        getAllParticipants();
     }, []);
 
     return (
         <Modal
             title={'Invite competitors'}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
-            visible={true}
+            visible={showModal}
             footer={null}
             onCancel={hideAssignModal}
         >
             <Spin spinning={isLoading}>
-                <Tabs defaultActiveKey="1">
-                    <Tabs.TabPane tab="Group" key="1">
-                        <Form
-                            form={groupForm}
-                            layout="vertical"
-                            name="basic"
-                            onFinish={onFinish}
-                            style={{ width: '100%' }}
-                        >
-                            <Form.Item
-                                label={<SyrfFieldLabel>{t(translations.group.select_or_search_a_group)}</SyrfFieldLabel>}
-                                name="groupId"
-                                rules={[{ required: true, message: t(translations.group.please_choose_a_group) }]}
-                            >
-                                <SyrfFormSelect
-                                    showSearch
-                                    allowClear
-                                    placeholder={t(translations.group.select_or_search_a_group)}
-                                    optionFilterProp="children"
-                                    onSearch={debounceSearch}
-                                >
-                                    {renderSearchResults()}
-                                </SyrfFormSelect>
-                            </Form.Item>
-
-                            <Form.Item
-                                label={<SyrfFieldLabel>{t(translations.public_profile.search_or_select_people)}</SyrfFieldLabel>}
-                                name="personId"
-                                rules={[{ required: true, message: t(translations.public_profile.search_or_select_people) }]}
-                            >
-                                <SyrfFormSelect
-                                    showSearch
-                                    allowClear
-                                    mode="multiple"
-                                    placeholder={t(translations.public_profile.search_or_select_people)}
-                                    optionFilterProp="children"
-                                    onSearch={debounceSearchPeople}
-                                >
-                                    {renderPeopleResults()}
-                                </SyrfFormSelect>
-                            </Form.Item>
-
-
-                            <Form.Item>
-                                <SyrfFormButton type="primary" htmlType="submit">
-                                    {t(translations.assign_vessel_participant_modal.save)}
-                                </SyrfFormButton>
-                            </Form.Item>
-                        </Form>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Individual" key="2">
-                        <Form
-                            form={individualForm}
-                            layout="vertical"
-                            name="basic"
-                            onFinish={onSubmitPeople}
-                            style={{ width: '100%' }}
-                        >
-                            <Form.Item
-                                label={<SyrfFieldLabel>{t(translations.public_profile.search_or_select_people)}</SyrfFieldLabel>}
-                                name="personId"
-                                rules={[{ required: true, message: t(translations.public_profile.search_or_select_people) }]}
-                            >
-                                <SyrfFormSelect
-                                    showSearch
-                                    allowClear
-                                    placeholder={t(translations.public_profile.search_or_select_people)}
-                                    optionFilterProp="children"
-                                    onSearch={debounceSearchPeople}
-                                >
-                                    {renderPeopleResults()}
-                                </SyrfFormSelect>
-                            </Form.Item>
-
-                            <Form.Item>
-                                <SyrfFormButton type="primary" htmlType="submit">
-                                    Invite
-                                </SyrfFormButton>
-                            </Form.Item>
-                        </Form>
-                    </Tabs.TabPane>
-                </Tabs>
+                <Input.Search allowClear onSearch={debounceSearchPeople} placeholder='Search for competitors' />
+                <ResultContainer>
+                    {results.map((profile, index) => {
+                        return <PeopleResultItem onInvited={updateResultList} key={index} profile={profile} eventId={eventId} />
+                    })}
+                </ResultContainer>
             </Spin>
         </Modal>
     )
 }
 
-const PeopleAvatar = styled.img`
-    with: 25px;
-    height: 25px;
-    margin-right: 5px;
-    border-radius: 50%;
+const PeopleResultItem = ({ profile, eventId, onInvited }) => {
+
+    const { t } = useTranslation();
+
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+    const renderActionButton = (profile) => {
+        return <Spin spinning={isLoading}>
+            <InviteButton onClick={() => inviteUser(profile)} type="primary">{t(translations.participant_list.invite)}</InviteButton>
+        </Spin>;
+    }
+
+    const inviteUser = async (profile) => {
+        setIsLoading(true);
+        const response = await inviteCompetitor(eventId, profile.name, profile.id);
+        setIsLoading(false);
+
+        if (response.success) {
+            if (response.data[0].success) {
+                toast.success(t(translations.participant_list.successfully_invited_user));
+                onInvited(profile.id);
+            } else {
+                toast.info(t(translations.participant_list.there_is_error_happended_when_inviting_this_user));
+            }
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
+    return (<PeopleItem>
+        <PeopleInnerWrapper>
+            <PeopleAvatar>
+                <img alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
+            </PeopleAvatar>
+            <PeopleInfo>
+                <PeopleName to={`/profile/${profile.id}`}>{profile.name}</PeopleName>
+            </PeopleInfo>
+        </PeopleInnerWrapper>
+        <ButtonOutter>{renderActionButton(profile)}</ButtonOutter>
+    </PeopleItem>)
+}
+
+const ResultContainer = styled.div`
+    margin-top: 25px;
+`;
+
+const PeopleItem = styled.div`
+    display: flex;
+    align-items: center;
+    text-align: left;
+    &:not(:last-child) {
+       padding-bottom: 10px;
+       margin-bottom: 20px;
+       border-bottom: 1px solid #eee;
+    }
+    overflow: hidden;
+`;
+
+const PeopleInfo = styled.div`
+    margin-left: 15px;
+`;
+
+const PeopleAvatar = styled.div`
+    width: 45px;
+    height: 45px;
+`;
+
+const PeopleName = styled(Link)`
+    display: block;
+`;
+
+const InviteButton = styled(Button)``;
+
+const PeopleInnerWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 0 0 auto;
+`;
+
+const ButtonOutter = styled.div`
+    margin-left: auto;
 `;

@@ -7,7 +7,7 @@ import { SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { debounce, showToastMessageOnRequestError } from 'utils/helpers';
-import { EventAdminsManager } from './EventAdminsManager';
+import { EventAdminsManager } from '../EventAdminsManager';
 import { searchForProfiles } from 'services/live-data-server/profile';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';

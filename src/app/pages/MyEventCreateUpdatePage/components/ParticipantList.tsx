@@ -1,18 +1,21 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import { Dropdown, Space, Spin, Table, Menu, Button } from 'antd';
-import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
-import { AiFillCopy, AiFillPlusCircle } from 'react-icons/ai';
+import { BorderedButton, CreateButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
 import styled from 'styled-components';
-import { AssignVesselParticipantModal } from './modals/AssignVesselParticipantModal';
-import { toast } from 'react-toastify';
 import { DownOutlined } from '@ant-design/icons';
 import ReactTooltip from 'react-tooltip';
 import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
+import { renderEmptyValue } from 'utils/helpers';
+import { EventState, ParticipantInvitationStatus } from 'utils/constants';
+import { Link } from 'react-router-dom';
+import { renderAvatar } from 'utils/user-utils';
+import { BlockParticipantConfirmModal } from 'app/pages/MyEventPage/components/modals/BlockParticipantConfirmModal';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -24,14 +27,19 @@ export const ParticipantList = (props) => {
 
     const { t } = useTranslation();
 
-    const { eventId } = props;
+    const { eventId, event } = props;
 
     const columns = [
         {
             title: t(translations.participant_list.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
-            render: text => text,
+            render: (text, record) => <UserWrapper>
+                <AvatarWrapper>
+                    <img className="avatar-img" src={renderAvatar(record?.userAvatar)} />
+                </AvatarWrapper>
+                {record?.userProfileId ? <Link to={`/profile/${record?.userProfileId}`}>{text}</Link> : text}
+            </UserWrapper>,
         },
         {
             title: 'Boat Name',
@@ -43,12 +51,31 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
+            title: t(translations.participant_list.status),
+            dataIndex: 'invitationStatus',
+            key: 'invitationStatus',
+            render: (text, record) => {
+                return record?.invitationStatus;
+            },
+            ellipsis: true,
+        },
+        {
+            title: t(translations.participant_list.class_name),
+            dataIndex: 'vesselName',
+            key: 'vesselName',
+            render: (text, record) => {
+                return renderEmptyValue(record?.vesselParticipants[0]?.group?.name);
+            },
+            ellipsis: true,
+        },
+        {
             title: t(translations.participant_list.action),
             key: 'action',
             fixed: true,
             render: (text, record) => (
                 <Space size={10}>
-                    <Button danger>Remove this competitor</Button>
+                    <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.participant_list.remove)}</DeleteButton>
+                    {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.participant_list.block)}</DeleteButton>}
                 </Space>
             ),
         },
@@ -84,11 +111,11 @@ export const ParticipantList = (props) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const history = useHistory();
-
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [showAssignModal, setShowAssignModal] = React.useState<boolean>(false);
+    const [showInviteModal, setShowInviteModal] = React.useState<boolean>(false);
+
+    const [showBlockParticipantModal, setShowBlockParticipantModal] = React.useState<boolean>(false);
 
     const [filterMode, setFilterMode] = React.useState<string>(FILTER_MODE.all);
 
@@ -126,19 +153,9 @@ export const ParticipantList = (props) => {
         getAllByFilter(pagination.page, filterMode);
     }
 
-    const showAssignParticipantModal = (participant) => {
-        setShowAssignModal(true);
+    const showBlockParticipant = (participant) => {
         setParticipant(participant);
-    }
-
-    const copyToClipboard = (text) => {
-        let input = document.createElement('input');
-        document.body.appendChild(input);
-        input.value = text;
-        input.select();
-        document.execCommand('copy', false);
-        toast.info(t(translations.participant_list.copied_to_clipboard));
-        document.body.removeChild(input);
+        setShowBlockParticipantModal(true);
     }
 
     const renderAssignedVessels = (participant) => {
@@ -159,33 +176,30 @@ export const ParticipantList = (props) => {
     }
 
     React.useEffect(() => {
-        if (!showAssignModal) {
+        if (!showInviteModal) {
             getAllByFilter(pagination.page, filterMode);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showAssignModal]);
+    }, [showInviteModal]);
 
     return (
         <>
-            {/* <CompetitorInviteModal/> */}
+            <CompetitorInviteModal eventId={eventId} showModal={showInviteModal} setShowModal={setShowInviteModal} />
             <DeleteParticipantModal
                 participant={participant}
                 onParticipantDeleted={onParticipantDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <AssignVesselParticipantModal
-                participant={participant}
-                showAssignModal={showAssignModal}
-                eventId={eventId}
-                setShowAssignModal={setShowAssignModal}
-            />
+            <BlockParticipantConfirmModal reloadParent={() => getAllByFilter(pagination.page, filterMode)} participant={participant} showModal={showBlockParticipantModal} setShowModal={setShowBlockParticipantModal} />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
-                    <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => history.push(`/events/${eventId}/competitors/create`)} icon={<AiFillPlusCircle
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>Invite</CreateButton>
+                    {
+                        [EventState.SCHEDULED, EventState.ON_GOING].includes(event.status) && <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
+                            style={{ marginRight: '5px' }}
+                            size={18} />}>{t(translations.participant_list.invite)}</CreateButton>
+                    }
                 </PageHeaderContainer>
                 <FilterWrapper>
                     <Dropdown overlay={menu}>
@@ -210,17 +224,18 @@ export const ParticipantList = (props) => {
     )
 }
 
-const AssignButton = styled(BorderedButton)`
-    background: #DC6E1E;
-    border: 1px solid #fff;
-
-    :hover, :focus {
-        background: #DC6E1E;
-        border: 1px solid #fff;
-    }
-`;
-
 const FilterWrapper = styled.div`
     text-align: right;
     text-transform: capitalize;
+`;
+
+const AvatarWrapper = styled.div`
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+`;
+
+const UserWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `;

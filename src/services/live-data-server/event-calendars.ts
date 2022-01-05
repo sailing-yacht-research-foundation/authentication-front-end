@@ -95,3 +95,13 @@ export const cancelCalendarEvent = (eventId) => {
         status: EventState.CANCELED
     }));
 }
+
+export const inviteCompetitor = (calendarEventId, publicName, userProfileId) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants`, [
+        {
+            publicName,
+            userProfileId,
+            calendarEventId,
+        }
+    ]));
+}

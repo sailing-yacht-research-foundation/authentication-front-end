@@ -9,11 +9,27 @@ import { translations } from 'locales/translations';
 import { CreateButton, PageDescription, PageHeaderContainerSimple, PageHeading, PageInfoContainer } from 'app/components/SyrfGeneral';
 import { EventList } from './EventList';
 import { InvitedEventLists } from './InvitedEventsList';
+import { getMyInvitedEvents } from 'services/live-data-server/participants';
 
 export const MyEvents = () => {
 
     const { t } = useTranslation();
+
     const history = useHistory();
+
+    const [numberOfInvitations, setNumberOfInvitation] = React.useState<number>(0);
+
+    const getNumberOfInvitedEvents = async () => {
+        const response = await getMyInvitedEvents(1);
+
+        if (response.success) {
+            setNumberOfInvitation(response.data.count);
+        }
+    }
+
+    React.useEffect(() => {
+        getNumberOfInvitedEvents();
+    }, []);
 
     return (
         <Container>
@@ -33,11 +49,10 @@ export const MyEvents = () => {
                     <EventList />
                 </StyledTabs.TabPane>
 
-                <StyledTabs.TabPane tab={<><div>Invited Events <span style={{ display:'inline-flex', justifyContent: 'center', alignItems: 'center', borderRadius: '50%', width:'25px', height: '25px', background: '#ff0000', color: '#fff'}}>5</span></div></>} key="2">
-                    <InvitedEventLists />
+                <StyledTabs.TabPane tab={<><div>{t(translations.my_event_list_page.invitation)} {numberOfInvitations > 0 && <NumberOfInvitationsDot>{numberOfInvitations}</NumberOfInvitationsDot>}</div></>} key="2">
+                    <InvitedEventLists reloadInvitationCount={() => getNumberOfInvitedEvents()} />
                 </StyledTabs.TabPane>
             </StyledTabs>
-
         </Container>
     )
 }
@@ -57,4 +72,16 @@ const StyledTabs = styled(Tabs)`
   .ant-tabs-tab:first-child {
     margin-left: 10px;
   }
+`;
+
+const NumberOfInvitationsDot = styled.div`
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background: #ff0000;
+    color: #fff;
+    font-size: 14px;
 `;

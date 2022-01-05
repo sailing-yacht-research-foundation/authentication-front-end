@@ -23,7 +23,7 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import tzLookup from 'tz-lookup';
-import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/AssignEventAsGroupAdminModal';
+import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/modals/AssignEventAsGroupAdminModal';
 import { ActionButtons } from './ActionButtons';
 import { EventChildLists } from './EventChildLists';
 import { FormItemEventNameDescription } from './FormItemEventNameDescription';
