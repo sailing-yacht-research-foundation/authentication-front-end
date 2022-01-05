@@ -1,9 +1,8 @@
 import React from 'react';
-import { Space, Button, Spin } from 'antd';
+import { Spin, Dropdown, Menu, Button, Space } from 'antd';
 import { EventState, MODE } from 'utils/constants';
 import { useTranslation } from 'react-i18next';
-import { DeleteButton } from 'app/components/SyrfGeneral';
-import { closeCalendarEvent, scheduleCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
+import { cancelCalendarEvent, closeCalendarEvent, scheduleCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
 import { translations } from 'locales/translations';
 import { toast } from 'react-toastify';
 import { GrGroup } from 'react-icons/gr';
@@ -11,8 +10,12 @@ import { ScheduleOutlined } from '@ant-design/icons';
 import { HiLockClosed } from 'react-icons/hi';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { GoChecklist } from 'react-icons/go';
-import { BiTrash } from 'react-icons/bi';
-import ReactTooltip from 'react-tooltip';
+import { BiImport, BiTrash } from 'react-icons/bi';
+import { showToastMessageOnRequestError } from 'utils/helpers';
+import { MdFreeCancellation } from 'react-icons/md';
+import styled from 'styled-components';
+import { media } from 'styles/media';
+import { DeleteButton } from 'app/components/SyrfGeneral';
 
 export const ActionButtons = ({
     mode,
@@ -20,7 +23,8 @@ export const ActionButtons = ({
     event,
     setShowDeleteModal,
     setEvent,
-    eventId
+    eventId,
+    setShowImportEventModal
 }) => {
 
     const { t } = useTranslation();
@@ -28,7 +32,6 @@ export const ActionButtons = ({
     const [isChangingStatus, setIsChangingStatus] = React.useState<boolean>(false);
 
     const [isOpeningClosingRegistration, setIsOpeningClosingRegistration] = React.useState<boolean>(false);
-
 
     const scheduleEvent = async () => {
         setIsChangingStatus(true);
@@ -42,7 +45,7 @@ export const ActionButtons = ({
                 status: EventState.SCHEDULED
             })
         } else {
-            toast.error(t(translations.app.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -62,11 +65,11 @@ export const ActionButtons = ({
                 toast.info(t(translations.my_event_create_update_page.event_is_closed_for_registration));
             }
         } else {
-            toast.error(t(translations.app.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
-    const closeRace = async () => {
+    const closeEvent = async () => {
         const response = await closeCalendarEvent(eventId);
 
         if (response.success) {
@@ -76,33 +79,143 @@ export const ActionButtons = ({
             });
             toast.success(t(translations.my_event_create_update_page.successfully_closed_this_event));
         } else {
-            toast.error(t(translations.app.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
+    const cancelEvent = async () => {
+        setIsChangingStatus(true);
+        const response = await cancelCalendarEvent(eventId);
+        setIsChangingStatus(false);
+
+        if (response.success) {
+            toast.success(t(translations.my_event_create_update_page.successfully_canceled_this_event));
+            setEvent({
+                ...event,
+                status: EventState.CANCELED
+            })
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
+    const menus = [
+        {
+            name: t(translations.my_event_create_update_page.import_external_data),
+            show: [EventState.DRAFT, EventState.ON_GOING, EventState.SCHEDULED].includes(event.status),
+            icon: <BiImport />,
+            spinning: false,
+            handler: () => setShowImportEventModal(true),
+            isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.assign_admins),
+            show: true,
+            icon: <GrGroup />,
+            spinning: false,
+            handler: () => showAssignEventAsGroupAdminModal(),
+            isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.schedule_event),
+            show: event.status === EventState.DRAFT,
+            icon: <ScheduleOutlined />,
+            spinning: isChangingStatus,
+            handler: () => scheduleEvent(),
+            isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.cancel_event),
+            show: event.status === EventState.SCHEDULED,
+            icon: <MdFreeCancellation />,
+            spinning: isChangingStatus,
+            handler: () => cancelEvent(),
+            isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.open_registration),
+            show: event.isOpen && event.allowRegistration === false && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
+            handler: () => toggleRegistration(true),
+            icon: <GiArchiveRegister />,
+            spinning: isOpeningClosingRegistration,
+            isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.close_registration),
+            show: event.isOpen && event.allowRegistration === true && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
+            handler: () => toggleRegistration(false),
+            icon: <HiLockClosed />,
+            spinning: isOpeningClosingRegistration,
+            isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.close_event),
+            handler: () => closeEvent(),
+            show: event.status === EventState.ON_GOING,
+            icon: <GoChecklist />,
+            spinning: isChangingStatus,
+            isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.delete),
+            show: event.status === EventState.DRAFT,
+            handler: () => setShowDeleteModal(true),
+            icon: <BiTrash />,
+            spinning: false,
+            isDelete: true
+        }
+    ];
+
+    const menu = (
+        <Menu>
+            {menus.map((menu, index) => menu.show && <Spin spinning={menu.spinning}>
+                <Menu.Item key={index} onClick={menu.handler} icon={menu.icon}>
+                    {menu.name}
+                </Menu.Item>
+            </Spin>)}
+        </Menu>
+    );
+
     return (
-        <Space size={10}>
-            {mode === MODE.UPDATE && <>
-                {
-                    event.status === EventState.ON_GOING &&
-                    <Spin spinning={isChangingStatus}><Button onClick={closeRace} data-tip={t(translations.tip.click_to_close_this_event_and_make_it_completed)} icon={< GoChecklist style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_event)}</Button></Spin>
-                }
-                <Button onClick={() => showAssignEventAsGroupAdminModal()} data-tip={t(translations.tip.set_this_event_as_group_admin)} icon={<GrGroup style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.assign_admins)}</Button>
-                {
-                    event.isOpen && <Spin spinning={isOpeningClosingRegistration}>
-                        {event.allowRegistration ? (<Button data-tip={t(translations.tip.click_to_make_this_event_close_for_registration)} onClick={() => toggleRegistration(false)} icon={<HiLockClosed style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.close_registration)}</Button>)
-                            : (<Button onClick={() => toggleRegistration(true)} data-tip={t(translations.tip.click_to_make_this_event_open_for_registration)} icon={< GiArchiveRegister style={{ marginRight: '5px' }} />}>{t(translations.my_event_create_update_page.open_registration)}</Button>)}
-                    </Spin>
-                }
-                {
-                    event.status === EventState.DRAFT && <>
-                        <Spin spinning={isChangingStatus}><Button onClick={scheduleEvent} data-tip={t(translations.tip.schedule_event)} icon={<ScheduleOutlined style={{ marginRight: '5px', position: 'relative', top: '-2px' }} />}>{t(translations.my_event_create_update_page.schedule_event)}</Button></Spin>
-                        <DeleteButton data-tip={t(translations.tip.delete_event)} onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
-                            style={{ marginRight: '5px' }}
-                            size={18} />}>{ t(translations.my_event_create_update_page.delete)}</DeleteButton>
-                    </>
-                }
-            </>}
-        </Space>
+        <>
+            {
+                mode === MODE.UPDATE &&
+                <>
+                    <MobileButtonsWrapper>
+                        <Dropdown.Button overlay={menu} placement="bottomCenter">
+                            {t(translations.my_event_create_update_page.event_options)}
+                        </Dropdown.Button>
+                    </MobileButtonsWrapper>
+                    <DesktopButtonsWrapper>
+                        <Space size={10} wrap style={{ justifyContent: 'flex-end' }}>
+                            {menus.map((item, index) => {
+                                return item.show && <Spin key={index} spinning={item.spinning}>
+                                    {!item.isDelete ? <Button onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</Button> :
+                                        <DeleteButton onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</DeleteButton>}
+                                </Spin>
+                            })}
+                        </Space>
+                    </DesktopButtonsWrapper>
+                </>
+            }
+        </>
     )
 }
+
+const DesktopButtonsWrapper = styled.div`
+    display: none;
+    ${media.medium`
+        display: block;
+    `}
+`;
+
+const MobileButtonsWrapper = styled.div`
+    display: block;
+    ${media.medium`
+        display: none;
+    `}
+`;
+
+const IconWrapper = styled.span`
+    margin-right: 5px;
+`;

@@ -13,7 +13,8 @@ export const initialState: HomeState = {
  total: 0,
  is_searching: false,
  page_size: 10,
- show_advanced_search: false
+ show_advanced_search: false,
+ sort: 'desc'
 };
 
 const slice = createSlice({
@@ -47,6 +48,9 @@ const slice = createSlice({
     },
     setShowAdvancedSearch(state, action: PayloadAction<boolean>) {
       state.show_advanced_search = action.payload;
+    },
+    setSortType(state, action: PayloadAction<string>) {
+      state.sort = action.payload;
     }
   },
 });

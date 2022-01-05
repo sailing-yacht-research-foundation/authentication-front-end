@@ -9,6 +9,7 @@ export interface HomeState {
     total: number;
     page_size: number;
     show_advanced_search: boolean;
+    sort: string;
   }
   
   export type ContainerState = HomeState

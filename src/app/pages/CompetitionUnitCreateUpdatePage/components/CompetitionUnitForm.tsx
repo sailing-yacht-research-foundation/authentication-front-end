@@ -19,7 +19,7 @@ import { translations } from 'locales/translations';
 import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MAP_DEFAULT_VALUE, MODE, TIME_FORMAT } from 'utils/constants';
-import { renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import ReactTooltip from 'react-tooltip';
 
@@ -115,7 +115,7 @@ export const CompetitionUnitForm = () => {
 
             goBack();
         } else {
-            toast.error(t(translations.competition_unit_create_update_page.an_error_happened));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -260,7 +260,7 @@ export const CompetitionUnitForm = () => {
         const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
         const eventDateTime = new Date(eventData?.approximateStartTime);
 
-        if (selectedDateTime.getTime() > eventDateTime.getTime()) {
+        if (selectedDateTime.getTime() >= eventDateTime.getTime()) {
             return {
                 isValid: true,
                 errors: { startDate: null, startTime: null }

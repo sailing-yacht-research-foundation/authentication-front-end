@@ -6,6 +6,7 @@ import { publicProfileActions } from ".";
 import { put, takeLatest, call } from 'redux-saga/effects';
 import { getFollowers, getFollowings, getProfileById } from "services/live-data-server/profile";
 import { toast } from "react-toastify";
+import { showToastMessageOnRequestError } from "utils/helpers";
 
 function* getProfile({ type, payload }) {
     const profileId = payload;
@@ -16,11 +17,7 @@ function* getProfile({ type, payload }) {
     if (response.success) {
         yield put(publicProfileActions.setProfile(response.data));
     } else {
-        if (response.error?.response?.status === 404) {
-            toast.info('This user profile is not found.');
-        } else {
-            toast.error('There is an error showing this user profile.');
-        }
+        showToastMessageOnRequestError(response.error);
         yield put(publicProfileActions.setGetProfileFailed(true));
     }
 }

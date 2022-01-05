@@ -2,7 +2,8 @@ import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
-import { CRITERIA_TO_RAW_CRITERIA, formatterSupportedSearchCriteria, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
+import { toast } from 'react-toastify';
+import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
 
 /**
  * Check if is mobile
@@ -107,18 +108,6 @@ export const dataURLtoFile = (dataurl, filename) => {
 }
 
 /**
- * Convert JS File image to base64
- * @param file 
- * @returns new Promise
- */
-export const toBase64 = file => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-});
-
-/**
  * Format phone number to the right format
  * @param phoneNumber
  */
@@ -167,58 +156,6 @@ export const renderTimezoneInUTCOffset = (timezone) => {
 }
 
 /**
- * Insert new ~3 when search.
- * @param keyword 
- * @returns 
- */
-export const insert3ToLastWordWhenSearch = (keyword) => {
-    let value = keyword;
-    let lastWord: any = keyword.match(/(?:\s|^)([\S]+)$/i);
-    if (lastWord) {
-        lastWord = lastWord[0];
-    }
-
-    if (lastWord && !Array.isArray(lastWord) && !lastWord!.includes('~3')) {
-        value = value.substr(0, value.length) + '~3' + value.substr(value.length);
-    }
-
-    return value;
-}
-/**
- * Insert 3~ between each word when append suggestion
- * @param stringOfWords 
- * @returns 
- */
-export const insert3BetweenEachWord = (stringOfWords) => {
-    //eslint-disable-next-line
-    const format = /[ `!@#$%^&*()+\-=\[\]{};'"\\|,.<>\/?~]/;
-    const formattedWord: any[] = [];
-
-    stringOfWords.split(' ').map(word => {
-        if (!format.test(word)) {
-            formattedWord.push(word);
-        }
-        return word;
-    });
-
-    return formattedWord.join('~3 ') + '~3';
-}
-
-/**
- * Remove all ~3 after word.
- * @param stringOfWords 
- * @returns 
- */
-export const remove3AfterEachWord = (stringOfWords) => {
-    return stringOfWords.split(' ').map((word, index) => {
-        if (word.includes('~3')) {
-            word = word.slice(0, -2);
-        }
-        return word;
-    }).join(' ');
-}
-
-/**
  * Render number with commas
  */
 export const renderNumberWithCommas = (number) => {
@@ -251,6 +188,11 @@ export const extractTextFromHTML = (s) => {
     return span.textContent || span.innerText;
 };
 
+/**
+ * Get caret at current position index from contenteditable string.
+ * @param element 
+ * @returns 
+ */
 export const getCaretPosition = (element) => {
     let caretOffset = 0;
 
@@ -269,6 +211,10 @@ export const getCaretPosition = (element) => {
     return caretOffset;
 }
 
+/**
+ * Place caret at the end of the search field.
+ * @param el
+ */
 export const placeCaretAtEnd = (el) => {
     el.focus();
     if (typeof window.getSelection != "undefined"
@@ -284,22 +230,40 @@ export const placeCaretAtEnd = (el) => {
     }
 }
 
+/**
+ * Replace criteria with pilled criteria
+ * @param string 
+ * @returns String pilled criteria.
+ */
 export const replaceCriteriaWithPilledCriteria = (string) => {
     supportedSearchCriteria.forEach(criteria => {
-        string = string.replace(criteria + ':', `<span contenteditable="false" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
+        const convertedRawCriteria = RAW_CRITERIA_TO_CRITERIA[criteria];
+        if (convertedRawCriteria)
+            string = string.replace(criteria + ':', `<span contenteditable="false" class="pill">${RAW_CRITERIA_TO_CRITERIA[criteria]}:</span>`);
     });
 
     return string;
 }
 
+/**
+ * Replace formatted criteria with raw criteria
+ * @param string 
+ * @returns 
+ */
 export const replaceFormattedCriteriaWithRawCriteria = (string): string => {
-    formatterSupportedSearchCriteria.forEach(criteria => {
-        string = string.replace(criteria, CRITERIA_TO_RAW_CRITERIA[criteria]);
+    formattedSupportedSearchCriteria.forEach(criteria => {
+        const convertedSupportedCriteria = CRITERIA_TO_RAW_CRITERIA[criteria];
+        if (convertedSupportedCriteria)
+            string = string.replace(criteria, CRITERIA_TO_RAW_CRITERIA[criteria]);
     });
 
     return string;
 }
 
+/**
+ * Remove whole text node (pilled criteria) on backspace.
+ * @param event
+ */
 export const removeWholeTextNodeOnBackSpace = (e) => {
     if (e.key === "Backspace") {
         var selection = document.getSelection();
@@ -309,6 +273,36 @@ export const removeWholeTextNodeOnBackSpace = (e) => {
     }
 }
 
+/**
+ * Show toast message base on request's response.
+ * @param error 
+ */
+export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '') => {
+    if (priotizedMessageToShow) {
+        toast.error(priotizedMessageToShow); // show the priotized message first.
+        return;
+    }
+
+    if (error?.response) {
+        const errorCode = error?.response.status;
+        if (errorCode === 500) {
+            toast.error(i18next.t(translations.app.oops_it_our_fault));
+        } else if (errorCode === 404) {
+            toast.error(i18next.t(translations.app.resource_is_not_found));
+        } else {
+            const serverMessage = error?.response?.data?.message;
+            toast.error(serverMessage || i18next.t(translations.app.oops_an_unexpected_error_happended_when_performing_your_request));
+        }
+    } else {
+        toast.error(i18next.t(translations.app.you_are_offline));
+    }
+}
+
+/**
+ * Format request's response promise.
+ * @param requestPromise 
+ * @returns Formatted promise response.
+ */
 export const formatServicePromiseResponse = (requestPromise) => {
     return requestPromise.then(response => {
         return {
@@ -321,4 +315,104 @@ export const formatServicePromiseResponse = (requestPromise) => {
             error: error
         }
     });
+}
+
+/**
+ * Parse search keyword.
+ * @param keyword 
+ * @returns parsed search keyword.
+ */
+export const parseKeyword = (keyword) => {
+    // eslint-disable-next-line
+    keyword = keyword.replace(/([\!\*\+\=\<\>\&\|\(\)\[\]\{\}\^\~\?\\/"])/g, "\\$1"); // escape special characters that will make the elastic search crash.
+    const { expression, processedKeyword } = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
+
+    const words = processedKeyword.trim().split(' ');
+    let parsedWords: any[] = [];
+    let result = '';
+
+    words.forEach((word, index) => {
+        word = word.trim();
+        let splittedWord = word.split(':');
+        if (splittedWord.length > 1 && supportedSearchCriteria.includes(splittedWord[0]) && index !== 0) {
+            splittedWord.splice(0, 0, expression);
+        }
+        parsedWords.push(splittedWord);
+    });
+
+    parsedWords = parsedWords.flat().filter(word => word).filter(Boolean);
+
+    parsedWords.forEach((word, i) => {
+        const nextWord = parsedWords[i + 1];
+        word = word.trim();
+
+        if (supportedSearchCriteria.includes(word)) {
+            result += (word + ':(');
+        } else {
+            if (i === 0) {
+                result += 'name:(';
+            }
+
+            if (nextWord === expression) {
+                result += (word + ') ');
+            }
+            else {
+                if (typeof nextWord === 'undefined') {
+                    result += (word + ')')
+                } else {
+                    result += (word + ' ');
+                }
+            }
+        }
+    });
+
+    result = priotizePointForNameFieldIfExists(result, expression);
+
+    return result.trim();
+}
+
+/**
+ * Change all_fields criteria to all criteria.
+ * @param keyword 
+ * @returns 
+ */
+export const addMultipleFieldCriteriaIfSearchByAllFields = (keyword) => {
+    if (keyword.includes('all_fields')) {
+        const parseResults: string[] = [];
+        keyword = keyword.split(':')[1];
+        supportedSearchCriteria.filter(criteria => criteria !== 'all_fields').forEach(criteria => {
+            parseResults.push(criteria + ':');
+            parseResults.push(keyword);
+        });
+
+        return { expression: 'OR', processedKeyword: parseResults.join(' ') };
+    }
+
+    return { expression: 'AND', processedKeyword: keyword };
+}
+
+/**
+ * Priotize point for name criteria.
+ * @param result 
+ * @returns search keyword.
+ */
+export const priotizePointForNameFieldIfExists = (result, expression) => {
+    const parsedResult: string[] = [];
+    const otherCriteriaInTheKeyword = supportedSearchCriteria.filter(criteria => criteria !== 'name').some(criteria => {
+        return result.includes(criteria);
+    });
+    if (result.includes('name:') && otherCriteriaInTheKeyword) {
+        const splittedSearchWordPhrases = result.split(` ${expression} `);
+        splittedSearchWordPhrases.forEach(phrase => {
+            if (phrase.includes('name:')) {
+                parsedResult.push('(' + phrase + ')^3');
+            } else {
+                parsedResult.push('(' + phrase + ')^2');
+            }
+        });
+    }
+    if (parsedResult.length > 0)
+        return parsedResult.join(` ${expression} `);
+
+    return result;
 }

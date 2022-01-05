@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
-import { renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import tzLookup from 'tz-lookup';
 import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/AssignEventAsGroupAdminModal';
 import { ActionButtons } from './ActionButtons';
@@ -32,6 +32,7 @@ import { FormItemStartLocationAddress } from './FormItemStartLocationAddress';
 import { FormItemEndLocationAddress } from './FormItemEndLocationAddress';
 import { FormItemStartDate } from './FormItemStartDate';
 import { FormItemEndDate } from './FormItemEndDate';
+import { ImportEventDataModal } from './modals/ImportEventDataModal';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -77,6 +78,8 @@ export const MyEventForm = () => {
     const raceListRef = React.useRef<any>();
 
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
+
+    const [showImportEventModal, setShowImportEventModal] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
         const { name, startDate, externalUrl, isOpen, lon, lat, endDate, endTime, startTime, description, approximateStartTime_zone, approximateEndTime_zone, endLat, endLon } = values;
@@ -137,7 +140,7 @@ export const MyEventForm = () => {
         if (response.success) {
             onEventSaved(response, { lat, lon }, { lat: endLat || lat, lon: endLon || lon });
         } else {
-            toast.error(t(translations.my_event_create_update_page.an_error_happened_when_saving_event));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -307,7 +310,7 @@ export const MyEventForm = () => {
                 onChoosedLocation(endLat, endLon, true, true, 'end');
             }
         } else {
-            message.error(t(translations.my_event_create_update_page.event_not_found));
+            showToastMessageOnRequestError(response.error);
             history.push('/events');
         }
     }
@@ -585,6 +588,7 @@ export const MyEventForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
+            <ImportEventDataModal calendarEventId={event.id} showModal={showImportEventModal} setShowModal={setShowImportEventModal} />
             <AssignEventAsGroupAdminModal showModal={showAssignModal} event={event} setShowModal={setShowAssignModal} />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
@@ -598,7 +602,7 @@ export const MyEventForm = () => {
                         <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                <ActionButtons event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} showAssignEventAsGroupAdminModal={showAssignEventAsGroupAdminModal} />
+                <ActionButtons setShowImportEventModal={setShowImportEventModal} event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} showAssignEventAsGroupAdminModal={showAssignEventAsGroupAdminModal} />
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSavingEvent}>

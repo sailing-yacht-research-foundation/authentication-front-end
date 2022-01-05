@@ -24,6 +24,7 @@
       "from_date": "From Date",
       "to_date": "To Date",
       "search": "Search",
+      "sort": "Sort",
       "from_date_must_be_smaller_than_to_date": "From date must be equal or smaller than to date",
       "to_date_must_bigger_than_from_date": "To date must be equal or bigger than from date",
       "filter_result": {
@@ -157,7 +158,8 @@
       "notification_setting": "Notification Settings",
       "profile_setting": "Profile Settings",
       "discover_friends": "Discover Friends",
-      "my_profile": "My Profile"
+      "my_profile": "My Profile",
+      "integrations": "Integrations"
     },
     "app_connection": "App Connections",
     "organizational_membership": "Organizational Memberships",
@@ -227,13 +229,12 @@
       "account_settings": "Account settings",
       "password_security": "Password & Security",
       "problem_updating_profile": "There are problem updating your profile.",
-      "error_happened_when_upload_profile_picture": "An error happened when uploading your profile picture",
       "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
-      "profile_mode": "Profile Mode"
+      "profile_mode": "Profile Mode",
+      "integrations": "Integrations"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
-    "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!",
-    "error_encounted_when_delete_account": "An error happened when deleting your account"
+    "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"
   },
   "privacy_page": {
     "version": "version",
@@ -284,7 +285,6 @@
     "password_must_not_contain_blank": "Password must not contain blank space.",
     "want_to_take_a_quick_tour": "Want to take a quick tour?",
     "look_like_you_are_new": "Looks like your are new here {{username}}, Do you want to take a quick tour with us?",
-    "an_error_happended_when_downloading_your_track": "An error happened when downloading your track.",
     "your_file_is_not_found": "Your file is not found.",
     "there_is_a_problem_with_our_server": "There is a problem with our server, please try again later."
   },
@@ -319,7 +319,10 @@
     "your_session_is_expired": "Your session is expired, please login again.",
     "error_happened": "Service is unavailable",
     "our_service_is_temporary_unavailable_at_the_moment": "Our service is temporary unavailable at the moment.",
-    "an_error_happened_when_performing_your_request": "An unexpected error happened when performing your request."
+    "you_are_offline": "You are offline, please connect to the internet before continuing",
+    "oops_it_our_fault": "Oops! It's our fault. Please try again later.",
+    "resource_is_not_found": "Oops! The resource you're accessing is not found.",
+    "oops_an_unexpected_error_happended_when_performing_your_request": "Oops! An unexpected error happened when performing your request."
   },
   "data_page": {
     "syrf_race_data": "SYRF Race Data",
@@ -377,7 +380,6 @@
   "competition_unit_create_update_page": {
     "created_a_new_competition_unit": "Created a new race with name: {{name}}.",
     "successfully_updated_competition_unit": "Successfully updated your race: {{name}}",
-    "an_error_happened": "An error happened when saving your race.",
     "view_all_competition_units": "View all",
     "delete": "Delete",
     "name": "Name",
@@ -408,7 +410,6 @@
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
     "successfully_update_event": "Successfully updated your event: {{name}}.",
-    "an_error_happened_when_saving_event": "An error happened when saving your event.",
     "update_your_event": "Update Your Event",
     "create_a_new_event": "Create A New Event",
     "view_all": "View all",
@@ -442,19 +443,29 @@
     "error_endtime_shouldgreater_starttime": "End time should be greater than start time",
     "error_starttime_shouldgreater_currenttime": "Start time should be greater than current time",
     "successfully_revoked": "Successfully revoked.",
-    "an_error_happened_when_performing_your_request": "An unexpected error happened when performing your request.",
     "successfully_assigned_people_as_editor": "Successfully assigned this person as editor!",
     "select_a_state": "Select a state",
     "successfully_scheduled_this_event": "Successfully scheduled this event.",
     "event_is_opened_for_registration": "Event is opened for registration.",
     "event_is_closed_for_registration": "Event is closed for registration.",
     "successfully_closed_this_event": "Successfully closed this event.",
+    "successfully_canceled_this_event": "Successfully canceled this event.",
     "open_regatta": "Open Regatta",
     "schedule_event":"Schedule Event",
     "close_event": "Close Event",
     "open_registration": "Open Registration",
     "close_registration": "Close Registration",
-    "assign_admins": "Assign Admins"
+    "assign_admins": "Assign Admins",
+    "please_select_a_credential": "Please select a credential first",
+    "then_select_an_event_of_the_above_credential": "Then select an event of the above credential",
+    "import": "Import",
+    "import_external_data": "Import external data",
+    "import_data_from_external_source": "Import event data from external source",
+    "credential_is_required": "Credential is required.",
+    "event_is_required": "Event is required.",
+    "we_are_importing_event_data_to_this_event": "We are importing your event data to this event. You will see them soon.",
+    "event_options": "Event options",
+    "cancel_event": "Cancel Event"
   },
   "course_list": {
     "name": "Name",
@@ -470,44 +481,37 @@
   },
   "delete_event_modal": {
     "successfully_deleted": "Successfully deleted event {{name}}",
-    "an_unexpected_error": "An unexpected error happened when deleting your event",
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this event?",
     "you_will_delete": "You will delete this event along with all associated information, are you sure you want to continue?"
   },
   "delete_track_modal": {
     "successfully_deleted": "Successfully deleted track {{name}}",
-    "an_unexpected_error": "An unexpected error happened when deleting your track",
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this track?",
     "you_will_delete": "You will delete this track along with all associated information, are you sure you want to continue?"
   },
   "delete_competition_unit_modal": {
     "successfully_deleted": "Successfully deleted race {{name}}",
-    "an_unexpected_error": "An unexpected error happened when deleting your race",
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this race?",
     "you_will_delete": "You will delete this race along with all associated information, are you sure you want to continue?"
   },
   "delete_vessel_modal": {
     "successfully_deleted": "Successfully deleted boat {{name}}",
-    "an_unexpected_error": "An unexpected error happened when deleting your boat",
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this boat?",
     "you_will_delete": "You will delete this boat along with all associated information, are you sure you want to continue?"
   },
   "delete_course_modal": {
     "successfully_deleted": "Successfully deleted course.",
-    "an_unexpected_error": "An unexpected error happened when deleting your course",
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this course?",
     "you_will_delete": "You will delete this course along with all associated information, are you sure you want to continue?"
   },
   "delete_participant_modal": {
     "successfully_deleted": "Successfully deleted competitor {{name}}",
-    "an_unexpected_error": "An unexpected error happened when deleting your competitor",
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this competitor?",
     "you_will_delete": "You will delete this competitor along with all associated information, are you sure you want to continue?"
   },
   "course_create_update_page": {
     "you_cannot_create_course": "You cannot save the course because You have not added any geometries",
     "successfully_created_your_course": "Successfully saved your course.",
-    "an_unexpected_error": "An unexpected error happened when saving your course.",
     "please_enter_a_course_name": "Course Name",
     "enter_geometry_name": "Enter geometry name",
     "geometry_name": "Geometry Name",
@@ -552,7 +556,6 @@
   "vessel_create_update_page": {
     "created_a_new_vessel": "Created a new boat with name: {{name}}.",
     "successfully_updated_vessel": "Successfully updated your boat: {{name}}",
-    "an_error_happened": "An error happened when saving your boat.",
     "view_all_vessels": "View all",
     "delete": "Delete",
     "public_name": "Name",
@@ -586,7 +589,6 @@
   "participant_unit_create_update_page": {
     "created_a_new_participant": "Created a new competitor with name: {{name}}.",
     "successfully_updated_participant": "Successfully updated your competitor: {{name}}",
-    "an_error_happened": "An error happened when saving your competitor.",
     "back_to_race": "Back to race",
     "delete": "Delete",
     "public_name": "Name",
@@ -600,7 +602,6 @@
   "vessel_participant_group_create_update_page": {
     "created_a_new_group": "Created a new class with name",
     "successfully_updated_group": "Successfully class",
-    "an_error_happened": "An error happened when saving your class.",
     "view_all_groups": "View all classes",
     "delete": "Delete",
     "name": "Class Name",
@@ -612,8 +613,6 @@
     "delete_from_group": "Delete From Class",
     "successfully_added_to_group": "Successfully added this boat to the class.",
     "successfully_removed_vessel_from_the_group": "Successfully removed boat from the class.",
-    "an_error_happened_when_adding_vessel_to_this_group": "An error happended when adding boat to the class",
-    "an_error_happened_when_removing_vessel_from_this_group": "An error happened when removing boat from this class",
     "member_of_classes_regattas": "Members of classes/regattas are scored against each other and go around the same course at the same time. They can be used for classes, regattas, divisions or boats using the same handicap methodology."
   },
   "vessel_participant_group_list_page": {
@@ -629,7 +628,6 @@
   },
   "delete_vessel_participant_group_modal": {
     "successfully_deleted": "Successfully deleted this class",
-    "an_unexpected_error": "An unexpected error happened when deleting your class",
     "are_you_sure_you_want_to_delete": "Are you sure you want to delete this class?",
     "you_will_delete": "You will delete this class along with all associated information, are you sure you want to continue?"
   },
@@ -640,9 +638,7 @@
     "unassign": "Unassign",
     "assign_vessel_to_vessel_group": "Assign competitor to class",
     "successfully_register": "Successfully registered this competitor to the class.",
-    "an_error_happended_when_registering": "An error happened when registering the competitor to the class",
     "successfully_unregister": "Successfully unregistered this competitor to the class.",
-    "an_error_happended_when_ungistering": "An error happened when unregistering the competitor from the class.",
     "action": "Action",
     "competitor_already_assigned": "This competitor already assigned!",
     "save": "Save"
@@ -759,7 +755,9 @@
     "click_to_make_this_event_open_for_registration": "Click to make this event open for registration.",
     "click_to_make_this_event_close_for_registration": "Click to make this event close for registration.",
     "click_to_close_this_event_and_make_it_completed": "Click to close this event and make it completed.",
-    "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app"
+    "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app",
+    "link_a_new_credential_to_your_account": "Link a new credential to your account.",
+    "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,.."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -807,9 +805,6 @@
     "copy": "Copy",
     "unsubscribe": "Unsubscribe",
     "copied_to_clipboard": "Copied to clipboard.",
-    "an_error_happened_when_getting_udp_server_detail": "We've encountered an error when getting UDP server detail.",
-    "an_error_happened_when_subscribe_this_race": "Oops. Looks like there is something wrong when subscribing you to this race.",
-    "an_error_happened_when_unsubscribe_this_race": "Oops. Looks like there is something wrong when unsubscribing you from this race.",
     "check_list_1": "Create a new network connection and enable Rx filters for these parameters:",
     "check_list_1_1": "a. Gun, Start port latitude, Start port longitude, Start stbd latitude, Start stbd longitude.",
     "check_list_2": "Select ‘Expedition’ from instruments drop down.",
@@ -866,7 +861,6 @@
     "are_you_sure_you_want_to_remove_person_out_of_this_group": "Are you sure you want to remove {{memberName}} from the group?",
     "this_people_will_no_longer_see_any": "{{memberName}} can no longer see any posts, events,... from this group. Do you really want to remove?",
     "successfully_removed_this_person_from_the_group": "Successfully removed {{memberName}} from the group.",
-    "an_error_happened_when_performing_your_request": "An unexpected error happened when performing your request.",
     "are_you_sure_you_want_to_remove_this_admin": "Are you sure you want to remove this person as admin?",
     "this_person_will_no_longer_can": "{{memberName}} will no longer be able to manage members, events, posts... Are you sure you want to continue?",
     "successfully_remove_person_as_admin": "Successfully removed {{memberName}} as admin",
@@ -876,7 +870,6 @@
     "your_results_will_be_shown_here": "Your results will be shown here.",
     "results": "Results",
     "see_all": "See all",
-    "an_error_happened_joining_this_group": "Oops! An unexpected error happened when joining this group.",
     "pending": "Pending",
     "number_of_members": "{{numberOfMembers}} members.",
     "successfully_set_user_as_admin": "Successfully set this user as admin.",
@@ -924,7 +917,6 @@
     "upload_group_avatar_successfully": "Upload group avatar successfully!",
     "change_group_avatar": "Change group avatar",
     "uploading": "Uploading....",
-    "error_happened_when_upload_group_avatar": "An error happened when uploading your group avatar",
     "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
     "leave_your_invitees_a_message": "Leave a message to your invitees",
     "you_can_leave_your_invitees_a_message_so_that": "You can leave a message to your invitees so that they will be notified to join your group",
@@ -957,5 +949,28 @@
     "unfollow_people": "Unfollow {{profileName}}",
     "are_you_sure_to_unfollow": "Are you sure you want to unfollow {{profileName}}?",
     "search_or_select_people": "Search or select a person."
+  },
+  "credentail_manager_page": {
+    "credentials": "Credentials",
+    "this_is_where_you_can_manage_your_credential_you_linked": "This is where you can manage your linked credentials from YachtScoring,...",
+    "you_havent_linked_any_credentials": "You haven't linked any credentials.",
+    "link_new_credential": "Link New Credential",
+    "edit_credential": "Edit Credential",
+    "link": "Link",
+    "successfully_linked_this_credential_to_your_account": "Successfully linked this credential to your account.",
+    "username": "Username",
+    "password": "Password",
+    "source": "Source",
+    "username_is_required":"Username is required.",
+    "password_is_required": "Password is required.",
+    "there_is_something_wrong_with_your_credential": "There is something wrong with your credential, please try again.",
+    "action": "Action",
+    "unlink": "Unlink",
+    "edit": "Edit"
+  },
+  "delete_credential_modal": {
+    "successfully_deleted": "Successfully unlinked the credential",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to unlink this credential?",
+    "you_will_delete": "You will unlink this credential, are you sure you want to continue?"
   }
 }

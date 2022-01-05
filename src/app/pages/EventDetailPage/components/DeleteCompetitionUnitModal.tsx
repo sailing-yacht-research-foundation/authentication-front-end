@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { deleteCompetitionUnit } from 'services/live-data-server/competition-units';
 import { translations } from 'locales/translations';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const DeleteCompetitionUnitModal = (props) => {
 
@@ -26,7 +27,7 @@ export const DeleteCompetitionUnitModal = (props) => {
             toast.success(t(translations.delete_competition_unit_modal.successfully_deleted, { name: competitionUnit.name }));
             onCompetitionUnitDeleted();
         } else {
-            toast.error(t(translations.delete_competition_unit_modal.an_unexpected_error));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

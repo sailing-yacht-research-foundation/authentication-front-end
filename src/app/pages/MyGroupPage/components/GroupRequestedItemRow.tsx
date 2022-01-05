@@ -5,10 +5,9 @@ import { leaveGroup } from 'services/live-data-server/groups';
 import { useGroupSlice } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectRequestedGroupCurrentPage } from '../slice/selectors';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { uppercaseFirstCharacter } from 'utils/helpers';
+import { showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
 import { Link } from 'react-router-dom';
 import { MdOutlineUndo } from 'react-icons/md';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
@@ -37,7 +36,7 @@ export const GroupRequestedItemRow = (props) => {
         if (response.success) {
             dispatch(actions.getRequestedGroups(currentPage));
         } else {
-            toast.error(t(translations.group.an_error_happened_when_performing_your_request));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

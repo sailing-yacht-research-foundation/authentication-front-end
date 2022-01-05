@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
 import Auth from '@aws-amplify/auth';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
-import { removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helpers';
+import { removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString, showToastMessageOnRequestError } from 'utils/helpers';
 import { PrivateUserInformation } from './PrivateUserInformation';
 import { toast } from 'react-toastify';
 import { PublicUserInformation } from './PublicUserInformation';
@@ -91,7 +91,7 @@ export const UpdateInfo = (props) => {
         if (response.success) {
             onUpdateProfileSuccess();
         } else {
-            toast.error(t(translations.profile_page.update_profile.problem_updating_profile));
+            showToastMessageOnRequestError(response.error);
             setIsUpdatingProfile(false);
             setFormFieldsBeforeUpdate(defaultFormFields);
         }

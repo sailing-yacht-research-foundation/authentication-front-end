@@ -3,29 +3,30 @@ import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { deleteVessel } from 'services/live-data-server/vessels';
 import { translations } from 'locales/translations';
-import { deleteParticipant } from 'services/live-data-server/participants';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { removeCredential } from 'services/live-data-server/external-platform';
 
-export const DeleteParticipantModal = (props) => {
+export const DeleteCredentialModal = (props) => {
 
     const { t } = useTranslation();
 
     const {
-        participant,
+        credential,
         showDeleteModal,
         setShowDeleteModal,
-        onParticipantDeleted
+        onCredentialDeleted
     } = props;
 
-    const performDeleteCompetitionUnit = async () => {
-        const response = await deleteParticipant(participant.id);
+    const performDelete = async () => {
+        const response = await removeCredential(credential.id);
 
         setShowDeleteModal(false);
 
         if (response.success) {
-            toast.success(t(translations.delete_participant_modal.successfully_deleted, { name: participant.publicName }));
-            onParticipantDeleted();
+            toast.success(t(translations.delete_credential_modal.successfully_deleted));
+            onCredentialDeleted();
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -33,15 +34,15 @@ export const DeleteParticipantModal = (props) => {
 
     return (
         <Modal
-            title={t(translations.delete_participant_modal.are_you_sure_you_want_to_delete)}
+            title={t(translations.delete_credential_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
             onOk={() => {
-                performDeleteCompetitionUnit();
+                performDelete();
             }}
             onCancel={() => {
                 setShowDeleteModal(false);
             }}>
-            <ModalMessage>{t(translations.delete_participant_modal.you_will_delete)}</ModalMessage>
+            <ModalMessage>{t(translations.delete_credential_modal.you_will_delete)}</ModalMessage>
         </Modal>
     )
 }

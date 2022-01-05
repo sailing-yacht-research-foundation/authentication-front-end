@@ -4,8 +4,8 @@
 
  import { profileSearchActions } from ".";
  import { put, takeLatest, call } from 'redux-saga/effects';
- import { toast } from "react-toastify";
 import { searchForProfiles } from "services/live-data-server/profile";
+import { showToastMessageOnRequestError } from "utils/helpers";
  
  function* searchProfiles({ type, payload }) {
      const { name, locale } = payload;
@@ -20,7 +20,7 @@ import { searchForProfiles } from "services/live-data-server/profile";
      if (response.success) {
          yield put(profileSearchActions.setResults(response?.data?.rows));
      } else {
-        toast.info('There is a problem searching your results');
+        showToastMessageOnRequestError(response.error);
      }
  }
  

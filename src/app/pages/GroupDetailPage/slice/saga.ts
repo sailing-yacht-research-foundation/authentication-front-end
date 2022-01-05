@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from "@redux-saga/core/effects";
 import { toast } from "react-toastify";
 import { getMembers, getAdmins, getGroupById, searchMembers } from "services/live-data-server/groups";
+import { showToastMessageOnRequestError } from "utils/helpers";
 import { groupDetailActions } from ".";
 
 export function* getGroupMembers({ type, payload }) {
@@ -14,7 +15,7 @@ export function* getGroupMembers({ type, payload }) {
         yield put(groupDetailActions.setCurrentMemberPage(response.data?.page));
         yield put(groupDetailActions.setMemberTotal(response.data?.count));
     } else {
-        toast.error('Oops! We\'re unable to list members');
+        showToastMessageOnRequestError(response.error);
     }
 }
 
@@ -29,7 +30,7 @@ export function* getGroupAdmins({ type, payload }) {
         yield put(groupDetailActions.setCurrentAdminPage(response.data?.page));
         yield put(groupDetailActions.setAdminTotal(response.data?.count));
     } else {
-        toast.error('Oops! We\'re unable to list admins');
+        showToastMessageOnRequestError(response.error);
     }
 }
 
@@ -44,14 +45,14 @@ export function* getGroup({ type, payload }) {
         yield put(groupDetailActions.setGroup(response.data));
     } else {
         yield put(groupDetailActions.setGetGroupFailed(true));
-        toast.error('Oops! There is an error getting this group information');
+        showToastMessageOnRequestError(response.error);
     }
 }
 
 export function* searchAcceptedMembers({ type, payload }) {
     const { groupId, keyword, status } = payload;
     const response = yield call(searchMembers, groupId, keyword, status);
-    
+
     if (response.success) {
         yield put(groupDetailActions.setAcceptedMemberResults(response.data.rows));
     }

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { deleteVessel } from 'services/live-data-server/vessels';
 import { translations } from 'locales/translations';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const DeleteVesselModal = (props) => {
 
@@ -26,7 +27,7 @@ export const DeleteVesselModal = (props) => {
             toast.success(t(translations.delete_vessel_modal.successfully_deleted, { name: vessel.publicName }));
             onVesselDeleted();
         } else {
-            toast.error(t(translations.delete_vessel_modal.an_unexpected_error));
+            showToastMessageOnRequestError(response.error);
         }
     }
 

@@ -16,6 +16,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { VesselParticipantList } from './VesselParticipantList';
 import ReactTooltip from 'react-tooltip';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const ParticipantForm = () => {
 
@@ -76,7 +77,7 @@ export const ParticipantForm = () => {
             }
             setMode(MODE.UPDATE);
         } else {
-            toast.error(t(translations.participant_unit_create_update_page.an_error_happened));
+            showToastMessageOnRequestError(response.error);
         }
     }
 
