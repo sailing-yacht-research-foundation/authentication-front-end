@@ -9,17 +9,23 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { showToastMessageOnRequestError } from 'utils/helpers';
+import { verifyPhoneNumber } from 'services/live-data-server/user';
+import { useDispatch } from 'react-redux';
+import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 
 export const VerifyPhoneModal = (props) => {
 
     const { t } = useTranslation();
 
+    const dispatch = useDispatch();
+
+    const { actions } = UseLoginSlice();
+
     const {
         showPhoneVerifyModal,
         setShowPhoneVerifyModal,
         sendPhoneVerification,
-        cancelUpdateProfile, message,
-        setPhoneVerifyModalMessage
     } = props;
 
     const [verifyPhoneForm] = Form.useForm();
@@ -27,21 +33,17 @@ export const VerifyPhoneModal = (props) => {
     const verifyFormAndPhoneNumber = () => {
         verifyPhoneForm
             .validateFields()
-            .then(values => {
+            .then(async values => {
                 const { code } = values;
-
-                Auth.verifyCurrentUserAttributeSubmit('phone_number', String(code)).then(() => {
-                    toast.success('Your phone number has been verified.');
-                    verifyPhoneForm.resetFields();
+                const response = await verifyPhoneNumber(code);
+                if (response.success) {
+                    toast.success(t(translations.profile_page.update_profile.your_phone_number_has_been_verified));
+                    dispatch(actions.getUser());
                     setShowPhoneVerifyModal(false);
-                    cancelUpdateProfile();
-                })
-                    .catch(error => {
-                        toast.error(error.message);
-                        verifyPhoneForm.resetFields();
-                    })
-            })
-            .catch(info => {
+                } else {
+                    showToastMessageOnRequestError(response.error);
+                }
+                verifyPhoneForm.resetFields();
             });
     }
 
@@ -53,10 +55,8 @@ export const VerifyPhoneModal = (props) => {
                 verifyFormAndPhoneNumber();
             }}
             onCancel={() => {
-                setPhoneVerifyModalMessage('');
                 setShowPhoneVerifyModal(false);
             }}>
-            <ModalMessage>{message}</ModalMessage>
             <Form
                 form={verifyPhoneForm}
                 layout="vertical"
@@ -68,7 +68,7 @@ export const VerifyPhoneModal = (props) => {
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.code)}</SyrfFieldLabel>}
                     name="code"
-                    rules={[{ required: true, min: 6 }]}
+                    rules={[{ required: true, min: 6, message: t(translations.profile_page.update_profile.code_is_required) }]}
                 >
                     <SyrfInputField
                         placeholder={t(translations.profile_page.update_profile.enter_the_code_you_received)}
