@@ -23,7 +23,7 @@ export const CompetitorInviteModal = (props) => {
 
     const [results, setResults] = React.useState<any[]>([]);
 
-    const [participants, setParticipants] = React.useState<any[]>([]);
+    const participants = React.useRef<any[]>([]);
 
     const user = useSelector(selectUser);
 
@@ -40,6 +40,8 @@ export const CompetitorInviteModal = (props) => {
             return;
         }
 
+        getAllParticipants();
+
         setIsLoading(true);
         const response = await searchForProfiles(keyword, getUserAttribute(user, 'locale'));
         setIsLoading(false);
@@ -47,7 +49,7 @@ export const CompetitorInviteModal = (props) => {
         if (!response.success) {
             showToastMessageOnRequestError(response.error);
         } else {
-            setResults(response.data?.rows.filter(item => !participants.includes(item.id)));
+            setResults(response.data?.rows.filter(item => !participants.current.includes(item.id)));
         }
     }
 
@@ -59,14 +61,9 @@ export const CompetitorInviteModal = (props) => {
         const response = await getAllByCalendarEventId(eventId, 1, 100);
 
         if (response.success) {
-            setParticipants(response.data?.rows?.map(participant => participant.userProfileId).filter(Boolean));
+            participants.current = response.data?.rows?.map(participant => participant.userProfileId).filter(Boolean);
         }
     }
-
-    React.useEffect(() => {
-        getAllParticipants();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <Modal

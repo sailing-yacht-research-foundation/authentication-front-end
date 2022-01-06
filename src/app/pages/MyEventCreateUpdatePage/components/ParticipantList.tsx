@@ -35,7 +35,7 @@ export const ParticipantList = (props) => {
             key: 'publicName',
             render: (text, record) => <UserWrapper>
                 <AvatarWrapper>
-                    <img className="avatar-img" alt={text} src={renderAvatar(record?.userAvatar)} />
+                    <img className="avatar-img" alt={text} src={renderAvatar(record?.profile?.avatar)} />
                 </AvatarWrapper>
                 {record?.userProfileId ? <Link to={`/profile/${record?.userProfileId}`}>{text}</Link> : text}
             </UserWrapper>,

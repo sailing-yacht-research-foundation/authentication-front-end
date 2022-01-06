@@ -637,7 +637,7 @@ export const MyEventForm = () => {
 
                         <FormItemStartDate dateLimiter={dateLimiter} error={error} handleFieldChange={handleFieldChange} renderErrorField={renderErrorField} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItemEndLocationAddress event={event} address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
+                        <FormItemEndLocationAddress mode={mode} event={event} address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
                         <FormItemEndDate renderErrorField={renderErrorField} error={error} handleFieldChange={handleFieldChange} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
