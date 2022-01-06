@@ -6,7 +6,7 @@ import { SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { showToastMessageOnRequestError } from 'utils/helpers';
-import { getCredentialByPage, getEventsUsingCredentialId, importEventFromExternalEvent, submitNewCredential } from 'services/live-data-server/external-platform';
+import { getCredentialByPage, getEventsUsingCredentialId, importEventFromExternalEvent } from 'services/live-data-server/external-platform';
 import styled from 'styled-components';
 
 export const ImportEventDataModal = (props) => {

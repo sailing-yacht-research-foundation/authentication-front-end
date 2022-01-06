@@ -38,7 +38,9 @@
         "date": "Date:"
       }
     },
-    "search_performed_no_result_found": "Searched for {{keyword}}, no result found."
+    "search_performed_no_result_found": "Searched for {{keyword}}, no result found.",
+    "successfully_registered_to_join_this_competition": "Successfully registered to join this competition.",
+    "register_as_competitor": "Register as Competitor"
   },
   "about_page": {
     "nav": {
@@ -421,7 +423,8 @@
     "select_a_course": "Select a course",
     "event_not_found": "Event not found!",
     "race_not_found": "Race not found!",
-    "error_starttime_greater_eventtime": "Start time should be greater than event time"
+    "error_starttime_greater_eventtime": "Start time should be greater than event time",
+    "please_complete_your_race_before_adding_another": "Please complete your race before adding another."
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -481,7 +484,12 @@
     "event_is_required": "Event is required.",
     "we_are_importing_event_data_to_this_event": "We are importing your event data to this event. You will see them soon.",
     "event_options": "Event options",
-    "cancel_event": "Cancel Event"
+    "cancel_event": "Cancel Event",
+    "publish": "Publish",
+    "publish_this_event": "Publish This Event",
+    "once_you_publish_this_event_you": "Once you publish an event it becomes visible to everyone. You can still make changes but you will not be able to delete the event.",
+    "invite_competitors": "Invite competitors",
+    "search_for_competitors": "Search for competitors"
   },
   "course_list": {
     "name": "Name",
@@ -543,7 +551,8 @@
       "rectangle": "Add a rectangle",
       "circle": "Add a circle",
       "marker": "Add a mark.",
-      "circlemarker": "Add a circlemarker"
+      "circlemarker": "Add a circlemarker",
+      "add_a_start_line": "Add a start line."
     },
     "create_a_new_course": "Create a new course",
     "update_course": "Update course",

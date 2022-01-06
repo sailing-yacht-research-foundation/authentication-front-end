@@ -4,7 +4,7 @@ import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { BorderedButton, DeleteButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, TableWrapper } from 'app/components/SyrfGeneral';
-import { Table, Spin, Button, Space } from 'antd';
+import { Table, Spin, Space } from 'antd';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-credentials.json';
 import { getCredentialByPage } from 'services/live-data-server/external-platform';

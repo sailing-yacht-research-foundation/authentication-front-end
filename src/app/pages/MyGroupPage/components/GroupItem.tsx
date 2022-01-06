@@ -4,7 +4,6 @@ import { Button, Spin, Tag, Space } from 'antd';
 import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
-import { toast } from 'react-toastify';
 import { renderNumberWithCommas, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';

@@ -5,8 +5,9 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { StyledPLaceDropdown } from 'app/components/SyrfGeneral';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import { EventState } from 'utils/constants';
 
-export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddressChange, handleSelectEndAddress }) => {
+export const FormItemEndLocationAddress = ({ event, address, endAddress, handleEndAddressChange, handleSelectEndAddress }) => {
 
     const { t } = useTranslation();
 
@@ -69,7 +70,7 @@ export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddre
                 data-tip={t(translations.tip.regatta)}
                 valuePropName="checked"
             >
-                <Switch unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
+                <Switch disabled={event.status !== EventState.DRAFT} unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
             </Form.Item>
         </>
     );

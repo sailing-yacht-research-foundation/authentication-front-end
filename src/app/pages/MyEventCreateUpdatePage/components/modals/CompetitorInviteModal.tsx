@@ -65,18 +65,19 @@ export const CompetitorInviteModal = (props) => {
 
     React.useEffect(() => {
         getAllParticipants();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <Modal
-            title={'Invite competitors'}
+            title={t(translations.my_event_create_update_page.invite_competitors)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
             visible={showModal}
             footer={null}
             onCancel={hideAssignModal}
         >
             <Spin spinning={isLoading}>
-                <Input.Search allowClear onSearch={debounceSearchPeople} placeholder='Search for competitors' />
+                <Input.Search allowClear onSearch={debounceSearchPeople} placeholder={t(translations.my_event_create_update_page.search_for_competitors)} />
                 <ResultContainer>
                     {results.map((profile, index) => {
                         return <PeopleResultItem onInvited={updateResultList} key={index} profile={profile} eventId={eventId} />

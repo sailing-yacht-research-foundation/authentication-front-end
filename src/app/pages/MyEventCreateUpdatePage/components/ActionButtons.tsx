@@ -2,11 +2,10 @@ import React from 'react';
 import { Spin, Dropdown, Menu, Button, Space } from 'antd';
 import { EventState, MODE } from 'utils/constants';
 import { useTranslation } from 'react-i18next';
-import { cancelCalendarEvent, closeCalendarEvent, scheduleCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
+import { cancelCalendarEvent, closeCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
 import { translations } from 'locales/translations';
 import { toast } from 'react-toastify';
 import { GrGroup } from 'react-icons/gr';
-import { ScheduleOutlined } from '@ant-design/icons';
 import { HiLockClosed } from 'react-icons/hi';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { GoChecklist } from 'react-icons/go';
@@ -32,22 +31,6 @@ export const ActionButtons = ({
     const [isChangingStatus, setIsChangingStatus] = React.useState<boolean>(false);
 
     const [isOpeningClosingRegistration, setIsOpeningClosingRegistration] = React.useState<boolean>(false);
-
-    const scheduleEvent = async () => {
-        setIsChangingStatus(true);
-        const response = await scheduleCalendarEvent(eventId);
-        setIsChangingStatus(false);
-
-        if (response.success) {
-            toast.success(t(translations.my_event_create_update_page.successfully_scheduled_this_event));
-            setEvent({
-                ...event,
-                status: EventState.SCHEDULED
-            })
-        } else {
-            showToastMessageOnRequestError(response.error);
-        }
-    }
 
     const toggleRegistration = async (allowRegistration: boolean) => {
         setIsOpeningClosingRegistration(true);
@@ -114,14 +97,6 @@ export const ActionButtons = ({
             icon: <GrGroup />,
             spinning: false,
             handler: () => showAssignEventAsGroupAdminModal(),
-            isDelete: false,
-        },
-        {
-            name: t(translations.my_event_create_update_page.schedule_event),
-            show: event.status === EventState.DRAFT,
-            icon: <ScheduleOutlined />,
-            spinning: isChangingStatus,
-            handler: () => scheduleEvent(),
             isDelete: false,
         },
         {

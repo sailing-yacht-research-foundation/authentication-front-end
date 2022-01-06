@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, Select, message } from 'antd';
+import { Spin, Form, Divider, Select } from 'antd';
 import { PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfInputField, SyrfFormWrapper } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -33,6 +33,7 @@ import { FormItemEndLocationAddress } from './FormItemEndLocationAddress';
 import { FormItemStartDate } from './FormItemStartDate';
 import { FormItemEndDate } from './FormItemEndDate';
 import { ImportEventDataModal } from './modals/ImportEventDataModal';
+import { create as createCourse} from 'services/live-data-server/courses';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -193,7 +194,12 @@ export const MyEventForm = () => {
 
         if (response.success) {
             createANewDefaultCompetitionUnit(event, response.data.id);
+            createDefaultCourse(event);
         }
+    }
+
+    const createDefaultCourse = async (event) => {
+        await createCourse(event.id, 'Default Course', []);
     }
 
     const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
@@ -226,7 +232,6 @@ export const MyEventForm = () => {
         } else {
             form.setFieldsValue({ approximateEndTime_zone: currentTimezone })
         }
-
 
         // Get address
         if (shouldFetchAddress) {
@@ -632,7 +637,7 @@ export const MyEventForm = () => {
 
                         <FormItemStartDate dateLimiter={dateLimiter} error={error} handleFieldChange={handleFieldChange} renderErrorField={renderErrorField} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItemEndLocationAddress address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
+                        <FormItemEndLocationAddress event={event} address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
                         <FormItemEndDate renderErrorField={renderErrorField} error={error} handleFieldChange={handleFieldChange} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
@@ -654,7 +659,7 @@ export const MyEventForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <EventChildLists eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
+            <EventChildLists setEvent={setEvent} eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
             <ReactTooltip />
         </Wrapper>
     )

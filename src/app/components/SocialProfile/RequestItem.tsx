@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Space, Button, Spin } from 'antd';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { renderAvatar } from '../../../utils/user-utils';

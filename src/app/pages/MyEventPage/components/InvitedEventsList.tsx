@@ -12,7 +12,7 @@ import { renderTimezoneInUTCOffset } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
-import { RegisterEventModal } from 'app/pages/MyEventPage/components/modals/RegisterEventModal';
+import { AcceptInvitationModal } from 'app/pages/MyEventPage/components/modals/AcceptInvitationModal';
 import { getMyInvitedEvents } from 'services/live-data-server/participants';
 import { RejectInviteRequestModal } from './modals/RejectInviteRequestModal';
 
@@ -147,7 +147,7 @@ export const InvitedEventLists = (props) => {
 
     return (
         <>
-            <RegisterEventModal reloadParent={reloadParent} request={request} showModal={showAcceptModal} setShowModal={setShowAcceptModal} />
+            <AcceptInvitationModal reloadParent={reloadParent} request={request} showModal={showAcceptModal} setShowModal={setShowAcceptModal} />
             <RejectInviteRequestModal reloadParent={reloadParent} showModal={showRejectConfirmModal} setShowModal={setShowRejectConfirmModal} request={request} />
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isLoading}>

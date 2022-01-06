@@ -25,26 +25,22 @@ export const RaceList = (props) => {
             render: (text, record) => {
                 return <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             },
-            width: '33%'
         },
         {
             title: t(translations.competition_unit_list_page.start_date),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
-            width: '33%'
         },
         {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
-            width: '33%'
         },
         {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
-            width: '20%',
             render: (text, record) => {
                 const userId = localStorage.getItem('user_id');
                 if (props?.editors?.includes(userId))

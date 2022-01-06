@@ -1,7 +1,6 @@
 import React from 'react';
-import { useHistory } from 'react-router';
-import { Dropdown, Space, Spin, Table, Menu, Button } from 'antd';
-import { BorderedButton, CreateButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { Dropdown, Space, Spin, Table, Menu } from 'antd';
+import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
@@ -36,7 +35,7 @@ export const ParticipantList = (props) => {
             key: 'publicName',
             render: (text, record) => <UserWrapper>
                 <AvatarWrapper>
-                    <img className="avatar-img" src={renderAvatar(record?.userAvatar)} />
+                    <img className="avatar-img" alt={text} src={renderAvatar(record?.userAvatar)} />
                 </AvatarWrapper>
                 {record?.userProfileId ? <Link to={`/profile/${record?.userProfileId}`}>{text}</Link> : text}
             </UserWrapper>,

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSuggestion } from 'services/live-data-server/competition-units';
 import styled from 'styled-components';
 import { supportedSearchCriteria } from 'utils/constants';
-import { debounce, extractTextFromHTML, getCaretPosition, isMobile, placeCaretAtEnd, replaceCriteriaWithPilledCriteria, replaceFormattedCriteriaWithRawCriteria } from 'utils/helpers';
+import { debounce, getCaretPosition, isMobile, placeCaretAtEnd, replaceCriteriaWithPilledCriteria, replaceFormattedCriteriaWithRawCriteria } from 'utils/helpers';
 
 const enum Criteria {
     NAME = 'name',

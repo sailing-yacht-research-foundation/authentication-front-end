@@ -84,6 +84,7 @@ export const PlaybackPage = (props) => {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competitionUnitDetail, searchRaceData, playbackType]);
 
   useEffect(() => {

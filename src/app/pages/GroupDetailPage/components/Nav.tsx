@@ -12,7 +12,6 @@ import { translations } from 'locales/translations';
 import { GroupMemberStatus } from 'utils/constants';
 import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { requestJoinGroup, leaveGroup } from 'services/live-data-server/groups';
-import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectAdminCurrentPage, selectMemberCurrentPage } from '../slice/selectors';
