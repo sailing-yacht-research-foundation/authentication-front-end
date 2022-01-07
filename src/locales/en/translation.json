@@ -446,7 +446,7 @@
     "longitude": "Longitude",
     "latitude": "Latitude",
     "save_draft": "Save Draft",
-    "save_event": "Save Event",
+    "save_event": "Save",
     "please_choose_a_location": "Please choose a location by clicking on the map",
     "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
     "Vessel_participant_groups": "Classes",

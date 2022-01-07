@@ -627,7 +627,8 @@ export const MyEventForm = () => {
                             approximateStartTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                             approximateEndTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                             endDate: moment().add(2, 'days'),
-                            endTime: moment({ hour: 0, minute: 0, second: 0 })
+                            endTime: moment({ hour: 0, minute: 0, second: 0 }),
+                            isOpen: true
                         }}
                     >
                         <FormItemEventNameDescription />

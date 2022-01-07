@@ -70,7 +70,7 @@ export const FormItemEndLocationAddress = ({ mode, event, address, endAddress, h
                 data-tip={t(translations.tip.regatta)}
                 valuePropName="checked"
             >
-                <Switch defaultChecked={true} disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
+                <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
             </Form.Item>
         </>
     );
