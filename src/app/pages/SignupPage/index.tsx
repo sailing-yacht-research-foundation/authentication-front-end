@@ -5,6 +5,8 @@ import { Curtains } from "react-curtains";
 import { SimpleVideoPlane } from 'app/pages/AboutPage/components/SimpleVideoPlane';
 import styled from 'styled-components';
 
+declare const Modernizr:any;
+
 export const SignupPage = () => {
 
   React.useEffect(() => {
@@ -12,6 +14,14 @@ export const SignupPage = () => {
       window.dispatchEvent(new Event('resize'));
     }
 
+    Modernizr.on('videoautoplay', function(result){
+      if(result) {
+        alert('video autoplay is supported');
+      }  else {
+        alert('video autplay is NOT supported');
+      }
+    });
+    
     return () => {
       window.onscroll = null;
     }
