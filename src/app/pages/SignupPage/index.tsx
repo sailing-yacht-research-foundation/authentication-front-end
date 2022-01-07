@@ -5,23 +5,23 @@ import { Curtains } from "react-curtains";
 import { SimpleVideoPlane } from 'app/pages/AboutPage/components/SimpleVideoPlane';
 import styled from 'styled-components';
 
-declare const Modernizr:any;
-
 export const SignupPage = () => {
+
+  const [autoplaySupported, setAutoPlaySupported] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     window.onscroll = function () {
       window.dispatchEvent(new Event('resize'));
     }
 
-    Modernizr.on('videoautoplay', function(result){
-      if(result) {
-        alert('video autoplay is supported');
-      }  else {
-        alert('video autplay is NOT supported');
+    Modernizr.on('videoautoplay', function (result) {
+      if (result) {
+        setAutoPlaySupported(true);
+      } else {
+        setAutoPlaySupported(false);
       }
     });
-    
+
     return () => {
       window.onscroll = null;
     }
@@ -29,11 +29,13 @@ export const SignupPage = () => {
 
   return (
     <>
-      <Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
-        <CurtainPlaneWrapper>
-          <SimpleVideoPlane />
-        </CurtainPlaneWrapper>
-      </Curtains>
+      {
+        autoplaySupported ? (<Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
+          <CurtainPlaneWrapper>
+            <SimpleVideoPlane />
+          </CurtainPlaneWrapper>
+        </Curtains>) : (<Background />)
+      }
       <Row justify="center" align="middle" style={{ height: 'calc(100vh - 100px)', marginTop: '100px', padding: '0 15px' }}>
         <SignupForm />
       </Row>
@@ -42,11 +44,22 @@ export const SignupPage = () => {
 }
 
 const CurtainPlaneWrapper = styled.div`
-position:fixed;
-padding:0;
-margin:0;
-top:0;
-left:0;
-width: 100%;
-height: 100%;
+  position:fixed;
+  padding:0;
+  margin:0;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+`;
+
+const Background = styled.div`
+  position:fixed;
+  padding:0;
+  margin:0;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  background: url('/syrf-background.jpg');
 `;

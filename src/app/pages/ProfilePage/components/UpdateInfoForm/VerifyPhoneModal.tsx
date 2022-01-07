@@ -4,7 +4,6 @@ import {
     SyrfFieldLabel,
     SyrfInputField,
 } from 'app/components/SyrfForm';
-import { Auth } from 'aws-amplify';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { translations } from 'locales/translations';
