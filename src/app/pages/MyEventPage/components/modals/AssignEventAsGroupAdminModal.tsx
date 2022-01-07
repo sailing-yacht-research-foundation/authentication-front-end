@@ -72,7 +72,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
     const onSubmitPeople = async (values) => {
         const { personId } = values;
         setIsLoading(true);
-        const response = await addEditor(personId, event.id);
+        const response = await addEditor(event.id, personId);
         setIsLoading(false);
 
         if (response.success) {
