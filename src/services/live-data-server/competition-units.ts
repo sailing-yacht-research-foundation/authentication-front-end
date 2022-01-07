@@ -174,3 +174,7 @@ export const getSuggestion = (fieldName, word) => {
 export const getRaceViewsCount = (competitionUnitId) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/viewers-count`));
 }
+
+export const stopRace = (competitionUnitId) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/stop-race`));
+}

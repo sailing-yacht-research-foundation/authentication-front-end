@@ -79,3 +79,13 @@ export const rejectInvitation = (requestId) => {
 export const blockParticipant = (participantId) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${participantId}/block`));
 }
+
+export const inviteCompetitor = (calendarEventId, publicName, userProfileId) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants`, [
+        {
+            publicName,
+            userProfileId,
+            calendarEventId,
+        }
+    ]));
+}

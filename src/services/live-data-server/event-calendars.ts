@@ -96,12 +96,6 @@ export const cancelCalendarEvent = (eventId) => {
     }));
 }
 
-export const inviteCompetitor = (calendarEventId, publicName, userProfileId) => {
-    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants`, [
-        {
-            publicName,
-            userProfileId,
-            calendarEventId,
-        }
-    ]));
+export const stopEvent = (calendarEventId) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/stop`));
 }

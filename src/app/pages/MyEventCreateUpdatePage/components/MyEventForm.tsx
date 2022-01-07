@@ -167,6 +167,10 @@ export const MyEventForm = () => {
         if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
+    const reloadParent = () => {
+        initData();
+    }
+
     const createANewDefaultCompetitionUnit = async (event, vesselParticipantGroupId) => {
         const data = {
             name: 'R1',
@@ -659,7 +663,7 @@ export const MyEventForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <EventChildLists setEvent={setEvent} eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
+            <EventChildLists reloadParent={reloadParent} setEvent={setEvent} eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
             <ReactTooltip />
         </Wrapper>
     )

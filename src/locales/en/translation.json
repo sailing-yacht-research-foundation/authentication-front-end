@@ -393,7 +393,9 @@
     "approximate_start": "Approximate Start",
     "you_dont_have_any_competition_unit": "You don't have any races, please create one.",
     "event_name": "Event Name",
-    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses."
+    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses.",
+    "status": "Status",
+    "stop": "Stop"
   },
   "competition_unit_create_update_page": {
     "created_a_new_competition_unit": "Created a new race with name: {{name}}.",
@@ -489,7 +491,14 @@
     "publish_this_event": "Publish This Event",
     "once_you_publish_this_event_you": "Once you publish an event it becomes visible to everyone. You can still make changes but you will not be able to delete the event.",
     "invite_competitors": "Invite competitors",
-    "search_for_competitors": "Search for competitors"
+    "search_for_competitors": "Search for competitors",
+    "stop_this_race": "Stop this race",
+    "are_you_sure_you_want_to_stop_this_race": "Are you sure you want to stop this race?",
+    "stopped_the_race": "Stopped the race.",
+    "stop": "Stop",
+    "stop_this_event": "Stop This Event",
+    "are_you_sure_you_want_to_stop_this_event": "Are you really sure you want to stop this event? All races are on going will be stopped. Do you want to continue?",
+    "successfully_stopped_this_event": "Successfully stopped this event."
   },
   "course_list": {
     "name": "Name",

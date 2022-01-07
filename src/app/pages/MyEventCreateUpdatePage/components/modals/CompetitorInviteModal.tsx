@@ -10,8 +10,7 @@ import { getUserAttribute, renderAvatar } from 'utils/user-utils';
 import styled from 'styled-components';
 import { searchForProfiles } from 'services/live-data-server/profile';
 import { Link } from 'react-router-dom';
-import { inviteCompetitor } from 'services/live-data-server/event-calendars';
-import { getAllByCalendarEventId } from 'services/live-data-server/participants';
+import { getAllByCalendarEventId, inviteCompetitor } from 'services/live-data-server/participants';
 
 export const CompetitorInviteModal = (props) => {
 
