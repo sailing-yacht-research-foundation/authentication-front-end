@@ -1,7 +1,5 @@
 import { ThemeState } from 'styles/theme/slice/types';
 import { LoginState } from 'app/pages/LoginPage/slice/types';
-import { FacebookState } from 'app/pages/ProfilePage/components/Facebook/slice/types';
-import { InstagramState } from 'app/pages/ProfilePage/components/Instagram/slice/types';
 import { SiderState } from 'app/components/SiderContent/slice/types';
 import { PlaybackState } from 'app/pages/PlaybackPage/components/slice/types';
 import { PrivacyPolicyState } from 'app/pages/PrivacyPolicyPage/slice/types';
@@ -25,8 +23,6 @@ import { ProfileSearchState } from 'app/pages/ProfileSearchPage/slice/types';
 export interface RootState {
   theme?: ThemeState;
   login?: LoginState;
-  facebook?: FacebookState;
-  instagram?: InstagramState;
   sider?: SiderState;
   playback?: PlaybackState;
   privacyPolicy?: PrivacyPolicyState;

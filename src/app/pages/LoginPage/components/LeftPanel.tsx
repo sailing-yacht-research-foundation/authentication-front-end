@@ -15,13 +15,7 @@ export const LeftPanel = () => {
     const [autoplaySupported, setAutoPlaySupported] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        Modernizr.on('videoautoplay', function (result) {
-            if (result) {
-                setAutoPlaySupported(true);
-            } else {
-                setAutoPlaySupported(false);
-            }
-        });
+        Modernizr.on('videoautoplay', (result) => setAutoPlaySupported(!!result));
     }, []);
 
     return (

@@ -14,13 +14,7 @@ export const SignupPage = () => {
       window.dispatchEvent(new Event('resize'));
     }
 
-    Modernizr.on('videoautoplay', function (result) {
-      if (result) {
-        setAutoPlaySupported(true);
-      } else {
-        setAutoPlaySupported(false);
-      }
-    });
+    Modernizr.on('videoautoplay', (result) => setAutoPlaySupported(!!result));
 
     return () => {
       window.onscroll = null;
