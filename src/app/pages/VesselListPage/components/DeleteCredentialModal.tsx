@@ -3,7 +3,6 @@ import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { deleteVessel } from 'services/live-data-server/vessels';
 import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { removeCredential } from 'services/live-data-server/external-platform';

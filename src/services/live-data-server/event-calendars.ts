@@ -95,3 +95,7 @@ export const cancelCalendarEvent = (eventId) => {
         status: EventState.CANCELED
     }));
 }
+
+export const stopEvent = (calendarEventId) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/stop`));
+}

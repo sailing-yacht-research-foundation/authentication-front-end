@@ -43,17 +43,17 @@ export const search = (params) => {
 
     const searchParams: any = {
         query: query,
-        sort: params.sort ? [
+        sort: [
             "_score",
             {
                 "approx_start_time_ms": {
-                    "order": params.sort
+                    "order": "desc"
                 }
             },
-        ] : []
+        ]
     };
 
-    searchParams._source = ["id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event", "event_description"]; // only the fields we need
+    searchParams._source = ["id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration"]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
@@ -115,7 +115,7 @@ export const searchScrapedRaceById = (id: string) => {
         },
     };
 
-    searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "url", "source"];
+    searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "url", "source", "isOpen", "allowRegistration"];
 
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
@@ -173,4 +173,8 @@ export const getSuggestion = (fieldName, word) => {
 
 export const getRaceViewsCount = (competitionUnitId) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/viewers-count`));
+}
+
+export const stopRace = (competitionUnitId) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/stop-race`));
 }

@@ -7,7 +7,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
 import moment from 'moment';
-import { create, update, get, getAllCompetitionUnitsByEventIdWithSort } from 'services/live-data-server/competition-units';
+import { create, update, get, getAllCompetitionUnitsByEventIdWithSort, getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { get as getEventById } from 'services/live-data-server/event-calendars';
 import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';
@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
-import { MAP_DEFAULT_VALUE, MODE, TIME_FORMAT } from 'utils/constants';
+import { MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import ReactTooltip from 'react-tooltip';
@@ -151,6 +151,7 @@ export const CompetitionUnitForm = () => {
         } else {
             setDefaultNameForRace();
             setDefaultTimeForRace();
+            checkIfNoRaceIsOngoing();
         }
     }
 
@@ -280,6 +281,25 @@ export const CompetitionUnitForm = () => {
         getAllEventCourses();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const checkIfNoRaceIsOngoing = async () => {
+        if (mode === MODE.UPDATE) return;
+
+        const response = await getAllByCalendarEventId(eventId, 1, 1000);
+
+        if (response.success) {
+            const races = response.data.rows;
+            races.some(race => {
+                if (race.status === RaceStatus.ON_GOING) {
+                    if (history.action !== 'POP') history.goBack();
+                    else history.push(`/events/${eventId}/update`);
+                    toast.info(t(translations.competition_unit_create_update_page.please_complete_your_race_before_adding_another))
+                    return true;
+                }
+                return false;
+            });
+        }
+    }
 
     const getAllEventCourses = async () => {
         const response = await getByEventId(eventId, {

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { SectionContainer, SectionTitle, PaginationContainer, SectionTitleWrapper } from './Members';
 import { UserItemRow } from './UserItemRow';
 import { useParams } from 'react-router';
-import { toast } from 'react-toastify';
 import { adminAcceptJoinRequest, getUserJoinRequests } from 'services/live-data-server/groups';
 import { Button, Pagination, Space, Spin } from 'antd';
 import { BiCheckCircle } from 'react-icons/bi';

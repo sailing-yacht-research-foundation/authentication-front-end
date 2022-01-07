@@ -3,7 +3,7 @@
  */
 
 import { homeActions } from ".";
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { search } from "services/live-data-server/competition-units";
 import { toast } from "react-toastify";
 import i18next from 'i18next';

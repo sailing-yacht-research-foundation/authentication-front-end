@@ -1,65 +1,77 @@
 import React from 'react';
-import { Form, Menu } from 'antd';
+import { Form, Menu, Switch } from 'antd';
 import { SyrfFieldLabel, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { StyledPLaceDropdown } from 'app/components/SyrfGeneral';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import { EventState, MODE } from 'utils/constants';
 
-export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddressChange, handleSelectEndAddress }) => {
+export const FormItemEndLocationAddress = ({ mode, event, address, endAddress, handleEndAddressChange, handleSelectEndAddress }) => {
 
     const { t } = useTranslation();
 
     return (
-        <Form.Item
-            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_location)}</SyrfFieldLabel>}
-            name="endLocation"
-            className="event-location-step"
-            data-tip={t(translations.tip.event_location_end)}
-        >
-            <PlacesAutocomplete
-                value={address}
-                onChange={handleEndAddressChange}
-                onSelect={handleSelectEndAddress}
+        <>
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_location)}</SyrfFieldLabel>}
+                name="endLocation"
+                className="event-location-step"
+                data-tip={t(translations.tip.event_location_end)}
             >
-                {({ getInputProps, suggestions, getSuggestionItemProps }) => {
-                    return (
-                        <>
-                            <SyrfInputField
-                                {...getInputProps({
-                                    placeholder: t(translations.profile_page.update_profile.search_places),
-                                    className: 'location-search-input',
-                                })}
-                                allowClear
-                                value={endAddress}
-                                autoCorrect="off"
-                            />
-                            {suggestions.length > 0 && <StyledPLaceDropdown>
-                                {suggestions.map((suggestion) => {
-                                    const className = suggestion.active
-                                        ? 'suggestion-item--active'
-                                        : 'suggestion-item';
-                                    // inline style for demonstration purpose
-                                    const style = suggestion.active
-                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                    return (
-                                        <Menu.Item
-                                            {...getSuggestionItemProps(suggestion, {
-                                                className,
-                                                style,
-                                            })}
-                                            key={suggestion.index}
-                                        >
-                                            <span>{suggestion.description}</span>
-                                        </Menu.Item>
-                                    );
-                                })}
-                            </StyledPLaceDropdown>}
-                        </>
-                    )
-                }}
-            </PlacesAutocomplete>
-        </Form.Item>
+                <PlacesAutocomplete
+                    value={address}
+                    onChange={handleEndAddressChange}
+                    onSelect={handleSelectEndAddress}
+                >
+                    {({ getInputProps, suggestions, getSuggestionItemProps }) => {
+                        return (
+                            <>
+                                <SyrfInputField
+                                    {...getInputProps({
+                                        placeholder: t(translations.profile_page.update_profile.search_places),
+                                        className: 'location-search-input',
+                                    })}
+                                    allowClear
+                                    value={endAddress}
+                                    autoCorrect="off"
+                                />
+                                {suggestions.length > 0 && <StyledPLaceDropdown>
+                                    {suggestions.map((suggestion) => {
+                                        const className = suggestion.active
+                                            ? 'suggestion-item--active'
+                                            : 'suggestion-item';
+                                        // inline style for demonstration purpose
+                                        const style = suggestion.active
+                                            ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                            : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                        return (
+                                            <Menu.Item
+                                                {...getSuggestionItemProps(suggestion, {
+                                                    className,
+                                                    style,
+                                                })}
+                                                key={suggestion.index}
+                                            >
+                                                <span>{suggestion.description}</span>
+                                            </Menu.Item>
+                                        );
+                                    })}
+                                </StyledPLaceDropdown>}
+                            </>
+                        )
+                    }}
+                </PlacesAutocomplete>
+            </Form.Item>
+
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}
+                name="isOpen"
+                data-tip={t(translations.tip.regatta)}
+                valuePropName="checked"
+            >
+                <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
+            </Form.Item>
+        </>
     );
 }

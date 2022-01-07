@@ -8,15 +8,18 @@ import { getAllByCalendarEventId } from 'services/live-data-server/competition-u
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
-import { TIME_FORMAT } from 'utils/constants';
+import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
+import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
 
 export const CompetitionUnitList = (props) => {
 
     const { t } = useTranslation();
 
     const { eventId } = props;
+
+    const [showStopRaceConfirmModal, setShowStopRaceConfirmModal] = React.useState<boolean>(false);
 
     const columns = [
         {
@@ -26,6 +29,13 @@ export const CompetitionUnitList = (props) => {
             render: (text, record) => {
                 return <Link data-tip={t(translations.tip.view_this_race_in_the_playback)} to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             },
+            width: '20%',
+        },
+        {
+            title: t(translations.competition_unit_list_page.status),
+            dataIndex: 'status',
+            key: 'status',
+            render: (value) => value,
             width: '20%',
         },
         {
@@ -40,6 +50,7 @@ export const CompetitionUnitList = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
+                    { record.status === RaceStatus.ON_GOING && <CreateButton onClick={()=> openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton> }
                     <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                         history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
@@ -64,6 +75,8 @@ export const CompetitionUnitList = (props) => {
     const history = useHistory();
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
+    const [race, setRace] = React.useState<any>({});
 
     const getAll = async (page) => {
         setIsLoading(true);
@@ -98,8 +111,14 @@ export const CompetitionUnitList = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const openStopRaceConfirmModal = (race) => {
+        setRace(race);
+        setShowStopRaceConfirmModal(true);
+    }
+
     return (
         <>
+            <StopRaceConfirmModal reloadParent={()=> getAll(pagination.page)} race={race} showModal={showStopRaceConfirmModal} setShowModal={setShowStopRaceConfirmModal}/>
             <DeleteCompetitionUnitModal
                 competitionUnit={competitionUnit}
                 onCompetitionUnitDeleted={onCompetitionUnitDeleted}
