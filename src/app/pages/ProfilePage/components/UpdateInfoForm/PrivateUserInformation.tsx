@@ -20,6 +20,10 @@ import { FIELD_VALIDATE } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
 import { FilterWorldSailingNumber } from 'utils/world-sailing-number';
 import countryCodeSource from '../../assets/world-sailing-number-countrycode.json';
+import { sendPhoneVerification } from 'services/live-data-server/user';
+import { toast } from 'react-toastify';
+import { VerifyPhoneModal } from './VerifyPhoneModal';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -35,9 +39,10 @@ export const PrivateUserInformation = (props) => {
     const { authUser, address, setAddress } = props;
 
     const { t } = useTranslation();
-    const [isSuggestionVisible, setIsSuggestionVisible] = useState(false);
+    const [isSuggestionVisible, setIsSuggestionVisible] = useState<boolean>(false);
     const [worldSailingNumber, setWorldSailingNumber] = useState('');
     const [countryCodeList, setCountryCodeList] = useState<string[]>([]);
+    const [showPhoneVerifyModal, setShowPhoneVerifyModal] = useState<boolean>(false);
 
     const isInitRef = useRef(true);
 
@@ -62,6 +67,16 @@ export const PrivateUserInformation = (props) => {
         });
     }
 
+    const sendVerificationCode = async () => {
+        const response = await sendPhoneVerification();
+
+        if (response.success) {
+            toast.success(t(translations.profile_page.update_profile.you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number))
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     const renderVerifiedStatus = (type: string) => {
         const verified = checkForVerifiedField(authUser, type);
         const userPhoneNumberExists = !!getUserAttribute(authUser, 'phone_number');
@@ -69,12 +84,16 @@ export const PrivateUserInformation = (props) => {
         if (type === FIELD_VALIDATE.email)
             return <ItemVerifyMessage className={verified ? 'verified' : ''}>{t(translations.profile_page.update_profile.your_email_is, { verify_status: (verified ? 'verified' : 'not verified') })}</ItemVerifyMessage>;
 
-        if (userPhoneNumberExists) {
-            return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.update_profile.your_phone_is_verified)}</ItemVerifyMessage>) :
-                (
-                    <ItemVerifyMessage>{t(translations.profile_page.update_profile.your_phone_is_not_verified)}</ItemVerifyMessage>
-                )
-        }
+            if (userPhoneNumberExists) {
+                return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.update_profile.your_phone_is_verified)}</ItemVerifyMessage>) :
+                    (
+                        <ItemVerifyMessage>{t(translations.profile_page.update_profile.your_phone_is_not_verified)} <a href="/" onClick={(e) => {
+                            e.preventDefault();
+                            sendVerificationCode();
+                            setShowPhoneVerifyModal(true);
+                        }}>{t(translations.profile_page.update_profile.verify)}</a></ItemVerifyMessage>
+                    )
+            }
     }
 
     const handleSuggestionVisible = () => {
@@ -115,10 +134,9 @@ export const PrivateUserInformation = (props) => {
         });
     };
 
-
-
     return (
         <Wrapper>
+            <VerifyPhoneModal sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showPhoneVerifyModal} setShowPhoneVerifyModal={setShowPhoneVerifyModal} />
             <SyrfFormTitle>{t(translations.profile_page.update_profile.private_user_details)}</SyrfFormTitle>
             <Form.Item
                 label={<SyrfFieldLabel>Email</SyrfFieldLabel>}

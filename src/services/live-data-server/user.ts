@@ -5,32 +5,32 @@ import syrfRequest from "utils/syrf-request";
 
 export const getUser = () => {
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/profile`)
-    .then(response => {
-        return {
-            success: true,
-            user: response.data
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    })
-} 
+        .then(response => {
+            return {
+                success: true,
+                user: response.data
+            }
+        }).catch(error => {
+            return {
+                sucess: false,
+                error: error
+            }
+        })
+}
 
 export const updateProfile = (data) => {
     return syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`, data)
-    .then(response => {
-        return {
-            success: true,
-            user: response.data
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    })
+        .then(response => {
+            return {
+                success: true,
+                user: response.data
+            }
+        }).catch(error => {
+            return {
+                sucess: false,
+                error: error
+            }
+        })
 }
 
 export const deleteUserAccount = () => {
@@ -55,4 +55,14 @@ export const uploadAvatar = (formData) => {
 
 export const updateAgreements = (data) => {
     return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/accept-eula`, data))
+}
+
+export const sendPhoneVerification = () => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/send-phone-verification`));
+}
+
+export const verifyPhoneNumber = (code) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/verify-phone-code`, {
+        code
+    }));
 }
