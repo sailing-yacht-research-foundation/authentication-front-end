@@ -625,6 +625,7 @@ export const MyEventForm = () => {
                             startDate: moment(),
                             startTime: moment(new Date()).add(1, 'h'),
                             approximateStartTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                            approximateEndTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                             endDate: moment().add(2, 'days'),
                             endTime: moment({ hour: 0, minute: 0, second: 0 })
                         }}
@@ -657,7 +658,7 @@ export const MyEventForm = () => {
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
-                                {t(event.status === EventState.DRAFT ? translations.my_event_create_update_page.save_draft : translations.my_event_create_update_page.save_event)}
+                                {t((event.status === EventState.DRAFT || mode === MODE.CREATE) ? translations.my_event_create_update_page.save_draft : translations.my_event_create_update_page.save_event)}
                             </SyrfFormButton>
                         </Form.Item>
                     </Form>

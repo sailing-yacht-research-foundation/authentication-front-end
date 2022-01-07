@@ -1,28 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ResultItem /> should render and match the snapshot 1`] = `
-<styled.div>
-  <styled.div>
-    <Space
-      size={5}
-    >
-      <GiPositionMarker />
-      California Coast
-    </Space>
-  </styled.div>
-  <styled.h3>
-    <Link
-      to="/playback?raceId=undefined"
-    >
-      Race at Wales west coast
-    </Link>
-  </styled.h3>
-  <styled.div>
-    <styled.span>
-      Date:
-       
-      Jun. 23, 2017
-    </styled.span>
-  </styled.div>
-</styled.div>
+<Provider
+  store={
+    Object {
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
+    }
+  }
+>
+  <ResultItem
+    item={
+      Object {
+        "_source": Object {
+          "approx_start_time_ms": 1498206000000,
+          "name": "Race at Wales west coast",
+          "start_country": "California Coast",
+        },
+      }
+    }
+  />
+</Provider>
 `;
