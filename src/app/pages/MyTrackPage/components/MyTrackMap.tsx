@@ -200,12 +200,10 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
                     race.event.isPrivate ? (<div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>) :
                         (<div>{t(translations.home_page.map_view_tab.name)} {[race.event?.name, race.name].filter(Boolean).join(' - ')}</div>)
                 }
-                {race.start_country && <div>{t(translations.home_page.map_view_tab.location)} {race.start_city + ', ' + race.start_country}</div>}
-                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approx_start_time_ms).format(TIME_FORMAT.date_text)}</div>
-                {race.event_name && <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race.event_name)}</div>}
-                {race.event_description && <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race.event_description)}</div>}
-                {race.start_city && <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race.start_city)}</div>}
-                {race.start_country && <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race.start_country)}</div>}
+                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStart).format(TIME_FORMAT.date_text)}</div>
+                {race.description && <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race.description)}</div>}
+                {race.city && <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race.city)}</div>}
+                {race.country && <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race.country)}</div>}
             </>
         )
     }
