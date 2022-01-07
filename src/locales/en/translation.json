@@ -228,13 +228,13 @@
       "permantly_delete_my_account": "Permantly delete my account",
       "account_settings": "Account settings",
       "password_security": "Password & Security",
-      "problem_updating_profile": "There are problem updating your profile.",
+      "problem_updating_profile": "There was a problem updating your profile.",
       "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
       "profile_mode": "Profile Mode",
       "integrations": "Integrations",
-      "we_couldnt_send_the_verification_code": "There was an error happened when sending verification code to your phone.",
+      "we_couldnt_send_the_verification_code": "There was an error sending the verification code to your phone.",
       "your_phone_number_has_been_verified": "Your phone number has been verified.",
-      "code_is_required": "Code is required and must be number and at least 6 characters."
+      "code_is_required": "Code is required and must be a 6-digit number."
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"
