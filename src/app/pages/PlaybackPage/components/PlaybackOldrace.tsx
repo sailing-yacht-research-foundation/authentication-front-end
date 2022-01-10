@@ -480,6 +480,9 @@ export const PlaybackOldRace = (props) => {
 
   return (
     <div style={{ height: "100%", position: "relative" }}>
+      <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
+        <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
+      </LeaderboardContainer>
       <MapContainer
         style={{
           height: "100%",
@@ -499,9 +502,6 @@ export const PlaybackOldRace = (props) => {
         duration={0}
         easeLinearity={0}
       >
-        <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-          <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
-        </LeaderboardContainer>
         <RaceMap emitter={eventEmitter} />
       </MapContainer>
 

@@ -2,13 +2,7 @@
 
 exports[`<SignupPage /> should render and match the snapshot 1`] = `
 <React.Fragment>
-  <Curtains$1
-    pixelRatio={1}
-  >
-    <styled.div>
-      <SimpleVideoPlane />
-    </styled.div>
-  </Curtains$1>
+  <styled.div />
   <Row
     align="middle"
     justify="center"

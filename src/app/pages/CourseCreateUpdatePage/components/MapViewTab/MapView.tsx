@@ -24,8 +24,38 @@ import { CourseDeleteModal } from '../CourseDeleteModal';
 import { MODE } from 'utils/constants';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
+import BoatPinIcon from '../../assets/boat_pin.png';
+import StartPinIcon from '../../assets/start_pin.png';
 
 require('leaflet-draw');
+
+L.Draw.Polyline.prototype.addVertex = function (latlng) {
+    var markersLength = this._markers.length;
+    // markersLength must be greater than or equal to 2 before intersections can occur
+
+    if (markersLength >= 2 && !this.options.allowIntersection && this._poly.newLatLngIntersects(latlng)) {
+        this._showErrorTooltip();
+        return;
+    }
+    else if (this._errorShown) {
+        this._hideErrorTooltip();
+    }
+
+    this._markers.push(this._createMarker(latlng));
+
+    this._poly.addLatLng(latlng);
+
+    if (this._poly.getLatLngs().length === 2) {
+        this._map.addLayer(this._poly);
+    }
+
+    this._vertexChanged(latlng, true);
+    markersLength = this._markers.length;
+    if (markersLength === 2) {
+        this._fireCreatedEvent();
+        this.disable();
+    }
+};
 
 type CourseGeometry = {
     geometryType: string;
@@ -58,11 +88,8 @@ L.drawLocal.draw.toolbar.buttons = {
 };
 
 let drawControl;
-
 const defaultPolylineNames = ['Start/Finish', 'Start', 'Finish', 'Windward Gate', 'Leeward Gate'];
-
 const defaultPolygonNames = ['Course Boundary', 'Exclusion Area', 'Starting Area'];
-
 const defaultMarkerNames = ['Windward Mark', 'Leeward Mark', 'Offset'];
 
 export const MapView = React.forwardRef((props, ref) => {
@@ -136,24 +163,15 @@ export const MapView = React.forwardRef((props, ref) => {
                 featureGroup: drawnItems,
                 poly: {
                     allowIntersection: false
-                }
+                },
+                edit: false
             },
             draw: {
                 rectangle: false,
                 circle: false,
                 circlemarker: false,
-                polygon: {
-                    allowIntersection: false,
-                    showArea: true
-                },
-                marker: {
-                    icon: L.divIcon({
-                        html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#fff', fontSize: '35px' }} />),
-                        iconSize: [20, 20],
-                        iconAnchor: [18, 42],
-                        className: 'my-race'
-                    })
-                }
+                polygon: false,
+                marker: false
             }
         });
         map.addControl(drawControl);
@@ -200,10 +218,12 @@ export const MapView = React.forwardRef((props, ref) => {
 
             switch (geometry.geometryType) {
                 case GEOMETRY_TYPE.line:
-                    geoJsonGroup = L.polyline([geometry.points.map(function (point) {
+                    const coordinates = geometry.points.map(function (point) {
                         return point.position;
-                    })]).addTo(map);
+                    });
+                    geoJsonGroup = L.polyline([...coordinates]).addTo(map);
                     geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.line;
+                    drawPointAndBoat(coordinates, geometry.id);
                     break;
                 case GEOMETRY_TYPE.point:
                     geoJsonGroup = L.marker(geometry.points[0].position, {
@@ -235,6 +255,13 @@ export const MapView = React.forwardRef((props, ref) => {
             e.layers.eachLayer(layer => {
                 mutableCouseSequencedGeometries.current = mutableCouseSequencedGeometries.current.filter(geometry => {
                     return geometry.id !== layer.options._id;
+                });
+
+                map.eachLayer(function (mapLayer) {
+                    if (layer.options._id === mapLayer.options._parent_id
+                        && typeof mapLayer.options._parent_id !== 'undefined') {
+                        map.removeLayer(mapLayer);
+                    }
                 });
             });
             dispatch(actions.setCourseSequencedGeometries(mutableCouseSequencedGeometries.current));
@@ -282,19 +309,25 @@ export const MapView = React.forwardRef((props, ref) => {
                             break;
                         case GEOMETRY_TYPE.polygon:
                         case GEOMETRY_TYPE.line:
-                            layer.getLatLngs().forEach(points => {
-                                points.forEach((point, index) => {
-                                    if (!geometry.points[index]) {
-                                        geometry.points[index] = {
-                                            position: []
+                            layer.getLatLngs().forEach((points, pointIndex) => {
+                                if (points.forEach) {
+                                    points.forEach((point, index) => {
+                                        if (!geometry.points[index]) {
+                                            geometry.points[index] = {
+                                                position: []
+                                            }
                                         }
-                                    }
-                                    geometry.points[index].position = [point.lat, point.lng]
-                                });
+                                        geometry.points[index].position = [point.lat, point.lng]
+                                    });
+                                } else {
+                                    let point = points; // in this case points is not an array.
+                                    geometry.points[pointIndex].position = [point.lat, point.lng];
+                                }
                             });
                             if (geometryType === GEOMETRY_TYPE.polygon) { // polygon only, making this polygon first position & last position the same as discussed with Aan.
                                 enclosePolygonPoints(geometry);
                             }
+                            drawPointAndBoat(layer.getLatLngs().map(point => [point.lat, point.lng]), geometry.id);
                             break;
                     }
                     mutableCouseSequencedGeometries.current.push(geometry);
@@ -346,6 +379,7 @@ export const MapView = React.forwardRef((props, ref) => {
                             position: [point.lat, point.lng]
                         });
                     });
+                    drawPointAndBoat(layer.getLatLngs().map(point => [point.lat, point.lng]), layerId);
                     layer.options._geometry_type = GEOMETRY_TYPE.line;
                     break;
             }
@@ -358,6 +392,40 @@ export const MapView = React.forwardRef((props, ref) => {
             mutableCouseSequencedGeometries.current = [...mutableCouseSequencedGeometries.current, geometry];
             dispatch(actions.setCourseSequencedGeometries(JSON.parse(JSON.stringify(mutableCouseSequencedGeometries.current))));
             layerOrder.current++;
+        });
+    }
+
+    const drawPointAndBoat = (coordinates, layerId) => {
+        map.eachLayer(function (mapLayer) {
+            if (layerId === mapLayer.options._parent_id
+                && typeof mapLayer.options._parent_id !== 'undefined') {
+                map.removeLayer(mapLayer);
+            }
+        });
+
+        coordinates.forEach(function (point, index) {
+            let marker;
+            if (index === 0) {
+                marker = L.marker([point[0], point[1]], {
+                    icon: new L.icon({
+                        iconUrl: StartPinIcon,
+                        iconSize: [25, 25],
+                        iconAnchor: [14, 10],
+                        popupAnchor: [5, -15]
+                    })
+                });
+            } else {
+                marker = L.marker([point[0], point[1]], {
+                    icon: new L.icon({
+                        iconUrl: BoatPinIcon,
+                        iconSize: [25, 25],
+                        iconAnchor: [14, 10],
+                        popupAnchor: [5, -15]
+                    })
+                });
+            }
+            marker.options._parent_id = layerId;
+            map.addLayer(marker);
         });
     }
 

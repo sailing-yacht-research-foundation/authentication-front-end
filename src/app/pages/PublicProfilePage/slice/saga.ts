@@ -5,7 +5,6 @@
 import { publicProfileActions } from ".";
 import { put, takeLatest, call } from 'redux-saga/effects';
 import { getFollowers, getFollowings, getProfileById } from "services/live-data-server/profile";
-import { toast } from "react-toastify";
 import { showToastMessageOnRequestError } from "utils/helpers";
 
 function* getProfile({ type, payload }) {

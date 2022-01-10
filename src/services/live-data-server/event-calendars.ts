@@ -89,3 +89,13 @@ export const toggleOpenForRegistration = (eventId: string, allowRegistration: bo
 export const closeCalendarEvent = (eventId: string) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/stop`))
 }
+
+export const cancelCalendarEvent = (eventId) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${eventId}/status`, {
+        status: EventState.CANCELED
+    }));
+}
+
+export const stopEvent = (calendarEventId) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/stop`));
+}

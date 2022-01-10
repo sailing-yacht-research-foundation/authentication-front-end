@@ -2,7 +2,7 @@ import { SuggestionCriteria, SuggestionInnerWrapper, SuggestionWrapper } from 'a
 import { useHomeSlice } from 'app/pages/HomePage/slice';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { CRITERIA_TO_RAW_CRITERIA, formatterSupportedSearchCriteria } from 'utils/constants';
+import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria } from 'utils/constants';
 import { extractTextFromHTML, placeCaretAtEnd } from 'utils/helpers';
 
 export const CriteriaSuggestion = (props) => {
@@ -32,10 +32,12 @@ export const CriteriaSuggestion = (props) => {
         if (lastword.length > 0)
             lastword = lastword[0];
 
-        if (lastword.length === 0) return [];
+        if (lastword.length === 0 || keyword.includes('all_fields')) return [];
 
-        formatterSupportedSearchCriteria.forEach(criteria => {
-            if (criteria.toLowerCase().includes(lastword.trim()) && !keyword.includes(criteria.toLowerCase() + ':')) {
+        formattedSupportedSearchCriteria.forEach(criteria => {
+            let splittedCriteria = criteria.split(' ')[0];
+            if (lastword.trim().length > 1 && splittedCriteria.toLowerCase().includes(lastword.trim())
+                && !keyword.includes(criteria.toLowerCase() + ':')) {
                 criteriaMatched.unshift(criteria);
             }
         });

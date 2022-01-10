@@ -13,15 +13,12 @@ import { useHomeSlice } from '../slice';
 import moment from 'moment';
 import { selectIsSearching, selectFromDate, selectSearchKeyword, selectToDate } from '../slice/selectors';
 import { TIME_FORMAT } from 'utils/constants';
-import { useHistory } from 'react-router-dom';
 import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
 import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
 import { replaceFormattedCriteriaWithRawCriteria, replaceCriteriaWithPilledCriteria, removeWholeTextNodeOnBackSpace } from 'utils/helpers';
 import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 
 export const FilterPane = (props) => {
-
-    let inputTimeout;
 
     const { defaultFocus } = props;
 
@@ -39,15 +36,13 @@ export const FilterPane = (props) => {
 
     const isSearching = useSelector(selectIsSearching);
 
-    const history = useHistory();
-
     const [form] = Form.useForm();
 
     const fromDate = useSelector(selectFromDate);
 
     const toDate = useSelector(selectToDate);
 
-    const [keyword, setKeyword] = React.useState<string>('');
+    const [, setKeyword] = React.useState<string>('');
 
     const [initedSearchBar, setInitedSearchBar] = React.useState<boolean>(false);
 
@@ -72,16 +67,14 @@ export const FilterPane = (props) => {
         if (from_date) params.from_date = moment(from_date).format(TIME_FORMAT.number);
         if (to_date) params.to_date = moment(to_date).format(TIME_FORMAT.number);
 
+        const keywordIsPilledCriteria = name.includes('</span>');
+        if (keywordIsPilledCriteria) return; // not searching if the keyword is not inputted when the pill inserted and user performs search.
+
         dispatch(actions.setPage(1));
         dispatch(actions.setKeyword(params.keyword ?? ''));
         dispatch(actions.setFromDate(params.from_date ?? ''));
         dispatch(actions.setToDate(params.to_date ?? ''));
         dispatch(actions.searchRaces(params));
-
-        history.push({
-            pathname: '/',
-            search: Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&')
-        });
     }
 
     React.useEffect(() => {
@@ -130,6 +123,7 @@ export const FilterPane = (props) => {
                     onFinish={onFormSubmit}
                     initialValues={{
                         name: searchKeyword,
+                        sort: 'desc'
                     }}>
                     <div style={{ position: 'relative' }}>
                         <Form.Item
@@ -154,11 +148,7 @@ export const FilterPane = (props) => {
                                     onKeyDown={onContentEditableKeydown}
                                     onInput={(e) => {
                                         const target = e.target as HTMLDivElement;
-                                        if (inputTimeout) clearTimeout(inputTimeout);
-                                        inputTimeout = setTimeout(() => {
-                                            dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
-                                            setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText));
-                                        }, 100);
+                                        dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
                                     }}></span>
                                 {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={() => {
                                     dispatch(actions.setKeyword(''));
@@ -168,8 +158,8 @@ export const FilterPane = (props) => {
                             </ContentEditableSearchBarWrapper>
                             {
                                 showSuggestion && <>
-                                    <CriteriaSuggestion form={form} keyword={keyword} searchBarRef={mutableEditableRef} />
-                                    <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={mutableEditableRef} isFilterPane keyword={keyword} />
+                                    <CriteriaSuggestion form={form} keyword={searchKeyword} searchBarRef={mutableEditableRef} />
+                                    <ResultSuggestion setShowSuggestion={setShowSuggestion} searchBarRef={mutableEditableRef} isFilterPane keyword={searchKeyword} />
                                 </>
                             }
 

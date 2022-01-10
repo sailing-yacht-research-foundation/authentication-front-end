@@ -32,10 +32,11 @@ export const supportedSearchCriteria = [
     'boat_models',
     'handicap_rules',
     'source',
-    'unstructured_text'
+    'unstructured_text',
+    'all_fields'
 ];
 
-export const formatterSupportedSearchCriteria = [
+export const formattedSupportedSearchCriteria = [
     'Start City',
     'Start Country',
     'Boat Name',
@@ -43,29 +44,29 @@ export const formatterSupportedSearchCriteria = [
     'Handicap Rule',
     'Source',
     'Unstructured Text',
-    'Name',
+    'All Fields'
 ];
 
 export const CRITERIA_TO_RAW_CRITERIA = {
-    'Name': 'name',
     'Start City': 'start_city',
     'Start Country': 'start_country',
     'Boat Name': 'boat_names',
     'Boat Model': 'boat_models',
     'Handicap Rule': 'handicap_rules',
     'Source': 'source',
-    'Unstructured Text': 'unstructured_text'
+    'Unstructured Text': 'unstructured_text',
+    'All Fields': 'all_fields'
 }
 
 export const RAW_CRITERIA_TO_CRITERIA = {
-    'name': 'Name',
     'start_city': 'Start City',
     'start_country': 'Start Country',
     'boat_names': 'Boat Name',
     'boat_models': 'Boat Model',
     'handicap_rules': 'Handicap Rule',
     'source': 'Source',
-    'unstructured_text': 'Unstructured Text'
+    'unstructured_text': 'Unstructured Text',
+    'all_fields': 'All Fields'
 }
 
 export const enum GroupMemberStatus {
@@ -155,4 +156,10 @@ export enum EventState {
     CANCELED = 'CANCELED',
     COMPLETED = 'COMPLETED',
     ON_GOING = 'ONGOING'
+}
+
+export enum ParticipantInvitationStatus  {
+    BLOCKED = 'BLOCKED',
+    INVITED = 'INVITED',
+    ACCEPTED = 'ACCEPTED'
 }

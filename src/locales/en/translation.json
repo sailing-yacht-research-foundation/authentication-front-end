@@ -24,6 +24,7 @@
       "from_date": "From Date",
       "to_date": "To Date",
       "search": "Search",
+      "sort": "Sort",
       "from_date_must_be_smaller_than_to_date": "From date must be equal or smaller than to date",
       "to_date_must_bigger_than_from_date": "To date must be equal or bigger than from date",
       "filter_result": {
@@ -37,7 +38,9 @@
         "date": "Date:"
       }
     },
-    "search_performed_no_result_found": "Searched for {{keyword}}, no result found."
+    "search_performed_no_result_found": "Searched for {{keyword}}, no result found.",
+    "successfully_registered_to_join_this_competition": "Successfully registered to join this competition.",
+    "register_as_competitor": "Register as Competitor"
   },
   "about_page": {
     "nav": {
@@ -157,7 +160,8 @@
       "notification_setting": "Notification Settings",
       "profile_setting": "Profile Settings",
       "discover_friends": "Discover Friends",
-      "my_profile": "My Profile"
+      "my_profile": "My Profile",
+      "integrations": "Integrations"
     },
     "app_connection": "App Connections",
     "organizational_membership": "Organizational Memberships",
@@ -226,9 +230,13 @@
       "permantly_delete_my_account": "Permantly delete my account",
       "account_settings": "Account settings",
       "password_security": "Password & Security",
-      "problem_updating_profile": "There are problem updating your profile.",
+      "problem_updating_profile": "There was a problem updating your profile.",
       "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
-      "profile_mode": "Profile Mode"
+      "profile_mode": "Profile Mode",
+      "integrations": "Integrations",
+      "we_couldnt_send_the_verification_code": "There was an error sending the verification code to your phone.",
+      "your_phone_number_has_been_verified": "Your phone number has been verified.",
+      "code_is_required": "Code is required and must be a 6-digit number."
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"
@@ -336,6 +344,7 @@
   },
   "my_event_list_page": {
     "you_dont_have_any_event": "You do not have any events at the moment, please create one.",
+    "you_dont_have_any_invitation": "You don't have any invitation.",
     "name": "Name",
     "location": "Location",
     "start_date": "Start Date",
@@ -356,7 +365,22 @@
     "status_publicevent": "Public Event",
     "status_privateevent": "Private Event",
     "admins": "Admins",
-    "status": "Status"
+    "status": "Status",
+    "invitation": "Invitation",
+    "invited_at": "Invited At",
+    "register_for": "Register for {{eventName}}",
+    "select_a_boat": "Select a boat",
+    "select_a_class": "Select a class",
+    "please_select_a_class_to_join_this_event": "Please select a class to join this event.",
+    "please_seelct_a_boat_to_join_this_event": "Please select a boat to join this event.",
+    "some_of_your_information_will_be_shared": "Some of your profile information will be shared with the event organizers.",
+    "register_as_a_competitor": "Register as a competitor.",
+    "yes": "Yes",
+    "no": "No",
+    "accepted_the_request": "Accepted the invitation request.",
+    "are_you_sure_you_want_to_reject_this_invitation": "Are you sure you want to reject this invitation?",
+    "reject_invitation": "Reject Invitation",
+    "successfully_rejected_this_invitation": "Successfully rejected this invitation."
   },
   "competition_unit_list_page": {
     "name": "Name",
@@ -372,7 +396,9 @@
     "approximate_start": "Approximate Start",
     "you_dont_have_any_competition_unit": "You don't have any races, please create one.",
     "event_name": "Event Name",
-    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses."
+    "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses.",
+    "status": "Status",
+    "stop": "Stop"
   },
   "competition_unit_create_update_page": {
     "created_a_new_competition_unit": "Created a new race with name: {{name}}.",
@@ -402,7 +428,8 @@
     "select_a_course": "Select a course",
     "event_not_found": "Event not found!",
     "race_not_found": "Race not found!",
-    "error_starttime_greater_eventtime": "Start time should be greater than event time"
+    "error_starttime_greater_eventtime": "Start time should be greater than event time",
+    "please_complete_your_race_before_adding_another": "Please complete your race before adding another."
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -421,7 +448,8 @@
     "status": "State of This Event",
     "longitude": "Longitude",
     "latitude": "Latitude",
-    "save_event": "Save event",
+    "save_draft": "Save Draft",
+    "save_event": "Save",
     "please_choose_a_location": "Please choose a location by clicking on the map",
     "events_are_regattas": "Events are regattas, races, or series that would be added to a calendar. An Event can have 1 or many specific races, divisions, or trophies.",
     "Vessel_participant_groups": "Classes",
@@ -445,12 +473,35 @@
     "event_is_opened_for_registration": "Event is opened for registration.",
     "event_is_closed_for_registration": "Event is closed for registration.",
     "successfully_closed_this_event": "Successfully closed this event.",
+    "successfully_canceled_this_event": "Successfully canceled this event.",
     "open_regatta": "Open Regatta",
-    "schedule_event":"Schedule Event",
+    "schedule_event": "Schedule Event",
     "close_event": "Close Event",
     "open_registration": "Open Registration",
     "close_registration": "Close Registration",
-    "assign_admins": "Assign Admins"
+    "assign_admins": "Assign Admins",
+    "please_select_a_credential": "Please select a credential first",
+    "then_select_an_event_of_the_above_credential": "Then select an event of the above credential",
+    "import": "Import",
+    "import_external_data": "Import external data",
+    "import_data_from_external_source": "Import event data from external source",
+    "credential_is_required": "Credential is required.",
+    "event_is_required": "Event is required.",
+    "we_are_importing_event_data_to_this_event": "We are importing your event data to this event. You will see them soon.",
+    "event_options": "Event options",
+    "cancel_event": "Cancel Event",
+    "publish": "Publish",
+    "publish_this_event": "Publish This Event",
+    "once_you_publish_this_event_you": "Once you publish an event it becomes visible to everyone. You can still make changes but you will not be able to delete the event.",
+    "invite_competitors": "Invite competitors",
+    "search_for_competitors": "Search for competitors",
+    "stop_this_race": "Stop this race",
+    "are_you_sure_you_want_to_stop_this_race": "Are you sure you want to stop this race?",
+    "stopped_the_race": "Stopped the race.",
+    "stop": "Stop",
+    "stop_this_event": "Stop This Event",
+    "are_you_sure_you_want_to_stop_this_event": "Are you really sure you want to stop this event? All races are on going will be stopped. Do you want to continue?",
+    "successfully_stopped_this_event": "Successfully stopped this event."
   },
   "course_list": {
     "name": "Name",
@@ -512,7 +563,8 @@
       "rectangle": "Add a rectangle",
       "circle": "Add a circle",
       "marker": "Add a mark.",
-      "circlemarker": "Add a circlemarker"
+      "circlemarker": "Add a circlemarker",
+      "add_a_start_line": "Add a start line."
     },
     "create_a_new_course": "Create a new course",
     "update_course": "Update course",
@@ -569,7 +621,17 @@
     "assigned_vessels": "Assigned Boats",
     "all": "All",
     "assigned": "Assigned",
-    "unassigned": "Unassigned"
+    "unassigned": "Unassigned",
+    "remove": "Remove",
+    "class_name": "Class Name",
+    "invite": "Invite",
+    "successfully_invited_user": "Successfully invited this user.",
+    "there_is_error_happended_when_inviting_this_user": "There is an error happened when inviting this user.",
+    "block": "Block",
+    "block_participant": "Block Participant",
+    "are_you_sure_you_want_to_block_this_participant": "Are you sure you want to block this participant.",
+    "successfully_blocked_this_participant": "Successfully blocked this participant.",
+    "status": "Status"
   },
   "participant_unit_create_update_page": {
     "created_a_new_participant": "Created a new competitor with name: {{name}}.",
@@ -740,7 +802,9 @@
     "click_to_make_this_event_open_for_registration": "Click to make this event open for registration.",
     "click_to_make_this_event_close_for_registration": "Click to make this event close for registration.",
     "click_to_close_this_event_and_make_it_completed": "Click to close this event and make it completed.",
-    "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app"
+    "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app",
+    "link_a_new_credential_to_your_account": "Link a new credential to your account.",
+    "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,.."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -932,5 +996,28 @@
     "unfollow_people": "Unfollow {{profileName}}",
     "are_you_sure_to_unfollow": "Are you sure you want to unfollow {{profileName}}?",
     "search_or_select_people": "Search or select a person."
+  },
+  "credentail_manager_page": {
+    "credentials": "Credentials",
+    "this_is_where_you_can_manage_your_credential_you_linked": "This is where you can manage your linked credentials from YachtScoring,...",
+    "you_havent_linked_any_credentials": "You haven't linked any credentials.",
+    "link_new_credential": "Link New Credential",
+    "edit_credential": "Edit Credential",
+    "link": "Link",
+    "successfully_linked_this_credential_to_your_account": "Successfully linked this credential to your account.",
+    "username": "Username",
+    "password": "Password",
+    "source": "Source",
+    "username_is_required": "Username is required.",
+    "password_is_required": "Password is required.",
+    "there_is_something_wrong_with_your_credential": "There is something wrong with your credential, please try again.",
+    "action": "Action",
+    "unlink": "Unlink",
+    "edit": "Edit"
+  },
+  "delete_credential_modal": {
+    "successfully_deleted": "Successfully unlinked the credential",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to unlink this credential?",
+    "you_will_delete": "You will unlink this credential, are you sure you want to continue?"
   }
 }

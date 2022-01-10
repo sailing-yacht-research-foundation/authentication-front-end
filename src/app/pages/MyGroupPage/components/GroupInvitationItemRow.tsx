@@ -5,7 +5,6 @@ import { userAcceptInvitationRequest, userRejectInvitationRequest } from 'servic
 import { useGroupSlice } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGroupCurrentPage, selectInvitationCurrentPage } from '../slice/selectors';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';

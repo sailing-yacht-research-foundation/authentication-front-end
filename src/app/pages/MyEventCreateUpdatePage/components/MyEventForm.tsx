@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, Select, message } from 'antd';
+import { Spin, Form, Divider, Select } from 'antd';
 import { PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfInputField, SyrfFormWrapper } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -12,7 +12,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
+import { EventState, MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -23,7 +23,7 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import tzLookup from 'tz-lookup';
-import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/AssignEventAsGroupAdminModal';
+import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/modals/AssignEventAsGroupAdminModal';
 import { ActionButtons } from './ActionButtons';
 import { EventChildLists } from './EventChildLists';
 import { FormItemEventNameDescription } from './FormItemEventNameDescription';
@@ -32,6 +32,8 @@ import { FormItemStartLocationAddress } from './FormItemStartLocationAddress';
 import { FormItemEndLocationAddress } from './FormItemEndLocationAddress';
 import { FormItemStartDate } from './FormItemStartDate';
 import { FormItemEndDate } from './FormItemEndDate';
+import { ImportEventDataModal } from './modals/ImportEventDataModal';
+import { create as createCourse} from 'services/live-data-server/courses';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -77,6 +79,8 @@ export const MyEventForm = () => {
     const raceListRef = React.useRef<any>();
 
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
+
+    const [showImportEventModal, setShowImportEventModal] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
         const { name, startDate, externalUrl, isOpen, lon, lat, endDate, endTime, startTime, description, approximateStartTime_zone, approximateEndTime_zone, endLat, endLon } = values;
@@ -163,6 +167,10 @@ export const MyEventForm = () => {
         if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
+    const reloadParent = () => {
+        initData();
+    }
+
     const createANewDefaultCompetitionUnit = async (event, vesselParticipantGroupId) => {
         const data = {
             name: 'R1',
@@ -190,7 +198,12 @@ export const MyEventForm = () => {
 
         if (response.success) {
             createANewDefaultCompetitionUnit(event, response.data.id);
+            createDefaultCourse(event);
         }
+    }
+
+    const createDefaultCourse = async (event) => {
+        await createCourse(event.id, 'Default Course', []);
     }
 
     const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
@@ -223,7 +236,6 @@ export const MyEventForm = () => {
         } else {
             form.setFieldsValue({ approximateEndTime_zone: currentTimezone })
         }
-
 
         // Get address
         if (shouldFetchAddress) {
@@ -585,6 +597,7 @@ export const MyEventForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
+            <ImportEventDataModal calendarEventId={event.id} showModal={showImportEventModal} setShowModal={setShowImportEventModal} />
             <AssignEventAsGroupAdminModal showModal={showAssignModal} event={event} setShowModal={setShowAssignModal} />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
@@ -598,7 +611,7 @@ export const MyEventForm = () => {
                         <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                <ActionButtons event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} showAssignEventAsGroupAdminModal={showAssignEventAsGroupAdminModal} />
+                <ActionButtons setShowImportEventModal={setShowImportEventModal} event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} showAssignEventAsGroupAdminModal={showAssignEventAsGroupAdminModal} />
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSavingEvent}>
@@ -612,8 +625,10 @@ export const MyEventForm = () => {
                             startDate: moment(),
                             startTime: moment(new Date()).add(1, 'h'),
                             approximateStartTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                            approximateEndTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                             endDate: moment().add(2, 'days'),
-                            endTime: moment({ hour: 0, minute: 0, second: 0 })
+                            endTime: moment({ hour: 0, minute: 0, second: 0 }),
+                            isOpen: true
                         }}
                     >
                         <FormItemEventNameDescription />
@@ -628,7 +643,7 @@ export const MyEventForm = () => {
 
                         <FormItemStartDate dateLimiter={dateLimiter} error={error} handleFieldChange={handleFieldChange} renderErrorField={renderErrorField} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItemEndLocationAddress address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
+                        <FormItemEndLocationAddress mode={mode} event={event} address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
                         <FormItemEndDate renderErrorField={renderErrorField} error={error} handleFieldChange={handleFieldChange} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
@@ -644,13 +659,13 @@ export const MyEventForm = () => {
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
-                                {t(translations.my_event_create_update_page.save_event)}
+                                {t((event.status === EventState.DRAFT || mode === MODE.CREATE) ? translations.my_event_create_update_page.save_draft : translations.my_event_create_update_page.save_event)}
                             </SyrfFormButton>
                         </Form.Item>
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <EventChildLists eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
+            <EventChildLists reloadParent={reloadParent} setEvent={setEvent} eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
             <ReactTooltip />
         </Wrapper>
     )

@@ -1,5 +1,4 @@
 import { call, put, takeLatest } from "@redux-saga/core/effects";
-import { toast } from "react-toastify";
 import { getMembers, getAdmins, getGroupById, searchMembers } from "services/live-data-server/groups";
 import { showToastMessageOnRequestError } from "utils/helpers";
 import { groupDetailActions } from ".";

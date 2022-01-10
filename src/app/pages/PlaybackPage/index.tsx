@@ -19,6 +19,7 @@ import { Share } from "./components/Share";
 import { FullScreen } from './components/FullScreen';
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export const PlaybackPage = (props) => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "" });
@@ -83,6 +84,7 @@ export const PlaybackPage = (props) => {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competitionUnitDetail, searchRaceData, playbackType]);
 
   useEffect(() => {
@@ -128,7 +130,7 @@ export const PlaybackPage = (props) => {
             <PageHeadingContainer>
               <div>
                 <PageHeading>{raceIdentity.name}</PageHeading>
-                {raceIdentity.eventName && <span>{t(translations.playback_page.event)} {raceIdentity.eventName}</span>}
+                {raceIdentity.eventName && <span>{t(translations.playback_page.event)} <Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{raceIdentity.eventName}</Link></span>}
                 {raceIdentity.description && <PageDescription>{raceIdentity.description}</PageDescription>}
               </div>
 

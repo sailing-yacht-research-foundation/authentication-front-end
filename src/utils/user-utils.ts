@@ -36,7 +36,7 @@ export const getProfilePicture = (user) => {
  * @returns 
  */
 export const checkForVerifiedField = (user, field) => {
-    return field === 'email' ? user.emailVerified : user.attributes?.phoneNumberVerified;
+    return field === 'email' ? user.emailVerified : user.phone_number_verified;
 }
 
 export const renderAvatar = (picture) => {

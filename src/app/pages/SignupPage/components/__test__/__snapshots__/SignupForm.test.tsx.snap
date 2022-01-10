@@ -11,7 +11,6 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
     <ForwardRef(InternalForm)
       initialValues={
         Object {
-          "birthdate": "2002-01-01T00:00:00.000Z",
           "email": "",
           "language": "en",
           "locale": "us",
@@ -158,32 +157,6 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
           autoCorrect="off"
           iconRender={[Function]}
           visibilityToggle={true}
-        />
-      </FormItem>
-      <FormItem
-        label="Date of Birth"
-        name="birthdate"
-        rules={
-          Array [
-            Object {
-              "type": "date",
-            },
-            Object {
-              "message": "Birth date is required.",
-              "required": true,
-            },
-          ]
-        }
-      >
-        <Picker
-          dateRender={[Function]}
-          disabledDate={[Function]}
-          showToday={false}
-          style={
-            Object {
-              "width": "100%",
-            }
-          }
         />
       </FormItem>
       <Divider />
@@ -1586,6 +1559,21 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
           value={1}
         >
           Agree that my provided email address is only used by me
+        </Checkbox>
+      </FormItem>
+      <FormItem
+        name="over_18"
+        rules={
+          Array [
+            Object {
+              "validator": [Function],
+            },
+          ]
+        }
+        valuePropName="checked"
+      >
+        <Checkbox>
+          I'm over 18 or have guardian's consent
         </Checkbox>
       </FormItem>
       <FormItem>

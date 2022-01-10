@@ -51,7 +51,8 @@ export const MyTrackList = () => {
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
                             }
-                            <Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>
+                            {!record?.event.isPrivate ? (<Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{[record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ')}</Link>) :
+                                (<Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>)}
                         </FlexWrapper>
                     );
                 return (
@@ -173,10 +174,10 @@ export const MyTrackList = () => {
 
     return (
         <>
-            <DeleteTrackModal 
-                onTrackDeleted={onTrackDeleted} 
-                track={track} 
-                showDeleteModal={showDeleteModal} 
+            <DeleteTrackModal
+                onTrackDeleted={onTrackDeleted}
+                track={track}
+                showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal} />
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
