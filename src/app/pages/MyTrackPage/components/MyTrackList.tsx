@@ -18,6 +18,7 @@ import GPXIcon from '../assets/gpx.png';
 import ReactTooltip from 'react-tooltip';
 import { BiTrash } from 'react-icons/bi';
 import { DeleteTrackModal } from './DeleteTrackModal';
+import { milisecondsToMinutes } from 'utils/helpers';
 
 const defaultOptions = {
     loop: true,
@@ -96,6 +97,10 @@ export const MyTrackList = () => {
             dataIndex: 'trackJson',
             key: 'trackJson.totalTraveledDistance',
             render: (_value, source) => {
+                if (source?.trackJson?.startTime && source?.trackJson?.endTime) {
+                    return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format("HH:mm:ss")
+                }
+
                 const totalTraveledDistance = source?.trackJson?.totalTraveledDistance;
                 return totalTraveledDistance ? `${totalTraveledDistance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} NMi` : '-';
             }
