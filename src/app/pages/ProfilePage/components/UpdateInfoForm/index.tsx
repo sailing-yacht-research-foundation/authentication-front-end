@@ -5,13 +5,11 @@ import { Form, Spin } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
-import Auth from '@aws-amplify/auth';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString, showToastMessageOnRequestError } from 'utils/helpers';
 import { PrivateUserInformation } from './PrivateUserInformation';
 import { toast } from 'react-toastify';
 import { PublicUserInformation } from './PublicUserInformation';
-import { VerifyPhoneModal } from './VerifyPhoneModal';
 import { EditEmailChangeModal } from './EditEmailChangeModal';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
@@ -34,11 +32,7 @@ export const UpdateInfo = (props) => {
 
     const { authUser } = props;
 
-    const [showPhoneVerifyModal, setShowPhoneVerifyModal] = useState<boolean>(false);
-
     const [address, setAddress] = React.useState<string>(getUserAttribute(authUser, 'address') || '');
-
-    const [phoneVerifyModalMessage, setPhoneVerifyModalMessage] = React.useState<string>('');
 
     const [showEmailChangeAlertModal, setShowEmailChangeAlertModal] = React.useState<boolean>(false);
 
@@ -104,14 +98,6 @@ export const UpdateInfo = (props) => {
         setFormFieldsBeforeUpdate(defaultFormFields);
         setFormHasBeenChanged(false);
     }
-    
-    const sendPhoneVerification = () => {
-        Auth.verifyCurrentUserAttribute('phone_number').then(() => {
-            toast.success(t(translations.profile_page.update_profile.you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number));
-        }).catch(error => {
-            toast.error(error.message);
-        });
-    }
 
     return (
         <Wrapper>
@@ -125,15 +111,6 @@ export const UpdateInfo = (props) => {
                 setFormFieldsBeforeUpdate={setFormFieldsBeforeUpdate}
                 showEmailChangeAlertModal={showEmailChangeAlertModal}
             />
-
-            <VerifyPhoneModal
-                showPhoneVerifyModal={showPhoneVerifyModal}
-                sendPhoneVerification={sendPhoneVerification}
-                setShowPhoneVerifyModal={setShowPhoneVerifyModal}
-                message={phoneVerifyModalMessage}
-                setPhoneVerifyModalMessage={setPhoneVerifyModalMessage}
-                cancelUpdateProfile={props.cancelUpdateProfile} />
-
             <SyrfFormWrapper className="no-background">
                 <Spin spinning={isUpdatingProfile} tip={t(translations.profile_page.update_profile.updating_your_profile)}>
                     <Form
@@ -164,9 +141,7 @@ export const UpdateInfo = (props) => {
                             cancelUpdateProfile={props.cancelUpdateProfile} />
 
                         <PrivateUserInformation
-                            setShowPhoneVerifyModal={setShowPhoneVerifyModal}
                             address={address} setAddress={setAddress}
-                            sendPhoneVerification={sendPhoneVerification}
                             authUser={authUser} />
 
                         <Form.Item>

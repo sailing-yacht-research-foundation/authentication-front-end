@@ -12,9 +12,15 @@ import { SimpleVideoPlane } from 'app/pages/AboutPage/components/SimpleVideoPlan
 export const LeftPanel = () => {
     const { t } = useTranslation();
 
+    const [autoplaySupported, setAutoPlaySupported] = React.useState<boolean>(false);
+
+    React.useEffect(() => {
+        Modernizr.on('videoautoplay', (result) => setAutoPlaySupported(!!result));
+    }, []);
+
     return (
         <Wrapper>
-            <SimpleVideoPlane />
+            {autoplaySupported ? <SimpleVideoPlane /> : <Background />}
             <ContentWrapper>
                 <Title>{t(translations.login_page.leftpanel_title)}</Title>
                 <Description>
@@ -68,4 +74,17 @@ const PartnerLogoImage = styled.img`
 const ContentWrapper = styled.div`
     position: relative;
     z-index: 11;
-`
+`;
+
+const Background = styled.div`
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('/syrf-background.jpg');
+    background-color:rgba(0, 0, 0, 0.9);
+    top:0;
+    left:0;
+    bottom:0;
+    right: 0;
+`;
