@@ -97,10 +97,6 @@ export const MyTrackList = () => {
             dataIndex: 'trackJson',
             key: 'trackJson.totalTraveledDistance',
             render: (_value, source) => {
-                if (source?.trackJson?.startTime && source?.trackJson?.endTime) {
-                    return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format("HH:mm:ss")
-                }
-
                 const totalTraveledDistance = source?.trackJson?.totalTraveledDistance;
                 return totalTraveledDistance ? `${totalTraveledDistance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} NMi` : '-';
             }
@@ -111,6 +107,10 @@ export const MyTrackList = () => {
             key: 'competitionUnit.elapsedTime',
             render: (_value, source) => {
                 if (!source?.competitionUnit?.isCompleted) return 'in progress';
+
+                if (source?.trackJson?.startTime && source?.trackJson?.endTime) {
+                    return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format("HH:mm:ss")
+                }
 
                 const startTime = new Date(source?.competitionUnit?.startTime).getTime();
                 const endTime = new Date(source?.competitionUnit?.endTime).getTime();
