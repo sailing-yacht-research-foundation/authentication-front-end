@@ -57,16 +57,19 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
     }));
 
     const getAll = async () => {
-      const response = await getAllTracks(1, 1000000);
-      if (response.success) {
-        const list = response?.data?.rows;
-        const listData = list.map((data) => {
-          const competitionUnit = data.competitionUnit;
-          return competitionUnit;
-        });
-  
-        setResults(listData);
-      }
+        const response = await getAllTracks(1, 1000000);
+        if (response.success) {
+            const list = response?.data?.rows;
+            const listData = list.map((data) => {
+                const competitionUnit = data.competitionUnit;
+                return {
+                    ...competitionUnit,
+                    event: data.event
+                };
+            });
+
+            setResults(listData);
+        }
     };
 
     const zoomToCurrentUserLocation = (type: string) => {
@@ -191,10 +194,12 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
     }, [isFocusingOnSearchInput]);
 
     const renderRacePopup = (race) => {
-        console.log(race);
         return (
             <>
-                <div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>
+                {
+                    race.event.isPrivate ? (<div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>) :
+                        (<div>{t(translations.home_page.map_view_tab.name)} {[race.event?.name, race.name].filter(Boolean).join(' - ')}</div>)
+                }
                 <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStart).format(TIME_FORMAT.date_text)}</div>
                 {race.description && <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race.description)}</div>}
                 {race.city && <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race.city)}</div>}
