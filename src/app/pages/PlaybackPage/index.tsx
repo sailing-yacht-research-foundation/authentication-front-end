@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export const PlaybackPage = (props) => {
-  const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "" });
+  const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
   const location = useLocation();
   const parsedQueryString: any = queryString.parse(
     location.search.includes("?") ? location.search.substring(1) : location.search
@@ -80,7 +80,8 @@ export const PlaybackPage = (props) => {
         setRaceIdentity({
           name: competitionUnitDetail?.name,
           description: competitionUnitDetail?.description,
-          eventName: competitionUnitDetail?.calendarEvent?.name
+          eventName: competitionUnitDetail?.calendarEvent?.name,
+          isTrackNow: competitionUnitDetail?.calendarEvent?.isPrivate
         });
       }
     }
@@ -130,7 +131,7 @@ export const PlaybackPage = (props) => {
             <PageHeadingContainer>
               <div>
                 <PageHeading>{raceIdentity.name}</PageHeading>
-                {raceIdentity.eventName && <span>{t(translations.playback_page.event)} <Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{raceIdentity.eventName}</Link></span>}
+                {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{raceIdentity.eventName}</Link></span>}
                 {raceIdentity.description && <PageDescription>{raceIdentity.description}</PageDescription>}
               </div>
 
