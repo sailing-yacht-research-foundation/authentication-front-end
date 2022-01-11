@@ -18,7 +18,6 @@ import GPXIcon from '../assets/gpx.png';
 import ReactTooltip from 'react-tooltip';
 import { BiTrash } from 'react-icons/bi';
 import { DeleteTrackModal } from './DeleteTrackModal';
-import { milisecondsToMinutes } from 'utils/helpers';
 
 const defaultOptions = {
     loop: true,
@@ -109,7 +108,7 @@ export const MyTrackList = () => {
                 if (!source?.competitionUnit?.isCompleted) return 'in progress';
 
                 if (source?.trackJson?.startTime && source?.trackJson?.endTime) {
-                    return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format("HH:mm:ss")
+                    return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format(TIME_FORMAT.time)
                 }
 
                 const startTime = new Date(source?.competitionUnit?.startTime).getTime();
