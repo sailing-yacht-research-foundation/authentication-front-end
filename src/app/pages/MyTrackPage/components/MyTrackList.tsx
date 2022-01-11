@@ -107,6 +107,10 @@ export const MyTrackList = () => {
             render: (_value, source) => {
                 if (!source?.competitionUnit?.isCompleted) return 'in progress';
 
+                if (source?.trackJson?.startTime && source?.trackJson?.endTime) {
+                    return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format(TIME_FORMAT.time)
+                }
+
                 const startTime = new Date(source?.competitionUnit?.startTime).getTime();
                 const endTime = new Date(source?.competitionUnit?.endTime).getTime();
 
