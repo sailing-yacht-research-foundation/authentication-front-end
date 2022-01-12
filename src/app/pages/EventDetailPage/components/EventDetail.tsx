@@ -20,6 +20,7 @@ import { FiEdit } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { RegisterEventModal } from 'app/components/RegisterEventModal';
+import { VesselList } from './VesselList';
 
 let userId;
 
@@ -174,6 +175,10 @@ export const EventDetail = () => {
                 <>
                     <EventSection>
                         <RaceList editors={editors} event={event} />
+                    </EventSection>
+
+                    <EventSection>
+                        <VesselList event={event} />
                     </EventSection>
 
                     <EventSection>

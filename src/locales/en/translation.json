@@ -634,7 +634,8 @@
     "block_participant": "Block Participant",
     "are_you_sure_you_want_to_block_this_participant": "Are you sure you want to block this participant.",
     "successfully_blocked_this_participant": "Successfully blocked this participant.",
-    "status": "Status"
+    "status": "Status",
+    "crew": "Crews"
   },
   "participant_unit_create_update_page": {
     "created_a_new_participant": "Created a new competitor with name: {{name}}.",
@@ -703,7 +704,8 @@
     "update_this_event": "Edit this event",
     "share": "Share",
     "event_not_found": "Event not found!",
-    "admins": "Admins"
+    "admins": "Admins",
+    "boats": "Boats participate in this event"
   },
   "my_tracks_page": {
     "my_tracks": "My Tracks",
