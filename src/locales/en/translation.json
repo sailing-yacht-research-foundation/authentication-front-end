@@ -368,7 +368,7 @@
     "status": "Status",
     "invitation": "Invitation",
     "invited_at": "Invited At",
-    "register_for": "Register for {{eventName}}",
+    "register_for": "Register for {{raceName}}",
     "select_a_boat": "Select a boat",
     "select_a_class": "Select a class",
     "please_select_a_class_to_join_this_event": "Please select a class to join this event.",

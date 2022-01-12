@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
-import { RegisterEventModal } from 'app/components/RegisterEventModal';
+import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { CreateButton } from 'app/components/SyrfGeneral';
@@ -37,10 +37,10 @@ export const ResultItem = (props) => {
 
     return (
         <>
-            <RegisterEventModal
+            <RegisterRaceModal
                 showModal={showRegisterModal}
                 setShowModal={setShowRegisterModal}
-                eventName={race._source?.name}
+                raceName={race._source?.name}
                 lon={race._source?.approx_start_point?.coordinates[0]}
                 lat={race._source?.approx_start_point?.coordinates[1]}
                 raceId={race._source?.id} />

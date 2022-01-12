@@ -13,7 +13,7 @@ import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { FiEdit } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
-import { RegisterEventModal } from 'app/components/RegisterEventModal';
+import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 
 export const RaceList = (props) => {
 
@@ -129,10 +129,10 @@ export const RaceList = (props) => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <RegisterEventModal
+            <RegisterRaceModal
                 showModal={showRegisterModal}
                 setShowModal={setShowRegisterModal}
-                eventName={event.name}
+                raceName={competitionUnit.name}
                 lon={event.lon}
                 lat={event.lat}
                 raceId={competitionUnit.id}
