@@ -71,8 +71,8 @@ export const CriteriaSuggestion = (props) => {
     }
 
     const renderSuggestionCriteria = () => {
-        return suggestionItems.map(criteria => {
-            return <SuggestionCriteria className={selectedCriteria === criteria ? 'active' : ''} onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
+        return suggestionItems.map((criteria, index) => {
+            return <SuggestionCriteria key={index} className={selectedCriteria === criteria ? 'active' : ''} onClick={() => appendCriteria(criteria)}>{criteria}</SuggestionCriteria>
         });
     }
 

@@ -86,7 +86,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
     const renderIndividualEditors = () => {
         const userId: any = localStorage.getItem('user_id');
         return individualEditors.map(editor => {
-            return <EditorItem data-tip={editor?.user?.name}>
+            return <EditorItem key={editor.id} data-tip={editor?.user?.name}>
                 <EditorItemAvatarContainer>
                     <img alt={editor?.user?.name} src={renderAvatar(editor?.user?.avatar)} />
                 </EditorItemAvatarContainer>

@@ -9,6 +9,7 @@ import { UnfollowConfirmModal } from 'app/components/SocialProfile/UnfollowConfi
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
+import { media } from 'styles/media';
 
 export const ResultItem = ({ profile }) => {
 
@@ -83,6 +84,7 @@ const PeopleInfo = styled.div`
 const PeopleAvatar = styled.div`
     width: 45px;
     height: 45px;
+    flex: 0 0 auto;
 `;
 
 const PeopleName = styled(Link)`
@@ -97,7 +99,10 @@ const PeopleInnerWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    flex: 0 0 auto;
 `;
 
-const PeopleAlsoFollow = styled.span``;
+const PeopleAlsoFollow = styled.span`
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+`;

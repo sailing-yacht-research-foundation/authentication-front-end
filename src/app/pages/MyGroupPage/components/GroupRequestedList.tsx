@@ -32,7 +32,7 @@ export const GroupRequestedList = () => {
 
     const renderInvitationItem = () => {
         if (requestedGroups.length > 0)
-            return requestedGroups.map(request => <GroupRequestedItemRow request={request} />);
+            return requestedGroups.map(request => <GroupRequestedItemRow key={request.id} request={request} />);
         return <EmptyInvitationMessage>{t(translations.group.you_have_not_requested_to_join_any_groups)}</EmptyInvitationMessage>
     }
 

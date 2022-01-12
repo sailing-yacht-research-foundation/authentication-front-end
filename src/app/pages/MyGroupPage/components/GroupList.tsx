@@ -56,6 +56,7 @@ export const GroupList = () => {
     const renderGroupItems = () => {
         if (groups.length > 0)
             return groups.map(group => <GroupItemRow
+                key={group.id}
                 showGroupButton={false}
                 memberCount={group.memberCount}
                 group={group?.group}
@@ -68,6 +69,7 @@ export const GroupList = () => {
     const renderGroupResults = () => {
         if (results.length > 0)
             return results.map(group => <GroupItemRow
+                key={group.id}
                 memberCount={group.memberCount}
                 status={group.userStatus}
                 showGroupButton={true}

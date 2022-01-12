@@ -42,8 +42,7 @@ export const RaceList = (props) => {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
             render: (text, record) => {
-                const userId = localStorage.getItem('user_id');
-                if (props?.editors?.includes(userId))
+                if (event.isEditor)
                     return <Space size="middle">
                         <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);

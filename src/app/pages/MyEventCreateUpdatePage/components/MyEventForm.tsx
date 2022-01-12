@@ -293,6 +293,11 @@ export const MyEventForm = () => {
         setIsSavingEvent(false);
 
         if (response.success) {
+
+            if (!response.data?.isEditor) {
+                toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
+            }
+
             form.setFieldsValue({
                 ...response.data,
                 startDate: moment(response.data?.approximateStartTime),

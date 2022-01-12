@@ -47,12 +47,14 @@ export const RaceList = (props) => {
             key: 'action',
             render: (text, record) => {
                 return (<Space size="middle">
-                {record?.id
-                    && record?.status === RaceStatus.ON_GOING && <ExpeditionServerActionButtons competitionUnit={record} />}
-                <BorderedButton onClick={() => {
-                    history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
-                }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-            </Space>)
+                    {record?.id
+                        && record?.status === RaceStatus.ON_GOING && <ExpeditionServerActionButtons competitionUnit={record} />}
+                    {
+                        event.isEditor && <BorderedButton onClick={() => {
+                            history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
+                        }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
+                    }
+                </Space>)
             }
         },
     ];

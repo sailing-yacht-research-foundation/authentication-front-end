@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
-import { downloadIcalendarFile, get, getEditors } from 'services/live-data-server/event-calendars';
+import { downloadIcalendarFile, get } from 'services/live-data-server/event-calendars';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -16,8 +16,6 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
 import { AiOutlineCalendar } from 'react-icons/ai';
-
-let userId;
 
 export const EventDetail = () => {
 
@@ -34,11 +32,8 @@ export const EventDetail = () => {
 
     const { t } = useTranslation();
 
-    const [editors, setEditors] = React.useState<string[]>([]);
-
     React.useEffect(() => {
         fetchEvent();
-        userId = localStorage.getItem('user_id'); // get userId everytime the component renders.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -63,11 +58,6 @@ export const EventDetail = () => {
                 });
             } else {
                 setEndCoordinates(null);
-            }
-
-            const editorResponse = await getEditors(data.id);
-            if (editorResponse.success) {
-                setEditors(editorResponse?.data?.individualEditors.map(editor => editor?.user?.id));
             }
         } else {
             message.error(t(translations.event_detail_page.event_not_found));
@@ -109,9 +99,7 @@ export const EventDetail = () => {
                 <EventActions>
                     <Space>
                         {
-                            editors.includes(userId) && (
-                                <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
-                            )
+                            event.isEditor && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                         }
                         <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
                             downloadIcalendarFile(event);
@@ -142,7 +130,7 @@ export const EventDetail = () => {
             {event.id &&
                 <>
                     <EventSection>
-                        <RaceList editors={editors} event={event} />
+                        <RaceList event={event} />
                     </EventSection>
 
                     <EventSection>
