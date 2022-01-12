@@ -1,8 +1,9 @@
 import React from 'react';
 import { Form } from 'antd';
-import { SyrfFieldLabel, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { AssignAdminsFormItem } from './AssignAdminsFormItem';
 
 export const FormItemEventNameDescription = () => {
 
@@ -33,6 +34,8 @@ export const FormItemEventNameDescription = () => {
             >
                 <SyrfTextArea autoCorrect="off" />
             </Form.Item>
+
+            <AssignAdminsFormItem />
         </>
     )
 }

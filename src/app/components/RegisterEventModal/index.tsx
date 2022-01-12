@@ -13,7 +13,7 @@ export const RegisterEventModal = (props) => {
 
     const { t } = useTranslation();
 
-    const { showModal, setShowModal, competition } = props;
+    const { showModal, setShowModal, eventName, eventId, lon, lat } = props;
 
     const [boats, setBoats] = React.useState<any[]>([]);
 
@@ -46,7 +46,7 @@ export const RegisterEventModal = (props) => {
         const { vesselId } = values;
 
         setIsLoading(true);
-        const response = await joinCompetitionUnit(competition.id, vesselId, competition?.approx_start_point?.coordinates[0], competition?.approx_start_point?.coordinates[1]);
+        const response = await joinCompetitionUnit(eventId, vesselId, lon, lat);
         setIsLoading(false);
 
         if (response.success) {
@@ -64,7 +64,7 @@ export const RegisterEventModal = (props) => {
     }, [showModal]);
 
     return (<Modal
-        title={t(translations.my_event_list_page.register_for, { eventName: competition?.name })}
+        title={t(translations.my_event_list_page.register_for, { eventName: eventName })}
         bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
         visible={showModal}
         footer={null}

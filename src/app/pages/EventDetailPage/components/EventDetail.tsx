@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, message, Space, Spin, Tag } from 'antd';
-import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { CreateButton, GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
@@ -16,6 +16,10 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
 import { AiOutlineCalendar } from 'react-icons/ai';
+import { FiEdit } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { RegisterEventModal } from 'app/components/RegisterEventModal';
 
 let userId;
 
@@ -35,6 +39,10 @@ export const EventDetail = () => {
     const { t } = useTranslation();
 
     const [editors, setEditors] = React.useState<string[]>([]);
+
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+
+    const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         fetchEvent();
@@ -93,8 +101,24 @@ export const EventDetail = () => {
         only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
     }
 
+    const showRegiterModalOrRedirect = () => {
+        if (isAuthenticated) {
+            setShowRegisterModal(true);
+        } else {
+            history.push('/signin');
+        }
+    }
+
     return (
         <Spin spinning={isFetchingEvent}>
+            <RegisterEventModal
+                showModal={showRegisterModal}
+                setShowModal={setShowRegisterModal}
+                eventName={event.name}
+                lon={event.lon}
+                lat={event.lat}
+                eventId={eventId}
+                 />
             <PageHeaderContainerResponsive>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => goBack()}>
@@ -127,10 +151,17 @@ export const EventDetail = () => {
 
             <EventDescriptionContainer>
                 <EventSection>
-                    <EventSectionHeading>{t(translations.event_detail_page.about_this_event)}</EventSectionHeading>
+                    <EventSectionHeadingContainer>
+                        <EventSectionHeading>{t(translations.event_detail_page.about_this_event)}</EventSectionHeading>
+                        {
+                            event.isOpen && event.allowRegistration && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={showRegiterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
+                        }
+                    </EventSectionHeadingContainer>
+
                     <EventDescription>
                         {event.description ? event.description : t(translations.home_page.filter_tab.filter_result.no_description)}
                     </EventDescription>
+
                     <EventOpenRegistrationContainer>
                         {event?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
                         {event?.isOpen && <StyledTag data-tip={translate.anyone_canview} color="purple">{translate.status_public}</StyledTag>}
@@ -185,8 +216,12 @@ const EventDescription = styled.p`
     margin-bottom: 0px;
 `;
 
-const EventSectionHeading = styled.h3`
+const EventSectionHeading = styled.h3``;
 
+const EventSectionHeadingContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const EventSection = styled.div`

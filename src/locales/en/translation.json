@@ -366,7 +366,7 @@
     "status_privateevent": "Private Event",
     "admins": "Admins",
     "status": "Status",
-    "invitation": "Invitation",
+    "invitations": "Invitations",
     "invited_at": "Invited At",
     "register_for": "Register for {{eventName}}",
     "select_a_boat": "Select a boat",
@@ -501,7 +501,10 @@
     "stop": "Stop",
     "stop_this_event": "Stop This Event",
     "are_you_sure_you_want_to_stop_this_event": "Are you really sure you want to stop this event? All races are on going will be stopped. Do you want to continue?",
-    "successfully_stopped_this_event": "Successfully stopped this event."
+    "successfully_stopped_this_event": "Successfully stopped this event.",
+    "editors": "Editors",
+    "group_members_assignment": "Group members assignment",
+    "group_assignment": "Group assignment"
   },
   "course_list": {
     "name": "Name",
@@ -796,7 +799,7 @@
     "group_visibility": "The visibility of this group towards other sailors.",
     "group_type": "Type of this group.",
     "delete_this_track": "Delete this track",
-    "set_this_event_as_group_admin": "Set or assign admins for this event.",
+    "set_admins_for_this_event": "Set or assign admins for this event.",
     "status": "Status of an event",
     "schedule_event": "Start to schedule this event.",
     "click_to_make_this_event_open_for_registration": "Click to make this event open for registration.",
