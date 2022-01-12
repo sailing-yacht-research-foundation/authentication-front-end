@@ -296,6 +296,7 @@ export const MyEventForm = () => {
 
             if (!response.data?.isEditor) {
                 toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
+                history.push('/events');
             }
 
             form.setFieldsValue({

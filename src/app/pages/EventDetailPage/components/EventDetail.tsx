@@ -121,7 +121,6 @@ export const EventDetail = () => {
                     </EventDescription>
                     <EventOpenRegistrationContainer>
                         {event?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
-                        {event?.isOpen && <StyledTag data-tip={translate.anyone_canview} color="purple">{translate.status_public}</StyledTag>}
                         {!event?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
                     </EventOpenRegistrationContainer>
                 </EventSection>
