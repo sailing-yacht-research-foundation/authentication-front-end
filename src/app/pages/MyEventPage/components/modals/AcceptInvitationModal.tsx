@@ -85,6 +85,7 @@ export const AcceptInvitationModal = (props) => {
             getEventClasses();
             getUserBoats();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [request]);
 
     return (<Modal

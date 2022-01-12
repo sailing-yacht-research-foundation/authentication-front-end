@@ -5,7 +5,6 @@ import {
     SyrfInputField,
 } from 'app/components/SyrfForm';
 import { toast } from 'react-toastify';
-import styled from 'styled-components';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { showToastMessageOnRequestError } from 'utils/helpers';
@@ -85,8 +84,3 @@ export const VerifyPhoneModal = (props) => {
         </Modal>
     )
 }
-
-const ModalMessage = styled.div`
-    margin: 0 5px;
-    margin-bottom: 15px;
-`;

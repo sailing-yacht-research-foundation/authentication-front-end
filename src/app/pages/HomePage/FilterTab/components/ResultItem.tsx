@@ -38,9 +38,12 @@ export const ResultItem = (props) => {
     return (
         <>
             <RegisterEventModal
-                competition={race._source}
                 showModal={showRegisterModal}
-                setShowModal={setShowRegisterModal} />
+                setShowModal={setShowRegisterModal}
+                eventName={race._source?.name}
+                lon={race._source?.approx_start_point?.coordinates[0]}
+                lat={race._source?.approx_start_point?.coordinates[1]}
+                raceId={race._source?.id} />
             <Wrapper key={props.index}>
                 {race._source?.start_country && <HeadDescriptionWrapper>
                     <Space size={5}>

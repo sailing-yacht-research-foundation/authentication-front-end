@@ -9,7 +9,6 @@ import { UnfollowConfirmModal } from 'app/components/SocialProfile/UnfollowConfi
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
-import { media } from 'styles/media';
 
 export const ResultItem = ({ profile }) => {
 

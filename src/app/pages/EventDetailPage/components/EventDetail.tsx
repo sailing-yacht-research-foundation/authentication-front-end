@@ -172,9 +172,7 @@ const EventDescription = styled.p`
     margin-bottom: 0px;
 `;
 
-const EventSectionHeading = styled.h3`
-
-`;
+const EventSectionHeading = styled.h3``;
 
 const EventSection = styled.div`
     padding: 10px 15px;
