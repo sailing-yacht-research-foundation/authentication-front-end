@@ -19,7 +19,7 @@ export const RaceList = (props) => {
 
     const { t } = useTranslation();
 
-    const { event } = props;
+    const { event, canManageEvent } = props;
 
     const columns = [
         {
@@ -46,7 +46,7 @@ export const RaceList = (props) => {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
             render: (text, record) => {
-                if (event.isEditor)
+                if (canManageEvent())
                     return <Space size="middle">
                         {event.isOpen && event.allowRegistration && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegiterModalOrRedirect(record)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
                         <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {

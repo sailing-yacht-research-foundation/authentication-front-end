@@ -4,7 +4,7 @@ import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } fr
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
-import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
+import { EventState, MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
 import { downloadIcalendarFile, get } from 'services/live-data-server/event-calendars';
@@ -83,6 +83,10 @@ export const EventDetail = () => {
         only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
     }
 
+    const canManageEvent = () => {
+        return event.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(event.status);
+    }
+
     return (
         <Spin spinning={isFetchingEvent}>
             <PageHeaderContainerResponsive>
@@ -99,7 +103,7 @@ export const EventDetail = () => {
                 <EventActions>
                     <Space>
                         {
-                            event.isEditor && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
+                            canManageEvent() && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                         }
                         <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
                             downloadIcalendarFile(event);
@@ -129,7 +133,7 @@ export const EventDetail = () => {
             {event.id &&
                 <>
                     <EventSection>
-                        <RaceList event={event} />
+                        <RaceList canManageEvent={canManageEvent} event={event} />
                     </EventSection>
 
                     <EventSection>

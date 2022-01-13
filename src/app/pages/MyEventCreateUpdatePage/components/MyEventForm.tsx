@@ -33,7 +33,7 @@ import { FormItemEndLocationAddress } from './FormItemEndLocationAddress';
 import { FormItemStartDate } from './FormItemStartDate';
 import { FormItemEndDate } from './FormItemEndDate';
 import { ImportEventDataModal } from './modals/ImportEventDataModal';
-import { create as createCourse} from 'services/live-data-server/courses';
+import { create as createCourse } from 'services/live-data-server/courses';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -287,6 +287,22 @@ export const MyEventForm = () => {
         }
     }
 
+    const canManageEvent = (event) => {
+        if (!event.isEditor) {
+            toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
+            history.push('/events');
+            return false;
+        }
+
+        if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status)) {
+            toast.info(t(translations.my_event_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
+            history.push('/events');
+            return false;
+        }
+
+        return true;
+    }
+
     const initData = async () => {
         setIsSavingEvent(true);
         const response = await get(eventId || event?.id);
@@ -294,10 +310,7 @@ export const MyEventForm = () => {
 
         if (response.success) {
 
-            if (!response.data?.isEditor) {
-                toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
-                history.push('/events');
-            }
+            if (!canManageEvent(response.data)) return;
 
             form.setFieldsValue({
                 ...response.data,

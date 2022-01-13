@@ -115,7 +115,7 @@ export const EventList = () => {
             <AiOutlineCalendar />
           </DownloadButton>
           {
-            record.isEditor && <>
+            record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status) && <>
               <BorderedButton onClick={() => {
                 history.push(`/events/${record.id}/update`)
               }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
