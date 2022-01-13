@@ -53,7 +53,7 @@ export const GroupInvitationList = () => {
 
     const renderInvitationItem = () => {
         if (pagination.rows.length > 0)
-            return pagination.rows.map(request => <GroupInvitationItemRow reloadParentList={reloadParentList} setIsLoading={setIsLoading} request={request} />);
+            return pagination.rows.map(request => <GroupInvitationItemRow key={request.id} reloadParentList={reloadParentList} setIsLoading={setIsLoading} request={request} />);
         return <EmptyInvitationMessage>{t(translations.group.you_dont_have_any_invitations_right_now)}</EmptyInvitationMessage>
     }
 

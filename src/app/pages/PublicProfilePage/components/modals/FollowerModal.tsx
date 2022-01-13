@@ -24,7 +24,7 @@ export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent
 
     const renderFollowers = () => {
         return followers.map(follower => {
-            return <UserFollowerFollowingRow setPerformedAction={setPerformedAction} profile={follower} profileId={follower.followerId} />
+            return <UserFollowerFollowingRow key={follower.followerId} setPerformedAction={setPerformedAction} profile={follower} profileId={follower.followerId} />
         })
     }
 

@@ -25,7 +25,7 @@ export const InfluencerModal = (props) => {
     const location = useLocation();
 
     const renderProfiles = () => {
-        return pagination.rows.map(profile => <UserFollowerFollowingRow profile={profile} profileId={profile.id} />);
+        return pagination.rows.map(profile => <UserFollowerFollowingRow key={profile.id} profile={profile} profileId={profile.id} />);
     }
 
     const [pagination, setPagination] = React.useState<any>({

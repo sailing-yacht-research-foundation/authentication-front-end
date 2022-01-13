@@ -58,11 +58,11 @@ export const AcceptInvitationModal = (props) => {
     }
 
     const renderBoatsList = () => {
-        return boats.map(item => <Select.Option value={item.id}>{item.publicName}</Select.Option>)
+        return boats.map(item => <Select.Option key={item.id} value={item.id}>{item.publicName}</Select.Option>)
     }
 
     const renderClassesList = () => {
-        return classes.map(item => <Select.Option value={item.id}>{item.name}</Select.Option>)
+        return classes.map(item => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)
     }
 
     const onFinish = async (values) => {
@@ -85,6 +85,7 @@ export const AcceptInvitationModal = (props) => {
             getEventClasses();
             getUserBoats();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [request]);
 
     return (<Modal

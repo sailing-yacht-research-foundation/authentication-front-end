@@ -38,7 +38,7 @@ export const UserApprovalModal = (props) => {
     }
 
     const renderAdmins = () => {
-        return pagination.rows.map(item => <UserItemRow item={item} buttons={renderActionButtons(item)} />);
+        return pagination.rows.map((item, index) => <UserItemRow key={index} item={item} buttons={renderActionButtons(item)} />);
     }
 
     const onPaginationChanged = (page) => {

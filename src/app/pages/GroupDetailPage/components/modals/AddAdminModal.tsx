@@ -64,7 +64,7 @@ export const AddAdminModal = (props) => {
     }
 
     const renderSearchResults = () => {
-        return results.map(member => <Select.Option value={member.id}>{member.member?.name} {member.email}</Select.Option>)
+        return results.map(member => <Select.Option key={member.id} value={member.id}>{member.member?.name} {member.email}</Select.Option>)
     }
 
     React.useEffect(() => {

@@ -17,8 +17,6 @@ import { PlaybackOldRace } from "./components/PlaybackOldrace";
 import { PlaybackMobileIssue } from './components/PlaybackMobileIssue';
 import { Share } from "./components/Share";
 import { FullScreen } from './components/FullScreen';
-import { translations } from "locales/translations";
-import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export const PlaybackPage = (props) => {
@@ -41,8 +39,6 @@ export const PlaybackPage = (props) => {
   const { actions } = usePlaybackSlice();
 
   const history = useHistory();
-
-  const { t } = useTranslation();
 
   // Init detail
   useEffect(() => {
