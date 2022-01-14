@@ -92,14 +92,6 @@ export const ActionButtons = ({
             isDelete: false,
         },
         {
-            name: t(translations.my_event_create_update_page.assign_admins),
-            show: true,
-            icon: <GrGroup />,
-            spinning: false,
-            handler: () => showAssignEventAsGroupAdminModal(),
-            isDelete: false,
-        },
-        {
             name: t(translations.my_event_create_update_page.cancel_event),
             show: event.status === EventState.SCHEDULED,
             icon: <MdFreeCancellation />,

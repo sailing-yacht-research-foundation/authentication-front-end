@@ -508,7 +508,10 @@
     "group_members_assignment": "Group members assignment",
     "group_assignment": "Group assignment",
     "your_not_the_event_editor_therefore_you_cannot_edit_the_event": "You're not the event editor therefore you cannot edit the event.",
-    "event_is_canceled_or_completed_you_cannot_manage_it_from_this_point": "This event is canceled or completed, you cannot manage it from this point."
+    "event_is_canceled_or_completed_you_cannot_manage_it_from_this_point": "This event is canceled or completed, you cannot manage it from this point.",
+    "invite_groups_or_individual_by_searching_them": "Invite groups or individuals by searching them.",
+    "successfully_invited_your_participants": "Successfully invited {{numberOfCompetitors}} competitors.",
+    "successfully_invited_your_participants_from_group": "Successfully invited {{numberOfCompetitors}} competitors from {{numberOfGroups}} group(s)."
   },
   "course_list": {
     "name": "Name",
@@ -850,7 +853,8 @@
     "email_must_be_valid": "Please input a valid email.",
     "search_keyword_is_required": "Search keyword is required.",
     "group_name_is_required": "Group name is required.",
-    "group_name_must_not_be_longer_than_100_chars": "Group name must not be longer than 100 characters."
+    "group_name_must_not_be_longer_than_100_chars": "Group name must not be longer than 100 characters.",
+    "competitors_are_required": "Competitors are required."
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",
