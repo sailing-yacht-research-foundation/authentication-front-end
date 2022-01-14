@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { AiFillPlusCircle } from 'react-icons/ai';
-import { useHistory } from 'react-router';
 import { Tabs } from 'antd';
 
 import { translations } from 'locales/translations';
-import { CreateButton, PageDescription, PageHeaderContainerSimple, PageHeading, PageInfoContainer } from 'app/components/SyrfGeneral';
+import { PageDescription, PageHeaderContainerSimple, PageHeading, PageInfoContainer } from 'app/components/SyrfGeneral';
 import { EventList } from './EventList';
 import { InvitedEventLists } from './InvitedEventsList';
 import { getMyInvitedEvents } from 'services/live-data-server/participants';
@@ -14,8 +12,6 @@ import { getMyInvitedEvents } from 'services/live-data-server/participants';
 export const MyEvents = () => {
 
     const { t } = useTranslation();
-
-    const history = useHistory();
 
     const [numberOfInvitations, setNumberOfInvitation] = React.useState<number>(0);
 

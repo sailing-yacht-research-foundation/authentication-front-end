@@ -16,8 +16,6 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
 import { AiOutlineCalendar } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { VesselList } from './VesselList';
 
 export const EventDetail = () => {
@@ -34,10 +32,6 @@ export const EventDetail = () => {
     const history = useHistory();
 
     const { t } = useTranslation();
-
-    const isAuthenticated = useSelector(selectIsAuthenticated);
-
-    const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         fetchEvent();
@@ -88,14 +82,6 @@ export const EventDetail = () => {
         anyone_canregist: t(translations.tip.anyone_can_register_event_and_tracking),
         anyone_canview: t(translations.tip.anyone_can_search_view_event),
         only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
-    }
-
-    const showRegiterModalOrRedirect = () => {
-        if (isAuthenticated) {
-            setShowRegisterModal(true);
-        } else {
-            history.push('/signin');
-        }
     }
 
     const canManageEvent = () => {

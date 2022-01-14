@@ -1,9 +1,8 @@
 import React from 'react';
 import { Spin, Table, Space } from 'antd';
-import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper, BorderedButton } from 'app/components/SyrfGeneral';
+import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { getEventRegisteredVessels } from 'services/live-data-server/event-calendars';
 import { renderEmptyValue } from 'utils/helpers';
 import styled from 'styled-components';

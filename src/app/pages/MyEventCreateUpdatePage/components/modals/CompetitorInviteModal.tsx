@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Spin, Button, Select, Form } from 'antd';
+import { Modal, Spin, Select, Form } from 'antd';
 import { toast } from 'react-toastify';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,6 @@ import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getUserAttribute, renderAvatar } from 'utils/user-utils';
 import styled from 'styled-components';
 import { searchForProfiles } from 'services/live-data-server/profile';
-import { Link } from 'react-router-dom';
 import { getAllByCalendarEventId, inviteCompetitor, inviteGroupsAsCompetitors } from 'services/live-data-server/participants';
 import { AdminType, CompetitorType } from 'utils/constants';
 import { searchGroupForAssigns } from 'services/live-data-server/groups';

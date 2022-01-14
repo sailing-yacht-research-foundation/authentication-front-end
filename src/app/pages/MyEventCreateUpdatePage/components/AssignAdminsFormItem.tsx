@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Select, Space, Switch } from 'antd';
+import { Form, Select, Switch } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { SyrfFieldLabel, SyrfFormSelect } from 'app/components/SyrfForm';

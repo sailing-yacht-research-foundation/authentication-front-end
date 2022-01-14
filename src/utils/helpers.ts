@@ -420,7 +420,7 @@ export const priotizePointForNameFieldIfExists = (result, expression) => {
 export const checkIfIsSafari = () => {
     return navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
         navigator.userAgent &&
-        navigator.userAgent.indexOf('CriOS') == -1 &&
-        navigator.userAgent.indexOf('FxiOS') == -1;
+        navigator.userAgent.indexOf('CriOS') === -1 &&
+        navigator.userAgent.indexOf('FxiOS') === -1;
 
 }

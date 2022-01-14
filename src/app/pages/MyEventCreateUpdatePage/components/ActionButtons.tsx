@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { cancelCalendarEvent, closeCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
 import { translations } from 'locales/translations';
 import { toast } from 'react-toastify';
-import { GrGroup } from 'react-icons/gr';
 import { HiLockClosed } from 'react-icons/hi';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { GoChecklist } from 'react-icons/go';
@@ -18,7 +17,6 @@ import { DeleteButton } from 'app/components/SyrfGeneral';
 
 export const ActionButtons = ({
     mode,
-    showAssignEventAsGroupAdminModal,
     event,
     setShowDeleteModal,
     setEvent,

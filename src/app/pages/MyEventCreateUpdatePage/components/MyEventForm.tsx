@@ -612,10 +612,6 @@ export const MyEventForm = () => {
         return current && current < currentStartDate.startOf('day');
     }
 
-    const showAssignEventAsGroupAdminModal = () => {
-        setShowAssignModal(true);
-    }
-
     return (
         <Wrapper>
             <DeleteEventModal
@@ -638,7 +634,7 @@ export const MyEventForm = () => {
                         <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                <ActionButtons setShowImportEventModal={setShowImportEventModal} event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} showAssignEventAsGroupAdminModal={showAssignEventAsGroupAdminModal} />
+                <ActionButtons setShowImportEventModal={setShowImportEventModal} event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} />
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSavingEvent}>
