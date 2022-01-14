@@ -51,7 +51,7 @@ export const VesselList = (props) => {
             key: 'class',
             render: (text, record) => {
                 return record?.vesselParticipants[0]?.crews?.map(crew => <Space key={crew.id} size={10}>
-                    <CrewItem onClick={() => navigateToProfile(crew)} alt={crew.publicName} src={renderAvatar(crew?.profile?.avatar)} />
+                    <CrewItem onClick={() => navigateToProfile(crew)} alt={crew.publicName} src={renderAvatar(crew.profile?.avatar)} />
                 </Space>);
             },
             ellipsis: true,

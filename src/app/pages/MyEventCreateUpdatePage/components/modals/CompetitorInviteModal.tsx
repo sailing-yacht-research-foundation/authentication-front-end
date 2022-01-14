@@ -90,18 +90,16 @@ export const CompetitorInviteModal = (props) => {
     const onFinish = async (values) => {
         const { competitors } = values;
         const parsedCompetitors = competitors ? competitors.map(item => JSON.parse(item)) : [];
-
         const individuals = parsedCompetitors.filter(item => item.type === CompetitorType.INDIVIDUAL).map(item => ({
             publicName: item.name,
             userProfileId: item.id,
             calendarEventId: eventId,
             trackerUrl: false
         }));
-
         const groups = parsedCompetitors.filter(item => item.type === CompetitorType.GROUP).map(item => item.id);
 
         setIsLoading(true);
-
+        
         const individualResponse = await inviteCompetitor(individuals);
         const groupResponse = await inviteGroupsAsCompetitors(groups, eventId);
 
