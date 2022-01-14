@@ -374,9 +374,12 @@ export const MapView = React.forwardRef((props, ref) => {
                     break;
                 case LAYER_TYPE.polyline:
                     geometry.geometryType = GEOMETRY_TYPE.line;
-                    layer.getLatLngs().forEach(function (point) {
+                    layer.getLatLngs().forEach(function (point, index) {
                         geometry.points.push({
-                            position: [point.lat, point.lng]
+                            position: [point.lat, point.lng],
+                            properties: {
+                                side: index === 0 ? "port" : "starboard"
+                            },
                         });
                     });
                     drawPointAndBoat(layer.getLatLngs().map(point => [point.lat, point.lng]), layerId);

@@ -10,7 +10,6 @@ const workercode = () => {
         SEND_WS_MESSAGE: 'SendWSMessage',
         INIT_WS: 'initWS',
         SET_CONNECTION_STATUS: 'SetConnectionStatus',
-        UPDATE_DATA_TO_MAIN_THREAD: 'UpdateWorkerDataToMainThread',
         COURSE_MARK_UPDATE: 'CourseMarkUpdate',
         UPDATE_WORKER_DATA_TO_MAIN_THREAD: 'UpdateWorkerDataToMainThread',
         NEW_PARTICIPANT_JOINED: 'NewParticipantJoined',
@@ -40,9 +39,11 @@ const workercode = () => {
     let lastTimeReceivedMessageFromWS = new Date();
     let hasMoreData = true;
     let elapsedTimeHasBeenChanged = false;
+    let coursePoints = {};
 
     self.addEventListener('message', function (e) {
         const data = e.data;
+
         if (data.action === workerEvent.INIT_WS) {
             initWS(data);
         } else if (data.action === workerEvent.SEND_WS_MESSAGE) {
@@ -57,6 +58,8 @@ const workercode = () => {
             competitionUnitId = data?.data?.competitionUnitId ?? competitionUnitId;
             retrievedTimestamps = data?.data?.retrievedTimestamps ?? retrievedTimestamps;
             playbackSpeed = data?.data?.playbackSpeed ?? playbackSpeed;
+            coursePoints = data?.data?.coursePoints ?? coursePoints;
+
             let newElapsedTime = data?.data?.elapsedTime ?? elapsedTime;
             if (newElapsedTime < elapsedTime) {
                 elapsedTimeHasBeenChanged = true;
@@ -101,12 +104,9 @@ const workercode = () => {
 
             if (wsData?.type === 'data') {
                 if (wsData?.dataType === wsMessageDataType.POSITION) {
-                    processData(wsData.data);
+                    processAndParseTracksData(wsData.data);
                 } else if (wsData?.dataType === wsMessageDataType.MARK_TRACK) {
-                    self.postMessage({
-                        action: workerEvent.COURSE_MARK_UPDATE,
-                        data: wsData.data
-                    })
+                    processAndParseMarksData(wsData.data);
                 } else if (wsData?.dataType === wsMessageDataType.NEW_PARTICIPANT_JOINED) {
                     self.postMessage({
                         action: workerEvent.NEW_PARTICIPANT_JOINED,
@@ -135,12 +135,13 @@ const workercode = () => {
             action: workerEvent.UPDATE_WORKER_DATA_TO_MAIN_THREAD,
             data: {
                 vesselParticipants: vesselParticipants,
-                retrievedTimestamps: retrievedTimestamps
+                retrievedTimestamps: retrievedTimestamps,
+                coursePoints: coursePoints
             }
         });
     }, 1000);
 
-    function processData(source) {
+    function processAndParseTracksData(source) {
         const data = Object.assign({}, source);
 
         if (!Object.keys(vesselParticipants)?.length || !data?.vesselParticipantId || !raceTime?.start) return;
@@ -177,6 +178,29 @@ const workercode = () => {
 
         receivingData = true;
         lastTimeReceivedMessageFromWS = new Date();
+    }
+
+    function processAndParseMarksData(source) {
+        const data = Object.assign({}, source);
+        const currentPointId = data.pointId;
+
+        const selectedPoint = coursePoints[currentPointId];
+
+        data?.tracks?.forEach(track => {
+            let trackData = Object.assign({}, track);
+            trackData.timestamp = track.timestamp - raceTime.start;
+            if (selectedPoint.tracks?.length) {
+                const similarTimestampPosition = selectedPoint.tracks.filter(
+                    (track) => track.timestamp === trackData.timestamp
+                );
+                if (similarTimestampPosition.length) return;
+            }
+
+            selectedPoint.tracks.push(trackData);
+        });
+
+        selectedPoint.tracks.sort((trackA, trackB) => trackA.timestamp - trackB.timestamp);
+        coursePoints[currentPointId] = selectedPoint;
     }
 
     function mapRetrievedTimestamps() {
