@@ -8,6 +8,7 @@ import { renderEmptyValue } from 'utils/helpers';
 import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
 import { useHistory } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 export const VesselList = (props) => {
 
@@ -50,7 +51,8 @@ export const VesselList = (props) => {
             key: 'class',
             render: (text, record) => {
                 return record?.vesselParticipants[0]?.crews?.map(crew => <Space key={crew.id} size={10}>
-                    <CrewItem onClick={() => navigateToProfile(crew)} alt={crew.publicName} src={renderAvatar(crew.profile?.avatar)} />
+                    <CrewItem data-tip={crew.publicName} onClick={() => navigateToProfile(crew)} alt={crew.publicName} src={renderAvatar(crew.profile?.avatar)} />
+                    <ReactTooltip/>
                 </Space>);
             },
             ellipsis: true,

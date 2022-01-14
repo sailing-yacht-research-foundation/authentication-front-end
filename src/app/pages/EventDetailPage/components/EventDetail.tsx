@@ -88,6 +88,10 @@ export const EventDetail = () => {
         return event.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(event.status);
     }
 
+    const navigateToEventHostProfile = (profileId) => {
+        history.push(`/profile/${profileId}`);
+    }
+
     return (
         <Spin spinning={isFetchingEvent}>
             <PageHeaderContainerResponsive>
@@ -97,7 +101,7 @@ export const EventDetail = () => {
                     </GobackButton>
                     <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
                         <EventTitle>{event.name}</EventTitle>
-                        {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost>{event.createdBy?.name}</EventHost></EventHoldBy>}
+                        {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={()=> navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
                     <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
