@@ -89,6 +89,7 @@ export const EventDetail = () => {
     }
 
     const navigateToEventHostProfile = (profileId) => {
+        if (!profileId) return;
         history.push(`/profile/${profileId}`);
     }
 
