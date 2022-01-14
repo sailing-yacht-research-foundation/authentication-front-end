@@ -108,50 +108,6 @@ export const generateRetrievedTimestamp = (vesselParticipants: VesselParticipant
   return availableTimestamps;
 };
 
-export const generateVesselParticipantsLastPosition = (vesselParticipantsObject, selectedTimestamp: number, retrievedTimestamps: number[]) => {
-  const vesselParticipants: VesselParticipant[] = Object.keys(vesselParticipantsObject).map(
-    (key) => vesselParticipantsObject[key]
-  );
-
-  const updatedVPs = vesselParticipants.map((vP) => {
-    const filteredPositions = vP.positions.filter((pos) => pos.timestamp <= selectedTimestamp);
-    filteredPositions.sort((a, b) => b.timestamp - a.timestamp);
-
-    const lastPosition = filteredPositions[0];
-
-    if (!lastPosition) // eslint-disable-next-line
-      return;
-
-    const isRetrievedTimestampExist = retrievedTimestamps.includes(selectedTimestamp);
-    if (!isRetrievedTimestampExist) {
-      // Only interpolate when no timestamp available
-      const nearestPos = findNearestPositions(vP.positions, selectedTimestamp, 1000, { excludeSelectedTimestamp: true });
-      const interpolatedPosition = interpolateNearestPositions(nearestPos, selectedTimestamp);
-
-      if (interpolatedPosition) {
-        lastPosition.lat = interpolatedPosition.lat;
-        lastPosition.lon = interpolatedPosition.lon;
-      }
-    }
-
-    const currentCoordinateForHeading = [lastPosition.lon, lastPosition.lat];
-    const previousCoordinateForHeading =
-      filteredPositions[1]?.lon && filteredPositions[1]?.lat
-        ? [filteredPositions[1].lon, filteredPositions[1].lat]
-        : currentCoordinateForHeading;
-    const heading = generateLastHeading(previousCoordinateForHeading, currentCoordinateForHeading);
-    lastPosition.heading = heading;
-
-    return {
-      ...vP,
-      positions: filteredPositions,
-      lastPosition,
-    };// filter here because the boat will have the position later.
-  });
-
-  return updatedVPs.filter(Boolean);
-};
-
 export const normalizeSequencedGeometries = (
   sequencedGeometries: CourseGeometrySequenced[]
 ): MappedCourseGeometrySequenced[] => {
@@ -233,61 +189,6 @@ export const findNearestRetrievedTimestamp = (
   nextTs.sort((a, b) => a - b);
 
   return { previous: previousTs, next: nextTs };
-};
-
-export const findNearestPositions = (
-  positions: VesselParticipantPosition[],
-  selectedTimestamp: number,
-  rangeLimit: number,
-  opt: any = {}
-) => {
-  let previousPos = positions.filter((pos) => {
-    return pos.timestamp >= selectedTimestamp - rangeLimit && pos.timestamp <= selectedTimestamp;
-  });
-
-  previousPos.sort((a, b) => a.timestamp - b.timestamp);
-
-  let nextPos = positions.filter((pos) => {
-    return pos.timestamp >= selectedTimestamp && pos.timestamp <= selectedTimestamp + rangeLimit;
-  });
-
-  nextPos.sort((a, b) => a.timestamp - b.timestamp);
-
-  if (opt?.excludeSelectedTimestamp) {
-    previousPos = previousPos.filter((pos) => pos.timestamp !== selectedTimestamp);
-    nextPos = nextPos.filter((pos) => pos.timestamp !== selectedTimestamp);
-  }
-
-  return { previous: previousPos, next: nextPos };
-};
-
-export const interpolateNearestPositions = (
-  nearestPositions: VesselParitipantNearestPositions,
-  selectedTimestamp: number
-) => {
-  // If we could find the previous and the next position
-  // example:
-  // nearestPosition: [5, 6] and the selectedTimeStamp: 5.5
-
-  if (nearestPositions.previous.length && nearestPositions.next.length) {
-    const mostPreviousPos = nearestPositions.previous[nearestPositions.previous.length - 1];
-
-    const earliestNext = nearestPositions.next[0];
-
-    const gap = {
-      timestamp: earliestNext.timestamp - mostPreviousPos.timestamp,
-      lat: earliestNext.lat - mostPreviousPos.lat,
-      lon: earliestNext.lon - mostPreviousPos.lon,
-    };
-
-    const normalizedTs = selectedTimestamp - mostPreviousPos.timestamp;
-    const interpolatedLat = (normalizedTs / gap.timestamp) * gap.lat;
-    const interpolatedLon = (normalizedTs / gap.timestamp) * gap.lon;
-
-    return { lat: interpolatedLat + mostPreviousPos.lat, lon: interpolatedLon + mostPreviousPos.lon };
-  }
-
-  return false;
 };
 
 export const checkIsForcedToInstallAppOnMobile = (source) => {

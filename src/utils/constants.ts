@@ -133,7 +133,8 @@ export enum WorkerEvent {
     COURSE_MARK_UPDATE = 'CourseMarkUpdate',
     UPDATE_WORKER_DATA_TO_MAIN_THREAD = 'UpdateWorkerDataToMainThread',
     NEW_PARTICIPANT_JOINED = 'NewParticipantJoined',
-    VESSEL_PARTICIPANT_REMOVED = 'VesselParticipantRemoved'
+    VESSEL_PARTICIPANT_REMOVED = 'VesselParticipantRemoved',
+    MAP_DATA = 'MapData'
 };
 
 export enum WSMessageDataType {
