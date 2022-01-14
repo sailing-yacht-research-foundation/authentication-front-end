@@ -31,8 +31,8 @@ const workercode = () => {
                 id: sG.id,
                 geometryType: sG.geometryType,
                 coordinates: coordinates,
-                properties: sG?.properties,
-                points: sG?.points
+                properties: sG.properties,
+                points: sG.points
             };
         });
     }

@@ -379,6 +379,10 @@ export const MapView = React.forwardRef((props, ref) => {
                             position: [point.lat, point.lng],
                             properties: {
                                 side: index === 0 ? "port" : "starboard"
+                                // Port is for the start pin and it’s always on the left side of the start line,
+                                // Starboard is for the boat pin and it’s always on the right side of the start line
+                                // index == 0 means the pin, 1 means the boat.
+                                // Check drawPointAndBoat function for more information.
                             },
                         });
                     });
@@ -408,7 +412,7 @@ export const MapView = React.forwardRef((props, ref) => {
 
         coordinates.forEach(function (point, index) {
             let marker;
-            if (index === 0) {
+            if (index === 0) { // pin
                 marker = L.marker([point[0], point[1]], {
                     icon: new L.icon({
                         iconUrl: StartPinIcon,
@@ -417,7 +421,7 @@ export const MapView = React.forwardRef((props, ref) => {
                         popupAnchor: [5, -15]
                     })
                 });
-            } else {
+            } else { // boat
                 marker = L.marker([point[0], point[1]], {
                     icon: new L.icon({
                         iconUrl: BoatPinIcon,
