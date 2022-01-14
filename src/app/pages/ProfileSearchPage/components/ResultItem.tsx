@@ -83,6 +83,7 @@ const PeopleInfo = styled.div`
 const PeopleAvatar = styled.div`
     width: 45px;
     height: 45px;
+    flex: 0 0 auto;
 `;
 
 const PeopleName = styled(Link)`
@@ -97,7 +98,10 @@ const PeopleInnerWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    flex: 0 0 auto;
 `;
 
-const PeopleAlsoFollow = styled.span``;
+const PeopleAlsoFollow = styled.span`
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+`;

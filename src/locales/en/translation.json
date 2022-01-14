@@ -368,7 +368,7 @@
     "status": "Status",
     "invitations": "Invitations",
     "invited_at": "Invited At",
-    "register_for": "Register for {{eventName}}",
+    "register_for": "Register for {{raceName}}",
     "select_a_boat": "Select a boat",
     "select_a_class": "Select a class",
     "please_select_a_class_to_join_this_event": "Please select a class to join this event.",
@@ -429,7 +429,9 @@
     "event_not_found": "Event not found!",
     "race_not_found": "Race not found!",
     "error_starttime_greater_eventtime": "Start time should be greater than event time",
-    "please_complete_your_race_before_adding_another": "Please complete your race before adding another."
+    "please_complete_your_race_before_adding_another": "Please complete your race before adding another.",
+    "your_not_the_event_editor_therefore_you_cannot_edit_the_event": "You're not the event editor therefore you cannot edit the races of this event.",
+    "event_is_canceled_or_completed_you_cannot_manage_it_from_this_point": "This event is canceled or completed, you cannot manage it from this point."
   },
   "my_event_create_update_page": {
     "created_a_new_event": "Created a new event with name {{name}}.",
@@ -504,7 +506,9 @@
     "successfully_stopped_this_event": "Successfully stopped this event.",
     "editors": "Editors",
     "group_members_assignment": "Group members assignment",
-    "group_assignment": "Group assignment"
+    "group_assignment": "Group assignment",
+    "your_not_the_event_editor_therefore_you_cannot_edit_the_event": "You're not the event editor therefore you cannot edit the event.",
+    "event_is_canceled_or_completed_you_cannot_manage_it_from_this_point": "This event is canceled or completed, you cannot manage it from this point."
   },
   "course_list": {
     "name": "Name",

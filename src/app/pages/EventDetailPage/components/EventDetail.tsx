@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, message, Space, Spin, Tag } from 'antd';
-import { CreateButton, GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
-import { MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
+import { EventState, MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
-import { downloadIcalendarFile, get, getEditors } from 'services/live-data-server/event-calendars';
+import { downloadIcalendarFile, get } from 'services/live-data-server/event-calendars';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -16,13 +16,9 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
 import { AiOutlineCalendar } from 'react-icons/ai';
-import { FiEdit } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
-import { RegisterEventModal } from 'app/components/RegisterEventModal';
 import { VesselList } from './VesselList';
-
-let userId;
 
 export const EventDetail = () => {
 
@@ -39,15 +35,12 @@ export const EventDetail = () => {
 
     const { t } = useTranslation();
 
-    const [editors, setEditors] = React.useState<string[]>([]);
-
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
     const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         fetchEvent();
-        userId = localStorage.getItem('user_id'); // get userId everytime the component renders.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -72,11 +65,6 @@ export const EventDetail = () => {
                 });
             } else {
                 setEndCoordinates(null);
-            }
-
-            const editorResponse = await getEditors(data.id);
-            if (editorResponse.success) {
-                setEditors(editorResponse?.data?.individualEditors.map(editor => editor?.user?.id));
             }
         } else {
             message.error(t(translations.event_detail_page.event_not_found));
@@ -110,16 +98,12 @@ export const EventDetail = () => {
         }
     }
 
+    const canManageEvent = () => {
+        return event.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(event.status);
+    }
+
     return (
         <Spin spinning={isFetchingEvent}>
-            <RegisterEventModal
-                showModal={showRegisterModal}
-                setShowModal={setShowRegisterModal}
-                eventName={event.name}
-                lon={event.lon}
-                lat={event.lat}
-                eventId={eventId}
-                 />
             <PageHeaderContainerResponsive>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => goBack()}>
@@ -128,15 +112,13 @@ export const EventDetail = () => {
                     <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
                         <EventTitle>{event.name}</EventTitle>
                         {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost>{event.createdBy?.name}</EventHost></EventHoldBy>}
-                        <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
+                    <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 <EventActions>
                     <Space>
                         {
-                            editors.includes(userId) && (
-                                <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
-                            )
+                            canManageEvent() && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                         }
                         <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
                             downloadIcalendarFile(event);
@@ -152,20 +134,13 @@ export const EventDetail = () => {
 
             <EventDescriptionContainer>
                 <EventSection>
-                    <EventSectionHeadingContainer>
-                        <EventSectionHeading>{t(translations.event_detail_page.about_this_event)}</EventSectionHeading>
-                        {
-                            event.isOpen && event.allowRegistration && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={showRegiterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
-                        }
-                    </EventSectionHeadingContainer>
-
+                    <EventSectionHeading>{t(translations.event_detail_page.about_this_event)}</EventSectionHeading>
                     <EventDescription>
                         {event.description ? event.description : t(translations.home_page.filter_tab.filter_result.no_description)}
                     </EventDescription>
 
                     <EventOpenRegistrationContainer>
                         {event?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
-                        {event?.isOpen && <StyledTag data-tip={translate.anyone_canview} color="purple">{translate.status_public}</StyledTag>}
                         {!event?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
                     </EventOpenRegistrationContainer>
                 </EventSection>
@@ -174,7 +149,7 @@ export const EventDetail = () => {
             {event.id &&
                 <>
                     <EventSection>
-                        <RaceList editors={editors} event={event} />
+                        <RaceList canManageEvent={canManageEvent} event={event} />
                     </EventSection>
 
                     <EventSection>
@@ -222,12 +197,6 @@ const EventDescription = styled.p`
 `;
 
 const EventSectionHeading = styled.h3``;
-
-const EventSectionHeadingContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`;
 
 const EventSection = styled.div`
     padding: 10px 15px;

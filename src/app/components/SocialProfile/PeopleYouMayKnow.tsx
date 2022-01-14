@@ -51,7 +51,7 @@ export const PeopleYouMayKnow = () => {
 
     const renderInfluencers = () => {
         return influencers.map(profile => {
-            return <UserFollowerFollowingRow profile={profile} profileId={profile.id} />
+            return <UserFollowerFollowingRow key={profile.id} profile={profile} profileId={profile.id} />
         });
     }
 
@@ -72,7 +72,7 @@ export const PeopleYouMayKnow = () => {
 
     const renderRecommendedProfiles = () => {
         return recommendations.map(profile => {
-            return <UserFollowerFollowingRow reloadParentList={reloadCurrentListAndUserFollowersFollowings} profile={profile} profileId={profile.id} />
+            return <UserFollowerFollowingRow key={profile.id} reloadParentList={reloadCurrentListAndUserFollowersFollowings} profile={profile} profileId={profile.id} />
         });
     }
 

@@ -49,7 +49,7 @@ export const Main = () => {
     }
 
     const renderResults = () => {
-        return results.map(profile => <ResultItem profile={profile} />)
+        return results.map(profile => <ResultItem key={profile.id} profile={profile} />)
     }
 
     return (

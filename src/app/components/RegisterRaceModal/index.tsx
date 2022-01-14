@@ -9,11 +9,11 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { joinCompetitionUnit } from 'services/live-data-server/open-competition';
 
-export const RegisterEventModal = (props) => {
+export const RegisterRaceModal = (props) => {
 
     const { t } = useTranslation();
 
-    const { showModal, setShowModal, eventName, eventId, lon, lat } = props;
+    const { showModal, setShowModal, raceName, raceId, lon, lat } = props;
 
     const [boats, setBoats] = React.useState<any[]>([]);
 
@@ -46,7 +46,7 @@ export const RegisterEventModal = (props) => {
         const { vesselId } = values;
 
         setIsLoading(true);
-        const response = await joinCompetitionUnit(eventId, vesselId, lon, lat);
+        const response = await joinCompetitionUnit(raceId, vesselId, lon, lat);
         setIsLoading(false);
 
         if (response.success) {
@@ -64,7 +64,7 @@ export const RegisterEventModal = (props) => {
     }, [showModal]);
 
     return (<Modal
-        title={t(translations.my_event_list_page.register_for, { eventName: eventName })}
+        title={t(translations.my_event_list_page.register_for, { raceName: raceName })}
         bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
         visible={showModal}
         footer={null}
