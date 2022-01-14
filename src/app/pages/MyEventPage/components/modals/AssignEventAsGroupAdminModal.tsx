@@ -100,11 +100,11 @@ export const AssignEventAsGroupAdminModal = (props) => {
     }
 
     const renderSearchResults = () => {
-        return results.map(group => <Select.Option value={group.id}>{group?.groupName}</Select.Option>)
+        return results.map(group => <Select.Option key={group.id} value={group.id}>{group?.groupName}</Select.Option>)
     }
 
     const renderPeopleResults = () => {
-        return people.map(p => <Select.Option value={p.id}><PeopleAvatar src={renderAvatar(p.avatar)}/> {p?.name}</Select.Option>)
+        return people.map(p => <Select.Option key={p.id} value={p.id}><PeopleAvatar src={renderAvatar(p.avatar)}/> {p?.name}</Select.Option>)
     }
 
     React.useEffect(() => {

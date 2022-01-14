@@ -38,7 +38,7 @@ export const PendingJoinRequests = (props) => {
     const memberCurrentPage = useSelector(selectMemberCurrentPage);
 
     const renderRequests = () => {
-        return pagination.rows.map(item => <UserItemRow pendingJoinRequest item={item} buttons={renderActionButton(item)} />);
+        return pagination.rows.map((item, index) => <UserItemRow key={index} pendingJoinRequest item={item} buttons={renderActionButton(item)} />);
     }
 
     const onPaginationChanged = (page) => {

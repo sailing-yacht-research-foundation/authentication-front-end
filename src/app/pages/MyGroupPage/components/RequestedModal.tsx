@@ -32,7 +32,7 @@ export const RequestedModal = (props) => {
 
     const renderInvitationItem = () => {
         if (invitations.length > 0)
-            return invitations.map(request => <GroupInvitationItemRow setIsLoading={setIsLoading} request={request} />);
+            return invitations.map(request => <GroupInvitationItemRow key={request.id} setIsLoading={setIsLoading} request={request} />);
         return <EmptyInvitationMessage>{t(translations.group.you_dont_have_any_invitations_right_now)}</EmptyInvitationMessage>
     }
 
