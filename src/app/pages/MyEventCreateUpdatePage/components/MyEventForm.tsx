@@ -130,7 +130,7 @@ export const MyEventForm = () => {
         else {
             response = await update(eventId, data);
         }
-        
+
         setIsSavingEvent(false);
 
         if (response.success) {
@@ -313,8 +313,21 @@ export const MyEventForm = () => {
                 startTime: moment(response.data?.approximateStartTime),
                 endDate: moment(response.data?.approximateEndTime),
                 endTime: moment(response.data?.approximateEndTime),
-                endLat: response?.data?.endLocation?.coordinates[1] || response?.data?.lat,
-                endLon: response?.data?.endLocation?.coordinates[0] || response?.data?.lon
+                endLat: response.data?.endLocation?.coordinates[1] || response.data?.lat,
+                endLon: response.data?.endLocation?.coordinates[0] || response.data?.lon,
+                admins:  [...response.data?.editors.map(editor => JSON.stringify({
+                    type: AdminType.INDIVIDUAL,
+                    id: editor.id,
+                    avatar: editor.avatar,
+                    name: editor.name,
+                    isIndividualAssignment: false
+                })), ...response.data?.groups.map(editor => JSON.stringify({
+                    type: AdminType.GROUP,
+                    id: editor.id,
+                    avatar: editor.groupImage,
+                    name: editor.groupName,
+                    isIndividualAssignment: false
+                }))]
             });
             setEvent(response.data);
             setCoordinates({
@@ -645,7 +658,7 @@ export const MyEventForm = () => {
                             isOpen: true
                         }}
                     >
-                        <FormItemEventNameDescription />
+                        <FormItemEventNameDescription event={event} />
 
                         <Divider />
 

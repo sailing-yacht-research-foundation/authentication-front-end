@@ -16,6 +16,8 @@ export const AssignAdminsFormItem = (props) => {
 
     const user = useSelector(selectUser);
 
+    const { event } = props;
+
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
     const { t } = useTranslation();
@@ -74,6 +76,34 @@ export const AssignAdminsFormItem = (props) => {
 
         setItems([...groupRows, ...peopleRows]);
     }
+
+    React.useEffect(() => {
+        let groupRows = [];
+        let peopleRows = [];
+        if (event.editors) {
+            peopleRows = event.editors.map(editor => ({
+                type: AdminType.INDIVIDUAL,
+                id: editor.id,
+                avatar: editor.avatar,
+                name: editor.name,
+                isIndividualAssignment: false
+            }));
+        }
+
+        if (event.groups) {
+            groupRows = event.groups.map(group => {
+                return {
+                    type: AdminType.GROUP,
+                    id: group.id,
+                    avatar: group.groupImage,
+                    name: group.groupName,
+                    isIndividualAssignment: false
+                }
+            });
+        }
+
+        setItems([...peopleRows, ...groupRows]);
+    }, [event]);
 
     return (
         <Form.Item
