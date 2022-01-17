@@ -18,15 +18,15 @@ const editorHeadlessStyles = {
 
 export const EventAdmins = (props) => {
 
-    const { event, headless } = props;
+    const { event, headless, groups, editors } = props;
 
     const { t } = useTranslation();
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const [groupEditors, setGroupEditors] = React.useState<any[]>([]);
+    const [groupEditors, setGroupEditors] = React.useState<any[]>(groups || []);
 
-    const [individualEditors, setIndividualEditors] = React.useState<any[]>([]);
+    const [individualEditors, setIndividualEditors] = React.useState<any[]>(editors || []);
 
     const history = useHistory();
 
@@ -50,8 +50,9 @@ export const EventAdmins = (props) => {
         let editors = groupEditors;
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
         return editors.map((editor, index) => {
-            return <EditorItem key={index} onClick={() => history.push(`/groups/${editor?.group?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.group?.groupName}>
-                <img alt={editor?.group?.groupName} src={editor?.group?.groupImage || DEFAULT_GROUP_AVATAR} />
+            if (editor.group) editor = editor.group;
+            return <EditorItem key={index} onClick={() => history.push(`/groups/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.groupName}>
+                <img alt={editor?.groupName} src={editor?.groupImage || DEFAULT_GROUP_AVATAR} />
             </EditorItem>
         });
     }
@@ -60,8 +61,9 @@ export const EventAdmins = (props) => {
         let editors = individualEditors;
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
         return individualEditors.map((editor, index) => {
-            return <EditorItem key={index} onClick={() => history.push(`/profile/${editor?.user?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.user?.name}>
-                <img alt={editor?.user?.name} src={renderAvatar(editor?.user?.avatar)} />
+            if (editor.user) editor = editor.user;
+            return <EditorItem key={index} onClick={() => history.push(`/profile/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.name}>
+                <img alt={editor?.name} src={renderAvatar(editor?.avatar)} />
             </EditorItem>
         });
     }
@@ -80,7 +82,8 @@ export const EventAdmins = (props) => {
     }
 
     React.useEffect(() => {
-        getAdmins();
+        if (!editors && !groups)
+            getAdmins();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

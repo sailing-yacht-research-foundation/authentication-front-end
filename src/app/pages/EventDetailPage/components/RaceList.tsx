@@ -37,6 +37,12 @@ export const RaceList = (props) => {
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
+            title: t(translations.competition_unit_list_page.status),
+            dataIndex: 'status',
+            key: 'status',
+            render: (value) => value,
+        },
+        {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',

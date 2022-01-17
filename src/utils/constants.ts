@@ -164,3 +164,13 @@ export enum ParticipantInvitationStatus  {
     INVITED = 'INVITED',
     ACCEPTED = 'ACCEPTED'
 }
+
+export enum AdminType {
+    GROUP = 'group',
+    INDIVIDUAL = 'individual'
+}
+
+export enum CompetitorType {
+    GROUP = 'group',
+    INDIVIDUAL = 'individual'
+}

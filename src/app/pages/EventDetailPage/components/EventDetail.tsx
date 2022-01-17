@@ -16,6 +16,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
 import { AiOutlineCalendar } from 'react-icons/ai';
+import { VesselList } from './VesselList';
 
 export const EventDetail = () => {
 
@@ -87,6 +88,11 @@ export const EventDetail = () => {
         return event.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(event.status);
     }
 
+    const navigateToEventHostProfile = (profileId) => {
+        if (!profileId) return;
+        history.push(`/profile/${profileId}`);
+    }
+
     return (
         <Spin spinning={isFetchingEvent}>
             <PageHeaderContainerResponsive>
@@ -96,8 +102,8 @@ export const EventDetail = () => {
                     </GobackButton>
                     <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
                         <EventTitle>{event.name}</EventTitle>
-                        {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost>{event.createdBy?.name}</EventHost></EventHoldBy>}
-                        <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
+                        {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={()=> navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
+                    <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 <EventActions>
@@ -123,6 +129,7 @@ export const EventDetail = () => {
                     <EventDescription>
                         {event.description ? event.description : t(translations.home_page.filter_tab.filter_result.no_description)}
                     </EventDescription>
+
                     <EventOpenRegistrationContainer>
                         {event?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
                         {!event?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
@@ -134,6 +141,10 @@ export const EventDetail = () => {
                 <>
                     <EventSection>
                         <RaceList canManageEvent={canManageEvent} event={event} />
+                    </EventSection>
+
+                    <EventSection>
+                        <VesselList event={event} />
                     </EventSection>
 
                     <EventSection>

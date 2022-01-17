@@ -40,11 +40,11 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
                     </SyrfFormWrapper>
 
                     <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                        <ParticipantList event={event} eventId={eventId || event.id} />
+                        <CoursesList eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
                     <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                        <CoursesList eventId={eventId || event.id} />
+                        <ParticipantList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
                     {
