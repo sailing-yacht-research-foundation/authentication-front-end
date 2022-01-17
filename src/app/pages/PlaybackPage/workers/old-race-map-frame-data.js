@@ -56,18 +56,6 @@ const workercode = () => {
             if (!lastPosition) // eslint-disable-next-line
                 return;
 
-            const isRetrievedTimestampExist = retrievedTimestamps.includes(selectedTimestamp);
-            if (!isRetrievedTimestampExist) {
-                // Only interpolate when no timestamp available
-                const nearestPos = findNearestPositions(point.tracks, selectedTimestamp, 1000, { excludeSelectedTimestamp: true });
-                const interpolatedPosition = interpolateNearestPositions(nearestPos, selectedTimestamp);
-
-                if (interpolatedPosition) {
-                    lastPosition.lat = interpolatedPosition.lat;
-                    lastPosition.lon = interpolatedPosition.lon;
-                }
-            }
-
             return Object.assign({}, point, { position: [lastPosition.lat, lastPosition.lon] });
         }).filter(Boolean);
 
