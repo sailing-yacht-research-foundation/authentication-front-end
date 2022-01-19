@@ -117,18 +117,6 @@ export const CompetitionUnitList = (props) => {
         setShowStopRaceConfirmModal(true);
     }
 
-    const performStartRace = async (race) => {
-        setIsLoading(true);
-        const response = await startRace(race.id);
-        setIsLoading(false);
-
-        if (response.success) {
-            getAll(pagination.page);
-        } else {
-            showToastMessageOnRequestError(response.error);
-        }
-    }
-
     return (
         <>
             <StopRaceConfirmModal reloadParent={()=> getAll(pagination.page)} race={race} showModal={showStopRaceConfirmModal} setShowModal={setShowStopRaceConfirmModal}/>
