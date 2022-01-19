@@ -8,7 +8,7 @@ import { getAllByCalendarEventId, startRace } from 'services/live-data-server/co
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
-import { RaceStatus, TIME_FORMAT } from 'utils/constants';
+import { EventState, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
@@ -18,7 +18,7 @@ export const CompetitionUnitList = (props) => {
 
     const { t } = useTranslation();
 
-    const { eventId } = props;
+    const { eventId, event } = props;
 
     const [showStopRaceConfirmModal, setShowStopRaceConfirmModal] = React.useState<boolean>(false);
 
@@ -51,7 +51,7 @@ export const CompetitionUnitList = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    { record.status === RaceStatus.SCHEDULED && <CreateButton onClick={() => performStartRace(record)}>{t(translations.competition_unit_list_page.start)}</CreateButton> }
+                    { record.status === RaceStatus.SCHEDULED && event.status === EventState.SCHEDULED && <CreateButton onClick={() => performStartRace(record)}>{t(translations.competition_unit_list_page.start)}</CreateButton> }
                     { record.status === RaceStatus.ON_GOING && <CreateButton onClick={()=> openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton> }
                     <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                         history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
