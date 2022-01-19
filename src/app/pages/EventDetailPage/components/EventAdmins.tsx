@@ -49,7 +49,7 @@ export const EventAdmins = (props) => {
     const renderGroupEditors = () => {
         let editors = groupEditors;
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
-        return editors.map((editor, index) => {
+        return editors.filter(Boolean).map((editor, index) => {
             if (editor.group) editor = editor.group;
             return <EditorItem key={index} onClick={() => history.push(`/groups/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.groupName}>
                 <img alt={editor?.groupName} src={editor?.groupImage || DEFAULT_GROUP_AVATAR} />
@@ -60,7 +60,7 @@ export const EventAdmins = (props) => {
     const renderIndividualEditors = () => {
         let editors = individualEditors;
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
-        return individualEditors.map((editor, index) => {
+        return editors.filter(Boolean).map((editor, index) => {
             if (editor.user) editor = editor.user;
             return <EditorItem key={index} onClick={() => history.push(`/profile/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.name}>
                 <img alt={editor?.name} src={renderAvatar(editor?.avatar)} />
