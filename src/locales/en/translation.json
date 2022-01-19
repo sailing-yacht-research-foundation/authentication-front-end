@@ -398,7 +398,8 @@
     "event_name": "Event Name",
     "race_configurations_pair_classes_to_courses": "Race configurations pair classes to courses.",
     "status": "Status",
-    "stop": "Stop"
+    "stop": "Stop",
+    "start":"Start"
   },
   "competition_unit_create_update_page": {
     "created_a_new_competition_unit": "Created a new race with name: {{name}}.",

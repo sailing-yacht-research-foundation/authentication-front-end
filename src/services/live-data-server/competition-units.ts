@@ -178,3 +178,7 @@ export const getRaceViewsCount = (competitionUnitId) => {
 export const stopRace = (competitionUnitId) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/stop-race`));
 }
+
+export const startRace = (competitionUnitId) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/prepare-race`));
+}
