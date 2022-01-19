@@ -174,3 +174,11 @@ export enum CompetitorType {
     GROUP = 'group',
     INDIVIDUAL = 'individual'
 }
+
+export enum VesselType {
+    FOIL_BOARD = 'FOIL_BOARD',
+    BOARD = 'BOARD',
+    DINGHY = 'DINGHY',
+    KEELBOAT = 'KEELBOAT',
+    OTHER = 'OTHER'   
+}

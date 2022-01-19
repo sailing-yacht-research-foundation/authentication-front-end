@@ -1,8 +1,8 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React from 'react';
-import { Spin, Form, Divider, Space, Row, Col } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField, SyrfPhoneInput } from 'app/components/SyrfForm';
+import { Spin, Form, Divider, Space, Row, Col, Select } from 'antd';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfFormWrapper, SyrfInputField, SyrfPhoneInput } from 'app/components/SyrfForm';
 import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -14,9 +14,10 @@ import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVes
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { MODE } from 'utils/constants';
+import { MODE, VesselType } from 'utils/constants';
 import { IoIosArrowBack } from 'react-icons/io';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { LiferaftList } from './LiferaftList';
 
 export const VesselForm = () => {
     const history = useHistory();
@@ -38,6 +39,13 @@ export const VesselForm = () => {
     const [vessel, setVessel] = React.useState<any>({});
 
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
+
+    const vesselTypes = [
+        { name: 'Foid board', value: VesselType.FOIL_BOARD },
+        { name: 'Keel boat', value: VesselType.KEELBOAT },
+        { name: 'Dinghy', value: VesselType.DINGHY },
+        { name: 'Other', value: VesselType.OTHER }
+    ]
 
     const onFinish = async (values) => {
         let { publicName, lengthInMeters } = values;
@@ -94,6 +102,12 @@ export const VesselForm = () => {
 
     const onVesselDeleted = () => {
         history.push('/boats');
+    }
+
+    const renderVesselType = () => {
+        return vesselTypes.map((type, index) => {
+            return <Select.Option key={index} value={type.value}>{type.name}</Select.Option>
+        });
     }
 
     React.useEffect(() => {
@@ -179,7 +193,9 @@ export const VesselForm = () => {
                                     label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.vessel_type)}</SyrfFieldLabel>}
                                     name="vesselType"
                                 >
-                                    <SyrfInputField autoCorrect="off" />
+                                    <SyrfFormSelect>
+                                        {renderVesselType()}
+                                    </SyrfFormSelect>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -366,6 +382,8 @@ export const VesselForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
+
+            { mode === MODE.UPDATE && <LiferaftList vesselId={vessel.id}/> }
         </Wrapper >
     )
 }

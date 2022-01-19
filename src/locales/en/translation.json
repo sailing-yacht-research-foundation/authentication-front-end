@@ -635,7 +635,16 @@
     "onboard_email": "Onboard Email",
     "hulls_count": "Hulls count",
     "onboard_email_is_not_a_valid_email": "onboard email is not a valid email",
-    "hulls_count_must_be_a_number": "Hulls count must be a number."
+    "hulls_count_must_be_a_number": "Hulls count must be a number.",
+    "liferafts": "Liferafts",
+    "add": "Add",
+    "serial_number":"Serial number",
+    "capacity": "Capacity",
+    "manufacturer": "Manufacturer",
+    "container": "Container",
+    "last_service_date": "Last service date",
+    "manufacture_date": "Manufacture Date",
+    "ownership": "Ownership"
   },
   "participant_list": {
     "participants": "Competitors",
@@ -836,7 +845,8 @@
     "click_to_close_this_event_and_make_it_completed": "Click to close this event and make it completed.",
     "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app",
     "link_a_new_credential_to_your_account": "Link a new credential to your account.",
-    "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,.."
+    "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,..",
+    "add_liferaft": "Add a new liferaft for this vessel."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
