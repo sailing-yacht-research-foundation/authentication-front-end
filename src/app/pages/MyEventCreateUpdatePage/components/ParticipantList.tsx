@@ -195,7 +195,7 @@ export const ParticipantList = (props) => {
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
                     {
-                        [EventState.SCHEDULED, EventState.ON_GOING].includes(event.status) && <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
+                        <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
                             style={{ marginRight: '5px' }}
                             size={18} />}>{t(translations.participant_list.invite)}</CreateButton>
                     }
