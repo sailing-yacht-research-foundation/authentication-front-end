@@ -51,7 +51,6 @@ export const CompetitionUnitList = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    { record.status === RaceStatus.SCHEDULED && event.status === EventState.SCHEDULED && <CreateButton onClick={() => performStartRace(record)}>{t(translations.competition_unit_list_page.start)}</CreateButton> }
                     { record.status === RaceStatus.ON_GOING && <CreateButton onClick={()=> openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton> }
                     <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                         history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
