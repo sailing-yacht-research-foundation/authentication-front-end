@@ -29,6 +29,10 @@ export const SyrfFormWrapper = styled.div`
         width: 55%;
         padding: 30px 56px;
     `}
+
+    &:not(:first-child) {
+        margin-top: 30px;
+    }
 `;
 
 export const SyrfSubmitButton = styled(Button)`

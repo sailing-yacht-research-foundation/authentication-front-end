@@ -7,6 +7,7 @@ import { translations } from 'locales/translations';
 import ReactTooltip from 'react-tooltip';
 import { renderEmptyValue } from 'utils/helpers';
 import { getAllByVesselId } from 'services/live-data-server/liferafts';
+import { SyrfFormWrapper } from 'app/components/SyrfForm';
 
 export const LiferaftList = (props) => {
 
@@ -99,7 +100,7 @@ export const LiferaftList = (props) => {
     }, []);
 
     return (
-        <>
+        <SyrfFormWrapper>
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.vessel_create_update_page.liferafts)}</PageHeaderTextSmall>
@@ -116,6 +117,6 @@ export const LiferaftList = (props) => {
                 </TableWrapper>
             </Spin>
             <ReactTooltip />
-        </>
+        </SyrfFormWrapper>
     )
 }
