@@ -1,6 +1,8 @@
+import 'react-phone-input-2/lib/style.css';
+
 import React from 'react';
-import { Spin, Form, Divider, Space } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
+import { Spin, Form, Divider, Space, Row, Col } from 'antd';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField, SyrfPhoneInput } from 'app/components/SyrfForm';
 import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -141,20 +143,207 @@ export const VesselForm = () => {
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>
 
+
+                        <Row gutter={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.length_in_meters)}</SyrfFieldLabel>}
+                                    name="lengthInMeters"
+                                    rules={[() => ({
+                                        validator(_, value) {
+                                            if (value === null) {
+                                                return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_is_required));
+                                            }
+                                            if (isNaN(value) || value <= 0) {
+                                                return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
+                                            }
+                                            return Promise.resolve();
+                                        },
+                                    }), { required: true, message: t(translations.vessel_create_update_page.length_in_meters_is_required) }]}
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.model)}</SyrfFieldLabel>}
+                                    name="model"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.vessel_type)}</SyrfFieldLabel>}
+                                    name="vesselType"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
+                        <Row gutter={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.sail_number)}</SyrfFieldLabel>}
+                                    name="sailNumber"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hull_number)}</SyrfFieldLabel>}
+                                    name="hullNumber"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.call_sign)}</SyrfFieldLabel>}
+                                    name="callSign"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
+                        <Row gutter={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hull_color_above_the_water_line)}</SyrfFieldLabel>}
+                                    name="hullColorAboveWaterline"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+
+                            </Col>
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hull_color_below_the_water_line)}</SyrfFieldLabel>}
+                                    name="hullColorBelowWaterline"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hulls_count)}</SyrfFieldLabel>}
+                                    name="hullsCount"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+
+                            </Col>
+                        </Row>
+
+
+                        <Row gutter={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.deck_color)}</SyrfFieldLabel>}
+                                    name="deckColor"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.mmsi)}</SyrfFieldLabel>}
+                                    name="mmsi"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.ssbTransceiver)}</SyrfFieldLabel>}
+                                    name="ssbTransceiver"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
+                        <Row gutter={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.homeport)}</SyrfFieldLabel>}
+                                    name="homeport"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.rigging)}</SyrfFieldLabel>}
+                                    name="rigging"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.marina_phoneNumber)}</SyrfFieldLabel>}
+                                    name="marinaPhoneNumber"
+                                >
+                                    <SyrfPhoneInput
+                                        inputClass="syrf-phone-number-input"
+                                        buttonClass="syrf-flag-dropdown"
+                                        placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
+                        <Row gutter={12}>
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.satellite_number)}</SyrfFieldLabel>}
+                                    name="satelliteNumber"
+                                >
+                                    <SyrfPhoneInput
+                                        inputClass="syrf-phone-number-input"
+                                        buttonClass="syrf-flag-dropdown"
+                                        placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.onboard_phone)}</SyrfFieldLabel>}
+                                    name="onboardPhone"
+                                >
+                                    <SyrfPhoneInput
+                                        inputClass="syrf-phone-number-input"
+                                        buttonClass="syrf-flag-dropdown"
+                                        placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={8} lg={8}>
+                                <Form.Item
+                                    rules={[{ type: 'email', message: t(translations.vessel_create_update_page.onboard_email_is_not_a_valid_email) }]}
+                                    label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.onboard_email)}</SyrfFieldLabel>}
+                                    name="onboardEmail"
+                                >
+                                    <SyrfInputField autoCorrect="off" />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.length_in_meters)}</SyrfFieldLabel>}
-                            name="lengthInMeters"
-                            rules={[() => ({
-                                validator(_, value) {
-                                    if (value === null) {
-                                        return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_is_required));
-                                    }
-                                    if (isNaN(value) || value <= 0) {
-                                        return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
-                                    }
-                                    return Promise.resolve();
-                                },
-                            }), { required: true, message: t(translations.vessel_create_update_page.length_in_meters_is_required) }]}
+                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.epirbHexId)}</SyrfFieldLabel>}
+                            name="epirbHexId"
                         >
                             <SyrfInputField autoCorrect="off" />
                         </Form.Item>
