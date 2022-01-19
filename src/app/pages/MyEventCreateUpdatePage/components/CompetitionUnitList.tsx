@@ -4,7 +4,7 @@ import { Space, Spin, Table } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
+import { getAllByCalendarEventId, startRace } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
@@ -12,6 +12,7 @@ import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const CompetitionUnitList = (props) => {
 
@@ -50,6 +51,7 @@ export const CompetitionUnitList = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
+                    { record.status === RaceStatus.SCHEDULED && <CreateButton onClick={() => performStartRace(record)}>{t(translations.competition_unit_list_page.start)}</CreateButton> }
                     { record.status === RaceStatus.ON_GOING && <CreateButton onClick={()=> openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton> }
                     <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                         history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
@@ -114,6 +116,18 @@ export const CompetitionUnitList = (props) => {
     const openStopRaceConfirmModal = (race) => {
         setRace(race);
         setShowStopRaceConfirmModal(true);
+    }
+
+    const performStartRace = async (race) => {
+        setIsLoading(true);
+        const response = await startRace(race.id);
+        setIsLoading(false);
+
+        if (response.success) {
+            getAll(pagination.page);
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
     }
 
     return (
