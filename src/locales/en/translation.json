@@ -634,7 +634,8 @@
     "onboard_phone": "Onboard Phone",
     "onboard_email": "Onboard Email",
     "hulls_count": "Hulls count",
-    "onboard_email_is_not_a_valid_email": "onboard email is not a valid email"
+    "onboard_email_is_not_a_valid_email": "onboard email is not a valid email",
+    "hulls_count_must_be_a_number": "Hulls count must be a number."
   },
   "participant_list": {
     "participants": "Competitors",

@@ -235,6 +235,14 @@ export const VesselForm = () => {
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hulls_count)}</SyrfFieldLabel>}
+                                    rules={[() => ({
+                                        validator(_, value) {
+                                            if (isNaN(value) && value.length > 0) {
+                                                return Promise.reject(t(translations.vessel_create_update_page.hulls_count_must_be_a_number));
+                                            }
+                                            return Promise.resolve();
+                                        },
+                                    })]}
                                     name="hullsCount"
                                 >
                                     <SyrfInputField autoCorrect="off" />
