@@ -99,6 +99,14 @@ export const FilterPane = (props) => {
         setShowSuggestion(true);
     }
 
+    const resetSearch = () => {
+        dispatch(actions.setKeyword(''));
+        dispatch(actions.setNoResultsFound(false));
+        dispatch(actions.setResults([]));
+        setKeyword('');
+        mutableEditableRef.current.innerHTML = '';
+    }
+
     return (
         <Wrapper {...props}>
             <FilterHeader>
@@ -150,11 +158,7 @@ export const FilterPane = (props) => {
                                         const target = e.target as HTMLDivElement;
                                         dispatch(actions.setKeyword(replaceFormattedCriteriaWithRawCriteria(target.innerText)));
                                     }}></span>
-                                {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={() => {
-                                    dispatch(actions.setKeyword(''));
-                                    setKeyword('');
-                                    mutableEditableRef.current.innerHTML = '';
-                                }} />}
+                                {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={resetSearch} />}
                             </ContentEditableSearchBarWrapper>
                             {
                                 showSuggestion && <>
