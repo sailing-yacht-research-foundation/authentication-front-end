@@ -44,7 +44,8 @@
     "register_as_competitor": "Register as Competitor",
     "live_and_upcoming": {
       "live_and_upcoming_races": "Live and upcoming races.",
-      "miles": "miles"
+      "miles": "miles",
+      "there_are_no_live_or_upcoming_races": "There are no live or upcoming races."
     }
   },
   "about_page": {
