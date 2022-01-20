@@ -823,7 +823,9 @@
     "click_to_close_this_event_and_make_it_completed": "Click to close this event and make it completed.",
     "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app",
     "link_a_new_credential_to_your_account": "Link a new credential to your account.",
-    "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,.."
+    "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,..",
+    "if_you_havent_linked_any_credentials": "If you haven't linked any credentials, you can go to this page to link your credential.",
+    "integrations_page": "Integrations page"
   },
   "forms": {
     "first_name_is_required": "First name is required.",
