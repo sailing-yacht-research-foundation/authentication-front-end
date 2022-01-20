@@ -814,7 +814,7 @@
     "group_visibility": "The visibility of this group towards other sailors.",
     "group_type": "Type of this group.",
     "delete_this_track": "Delete this track",
-    "set_admins_for_this_event": "Set or assign admins for this event.",
+    "set_admins_for_this_event": "Search and assign admins for this event.",
     "status": "Status of an event",
     "schedule_event": "Start to schedule this event.",
     "click_to_make_this_event_open_for_registration": "Click to make this event open for registration.",
