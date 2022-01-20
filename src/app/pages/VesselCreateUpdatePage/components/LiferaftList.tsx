@@ -1,6 +1,6 @@
 import React from 'react';
-import { Space, Spin, Table, Menu } from 'antd';
-import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { Space, Spin, Table } from 'antd';
+import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -8,12 +8,18 @@ import ReactTooltip from 'react-tooltip';
 import { renderEmptyValue } from 'utils/helpers';
 import { getAllByVesselId } from 'services/live-data-server/liferafts';
 import { SyrfFormWrapper } from 'app/components/SyrfForm';
+import { useHistory } from 'react-router-dom';
+import { TIME_FORMAT } from 'utils/constants';
+import moment from 'moment';
+import { DeleteLiferaftModal } from 'app/pages/LiferaftCreateUpdatePage/components/DeleteLifeRaftModal';
 
 export const LiferaftList = (props) => {
 
     const { t } = useTranslation();
 
     const { vesselId } = props;
+
+    const history = useHistory();
 
     const columns = [
         {
@@ -47,16 +53,16 @@ export const LiferaftList = (props) => {
             render: (text, record) => renderEmptyValue(text),
         },
         {
-            title: t(translations.vessel_create_update_page.public_name),
+            title: t(translations.vessel_create_update_page.last_service_date),
             dataIndex: 'lastServiceDate',
             key: 'lastServiceDate',
-            render: (text, record) => renderEmptyValue(text),
+            render: (text, record) => text && moment(text).format(TIME_FORMAT.date_text),
         },
         {
             title: t(translations.vessel_create_update_page.manufacture_date),
             dataIndex: 'manufactureDate',
             key: 'manufactureDate',
-            render: (text, record) => renderEmptyValue(text),
+            render: (text, record) => text && moment(text).format(TIME_FORMAT.date_text),
         },
         {
             title: t(translations.vessel_create_update_page.ownership),
@@ -70,7 +76,10 @@ export const LiferaftList = (props) => {
             fixed: true,
             render: (text, record) => (
                 <Space size={10}>
-
+                    <BorderedButton onClick={() => {
+                        history.push(`/boats/${vesselId}/liferafts/${record.id}/update`);
+                    }} type="primary">{t(translations.liferaft_create_update_page.update)}</BorderedButton>
+                    <BorderedButton data-tip={t(translations.tip.delete_this_liferaft)} danger onClick={() => showDeleteLiferaftModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
                 </Space>
             ),
         },
@@ -84,6 +93,11 @@ export const LiferaftList = (props) => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
+    const showDeleteLiferaftModal = (liferaft) => {
+        setLiferaft(liferaft);
+        setShowDeleteModal(true);
+    }
+
     const getAll = async () => {
         setIsLoading(true);
         const response = await getAllByVesselId(vesselId);
@@ -94,6 +108,10 @@ export const LiferaftList = (props) => {
         }
     }
 
+    const onLiferaftDeleted = () => {
+        getAll();
+    }
+
     React.useEffect(() => {
         getAll();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,11 +119,17 @@ export const LiferaftList = (props) => {
 
     return (
         <SyrfFormWrapper>
+            <DeleteLiferaftModal
+                liferaft={liferaft}
+                onLiferaftDeleted={onLiferaftDeleted}
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+            />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.vessel_create_update_page.liferafts)}</PageHeaderTextSmall>
                     {
-                        <CreateButton data-tip={t(translations.tip.add_liferaft)} icon={<AiFillPlusCircle
+                        <CreateButton data-tip={t(translations.tip.add_liferaft)} onClick={() => history.push(`/boats/${vesselId}/liferafts/create`)} icon={<AiFillPlusCircle
                             style={{ marginRight: '5px' }}
                             size={18} />}>{t(translations.vessel_create_update_page.add)}</CreateButton>
                     }

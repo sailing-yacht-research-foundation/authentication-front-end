@@ -846,7 +846,8 @@
     "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app",
     "link_a_new_credential_to_your_account": "Link a new credential to your account.",
     "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,..",
-    "add_liferaft": "Add a new liferaft for this vessel."
+    "add_liferaft": "Add a new liferaft for this vessel.",
+    "delete_this_liferaft": "Delete this liferaft."
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -884,7 +885,9 @@
     "search_keyword_is_required": "Search keyword is required.",
     "group_name_is_required": "Group name is required.",
     "group_name_must_not_be_longer_than_100_chars": "Group name must not be longer than 100 characters.",
-    "competitors_are_required": "Competitors are required."
+    "competitors_are_required": "Competitors are required.",
+    "serial_number_is_required": "Serial number is required.",
+    "serial_number_must_not_be_greater_than_20_chars": "Serial number must not be greater than 20 characters."
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",
@@ -1062,5 +1065,25 @@
     "successfully_deleted": "Successfully unlinked the credential",
     "are_you_sure_you_want_to_delete": "Are you sure you want to unlink this credential?",
     "you_will_delete": "You will unlink this credential, are you sure you want to continue?"
+  },
+  "liferaft_create_update_page": {
+    "create_a_new_liferaft": "Create a new liferaft",
+    "update_liferaft": "Update liferaft",
+    "delete_liferaft": "Delete liferaft",
+    "serial_number": "Serial number",
+    "capacity": "Capacity",
+    "model": "Model",
+    "last_service_date": "Last service date",
+    "manufacture_date": "Manufacture Date",
+    "ownership": "Ownership",
+    "manufacturer": "Manufacturer",
+    "container": "Container",
+    "save_liferaft": "Save liferaft",
+    "update": "Update"
+  },
+  "delete_liferaft_modal": {
+    "deleted_successfully": "Successfully deleted liferaft.",
+    "are_you_sure_you_want_to_delete_this_liferaft": "Are you sure you want to delete this liferaft?",
+    "all_information_associated_with_this_liferaft_will_be_deleted": "All information associated with this liferaft will be deleted, are you sure you want to continue?"
   }
 }

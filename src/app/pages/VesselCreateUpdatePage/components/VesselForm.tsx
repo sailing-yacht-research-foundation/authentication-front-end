@@ -383,7 +383,7 @@ export const VesselForm = () => {
                 </Spin>
             </SyrfFormWrapper>
 
-            { mode === MODE.UPDATE && <LiferaftList vesselId={vessel.id}/> }
+            { mode === MODE.UPDATE && vessel.id && <LiferaftList vesselId={vessel.id}/> }
         </Wrapper >
     )
 }
