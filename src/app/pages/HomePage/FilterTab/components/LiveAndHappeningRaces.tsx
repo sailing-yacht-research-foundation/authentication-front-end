@@ -128,7 +128,7 @@ export const LiveAndHappeningRaces = () => {
         {renderResults()}
 
         {
-            resultsCount > 10 && <PaginationContainer>
+            resultsCount > pageSize && <PaginationContainer>
                 <Pagination defaultCurrent={currentPage} current={currentPage} onChange={onPaginationPageChanged} total={resultsCount} pageSize={pageSize} />
             </PaginationContainer>
         }
