@@ -109,7 +109,7 @@ export const LiveAndHappeningRaces = () => {
     return (<>
         <HeaderContainer>
             <h3>{t(translations.home_page.live_and_upcoming.live_and_upcoming_races)}</h3>
-            { results.length > 0 && <Space size={20}>
+            <Space size={20}>
                 <Dropdown overlay={durationMenus}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                         {durationToDurationName(duration)} <DownOutlined />
@@ -120,7 +120,7 @@ export const LiveAndHappeningRaces = () => {
                         {distance} {t(translations.home_page.live_and_upcoming.miles)} <DownOutlined />
                     </a>
                 </Dropdown>}
-            </Space>}
+            </Space>
         </HeaderContainer>
 
         {renderResults()}
