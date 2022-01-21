@@ -18,6 +18,7 @@ export const AssignAdminsFormItem = (props) => {
 
     const { event } = props;
 
+    // eslint-disable-next-line
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
     const { t } = useTranslation();
@@ -103,6 +104,7 @@ export const AssignAdminsFormItem = (props) => {
         }
 
         setItems([...peopleRows, ...groupRows]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event]);
 
     return (

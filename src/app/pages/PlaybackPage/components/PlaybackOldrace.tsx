@@ -321,8 +321,8 @@ export const PlaybackOldRace = (props) => {
 
     const coursePoints = {};
 
-    raceCourseDetail.courseSequencedGeometries.map(geometry => {
-      geometry.points.map(point => {
+    raceCourseDetail.courseSequencedGeometries.forEach(geometry => {
+      geometry.points.forEach(point => {
         coursePoints[point.id] = {
           tracks: [],
           geometryId: geometry.id,

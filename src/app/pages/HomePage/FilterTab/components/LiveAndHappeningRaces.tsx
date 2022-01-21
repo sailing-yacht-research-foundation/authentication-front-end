@@ -53,6 +53,7 @@ export const LiveAndHappeningRaces = () => {
     React.useEffect(() => {
         if (results.length === 0)
             getLiveAndUpcomingRaces(2, 5, 1, 10);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getLiveAndUpcomingRaces = (duration, distance, page, size) => {
@@ -88,7 +89,7 @@ export const LiveAndHappeningRaces = () => {
                         e.preventDefault();
                         getLiveAndUpcomingRaces(duration, distance, currentPage, pageSize);
                     }} target="_blank" rel="noopener noreferrer" href="/">
-                        {distance} {t(translations.home_page.live_and_upcoming.miles)}
+                        {distance} {t(translations.home_page.live_and_upcoming.nmi)}
                     </a>
                 </Menu.Item>)}
         </Menu>
@@ -118,7 +119,7 @@ export const LiveAndHappeningRaces = () => {
                 </Dropdown>
                 {userCoordinates && <Dropdown overlay={distanceMenus}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
-                        {distance} {t(translations.home_page.live_and_upcoming.miles)} <DownOutlined />
+                        {distance} {t(translations.home_page.live_and_upcoming.nmi)} <DownOutlined />
                     </a>
                 </Dropdown>}
             </Space>

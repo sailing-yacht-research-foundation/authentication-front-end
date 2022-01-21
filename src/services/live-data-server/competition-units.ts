@@ -204,7 +204,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
     if (coordinate) {
         query.bool.filter.push({
             "geo_distance": {
-                "distance": `${distance}mi`,
+                "distance": `${distance}nmi`,
                 "approx_start_point.coordinates": {
                     "lat": coordinate.lat,
                     "lon": coordinate.lon

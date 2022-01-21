@@ -45,6 +45,7 @@
     "live_and_upcoming": {
       "live_and_upcoming_races": "Live and upcoming races.",
       "miles": "miles",
+      "nmi": "NMi",
       "there_are_no_live_or_upcoming_races": "There are no live or upcoming races."
     }
   },
