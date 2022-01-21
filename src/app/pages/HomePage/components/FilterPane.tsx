@@ -17,6 +17,7 @@ import { CriteriaSuggestion } from './MapViewTab/components/CriteriaSuggestion';
 import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
 import { replaceFormattedCriteriaWithRawCriteria, replaceCriteriaWithPilledCriteria, removeWholeTextNodeOnBackSpace } from 'utils/helpers';
 import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
+import { useHistory } from 'react-router-dom';
 
 export const FilterPane = (props) => {
 
@@ -47,6 +48,8 @@ export const FilterPane = (props) => {
     const [initedSearchBar, setInitedSearchBar] = React.useState<boolean>(false);
 
     const [showSuggestion, setShowSuggestion] = React.useState<boolean>(false);
+
+    const history = useHistory();
 
     useEffect(() => {
         if (defaultFocus && searchInputRef) {
@@ -105,6 +108,7 @@ export const FilterPane = (props) => {
         dispatch(actions.setResults([]));
         setKeyword('');
         mutableEditableRef.current.innerHTML = '';
+        history.push('/');
     }
 
     return (

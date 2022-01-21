@@ -51,39 +51,39 @@ export const RaceMap = (props) => {
 
     if (emitter) {
       // Zoom to specific race location
-      emitter.on(RaceEmitterEvent.ZOOM_TO_LOCATION, () => {
+      emitter?.on(RaceEmitterEvent.ZOOM_TO_LOCATION, () => {
         _zoomToRaceLocation(current)
       });
 
       // Render the boat
-      emitter.on(RaceEmitterEvent.PING, (participants) => {
+      emitter?.on(RaceEmitterEvent.PING, (participants) => {
         _updateBoats(participants, current);
         _updateTrack(participants, current);
       });
 
       // Update the courses
-      emitter.on(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
+      emitter?.on(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
         current.courseData = JSON.parse(JSON.stringify(sequencedCourses)); // save this for later update.
         _drawCourse(sequencedCourses);
       });
 
-      emitter.on(RaceEmitterEvent.UPDATE_COURSE_MARK, (courseMarkData) => {
+      emitter?.on(RaceEmitterEvent.UPDATE_COURSE_MARK, (courseMarkData) => {
         _updateCourseMark(courseMarkData);
       });
 
-      emitter.on(RaceEmitterEvent.REMOVE_PARTICIPANT, (id) => {
+      emitter?.on(RaceEmitterEvent.REMOVE_PARTICIPANT, (id) => {
         _removeVesselParticipant(id);
       })
 
-      emitter.on(RaceEmitterEvent.RENDER_REGS, (raceLegs: NormalizedRaceLeg[]) => {
+      emitter?.on(RaceEmitterEvent.RENDER_REGS, (raceLegs: NormalizedRaceLeg[]) => {
         _updateLegs(raceLegs);
       });
 
-      emitter.on(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, (participant) => {
+      emitter?.on(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, (participant) => {
         _zoomToParticipant(participant);
       });
 
-      emitter.on(RaceEmitterEvent.UPDATE_COURSE, (courses: MappedCourseGeometrySequenced) => {
+      emitter?.on(RaceEmitterEvent.UPDATE_COURSE, (courses: MappedCourseGeometrySequenced) => {
         current.courseData = JSON.parse(JSON.stringify(courses));
         _updateCourse(courses);
       })

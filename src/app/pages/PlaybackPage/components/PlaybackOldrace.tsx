@@ -97,16 +97,16 @@ export const PlaybackOldRace = (props) => {
     eventEmitter = new EventEmitter();
     return () => {
       if (eventEmitter) {
-        eventEmitter.removeAllListeners();
-        eventEmitter.off(RaceEmitterEvent.PING, () => { });
-        eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
-        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
-        eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
-        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
-        eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
-        eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
-        socketWorker.terminate();
-        mapDataWorker.terminate();
+        eventEmitter?.removeAllListeners();
+        eventEmitter?.off(RaceEmitterEvent.PING, () => { });
+        eventEmitter?.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
+        eventEmitter?.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
+        eventEmitter?.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
+        eventEmitter?.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
+        eventEmitter?.off(RaceEmitterEvent.RENDER_REGS, () => { });
+        eventEmitter?.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
+        socketWorker?.terminate();
+        mapDataWorker?.terminate();
         eventEmitter = undefined;
         socketWorker = undefined;
         mapDataWorker = undefined;
@@ -119,7 +119,7 @@ export const PlaybackOldRace = (props) => {
 
   useEffect(() => {
     playbackSpeedRef.current = playbackSpeed; // update the ref everytime the speed updates.
-    socketWorker.postMessage({
+    socketWorker?.postMessage({
       action: WorkerEvent.SEND_DATA_TO_WORKER,
       data: {
         playbackSpeed: playbackSpeed
@@ -145,7 +145,7 @@ export const PlaybackOldRace = (props) => {
   // Manage subscription of websocket
   useEffect(() => {
     if (connectionStatus === WebsocketConnectionStatus.OPEN && isReady) {
-      socketWorker.postMessage({
+      socketWorker?.postMessage({
         action: WorkerEvent.SEND_WS_MESSAGE,
         data: {
           action: "playback_v2",
@@ -197,7 +197,7 @@ export const PlaybackOldRace = (props) => {
       handleDebug(vesselParticipantsObject);
       handleDebug("===========================");
 
-      socketWorker.postMessage({
+      socketWorker?.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           vesselParticipants: vesselParticipantsRef.current,
@@ -210,7 +210,7 @@ export const PlaybackOldRace = (props) => {
 
   useEffect(() => {
     raceTimeRef.current = raceTime;
-    socketWorker.postMessage({
+    socketWorker?.postMessage({
       action: WorkerEvent.SEND_DATA_TO_WORKER,
       data: {
         raceTime: raceTime
@@ -253,12 +253,12 @@ export const PlaybackOldRace = (props) => {
   }, [raceCourseDetail]);
 
   useEffect(() => {
-    socketWorker.postMessage({
+    socketWorker?.postMessage({
       action: 'initWS',
       url: `${streamUrl}/authenticate?session_token=${sessionToken}`
     });
 
-    socketWorker.addEventListener('message', function (e) {
+    socketWorker?.addEventListener('message', function (e) {
       const data = e.data;
       if (data.action === WorkerEvent.SET_CONNECTION_STATUS) {
         setConnectionStatus(data.data);
@@ -279,12 +279,12 @@ export const PlaybackOldRace = (props) => {
       }
     });
 
-    mapDataWorker.addEventListener('message', function (e) {
+    mapDataWorker?.addEventListener('message', function (e) {
       const data = e.data;
 
       if (data.action === WorkerEvent.UPDATE_WORKER_DATA_TO_MAIN_THREAD) {
-        eventEmitter.emit(RaceEmitterEvent.PING, data.data.mappedVesselParticipants);
-        eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE, data.data.mappedMarks);
+        eventEmitter?.emit(RaceEmitterEvent.PING, data.data.mappedVesselParticipants);
+        eventEmitter?.emit(RaceEmitterEvent.UPDATE_COURSE, data.data.mappedMarks);
 
         handleUpdateLeaderPosition(data.data.mappedVesselParticipants);
 
@@ -332,7 +332,7 @@ export const PlaybackOldRace = (props) => {
       });
     })
 
-    socketWorker.postMessage({
+    socketWorker?.postMessage({
       action: WorkerEvent.SEND_DATA_TO_WORKER,
       data: {
         coursePoints: coursePoints
@@ -361,7 +361,7 @@ export const PlaybackOldRace = (props) => {
       },
     };
 
-    socketWorker.postMessage({
+    socketWorker?.postMessage({
       action: WorkerEvent.SEND_DATA_TO_WORKER,
       data: {
         vesselParticipants: vesselParticipantsRef.current
@@ -377,13 +377,13 @@ export const PlaybackOldRace = (props) => {
 
     if (vesselParticipantsRef?.current[id]) {
       delete vesselParticipantsRef?.current[id];
-      socketWorker.postMessage({
+      socketWorker?.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           vesselParticipants: vesselParticipantsRef.current
         }
       });
-      eventEmitter.emit(RaceEmitterEvent.REMOVE_PARTICIPANT, id);
+      eventEmitter?.emit(RaceEmitterEvent.REMOVE_PARTICIPANT, id);
       message.info(t(translations.playback_page.boat_left_the_race, { boat_name: vessel?.publicName }));
     }
   }
@@ -405,7 +405,7 @@ export const PlaybackOldRace = (props) => {
       vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
       handleMapRetrievedTimestamps(vesselParticipantsRef.current);
 
-      socketWorker.postMessage({
+      socketWorker?.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           vesselParticipants: vesselParticipantsRef.current
@@ -434,7 +434,7 @@ export const PlaybackOldRace = (props) => {
   };
 
   const updateCourseMarksPosition = (data) => {
-    eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE_MARK, data);
+    eventEmitter?.emit(RaceEmitterEvent.UPDATE_COURSE_MARK, data);
   }
 
   const handleSetElapsedTime = (elapsedTime) => {
@@ -444,7 +444,7 @@ export const PlaybackOldRace = (props) => {
 
     if (isElapsedTimeLessThanRaceLength) {
       dispatch(actions.setElapsedTime(time));
-      socketWorker.postMessage({
+      socketWorker?.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           elapsedTime: elapsedTime
@@ -470,7 +470,7 @@ export const PlaybackOldRace = (props) => {
       return;
     }
 
-    mapDataWorker.postMessage({
+    mapDataWorker?.postMessage({
       action: WorkerEvent.MAP_DATA,
       data: {
         vesselParticipants,
@@ -502,7 +502,7 @@ export const PlaybackOldRace = (props) => {
     });
 
     const filteredRaceLegs = limitRaceLegsDataByElapsedTime(mappedRaceLegs, elapsedTime);
-    eventEmitter.emit(RaceEmitterEvent.RENDER_REGS, filteredRaceLegs);
+    eventEmitter?.emit(RaceEmitterEvent.RENDER_REGS, filteredRaceLegs);
   };
 
   const handleRenderCourseDetail = (course) => {
@@ -512,7 +512,7 @@ export const PlaybackOldRace = (props) => {
     const mappedSequencedGeometries = normalizeSequencedGeometries(sequencedGeometries);
 
     setTimeout(() => {
-      eventEmitter.emit(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, mappedSequencedGeometries);
+        eventEmitter?.emit(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, mappedSequencedGeometries);
     }, 500);
   };
 
