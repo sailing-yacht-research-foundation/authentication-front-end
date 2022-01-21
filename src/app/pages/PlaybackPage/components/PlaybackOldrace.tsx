@@ -97,14 +97,14 @@ export const PlaybackOldRace = (props) => {
     eventEmitter = new EventEmitter();
     return () => {
       if (eventEmitter) {
-        eventEmitter?.removeAllListeners();
-        eventEmitter?.off(RaceEmitterEvent.PING, () => { });
-        eventEmitter?.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
-        eventEmitter?.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
-        eventEmitter?.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
-        eventEmitter?.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
-        eventEmitter?.off(RaceEmitterEvent.RENDER_REGS, () => { });
-        eventEmitter?.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
+        eventEmitter.removeAllListeners();
+        eventEmitter.off(RaceEmitterEvent.PING, () => { });
+        eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
+        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
+        eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
+        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
+        eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
+        eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
         eventEmitter = undefined;
       }
      
