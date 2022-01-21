@@ -96,17 +96,20 @@ export const PlaybackOldRace = (props) => {
     mapDataWorker = new Worker(MapFrameDataWorker);
     eventEmitter = new EventEmitter();
     return () => {
-      eventEmitter?.removeAllListeners();
-      eventEmitter?.off(RaceEmitterEvent.PING, () => { });
-      eventEmitter?.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
-      eventEmitter?.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
-      eventEmitter?.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
-      eventEmitter?.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
-      eventEmitter?.off(RaceEmitterEvent.RENDER_REGS, () => { });
-      eventEmitter?.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
+      if (eventEmitter) {
+        eventEmitter?.removeAllListeners();
+        eventEmitter?.off(RaceEmitterEvent.PING, () => { });
+        eventEmitter?.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
+        eventEmitter?.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
+        eventEmitter?.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
+        eventEmitter?.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
+        eventEmitter?.off(RaceEmitterEvent.RENDER_REGS, () => { });
+        eventEmitter?.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
+        eventEmitter = undefined;
+      }
+     
       socketWorker?.terminate();
       mapDataWorker?.terminate();
-      eventEmitter = undefined;
       socketWorker = undefined;
       mapDataWorker = undefined;
       dispatch(actions.setElapsedTime(0));
