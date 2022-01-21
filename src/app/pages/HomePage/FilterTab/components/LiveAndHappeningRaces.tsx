@@ -51,7 +51,8 @@ export const LiveAndHappeningRaces = () => {
     const { t } = useTranslation();
 
     React.useEffect(() => {
-        getLiveAndUpcomingRaces(2, 5, 1, 10);
+        if (results.length === 0)
+            getLiveAndUpcomingRaces(2, 5, 1, 10);
     }, []);
 
     const getLiveAndUpcomingRaces = (duration, distance, page, size) => {
