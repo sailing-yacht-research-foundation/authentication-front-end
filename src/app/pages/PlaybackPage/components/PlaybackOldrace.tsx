@@ -511,9 +511,7 @@ export const PlaybackOldRace = (props) => {
     if (!sequencedGeometries) return;
     const mappedSequencedGeometries = normalizeSequencedGeometries(sequencedGeometries);
 
-    setTimeout(() => {
-        eventEmitter?.emit(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, mappedSequencedGeometries);
-    }, 500);
+    eventEmitter?.emit(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, mappedSequencedGeometries);
   };
 
   const handleUpdateLeaderPosition = (normalizedPosition) => {
