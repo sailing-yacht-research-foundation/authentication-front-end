@@ -182,3 +182,83 @@ export const stopRace = (competitionUnitId) => {
 export const startRace = (competitionUnitId) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/prepare-race`));
 }
+
+/**
+ * Get live and happening soon races.
+ * @param duration // in months
+ * @param distance in mile
+ * @param page 
+ * @param size 
+ * @param coordinate { lat, lon }
+ * @returns 
+ */
+export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number = 1000, page: number = 1, size: number = 10, coordinate) => {
+    const query: any = {
+        bool: {
+            must: {},
+            filter: [],
+            should: [],
+        },
+    };
+
+    if (coordinate) {
+        query.bool.filter.push({
+            "geo_distance": {
+                "distance": `${distance}nmi`,
+                "approx_start_point.coordinates": {
+                    "lat": coordinate.lat,
+                    "lon": coordinate.lon
+                }
+            }
+        })
+    }
+
+    query.bool.must.bool = { // endtime is greater than now or starttime greater than now AND less than duration.
+        should: [
+            {
+                "range": {
+                    "approximateEndTime": {
+                        "gte": "now"
+                    }
+                }
+            },
+            {
+                "range": {
+                    "approx_start_time_ms": {
+                        "gte": moment().set({ hour: 0, minute: 0, second: 0 }).unix() * 1000,
+                        "lt": moment().add(duration, "months").set({ hour: 23, minute: 59, second: 59 }).unix() * 1000,
+                    }
+                }
+            }
+        ]
+    }
+
+    const searchParams: any = {
+        query: query,
+        sort: [
+            {
+                "approx_start_time_ms": {
+                    "order": "asc"
+                }
+            },
+        ]
+    };
+
+    if (coordinate) {
+        searchParams.sort.push({
+            "_geo_distance": {
+                "approx_start_point.coordinates": {
+                    "lat": coordinate.lat,
+                    "lon": coordinate.lon
+                },
+                "order": "asc",
+            }
+        })
+    }
+
+    searchParams._source = ["id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration"]; // only the fields we need
+    searchParams.from = (page - 1) * size;
+    searchParams.size = size;
+
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
+}

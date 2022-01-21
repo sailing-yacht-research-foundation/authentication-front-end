@@ -29,6 +29,7 @@
       "to_date_must_bigger_than_from_date": "To date must be equal or bigger than from date",
       "filter_result": {
         "start_searching_by_typing_something": "Nothing to show here. Start searching by typing something.",
+        "no_results_found": "No results found.",
         "about_number_result": "About {{total}} results",
         "searching": "Searching....",
         "no_description": "No description provided.",
@@ -40,7 +41,13 @@
     },
     "search_performed_no_result_found": "Searched for {{keyword}}, no result found.",
     "successfully_registered_to_join_this_competition": "Successfully registered to join this competition.",
-    "register_as_competitor": "Register as Competitor"
+    "register_as_competitor": "Register as Competitor",
+    "live_and_upcoming": {
+      "live_and_upcoming_races": "Live and upcoming races.",
+      "miles": "miles",
+      "nmi": "NMi",
+      "there_are_no_live_or_upcoming_races": "There are no live or upcoming races."
+    }
   },
   "about_page": {
     "nav": {
@@ -809,7 +816,7 @@
     "group_visibility": "The visibility of this group towards other sailors.",
     "group_type": "Type of this group.",
     "delete_this_track": "Delete this track",
-    "set_admins_for_this_event": "Set or assign admins for this event.",
+    "set_admins_for_this_event": "Search and assign admins for this event.",
     "status": "Status of an event",
     "schedule_event": "Start to schedule this event.",
     "click_to_make_this_event_open_for_registration": "Click to make this event open for registration.",
@@ -817,7 +824,9 @@
     "click_to_close_this_event_and_make_it_completed": "Click to close this event and make it completed.",
     "regatta": "Opening the registration means anyone can register for the event and start tracking for it from the mobile app",
     "link_a_new_credential_to_your_account": "Link a new credential to your account.",
-    "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,.."
+    "import_event_data_from_other_source": "Import event data from other sources like YachtScoring,...",
+    "if_you_havent_linked_any_credentials": "If you haven't linked any credentials, you can go to this page to link your credential.",
+    "integrations_page": "Integrations page"
   },
   "forms": {
     "first_name_is_required": "First name is required.",

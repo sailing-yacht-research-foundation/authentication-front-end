@@ -27,7 +27,7 @@ describe('Home slice', () => {
       slice.reducer(state, slice.homeActions.setFromDate(fromDate)),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-      from_date: fromDate
+      fromDate: fromDate
     });
   });
 
@@ -37,7 +37,7 @@ describe('Home slice', () => {
       slice.reducer(state, slice.homeActions.setToDate(toDate)),
     ).toEqual<ContainerState>({
       ...slice.initialState,
-      to_date: toDate
+      toDate: toDate
     });
   });
 
@@ -56,6 +56,60 @@ describe('Home slice', () => {
     ).toEqual<ContainerState>({
       ...slice.initialState,
       keyword: 'keyword'
+    });
+  });
+
+  it('should handle setUpcomingRaces', () => {
+    expect(
+      slice.reducer(state, slice.homeActions.setUpcomingRaceResults([])),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      upcomingResults:[]
+    });
+  });
+
+  it('should handle setUpComingResultPage', () => {
+    expect(
+      slice.reducer(state, slice.homeActions.setUpComingResultPage(1)),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      upcomingResultPage:1
+    });
+  });
+
+  it('should handle setUpComingResultPageSize', () => {
+    expect(
+      slice.reducer(state, slice.homeActions.setUpcomingResultPageSize(10)),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      upcomingResultSize: 10
+    });
+  });
+
+  it('should handle setUpComingResultPageSize', () => {
+    expect(
+      slice.reducer(state, slice.homeActions.setUpcomingResultTotal(100)),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      upcomingResultTotal: 100
+    });
+  });
+
+  it('should handle setUpcomingResultDuration', () => {
+    expect(
+      slice.reducer(state, slice.homeActions.setUpcomingResultDuration(1)),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      upcomingResultDuration: 1
+    });
+  });
+
+  it('should handle setUpcomingResultDistance', () => {
+    expect(
+      slice.reducer(state, slice.homeActions.setUpcomingResultDistance(5)),
+    ).toEqual<ContainerState>({
+      ...slice.initialState,
+      upcomingResultDistance: 5
     });
   });
 });

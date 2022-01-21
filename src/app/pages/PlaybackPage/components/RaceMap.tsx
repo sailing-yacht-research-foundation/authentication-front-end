@@ -56,7 +56,7 @@ export const RaceMap = (props) => {
       });
 
       // Render the boat
-      emitter.on(RaceEmitterEvent.PING, (participants) => {
+      emitter?.on(RaceEmitterEvent.PING, (participants) => {
         _updateBoats(participants, current);
         _updateTrack(participants, current);
       });

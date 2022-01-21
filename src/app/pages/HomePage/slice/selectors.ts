@@ -18,7 +18,7 @@ export const selectSearchKeyword = createSelector(
 
 export const selectIsSearching = createSelector(
   [selectDomain],
-  homeState => homeState.is_searching,
+  homeState => homeState.isSearching,
 );
 
 export const selectTotal = createSelector(
@@ -33,25 +33,60 @@ export const selectPage = createSelector(
 
 export const selectFromDate = createSelector(
   [selectDomain],
-  homeState => homeState.from_date,
+  homeState => homeState.fromDate,
 ); 
 
 export const selectToDate = createSelector(
   [selectDomain],
-  homeState => homeState.to_date,
+  homeState => homeState.toDate,
 );
 
 export const selectPageSize = createSelector(
   [selectDomain],
-  homeState => homeState.page_size,
+  homeState => homeState.pageSize,
 );
 
 export const selectShowAdvancedSearch = createSelector(
   [selectDomain],
-  homeState => homeState.show_advanced_search,
+  homeState => homeState.showAdvancedSearch,
 );
 
 export const selectSortType = createSelector(
   [selectDomain],
   homeState => homeState.sort,
+);
+
+export const selectUpcomingRaces = createSelector(
+  [selectDomain],
+  homeState => homeState.upcomingResults,
+);
+
+export const selectUpcomingRacePage = createSelector(
+  [selectDomain],
+  homeState => homeState.upcomingResultPage,
+);
+
+export const selectUpcomingRacePageSize = createSelector(
+  [selectDomain],
+  homeState => homeState.upcomingResultSize,
+);
+
+export const selectUpcomingRaceTotal = createSelector(
+  [selectDomain],
+  homeState => homeState.upcomingResultTotal,
+);
+
+export const selectUpcomingRaceDistanceCriteria = createSelector(
+  [selectDomain],
+  homeState => homeState.upcomingResultDistance,
+);
+
+export const selectUpcomingRaceDurationCriteria = createSelector(
+  [selectDomain],
+  homeState => homeState.upcomingResultDuration,
+);
+
+export const selectNoResultsFound = createSelector(
+  [selectDomain],
+  homeState => homeState.noResultFound,
 );

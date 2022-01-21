@@ -2,14 +2,21 @@
 export interface HomeState {
     results: any[];
     keyword: string;
-    from_date: string;
-    to_date: string;
+    fromDate: string;
+    toDate: string;
     page: number;
-    is_searching: boolean;
+    isSearching: boolean;
     total: number;
-    page_size: number;
-    show_advanced_search: boolean;
+    pageSize: number;
+    showAdvancedSearch: boolean;
     sort: string;
+    upcomingResults: any[];
+    upcomingResultPage: number;
+    upcomingResultSize: number;
+    upcomingResultTotal: number;
+    upcomingResultDistance: number;
+    upcomingResultDuration: number;
+    noResultFound: boolean;
   }
   
   export type ContainerState = HomeState

@@ -4,21 +4,20 @@ import { Space, Spin, Table } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { getAllByCalendarEventId, startRace } from 'services/live-data-server/competition-units';
+import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
-import { EventState, RaceStatus, TIME_FORMAT } from 'utils/constants';
+import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
-import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const CompetitionUnitList = (props) => {
 
     const { t } = useTranslation();
 
-    const { eventId, event } = props;
+    const { eventId } = props;
 
     const [showStopRaceConfirmModal, setShowStopRaceConfirmModal] = React.useState<boolean>(false);
 
