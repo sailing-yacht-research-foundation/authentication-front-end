@@ -111,7 +111,7 @@ export const Playback = (props) => {
     }
 
     const backToRaceArea = () => {
-        emitter.emit(RaceEmitterEvent.ZOOM_TO_LOCATION);
+        emitter?.emit(RaceEmitterEvent.ZOOM_TO_LOCATION);
     }
 
     const renderRaceLengthBaseOnPlaybackType = () => {

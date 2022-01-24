@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { getCredentialByPage, getEventsUsingCredentialId, importEventFromExternalEvent } from 'services/live-data-server/external-platform';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const ImportEventDataModal = (props) => {
 
@@ -133,6 +134,7 @@ export const ImportEventDataModal = (props) => {
                         </SyrfFormButton>
                     </Form.Item>
                 </Form>
+                <Message>{t(translations.tip.if_you_havent_linked_any_credentials)} <Link to={`/account/integrations`}>{t(translations.tip.integrations_page)}</Link></Message>
             </Spin>
         </Modal>
     )
@@ -142,4 +144,8 @@ const StyledSpinContainer = styled.div`
     position: absolute;
     right: 10px;
     top: 7px;
+`;
+
+const Message = styled.span`
+    font-size: 14px;
 `;

@@ -10,15 +10,17 @@ import { translations } from 'locales/translations';
 import { useSelector } from 'react-redux';
 import {
     selectIsSearching,
+    selectNoResultsFound,
     selectPage, selectPageSize, selectResults,
     selectTotal
 } from '../../slice/selectors';
 import { LottieMessage, LottieWrapper } from 'app/components/SyrfGeneral';
 import { renderNumberWithCommas } from 'utils/helpers';
+import { LiveAndHappeningRaces } from './LiveAndHappeningRaces';
 
 export const FilterResult = (props) => {
 
-    const { onPaginationPageChanged } = props; 
+    const { onPaginationPageChanged } = props;
 
     const { t } = useTranslation();
 
@@ -32,6 +34,8 @@ export const FilterResult = (props) => {
 
     const pageSize = useSelector(selectPageSize);
 
+    const noResultsFound = useSelector(selectNoResultsFound);
+
     const renderResult = () => {
         const defaultOptions = {
             loop: true,
@@ -44,13 +48,17 @@ export const FilterResult = (props) => {
 
         if (results.length === 0)
             return (
-                <LottieWrapper>
-                    <Lottie
-                        options={defaultOptions}
-                        height={400}
-                        width={400} />
-                    <LottieMessage>{isSearching ? t(translations.home_page.filter_tab.filter_result.searching) : t(translations.home_page.filter_tab.filter_result.start_searching_by_typing_something)}</LottieMessage>
-                </LottieWrapper>);
+                <>
+                    {isSearching || noResultsFound ? <LottieWrapper>
+                        <Lottie
+                            options={defaultOptions}
+                            height={400}
+                            width={400} />
+
+                        <LottieMessage>{isSearching ? t(translations.home_page.filter_tab.filter_result.searching) : t(translations.home_page.filter_tab.filter_result.no_results_found)}</LottieMessage>
+                    </LottieWrapper> : <LiveAndHappeningRaces />}
+                </>
+            );
 
         return results.map((result, index) => {
             return <ResultItem item={result} key={index} index={index} />

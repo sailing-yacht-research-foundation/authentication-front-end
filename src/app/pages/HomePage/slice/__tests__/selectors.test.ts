@@ -12,7 +12,7 @@ describe('Homepage selectors', () => {
     it('should select from_date', () => {
         const fromDate = '2021-08-20';
         state = {
-            home: { ...initialState, from_date: '2021-08-20' },
+            home: { ...initialState, fromDate: '2021-08-20' },
         };
         expect(selectors.selectFromDate(state)).toEqual(fromDate);
     });
@@ -21,7 +21,7 @@ describe('Homepage selectors', () => {
     it('should select to_date', () => {
         const toDate = '2021-08-20';
         state = {
-            home: { ...initialState, to_date: '2021-08-20' },
+            home: { ...initialState, toDate: '2021-08-20' },
         };
         expect(selectors.selectToDate(state)).toEqual(toDate);
     });
@@ -29,7 +29,7 @@ describe('Homepage selectors', () => {
     it('should select is_searching', () => {
         const isSearching = false;
         state = {
-            home: { ...initialState, is_searching: false },
+            home: { ...initialState, isSearching: false },
         };
         expect(selectors.selectIsSearching(state)).toEqual(isSearching);
     });
@@ -58,11 +58,53 @@ describe('Homepage selectors', () => {
         expect(selectors.selectResults(state)).toEqual(results);
     });
 
-    it('should select total result', () => {
-        const totalResults = 2000;
+    it('should select upcoming races', () => {
+        const races = [{
+            name: 'some races'
+        }];
         state = {
-            home: { ...initialState, total: 2000 },
+            home: { ...initialState, upcomingResults: races },
         };
-        expect(selectors.selectTotal(state)).toEqual(totalResults);
+        expect(selectors.selectUpcomingRaces(state)).toEqual(races);
+    });
+
+    it('should select total upcoming races', () => {
+        const totalResults = 5;
+        state = {
+            home: { ...initialState, upcomingResultTotal: 5 },
+        };
+        expect(selectors.selectUpcomingRaceTotal(state)).toEqual(totalResults);
+    });
+
+    it('should select current upcoming page search', () => {
+        const currentPage = 1;
+        state = {
+            home: { ...initialState, upcomingResultPage: currentPage },
+        };
+        expect(selectors.selectUpcomingRacePage(state)).toEqual(currentPage);
+    });
+
+    it('should select upcoming races search pagesize', () => {
+        const pageSize = 10;
+        state = {
+            home: { ...initialState, pageSize: 10 },
+        };
+        expect(selectors.selectUpcomingRacePageSize(state)).toEqual(pageSize);
+    });
+
+    it('should select distance of upcoming races', () => {
+        const distance = 5;
+        state = {
+            home: { ...initialState, upcomingResultDistance: distance },
+        };
+        expect(selectors.selectUpcomingRaceDistanceCriteria(state)).toEqual(distance);
+    });
+
+    it('should select duration of upcoming races', () => {
+        const duration = 1; // month
+        state = {
+            home: { ...initialState, upcomingResultDuration: duration },
+        };
+        expect(selectors.selectUpcomingRaceDurationCriteria(state)).toEqual(duration);
     });
 });

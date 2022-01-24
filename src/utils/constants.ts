@@ -84,7 +84,8 @@ export const enum GroupVisibility {
 
 export const enum RaceStatus {
     ON_GOING = 'ONGOING',
-    SCHEDULED = 'SCHEDULED'
+    SCHEDULED = 'SCHEDULED',
+    COMPLETED = 'COMPLETED'
 }
 
 export const enum WebsocketConnectionStatus {

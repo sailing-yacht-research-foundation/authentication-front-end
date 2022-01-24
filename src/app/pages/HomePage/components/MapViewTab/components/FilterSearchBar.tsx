@@ -92,6 +92,13 @@ export const FilterSearchBar = (props) => {
         }, 100)
     }
 
+    const resetSearch = () => {
+        dispatch(actions.setKeyword(''));
+        setKeyword('');
+        searchBarRef.current.innerHTML = '';
+        history.push('/');
+    }
+
     return (
         <SearchBarWrapper ref={searchBarWrapperRef}>
             <SearchBarInnerWrapper>
@@ -110,11 +117,7 @@ export const FilterSearchBar = (props) => {
                         removeWholeTextNodeOnBackSpace(e);
                     }}
                     onInput={handleInput}></span>
-                {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={() => {
-                    dispatch(actions.setKeyword(''));
-                    setKeyword('');
-                    searchBarRef.current.innerHTML = '';
-                }} />}
+                {searchKeyword.length > 0 && <ContentEditableTextRemover onClick={resetSearch} />}
                 <SearchBarLogo />
                 <StyledSpin spinning={isSearching}></StyledSpin>
                 {

@@ -98,20 +98,23 @@ export const CompetitorInviteModal = (props) => {
         const groups = parsedCompetitors.filter(item => item.type === CompetitorType.GROUP).map(item => item.id);
 
         setIsLoading(true);
-        
-        const individualResponse = await inviteCompetitor(individuals);
-        const groupResponse = await inviteGroupsAsCompetitors(groups, eventId);
 
-        if (individualResponse.success) {
-            toast.success(t(translations.my_event_create_update_page.successfully_invited_your_participants, { numberOfCompetitors: individuals.length }))
-        } else {
-            showToastMessageOnRequestError(individualResponse.error);
+        if (individuals.length > 0) {
+            const individualResponse = await inviteCompetitor(individuals);
+            if (individualResponse.success) {
+                toast.success(t(translations.my_event_create_update_page.successfully_invited_your_participants, { numberOfCompetitors: individuals.length }))
+            } else {
+                showToastMessageOnRequestError(individualResponse.error);
+            }
         }
 
-        if (groupResponse.success) {
-            toast.success(t(translations.my_event_create_update_page.successfully_invited_your_participants_from_group, { numberOfCompetitors: groupResponse.data?.invited, numberOfGroups: groups.length }))
-        } else {
-            showToastMessageOnRequestError(individualResponse.error);
+        if (groups.length > 0) {
+            const groupResponse = await inviteGroupsAsCompetitors(groups, eventId);
+            if (groupResponse.success) {
+                toast.success(t(translations.my_event_create_update_page.successfully_invited_your_participants_from_group, { numberOfCompetitors: groupResponse.data?.invited, numberOfGroups: groups.length }))
+            } else {
+                showToastMessageOnRequestError(groupResponse.error);
+            }
         }
 
         setIsLoading(false);

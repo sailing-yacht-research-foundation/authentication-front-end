@@ -3,9 +3,7 @@ import { CourseGeometrySequenced, MappedCourseGeometrySequenced } from "types/Co
 import { NormalizedLeg, NormalizedRaceLeg, RaceLeg } from "types/RaceLeg";
 import { SimplifiedTrack, SimplifiedTrackData } from "types/SimplifiedTrack";
 import {
-  VesselParitipantNearestPositions,
   VesselParticipant,
-  VesselParticipantPosition,
 } from "types/VesselParticipant";
 
 export const generateLastHeading = (coordinate1, coordinate2) => {
