@@ -56,7 +56,7 @@ export const RaceMap = (props) => {
       });
 
       // Render the boat
-      emitter.on(RaceEmitterEvent.PING, (participants) => {
+      emitter?.on(RaceEmitterEvent.PING, (participants) => {
         _updateBoats(participants, current);
         _updateTrack(participants, current);
       });
@@ -384,6 +384,7 @@ export const RaceMap = (props) => {
   };
 
   const _attachCoursesToMap = (courses) => {
+    if (!courses) return;
     raceStatus.current.courses = courses;
     Object.keys(courses).forEach((k) => {
       courses[k].addTo(map);

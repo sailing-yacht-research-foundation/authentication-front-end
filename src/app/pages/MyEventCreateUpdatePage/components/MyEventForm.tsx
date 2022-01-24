@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, Select } from 'antd';
+import { Spin, Form, Divider, Select, Switch } from 'antd';
 import { PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFieldLabel, SyrfFormButton, SyrfInputField, SyrfFormWrapper } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -12,7 +12,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { EventState, MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
+import { AdminType, EventState, MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -33,7 +33,7 @@ import { FormItemEndLocationAddress } from './FormItemEndLocationAddress';
 import { FormItemStartDate } from './FormItemStartDate';
 import { FormItemEndDate } from './FormItemEndDate';
 import { ImportEventDataModal } from './modals/ImportEventDataModal';
-import { create as createCourse} from 'services/live-data-server/courses';
+import { create as createCourse } from 'services/live-data-server/courses';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -45,48 +45,35 @@ timeZones.push({
 });
 
 export const MyEventForm = () => {
-
     const history = useHistory();
-
     const location = useLocation();
-
     const [form] = useForm();
+    const { eventId } = useParams<{ eventId: string }>();
+    const { t } = useTranslation();
 
     const [isSavingEvent, setIsSavingEvent] = React.useState<boolean>(false);
-
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-
     const [showAssignModal, setShowAssignModal] = React.useState<boolean>(false);
-
     const [mode, setMode] = React.useState<string>('');
-
-    const { eventId } = useParams<{ eventId: string }>();
-
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
-
     const [event, setEvent] = React.useState<any>({});
-
     const [error, setError] = React.useState<any>({
         startTime: '',
     });
-
     const [address, setAddress] = React.useState<string>('');
     const [endAddress, setEndAddress] = React.useState<string>('');
-
-    const { t } = useTranslation();
+    const [formChanged, setFormChanged] = React.useState<boolean>(true);
+    const [showImportEventModal, setShowImportEventModal] = React.useState<boolean>(false);
 
     const raceListRef = React.useRef<any>();
 
-    const [formChanged, setFormChanged] = React.useState<boolean>(true);
-
-    const [showImportEventModal, setShowImportEventModal] = React.useState<boolean>(false);
-
     const onFinish = async (values) => {
-        const { name, startDate, externalUrl, isOpen, lon, lat, endDate, endTime, startTime, description, approximateStartTime_zone, approximateEndTime_zone, endLat, endLon } = values;
+        const { name, startDate, externalUrl, isOpen, lon, lat, endDate, endTime, startTime, description, approximateStartTime_zone, approximateEndTime_zone, endLat, endLon, admins } = values;
         let response;
         let currentDate = moment();
         let currentTime = moment();
+        const editors = admins ? admins.map(item => JSON.parse(item)) : [];
 
         const startTimeValidation = handleCheckIsStartTimeValid();
         const endTimeValidation = handleCheckIsEndDateTimeValid();
@@ -103,8 +90,6 @@ export const MyEventForm = () => {
         if (endTime) {
             currentTime = endTime;
         }
-
-        setIsSavingEvent(true);
 
         const data = {
             name: name,
@@ -128,15 +113,25 @@ export const MyEventForm = () => {
             approximateStartTime_zone: approximateStartTime_zone,
             approximateEndTime_zone: approximateEndTime_zone,
             isPrivate: false,
-            isOpen: !!isOpen
+            isOpen: !!isOpen,
+            editors: editors.filter(item => item.type === AdminType.INDIVIDUAL).map(item => ({
+                id: item.id
+            })),
+            groupEditors: editors.filter(item => item.type === AdminType.GROUP).map(item => ({
+                id: item.id,
+                isIndividualAssignment: item.isIndividualAssignment
+            })),
         };
+
+        setIsSavingEvent(true);
 
         if (mode === MODE.CREATE)
             response = await create(data);
         else {
             response = await update(eventId, data);
-            setIsSavingEvent(false);
         }
+
+        setIsSavingEvent(false);
 
         if (response.success) {
             onEventSaved(response, { lat, lon }, { lat: endLat || lat, lon: endLon || lon });
@@ -287,20 +282,52 @@ export const MyEventForm = () => {
         }
     }
 
+    const canManageEvent = (event) => {
+        if (!event.isEditor) {
+            toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
+            history.push('/events');
+            return false;
+        }
+
+        if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status)) {
+            toast.info(t(translations.my_event_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
+            history.push('/events');
+            return false;
+        }
+
+        return true;
+    }
+
     const initData = async () => {
         setIsSavingEvent(true);
         const response = await get(eventId || event?.id);
         setIsSavingEvent(false);
 
         if (response.success) {
+
+            if (!canManageEvent(response.data)) return;
+
             form.setFieldsValue({
                 ...response.data,
                 startDate: moment(response.data?.approximateStartTime),
                 startTime: moment(response.data?.approximateStartTime),
                 endDate: moment(response.data?.approximateEndTime),
                 endTime: moment(response.data?.approximateEndTime),
-                endLat: response?.data?.endLocation?.coordinates[1] || response?.data?.lat,
-                endLon: response?.data?.endLocation?.coordinates[0] || response?.data?.lon
+                endLat: response.data?.endLocation?.coordinates[1] || response.data?.lat,
+                endLon: response.data?.endLocation?.coordinates[0] || response.data?.lon,
+                admins:  [...response.data?.editors.map(editor => JSON.stringify({
+                    type: AdminType.INDIVIDUAL,
+                    id: editor.id,
+                    avatar: editor.avatar,
+                    name: editor.name,
+                    isIndividualAssignment: false
+                })), ...response.data?.groups.map(editor => JSON.stringify({
+                    type: AdminType.GROUP,
+                    id: editor.id,
+                    avatar: editor.groupImage,
+                    name: editor.groupName,
+                    isIndividualAssignment: false
+                }))]
             });
             setEvent(response.data);
             setCoordinates({
@@ -585,10 +612,6 @@ export const MyEventForm = () => {
         return current && current < currentStartDate.startOf('day');
     }
 
-    const showAssignEventAsGroupAdminModal = () => {
-        setShowAssignModal(true);
-    }
-
     return (
         <Wrapper>
             <DeleteEventModal
@@ -611,7 +634,7 @@ export const MyEventForm = () => {
                         <PageDescription>{t(translations.my_event_create_update_page.events_are_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                <ActionButtons setShowImportEventModal={setShowImportEventModal} event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} showAssignEventAsGroupAdminModal={showAssignEventAsGroupAdminModal} />
+                <ActionButtons setShowImportEventModal={setShowImportEventModal} event={event} eventId={eventId} mode={mode} setEvent={setEvent} setShowDeleteModal={setShowDeleteModal} />
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSavingEvent}>
@@ -631,7 +654,7 @@ export const MyEventForm = () => {
                             isOpen: true
                         }}
                     >
-                        <FormItemEventNameDescription />
+                        <FormItemEventNameDescription event={event} />
 
                         <Divider />
 
@@ -643,7 +666,7 @@ export const MyEventForm = () => {
 
                         <FormItemStartDate dateLimiter={dateLimiter} error={error} handleFieldChange={handleFieldChange} renderErrorField={renderErrorField} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItemEndLocationAddress mode={mode} event={event} address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
+                        <FormItemEndLocationAddress address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
                         <FormItemEndDate renderErrorField={renderErrorField} error={error} handleFieldChange={handleFieldChange} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
@@ -655,6 +678,15 @@ export const MyEventForm = () => {
                             rules={[{ type: 'url', message: t(translations.forms.external_url_is_not_a_valid_url) }]}
                         >
                             <SyrfInputField autoCorrect="off" />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}
+                            name="isOpen"
+                            data-tip={t(translations.tip.regatta)}
+                            valuePropName="checked"
+                        >
+                            <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
                         </Form.Item>
 
                         <Form.Item>

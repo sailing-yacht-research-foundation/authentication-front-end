@@ -32,7 +32,7 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
             mode === MODE.UPDATE && (
                 <>
                     <SyrfFormWrapper ref={raceListRef} style={{ marginTop: '30px' }}>
-                        <CompetitionUnitList eventId={eventId || event.id} />
+                        <CompetitionUnitList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
                     <SyrfFormWrapper style={{ marginTop: '30px' }}>
@@ -40,11 +40,11 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
                     </SyrfFormWrapper>
 
                     <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                        <ParticipantList event={event} eventId={eventId || event.id} />
+                        <CoursesList eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
                     <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                        <CoursesList eventId={eventId || event.id} />
+                        <ParticipantList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
                     {

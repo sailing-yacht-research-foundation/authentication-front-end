@@ -3,8 +3,11 @@ import { Form } from 'antd';
 import { SyrfFieldLabel, SyrfInputField, SyrfTextArea } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { AssignAdminsFormItem } from './AssignAdminsFormItem';
 
-export const FormItemEventNameDescription = () => {
+export const FormItemEventNameDescription = (props) => {
+
+    const { event } = props;
 
     const { t } = useTranslation();
 
@@ -33,6 +36,8 @@ export const FormItemEventNameDescription = () => {
             >
                 <SyrfTextArea autoCorrect="off" />
             </Form.Item>
+
+            <AssignAdminsFormItem event={event} />
         </>
     )
 }

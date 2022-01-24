@@ -7,15 +7,19 @@ import { TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import ReactTooltip from 'react-tooltip';
-import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper, BorderedButton } from 'app/components/SyrfGeneral';
+import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper, BorderedButton, CreateButton } from 'app/components/SyrfGeneral';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
+import { FiEdit } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 
 export const RaceList = (props) => {
 
     const { t } = useTranslation();
 
-    const { event } = props;
+    const { event, canManageEvent } = props;
 
     const columns = [
         {
@@ -33,6 +37,12 @@ export const RaceList = (props) => {
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
+            title: t(translations.competition_unit_list_page.status),
+            dataIndex: 'status',
+            key: 'status',
+            render: (value) => value,
+        },
+        {
             title: t(translations.competition_unit_list_page.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
@@ -42,9 +52,9 @@ export const RaceList = (props) => {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
             render: (text, record) => {
-                const userId = localStorage.getItem('user_id');
-                if (props?.editors?.includes(userId))
+                if (canManageEvent())
                     return <Space size="middle">
+                        {event.isOpen && event.allowRegistration && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegiterModalOrRedirect(record)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
                         <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
                         }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
@@ -68,6 +78,10 @@ export const RaceList = (props) => {
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
     const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
+
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+
+    const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
 
     const history = useHistory();
 
@@ -99,6 +113,15 @@ export const RaceList = (props) => {
         setCompetitionUnit(competitionUnit);
     }
 
+    const showRegiterModalOrRedirect = (competitionUnit) => {
+        if (isAuthenticated) {
+            setCompetitionUnit(competitionUnit);
+            setShowRegisterModal(true);
+        } else {
+            history.push('/signin');
+        }
+    }
+
     React.useEffect(() => {
         getAll(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +135,14 @@ export const RaceList = (props) => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-
+            <RegisterRaceModal
+                showModal={showRegisterModal}
+                setShowModal={setShowRegisterModal}
+                raceName={competitionUnit.name}
+                lon={event.lon}
+                lat={event.lat}
+                raceId={competitionUnit.id}
+            />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.event_detail_page.races)}</PageHeaderTextSmall>

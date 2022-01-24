@@ -54,7 +54,7 @@ export const CompetitionUnitList = (props) => {
                     <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                         history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
                     }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-                    <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                    { record.status !== RaceStatus.COMPLETED && <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton> }
                     <ReactTooltip />
                 </Space>
             ),

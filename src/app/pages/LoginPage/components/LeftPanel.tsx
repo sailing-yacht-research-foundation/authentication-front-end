@@ -8,19 +8,14 @@ import Winging from '../assets/sport-logos/Winging.svg';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { SimpleVideoPlane } from 'app/pages/AboutPage/components/SimpleVideoPlane';
+import { checkIfIsSafari } from 'utils/helpers';
 
 export const LeftPanel = () => {
     const { t } = useTranslation();
 
-    const [autoplaySupported, setAutoPlaySupported] = React.useState<boolean>(false);
-
-    React.useEffect(() => {
-        Modernizr.on('videoautoplay', (result) => setAutoPlaySupported(!!result));
-    }, []);
-
     return (
         <Wrapper>
-            {autoplaySupported ? <SimpleVideoPlane /> : <Background />}
+            {!checkIfIsSafari() ? <SimpleVideoPlane /> : <Background />}
             <ContentWrapper>
                 <Title>{t(translations.login_page.leftpanel_title)}</Title>
                 <Description>

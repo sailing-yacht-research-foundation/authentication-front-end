@@ -1,13 +1,12 @@
 import React from 'react';
-import { Form, Menu, Switch } from 'antd';
+import { Form, Menu } from 'antd';
 import { SyrfFieldLabel, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { StyledPLaceDropdown } from 'app/components/SyrfGeneral';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { EventState, MODE } from 'utils/constants';
 
-export const FormItemEndLocationAddress = ({ mode, event, address, endAddress, handleEndAddressChange, handleSelectEndAddress }) => {
+export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddressChange, handleSelectEndAddress }) => {
 
     const { t } = useTranslation();
 
@@ -62,15 +61,6 @@ export const FormItemEndLocationAddress = ({ mode, event, address, endAddress, h
                         )
                     }}
                 </PlacesAutocomplete>
-            </Form.Item>
-
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}
-                name="isOpen"
-                data-tip={t(translations.tip.regatta)}
-                valuePropName="checked"
-            >
-                <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
             </Form.Item>
         </>
     );

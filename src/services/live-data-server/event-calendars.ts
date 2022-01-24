@@ -99,3 +99,11 @@ export const cancelCalendarEvent = (eventId) => {
 export const stopEvent = (calendarEventId) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/stop`));
 }
+
+export const getEventRegisteredVessels = (calendarEventId, page) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/registered-vessels`, {
+        params: {
+            page
+        }
+    }));
+}

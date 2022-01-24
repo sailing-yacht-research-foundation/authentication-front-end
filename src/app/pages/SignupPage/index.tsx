@@ -4,18 +4,13 @@ import { SignupForm } from './components/SignupForm';
 import { Curtains } from "react-curtains";
 import { SimpleVideoPlane } from 'app/pages/AboutPage/components/SimpleVideoPlane';
 import styled from 'styled-components';
+import { checkIfIsSafari } from 'utils/helpers';
 
 export const SignupPage = () => {
-
-  const [autoplaySupported, setAutoPlaySupported] = React.useState<boolean>(false);
-
   React.useEffect(() => {
     window.onscroll = function () {
       window.dispatchEvent(new Event('resize'));
     }
-
-    Modernizr.on('videoautoplay', (result) => setAutoPlaySupported(!!result));
-
     return () => {
       window.onscroll = null;
     }
@@ -24,7 +19,7 @@ export const SignupPage = () => {
   return (
     <>
       {
-        autoplaySupported ? (<Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
+        !checkIfIsSafari() ? (<Curtains pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
           <CurtainPlaneWrapper>
             <SimpleVideoPlane />
           </CurtainPlaneWrapper>

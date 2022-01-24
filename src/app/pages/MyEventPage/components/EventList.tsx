@@ -90,7 +90,7 @@ export const EventList = () => {
       title: t(translations.my_event_list_page.admins),
       dataIndex: 'admin',
       key: 'admin',
-      render: (_, record) => <EventAdmins headless event={record} />
+      render: (_, record) => <EventAdmins headless editors={record.editors || []} groups={record.groupEditors || []} event={record} />
     },
     {
       title: t(translations.my_event_list_page.status),
@@ -114,10 +114,14 @@ export const EventList = () => {
           }} type="primary">
             <AiOutlineCalendar />
           </DownloadButton>
-          <BorderedButton onClick={() => {
-            history.push(`/events/${record.id}/update`)
-          }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
-          {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>}
+          {
+            record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status) && <>
+              <BorderedButton onClick={() => {
+                history.push(`/events/${record.id}/update`)
+              }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
+              {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>}
+            </>
+          }
           <ReactTooltip />
         </Space>;
       }
