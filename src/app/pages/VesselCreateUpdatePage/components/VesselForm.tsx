@@ -18,6 +18,7 @@ import { MODE, VesselType } from 'utils/constants';
 import { IoIosArrowBack } from 'react-icons/io';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { LiferaftList } from './LiferaftList';
+import { PDFUploadForm } from './PDFUploadForm';
 
 export const VesselForm = () => {
     const history = useHistory();
@@ -383,7 +384,11 @@ export const VesselForm = () => {
                 </Spin>
             </SyrfFormWrapper>
 
-            { mode === MODE.UPDATE && vessel.id && <LiferaftList vesselId={vessel.id}/> }
+            {mode === MODE.UPDATE && vessel.id &&
+                <>
+                    <PDFUploadForm reloadVessel={initModeAndData} vessel={vessel} />
+                    <LiferaftList vesselId={vessel.id} />
+                </>}
         </Wrapper >
     )
 }

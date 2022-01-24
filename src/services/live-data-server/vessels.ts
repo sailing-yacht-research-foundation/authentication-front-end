@@ -39,3 +39,9 @@ export const getManyVesselsByEventCalendarId = (calendarEventId, page) => {
         }
     }))
 }
+
+export const uploadVesselPDF = (vesselId, formData) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${vesselId}/upload-pdfs`, formData, {
+        headers: { "content-type": "multipart/form-data" }
+    }))
+}

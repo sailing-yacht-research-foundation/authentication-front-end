@@ -1,13 +1,13 @@
 import React from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, Image, Spin } from 'antd';
+import { Button, Image, Spin, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../slice';
 import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile } from '../slice/selectors';
 import { FollowerModal } from './modals/FollowerModal';
 import { FollowingModal } from './modals/FollowingModal';
-import { renderAvatar } from 'utils/user-utils';
+import { getUserInterestsAsArray, renderAvatar } from 'utils/user-utils';
 import { FollowStatus } from 'utils/constants';
 import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
 import { BsCheck, BsPlus, BsCheck2All } from 'react-icons/bs';
@@ -123,38 +123,46 @@ export const PublicProfile = () => {
                 </>
             }
             <Spin spinning={isLoadingProfile}>
-                <InfoSection>
-                    <AvatarWrapper>
-                        <Image src={renderAvatar(profile.avatar)} />
-                    </AvatarWrapper>
-                    <ProfileName>{profile.name}</ProfileName>
-                    <ProfileBio>{profile.bio}</ProfileBio>
-                    {renderFollowButton()}
-                    {profile.isPrivate && <div>{t(translations.public_profile.profile_is_private)}</div>}
-                </InfoSection>
-                <SubInfoSection>
-                    <InfoItem onClick={showFollowersModal}>
-                        <InfoNumber>{profile.followerCount}</InfoNumber>
-                        <InfoTitle>{t(translations.public_profile.followers)}</InfoTitle>
-                    </InfoItem>
-                    <InfoItem onClick={showFollowingsModal}>
-                        <InfoNumber>{profile.followingCount}</InfoNumber>
-                        <InfoTitle>{t(translations.public_profile.following)}</InfoTitle>
-                    </InfoItem>
-                </SubInfoSection>
+                <SectionWrapper>
+                    <InfoSection>
+                        <AvatarWrapper>
+                            <Image src={renderAvatar(profile.avatar)} />
+                        </AvatarWrapper>
+                        <ProfileName>{profile.name}</ProfileName>
+                        <ProfileBio>{profile.bio}</ProfileBio>
+                        {renderFollowButton()}
+                        {profile.isPrivate && <div>{t(translations.public_profile.profile_is_private)}</div>}
+                    </InfoSection>
+                    <SubInfoSection>
+                        <InfoItem onClick={showFollowersModal}>
+                            <InfoNumber>{profile.followerCount}</InfoNumber>
+                            <InfoTitle>{t(translations.public_profile.followers)}</InfoTitle>
+                        </InfoItem>
+                        <InfoItem onClick={showFollowingsModal}>
+                            <InfoNumber>{profile.followingCount}</InfoNumber>
+                            <InfoTitle>{t(translations.public_profile.following)}</InfoTitle>
+                        </InfoItem>
+                    </SubInfoSection>
+                </SectionWrapper>
             </Spin>
         </Wrapper>
     );
 }
 
+const SectionWrapper = styled.div`
+    padding: 10px;
+    :not(:first-child) {
+        margin-top: 30px;
+    }
+`;
+
 const Wrapper = styled.div`
-    background: #fff;
     flex: .7;
+    background: #fff;
 `;
 
 const InfoSection = styled.div`
     text-align: center;
-    padding: 10px;
 `;
 
 const AvatarWrapper = styled.div`

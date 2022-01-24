@@ -66,3 +66,7 @@ export const verifyPhoneNumber = (code) => {
         code
     }));
 }
+
+export const updateInterests = (interests) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/interests`, interests));
+}

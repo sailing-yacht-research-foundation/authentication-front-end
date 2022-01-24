@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Form, Spin } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
-import { getUserAttribute } from 'utils/user-utils';
+import { getUserAttribute, getUserInterestsAsArray } from 'utils/user-utils';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString, showToastMessageOnRequestError } from 'utils/helpers';
 import { PrivateUserInformation } from './PrivateUserInformation';
@@ -14,8 +14,9 @@ import { EditEmailChangeModal } from './EditEmailChangeModal';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { updateProfile } from 'services/live-data-server/user';
+import { updateInterests, updateProfile } from 'services/live-data-server/user';
 import { TIME_FORMAT } from 'utils/constants';
+import { ShareableInformation } from './ShareableInformation';
 
 const defaultFormFields = {
     email: '',
@@ -60,7 +61,8 @@ export const UpdateInfo = (props) => {
         bio,
         first_name,
         last_name,
-        isPrivate
+        isPrivate,
+        interests
     }) => {
 
         setIsUpdatingProfile(true);
@@ -83,6 +85,10 @@ export const UpdateInfo = (props) => {
         });
 
         if (response.success) {
+            const interestResponse = await updateInterests(interestsArrayToObject(interests));
+            if (!interestResponse.success) {
+                showToastMessageOnRequestError(interestResponse.error);
+            }
             onUpdateProfileSuccess();
         } else {
             showToastMessageOnRequestError(response.error);
@@ -97,6 +103,17 @@ export const UpdateInfo = (props) => {
         props.cancelUpdateProfile();
         setFormFieldsBeforeUpdate(defaultFormFields);
         setFormHasBeenChanged(false);
+    }
+
+    const interestsArrayToObject = (interestsArray) => {
+        return {
+            "HANDICAP": interestsArray.includes('HANDICAP'),
+            "ONEDESIGN": interestsArray.includes('ONEDESIGN'),
+            "KITESURFING": interestsArray.includes('KITESURFING'),
+            "WINGING": interestsArray.includes('WINGING'),
+            "WINDSURFING": interestsArray.includes('WINDSURFING'),
+            "CRUISING": interestsArray.includes('CRUISING')
+        }
     }
 
     return (
@@ -132,7 +149,8 @@ export const UpdateInfo = (props) => {
                             twitter: getUserAttribute(authUser, 'twitter'),
                             language: getUserAttribute(authUser, 'language'),
                             country: getUserAttribute(authUser, 'locale'),
-                            isPrivate: authUser.isPrivate
+                            isPrivate: authUser.isPrivate,
+                            interests: getUserInterestsAsArray(authUser)
                         }}
                         onFinish={onFinish}
                     >
@@ -143,6 +161,8 @@ export const UpdateInfo = (props) => {
                         <PrivateUserInformation
                             address={address} setAddress={setAddress}
                             authUser={authUser} />
+
+                        <ShareableInformation/>
 
                         <Form.Item>
                             <StyledSyrfFormButtonWrapper>

@@ -47,3 +47,15 @@ export const renderAvatar = (picture) => {
 
     return NoAvatar;
 }
+
+/**
+ * Convert interest object into array.
+ * @param user 
+ * @returns 
+ */
+export const getUserInterestsAsArray = (user) => {
+    return !!user.interests ? Object.entries(user.interests).map(([key, value]) => {
+        if (value === true) return key;
+        return null; 
+    }).filter(Boolean) : [];
+}

@@ -243,7 +243,21 @@
       "integrations": "Integrations",
       "we_couldnt_send_the_verification_code": "There was an error sending the verification code to your phone.",
       "your_phone_number_has_been_verified": "Your phone number has been verified.",
-      "code_is_required": "Code is required and must be a 6-digit number."
+      "code_is_required": "Code is required and must be a 6-digit number.",
+      "interests": "Interests",
+      "emergency_contact_name": "Emergency Contact Name",
+      "emergency_contact_phone": "Emergency Contact Phone",
+      "emergency_contact_email": "Emergency Contact Email",
+      "emergency_contact_relationship": "Emergency Contact Relationship",
+      "passport_photo": "Passport Photo",
+      "passport_number": "Passport Number",
+      "passport_issue_date": "Passport Issue Date",
+      "passport_expiration_date": "Passport Expiration Date",
+      "food_allergies": "Food Allergies",
+      "certifications": "Certifications",
+      "medical_problems": "Medical Problems",
+      "tshirt_size": "TShirt Size",
+      "shareable_information": "Shareable Information"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"
@@ -652,7 +666,11 @@
     "container": "Container",
     "last_service_date": "Last service date",
     "manufacture_date": "Manufacture Date",
-    "ownership": "Ownership"
+    "ownership": "Ownership",
+    "pdf_documents": "PDF documents",
+    "upload": "Upload",
+    "download": "Download",
+    "download_all": "Download All"
   },
   "participant_list": {
     "participants": "Competitors",
@@ -857,7 +875,8 @@
     "add_liferaft": "Add a new liferaft for this vessel.",
     "delete_this_liferaft": "Delete this liferaft.",
     "if_you_havent_linked_any_credentials": "If you haven't linked any credentials, you can go to this page to link your credential.",
-    "integrations_page": "Integrations page"
+    "integrations_page": "Integrations page",
+    "your_interests": "Your interests"
   },
   "forms": {
     "first_name_is_required": "First name is required.",

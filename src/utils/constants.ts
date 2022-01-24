@@ -160,7 +160,7 @@ export enum EventState {
     ON_GOING = 'ONGOING'
 }
 
-export enum ParticipantInvitationStatus  {
+export enum ParticipantInvitationStatus {
     BLOCKED = 'BLOCKED',
     INVITED = 'INVITED',
     ACCEPTED = 'ACCEPTED'
@@ -181,5 +181,13 @@ export enum VesselType {
     BOARD = 'BOARD',
     DINGHY = 'DINGHY',
     KEELBOAT = 'KEELBOAT',
-    OTHER = 'OTHER'   
+    OTHER = 'OTHER'
 }
+
+export const WATERSPORTS = [
+    "WINGING",
+    "CRUISING",
+    "HANDICAP",
+    "ONEDESIGN",
+    "KITESURFING",
+    "WINDSURFING"];
