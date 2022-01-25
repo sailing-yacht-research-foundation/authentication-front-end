@@ -257,7 +257,16 @@
       "certifications": "Certifications",
       "medical_problems": "Medical Problems",
       "tshirt_size": "TShirt Size",
-      "shareable_information": "Shareable Information"
+      "shareable_information": "Shareable Information",
+      "epirbBeaconHexId": "Epirb BeaconHexId",
+      "your_uploaded_passport": "Your uploaded Passport",
+      "your_uploaded_vaccination_card": "Your uploaded Vaccination Card",
+      "covid_vaccination_card": "Covid Vaccination Card",
+      "remove_covid_card": "Remove Covid Card",
+      "are_you_sure_you_want_to_remove_covid_card": "Are you sure you want to remove covid card?",
+      "remove_passport_photo": "Remove Passport Photo",
+      "are_you_sure_you_want_to_remove_passport_photo": "Are you sure you want to remove passport photo?",
+      "remove": "Remove"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"
@@ -533,7 +542,11 @@
     "event_is_canceled_or_completed_you_cannot_manage_it_from_this_point": "This event is canceled or completed, you cannot manage it from this point.",
     "invite_groups_or_individual_by_searching_them": "Invite groups or individuals by searching them.",
     "successfully_invited_your_participants": "Successfully invited {{numberOfCompetitors}} competitors.",
-    "successfully_invited_your_participants_from_group": "Successfully invited {{numberOfCompetitors}} competitors from {{numberOfGroups}} group(s)."
+    "successfully_invited_your_participants_from_group": "Successfully invited {{numberOfCompetitors}} competitors from {{numberOfGroups}} group(s).",
+    "event_type":"Event Type",
+    "hashtag": "Hashtag",
+    "participanting_fee": "Participating Fee",
+    "participanting_fee_type": "Participating Fee Type"
   },
   "course_list": {
     "name": "Name",
@@ -650,7 +663,7 @@
     "homeport": "Home Port",
     "ssbTransceiver": "SSB transceiver",
     "rigging": "Rigging",
-    "marina_phoneNumber": "Marina PhoneNumber",
+    "marina_phoneNumber": "Marina Phone Number",
     "epirbHexId": "epirbHexId",
     "satellite_number": "Satellite Number",
     "onboard_phone": "Onboard Phone",
@@ -876,7 +889,8 @@
     "delete_this_liferaft": "Delete this liferaft.",
     "if_you_havent_linked_any_credentials": "If you haven't linked any credentials, you can go to this page to link your credential.",
     "integrations_page": "Integrations page",
-    "your_interests": "Your interests"
+    "your_interests": "Your interests",
+    "event_types": "Select an event type"
   },
   "forms": {
     "first_name_is_required": "First name is required.",
@@ -916,7 +930,14 @@
     "group_name_must_not_be_longer_than_100_chars": "Group name must not be longer than 100 characters.",
     "competitors_are_required": "Competitors are required.",
     "serial_number_is_required": "Serial number is required.",
-    "serial_number_must_not_be_greater_than_20_chars": "Serial number must not be greater than 20 characters."
+    "serial_number_must_not_be_greater_than_20_chars": "Serial number must not be greater than 20 characters.",
+    "emergency_name_must_not_be_greater_than_25_chars": "Emergency name must not be more than 25 characters.",
+    "emergency_relationship_must_not_be_greater_than_25_chars": "Emergency relationship must not be more than 25 characters.",
+    "passport_must_be_a_number_with_at_least_5_digits": "Passport must be a number with at least 5 digits.",
+    "food_allergies_must_not_be_more_than_50_characters": "Food allergies must not be more than 50 characters.",
+    "please_input_in_commas_separated_format": "Please input in commas separated format.",
+    "please_input_no_more_than_255_characters": "Please input no more than 255 characters.",
+    "please_input_number": "Please input number."
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",

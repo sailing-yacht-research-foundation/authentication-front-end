@@ -191,3 +191,24 @@ export const WATERSPORTS = [
     "ONEDESIGN",
     "KITESURFING",
     "WINDSURFING"];
+
+export const ownershipArray = [
+    'OWNED', 'RENTED'
+];
+
+export enum EventTypes {
+    ONE_DESIGN = 'ONE_DESIGN',
+    HANDICAP_RACE = 'HANDICAP_RACE',
+    KITESURFING = 'KITESURFING',
+    WINGING = 'WINGING',
+    WINDSURFING = 'WINDSURFING',
+    CRUISING = 'CRUISING',
+    RALLY = 'RALLY',
+    TRAINING = 'TRAINING',
+    OTHER = 'OTHER'
+}
+
+export enum EventParticipatingTypes {
+    VESSEL = 'VESSEL',
+    PERSON = 'PERSON'
+}

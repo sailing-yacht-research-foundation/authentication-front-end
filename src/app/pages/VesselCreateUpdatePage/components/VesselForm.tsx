@@ -49,15 +49,14 @@ export const VesselForm = () => {
     ]
 
     const onFinish = async (values) => {
-        let { publicName, lengthInMeters } = values;
         let response;
 
         setIsSaving(true);
 
         const data = {
-            publicName: publicName,
-            lengthInMeters: lengthInMeters,
-            orcJsonPolars: {}
+            ...values,
+            hullsCount: Number(values.hullsCount),
+            orcJsonPolars: null
         };
 
         if (mode === MODE.CREATE)
@@ -108,6 +107,12 @@ export const VesselForm = () => {
     const renderVesselType = () => {
         return vesselTypes.map((type, index) => {
             return <Select.Option key={index} value={type.value}>{type.name}</Select.Option>
+        });
+    }
+
+    const renderHullsCountSelection = () => {
+        return [1, 2, 3].map((number, index) => {
+            return <Select.Option key={index} value={number}>{number}</Select.Option>
         });
     }
 
@@ -262,7 +267,9 @@ export const VesselForm = () => {
                                     })]}
                                     name="hullsCount"
                                 >
-                                    <SyrfInputField autoCorrect="off" />
+                                    <SyrfFormSelect>
+                                        {renderHullsCountSelection()}
+                                    </SyrfFormSelect>
                                 </Form.Item>
 
                             </Col>
