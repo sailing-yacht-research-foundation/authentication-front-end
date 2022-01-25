@@ -546,7 +546,12 @@
     "event_type":"Event Type",
     "hashtag": "Hashtag",
     "participanting_fee": "Participating Fee",
-    "participanting_fee_type": "Participating Fee Type"
+    "participanting_fee_type": "Participating Fee Type",
+    "is_crewed": "Is Crewed",
+    "min_crew": "Min. Crews",
+    "max_crew": "Max. Crews",
+    "require_covid_vaccination": "Require COVID Vaccination?",
+    "require_certifications": "Require certifications?"
   },
   "course_list": {
     "name": "Name",
@@ -937,7 +942,9 @@
     "food_allergies_must_not_be_more_than_50_characters": "Food allergies must not be more than 50 characters.",
     "please_input_in_commas_separated_format": "Please input in commas separated format.",
     "please_input_no_more_than_255_characters": "Please input no more than 255 characters.",
-    "please_input_number": "Please input number."
+    "please_input_number": "Please input number.",
+    "min_crews_must_be_less_than_max_crews": "Min. crews is required and must be less than max. crews",
+    "max_crews_must_be_greater_than_min_crews": "Max. crew is required and must be greater than min. crews"
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Spin, Form, Divider, Select, Switch } from 'antd';
+import { Spin, Form, Divider, Select } from 'antd';
 import { PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
-import { SyrfFieldLabel, SyrfFormButton, SyrfInputField, SyrfFormWrapper } from 'app/components/SyrfForm';
+import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { LocationPicker } from './LocationPicker';
@@ -70,11 +70,12 @@ export const MyEventForm = () => {
     const raceListRef = React.useRef<any>();
 
     const onFinish = async (values) => {
-        const { startDate, isOpen, lon, lat, endDate, endTime, startTime, endLat, endLon, admins } = values;
+        const { startDate, isOpen, lon, lat, endDate, endTime, startTime, endLat, endLon, admins, requiredCertifications } = values;
         let response;
         let currentDate = moment();
         let currentTime = moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
+        const certifications = !!requiredCertifications ? requiredCertifications.split(',') : [];
 
         const startTimeValidation = handleCheckIsStartTimeValid();
         const endTimeValidation = handleCheckIsEndDateTimeValid();
@@ -116,7 +117,8 @@ export const MyEventForm = () => {
                 id: item.id,
                 isIndividualAssignment: item.isIndividualAssignment
             })),
-            participatingFee: (values.participatingFee && values.participatingFee !== 0) ? values.participatingFee : undefined
+            participatingFee: (values.participatingFee && values.participatingFee !== 0) ? values.participatingFee : undefined,
+            requiredCertifications: certifications
         };
 
         setIsSavingEvent(true);
@@ -323,18 +325,19 @@ export const MyEventForm = () => {
                     avatar: editor.groupImage,
                     name: editor.groupName,
                     isIndividualAssignment: false
-                }))]
+                }))],
+                requiredCertifications: response.data?.requiredCertifications.join(',')
             });
             setEvent(response.data);
             setCoordinates({
-                lat: response?.data?.lat,
-                lng: response?.data?.lon
+                lat: response.data?.lat,
+                lng: response.data?.lon
             });
             onChoosedLocation(response.data.lat, response.data.lon);
 
-            if (response?.data?.endLocation) {
-                const endLat = response?.data?.endLocation?.coordinates[1];
-                const endLon = response?.data?.endLocation?.coordinates[0]
+            if (response.data?.endLocation) {
+                const endLat = response.data?.endLocation?.coordinates[1];
+                const endLon = response.data?.endLocation?.coordinates[0]
                 setEndCoordinates({
                     lat: endLat,
                     lng: endLon
@@ -667,7 +670,7 @@ export const MyEventForm = () => {
 
                         <FormItemEndDate renderErrorField={renderErrorField} error={error} handleFieldChange={handleFieldChange} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItems form={form} event={event} mode={mode} />
+                        <FormItems event={event} mode={mode} />
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
