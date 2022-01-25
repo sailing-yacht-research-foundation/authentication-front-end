@@ -70,7 +70,7 @@ export const MyEventForm = () => {
     const raceListRef = React.useRef<any>();
 
     const onFinish = async (values) => {
-        const { startDate, isOpen, lon, lat, endDate, endTime, startTime, endLat, endLon, admins, requiredCertifications } = values;
+        const { startDate, isOpen, lon, lat, endDate, endTime, startTime, endLat, endLon, admins, requiredCertifications, requireCovidCertificate, isCrewed } = values;
         let response;
         let currentDate = moment();
         let currentTime = moment();
@@ -110,6 +110,8 @@ export const MyEventForm = () => {
             ics: "ics",
             isPrivate: false,
             isOpen: !!isOpen,
+            isCrewed: !!isCrewed,
+            requireCovidCertificate: !!requireCovidCertificate,
             editors: editors.filter(item => item.type === AdminType.INDIVIDUAL).map(item => ({
                 id: item.id
             })),
