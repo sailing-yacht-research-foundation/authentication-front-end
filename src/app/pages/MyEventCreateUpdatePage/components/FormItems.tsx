@@ -5,6 +5,9 @@ import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfInputNumber } from 
 import { translations } from 'locales/translations';
 import { EventState, MODE } from 'utils/constants';
 import { useLocation } from 'react-router-dom';
+import { getValidOrganizableGroup } from 'services/live-data-server/groups';
+import { ItemAvatar } from 'app/components/SyrfGeneral';
+import { renderAvatar } from 'utils/user-utils';
 
 export const FormItems = (props) => {
 
@@ -18,7 +21,11 @@ export const FormItems = (props) => {
 
     const [isCrewed, setIsCrewed] = React.useState<boolean>(false);
 
+    const [selectedOrganizerGroup, setSelectedOrganizerGroup] = React.useState<boolean>(false);
+
     const participantFeeValid = participatingFee !== 0;
+
+    const [validGroups, setValidGroups] = React.useState<any[]>([]);
 
     const eventTypes = [
         { name: 'One Design', value: 'ONE_DESIGN' },
@@ -34,13 +41,22 @@ export const FormItems = (props) => {
     React.useEffect(() => {
         if (location.pathname.includes(MODE.CREATE)) {
             setIsCrewed(false);
-            setParticipatingFee(0)
+            setParticipatingFee(0);
+            setSelectedOrganizerGroup(false);
         } else {
+            setSelectedOrganizerGroup(!!event.organizerGroupId)
             setIsCrewed(!!event.isCrewed);
             setParticipatingFee(!!event.participatingFee ? event.participatingFee : 0);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, event]);
+
+    const renderValidOrganizerGroups = () => {
+        return validGroups.map((group, index) => <Select.Option key={index} value={group.id}>
+            <ItemAvatar src={renderAvatar(group.groupImage)} />
+            {group.groupName}
+        </Select.Option>)
+    }
 
     const renderEventTypesSelection = () => {
         return eventTypes.map((type, index) => <Select.Option key={index} value={type.value}>{type.name}</Select.Option>)
@@ -49,6 +65,18 @@ export const FormItems = (props) => {
     const renderParticipatingType = () => {
         return ['PERSON', 'VESSEL'].map((type, index) => <Select.Option key={index} value={type}>{type.toLowerCase()}</Select.Option>)
     }
+
+    const getAllValidOrganizerGroups = async () => {
+        const response = await getValidOrganizableGroup();
+
+        if (response.success) {
+            setValidGroups(response.data.groups);
+        }
+    }
+
+    React.useEffect(() => {
+        getAllValidOrganizerGroups();
+    }, []);
 
     return (
         <>
@@ -75,29 +103,39 @@ export const FormItems = (props) => {
                 </Col>
             </Row>
 
-            <Row gutter={12}>
-                <Col xs={24} sm={24} md={participantFeeValid ? 12 : 24} lg={participantFeeValid ? 12 : 24}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee)}</SyrfFieldLabel>}
-                        name="participatingFee">
-                        <SyrfInputNumber
-                            onChange={(value) => setParticipatingFee(Number(value))}
-                            defaultValue={0}
-                            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        />
-                    </Form.Item>
-                </Col>
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.organizer_group)}</SyrfFieldLabel>}
+                name="organizerGroupId">
+                <SyrfFormSelect onChange={value => setSelectedOrganizerGroup(!!value)}>
+                    {renderValidOrganizerGroups()}
+                </SyrfFormSelect>
+            </Form.Item>
 
-                {
-                    participantFeeValid && <Col xs={24} sm={24} md={12} lg={12}><Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee_type)}</SyrfFieldLabel>}
-                        name="participatingFeeType">
-                        <SyrfFormSelect>
-                            {renderParticipatingType()}
-                        </SyrfFormSelect>
-                    </Form.Item></Col>
-                }
-            </Row>
+            { selectedOrganizerGroup &&
+                <Row gutter={12}>
+                    <Col xs={24} sm={24} md={participantFeeValid ? 12 : 24} lg={participantFeeValid ? 12 : 24}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee)}</SyrfFieldLabel>}
+                            name="participatingFee">
+                            <SyrfInputNumber
+                                onChange={(value) => setParticipatingFee(Number(value))}
+                                defaultValue={0}
+                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            />
+                        </Form.Item>
+                    </Col>
+
+                    {
+                        participantFeeValid && <Col xs={24} sm={24} md={12} lg={12}><Form.Item
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee_type)}</SyrfFieldLabel>}
+                            name="participatingFeeType">
+                            <SyrfFormSelect>
+                                {renderParticipatingType()}
+                            </SyrfFormSelect>
+                        </Form.Item></Col>
+                    }
+                </Row>
+            }
 
             <Row gutter={12}>
                 <Col xs={12} sm={12} md={!isCrewed ? 8 : 4} lg={!isCrewed ? 8 : 4}>
@@ -158,7 +196,7 @@ export const FormItems = (props) => {
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_certifications)}</SyrfFieldLabel>}
                 name="requiredCertifications"
             >
-                <SyrfInputField placeholder={t(translations.forms.please_input_in_commas_separated_format)}/>
+                <SyrfInputField placeholder={t(translations.forms.please_input_in_commas_separated_format)} />
             </Form.Item>
 
             <Form.Item
@@ -170,7 +208,7 @@ export const FormItems = (props) => {
             >
                 <SyrfInputField autoCorrect="off" />
             </Form.Item>
-            
+
 
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}

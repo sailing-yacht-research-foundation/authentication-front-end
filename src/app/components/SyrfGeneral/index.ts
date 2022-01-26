@@ -223,3 +223,10 @@ export const StyledPLaceDropdown = styled(Menu)`
     border: 1px solid #d9d9d9;
     width: 100%;
 `;
+
+export const ItemAvatar = styled.img`
+with: 25px;
+height: 25px;
+margin-right: 5px;
+border-radius: 50%;
+`;

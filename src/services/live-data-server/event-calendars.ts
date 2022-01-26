@@ -107,3 +107,9 @@ export const getEventRegisteredVessels = (calendarEventId, page) => {
         }
     }));
 }
+
+export const uploadPdfs = (calendarEventId, formData) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/upload-pdfs`, formData,  {
+        headers: { "content-type": "multipart/form-data" }
+    }));
+}

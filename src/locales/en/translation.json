@@ -551,7 +551,12 @@
     "min_crew": "Min. Crews",
     "max_crew": "Max. Crews",
     "require_covid_vaccination": "Require COVID Vaccination?",
-    "require_certifications": "Require certifications?"
+    "require_certifications": "Require certifications?",
+    "organizer_group": "Organizer Group",
+    "pdf_documents":"PDF documents",
+    "download_all":"Download All",
+    "download": "Download",
+    "upload": "Upload"
   },
   "course_list": {
     "name": "Name",

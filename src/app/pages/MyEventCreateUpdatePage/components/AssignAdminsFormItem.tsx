@@ -11,6 +11,7 @@ import { searchForProfiles } from 'services/live-data-server/profile';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { useSelector } from 'react-redux';
 import { AdminType } from 'utils/constants';
+import { ItemAvatar } from 'app/components/SyrfGeneral';
 
 export const AssignAdminsFormItem = (props) => {
 
@@ -125,10 +126,3 @@ export const AssignAdminsFormItem = (props) => {
         </Form.Item>
     )
 }
-
-const ItemAvatar = styled.img`
-    with: 25px;
-    height: 25px;
-    margin-right: 5px;
-    border-radius: 50%;
-`;
