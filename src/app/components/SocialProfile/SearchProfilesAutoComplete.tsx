@@ -25,7 +25,7 @@ export const SearchProfilesAutoComplete = ({ keyword, user }) => {
         const response = await searchForProfiles(keyword, getUserAttribute(user, 'locale'));
 
         if (response.success) {
-            setResults(response?.data?.rows);
+            setResults(response?.data);
         }
     }
 
