@@ -107,7 +107,7 @@ export const PlaybackOldRace = (props) => {
         eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
         eventEmitter = undefined;
       }
-     
+
       socketWorker?.terminate();
       mapDataWorker?.terminate();
       socketWorker = undefined;
