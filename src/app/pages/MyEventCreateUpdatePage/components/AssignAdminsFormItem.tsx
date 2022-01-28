@@ -11,12 +11,15 @@ import { searchForProfiles } from 'services/live-data-server/profile';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { useSelector } from 'react-redux';
 import { AdminType } from 'utils/constants';
+import { useHistory } from 'react-router-dom';
 
 export const AssignAdminsFormItem = (props) => {
 
     const user = useSelector(selectUser);
 
     const { event } = props;
+
+    const history = useHistory();
 
     // eslint-disable-next-line
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
@@ -37,9 +40,14 @@ export const AssignAdminsFormItem = (props) => {
         }))
     }
 
+    const navigateToProfile = (e, item) => {
+        e.stopPropagation();
+        history.push(`/${item.type === AdminType.GROUP ? 'groups' : 'profile'}/${item.id}`);
+    }
+
     const renderItemResults = () => {
         return items.map(item => <Select.Option style={{ padding: '5px' }} value={JSON.stringify(item)}>
-            <ItemAvatar src={renderAvatar(item.avatar)} /> {item.name}, type: {item.type}
+            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name}
             {item.type === AdminType.GROUP && <Switch checked={item.isIndividualAssignment} style={{ marginLeft: '10px' }} checkedChildren={t(translations.my_event_create_update_page.group_members_assignment)} unCheckedChildren={t(translations.my_event_create_update_page.group_assignment)} onChange={(checked, e) => handleSwitchChange(checked, e, item)} />}
         </Select.Option>)
     }
@@ -109,7 +117,7 @@ export const AssignAdminsFormItem = (props) => {
 
     return (
         <Form.Item
-            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.editors)}</SyrfFieldLabel>}
+            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.admins)}</SyrfFieldLabel>}
             name="admins"
             data-tip={t(translations.tip.set_admins_for_this_event)}>
             <SyrfFormSelect mode="multiple"

@@ -1,22 +1,25 @@
 import React from 'react';
 import { Button, message, Space, Spin, Tag } from 'antd';
-import { GobackButton, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
 import { EventState, MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams } from 'react-router';
-import { downloadIcalendarFile, get } from 'services/live-data-server/event-calendars';
+import { downloadIcalendarFile, get, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { VesselList } from './VesselList';
+import { toast } from 'react-toastify';
+import { GiArchiveRegister } from 'react-icons/gi';
+import { HiLockClosed } from 'react-icons/hi';
 
 export const EventDetail = () => {
 
@@ -29,9 +32,50 @@ export const EventDetail = () => {
 
     const [isFetchingEvent, setIsFetchingEvent] = React.useState<boolean>(false);
 
+    const [isOpeningClosingRegistration, setIsOpeningClosingRegistration] = React.useState<boolean>(false);
+
     const history = useHistory();
 
     const { t } = useTranslation();
+
+    const toggleRegistration = async (allowRegistration: boolean) => {
+        setIsOpeningClosingRegistration(true);
+        const response = await toggleOpenForRegistration(eventId, allowRegistration);
+        setIsOpeningClosingRegistration(false);
+
+        if (response.success) {
+            setEvent({
+                ...event,
+                allowRegistration: allowRegistration
+            })
+            if (allowRegistration) {
+                toast.info(t(translations.my_event_create_update_page.event_is_opened_for_registration));
+            } else {
+                toast.info(t(translations.my_event_create_update_page.event_is_closed_for_registration));
+            }
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
+    const menus = [
+        {
+            name: t(translations.my_event_create_update_page.open_registration),
+            show: event.isOpen && event.allowRegistration === false && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
+            handler: () => toggleRegistration(true),
+            icon: <GiArchiveRegister />,
+            spinning: isOpeningClosingRegistration,
+            isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.close_registration),
+            show: event.isOpen && event.allowRegistration === true && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
+            handler: () => toggleRegistration(false),
+            icon: <HiLockClosed />,
+            spinning: isOpeningClosingRegistration,
+            isDelete: false,
+        }
+    ];
 
     React.useEffect(() => {
         fetchEvent();
@@ -102,14 +146,22 @@ export const EventDetail = () => {
                     </GobackButton>
                     <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
                         <EventTitle>{event.name}</EventTitle>
-                        {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={()=> navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
-                    <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
+                        {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={() => navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
+                        <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 <EventActions>
                     <Space>
                         {
-                            canManageEvent() && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
+                            canManageEvent() &&
+                            <>
+                                {menus.map((item, index) => {
+                                    return item.show && <Spin key={index} spinning={item.spinning}>
+                                        {<Button shape="round" onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</Button>}
+                                    </Spin>
+                                })}
+                                <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
+                            </>
                         }
                         <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
                             downloadIcalendarFile(event);

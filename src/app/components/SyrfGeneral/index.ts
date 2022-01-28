@@ -223,3 +223,7 @@ export const StyledPLaceDropdown = styled(Menu)`
     border: 1px solid #d9d9d9;
     width: 100%;
 `;
+
+export const IconWrapper = styled.span`
+    margin-right: 5px;
+`;

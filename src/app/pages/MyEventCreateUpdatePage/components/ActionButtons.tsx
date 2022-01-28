@@ -2,18 +2,16 @@ import React from 'react';
 import { Spin, Dropdown, Menu, Button, Space } from 'antd';
 import { EventState, MODE } from 'utils/constants';
 import { useTranslation } from 'react-i18next';
-import { cancelCalendarEvent, closeCalendarEvent, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
+import { cancelCalendarEvent, closeCalendarEvent } from 'services/live-data-server/event-calendars';
 import { translations } from 'locales/translations';
 import { toast } from 'react-toastify';
-import { HiLockClosed } from 'react-icons/hi';
-import { GiArchiveRegister } from 'react-icons/gi';
 import { GoChecklist } from 'react-icons/go';
 import { BiImport, BiTrash } from 'react-icons/bi';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { MdFreeCancellation } from 'react-icons/md';
 import styled from 'styled-components';
 import { media } from 'styles/media';
-import { DeleteButton } from 'app/components/SyrfGeneral';
+import { DeleteButton, IconWrapper } from 'app/components/SyrfGeneral';
 
 export const ActionButtons = ({
     mode,
@@ -27,28 +25,6 @@ export const ActionButtons = ({
     const { t } = useTranslation();
 
     const [isChangingStatus, setIsChangingStatus] = React.useState<boolean>(false);
-
-    const [isOpeningClosingRegistration, setIsOpeningClosingRegistration] = React.useState<boolean>(false);
-
-    const toggleRegistration = async (allowRegistration: boolean) => {
-        setIsOpeningClosingRegistration(true);
-        const response = await toggleOpenForRegistration(eventId, allowRegistration);
-        setIsOpeningClosingRegistration(false);
-
-        if (response.success) {
-            setEvent({
-                ...event,
-                allowRegistration: allowRegistration
-            })
-            if (allowRegistration) {
-                toast.info(t(translations.my_event_create_update_page.event_is_opened_for_registration));
-            } else {
-                toast.info(t(translations.my_event_create_update_page.event_is_closed_for_registration));
-            }
-        } else {
-            showToastMessageOnRequestError(response.error);
-        }
-    }
 
     const closeEvent = async () => {
         const response = await closeCalendarEvent(eventId);
@@ -95,22 +71,6 @@ export const ActionButtons = ({
             icon: <MdFreeCancellation />,
             spinning: isChangingStatus,
             handler: () => cancelEvent(),
-            isDelete: false,
-        },
-        {
-            name: t(translations.my_event_create_update_page.open_registration),
-            show: event.isOpen && event.allowRegistration === false && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
-            handler: () => toggleRegistration(true),
-            icon: <GiArchiveRegister />,
-            spinning: isOpeningClosingRegistration,
-            isDelete: false,
-        },
-        {
-            name: t(translations.my_event_create_update_page.close_registration),
-            show: event.isOpen && event.allowRegistration === true && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
-            handler: () => toggleRegistration(false),
-            icon: <HiLockClosed />,
-            spinning: isOpeningClosingRegistration,
             isDelete: false,
         },
         {
@@ -179,8 +139,4 @@ const MobileButtonsWrapper = styled.div`
     ${media.medium`
         display: none;
     `}
-`;
-
-const IconWrapper = styled.span`
-    margin-right: 5px;
 `;
