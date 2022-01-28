@@ -22,7 +22,8 @@ module.exports = {
             if (scrapedRace) {
                 return {
                     title: scrapedRace._source?.name,
-                    description: null
+                    description: null,
+                    openGraphImage: scrapedRace._source?.open_graph_image
                 }
             }
         }

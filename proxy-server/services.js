@@ -28,7 +28,7 @@ module.exports = {
             },
         };
 
-        searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "url", "source"];
+        searchParams._source = ["id", "name", "approx_start_point", "start_country", "approx_start_time_ms", "url", "source", "open_graph_image"];
 
         return syrfRequest.post(`${process.env.SYRF_API_URL}${process.env.SYRF_API_VERSION}/competition-units/search`, searchParams).then(response => {
             return response.data
