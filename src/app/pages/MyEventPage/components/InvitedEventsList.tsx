@@ -69,7 +69,7 @@ export const InvitedEventLists = (props) => {
             key: 'start_date',
             render: (value, record) => {
                 if (record.event) {
-                    return [moment(record?.event.approximateStartTime).format(TIME_FORMAT.date_text_with_time), record?.event.approximateStartTime_zone, renderTimezoneInUTCOffset(record?.event.approximateStartTime_zone)].filter(Boolean).join(' ')
+                    return [moment(record.event.approximateStartTime).format(TIME_FORMAT.date_text_with_time), record.event.approximateStartTime_zone, renderTimezoneInUTCOffset(record?.event.approximateStartTime_zone)].filter(Boolean).join(' ')
                 }
 
                 return renderEmptyValue(null);
