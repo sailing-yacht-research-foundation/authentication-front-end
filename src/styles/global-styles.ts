@@ -7,7 +7,7 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     width: 100%;
     line-height: 1.5;
-    max-width: 1920px;
+    max-width: 2560px;
     display: block;
     margin: 0 auto;
   }
@@ -59,7 +59,7 @@ export const GlobalStyle = createGlobalStyle`
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: center;
-    max-width: 1920px;
+    max-width: 2560px;
     margin: 0 auto;
   }
 
