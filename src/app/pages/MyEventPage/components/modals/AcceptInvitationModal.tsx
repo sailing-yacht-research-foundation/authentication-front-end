@@ -89,7 +89,7 @@ export const AcceptInvitationModal = (props) => {
     }, [request]);
 
     return (<Modal
-        title={t(translations.my_event_list_page.register_for, { eventName: request?.event?.name })}
+        title={t(translations.my_event_list_page.register_for, { raceName: request?.event?.name })}
         bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
         visible={showModal}
         footer={null}
