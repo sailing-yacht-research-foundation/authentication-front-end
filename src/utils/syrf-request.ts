@@ -66,6 +66,7 @@ class Request {
                     if (responseData.data) {
                         localStorage.setItem('session_token', responseData.data?.token);
                         localStorage.setItem('refresh_token', responseData.data?.refresh_token);
+                        localStorage.setItem('is_guest', '1');
                     }
                     localStorage.setItem('tried_getting_token', '1');
                     window.location.reload();

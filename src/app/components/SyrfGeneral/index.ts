@@ -248,12 +248,16 @@ export const FormPhotoHeaderContainer = styled.div`
 `;
 
 export const ItemVerifyMessage = styled.div`
-color: rgb(115, 116, 117);
-font-size: 13px;
-margin-top: -20px;
-text-align: right;
+    color: rgb(115, 116, 117);
+    font-size: 13px;
+    margin-top: -20px;
+    text-align: right;
 
-&.verified {
-    color: ${StyleConstants.MAIN_TONE_COLOR} !important;
-}
+    &.verified {
+        color: ${StyleConstants.MAIN_TONE_COLOR} !important;
+    }
+`;
+
+export const IconWrapper = styled.span`
+    margin-right: 5px;
 `;

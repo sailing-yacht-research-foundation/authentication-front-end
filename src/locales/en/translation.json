@@ -536,7 +536,7 @@
     "stop_this_event": "Stop This Event",
     "are_you_sure_you_want_to_stop_this_event": "Are you really sure you want to stop this event? All races are on going will be stopped. Do you want to continue?",
     "successfully_stopped_this_event": "Successfully stopped this event.",
-    "editors": "Editors",
+    "admins": "Admins",
     "group_members_assignment": "Group members assignment",
     "group_assignment": "Group assignment",
     "your_not_the_event_editor_therefore_you_cannot_edit_the_event": "You're not the event editor therefore you cannot edit the event.",

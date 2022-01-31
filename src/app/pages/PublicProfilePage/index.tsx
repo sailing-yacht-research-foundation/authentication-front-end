@@ -2,7 +2,6 @@ import React from 'react';
 import { Row } from 'antd';
 import { PublicProfile } from './components/PublicProfile';
 import styled from 'styled-components';
-import { PeopleYouMayKnow } from 'app/components/SocialProfile/PeopleYouMayKnow';
 import { media } from 'styles/media';
 
 export const PublicProfilePage = () => {
@@ -10,9 +9,6 @@ export const PublicProfilePage = () => {
         <Row justify="center" align="top" style={{ minHeight: 'calc(100vh - 70px)', background: '#f7f7f9', marginTop: '70px' }}>
             <ProfileWrapper>
                 <PublicProfile />
-                <RightPaneWrapper>
-                    <PeopleYouMayKnow />
-                </RightPaneWrapper>
             </ProfileWrapper>
         </Row>
     )

@@ -4,16 +4,21 @@ import { useTranslation } from 'react-i18next';
 import { Tabs } from 'antd';
 
 import { translations } from 'locales/translations';
-import { PageDescription, PageHeaderContainerSimple, PageHeading, PageInfoContainer } from 'app/components/SyrfGeneral';
+import { CreateButton, PageDescription, PageHeaderContainerSimple, PageHeading, PageInfoContainer } from 'app/components/SyrfGeneral';
 import { EventList } from './EventList';
 import { InvitedEventLists } from './InvitedEventsList';
 import { getMyInvitedEvents } from 'services/live-data-server/participants';
+import { AiFillPlusCircle } from 'react-icons/ai';
+import { useHistory } from 'react-router-dom';
+import { media } from 'styles/media';
 
 export const MyEvents = () => {
 
     const { t } = useTranslation();
 
     const [numberOfInvitations, setNumberOfInvitation] = React.useState<number>(0);
+
+    const history = useHistory();
 
     const getNumberOfInvitedEvents = async () => {
         const response = await getMyInvitedEvents(1);
@@ -34,6 +39,11 @@ export const MyEvents = () => {
                     <PageHeading style={{ padding: '0px', marginBottom: '4px' }}>{t(translations.my_event_list_page.my_events)}</PageHeading>
                     <PageDescription style={{ padding: '0px', marginBottom: '8px' }}>{t(translations.my_event_list_page.events_are_regattas)}</PageDescription>
                 </PageInfoContainer>
+                <CreateButtonWrapper>
+                    <CreateButton style={{ margin: '0px' }} onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
+                        style={{ marginRight: '5px' }}
+                        size={18} />}>{t(translations.my_event_list_page.create_a_new_event)}</CreateButton>
+                </CreateButtonWrapper>
             </PageHeaderContainerSimple>
             <StyledTabs<React.ElementType> animated defaultActiveKey="1">
                 <StyledTabs.TabPane tab={'Events'} key="1">
@@ -47,6 +57,13 @@ export const MyEvents = () => {
         </Container>
     )
 }
+
+const CreateButtonWrapper = styled.div`
+    display: block;
+    ${media.medium`
+        display: none;
+    `}
+`;
 
 const Container = styled.div`
     padding: 24px 0px;

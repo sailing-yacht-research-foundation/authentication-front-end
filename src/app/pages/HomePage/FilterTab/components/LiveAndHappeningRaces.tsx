@@ -111,7 +111,7 @@ export const LiveAndHappeningRaces = () => {
     return (<>
         <HeaderContainer>
             <h3>{t(translations.home_page.live_and_upcoming.live_and_upcoming_races)}</h3>
-            <Space size={20}>
+            <Space size={10}>
                 <Dropdown overlay={durationMenus}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                         {durationToDurationName(duration)} <DownOutlined />
@@ -138,4 +138,10 @@ export const LiveAndHappeningRaces = () => {
 const HeaderContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h3 {
+        margin: 0;
+    }
 `;
