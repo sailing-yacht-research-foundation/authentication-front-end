@@ -14,16 +14,18 @@ import {
 } from 'app/components/SyrfForm';
 import { languagesList } from 'utils/languages-util';
 import { translations } from 'locales/translations';
-import { StyleConstants } from 'styles/StyleConstants';
 import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';
 import { FIELD_VALIDATE } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
 import { FilterWorldSailingNumber } from 'utils/world-sailing-number';
 import countryCodeSource from '../../assets/world-sailing-number-countrycode.json';
-import { sendPhoneVerification } from 'services/live-data-server/user';
+import { sendPhoneVerification, verifyPhoneNumber } from 'services/live-data-server/user';
 import { toast } from 'react-toastify';
-import { VerifyPhoneModal } from './VerifyPhoneModal';
+import { VerifyPhoneModal } from 'app/components/VerifyPhoneNumberModal';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { ItemVerifyMessage } from 'app/components/SyrfGeneral';
+import { useDispatch } from 'react-redux';
+import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -38,6 +40,8 @@ export const PrivateUserInformation = (props) => {
 
     const { authUser, address, setAddress } = props;
 
+    const dispatch = useDispatch();
+    const { actions } = UseLoginSlice();
     const { t } = useTranslation();
     const [isSuggestionVisible, setIsSuggestionVisible] = useState<boolean>(false);
     const [worldSailingNumber, setWorldSailingNumber] = useState('');
@@ -134,9 +138,20 @@ export const PrivateUserInformation = (props) => {
         });
     };
 
+    const verifyPhone = async (code) => {
+        const response = await verifyPhoneNumber(code);
+        if (response.success) {
+            toast.success(t(translations.profile_page.update_profile.your_phone_number_has_been_verified));
+            dispatch(actions.getUser());
+            setShowPhoneVerifyModal(false);
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     return (
         <Wrapper>
-            <VerifyPhoneModal sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showPhoneVerifyModal} setShowPhoneVerifyModal={setShowPhoneVerifyModal} />
+            <VerifyPhoneModal verifyPhone={verifyPhone} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showPhoneVerifyModal} setShowPhoneVerifyModal={setShowPhoneVerifyModal} />
             <SyrfFormTitle>{t(translations.profile_page.update_profile.private_user_details)}</SyrfFormTitle>
             <Form.Item
                 label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
@@ -312,17 +327,6 @@ const Wrapper = styled.div`
     padding: 30px 25px;
     border-radius: 10px;
     margin: 30px 0;
-`;
-
-const ItemVerifyMessage = styled.div`
-    color: rgb(115, 116, 117);
-    font-size: 13px;
-    margin-top: -20px;
-    text-align: right;
-
-    &.verified {
-        color: ${StyleConstants.MAIN_TONE_COLOR} !important;
-    }
 `;
 
 const StyledPLaceDropdown = styled(Menu)`

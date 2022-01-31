@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Upload, Spin } from 'antd';
+import { List, Upload, Spin, Button } from 'antd';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -48,9 +48,9 @@ export const PDFItem = (props) => {
                 showUploadList={false}
                 customRequest={options => uploadPDF(options, item.formFieldName)}
             >
-                <a>{t(translations.my_event_create_update_page.upload)}</a>
+                <Button type="link">{t(translations.my_event_create_update_page.upload)}</Button>
             </Upload>
-        </Spin>, checkIfPdfExist(item.formFieldName) && <a target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a>]}
+        </Spin>, checkIfPdfExist(item.formFieldName) && <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a>]}
     >
         <span>{item.name}</span>
     </List.Item>)

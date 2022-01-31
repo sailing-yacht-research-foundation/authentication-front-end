@@ -1,13 +1,13 @@
 import React from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, Image, Spin, Space } from 'antd';
+import { Button, Image, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../slice';
 import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile } from '../slice/selectors';
 import { FollowerModal } from './modals/FollowerModal';
 import { FollowingModal } from './modals/FollowingModal';
-import { getUserInterestsAsArray, renderAvatar } from 'utils/user-utils';
+import { renderAvatar } from 'utils/user-utils';
 import { FollowStatus } from 'utils/constants';
 import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
 import { BsCheck, BsPlus, BsCheck2All } from 'react-icons/bs';

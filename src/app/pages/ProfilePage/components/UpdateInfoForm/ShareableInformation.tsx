@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Form, DatePicker, Input, Button } from 'antd';
+import { Col, Row, Form, DatePicker, Button, Image } from 'antd';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { SyrfFieldLabel, SyrfFormTitle, SyrfInputField, SyrfPhoneInput } from 'app/components/SyrfForm';
@@ -7,6 +7,7 @@ import { translations } from 'locales/translations';
 import { removeCovidCard, removePassportPhoto } from 'services/live-data-server/user';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { ConfirmModal } from 'app/components/ConfirmModal';
+import { FormPhotoHeaderContainer, FormPhotoWrapper } from 'app/components/SyrfGeneral';
 
 export const ShareableInformation = (props) => {
 
@@ -126,7 +127,7 @@ export const ShareableInformation = (props) => {
                         getValueFromEvent={normFile}
                         data-tip={t(translations.profile_page.update_profile.passport_photo)}
                     >
-                        <Input type={'file'} accept="image/png, image/jpeg" />
+                        <SyrfInputField type={'file'} accept="image/png, image/jpeg" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={8}>
@@ -262,24 +263,24 @@ export const ShareableInformation = (props) => {
 
             <Row gutter={12}>
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    {shareableInformation.passportPhoto && <PassportPhotoWrapper>
-                        <PhotoHeaderContainer>
+                    {shareableInformation.passportPhoto && <FormPhotoWrapper>
+                        <FormPhotoHeaderContainer>
                             <h3>{t(translations.profile_page.update_profile.your_uploaded_passport)}</h3>
                             <Button type="link" danger onClick={() => setShowRemovePassportConfirmModal(true)}>{t(translations.profile_page.update_profile.remove)}</Button>
-                        </PhotoHeaderContainer>
-                        <img src={`data:image/png;base64, ${shareableInformation.passportPhoto}`} />
+                        </FormPhotoHeaderContainer>
+                        <Image src={`data:image/png;base64, ${shareableInformation.passportPhoto}`} />
 
-                    </PassportPhotoWrapper>}
+                    </FormPhotoWrapper>}
                 </Col>
 
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    {shareableInformation.covidVaccinationCard && <PassportPhotoWrapper>
-                        <PhotoHeaderContainer>
+                    {shareableInformation.covidVaccinationCard && <FormPhotoWrapper>
+                        <FormPhotoHeaderContainer>
                             <h3>{t(translations.profile_page.update_profile.your_uploaded_vaccination_card)}</h3>
                             <Button type="link" danger onClick={() => setShowRemoveCovidCardConfirmModal(true)}>{t(translations.profile_page.update_profile.remove)}</Button>
-                        </PhotoHeaderContainer>
-                        <img src={`data:image/png;base64, ${shareableInformation.covidVaccinationCard}`} />
-                    </PassportPhotoWrapper>}
+                        </FormPhotoHeaderContainer>
+                        <Image src={`data:image/png;base64, ${shareableInformation.covidVaccinationCard}`} />
+                    </FormPhotoWrapper>}
                 </Col>
             </Row>
         </Wrapper >
@@ -291,19 +292,4 @@ const Wrapper = styled.div`
     padding: 30px 25px;
     border-radius: 10px;
     margin: 30px 0;
-`;
-
-const PassportPhotoWrapper = styled.div`
-    width: 100%;
-
-    img {
-        width: 100%;
-        height: 100%px;
-        object-fit: cover;
-    }
-`;
-
-const PhotoHeaderContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
 `;

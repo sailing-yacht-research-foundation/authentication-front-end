@@ -59,7 +59,7 @@ export const CompetitorInviteModal = (props) => {
         }
 
         if (peopleResponse.success) {
-            peopleRows = peopleResponse.data.rows.filter(p => !participants.current.includes(p.id)).map(p => {
+            peopleRows = peopleResponse.data.filter(p => !participants.current.includes(p.id)).map(p => {
                 return {
                     type: AdminType.INDIVIDUAL,
                     id: p.id,

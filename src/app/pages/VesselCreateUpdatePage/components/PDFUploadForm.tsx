@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, List } from 'antd';
+import { List } from 'antd';
 import { SyrfFormWrapper } from 'app/components/SyrfForm';
 import { CreateButton, PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
 import { useTranslation } from 'react-i18next';

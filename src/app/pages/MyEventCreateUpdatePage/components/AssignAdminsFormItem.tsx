@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { SyrfFieldLabel, SyrfFormSelect } from 'app/components/SyrfForm';
 import { renderAvatar, getUserAttribute } from 'utils/user-utils';
-import styled from 'styled-components';
 import { debounce } from 'utils/helpers';
 import { searchGroupForAssigns } from 'services/live-data-server/groups';
 import { searchForProfiles } from 'services/live-data-server/profile';
@@ -65,7 +64,7 @@ export const AssignAdminsFormItem = (props) => {
         }
 
         if (peopleResponse.success) {
-            peopleRows = peopleResponse.data.rows.map(p => {
+            peopleRows = peopleResponse.data.map(p => {
                 return {
                     type: AdminType.INDIVIDUAL,
                     id: p.id,

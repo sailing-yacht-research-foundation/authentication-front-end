@@ -54,8 +54,8 @@ export const LiferaftForm = () => {
             capacity,
             model,
             container,
-            lastServiceDate: lastServiceDate ? lastServiceDate.format(TIME_FORMAT.number) : '',
-            manufactureDate: manufactureDate ? manufactureDate.format(TIME_FORMAT.number) : '',
+            lastServiceDate: lastServiceDate ? lastServiceDate.format(TIME_FORMAT.number) : null,
+            manufactureDate: manufactureDate ? manufactureDate.format(TIME_FORMAT.number) : null,
             ownership
         };
 
@@ -68,10 +68,10 @@ export const LiferaftForm = () => {
 
         if (response.success) {
             if (mode === MODE.CREATE) {
-                toast.success(t(translations.vessel_participant_group_create_update_page.created_a_new_group));
+                toast.success(t(translations.vessel_create_update_page.created_a_new_liferaft));
                 setLiferaft(response.data);
             } else {
-                toast.success(t(translations.vessel_participant_group_create_update_page.successfully_updated_group));
+                toast.success(t(translations.vessel_create_update_page.successfully_saved_liferaft));
             }
 
             history.push(`/boats/${boatId}/liferafts/${response.data?.id}/update`);
@@ -92,8 +92,8 @@ export const LiferaftForm = () => {
                 setLiferaft(response.data);
                 form.setFieldsValue({
                     ...response.data,
-                    lastServiceDate: moment(response.data?.lastServiceDate),
-                    manufactureDate: moment(response.data?.manufactureDate),
+                    lastServiceDate: response.data?.lastServiceDate ? moment(response.data?.lastServiceDate) : '',
+                    manufactureDate: response.data?.manufactureDate ? moment(response.data?.manufactureDate) : '',
                 });
             } else {
                 history.push('/404');

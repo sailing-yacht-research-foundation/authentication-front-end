@@ -92,7 +92,7 @@ export const UpdateInfo = (props) => {
             'medicalProblems', 'tShirtSize', 'epirbBeaconHexId', 'covidVaccinationCard'];
 
         const form = new FormData();
-        Object.entries(values).map(([key, value]: any) => {
+        Object.entries(values).forEach(([key, value]: any) => {
             if (fieldsToUpdate.includes(key)) {
                 if (['passportExpirationDate', 'passportIssueDate'].includes(key)) {
                     if (value instanceof moment)
@@ -148,6 +148,7 @@ export const UpdateInfo = (props) => {
 
     React.useEffect(() => {
         getUserShareableInformation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
