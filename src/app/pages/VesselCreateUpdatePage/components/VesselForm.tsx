@@ -14,7 +14,7 @@ import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVes
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { MODE } from 'utils/constants';
+import { AdminType, MODE } from 'utils/constants';
 import { IoIosArrowBack } from 'react-icons/io';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { LiferaftList } from './LiferaftList';
@@ -47,10 +47,11 @@ export const VesselForm = () => {
 
     const onFinish = async (values) => {
         let response;
+        const { admins } = values;
+        const editors = admins ? admins.map(item => JSON.parse(item)) : [];
+        const form = new FormData();
 
         setIsSaving(true);
-
-        const form = new FormData();
 
         Object.entries(values).forEach(([key, value]: any) => {
             if (['onboardPhone', 'satelliteNumber'].includes(key) && !String(value).includes('+')) {
@@ -59,6 +60,15 @@ export const VesselForm = () => {
                 form.append(key, value);
             }
         });
+
+        if (editors && Array.isArray(editors)) {
+            editors.filter(item => item.type === AdminType.GROUP).map((item, index) => {
+                form.append(`groupEditors[${index}]`, item.id);
+            });
+            editors.filter(item => item.type === AdminType.INDIVIDUAL).forEach((item, index) => {
+                form.append(`editors[${index}]`, item.id);
+            });
+        }
 
         if (mode === MODE.CREATE)
             response = await createMultipart(form);
@@ -93,7 +103,18 @@ export const VesselForm = () => {
             if (response.success) {
                 setVessel(response.data);
                 form.setFieldsValue({
-                    ...response.data
+                    ...response.data,
+                    admins: [...response.data?.editors.map(editor => JSON.stringify({
+                        type: AdminType.INDIVIDUAL,
+                        id: editor.id,
+                        avatar: editor.avatar,
+                        name: editor.name,
+                    })), ...response.data?.groupEditors.map(editor => JSON.stringify({
+                        type: AdminType.GROUP,
+                        id: editor.id,
+                        avatar: editor.groupImage,
+                        name: editor.groupName,
+                    }))],
                 });
             } else {
                 history.push('/404');
@@ -244,16 +265,16 @@ export const VesselForm = () => {
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
                     >
-                        <VesselFormFields 
+                        <VesselFormFields
                             setShowRemoveHullDiagram={setShowRemoveHullDiagram}
-                            setShowRemovePhotoModal={setShowRemovePhotoModal} 
+                            setShowRemovePhotoModal={setShowRemovePhotoModal}
                             setShowRemoveDeckPlanModal={setShowRemoveDeckPlanModal}
                             setShowVerifyOnboardPhoneModal={setShowVerifyOnboardPhoneModal}
                             setShowVerifySatellitePhoneModal={setShowVerifySatellitePhoneModal}
                             sendVerificationCode={sendVerificationCode}
                             formChanged={formChanged}
                             fieldsValidate={fieldsValidate}
-                            vessel={vessel}/>
+                            vessel={vessel} />
                     </Form>
                 </Spin>
             </SyrfFormWrapper>

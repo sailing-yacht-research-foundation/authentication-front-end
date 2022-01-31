@@ -713,7 +713,9 @@
     "please_check_you_phone_for_verification": "Please check your phone for verification.",
     "successfully_verified_phone_number": "Successfully verified your phone number.",
     "created_a_new_liferaft": "Created a new liferaft.",
-    "successfully_saved_liferaft": "Successfully saved liferaft."
+    "successfully_saved_liferaft": "Successfully saved liferaft.",
+    "admins": "Admins",
+    "assign_for_all_group_member": "Assign for all group members?"
   },
   "participant_list": {
     "participants": "Competitors",
@@ -907,6 +909,7 @@
     "group_type": "Type of this group.",
     "delete_this_track": "Delete this track",
     "set_admins_for_this_event": "Search and assign admins for this event.",
+    "set_admins_for_this_boat": "Search and assign admins for this boat.",
     "status": "Status of an event",
     "schedule_event": "Start to schedule this event.",
     "click_to_make_this_event_open_for_registration": "Click to make this event open for registration.",

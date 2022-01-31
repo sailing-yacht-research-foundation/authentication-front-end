@@ -6,6 +6,7 @@ import { translations } from 'locales/translations';
 import { FormPhotoWrapper } from 'app/components/SyrfGeneral';
 import { useTranslation } from 'react-i18next';
 import { VesselType } from 'utils/constants';
+import { EditorsField } from './EditorsField';
 
 export const VesselFormFields = (props) => {
     const { vessel, sendVerificationCode, setShowVerifyOnboardPhoneModal, setShowVerifySatellitePhoneModal, 
@@ -360,6 +361,8 @@ export const VesselFormFields = (props) => {
                     </FormPhotoWrapper>}
                 </Col>
             </Row>
+
+            <EditorsField vessel={vessel} />
 
             <Divider />
 
