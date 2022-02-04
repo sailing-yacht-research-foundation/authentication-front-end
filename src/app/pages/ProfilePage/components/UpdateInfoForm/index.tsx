@@ -2,7 +2,7 @@ import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
 import { Form, Spin } from 'antd';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import styled from 'styled-components';
 import { getUserAttribute, getUserInterestsAsArray } from 'utils/user-utils';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
@@ -95,8 +95,10 @@ export const UpdateInfo = (props) => {
         Object.entries(values).forEach(([key, value]: any) => {
             if (fieldsToUpdate.includes(key)) {
                 if (['passportExpirationDate', 'passportIssueDate'].includes(key)) {
-                    if (value instanceof moment)
-                        form.append(key, moment(value).format(TIME_FORMAT.number));
+                    if (value instanceof moment) {
+                        let valueAsMomentInstance = value as Moment; // need to cast here to avoid IDE error althrough it's a moment instane.
+                        form.append(key, valueAsMomentInstance.format(TIME_FORMAT.number));
+                    }
                 } else {
                     if (value)
                         form.append(key, value);

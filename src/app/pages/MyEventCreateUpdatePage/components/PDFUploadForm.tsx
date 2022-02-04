@@ -13,7 +13,7 @@ export const PDFUploadForm = (props) => {
 
     const list = [
         {
-            name: 'Notice Of Race',
+            name: 'Notice of Race',
             formFieldName: 'noticeOfRacePDF',
         },
         {

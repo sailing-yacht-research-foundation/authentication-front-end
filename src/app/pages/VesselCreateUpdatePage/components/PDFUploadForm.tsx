@@ -21,15 +21,15 @@ export const PDFUploadForm = (props) => {
             formFieldName: 'instrumentSystem',
         },
         {
-            name: 'edcis',
+            name: 'EDCIS',
             formFieldName: 'edcis',
         },
         {
-            name: 'ssb',
+            name: 'SSB',
             formFieldName: 'ssb',
         },
         {
-            name: 'vhf',
+            name: 'VHF',
             formFieldName: 'vhf',
         },
         {

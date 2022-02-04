@@ -9,18 +9,19 @@ import { VesselType } from 'utils/constants';
 import { EditorsField } from './EditorsField';
 
 export const VesselFormFields = (props) => {
-    const { vessel, sendVerificationCode, setShowVerifyOnboardPhoneModal, setShowVerifySatellitePhoneModal, 
+    const { vessel, sendVerificationCode, setShowVerifyOnboardPhoneModal, setShowVerifySatellitePhoneModal,
         fieldsValidate, setShowRemovePhotoModal, setShowRemoveDeckPlanModal,
         setShowRemoveHullDiagram, formChanged } = props;
 
     const { t } = useTranslation();
 
-    const vesselTypes = [
-        { name: 'Foid board', value: VesselType.FOIL_BOARD },
-        { name: 'Keel boat', value: VesselType.KEELBOAT },
-        { name: 'Dinghy', value: VesselType.DINGHY },
-        { name: 'Other', value: VesselType.OTHER }
-    ];
+    const vesselTypes = Object.values(VesselType).map((type) => {
+        return {
+            name: type.charAt(0).toUpperCase() + type.slice(1).toLowerCase().replace(new RegExp('_', 'g'), ' '),
+            value: type
+        }
+    })
+
 
     const renderVesselType = () => {
         return vesselTypes.map((type, index) => {
@@ -67,7 +68,8 @@ export const VesselFormFields = (props) => {
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.public_name)}</SyrfFieldLabel>}
                 name="publicName"
-                rules={[{ required: true, message: t(translations.forms.boat_name_is_required) }]}
+                rules={[{ required: true, message: t(translations.forms.boat_name_is_required) }, 
+                    { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
             >
                 <SyrfInputField autoCorrect="off" />
             </Form.Item>
@@ -98,6 +100,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.model)}</SyrfFieldLabel>}
                         name="model"
+                        rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -120,6 +123,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.sail_number)}</SyrfFieldLabel>}
                         name="sailNumber"
+                        rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -129,6 +133,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hull_number)}</SyrfFieldLabel>}
                         name="hullNumber"
+                        rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -138,6 +143,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.call_sign)}</SyrfFieldLabel>}
                         name="callSign"
+                        rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -149,6 +155,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hull_color_above_the_water_line)}</SyrfFieldLabel>}
                         name="hullColorAboveWaterline"
+                        rules={[{ max: 15, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -158,6 +165,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hull_color_below_the_water_line)}</SyrfFieldLabel>}
                         name="hullColorBelowWaterline"
+                        rules={[{ max: 15, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -166,14 +174,6 @@ export const VesselFormFields = (props) => {
                 <Col xs={24} sm={24} md={8} lg={8}>
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hulls_count)}</SyrfFieldLabel>}
-                        rules={[() => ({
-                            validator(_, value) {
-                                if (isNaN(value) && value.length > 0) {
-                                    return Promise.reject(t(translations.vessel_create_update_page.hulls_count_must_be_a_number));
-                                }
-                                return Promise.resolve();
-                            },
-                        })]}
                         name="hullsCount"
                     >
                         <SyrfFormSelect>
@@ -190,6 +190,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.deck_color)}</SyrfFieldLabel>}
                         name="deckColor"
+                        rules={[{ max: 15, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -199,6 +200,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.mmsi)}</SyrfFieldLabel>}
                         name="mmsi"
+                        rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -208,6 +210,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.ssbTransceiver)}</SyrfFieldLabel>}
                         name="ssbTransceiver"
+                        rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}  
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -219,6 +222,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.homeport)}</SyrfFieldLabel>}
                         name="homeport"
+                        rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -228,6 +232,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.rigging)}</SyrfFieldLabel>}
                         name="rigging"
+                        rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}
                     >
                         <SyrfInputField autoCorrect="off" />
                     </Form.Item>
@@ -287,6 +292,7 @@ export const VesselFormFields = (props) => {
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.epirbHexId)}</SyrfFieldLabel>}
                 name="epirbHexId"
+                rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
             >
                 <SyrfInputField autoCorrect="off" />
             </Form.Item>

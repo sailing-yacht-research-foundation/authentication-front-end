@@ -105,7 +105,7 @@ export const LiferaftForm = () => {
         history.push(`/boats/${boatId}/update`);
     }
 
-    const renderOwnshipSelection = () => {
+    const renderOwnershipSelection = () => {
         return ownershipArray.map((criteria, index) => {
             return <Select.Option key={index} value={criteria}>{criteria}</Select.Option>
         })
@@ -178,120 +178,123 @@ export const LiferaftForm = () => {
                                     label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.manufacturer)}</SyrfFieldLabel>}
                                     name="manufacturer"
                                     data-tip={t(translations.liferaft_create_update_page.manufacturer)}
+                                    rules={[{ max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
                                 >
-                                    <SyrfInputField autoCorrect="off" />
-                                </Form.Item>
-                            </Col>
+                                <SyrfInputField autoCorrect="off" />
+                            </Form.Item>
+                        </Col>
 
-                            <Col xs={24} sm={24} md={8} lg={8}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.capacity)}</SyrfFieldLabel>}
-                                    name="capacity"
-                                    rules={[() => ({
-                                        validator(_, value) {
-                                            if (isNaN(value) && value.length > 0) {
-                                                return Promise.reject(t(translations.forms.please_input_number));
-                                            }
-                                            return Promise.resolve();
-                                        },
-                                    })]}
-                                    data-tip={t(translations.liferaft_create_update_page.capacity)}
-                                >
-                                    <SyrfInputField autoCorrect="off" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        <Col xs={24} sm={24} md={8} lg={8}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.capacity)}</SyrfFieldLabel>}
+                                name="capacity"
+                                rules={[() => ({
+                                    validator(_, value) {
+                                        if (value && isNaN(value) && value.length > 0) {
+                                            return Promise.reject(t(translations.forms.please_input_number));
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                })]}
+                                data-tip={t(translations.liferaft_create_update_page.capacity)}
+                            >
+                                <SyrfInputField autoCorrect="off" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-                        <Row gutter={12}>
-                            <Col xs={24} sm={24} md={8} lg={8}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.model)}</SyrfFieldLabel>}
-                                    name="model"
-                                    data-tip={t(translations.liferaft_create_update_page.model)}
-                                >
-                                    <SyrfInputField autoCorrect="off" />
-                                </Form.Item>
-                            </Col>
+                    <Row gutter={12}>
+                        <Col xs={24} sm={24} md={8} lg={8}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.model)}</SyrfFieldLabel>}
+                                name="model"
+                                data-tip={t(translations.liferaft_create_update_page.model)}
+                                rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
+                            >
+                                <SyrfInputField autoCorrect="off" />
+                            </Form.Item>
+                        </Col>
 
-                            <Col xs={24} sm={24} md={8} lg={8}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.container)}</SyrfFieldLabel>}
-                                    name="container"
-                                    data-tip={t(translations.liferaft_create_update_page.container)}
-                                >
-                                    <SyrfInputField autoCorrect="off" />
-                                </Form.Item>
-                            </Col>
+                        <Col xs={24} sm={24} md={8} lg={8}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.container)}</SyrfFieldLabel>}
+                                name="container"
+                                data-tip={t(translations.liferaft_create_update_page.container)}
+                                rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
+                            >
+                                <SyrfInputField autoCorrect="off" />
+                            </Form.Item>
+                        </Col>
 
-                            <Col xs={24} sm={24} md={8} lg={8}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.last_service_date)}</SyrfFieldLabel>}
-                                    name="lastServiceDate"
-                                    data-tip={t(translations.liferaft_create_update_page.last_service_date)}
-                                >
-                                    <DatePicker
-                                        allowClear={false}
-                                        showToday={true}
-                                        className="syrf-datepicker"
-                                        style={{ width: '100%' }}
-                                        dateRender={current => {
-                                            return (
-                                                <div className="ant-picker-cell-inner">
-                                                    {current.date()}
-                                                </div>
-                                            );
-                                        }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        <Col xs={24} sm={24} md={8} lg={8}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.last_service_date)}</SyrfFieldLabel>}
+                                name="lastServiceDate"
+                                data-tip={t(translations.liferaft_create_update_page.last_service_date)}
+                            >
+                                <DatePicker
+                                    allowClear={false}
+                                    showToday={true}
+                                    className="syrf-datepicker"
+                                    style={{ width: '100%' }}
+                                    dateRender={current => {
+                                        return (
+                                            <div className="ant-picker-cell-inner">
+                                                {current.date()}
+                                            </div>
+                                        );
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-                        <Row gutter={12}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.manufacture_date)}</SyrfFieldLabel>}
-                                    name="manufactureDate"
-                                    data-tip={t(translations.liferaft_create_update_page.manufacture_date)}
-                                >
-                                    <DatePicker
-                                        allowClear={false}
-                                        showToday={true}
-                                        className="syrf-datepicker"
-                                        style={{ width: '100%' }}
-                                        dateRender={current => {
-                                            return (
-                                                <div className="ant-picker-cell-inner">
-                                                    {current.date()}
-                                                </div>
-                                            );
-                                        }}
-                                    />
-                                </Form.Item>
-                            </Col>
+                    <Row gutter={12}>
+                        <Col xs={24} sm={24} md={12} lg={12}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.manufacture_date)}</SyrfFieldLabel>}
+                                name="manufactureDate"
+                                data-tip={t(translations.liferaft_create_update_page.manufacture_date)}
+                            >
+                                <DatePicker
+                                    allowClear={false}
+                                    showToday={true}
+                                    className="syrf-datepicker"
+                                    style={{ width: '100%' }}
+                                    dateRender={current => {
+                                        return (
+                                            <div className="ant-picker-cell-inner">
+                                                {current.date()}
+                                            </div>
+                                        );
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
 
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.ownership)}</SyrfFieldLabel>}
-                                    name="ownership"
-                                    data-tip={t(translations.liferaft_create_update_page.ownership)}
-                                >
-                                    <SyrfFormSelect>
-                                        {renderOwnshipSelection()}
-                                    </SyrfFormSelect>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        <Col xs={24} sm={24} md={12} lg={12}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.ownership)}</SyrfFieldLabel>}
+                                name="ownership"
+                                data-tip={t(translations.liferaft_create_update_page.ownership)}
+                            >
+                                <SyrfFormSelect>
+                                    {renderOwnershipSelection()}
+                                </SyrfFormSelect>
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-                        <Divider />
+                    <Divider />
 
-                        <Form.Item>
-                            <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
-                                {t(translations.liferaft_create_update_page.save_liferaft)}
-                            </SyrfFormButton>
-                        </Form.Item>
-                    </Form>
-                </Spin>
-            </SyrfFormWrapper>
+                    <Form.Item>
+                        <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
+                            {t(translations.liferaft_create_update_page.save_liferaft)}
+                        </SyrfFormButton>
+                    </Form.Item>
+                </Form>
+            </Spin>
+        </SyrfFormWrapper>
         </Wrapper >
     )
 }

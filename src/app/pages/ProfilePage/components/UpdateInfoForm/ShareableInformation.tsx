@@ -101,7 +101,7 @@ export const ShareableInformation = (props) => {
                         data-tip={t(translations.profile_page.update_profile.address)}
                         rules={[{
                             type: 'email', message: t(translations.forms.email_must_be_valid)
-                        }]}
+                        }, { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
                     >
                         <SyrfInputField />
                     </Form.Item>
@@ -135,14 +135,14 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.passport_number)}</SyrfFieldLabel>}
                         name="passportNumber"
                         data-tip={t(translations.profile_page.update_profile.passport_number)}
-                        rules={[{ min: 6, message: t(translations.forms.passport_must_be_a_number_with_at_least_5_digits) }, () => ({
+                        rules={[{ min: 5, message: t(translations.forms.passport_must_be_a_number_with_at_least_5_digits) }, () => ({
                             validator(_, value) {
-                                if (isNaN(value) && value.length > 0) {
+                                if (value && isNaN(value) && value.length > 0) {
                                     return Promise.reject(t(translations.forms.please_input_number));
                                 }
                                 return Promise.resolve();
                             },
-                        })]}
+                        }), { max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
                     >
                         <SyrfInputField/>
                     </Form.Item>
@@ -197,7 +197,7 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.food_allergies)}</SyrfFieldLabel>}
                         name="foodAllergies"
                         data-tip={t(translations.profile_page.update_profile.food_allergies)}
-                        rules={[{ message: t(translations.forms.food_allergies_must_not_be_more_than_50_characters) }]}
+                        rules={[{  max: 50, message: t(translations.forms.food_allergies_must_not_be_more_than_50_characters) }]}
                     >
                         <SyrfInputField placeholder={t(translations.forms.please_input_in_commas_separated_format)} />
                     </Form.Item>
@@ -209,6 +209,7 @@ export const ShareableInformation = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.certifications)}</SyrfFieldLabel>}
                         name="certifications"
+                        rules={[{ max: 125, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 125 }) }]}
                         data-tip={t(translations.profile_page.update_profile.certifications)}
                     >
                         <SyrfInputField />
@@ -231,6 +232,7 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.tshirt_size)}</SyrfFieldLabel>}
                         name="tShirtSize"
                         data-tip={t(translations.profile_page.update_profile.tshirt_size)}
+                        rules={[{ max: 10, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 10 }) }]}
                     >
                         <SyrfInputField />
                     </Form.Item>
@@ -243,6 +245,7 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.epirbBeaconHexId)}</SyrfFieldLabel>}
                         name="epirbBeaconHexId"
                         data-tip={t(translations.profile_page.update_profile.epirbBeaconHexId)}
+                        rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
                         <SyrfInputField />
                     </Form.Item>

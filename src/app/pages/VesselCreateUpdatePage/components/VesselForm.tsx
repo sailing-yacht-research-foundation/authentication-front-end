@@ -54,10 +54,11 @@ export const VesselForm = () => {
         setIsSaving(true);
 
         Object.entries(values).forEach(([key, value]: any) => {
-            if (['onboardPhone', 'satelliteNumber'].includes(key) && !String(value).includes('+')) {
+            if (['onboardPhone', 'satelliteNumber'].includes(key) && !String(value).includes('+') && value) {
                 form.append(key, '+' + value);
             } else {
-                form.append(key, value);
+                if (value)
+                    form.append(key, value);
             }
         });
 
