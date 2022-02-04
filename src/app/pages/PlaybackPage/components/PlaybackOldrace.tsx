@@ -280,21 +280,7 @@ export const PlaybackOldRace = (props) => {
       }
     });
 
-    mapDataWorker?.addEventListener('message', function (e) {
-      const data = e.data;
-
-      if (data.action === WorkerEvent.UPDATE_WORKER_DATA_TO_MAIN_THREAD) {
-        eventEmitter?.emit(RaceEmitterEvent.PING, data.data.mappedVesselParticipants);
-        eventEmitter?.emit(RaceEmitterEvent.UPDATE_COURSE, data.data.mappedMarks);
-
-        handleUpdateLeaderPosition(data.data.mappedVesselParticipants);
-
-        // Debug
-        handleDebug("=== Mapped Vessel Participants ===")
-        handleDebug(data.data.mappedVesselParticipants);
-        handleDebug("==================================");
-      }
-    });
+    mapDataWorker?.addEventListener('message', mapData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -339,6 +325,26 @@ export const PlaybackOldRace = (props) => {
         coursePoints: coursePoints
       }
     });
+  }
+
+  const mapData = (e) => {
+    const data = e.data;
+
+    if (data.action === WorkerEvent.UPDATE_WORKER_DATA_TO_MAIN_THREAD) {
+      eventEmitter?.emit(RaceEmitterEvent.PING, data.data.mappedVesselParticipants);
+      eventEmitter?.emit(RaceEmitterEvent.UPDATE_COURSE, data.data.mappedMarks);
+
+      handleUpdateLeaderPosition(data.data.mappedVesselParticipants);
+
+      // Debug
+      handleDebug("=== Mapped Vessel Participants ===")
+      handleDebug(data.data.mappedVesselParticipants);
+      handleDebug("==================================");
+
+      mapDataWorker?.terminate();
+      mapDataWorker = new Worker(MapFrameDataWorker);
+      mapDataWorker?.addEventListener('message', mapData);
+    }
   }
 
   const addNewVesselParticipantToTheRace = (data) => {
