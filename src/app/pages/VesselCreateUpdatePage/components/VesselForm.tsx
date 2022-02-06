@@ -57,8 +57,7 @@ export const VesselForm = () => {
             if (['onboardPhone', 'satelliteNumber'].includes(key) && !String(value).includes('+') && value) {
                 form.append(key, '+' + value);
             } else {
-                if (value)
-                    form.append(key, value);
+                form.append(key, value || '');
             }
         });
 

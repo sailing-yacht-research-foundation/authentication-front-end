@@ -100,8 +100,7 @@ export const UpdateInfo = (props) => {
                         form.append(key, valueAsMomentInstance.format(TIME_FORMAT.number));
                     }
                 } else {
-                    if (value)
-                        form.append(key, value);
+                    form.append(key, value || '');
                 }
             }
         });
@@ -150,7 +149,7 @@ export const UpdateInfo = (props) => {
 
     React.useEffect(() => {
         getUserShareableInformation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
