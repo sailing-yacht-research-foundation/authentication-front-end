@@ -23,7 +23,7 @@ export const RaceList = (props) => {
 
     const canRegisterToRace = (race) => {
         return [RaceStatus.ON_GOING].includes(race.status) && event.isOpen
-            && event.allowRegistration && [EventState.ON_GOING].includes(event.status);
+            && event.allowRegistration && [EventState.ON_GOING].includes(event.status) && !event.isEditor;
     }
 
     const columns = [
