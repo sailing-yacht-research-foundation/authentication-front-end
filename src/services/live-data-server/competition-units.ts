@@ -220,18 +220,18 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
         should: [
             {
                 "range": {
-                    "approximateEndTime": {
-                        "gte": "now"
+                    "approx_start_time_ms": {
+                        "gte": moment().unix() * 1000,
+                        "lt": moment().add(duration, "months").set({ hour: 23, minute: 59, second: 59 }).unix() * 1000,
                     }
-                }
+                },
             },
             {
                 "range": {
-                    "approx_start_time_ms": {
-                        "gte": moment().set({ hour: 0, minute: 0, second: 0 }).unix() * 1000,
-                        "lt": moment().add(duration, "months").set({ hour: 23, minute: 59, second: 59 }).unix() * 1000,
+                    "approximateEndTime": {
+                        "gte": "now"
                     }
-                }
+                },
             }
         ]
     }
