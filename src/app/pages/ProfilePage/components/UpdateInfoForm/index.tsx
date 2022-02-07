@@ -182,6 +182,7 @@ export const UpdateInfo = (props) => {
 
                         <PrivateUserInformation
                             address={address} setAddress={setAddress}
+                            setFormHasBeenChanged={setFormHasBeenChanged}
                             authUser={authUser} />
 
                         <ShareableInformation setShareableInformation={setShareableInformation} shareableInformation={shareableInformation} />

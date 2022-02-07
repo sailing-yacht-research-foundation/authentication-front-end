@@ -38,7 +38,7 @@ const disabledDates = [
 
 export const PrivateUserInformation = (props) => {
 
-    const { authUser, address, setAddress } = props;
+    const { authUser, address, setAddress, setFormHasBeenChanged } = props;
 
     const dispatch = useDispatch();
     const { actions } = UseLoginSlice();
@@ -121,6 +121,7 @@ export const PrivateUserInformation = (props) => {
 
     const handleWorldSailingNumberChange = (e) => {
         setWorldSailingNumber(e.target.value);
+        setFormHasBeenChanged(true);
     };
 
     const handleFilterWorldSailingNumber = (key: string, source: string[]) => {
@@ -130,6 +131,7 @@ export const PrivateUserInformation = (props) => {
 
     const handleCountryCodeSuggestionClick = (countryCode) => {
         setWorldSailingNumber(countryCode);
+        setFormHasBeenChanged(true);
     };
 
     const renderCountryCodeList = (countryCodeList: string[]) => {
