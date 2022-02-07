@@ -35,6 +35,10 @@ const Wrapper = styled.nav`
     align-self: center;
     width: 100%;
 
+    ${media.large`
+        width: 91% !important;
+    `};
+
     ${media.medium`
         width: 90%;
     `};
