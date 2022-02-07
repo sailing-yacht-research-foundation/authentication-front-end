@@ -55,7 +55,7 @@ export const renderAvatar = (picture) => {
  */
 export const getUserInterestsAsArray = (user) => {
     return !!user.interests ? Object.entries(user.interests).reduce((acc: any[], [key, value]) => {
-        if (key) {
+        if (value) {
           acc.push(key);
         }
         return acc;

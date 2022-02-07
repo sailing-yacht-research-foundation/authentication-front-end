@@ -33,8 +33,8 @@ export const PDFUploadForm = (props) => {
             formFieldName: 'vhf',
         },
         {
-            name: 'Pactor Modern',
-            formFieldName: 'pactorModern',
+            name: 'Pactor Modem',
+            formFieldName: 'pactorModern', // this typo is used in backend so i will keep it for now. It should be pactorModem.
         },
         {
             name: 'Water Maker',

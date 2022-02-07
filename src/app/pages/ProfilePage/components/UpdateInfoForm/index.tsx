@@ -14,7 +14,7 @@ import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { getShareableInformation, updateInterests, updateProfile, updateShareableInformation } from 'services/live-data-server/user';
-import { TIME_FORMAT } from 'utils/constants';
+import { TIME_FORMAT, WATERSPORTS } from 'utils/constants';
 import { ShareableInformation } from './ShareableInformation';
 
 export const UpdateInfo = (props) => {
@@ -122,14 +122,10 @@ export const UpdateInfo = (props) => {
     }
 
     const interestsArrayToObject = (interestsArray) => {
-        return {
-            "HANDICAP": interestsArray.includes('HANDICAP'),
-            "ONEDESIGN": interestsArray.includes('ONEDESIGN'),
-            "KITESURFING": interestsArray.includes('KITESURFING'),
-            "WINGING": interestsArray.includes('WINGING'),
-            "WINDSURFING": interestsArray.includes('WINDSURFING'),
-            "CRUISING": interestsArray.includes('CRUISING')
-        }
+        return WATERSPORTS.reduce((acc, w) => {
+            acc[w] = interestsArray.includes(w);
+            return acc;
+          }, {});
     }
 
     const getUserShareableInformation = async () => {

@@ -14,7 +14,7 @@ import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVes
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { AdminType, MODE } from 'utils/constants';
+import { AdminType, MODE, VesselType } from 'utils/constants';
 import { IoIosArrowBack } from 'react-icons/io';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { LiferaftList } from './LiferaftList';
@@ -57,7 +57,10 @@ export const VesselForm = () => {
             if (['onboardPhone', 'satelliteNumber'].includes(key) && !String(value).includes('+') && value) {
                 form.append(key, '+' + value);
             } else {
-                form.append(key, value || '');
+                if ('onboardEmail' === key && !value) return;
+                else {
+                    form.append(key, value || '');
+                }
             }
         });
 
@@ -264,6 +267,10 @@ export const VesselForm = () => {
                         form={form}
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
+                        initialValues={{
+                            vesselType: VesselType.FOIL_BOARD,
+                            hullsCount: 1
+                        }}
                     >
                         <VesselFormFields
                             setShowRemoveHullDiagram={setShowRemoveHullDiagram}
