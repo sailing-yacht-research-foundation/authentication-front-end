@@ -144,7 +144,7 @@ export const ShareableInformation = (props) => {
                             },
                         }), { max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
                     >
-                        <SyrfInputField/>
+                        <SyrfInputField />
                     </Form.Item>
                 </Col>
             </Row>
@@ -197,7 +197,7 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.food_allergies)}</SyrfFieldLabel>}
                         name="foodAllergies"
                         data-tip={t(translations.profile_page.update_profile.food_allergies)}
-                        rules={[{  max: 50, message: t(translations.forms.food_allergies_must_not_be_more_than_50_characters) }]}
+                        rules={[{ max: 50, message: t(translations.forms.food_allergies_must_not_be_more_than_50_characters) }]}
                     >
                         <SyrfInputField placeholder={t(translations.forms.please_input_in_commas_separated_format)} />
                     </Form.Item>
@@ -209,8 +209,15 @@ export const ShareableInformation = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.certifications)}</SyrfFieldLabel>}
                         name="certifications"
-                        rules={[{ max: 125, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 125 }) }]}
                         data-tip={t(translations.profile_page.update_profile.certifications)}
+                        rules={[() => ({ // add custom validator here to avoid antd form issue with field name certifications.
+                            validator(_, value) {
+                                if (value && value.length > 125) {
+                                    return Promise.reject(t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 125 }));
+                                }
+                                return Promise.resolve();
+                            },
+                        })]}
                     >
                         <SyrfInputField />
                     </Form.Item>

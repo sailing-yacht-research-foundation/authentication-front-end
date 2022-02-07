@@ -96,7 +96,7 @@ export const UpdateInfo = (props) => {
             if (fieldsToUpdate.includes(key)) {
                 if (['passportExpirationDate', 'passportIssueDate'].includes(key)) {
                     if (value instanceof moment) {
-                        let valueAsMomentInstance = value as Moment; // need to cast here to avoid IDE error althrough it's a moment instane.
+                        let valueAsMomentInstance = value as Moment; // need to cast here to avoid IDE error although it's a moment instance.
                         form.append(key, valueAsMomentInstance.format(TIME_FORMAT.number));
                     }
                 } else {
