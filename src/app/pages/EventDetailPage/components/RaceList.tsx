@@ -3,7 +3,7 @@ import { Spin, Table, Space } from 'antd';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { TIME_FORMAT } from 'utils/constants';
+import { EventState, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import ReactTooltip from 'react-tooltip';
@@ -20,6 +20,11 @@ export const RaceList = (props) => {
     const { t } = useTranslation();
 
     const { event, canManageEvent } = props;
+
+    const canRegisterToRace = (race) => {
+        return [RaceStatus.ON_GOING].includes(race.status) && event.isOpen
+            && event.allowRegistration && [EventState.ON_GOING].includes(event.status);
+    }
 
     const columns = [
         {
@@ -54,7 +59,7 @@ export const RaceList = (props) => {
             render: (text, record) => {
                 if (canManageEvent())
                     return <Space size="middle">
-                        {event.isOpen && event.allowRegistration && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegiterModalOrRedirect(record)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
+                        {canRegisterToRace(record) && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegiterModalOrRedirect(record)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
                         <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
                         }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>

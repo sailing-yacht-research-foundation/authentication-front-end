@@ -7,7 +7,7 @@ import moment from 'moment';
 import { renderEmptyValue } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { TIME_FORMAT } from 'utils/constants';
+import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { useSelector } from 'react-redux';
@@ -65,6 +65,7 @@ export const ResultItem = (props) => {
                     {race?._source?.id &&
                         race?._source?.source === 'SYRF' &&
                         moment(race._source?.approx_start_time_ms).isAfter(moment())
+                        && [RaceStatus.ON_GOING].includes(race._source?.status)
                         && <ExpeditionServerActionButtons competitionUnit={race._source} />}
                     {
                         race._source?.isOpen && race._source?.allowRegistration && <CreateButton icon={<FiEdit style={{marginRight: '10px'}}/>} onClick={showRegiterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
