@@ -87,7 +87,8 @@ export const VesselList = () => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        size: 10
     });
 
     const history = useHistory();
@@ -99,13 +100,13 @@ export const VesselList = () => {
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        getAll(1);
+        getAll(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const getAll = async (page) => {
+    const getAll = async (page, size) => {
         setIsChangingPage(true);
-        const response = await getMany(page);
+        const response = await getMany(page, size);
         setIsChangingPage(false);
 
         if (response.success) {
@@ -118,8 +119,8 @@ export const VesselList = () => {
         }
     }
 
-    const onPaginationChanged = (page) => {
-        getAll(page);
+    const onPaginationChanged = (page, size) => {
+        getAll(page, size);
     }
 
     const showDeleteVesselModal = (vessel) => {
@@ -128,7 +129,7 @@ export const VesselList = () => {
     }
 
     const onVesselDeleted = () => {
-        getAll(pagination.page);
+        getAll(pagination.page, pagination.size);
     }
 
     return (

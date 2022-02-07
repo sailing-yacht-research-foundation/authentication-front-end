@@ -100,7 +100,8 @@ export const InvitedEventLists = (props) => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        size: 10
     });
 
     const [showRejectConfirmModal, setShowRejectConfirmModal] = React.useState<boolean>(false);
@@ -111,9 +112,9 @@ export const InvitedEventLists = (props) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const getInvitations = async (page) => {
+    const getInvitations = async (page, size) => {
         setIsLoading(true);
-        const response = await getMyInvitedEvents(page);
+        const response = await getMyInvitedEvents(page, size);
         setIsLoading(false);
 
         if (response.success) {
@@ -127,12 +128,12 @@ export const InvitedEventLists = (props) => {
     }
 
     React.useEffect(() => {
-        getInvitations(1);
+        getInvitations(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const onPaginationChanged = (page) => {
-        getInvitations(page);
+    const onPaginationChanged = (page, size) => {
+        getInvitations(page, size);
     }
 
     const acceptInviteRequest = (request) => {
@@ -146,7 +147,7 @@ export const InvitedEventLists = (props) => {
     }
 
     const reloadParent = () => {
-        getInvitations(pagination.page)
+        getInvitations(pagination.page, pagination.size);
         reloadInvitationCount();
     }
 

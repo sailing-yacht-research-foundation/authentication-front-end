@@ -31,12 +31,13 @@ export const InfluencerModal = (props) => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        size: 10
     });
 
-    const getInfluencers = async (page) => {
+    const getInfluencers = async (page, size) => {
         setIsLoading(true);
-        const response = await getHotRecommandation({ locale: getUserAttribute(user, 'locale'), page, size: 10 });
+        const response = await getHotRecommandation({ locale: getUserAttribute(user, 'locale'), page, size });
         setIsLoading(false);
 
         if (response.success) {
@@ -45,7 +46,8 @@ export const InfluencerModal = (props) => {
                 ...pagination,
                 rows: rows,
                 total: response?.data?.count,
-                page: page
+                page: page,
+                size: size
             })
         }
     }
@@ -64,7 +66,7 @@ export const InfluencerModal = (props) => {
 
     React.useEffect(() => {
         if (user)
-            getInfluencers(1);
+            getInfluencers(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
@@ -74,7 +76,7 @@ export const InfluencerModal = (props) => {
                 {renderProfiles()}
                 {
                     pagination.total > 10 && <PaginationContainer>
-                        <Pagination current={pagination.page} onChange={(page) => getInfluencers(page)} total={pagination.total} />
+                        <Pagination current={pagination.page} onChange={(page, size) => getInfluencers(page, size)} total={pagination.total} />
                     </PaginationContainer>
                 }
             </Spin>

@@ -190,7 +190,7 @@ export const MyTrackList = () => {
                     <TableWrapper>
                         <Table scroll={{ x: "max-content" }} columns={columns}
                             dataSource={pagination.rows} pagination={{
-                                defaultPageSize: pagination.size,
+                                defaultPageSize: 10,
                                 current: pagination.page,
                                 total: pagination.total,
                                 onChange: onPaginationChanged
