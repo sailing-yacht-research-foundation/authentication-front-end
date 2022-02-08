@@ -219,7 +219,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
         })
     }
 
-    query.bool.must.bool = {  // WHERE (END_TIME > NOW() AND START_TIME LESS THAN RANGE) OR (END_TIME DOES NOT EXISTS AND START_TIME IN RANGE)  
+    query.bool.must.bool = {  // WHERE (END_TIME > NOW() AND START_TIME LESS THAN RANGE) OR (END_TIME DOES NOT EXISTS AND START_TIME IN RANGE OR STATUS IN ('ONGOING', 'SCHEDULED'))  
         should: [             // OR START_TIME LESS THAN RANGE AND STATUS IN ('ONGOING', 'SCHEDULED')
             {
                 bool: {
