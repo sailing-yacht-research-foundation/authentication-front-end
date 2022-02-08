@@ -262,8 +262,17 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
                     ],
                     should: [ /// this optional, it will get rows with that have the status field equal sheduled and ongoing if possible.
                         {
-                            "terms": {
-                                "status": [EventState.SCHEDULED, EventState.ON_GOING],
+                            bool: {
+                                should: [{
+                                    "match": {
+                                        "status": EventState.SCHEDULED
+                                    }
+                                },
+                                {
+                                    "match": {
+                                        "status": EventState.ON_GOING
+                                    }
+                                }]
                             }
                         }
                     ]
