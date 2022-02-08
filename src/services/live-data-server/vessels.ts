@@ -28,6 +28,18 @@ export const update = (id, data) => {
     }))
 }
 
+export const createMultipart = (formData) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/create`, formData, {
+        headers: { "content-type": "multipart/form-data" }
+    }))
+}
+
+export const updateMultipart = (id, formData) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${id}/update`, formData, {
+        headers: { "content-type": "multipart/form-data" }
+    }))
+}
+
 export const deleteVessel = (id) => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${id}`))
 }
@@ -37,5 +49,32 @@ export const getManyVesselsByEventCalendarId = (calendarEventId, page) => {
         params: {
             page: page
         }
+    }))
+}
+
+export const uploadVesselPDF = (vesselId, formData) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${vesselId}/upload-pdfs`, formData, {
+        headers: { "content-type": "multipart/form-data" }
+    }))
+}
+
+export const removePhotos = (vesselId, options) => {
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${vesselId}/remove-photos`, {
+        data: {
+            ...options
+        }
+    }))
+}
+
+export const sendPhoneVerification = (vesselId, field) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${vesselId}/send-verification-sms`, {
+        field
+    }))
+}
+
+export const verifyPhones = (vesselId, field, code) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${vesselId}/verify-sms`, {
+        field,
+        code
     }))
 }

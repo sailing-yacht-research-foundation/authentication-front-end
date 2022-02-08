@@ -40,7 +40,6 @@ export const Profile = () => {
             />
             <ProfileTabs />
             { authUser.username && <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} /> }
-             {/* <LinkToProviders /> Hide & comment this base on Jon's request of SNS-250 */}
             <SyrfFormWrapper className="danger-zone">
                 <SyrfFormTitle>{t(translations.profile_page.update_profile.danger_zone)}</SyrfFormTitle>
                 <Row gutter={24}>

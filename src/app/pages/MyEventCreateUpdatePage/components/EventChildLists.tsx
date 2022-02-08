@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ConfirmPublishEventModal } from './modals/ConfirmPublishEventModal';
 import { ConfirmStopEventModal } from './modals/ConfirmStopEventModal';
+import { PDFUploadForm } from './PDFUploadForm';
 
 export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, reloadParent }) => {
 
@@ -31,30 +32,32 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
         {
             mode === MODE.UPDATE && (
                 <>
-                    <SyrfFormWrapper ref={raceListRef} style={{ marginTop: '30px' }}>
+                    <SyrfFormWrapper ref={raceListRef}>
                         <CompetitionUnitList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
-                    <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                    <SyrfFormWrapper>
                         <VesselParticipantGroupList eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
-                    <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                    <SyrfFormWrapper>
                         <CoursesList eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
-                    <SyrfFormWrapper style={{ marginTop: '30px' }}>
+                    <SyrfFormWrapper>
                         <ParticipantList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
+                    <PDFUploadForm event={event} reloadParent={reloadParent} />
+
                     {
-                        event.status === EventState.DRAFT && <SyrfFormWrapper style={{ margin: '30px 0' }}>
+                        event.status === EventState.DRAFT && <SyrfFormWrapper>
                             <SyrfFormButton onClick={() => setShowConfirmPublishEventModal(true)}>{t(translations.my_event_create_update_page.publish)}</SyrfFormButton>
                         </SyrfFormWrapper>
                     }
 
                     {
-                        event.status === EventState.ON_GOING && <SyrfFormWrapper style={{ margin: '30px 0' }}>
+                        event.status === EventState.ON_GOING && <SyrfFormWrapper>
                             <SyrfFormButton onClick={() => setShowConfirmStopEventModal(true)}>{t(translations.my_event_create_update_page.stop)}</SyrfFormButton>
                         </SyrfFormWrapper>
                     }

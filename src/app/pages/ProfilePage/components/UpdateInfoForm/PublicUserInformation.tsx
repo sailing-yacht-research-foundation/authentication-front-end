@@ -13,6 +13,7 @@ import { localesList as countryList } from 'utils/languages-util';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import ReactTooltip from 'react-tooltip';
+import { WATERSPORTS } from 'utils/constants';
 
 export const PublicUserInformation = (props) => {
 
@@ -25,6 +26,15 @@ export const PublicUserInformation = (props) => {
 
         return objectArray.map(([key, value]) => {
             return <Select.Option key={key} value={key.toLowerCase()}>{value}</Select.Option>
+        });
+    }
+
+    const renderInterestsList = () => {
+        return WATERSPORTS.map((interest, index) => {
+            return <Select.Option key={index} value={interest}>
+                {'CRUISING' === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
+                :  <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />}
+                {interest}</Select.Option>
         });
     }
 
@@ -94,6 +104,17 @@ export const PublicUserInformation = (props) => {
             >
                 <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
             </Form.Item>
+
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.interests)}</SyrfFieldLabel>}
+                name="interests"
+                data-tip={t(translations.tip.your_interests)}
+            >
+                <SyrfFormSelect mode="multiple" maxTagCount={'responsive'}>
+                    {renderInterestsList()}
+                </SyrfFormSelect>
+            </Form.Item>
+
             <ReactTooltip />
         </Wrapper>
     );
@@ -112,4 +133,11 @@ const Wrapper = styled.div`
     background: #fff;
     padding: 50px 25px;
     border-radius: 10px;
+`;
+
+const ItemAvatar = styled.img`
+    with: 25px;
+    height: 25px;
+    margin-right: 5px;
+    border-radius: 50%;
 `;

@@ -13,32 +13,22 @@ import { AdminType } from 'utils/constants';
 import { ItemAvatar } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router-dom';
 
-export const AssignAdminsFormItem = (props) => {
+export const EditorsField = (props) => {
 
     const user = useSelector(selectUser);
 
-    const { event } = props;
+    const { vessel } = props;
 
     const history = useHistory();
 
     // eslint-disable-next-line
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
+    const [showIndividualField, setShowIndividualField] = React.useState<boolean>(false);
+
     const { t } = useTranslation();
 
     const [items, setItems] = React.useState<any[]>([]);
-
-    const handleSwitchChange = (checked, e, item) => {
-        e.stopPropagation();
-
-        setItems(items.map(i => {
-            if (i.id === item.id) {
-                i.isIndividualAssignment = checked
-            }
-
-            return i;
-        }))
-    }
 
     const navigateToProfile = (e, item) => {
         e.stopPropagation();
@@ -47,8 +37,7 @@ export const AssignAdminsFormItem = (props) => {
 
     const renderItemResults = () => {
         return items.map(item => <Select.Option style={{ padding: '5px' }} value={JSON.stringify(item)}>
-            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name}
-            {item.type === AdminType.GROUP && <Switch checked={item.isIndividualAssignment} style={{ marginLeft: '10px' }} checkedChildren={t(translations.my_event_create_update_page.group_members_assignment)} unCheckedChildren={t(translations.my_event_create_update_page.group_assignment)} onChange={(checked, e) => handleSwitchChange(checked, e, item)} />}
+            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name} - {item.type === AdminType.GROUP ? 'group' : 'individual'}
         </Select.Option>)
     }
 
@@ -66,7 +55,6 @@ export const AssignAdminsFormItem = (props) => {
                     id: group.id,
                     avatar: group.groupImage,
                     name: group.groupName,
-                    isIndividualAssignment: false
                 }
             });
         }
@@ -78,7 +66,6 @@ export const AssignAdminsFormItem = (props) => {
                     id: p.id,
                     avatar: p.avatar,
                     name: p.name,
-                    isIndividualAssignment: false
                 }
             })
         }
@@ -89,47 +76,61 @@ export const AssignAdminsFormItem = (props) => {
     React.useEffect(() => {
         let groupRows = [];
         let peopleRows = [];
-        if (event.editors) {
-            peopleRows = event.editors.map(editor => ({
+        if (vessel.editors) {
+            peopleRows = vessel.editors.map(editor => ({
                 type: AdminType.INDIVIDUAL,
                 id: editor.id,
                 avatar: editor.avatar,
                 name: editor.name,
-                isIndividualAssignment: false
             }));
         }
 
-        if (event.groups) {
-            groupRows = event.groups.map(group => {
+        if (vessel.groupEditors) {
+            groupRows = vessel.groupEditors.map(group => {
                 return {
                     type: AdminType.GROUP,
                     id: group.id,
                     avatar: group.groupImage,
                     name: group.groupName,
-                    isIndividualAssignment: false
                 }
             });
         }
 
         setItems([...peopleRows, ...groupRows]);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [event]);
+    }, [vessel]);
+
+    const handleOnChange = (items) => {
+        const editors = items ? items.map(item => JSON.parse(item)) : [];
+        setShowIndividualField(editors.filter(editor => editor.type === AdminType.GROUP).length > 0);
+    }
 
     return (
-        <Form.Item
-            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.admins)}</SyrfFieldLabel>}
-            name="admins"
-            data-tip={t(translations.tip.set_admins_for_this_event)}>
-            <SyrfFormSelect mode="multiple"
-                style={{ width: '100%' }}
-                placeholder={t(translations.tip.set_admins_for_this_event)}
-                onSearch={debounceSearch}
-                filterOption={false}
-                allowClear
-                maxTagCount={'responsive' as const}
+        <>
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.admins)}</SyrfFieldLabel>}
+                name="admins"
+                data-tip={t(translations.tip.set_admins_for_this_boat)}>
+                <SyrfFormSelect mode="multiple"
+                    style={{ width: '100%' }}
+                    placeholder={t(translations.tip.set_admins_for_this_boat)}
+                    onSearch={debounceSearch}
+                    onChange={handleOnChange}
+                    filterOption={false}
+                    allowClear
+                    maxTagCount={'responsive' as const}
+                >
+                    {renderItemResults()}
+                </SyrfFormSelect>
+            </Form.Item>
+
+            {showIndividualField && <Form.Item
+                label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.assign_for_all_group_member)}</SyrfFieldLabel>}
+                name="isIndividualAssignment"
+                valuePropName="checked"
             >
-                {renderItemResults()}
-            </SyrfFormSelect>
-        </Form.Item>
+                <Switch />
+            </Form.Item>}
+        </>
     )
 }

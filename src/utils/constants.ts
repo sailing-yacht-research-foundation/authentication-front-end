@@ -160,7 +160,7 @@ export enum EventState {
     ON_GOING = 'ONGOING'
 }
 
-export enum ParticipantInvitationStatus  {
+export enum ParticipantInvitationStatus {
     BLOCKED = 'BLOCKED',
     INVITED = 'INVITED',
     ACCEPTED = 'ACCEPTED'
@@ -174,4 +174,41 @@ export enum AdminType {
 export enum CompetitorType {
     GROUP = 'group',
     INDIVIDUAL = 'individual'
+}
+
+export enum VesselType {
+    FOIL_BOARD = 'FOIL_BOARD',
+    BOARD = 'BOARD',
+    DINGHY = 'DINGHY',
+    KEELBOAT = 'KEELBOAT',
+    OTHER = 'OTHER'
+}
+
+export const WATERSPORTS = [
+    "WINGING",
+    "CRUISING",
+    "HANDICAP",
+    "ONEDESIGN",
+    "KITESURFING",
+    "WINDSURFING"];
+
+export const ownershipArray = [
+    'OWNED', 'RENTED'
+];
+
+export enum EventTypes {
+    ONE_DESIGN = 'ONE_DESIGN',
+    HANDICAP_RACE = 'HANDICAP_RACE',
+    KITESURFING = 'KITESURFING',
+    WINGING = 'WINGING',
+    WINDSURFING = 'WINDSURFING',
+    CRUISING = 'CRUISING',
+    RALLY = 'RALLY',
+    TRAINING = 'TRAINING',
+    OTHER = 'OTHER'
+}
+
+export enum EventParticipatingTypes {
+    VESSEL = 'VESSEL',
+    PERSON = 'PERSON'
 }

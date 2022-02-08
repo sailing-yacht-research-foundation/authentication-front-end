@@ -1,7 +1,7 @@
 import React from 'react';
-import { Spin, Form, Divider, Select, Switch } from 'antd';
+import { Spin, Form, Divider, Select } from 'antd';
 import { PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
-import { SyrfFieldLabel, SyrfFormButton, SyrfInputField, SyrfFormWrapper } from 'app/components/SyrfForm';
+import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { LocationPicker } from './LocationPicker';
@@ -12,7 +12,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, EventState, MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
+import { AdminType, EventParticipatingTypes, EventState, MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -34,6 +34,7 @@ import { FormItemStartDate } from './FormItemStartDate';
 import { FormItemEndDate } from './FormItemEndDate';
 import { ImportEventDataModal } from './modals/ImportEventDataModal';
 import { create as createCourse } from 'services/live-data-server/courses';
+import { FormItems } from './FormItems';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -69,11 +70,12 @@ export const MyEventForm = () => {
     const raceListRef = React.useRef<any>();
 
     const onFinish = async (values) => {
-        const { name, startDate, externalUrl, isOpen, lon, lat, endDate, endTime, startTime, description, approximateStartTime_zone, approximateEndTime_zone, endLat, endLon, admins } = values;
+        const { startDate, isOpen, lon, lat, endDate, endTime, startTime, endLat, endLon, admins, requiredCertifications, requireCovidCertificate, isCrewed } = values;
         let response;
         let currentDate = moment();
         let currentTime = moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
+        const certifications = !!requiredCertifications ? requiredCertifications.split(',') : [];
 
         const startTimeValidation = handleCheckIsStartTimeValid();
         const endTimeValidation = handleCheckIsEndDateTimeValid();
@@ -92,15 +94,11 @@ export const MyEventForm = () => {
         }
 
         const data = {
-            name: name,
-            externalUrl: externalUrl,
-            lon: lon,
-            lat: lat,
+            ...values,
             endLocation: {
                 lon: endLon || lon,
                 lat: endLat || lat
             },
-            description: description,
             approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
             approximateEndTime: moment(currentDate.format('YYYY-MM-DD') + ' ' + currentTime.format("HH:mm:ss")).utc(),
             startDay: startDate.utc().format('DD'),
@@ -110,10 +108,10 @@ export const MyEventForm = () => {
             endMonth: currentDate.utc().format('MM'),
             endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
-            approximateStartTime_zone: approximateStartTime_zone,
-            approximateEndTime_zone: approximateEndTime_zone,
             isPrivate: false,
             isOpen: !!isOpen,
+            isCrewed: !!isCrewed,
+            requireCovidCertificate: !!requireCovidCertificate,
             editors: editors.filter(item => item.type === AdminType.INDIVIDUAL).map(item => ({
                 id: item.id
             })),
@@ -121,6 +119,8 @@ export const MyEventForm = () => {
                 id: item.id,
                 isIndividualAssignment: item.isIndividualAssignment
             })),
+            participatingFee: (values.participatingFee && values.participatingFee !== 0) ? values.participatingFee : undefined,
+            requiredCertifications: certifications
         };
 
         setIsSavingEvent(true);
@@ -315,7 +315,7 @@ export const MyEventForm = () => {
                 endTime: moment(response.data?.approximateEndTime),
                 endLat: response.data?.endLocation?.coordinates[1] || response.data?.lat,
                 endLon: response.data?.endLocation?.coordinates[0] || response.data?.lon,
-                admins:  [...response.data?.editors.map(editor => JSON.stringify({
+                admins: [...response.data?.editors.map(editor => JSON.stringify({
                     type: AdminType.INDIVIDUAL,
                     id: editor.id,
                     avatar: editor.avatar,
@@ -327,18 +327,19 @@ export const MyEventForm = () => {
                     avatar: editor.groupImage,
                     name: editor.groupName,
                     isIndividualAssignment: false
-                }))]
+                }))],
+                requiredCertifications: response.data?.requiredCertifications.join(',')
             });
             setEvent(response.data);
             setCoordinates({
-                lat: response?.data?.lat,
-                lng: response?.data?.lon
+                lat: response.data?.lat,
+                lng: response.data?.lon
             });
             onChoosedLocation(response.data.lat, response.data.lon);
 
-            if (response?.data?.endLocation) {
-                const endLat = response?.data?.endLocation?.coordinates[1];
-                const endLon = response?.data?.endLocation?.coordinates[0]
+            if (response.data?.endLocation) {
+                const endLat = response.data?.endLocation?.coordinates[1];
+                const endLon = response.data?.endLocation?.coordinates[0]
                 setEndCoordinates({
                     lat: endLat,
                     lng: endLon
@@ -651,7 +652,8 @@ export const MyEventForm = () => {
                             approximateEndTime_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                             endDate: moment().add(2, 'days'),
                             endTime: moment({ hour: 0, minute: 0, second: 0 }),
-                            isOpen: true
+                            isOpen: true,
+                            participatingFeeType: EventParticipatingTypes.PERSON
                         }}
                     >
                         <FormItemEventNameDescription event={event} />
@@ -670,24 +672,7 @@ export const MyEventForm = () => {
 
                         <FormItemEndDate renderErrorField={renderErrorField} error={error} handleFieldChange={handleFieldChange} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
-                            name="externalUrl"
-                            className="event-external-website-step"
-                            data-tip={t(translations.tip.event_website)}
-                            rules={[{ type: 'url', message: t(translations.forms.external_url_is_not_a_valid_url) }]}
-                        >
-                            <SyrfInputField autoCorrect="off" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}
-                            name="isOpen"
-                            data-tip={t(translations.tip.regatta)}
-                            valuePropName="checked"
-                        >
-                            <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
-                        </Form.Item>
+                        <FormItems event={event} mode={mode} />
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">

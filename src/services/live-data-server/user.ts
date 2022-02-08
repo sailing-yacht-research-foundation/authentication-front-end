@@ -66,3 +66,27 @@ export const verifyPhoneNumber = (code) => {
         code
     }));
 }
+
+export const updateInterests = (interests) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/interests`, interests));
+}
+
+export const updateShareableInformation = (form) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/shareable-info`, form, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+}
+
+export const getShareableInformation = () => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/shareable-info`));
+}
+
+export const removeCovidCard = () => {
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/covid-vaccination-card`));
+}
+
+export const removePassportPhoto = () => {
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/passport-photo`))
+}
