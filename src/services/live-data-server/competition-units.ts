@@ -199,9 +199,7 @@ export const startRace = (competitionUnitId) => {
 export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number = 1000, page: number = 1, size: number = 10, coordinate) => {
     const query: any = {
         bool: {
-            must: {
-
-            },
+            must: {},
             filter: [],
             should: [],
         },
