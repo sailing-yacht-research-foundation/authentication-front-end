@@ -224,8 +224,8 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
                     must: [
                         {
                             range: {
-                                "approximateEndTime": { // end_time is greater than now means the race is on_going.
-                                    "gte": "now"
+                                "approx_end_time_ms": { // end_time is greater than now means the race is on_going.
+                                    "gte": moment().unix() * 1000
                                 },
 
                             }
@@ -245,7 +245,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
                     must_not: [
                         {
                             "exists": {
-                                "field": "approximateEndTime"
+                                "field": "approx_end_time_ms"
                             }
                         }
                     ],
