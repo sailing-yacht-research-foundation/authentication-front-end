@@ -32,7 +32,8 @@ export const PublicUserInformation = (props) => {
     const renderInterestsList = () => {
         return WATERSPORTS.map((interest, index) => {
             return <Select.Option key={index} value={interest}>
-                <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />
+                {'CRUISING' === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
+                :  <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />}
                 {interest}</Select.Option>
         });
     }
