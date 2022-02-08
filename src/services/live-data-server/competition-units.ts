@@ -243,7 +243,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
                 }
             },
             {
-                bool: { // end_time does not exist and start_time in range.
+                bool: { // end_time does not exist and start_time in range, so that races in the past are not included.
                     must_not: [
                         {
                             "exists": {
@@ -262,7 +262,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
                             }
                         }
                     ],
-                    should: [ /// this optional, it will get rows with status if possible.
+                    should: [ /// this optional, it will get rows with that have the status field equal sheduled and ongoing if possible.
                         {
                             "terms": {
                                 "status": [EventState.SCHEDULED, EventState.ON_GOING],
@@ -281,7 +281,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
                                 },
 
                             }
-                        }, {// and status equals scheduled and ongoing so that we only get sheduled and ongoing races.
+                        }, {// and status equals scheduled and ongoing so that we only get sheduled and ongoing races, no races in the past are included.
                             "terms": {
                                 "status": [EventState.SCHEDULED, EventState.ON_GOING],
                             }
