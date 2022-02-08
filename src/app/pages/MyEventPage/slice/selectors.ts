@@ -25,3 +25,8 @@ export const selectIsChangingPage = createSelector(
     [selectDomain],
     myEventList => myEventList.is_changing_page,
 );
+
+export const selectPageSize = createSelector(
+    [selectDomain],
+    myEventList => myEventList.size,
+);

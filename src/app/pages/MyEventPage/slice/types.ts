@@ -4,6 +4,7 @@ export interface MyEventListState {
     page: number;
     total: number;
     is_changing_page: boolean;
+    size: number;
   }
   
   export type ContainerState = MyEventListState

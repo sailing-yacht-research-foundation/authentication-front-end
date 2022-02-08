@@ -9,6 +9,7 @@ export const initialState: MyEventListState = {
   results: [],
   total: 0,
   is_changing_page: false,
+  size: 10
 };
 
 const slice = createSlice({
@@ -21,9 +22,12 @@ const slice = createSlice({
     setTotal(state, action: PayloadAction<number>) {
       state.total = action.payload;
     },
-    getEvents(state, page) { },
+    getEvents(state, action: PayloadAction<any>) { },
     setPage(state, action: PayloadAction<number>) {
       state.page = action.payload;
+    },
+    setSize(state, action: PayloadAction<number>) {
+      state.size = action.payload;
     },
     setIsChangingPage(state, action: PayloadAction<boolean>) {
       state.is_changing_page = action.payload;

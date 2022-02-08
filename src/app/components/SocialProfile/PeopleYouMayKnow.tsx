@@ -56,7 +56,7 @@ export const PeopleYouMayKnow = () => {
     }
 
     React.useEffect(() => {
-        if (user) {
+        if (user?.attributes) {
             getRecommandedProfiles();
             getInfluencers();
         }

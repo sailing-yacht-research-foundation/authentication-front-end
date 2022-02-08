@@ -59,9 +59,12 @@ export const unregisterParticipantFromVesselParticipant = (vesselParticipantId, 
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants/${vesselParticipantId}/participants/${participantId}`))
 }
 
-export const getMyInvitedEvents = (page) => {
+export const getMyInvitedEvents = (page, size = 10) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/my-invitation`, {
-        page
+        params: {
+            page,
+            size
+        }
     }))
 }
 
