@@ -36,12 +36,12 @@ export const EventAdmins = (props) => {
         setIsLoading(false);
 
         if (response.success) {
-            if (response?.data?.individualEditors?.length > 0) {
-                setIndividualEditors(response?.data?.individualEditors);
+            if (response.data?.individualEditors.length > 0) {
+                setIndividualEditors(response.data.individualEditors);
             }
 
-            if (response?.data?.groupEditors?.length > 0) {
-                setGroupEditors(response?.data?.groupEditors);
+            if (response.data?.groupEditors.length > 0) {
+                setGroupEditors(response.data.groupEditors);
             }
         }
     }

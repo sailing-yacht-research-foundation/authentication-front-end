@@ -143,19 +143,20 @@ export const MyTrackList = () => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        size: 10
     });
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        getAll(1);
+        getAll(pagination.page, pagination.size);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const getAll = async (page) => {
+    const getAll = async (page, size) => {
         setIsChangingPage(true);
-        const response = await getAllTracks(page);
+        const response = await getAllTracks(page, size);
         setIsChangingPage(false);
 
         if (response.success) {
@@ -163,17 +164,18 @@ export const MyTrackList = () => {
                 ...pagination,
                 rows: response.data?.rows,
                 page: page,
-                total: response.data?.count
+                total: response.data?.count,
+                size: response.data?.size
             });
         }
     }
 
-    const onPaginationChanged = (page) => {
-        getAll(page);
+    const onPaginationChanged = (page, size) => {
+        getAll(page, size);
     }
 
     const onTrackDeleted = () => {
-        getAll(pagination.page);
+        getAll(pagination.page, pagination.size);
     }
 
     return (

@@ -1,59 +1,82 @@
+import 'react-phone-input-2/lib/style.css';
+
 import React from 'react';
-import { Spin, Form, Divider, Space } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
+import { Spin, Form, Space } from 'antd';
+import { SyrfFormWrapper } from 'app/components/SyrfForm';
 import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
-import { create, update, get } from 'services/live-data-server/vessels';
+import { createMultipart, updateMultipart, get, removePhotos, sendPhoneVerification, verifyPhones } from 'services/live-data-server/vessels';
 import { toast } from 'react-toastify';
 import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVesselModal';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { MODE } from 'utils/constants';
+import { AdminType, MODE, VesselType } from 'utils/constants';
 import { IoIosArrowBack } from 'react-icons/io';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { LiferaftList } from './LiferaftList';
+import { PDFUploadForm } from './PDFUploadForm';
+import { ConfirmModal } from 'app/components/ConfirmModal';
+import { VerifyPhoneModal } from 'app/components/VerifyPhoneNumberModal';
+import { VesselFormFields } from './VesselFormFields';
+
+const fieldsValidate = {
+    STATELINE: 'isVerifiedSatelliteNumber',
+    ONBOARD_PHONE: 'isVerifiedOnboardPhone'
+}
 
 export const VesselForm = () => {
     const history = useHistory();
-
     const { t } = useTranslation();
-
     const location = useLocation();
-
     const [form] = useForm();
-
+    const { id } = useParams<{ id: string }>();
+    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+    const [vessel, setVessel] = React.useState<any>({});
+    const [formChanged, setFormChanged] = React.useState<boolean>(false);
+    const [showRemovePhotoModal, setShowRemovePhotoModal] = React.useState<boolean>(false);
+    const [showRemoveDeckPlanModal, setShowRemoveDeckPlanModal] = React.useState<boolean>(false);
+    const [showRemoveHullDiagram, setShowRemoveHullDiagram] = React.useState<boolean>(false);
+    const [showVerifyOnboardPhoneModal, setShowVerifyOnboardPhoneModal] = React.useState<boolean>(false);
+    const [showVerifySatellitePhoneModal, setShowVerifySatellitePhoneModal] = React.useState<boolean>(false);
     const [isSaving, setIsSaving] = React.useState<boolean>(false);
-
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
-    const { id } = useParams<{ id: string }>();
-
-    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-
-    const [vessel, setVessel] = React.useState<any>({});
-
-    const [formChanged, setFormChanged] = React.useState<boolean>(false);
-
     const onFinish = async (values) => {
-        let { publicName, lengthInMeters } = values;
         let response;
+        const { admins } = values;
+        const editors = admins ? admins.map(item => JSON.parse(item)) : [];
+        const form = new FormData();
 
         setIsSaving(true);
 
-        const data = {
-            publicName: publicName,
-            lengthInMeters: lengthInMeters,
-            orcJsonPolars: {}
-        };
+        Object.entries(values).forEach(([key, value]: any) => {
+            if (['onboardPhone', 'satelliteNumber'].includes(key) && !String(value).includes('+') && value) {
+                form.append(key, '+' + value);
+            } else {
+                if ('onboardEmail' === key && !value) return;
+                else {
+                    form.append(key, value || '');
+                }
+            }
+        });
+
+        if (editors && Array.isArray(editors)) {
+            editors.filter(item => item.type === AdminType.GROUP).map((item, index) => {
+                form.append(`groupEditors[${index}]`, item.id);
+            });
+            editors.filter(item => item.type === AdminType.INDIVIDUAL).forEach((item, index) => {
+                form.append(`editors[${index}]`, item.id);
+            });
+        }
 
         if (mode === MODE.CREATE)
-            response = await create(data);
+            response = await createMultipart(form);
         else
-            response = await update(id, data);
-
+            response = await updateMultipart(id, form);
 
         setIsSaving(false);
 
@@ -67,6 +90,7 @@ export const VesselForm = () => {
 
             history.push(`/boats/${response.data?.id}/update`);
             setMode(MODE.UPDATE);
+            initModeAndData();
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -82,7 +106,18 @@ export const VesselForm = () => {
             if (response.success) {
                 setVessel(response.data);
                 form.setFieldsValue({
-                    ...response.data
+                    ...response.data,
+                    admins: [...response.data?.editors.map(editor => JSON.stringify({
+                        type: AdminType.INDIVIDUAL,
+                        id: editor.id,
+                        avatar: editor.avatar,
+                        name: editor.name,
+                    })), ...response.data?.groupEditors.map(editor => JSON.stringify({
+                        type: AdminType.GROUP,
+                        id: editor.id,
+                        avatar: editor.groupImage,
+                        name: editor.groupName,
+                    }))],
                 });
             } else {
                 history.push('/404');
@@ -99,6 +134,86 @@ export const VesselForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const removePhoto = async () => {
+        const response = await removePhotos(vessel.id, {
+            isDeletePhoto: true
+        });
+
+        if (response.success) {
+            setVessel({
+                ...vessel,
+                photo: null
+            });
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
+        setShowRemovePhotoModal(false);
+    }
+
+    const removeDeckPlan = async () => {
+        const response = await removePhotos(vessel.id, {
+            isDeleteDeckPlan: true
+        });
+
+        if (response.success) {
+            setVessel({
+                ...vessel,
+                deckPlan: null
+            });
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
+        setShowRemoveDeckPlanModal(false);
+    }
+
+    const removeHullDiagram = async () => {
+        const response = await removePhotos(vessel.id, {
+            isDeleteHullDiagram: true
+        });
+
+        if (response.success) {
+            setVessel({
+                ...vessel,
+                hullDiagram: null
+            });
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
+        setShowRemoveHullDiagram(false);
+    }
+
+    const verifyPhone = async (field, code) => {
+        const response = await verifyPhones(vessel.id, field, code);
+
+        if (response.success) {
+            toast.success(t(translations.vessel_create_update_page.successfully_verified_phone_number));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
+        setShowVerifyOnboardPhoneModal(false);
+        setShowVerifySatellitePhoneModal(false);
+        initModeAndData();
+    }
+
+    const sendVerificationCode = async (field) => {
+        let response;
+        if (fieldsValidate.ONBOARD_PHONE === field) {
+            response = await sendPhoneVerification(vessel.id, 'ONBOARD_PHONE');
+        } else {
+            response = await sendPhoneVerification(vessel.id, 'SATELLITE');
+        }
+
+        if (response.success) {
+            toast.success(t(translations.vessel_create_update_page.please_check_you_phone_for_verification));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     return (
         <Wrapper>
             <DeleteVesselModal
@@ -107,6 +222,26 @@ export const VesselForm = () => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
+            <ConfirmModal
+                showModal={showRemovePhotoModal}
+                onCancel={() => setShowRemovePhotoModal(false)}
+                title={t(translations.vessel_create_update_page.remove_photo)}
+                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove_boat_photo)}
+                onOk={removePhoto} />
+            <ConfirmModal
+                showModal={showRemoveDeckPlanModal}
+                onCancel={() => setShowRemoveDeckPlanModal(false)}
+                title={t(translations.vessel_create_update_page.remove_deck_plan)}
+                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove_deck_plan)}
+                onOk={removeDeckPlan} />
+            <ConfirmModal
+                showModal={showRemoveHullDiagram}
+                onCancel={() => setShowRemoveHullDiagram(false)}
+                title={t(translations.vessel_create_update_page.remove_hull_diagram)}
+                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove_hull_diagram)}
+                onOk={removeHullDiagram} />
+            <VerifyPhoneModal verifyPhone={(code) => verifyPhone('ONBOARD_PHONE', code)} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showVerifyOnboardPhoneModal} setShowPhoneVerifyModal={setShowVerifyOnboardPhoneModal} />
+            <VerifyPhoneModal verifyPhone={(code) => verifyPhone('SATELLITE', code)} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showVerifySatellitePhoneModal} setShowPhoneVerifyModal={setShowVerifySatellitePhoneModal} />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => history.push("/boats")}>
@@ -132,43 +267,30 @@ export const VesselForm = () => {
                         form={form}
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
+                        initialValues={{
+                            vesselType: VesselType.FOIL_BOARD,
+                            hullsCount: 1
+                        }}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.public_name)}</SyrfFieldLabel>}
-                            name="publicName"
-                            rules={[{ required: true, message: t(translations.forms.boat_name_is_required) }]}
-                        >
-                            <SyrfInputField autoCorrect="off" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.length_in_meters)}</SyrfFieldLabel>}
-                            name="lengthInMeters"
-                            rules={[() => ({
-                                validator(_, value) {
-                                    if (value === null) {
-                                        return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_is_required));
-                                    }
-                                    if (isNaN(value) || value <= 0) {
-                                        return Promise.reject(t(translations.vessel_create_update_page.length_in_meters_must_be_a_number));
-                                    }
-                                    return Promise.resolve();
-                                },
-                            }), { required: true, message: t(translations.vessel_create_update_page.length_in_meters_is_required) }]}
-                        >
-                            <SyrfInputField autoCorrect="off" />
-                        </Form.Item>
-
-                        <Divider />
-
-                        <Form.Item>
-                            <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">
-                                {t(translations.vessel_create_update_page.save_vessel)}
-                            </SyrfFormButton>
-                        </Form.Item>
+                        <VesselFormFields
+                            setShowRemoveHullDiagram={setShowRemoveHullDiagram}
+                            setShowRemovePhotoModal={setShowRemovePhotoModal}
+                            setShowRemoveDeckPlanModal={setShowRemoveDeckPlanModal}
+                            setShowVerifyOnboardPhoneModal={setShowVerifyOnboardPhoneModal}
+                            setShowVerifySatellitePhoneModal={setShowVerifySatellitePhoneModal}
+                            sendVerificationCode={sendVerificationCode}
+                            formChanged={formChanged}
+                            fieldsValidate={fieldsValidate}
+                            vessel={vessel} />
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
+
+            {mode === MODE.UPDATE && vessel.id &&
+                <>
+                    <PDFUploadForm reloadVessel={initModeAndData} vessel={vessel} />
+                    <LiferaftList vesselId={vessel.id} />
+                </>}
         </Wrapper >
     )
 }
