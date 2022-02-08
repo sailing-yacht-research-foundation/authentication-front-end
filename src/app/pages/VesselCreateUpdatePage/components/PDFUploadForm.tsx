@@ -34,7 +34,7 @@ export const PDFUploadForm = (props) => {
         },
         {
             name: 'Pactor Modem',
-            formFieldName: 'pactorModern', // this typo is used in backend so i will keep it for now. It should be pactorModem.
+            formFieldName: 'pactorModem',
         },
         {
             name: 'Water Maker',
