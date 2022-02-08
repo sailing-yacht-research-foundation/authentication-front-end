@@ -21,9 +21,9 @@ export const RaceList = (props) => {
 
     const { event, canManageEvent } = props;
 
-    const canRegisterToRace = (race) => {
-        return [RaceStatus.ON_GOING].includes(race.status) && event.isOpen
-            && event.allowRegistration && [EventState.ON_GOING].includes(event.status) && !event.isEditor;
+    const canRegisterToRace = (race) => { // race is scheduled and event is open and allow for registration and event status is on going or scheduled and the user is not admin.
+        return [RaceStatus.SCHEDULED].includes(race.status) && event.isOpen
+            && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status) && !event.isEditor;
     }
 
     const columns = [
