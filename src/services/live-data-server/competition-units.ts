@@ -279,9 +279,21 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
                                 },
 
                             }
-                        }, {// and status equals scheduled and ongoing so that we only get sheduled and ongoing races, no races in the past are included.
-                            "terms": {
-                                "status": [EventState.SCHEDULED, EventState.ON_GOING],
+                        },
+                        {// and status equals scheduled and ongoing so that we only get sheduled and ongoing races, no races in the past are included.
+                            bool: {
+                                should: [
+                                    {
+                                        "match": {
+                                            "status": EventState.SCHEDULED
+                                        }
+                                    },
+                                    {
+                                        "match": {
+                                            "status": EventState.ON_GOING
+                                        }
+                                    }
+                                ]
                             }
                         }
                     ]
