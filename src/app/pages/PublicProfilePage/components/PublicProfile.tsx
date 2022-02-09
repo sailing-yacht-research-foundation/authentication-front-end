@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, Image, Spin } from 'antd';
+import { Button, Image, Spin, Menu, Dropdown } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../slice';
 import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile } from '../slice/selectors';
@@ -9,11 +9,14 @@ import { FollowerModal } from './modals/FollowerModal';
 import { FollowingModal } from './modals/FollowingModal';
 import { renderAvatar } from 'utils/user-utils';
 import { FollowStatus } from 'utils/constants';
-import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
+import { blockUser, followProfile, unblockUser, unfollowProfile } from 'services/live-data-server/profile';
 import { BsCheck, BsPlus, BsCheck2All } from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { UnfollowConfirmModal } from 'app/components/SocialProfile/UnfollowConfirmModal';
+import { showToastMessageOnRequestError } from 'utils/helpers';
+import { toast } from 'react-toastify';
+import { ConfirmModal } from 'app/components/ConfirmModal';
 
 export const PublicProfile = () => {
 
@@ -43,6 +46,8 @@ export const PublicProfile = () => {
 
     const [followStatus, setFollowStatus] = React.useState<any>(null);
 
+    const [showConfirmBlockModal, setShowConfirmBlockModal] = React.useState<boolean>(false);
+
     const { t } = useTranslation();
 
     const getUserProfile = async () => {
@@ -63,6 +68,29 @@ export const PublicProfile = () => {
         if (response.success) {
             setFollowStatus(response?.data?.status);
             handlePostFollowUnfollowAction();
+        }
+    }
+
+    const block = async () => {
+        const response = await blockUser(profile.id);
+
+        if (response.success) {
+            toast.info(t(translations.public_profile.successfully_blocked_user, { userName: profile.name }));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
+        setShowConfirmBlockModal(false);
+    }
+
+    const unblock = async () => {
+        const response = await unblockUser(profile.id);
+
+        if (response.success) {
+            getUserProfile();
+            toast.info(t(translations.public_profile.successfully_unblocked_user, { userName: profile.name }))
+        } else {
+            showToastMessageOnRequestError(response.error);
         }
     }
 
@@ -94,6 +122,16 @@ export const PublicProfile = () => {
             setShowFollowingModal(true)
     }
 
+    const menu = (
+        <Menu>
+            {
+                !profile.isBlocking ?
+                    (<Menu.Item key="1" onClick={() => setShowConfirmBlockModal(true)}>{t(translations.public_profile.block)}</Menu.Item>) :
+                    (<Menu.Item key="2" onClick={unblock}>{t(translations.public_profile.unblock)}</Menu.Item>)
+            }
+        </Menu >
+    );
+
     React.useEffect(() => {
         if (getProfileFailed)
             history.push('/');
@@ -115,6 +153,12 @@ export const PublicProfile = () => {
 
     return (
         <Wrapper>
+            <ConfirmModal
+                showModal={showConfirmBlockModal}
+                title={t(translations.public_profile.are_you_sure_you_want_to_block, { userName: profile.name })}
+                content={t(translations.public_profile.are_you_really_sure_you_want_to_block_user_they_will_no_longer_see_you_on_syrf_and, { userName: profile.name })}
+                onOk={block}
+                onCancel={() => setShowConfirmBlockModal(false)} />
             <UnfollowConfirmModal profileName={profile.name} unfollow={unfollow} visible={showConfirmUnfollowModal} hideModal={() => setShowUnfollowConfirmModal(false)} />
             {
                 profile.id && (!profile.isPrivate || currentUserId === profile.id) && <>
@@ -130,7 +174,13 @@ export const PublicProfile = () => {
                         </AvatarWrapper>
                         <ProfileName>{profile.name}</ProfileName>
                         <ProfileBio>{profile.bio}</ProfileBio>
-                        {renderFollowButton()}
+                        <ProfileButtonsWrapper>
+                            <div></div>
+                            <div>{renderFollowButton()}</div>
+                            <OptionContainer>
+                                <Dropdown.Button overlay={menu}></Dropdown.Button>
+                            </OptionContainer>
+                        </ProfileButtonsWrapper>
                         {profile.isPrivate && <div>{t(translations.public_profile.profile_is_private)}</div>}
                     </InfoSection>
                     <SubInfoSection>
@@ -218,3 +268,15 @@ const InfoNumber = styled.h3`
 `;
 
 const InfoTitle = styled.span``;
+
+const ProfileButtonsWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    & > div {
+        width: 33%;
+    }
+`;
+
+const OptionContainer = styled.div`
+    text-align: right;
+`;

@@ -1127,7 +1127,13 @@
     "requested_to_follow_you": "Requested to follow you.",
     "unfollow_people": "Unfollow {{profileName}}",
     "are_you_sure_to_unfollow": "Are you sure you want to unfollow {{profileName}}?",
-    "search_or_select_people": "Search or select a person."
+    "search_or_select_people": "Search or select a person.",
+    "block": "Block",
+    "unblock": "Unblock",
+    "successfully_blocked_user": "Successfully blocked {{userName}}.",
+    "successfully_unblocked_user": "Successfully unblocked {{userName}}.",
+    "are_you_sure_you_want_to_block": "Are you sure you want to block {{userName}}?",
+    "are_you_really_sure_you_want_to_block_user_they_will_no_longer_see_you_on_syrf_and": "Are you really sure you want to block {{userName}}, they will no longer see you on SYRF."
   },
   "credentail_manager_page": {
     "credentials": "Credentials",
