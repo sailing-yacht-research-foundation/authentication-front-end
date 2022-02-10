@@ -73,7 +73,8 @@ export const enum GroupMemberStatus {
     INVITED = 'INVITED',
     REQUESTED = 'REQUESTED',
     ACCEPTED = 'ACCEPTED',
-    DECLINED = 'DECLINED'
+    DECLINED = 'DECLINED',
+    BLOCKED = 'BLOCKED'
 };
 
 export const enum GroupVisibility {

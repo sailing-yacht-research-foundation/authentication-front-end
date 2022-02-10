@@ -4,7 +4,7 @@ import { SectionContainer, SectionTitle, PaginationContainer, SectionTitleWrappe
 import { Menu, Dropdown, Spin, Pagination } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { UserItemRow } from './UserItemRow';
-import { assignAdmin } from 'services/live-data-server/groups';
+import { assignAdmin, blockMember, unBlockMember } from 'services/live-data-server/groups';
 import { useParams } from 'react-router';
 import { CreateButton } from 'app/components/SyrfGeneral';
 import { IoMdPersonAdd } from 'react-icons/io';
@@ -18,6 +18,7 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { renderNumberWithCommas, showToastMessageOnRequestError } from 'utils/helpers';
 import { GroupMemberStatus } from 'utils/constants';
+import { ConfirmModal } from 'app/components/ConfirmModal';
 
 export const MembersManager = (props) => {
 
@@ -28,6 +29,8 @@ export const MembersManager = (props) => {
     const { groupId } = useParams<{ groupId: string }>();
 
     const [showModal, setShowModal] = React.useState<boolean>(false);
+
+    const [showBlockConfirmModal, setShowBlockConfirmModal] = React.useState<boolean>(false);
 
     const members = useSelector(selectMembers);
 
@@ -93,6 +96,40 @@ export const MembersManager = (props) => {
         }
     }
 
+    const block = async (e) => {
+        e.preventDefault();
+
+        const response = await blockMember(groupId, member.member?.id);
+
+        if (response.success) {
+            toast.success(t(translations.group.successfully_blocked_member_out_of_the_group));
+            getMembers(memberCurrentPage);
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
+        setShowBlockConfirmModal(false);
+    }
+
+    const unblock = async (e, member) => {
+        e.preventDefault();
+
+        const response = await unBlockMember(groupId, member.member?.id);
+
+        if (response.success) {
+            toast.success(t(translations.group.successfully_unblocked_member_out_of_the_group));
+            getMembers(memberCurrentPage);
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
+    const showBlockModal = (e, member) => {
+        e.preventDefault();
+        setMember(member);
+        setShowBlockConfirmModal(true);
+    }
+
     React.useEffect(() => {
         getMembers(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,6 +148,13 @@ export const MembersManager = (props) => {
                 <Menu.Item key="1">
                     <a onClick={(e) => removeFromGroup(e, member)} href="/">{t(member.status === GroupMemberStatus.INVITED ? translations.group.cancel_invitation : translations.group.remove_from_group)}</a>
                 </Menu.Item>
+                {
+                    member.status !== GroupMemberStatus.BLOCKED ? (<Menu.Item key="1">
+                        <a onClick={(e) => showBlockModal(e, member)} href="/">{t(translations.app.block)}</a>
+                    </Menu.Item>) : (<Menu.Item key="1">
+                        <a onClick={(e) => unblock(e, member)} href="/">{t(translations.app.unblock)}</a>
+                    </Menu.Item>)
+                }
             </Menu>
         );
 
@@ -125,6 +169,11 @@ export const MembersManager = (props) => {
 
     return (
         <SectionContainer>
+            <ConfirmModal content={t(translations.group.are_you_really_sure_you_want_to_block_user_they_will_no_longer, { memberName: member.member?.name })}
+                title={t(translations.group.are_you_sure_you_want_to_block, { memberName: member.member?.name })}
+                showModal={showBlockConfirmModal}
+                onCancel={() => setShowBlockConfirmModal(false)}
+                onOk={block} />
             <InviteUserModal onUsersInvited={onUsersInvited} groupId={groupId} showModal={showModal} setShowModal={setShowModal} />
             <RemoveMemberFromGroupModal groupId={groupId} onMemberRemoved={onMemberRemoved} member={member} showModal={showRemoveFromGroupModal} setShowModal={setShowRemoveFromGroupModal} />
             <SectionTitleWrapper>

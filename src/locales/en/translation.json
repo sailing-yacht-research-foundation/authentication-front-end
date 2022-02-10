@@ -358,7 +358,9 @@
     "enter_the_code_you_received": "Enter the code you received",
     "could_not_receive_the_code": "Could not receive the code?",
     "resend": "Resend",
-    "code_is_required": "Code is required and must be a 6-digit number."
+    "code_is_required": "Code is required and must be a 6-digit number.",
+    "block": "Block",
+    "unblock": "Unblock"
   },
   "data_page": {
     "syrf_race_data": "SYRF Race Data",
@@ -1105,7 +1107,11 @@
     "individual": "Individual",
     "group": "Group",
     "revoke": "Revoke",
-    "no_results_found": "No results found."
+    "no_results_found": "No results found.",
+    "successfully_blocked_member_out_of_the_group": "Sucessfully blocked {{memberName}} from the group.",
+    "successfully_unblocked_member_out_of_the_group": "Successfully unblocked {{memberName}}.",
+    "are_you_sure_you_want_to_block": "Are you sure you want to block {{memberName}}?",
+    "are_you_really_sure_you_want_to_block_user_they_will_no_longer": "Are you really sure you want to block {{memberName}}, they will no longer search or join this group."
   },
   "public_profile": {
     "people_you_may_know": "People you may know",
