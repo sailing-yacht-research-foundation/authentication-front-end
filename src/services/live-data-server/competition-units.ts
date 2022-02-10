@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
+import { EventState } from 'utils/constants';
 import { formatServicePromiseResponse, parseKeyword } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
@@ -53,7 +54,10 @@ export const search = (params) => {
         ]
     };
 
-    searchParams._source = ["id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration"]; // only the fields we need
+    searchParams._source = [
+        "id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month",
+        "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration", "status"
+    ]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 
@@ -213,21 +217,95 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
         })
     }
 
-    query.bool.must.bool = { // endtime is greater than now or starttime greater than now AND less than duration.
-        should: [
+    query.bool.must.bool = {  // WHERE (END_TIME > NOW() AND START_TIME LESS THAN RANGE) OR (END_TIME DOES NOT EXISTS AND START_TIME IN RANGE OR STATUS IN ('ONGOING', 'SCHEDULED'))  
+        should: [             // OR START_TIME LESS THAN RANGE AND STATUS IN ('ONGOING', 'SCHEDULED')
             {
-                "range": {
-                    "approximateEndTime": {
-                        "gte": "now"
-                    }
+                bool: {
+                    must: [
+                        {
+                            range: {
+                                "approx_end_time_ms": { // end_time is greater than now means the race is on_going.
+                                    "gte": moment().unix() * 1000
+                                },
+
+                            }
+                        },
+                        {
+                            range: { // start_time is less than range so that we only get races in range.
+                                "approx_start_time_ms": {
+                                    "lt": moment().add(duration, "months").set({ hour: 23, minute: 59, second: 59 }).unix() * 1000,
+                                },
+                            }
+                        }
+                    ]
                 }
             },
             {
-                "range": {
-                    "approx_start_time_ms": {
-                        "gte": moment().set({ hour: 0, minute: 0, second: 0 }).unix() * 1000,
-                        "lt": moment().add(duration, "months").set({ hour: 23, minute: 59, second: 59 }).unix() * 1000,
-                    }
+                bool: { // end_time does not exist and start_time in range, so that races in the past are not included.
+                    must_not: [
+                        {
+                            "exists": {
+                                "field": "approx_end_time_ms"
+                            }
+                        }
+                    ],
+                    must: [
+                        {
+                            "range": {
+                                "approx_start_time_ms": {
+                                    "gte": moment().unix() * 1000,
+                                    "lt": moment().add(duration, "months").set({ hour: 23, minute: 59, second: 59 }).unix() * 1000,
+                                },
+
+                            }
+                        }
+                    ],
+                    should: [ /// this optional, it will get rows with that have the status field equal sheduled and ongoing if possible.
+                        {
+                            bool: {
+                                should: [{
+                                    "match": {
+                                        "status": EventState.SCHEDULED
+                                    }
+                                },
+                                {
+                                    "match": {
+                                        "status": EventState.ON_GOING
+                                    }
+                                }]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                bool: {
+                    must: [ // start_time is less than range 
+                        {
+                            "range": {
+                                "approx_start_time_ms": {
+                                    "lt": moment().add(duration, "months").set({ hour: 23, minute: 59, second: 59 }).unix() * 1000,
+                                },
+
+                            }
+                        },
+                        {// and status equals scheduled and ongoing so that we only get sheduled and ongoing races, no races in the past are included.
+                            bool: {
+                                should: [
+                                    {
+                                        "match": {
+                                            "status": EventState.SCHEDULED
+                                        }
+                                    },
+                                    {
+                                        "match": {
+                                            "status": EventState.ON_GOING
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         ]
@@ -256,7 +334,10 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
         })
     }
 
-    searchParams._source = ["id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month", "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration"]; // only the fields we need
+    searchParams._source = [
+        "id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month",
+        "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration", "status"
+    ]; // only the fields we need
     searchParams.from = (page - 1) * size;
     searchParams.size = size;
 
