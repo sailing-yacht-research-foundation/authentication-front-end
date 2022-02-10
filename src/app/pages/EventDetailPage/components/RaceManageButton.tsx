@@ -31,11 +31,14 @@ export const RaceManageButtons = (props) => {
         if (relations.length > 0) {
             setRelation(relations.find(r => r.id === race.id));
         }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [relations]);
 
     const canRegisterToRace = () => { // race is scheduled and event is open and allow for registration and event status is on going or scheduled and the user is not admin.
-        return relation && !relation?.isAdmin && !relation?.isParticipating && [RaceStatus.SCHEDULED].includes(race.status) && event.isOpen
-            && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status) && !event.isEditor;
+        return relation && !relation?.isAdmin && !relation?.isParticipating 
+            && [RaceStatus.SCHEDULED].includes(race.status) && event.isOpen
+            && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status) 
+            && !event.isEditor;
     }
 
     return (<Space size="middle">

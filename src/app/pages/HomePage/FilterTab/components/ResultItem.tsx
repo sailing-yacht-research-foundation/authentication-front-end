@@ -51,6 +51,7 @@ export const ResultItem = (props) => {
         if (relations.length > 0) {
             setRelation(relations.find(r => r.id === race._source.id));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [relations]);
 
     return (

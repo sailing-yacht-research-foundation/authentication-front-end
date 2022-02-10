@@ -1,19 +1,15 @@
 import React from 'react';
-import { Spin, Table, Space } from 'antd';
+import { Spin, Table } from 'antd';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { EventState, RaceStatus, TIME_FORMAT } from 'utils/constants';
+import { TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router';
-import ReactTooltip from 'react-tooltip';
-import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper, BorderedButton, CreateButton } from 'app/components/SyrfGeneral';
+import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { checkForUserRelationWithCompetitionUnits, getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
-import { FiEdit } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
-import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { RaceManageButtons } from './RaceManageButton';
 
 export const RaceList = (props) => {

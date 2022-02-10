@@ -25,11 +25,3 @@ const ProfileWrapper = styled.div`
         flex-direction: row;
     `}
 `;
-
-const RightPaneWrapper = styled.div`
-    ${media.medium`
-        flex: .3;
-        margin-left: 15px;
-    `};
-    padding: 15px;
-`;
