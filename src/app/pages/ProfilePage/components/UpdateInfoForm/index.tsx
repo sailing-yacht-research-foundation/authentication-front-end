@@ -99,6 +99,10 @@ export const UpdateInfo = (props) => {
                         let valueAsMomentInstance = value as Moment; // need to cast here to avoid IDE error although it's a moment instance.
                         form.append(key, valueAsMomentInstance.format(TIME_FORMAT.number));
                     }
+                } else if (['passportPhoto', 'covidVaccinationCard'].includes(key)) {
+                    if (value instanceof File) {
+                        form.append(key, value);
+                    }
                 } else {
                     form.append(key, value || '');
                 }
@@ -125,7 +129,7 @@ export const UpdateInfo = (props) => {
         return WATERSPORTS.reduce((acc, w) => {
             acc[w] = interestsArray.includes(w);
             return acc;
-          }, {});
+        }, {});
     }
 
     const getUserShareableInformation = async () => {

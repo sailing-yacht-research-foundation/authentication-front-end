@@ -56,6 +56,10 @@ export const VesselForm = () => {
         Object.entries(values).forEach(([key, value]: any) => {
             if (['onboardPhone', 'satelliteNumber'].includes(key) && !String(value).includes('+') && value) {
                 form.append(key, '+' + value);
+            } else if (['photo', 'deckPlan', 'hullDiagram'].includes(key)) {
+                if (value instanceof File) {
+                    form.append(key, value);
+                }
             } else {
                 if ('onboardEmail' === key && !value) return;
                 else {

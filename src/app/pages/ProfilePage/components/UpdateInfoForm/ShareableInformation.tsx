@@ -135,14 +135,7 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.passport_number)}</SyrfFieldLabel>}
                         name="passportNumber"
                         data-tip={t(translations.profile_page.update_profile.passport_number)}
-                        rules={[{ min: 5, message: t(translations.forms.passport_must_be_a_number_with_at_least_5_digits) }, () => ({
-                            validator(_, value) {
-                                if (value && isNaN(value) && value.length > 0) {
-                                    return Promise.reject(t(translations.forms.please_input_number));
-                                }
-                                return Promise.resolve();
-                            },
-                        }), { max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
+                        rules={[{ min: 5, message: t(translations.forms.please_input_at_least_characters, { numberOfChars: 5}) }, { max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
                     >
                         <SyrfInputField />
                     </Form.Item>
