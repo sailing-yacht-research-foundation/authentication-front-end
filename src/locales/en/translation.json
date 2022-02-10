@@ -973,7 +973,8 @@
     "please_input_number": "Please input number.",
     "min_crews_must_be_less_than_max_crews": "Min. crews is required and must be less than max. crews",
     "max_crews_must_be_greater_than_min_crews": "Max. crew is required and must be greater than min. crews",
-    "please_input_no_more_than_characters": "Please input no more than {{numberOfChars}} characters."
+    "please_input_no_more_than_characters": "Please input no more than {{numberOfChars}} characters.",
+    "please_input_at_least_characters": "Please input at least {{numberOfChars}} characters."
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",
