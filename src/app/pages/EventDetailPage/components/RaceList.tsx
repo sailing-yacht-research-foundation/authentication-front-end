@@ -8,23 +8,19 @@ import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import ReactTooltip from 'react-tooltip';
 import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper, BorderedButton, CreateButton } from 'app/components/SyrfGeneral';
-import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
+import { checkForUserRelationWithCompetitionUnits, getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { FiEdit } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
+import { RaceManageButtons } from './RaceManageButton';
 
 export const RaceList = (props) => {
 
     const { t } = useTranslation();
 
     const { event, canManageEvent } = props;
-
-    const canRegisterToRace = (race) => { // race is scheduled and event is open and allow for registration and event status is on going or scheduled and the user is not admin.
-        return [RaceStatus.SCHEDULED].includes(race.status) && event.isOpen
-            && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status) && !event.isEditor;
-    }
 
     const columns = [
         {
@@ -57,15 +53,16 @@ export const RaceList = (props) => {
             title: t(translations.competition_unit_list_page.action),
             key: 'action',
             render: (text, record) => {
-                return <Space size="middle">
-                    {canRegisterToRace(record) && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegiterModalOrRedirect(record)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
-                    {canManageEvent() && <>
-                        <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
-                            history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
-                        }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-                        <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton></>}
-                    <ReactTooltip />
-                </Space>;
+                return <RaceManageButtons
+                    race={record}
+                    canManageEvent={canManageEvent}
+                    event={event}
+                    relations={relations}
+                    isAuthenticated={isAuthenticated}
+                    showDeleteRaceModal={showDeleteRaceModal}
+                    showRegisterModal={showRegisterModal}
+                    setCompetitionUnit={setCompetitionUnit}
+                    setShowRegisterModal={setShowRegisterModal} />;
             }
         },
     ];
@@ -86,7 +83,7 @@ export const RaceList = (props) => {
 
     const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
 
-    const history = useHistory();
+    const [relations, setRelations] = React.useState<any[]>([]);
 
     const getAll = async (page) => {
         setIsLoading(true);
@@ -100,6 +97,15 @@ export const RaceList = (props) => {
                 page: page,
                 total: response.data?.count
             });
+            getRelations(response.data?.rows.map(c => c.id));
+        }
+    }
+
+    const getRelations = async (competitionUnits) => {
+        const response = await checkForUserRelationWithCompetitionUnits(competitionUnits);
+
+        if (response.success) {
+            setRelations(response.data);
         }
     }
 
@@ -116,14 +122,6 @@ export const RaceList = (props) => {
         setCompetitionUnit(competitionUnit);
     }
 
-    const showRegiterModalOrRedirect = (competitionUnit) => {
-        if (isAuthenticated) {
-            setCompetitionUnit(competitionUnit);
-            setShowRegisterModal(true);
-        } else {
-            history.push('/signin');
-        }
-    }
 
     React.useEffect(() => {
         getAll(1);
@@ -137,14 +135,6 @@ export const RaceList = (props) => {
                 onCompetitionUnitDeleted={onCompetitionUnitDeleted}
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
-            />
-            <RegisterRaceModal
-                showModal={showRegisterModal}
-                setShowModal={setShowRegisterModal}
-                raceName={competitionUnit.name}
-                lon={event.lon}
-                lat={event.lat}
-                raceId={competitionUnit.id}
             />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>

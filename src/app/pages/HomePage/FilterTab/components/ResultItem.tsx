@@ -24,7 +24,7 @@ export const ResultItem = (props) => {
 
     const relations = useSelector(selectRelations);
 
-    const [relation, setRelation] = React.useState<any>({});
+    const [relation, setRelation] = React.useState<any>(null);
 
     const eventId = race._source?.event;
     const eventText = renderEmptyValue(race._source?.event_name, ' ');
