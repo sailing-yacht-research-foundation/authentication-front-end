@@ -262,3 +262,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
 
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
+
+export const checkForUserRelationWithCompetitionUnits = (competitionUnits: string[] = []) => {
+    return  formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/check-user-relation`, competitionUnits))
+}

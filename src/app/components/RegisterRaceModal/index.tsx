@@ -13,7 +13,7 @@ export const RegisterRaceModal = (props) => {
 
     const { t } = useTranslation();
 
-    const { showModal, setShowModal, raceName, raceId, lon, lat } = props;
+    const { showModal, setShowModal, raceName, raceId, lon, lat, setRelation } = props;
 
     const [boats, setBoats] = React.useState<any[]>([]);
 
@@ -52,6 +52,9 @@ export const RegisterRaceModal = (props) => {
         if (response.success) {
             hideModal();
             toast.success(t(translations.home_page.successfully_registered_to_join_this_competition));
+            if (setRelation) setRelation({ 
+                isParticipating: true
+             });
         } else {
             showToastMessageOnRequestError(response.error);
         }

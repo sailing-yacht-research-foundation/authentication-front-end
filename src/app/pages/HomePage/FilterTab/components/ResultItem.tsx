@@ -14,11 +14,17 @@ import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { CreateButton } from 'app/components/SyrfGeneral';
 import { FiEdit } from 'react-icons/fi';
+import { selectRelations } from '../../slice/selectors';
 
 export const ResultItem = (props) => {
+
     const race = props.item;
 
     const { t } = useTranslation();
+
+    const relations = useSelector(selectRelations);
+
+    const [relation, setRelation] = React.useState<any>({});
 
     const eventId = race._source?.event;
     const eventText = renderEmptyValue(race._source?.event_name, ' ');
@@ -35,9 +41,20 @@ export const ResultItem = (props) => {
         }
     }
 
+    const canRegister = () => {
+        return relation && !relation?.isAdmin && !relation?.isParticipating && race._source?.isOpen && race._source?.allowRegistration;
+    };
+
+    React.useEffect(() => {
+        if (relations.length > 0) {
+            setRelation(relations.find(r => r.id === race._source.id));
+        }
+    }, [relations]);
+
     return (
         <>
             <RegisterRaceModal
+                setRelation={setRelation}
                 showModal={showRegisterModal}
                 setShowModal={setShowRegisterModal}
                 raceName={race._source?.name}
@@ -67,7 +84,7 @@ export const ResultItem = (props) => {
                         moment(race._source?.approx_start_time_ms).isAfter(moment())
                         && <ExpeditionServerActionButtons competitionUnit={race._source} />}
                     {
-                        race._source?.isOpen && race._source?.allowRegistration && <CreateButton icon={<FiEdit style={{marginRight: '10px'}}/>} onClick={showRegiterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
+                        canRegister() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={showRegiterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
                     }
                 </Space>
             </Wrapper>
