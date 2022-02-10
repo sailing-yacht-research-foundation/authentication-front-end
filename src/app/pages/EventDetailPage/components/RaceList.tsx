@@ -10,7 +10,7 @@ import { checkForUserRelationWithCompetitionUnits, getAllByCalendarEventId } fro
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
-import { RaceManageButtons } from './RaceManageButton';
+import { RaceManageButtons } from './RaceManageButtons';
 
 export const RaceList = (props) => {
 
