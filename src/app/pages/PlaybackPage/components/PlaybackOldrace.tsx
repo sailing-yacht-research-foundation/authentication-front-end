@@ -530,11 +530,15 @@ export const PlaybackOldRace = (props) => {
     lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
   };
 
+  const isScrapedRace = () => competitionUnitDetail.scrapedOriginalId || competitionUnitDetail.scrapedUrl;
+
   return (
     <div style={{ height: "100%", position: "relative" }}>
-      <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-        <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
-      </LeaderboardContainer>
+      {
+        !isScrapedRace() && <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
+          <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
+        </LeaderboardContainer>
+      }
       <MapContainer
         style={{
           height: "100%",
