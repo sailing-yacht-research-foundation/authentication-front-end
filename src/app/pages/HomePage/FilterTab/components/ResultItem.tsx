@@ -33,7 +33,7 @@ export const ResultItem = (props) => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const history = useHistory();
 
-    const showRegiterModalOrRedirect = () => {
+    const showRegisterModalOrRedirect = () => {
         if (isAuthenticated) {
             setShowRegisterModal(true);
         } else {
@@ -87,7 +87,7 @@ export const ResultItem = (props) => {
                         && [RaceStatus.ON_GOING].includes(race._source?.status) // only show expedition button for ongoing races.
                         && <ExpeditionServerActionButtons competitionUnit={race._source} />}
                     {
-                        canRegister() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={showRegiterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
+                        canRegister() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
                     }
                 </Space>
             </Wrapper>

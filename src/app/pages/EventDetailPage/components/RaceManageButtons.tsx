@@ -18,7 +18,7 @@ export const RaceManageButtons = (props) => {
 
     const { t } = useTranslation();
 
-    const showRegiterModalOrRedirect = (competitionUnit) => {
+    const showRegisterModalOrRedirect = (competitionUnit) => {
         if (isAuthenticated) {
             setCompetitionUnit(competitionUnit);
             setShowRegisterModal(true);
@@ -35,10 +35,12 @@ export const RaceManageButtons = (props) => {
     }, [relations]);
 
     const canRegisterToRace = () => { // race is scheduled and event is open and allow for registration and event status is on going or scheduled and the user is not admin.
-        return relation && !relation?.isAdmin && !relation?.isParticipating 
-            && [RaceStatus.SCHEDULED].includes(race.status) && event.isOpen
-            && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status) 
-            && !event.isEditor;
+        const isNotAdminOrParticipant = relation && !relation.isAdmin && !relation.isParticipating;
+        const eventIsRegattaAndOngoingOrScheduled = event.isOpen && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status);
+        const isNotEventEditor = !event.isEditor;
+        const raceIsScheduled = [RaceStatus.SCHEDULED].includes(race.status);
+
+        return isNotAdminOrParticipant && eventIsRegattaAndOngoingOrScheduled && isNotEventEditor && raceIsScheduled;
     }
 
     return (<Space size="middle">
@@ -51,7 +53,7 @@ export const RaceManageButtons = (props) => {
             setRelation={setRelation}
             raceId={race.id}
         />
-        {canRegisterToRace() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegiterModalOrRedirect(race)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
+        {canRegisterToRace() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegisterModalOrRedirect(race)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
         {canManageEvent() && <>
             <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                 history.push(`/events/${race.calendarEventId}/races/${race.id}/update`);
