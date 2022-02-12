@@ -223,3 +223,41 @@ export const StyledPLaceDropdown = styled(Menu)`
     border: 1px solid #d9d9d9;
     width: 100%;
 `;
+
+export const ItemAvatar = styled.img`
+    with: 25px;
+    height: 25px;
+    margin-right: 5px;
+    border-radius: 50%;
+`;
+
+export const FormPhotoWrapper = styled.div`
+    width: 100%;
+
+    img {
+        width: 100%;
+        height: 100%px;
+        object-fit: cover;
+        max-height: 250px;
+    }
+`;
+
+export const FormPhotoHeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const ItemVerifyMessage = styled.div`
+    color: rgb(115, 116, 117);
+    font-size: 13px;
+    margin-top: -20px;
+    text-align: right;
+
+    &.verified {
+        color: ${StyleConstants.MAIN_TONE_COLOR} !important;
+    }
+`;
+
+export const IconWrapper = styled.span`
+    margin-right: 5px;
+`;

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Table, Space, Spin, Tag } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsChangingPage, selectResults } from '../slice/selectors';
+import { selectIsChangingPage, selectPageSize, selectResults } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
@@ -134,6 +134,8 @@ export const EventList = () => {
 
   const total = useSelector(selectTotal);
 
+  const size = useSelector(selectPageSize);
+
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -149,7 +151,7 @@ export const EventList = () => {
   const isChangingPage = useSelector(selectIsChangingPage);
 
   React.useEffect(() => {
-    dispatch(actions.getEvents(1));
+    dispatch(actions.getEvents({ page: 1, size: 10 }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -158,8 +160,8 @@ export const EventList = () => {
     setMappedResults(resultsWithKey);
   }, [results]);
 
-  const onPaginationChanged = (page) => {
-    dispatch(actions.getEvents(page));
+  const onPaginationChanged = (page, size) => {
+    dispatch(actions.getEvents({ page, size }));
   }
 
   const showDeleteRaceModal = (event) => {
@@ -168,7 +170,7 @@ export const EventList = () => {
   }
 
   const onRaceDeleted = () => {
-    dispatch(actions.getEvents(page));
+    dispatch(actions.getEvents({ page, size }));
   }
 
   const renderExpandedRowRender = (record) => {

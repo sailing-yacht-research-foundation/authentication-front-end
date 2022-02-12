@@ -172,3 +172,7 @@ export const revokeGroupAsEditor = (groupId, eventId) => {
         }
     }));
 }
+
+export const getValidOrganizableGroup = () => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/valid-organizer`, ));
+}

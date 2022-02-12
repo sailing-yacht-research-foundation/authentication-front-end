@@ -2,30 +2,20 @@ import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
 import { Form, Spin } from 'antd';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import styled from 'styled-components';
-import { getUserAttribute } from 'utils/user-utils';
+import { getUserAttribute, getUserInterestsAsArray } from 'utils/user-utils';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { removePlusFromPhoneNumber, replaceObjectPropertiesFromNullToEmptyString, showToastMessageOnRequestError } from 'utils/helpers';
 import { PrivateUserInformation } from './PrivateUserInformation';
 import { toast } from 'react-toastify';
 import { PublicUserInformation } from './PublicUserInformation';
-import { EditEmailChangeModal } from './EditEmailChangeModal';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { updateProfile } from 'services/live-data-server/user';
-import { TIME_FORMAT } from 'utils/constants';
-
-const defaultFormFields = {
-    email: '',
-    name: '',
-    phone_number: '',
-    sailing_number: '',
-    birthdate: '',
-    language: '',
-    country: '',
-};
+import { getShareableInformation, updateInterests, updateProfile, updateShareableInformation } from 'services/live-data-server/user';
+import { TIME_FORMAT, WATERSPORTS } from 'utils/constants';
+import { ShareableInformation } from './ShareableInformation';
 
 export const UpdateInfo = (props) => {
     const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
@@ -34,34 +24,31 @@ export const UpdateInfo = (props) => {
 
     const [address, setAddress] = React.useState<string>(getUserAttribute(authUser, 'address') || '');
 
-    const [showEmailChangeAlertModal, setShowEmailChangeAlertModal] = React.useState<boolean>(false);
-
     const [form] = Form.useForm();
 
     const [formHasBeenChanged, setFormHasBeenChanged] = React.useState<boolean>(false);
 
-    const { t } = useTranslation();
+    const [shareableInformation, setShareableInformation] = React.useState<any>({});
 
-    // for storing fields filled by user from the form for later use when
-    // user still chooses to change the email.
-    const [formFieldsBeforeUpdate, setFormFieldsBeforeUpdate] = React.useState(defaultFormFields);
+    const { t } = useTranslation();
 
     const onFinish = (values) => {
         values = replaceObjectPropertiesFromNullToEmptyString(values);
         updateUserInfo(values);
     }
 
-    const updateUserInfo = async ({
-        phone_number,
-        sailing_number,
-        birthdate,
-        language,
-        country,
-        bio,
-        first_name,
-        last_name,
-        isPrivate
-    }) => {
+    const updateUserInfo = async (values) => {
+        const {
+            phone_number,
+            sailing_number,
+            birthdate,
+            language,
+            country,
+            bio,
+            first_name,
+            last_name,
+            isPrivate,
+        } = values;
 
         setIsUpdatingProfile(true);
 
@@ -83,34 +70,90 @@ export const UpdateInfo = (props) => {
         });
 
         if (response.success) {
-            onUpdateProfileSuccess();
+            onUpdateProfileSuccess(values);
         } else {
             showToastMessageOnRequestError(response.error);
             setIsUpdatingProfile(false);
-            setFormFieldsBeforeUpdate(defaultFormFields);
         }
     }
 
-    const onUpdateProfileSuccess = () => {
+    const onUpdateProfileSuccess = (values) => {
         setIsUpdatingProfile(false);
         toast.success(t(translations.profile_page.update_profile.your_profile_has_been_successfully_updated));
         props.cancelUpdateProfile();
-        setFormFieldsBeforeUpdate(defaultFormFields);
         setFormHasBeenChanged(false);
+        updateUserInterests(values);
+        updateUserShareableInformation(values);
     }
+
+    const updateUserShareableInformation = async (values) => {
+        const fieldsToUpdate = ['emergencyContactName', 'emergencyContactPhone', 'emergencyContactEmail', 'emergencyContactRelationship',
+            'passportPhoto', 'passportNumber', 'passportIssueDate', 'passportExpirationDate', 'foodAllergies', 'certifications',
+            'medicalProblems', 'tShirtSize', 'epirbBeaconHexId', 'covidVaccinationCard'];
+
+        const form = new FormData();
+        Object.entries(values).forEach(([key, value]: any) => {
+            if (fieldsToUpdate.includes(key)) {
+                if (['passportExpirationDate', 'passportIssueDate'].includes(key)) {
+                    if (value instanceof moment) {
+                        let valueAsMomentInstance = value as Moment; // need to cast here to avoid IDE error although it's a moment instance.
+                        form.append(key, valueAsMomentInstance.format(TIME_FORMAT.number));
+                    }
+                } else if (['passportPhoto', 'covidVaccinationCard'].includes(key)) {
+                    if (value instanceof File) {
+                        form.append(key, value);
+                    }
+                } else {
+                    form.append(key, value || '');
+                }
+            }
+        });
+
+        const response = await updateShareableInformation(form);
+        if (response.success) {
+            getUserShareableInformation();
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
+    const updateUserInterests = async (values) => {
+        const { interests } = values;
+        const interestResponse = await updateInterests(interestsArrayToObject(interests));
+        if (!interestResponse.success) {
+            showToastMessageOnRequestError(interestResponse.error);
+        }
+    }
+
+    const interestsArrayToObject = (interestsArray) => {
+        return WATERSPORTS.reduce((acc, w) => {
+            acc[w] = interestsArray.includes(w);
+            return acc;
+        }, {});
+    }
+
+    const getUserShareableInformation = async () => {
+        const response = await getShareableInformation();
+
+        if (response.success) {
+            const info = response.data;
+            form.setFieldsValue({
+                ...info,
+                passportIssueDate: info?.passportIssueDate ? moment(info.passportIssueDate) : '',
+                passportExpirationDate: info?.passportExpirationDate ? moment(info.passportExpirationDate) : '',
+                foodAllergies: info?.foodAllergies ? info.foodAllergies.join(", ") : ''
+            });
+            setShareableInformation(info);
+        }
+    }
+
+    React.useEffect(() => {
+        getUserShareableInformation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Wrapper>
-            <EditEmailChangeModal
-                formFieldsBeforeUpdate={formFieldsBeforeUpdate}
-                defaultFormFields={defaultFormFields}
-                authUser={authUser}
-                form={form}
-                updateUserInfo={updateUserInfo}
-                setShowEmailChangeAlertModal={setShowEmailChangeAlertModal}
-                setFormFieldsBeforeUpdate={setFormFieldsBeforeUpdate}
-                showEmailChangeAlertModal={showEmailChangeAlertModal}
-            />
             <SyrfFormWrapper className="no-background">
                 <Spin spinning={isUpdatingProfile} tip={t(translations.profile_page.update_profile.updating_your_profile)}>
                     <Form
@@ -132,7 +175,8 @@ export const UpdateInfo = (props) => {
                             twitter: getUserAttribute(authUser, 'twitter'),
                             language: getUserAttribute(authUser, 'language'),
                             country: getUserAttribute(authUser, 'locale'),
-                            isPrivate: authUser.isPrivate
+                            isPrivate: authUser.isPrivate,
+                            interests: getUserInterestsAsArray(authUser)
                         }}
                         onFinish={onFinish}
                     >
@@ -142,7 +186,10 @@ export const UpdateInfo = (props) => {
 
                         <PrivateUserInformation
                             address={address} setAddress={setAddress}
+                            setFormHasBeenChanged={setFormHasBeenChanged}
                             authUser={authUser} />
+
+                        <ShareableInformation setShareableInformation={setShareableInformation} shareableInformation={shareableInformation} />
 
                         <Form.Item>
                             <StyledSyrfFormButtonWrapper>

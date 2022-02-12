@@ -8,13 +8,14 @@ import { translations } from 'locales/translations';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
 import { AcceptInvitationModal } from 'app/pages/MyEventPage/components/modals/AcceptInvitationModal';
 import { getMyInvitedEvents } from 'services/live-data-server/participants';
 import { RejectInviteRequestModal } from './modals/RejectInviteRequestModal';
+import { join } from 'path';
 
 const defaultOptions = {
     loop: true,
@@ -66,9 +67,13 @@ export const InvitedEventLists = (props) => {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
             key: 'start_date',
-            render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time)
-                + ' ' + record?.event.approximateStartTime_zone + ' '
-                + renderTimezoneInUTCOffset(record?.event.approximateStartTime_zone),
+            render: (value, record) => {
+                if (record.event) {
+                    return [moment(record.event.approximateStartTime).format(TIME_FORMAT.date_text_with_time), record.event.approximateStartTime_zone, renderTimezoneInUTCOffset(record?.event.approximateStartTime_zone)].filter(Boolean).join(' ')
+                }
+
+                return renderEmptyValue(null);
+            }
         },
         {
             title: t(translations.my_event_list_page.invited_at),
@@ -95,7 +100,8 @@ export const InvitedEventLists = (props) => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        size: 10
     });
 
     const [showRejectConfirmModal, setShowRejectConfirmModal] = React.useState<boolean>(false);
@@ -106,9 +112,9 @@ export const InvitedEventLists = (props) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const getInvitations = async (page) => {
+    const getInvitations = async (page, size) => {
         setIsLoading(true);
-        const response = await getMyInvitedEvents(page);
+        const response = await getMyInvitedEvents(page, size);
         setIsLoading(false);
 
         if (response.success) {
@@ -122,12 +128,12 @@ export const InvitedEventLists = (props) => {
     }
 
     React.useEffect(() => {
-        getInvitations(1);
+        getInvitations(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const onPaginationChanged = (page) => {
-        getInvitations(page);
+    const onPaginationChanged = (page, size) => {
+        getInvitations(page, size);
     }
 
     const acceptInviteRequest = (request) => {
@@ -141,7 +147,7 @@ export const InvitedEventLists = (props) => {
     }
 
     const reloadParent = () => {
-        getInvitations(pagination.page)
+        getInvitations(pagination.page, pagination.size);
         reloadInvitationCount();
     }
 

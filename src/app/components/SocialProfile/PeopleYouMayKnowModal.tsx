@@ -33,11 +33,12 @@ export const PeopleYouMayKnowModal = (props) => {
         total: 0,
         rows: [],
         totalPages: 1,
+        size: 10
     });
 
-    const getPeopleYouMayKnow = async (page) => {
+    const getPeopleYouMayKnow = async (page, size) => {
         setIsLoading(true);
-        const response = await getTopRecommandation({ locale: getUserAttribute(user, 'locale'), page, size: 10 });
+        const response = await getTopRecommandation({ locale: getUserAttribute(user, 'locale'), page, size });
         setIsLoading(false);
 
         if (response.success) {
@@ -47,6 +48,7 @@ export const PeopleYouMayKnowModal = (props) => {
                 rows: rows,
                 total: response?.data?.count,
                 page: page,
+                size: size
             })
         }
     }
@@ -65,7 +67,7 @@ export const PeopleYouMayKnowModal = (props) => {
 
     React.useEffect(() => {
         if (user)
-            getPeopleYouMayKnow(1);
+            getPeopleYouMayKnow(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
@@ -75,7 +77,7 @@ export const PeopleYouMayKnowModal = (props) => {
                 {renderProfiles()}
                 {
                     pagination.total > 10 && <PaginationContainer>
-                        <Pagination current={pagination.page} onChange={(page) => getPeopleYouMayKnow(page)} total={pagination.total} />
+                        <Pagination current={pagination.page} onChange={(page, size) => getPeopleYouMayKnow(page, size)} total={pagination.total} />
                     </PaginationContainer>
                 }
             </Spin>

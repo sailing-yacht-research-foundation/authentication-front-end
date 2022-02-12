@@ -13,6 +13,7 @@ import { getAllByCalendarEventId, inviteCompetitor, inviteGroupsAsCompetitors } 
 import { AdminType, CompetitorType } from 'utils/constants';
 import { searchGroupForAssigns } from 'services/live-data-server/groups';
 import { SyrfFormButton, SyrfFormSelect } from 'app/components/SyrfForm';
+import { useHistory } from 'react-router-dom';
 
 export const CompetitorInviteModal = (props) => {
 
@@ -29,6 +30,8 @@ export const CompetitorInviteModal = (props) => {
     const user = useSelector(selectUser);
 
     const [form] = Form.useForm();
+
+    const history = useHistory();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
@@ -59,7 +62,7 @@ export const CompetitorInviteModal = (props) => {
         }
 
         if (peopleResponse.success) {
-            peopleRows = peopleResponse.data.rows.filter(p => !participants.current.includes(p.id)).map(p => {
+            peopleRows = peopleResponse.data.filter(p => !participants.current.includes(p.id)).map(p => {
                 return {
                     type: AdminType.INDIVIDUAL,
                     id: p.id,
@@ -82,7 +85,7 @@ export const CompetitorInviteModal = (props) => {
 
     const renderItemResults = () => {
         return items.map(item => <Select.Option style={{ padding: '5px' }} value={JSON.stringify(item)}>
-            <ItemAvatar src={renderAvatar(item.avatar)} /> {item.name}, type: {item.type}
+            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name}, type: {item.type}
         </Select.Option>)
     }
 
@@ -120,6 +123,11 @@ export const CompetitorInviteModal = (props) => {
         setIsLoading(false);
         setShowModal(false);
         form.resetFields();
+    }
+
+    const navigateToProfile = (e, item) => {
+        e.stopPropagation();
+        history.push(`/${item.type === CompetitorType.GROUP ? 'groups' : 'profile'}/${item.id}`);
     }
 
     return (

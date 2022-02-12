@@ -18,7 +18,7 @@ import { showToastMessageOnRequestError } from "utils/helpers";
      yield put(profileSearchActions.setIsSearching(false));
  
      if (response.success) {
-         yield put(profileSearchActions.setResults(response?.data?.rows));
+         yield put(profileSearchActions.setResults(response.data));
      } else {
         showToastMessageOnRequestError(response.error);
      }

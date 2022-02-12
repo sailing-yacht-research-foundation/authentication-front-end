@@ -4,26 +4,18 @@ import {
     SyrfFieldLabel,
     SyrfInputField,
 } from 'app/components/SyrfForm';
-import { toast } from 'react-toastify';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { showToastMessageOnRequestError } from 'utils/helpers';
-import { verifyPhoneNumber } from 'services/live-data-server/user';
-import { useDispatch } from 'react-redux';
-import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 
 export const VerifyPhoneModal = (props) => {
 
     const { t } = useTranslation();
 
-    const dispatch = useDispatch();
-
-    const { actions } = UseLoginSlice();
-
     const {
         showPhoneVerifyModal,
         setShowPhoneVerifyModal,
         sendPhoneVerification,
+        verifyPhone
     } = props;
 
     const [verifyPhoneForm] = Form.useForm();
@@ -33,21 +25,14 @@ export const VerifyPhoneModal = (props) => {
             .validateFields()
             .then(async values => {
                 const { code } = values;
-                const response = await verifyPhoneNumber(code);
-                if (response.success) {
-                    toast.success(t(translations.profile_page.update_profile.your_phone_number_has_been_verified));
-                    dispatch(actions.getUser());
-                    setShowPhoneVerifyModal(false);
-                } else {
-                    showToastMessageOnRequestError(response.error);
-                }
+                verifyPhone(code);
                 verifyPhoneForm.resetFields();
             });
     }
 
     return (
         <Modal
-            title={t(translations.profile_page.update_profile.please_verify_your_phone_number)}
+            title={t(translations.app.please_verify_your_phone_number)}
             visible={showPhoneVerifyModal}
             onOk={() => {
                 verifyFormAndPhoneNumber();
@@ -64,22 +49,22 @@ export const VerifyPhoneModal = (props) => {
                 }}
             >
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.code)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.app.code)}</SyrfFieldLabel>}
                     name="code"
-                    rules={[{ required: true, min: 6, message: t(translations.profile_page.update_profile.code_is_required) }]}
+                    rules={[{ required: true, min: 6, message: t(translations.app.code_is_required) }]}
                 >
                     <SyrfInputField
-                        placeholder={t(translations.profile_page.update_profile.enter_the_code_you_received)}
+                        placeholder={t(translations.app.enter_the_code_you_received)}
                         type="number"
                     />
                 </Form.Item>
             </Form>
 
             <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                <span>{t(translations.profile_page.update_profile.could_not_receive_the_code)} &nbsp; <a style={{ float: 'right' }} href="/" onClick={(e) => {
+                <span>{t(translations.app.could_not_receive_the_code)} &nbsp; <a style={{ float: 'right' }} href="/" onClick={(e) => {
                     e.preventDefault();
                     sendPhoneVerification();
-                }}>{t(translations.profile_page.update_profile.resend)}</a></span>
+                }}>{t(translations.app.resend)}</a></span>
             </div>
         </Modal>
     )
