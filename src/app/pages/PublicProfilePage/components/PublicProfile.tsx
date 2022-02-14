@@ -122,6 +122,13 @@ export const PublicProfile = () => {
             setShowFollowingModal(true)
     }
 
+    const renderBlockButton = () => {
+        if (currentUserId === profile.id)
+            return <></>;
+
+        return <Dropdown.Button overlay={menu}></Dropdown.Button>;
+    }
+
     const menu = (
         <Menu>
             {
@@ -178,7 +185,7 @@ export const PublicProfile = () => {
                             <div></div>
                             <div>{renderFollowButton()}</div>
                             <OptionContainer>
-                                <Dropdown.Button overlay={menu}></Dropdown.Button>
+                                {renderBlockButton()}
                             </OptionContainer>
                         </ProfileButtonsWrapper>
                         {profile.isPrivate && <div>{t(translations.public_profile.profile_is_private)}</div>}
