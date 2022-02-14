@@ -95,6 +95,7 @@ export const Playback = (props) => {
         });
 
         let convertedPlayTimeInMiliseconds = Number(newPlayTimeInMilisecondsInString.join(''));
+        if (convertedPlayTimeInMiliseconds < 0) convertedPlayTimeInMiliseconds = 0;
         dispatch(actions.setElapsedTime(convertedPlayTimeInMiliseconds));
         if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(convertedPlayTimeInMiliseconds);
     }

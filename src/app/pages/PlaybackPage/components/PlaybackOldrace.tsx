@@ -12,6 +12,7 @@ import {
   generateRaceLegsData,
   limitRaceLegsDataByElapsedTime,
   turnTracksToVesselParticipantsData,
+  getRaceLengthFromSimplifiedTracks,
 } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
@@ -411,6 +412,7 @@ export const PlaybackOldRace = (props) => {
       simplifiedTracksRef.current = normalizedSimplifiedTracks;
       vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
       handleMapRetrievedTimestamps(vesselParticipantsRef.current);
+      dispatch(actions.setRaceLength(getRaceLengthFromSimplifiedTracks(normalizedSimplifiedTracks)));
 
       socketWorker?.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
