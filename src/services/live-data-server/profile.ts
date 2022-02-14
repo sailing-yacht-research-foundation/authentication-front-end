@@ -71,3 +71,11 @@ export const rejectFollowRequest = (requestId) => {
         acceptRequest: false
     }))
 }
+
+export const blockUser = (userId) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/block/${userId}`));
+}
+
+export const unblockUser = (userId) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/unblock/${userId}`));
+}
