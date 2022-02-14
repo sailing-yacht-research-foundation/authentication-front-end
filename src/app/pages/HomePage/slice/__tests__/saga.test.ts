@@ -86,6 +86,11 @@ describe('home Saga', () => {
             put(slice.homeActions.setResults(response.data?.hits.hits))
         );
 
+        putDescriptor = searchRaceIterator.next().value;
+        expect(putDescriptor).toEqual(
+            put(slice.homeActions.getRelationWithCompetitionUnits([]))
+        );
+
         const iteration = searchRaceIterator.next();
         expect(iteration.done).toBe(true);
     });

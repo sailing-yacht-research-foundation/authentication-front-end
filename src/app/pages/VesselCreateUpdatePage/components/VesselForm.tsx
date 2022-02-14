@@ -48,7 +48,7 @@ export const VesselForm = () => {
     const onFinish = async (values) => {
         let response;
         const { admins } = values;
-        const editors = admins ? admins.map(item => JSON.parse(item)) : [];
+        const editors = admins?.forEach(item => JSON.parse(item)) || [];
         const form = new FormData();
 
         setIsSaving(true);
@@ -69,7 +69,7 @@ export const VesselForm = () => {
         });
 
         if (editors && Array.isArray(editors)) {
-            editors.filter(item => item.type === AdminType.GROUP).map((item, index) => {
+            editors.filter(item => item.type === AdminType.GROUP).forEach((item, index) => {
                 form.append(`groupEditors[${index}]`, item.id);
             });
             editors.filter(item => item.type === AdminType.INDIVIDUAL).forEach((item, index) => {

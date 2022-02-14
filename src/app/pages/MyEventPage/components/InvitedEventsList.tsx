@@ -15,7 +15,6 @@ import { MdRemoveCircle } from 'react-icons/md';
 import { AcceptInvitationModal } from 'app/pages/MyEventPage/components/modals/AcceptInvitationModal';
 import { getMyInvitedEvents } from 'services/live-data-server/participants';
 import { RejectInviteRequestModal } from './modals/RejectInviteRequestModal';
-import { join } from 'path';
 
 const defaultOptions = {
     loop: true,

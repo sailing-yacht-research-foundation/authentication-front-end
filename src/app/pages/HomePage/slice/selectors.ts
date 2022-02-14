@@ -90,3 +90,8 @@ export const selectNoResultsFound = createSelector(
   [selectDomain],
   homeState => homeState.noResultFound,
 );
+
+export const selectRelations = createSelector(
+  [selectDomain],
+  homeState => homeState.relations,
+);
