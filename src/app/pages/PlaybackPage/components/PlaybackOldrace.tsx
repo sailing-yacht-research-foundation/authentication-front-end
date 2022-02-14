@@ -530,7 +530,7 @@ export const PlaybackOldRace = (props) => {
     lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
   };
 
-  const isScrapedRace = () => competitionUnitDetail.scrapedOriginalId || competitionUnitDetail.scrapedUrl;
+  const isScrapedRace = () => competitionUnitDetail ? (competitionUnitDetail.scrapedOriginalId || competitionUnitDetail.scrapedUrl) : false;
 
   return (
     <div style={{ height: "100%", position: "relative" }}>
