@@ -16,16 +16,26 @@ export const FullScreen = (props) => {
         } else {
             if (container?.current?.requestFullscreen) {
                 container?.current?.requestFullscreen();
-                setIsFullScreen(true);
+            } else if (container?.current?.webkitRequestFullscreen) {
+                container?.current?.webkitRequestFullscreen();
             }
         }
     }
+
+    React.useEffect(() => {
+        window.addEventListener('fullscreenchange', function (e) {
+            if (document?.fullscreenElement) {
+                setIsFullScreen(true);
+            } else {
+                setIsFullScreen(false);
+            }
+        });
+    }, []);
 
     const handleCloseFullScreen = () => {
         if (document?.fullscreenElement) {
             document.exitFullscreen();
         }
-        setIsFullScreen(false);
     }
 
     return (
