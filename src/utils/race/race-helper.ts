@@ -200,11 +200,16 @@ export const checkIsForcedToInstallAppOnMobile = (source) => {
 
 export const getRaceLengthFromSimplifiedTracks = (simplifiedTracks) => {
   let endTime = -Infinity;
+  let startTime = Infinity;
   simplifiedTracks.forEach(vesselTrack => {
+    if (vesselTrack.tracks[0].pingTime < startTime) {
+      startTime = vesselTrack.tracks[0].pingTime;
+    }
+
     if (vesselTrack.tracks[vesselTrack.tracks.length - 1].pingTime > endTime) {
       endTime = vesselTrack.tracks[vesselTrack.tracks.length - 1].pingTime;
     }
   });
 
-  return endTime;
+  return endTime - startTime;
 }

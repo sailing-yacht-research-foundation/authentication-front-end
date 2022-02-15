@@ -465,7 +465,7 @@ export const PlaybackOldRace = (props) => {
     }
   };
 
-  const handlePlaybackClickedPosition = (targetTime) => {
+  const handlePlaybackClickedPosition = () => {
     dispatch(actions.setIsPlaying(true));
   };
 
