@@ -646,7 +646,10 @@
     "the_number_of_boats_must_be_greater_than_zero": "The number of boats must be greater than zero and must be a valid number.",
     "the_number_of_boats_must_not_more_than_30": "The number of boats must not more than 30.",
     "the_number_of_boats_must_be_a_number": "The number of boats must be a number.",
-    "successfully_created_vessels": "Successfully created {{number_of_vessels}} boats."
+    "successfully_created_vessels": "Successfully created {{number_of_vessels}} boats.",
+    "role": "Role",
+    "admin": "Admin",
+    "owner": "Owner"
   },
   "vessel_create_update_page": {
     "created_a_new_vessel": "Created a new boat with name: {{name}}.",
