@@ -79,7 +79,7 @@ export const ShareableInformation = (props) => {
                         data-tip={t(translations.profile_page.update_profile.emergency_contact_name)}
                         rules={[{ max: 25, message: t(translations.forms.emergency_name_must_not_be_greater_than_25_chars) }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete="off" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={8}>
@@ -89,6 +89,7 @@ export const ShareableInformation = (props) => {
                         data-tip={t(translations.profile_page.update_profile.emergency_contact_phone)}
                     >
                         <SyrfPhoneInput
+                            inputProps={{ autoComplete: 'off' }}
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
@@ -103,7 +104,7 @@ export const ShareableInformation = (props) => {
                             type: 'email', message: t(translations.forms.email_must_be_valid)
                         }, { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete="off" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -116,7 +117,7 @@ export const ShareableInformation = (props) => {
                         data-tip={t(translations.profile_page.update_profile.emergency_contact_relationship)}
                         rules={[{ max: 25, message: t(translations.forms.emergency_relationship_must_not_be_greater_than_25_chars) }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete="off" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={8}>
@@ -127,7 +128,7 @@ export const ShareableInformation = (props) => {
                         getValueFromEvent={normFile}
                         data-tip={t(translations.profile_page.update_profile.passport_photo)}
                     >
-                        <SyrfInputField type={'file'} accept="image/png, image/jpeg" />
+                        <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={8}>
@@ -135,9 +136,9 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.passport_number)}</SyrfFieldLabel>}
                         name="passportNumber"
                         data-tip={t(translations.profile_page.update_profile.passport_number)}
-                        rules={[{ min: 5, message: t(translations.forms.please_input_at_least_characters, { numberOfChars: 5}) }, { max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
+                        rules={[{ min: 5, message: t(translations.forms.please_input_at_least_characters, { numberOfChars: 5 }) }, { max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete="off" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -192,7 +193,7 @@ export const ShareableInformation = (props) => {
                         data-tip={t(translations.profile_page.update_profile.food_allergies)}
                         rules={[{ max: 50, message: t(translations.forms.food_allergies_must_not_be_more_than_50_characters) }]}
                     >
-                        <SyrfInputField placeholder={t(translations.forms.please_input_in_commas_separated_format)} />
+                        <SyrfInputField autoComplete="off" placeholder={t(translations.forms.please_input_in_commas_separated_format)} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -223,7 +224,7 @@ export const ShareableInformation = (props) => {
                         data-tip={t(translations.profile_page.update_profile.medical_problems)}
                         rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_255_characters) }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete="off" />
                     </Form.Item>
                 </Col>
 
@@ -234,7 +235,7 @@ export const ShareableInformation = (props) => {
                         data-tip={t(translations.profile_page.update_profile.tshirt_size)}
                         rules={[{ max: 10, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 10 }) }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete="off" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -247,7 +248,7 @@ export const ShareableInformation = (props) => {
                         data-tip={t(translations.profile_page.update_profile.epirbBeaconHexId)}
                         rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete="off" />
                     </Form.Item>
                 </Col>
 
@@ -259,7 +260,7 @@ export const ShareableInformation = (props) => {
                         getValueFromEvent={normFile}
                         data-tip={t(translations.profile_page.update_profile.covid_vaccination_card)}
                     >
-                        <SyrfInputField type='file' accept="image/png, image/jpeg" />
+                        <SyrfInputField autoComplete="off" type='file' accept="image/png, image/jpeg" />
                     </Form.Item>
                 </Col>
             </Row>
