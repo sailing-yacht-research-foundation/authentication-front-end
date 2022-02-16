@@ -284,13 +284,13 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
     }
 
     if (error?.response) {
-        const errorCode = error?.response.status;
+        const errorCode = error.response.status;
         if (errorCode === 500) {
             toast.error(i18next.t(translations.app.oops_it_our_fault));
         } else if (errorCode === 404) {
             toast.error(i18next.t(translations.app.resource_is_not_found));
-        } else {
-            const serverMessage = error?.response?.data?.message;
+        } else if (errorCode !== 401) {
+            const serverMessage = error.response?.data?.message;
             toast.error(serverMessage || i18next.t(translations.app.oops_an_unexpected_error_happended_when_performing_your_request));
         }
     } else {
