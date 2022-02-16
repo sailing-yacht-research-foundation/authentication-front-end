@@ -14,10 +14,11 @@ export const FullScreen = (props) => {
                 document.exitFullscreen();
             }
         } else {
-            if (container?.current?.requestFullscreen) {
-                container?.current?.requestFullscreen();
-            } else if (container?.current?.webkitRequestFullscreen) {
-                container?.current?.webkitRequestFullscreen();
+            const fullScreenDiv = container?.current;
+            if (fullScreenDiv?.requestFullscreen) {
+                fullScreenDiv.requestFullscreen();
+            } else if (fullScreenDiv?.webkitRequestFullscreen) {
+                fullScreenDiv.webkitRequestFullscreen();
             }
         }
     }
