@@ -189,7 +189,7 @@ const workercode = () => {
             Math.sin(startLat) * Math.cos(destLat) * Math.cos(destLng - startLng);
         bearing = Math.atan2(y, x);
         bearing = toDegrees(bearing);
-        return (bearing + 360) % 360;
+        return (bearing) % 360;
     };
 };
 
