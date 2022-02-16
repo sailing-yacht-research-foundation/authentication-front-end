@@ -14,18 +14,29 @@ export const FullScreen = (props) => {
                 document.exitFullscreen();
             }
         } else {
-            if (container?.current?.requestFullscreen) {
-                container?.current?.requestFullscreen();
-                setIsFullScreen(true);
+            const fullScreenDiv = container?.current;
+            if (fullScreenDiv?.requestFullscreen) {
+                fullScreenDiv.requestFullscreen();
+            } else if (fullScreenDiv?.webkitRequestFullscreen) {
+                fullScreenDiv.webkitRequestFullscreen();
             }
         }
     }
+
+    React.useEffect(() => {
+        window.addEventListener('fullscreenchange', function (e) {
+            if (document?.fullscreenElement) {
+                setIsFullScreen(true);
+            } else {
+                setIsFullScreen(false);
+            }
+        });
+    }, []);
 
     const handleCloseFullScreen = () => {
         if (document?.fullscreenElement) {
             document.exitFullscreen();
         }
-        setIsFullScreen(false);
     }
 
     return (
