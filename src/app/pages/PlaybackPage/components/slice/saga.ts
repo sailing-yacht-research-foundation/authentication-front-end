@@ -158,7 +158,6 @@ export function* getOldRaceData({ type, payload }) {
   const { raceId } = payload;
   if (!raceId) return;
 
-  yield put(playbackActions.getRaceStartTimeAndEndTime({ raceId }));
   yield put(playbackActions.getRaceLegs({ raceId }));
   yield put(playbackActions.getRaceCourseDetail({ raceId }));
 }
@@ -183,7 +182,6 @@ export default function* playbackSaga() {
     takeLatest(playbackActions.getSearchRaceDetail.type, getSearchRaceDetail),
     takeLatest(playbackActions.getRaceData.type, getRaceData),
     takeLatest(playbackActions.getOldRaceData.type, getOldRaceData),
-    takeLatest(playbackActions.getRaceStartTimeAndEndTime.type, getRaceStartTimeAndEndTime),
     takeLatest(playbackActions.getRaceLegs.type, getRaceLegs),
     takeLatest(playbackActions.getRaceSimplifiedTracks.type, getRaceSimplifiedTracks),
     takeLatest(playbackActions.getRaceCourseDetail.type, getRaceCourseDetail),
