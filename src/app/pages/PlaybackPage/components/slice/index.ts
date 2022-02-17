@@ -84,7 +84,7 @@ const slice = createSlice({
         getRaceData(state, action: PayloadAction<any>) {},
         getRaceSimplifiedTracks(state, action: PayloadAction<any>) {},
         getRaceLegs(state, action: PayloadAction<any>) {},
-        getRaceLength(state, action: PayloadAction<any>) {},
+        getRaceStartTimeAndEndTime(state, action: PayloadAction<any>) {},
         getRaceCourseDetail(state, action: PayloadAction<any>) {},
         getOldRaceData(state, action: PayloadAction<any>) {},
         getTimeBeforeRaceBegin(state, action: PayloadAction<any>) {},

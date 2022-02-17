@@ -12,6 +12,8 @@ import {
   generateRaceLegsData,
   limitRaceLegsDataByElapsedTime,
   turnTracksToVesselParticipantsData,
+  getRaceLengthFromSimplifiedTracks,
+  getFirstPingTimeFromSimplifiedTracks,
 } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
@@ -138,6 +140,7 @@ export const PlaybackOldRace = (props) => {
     // Get old race additional data
     if (competitionUnitDetail?.id) {
       dispatch(actions.getOldRaceData({ raceId: competitionUnitDetail.id }));
+      getSimplifiedTracks();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -217,9 +220,6 @@ export const PlaybackOldRace = (props) => {
         raceTime: raceTime
       }
     })
-    if (raceTime?.start) {
-      getSimplifiedTracks();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceTime]);
 
@@ -407,11 +407,18 @@ export const PlaybackOldRace = (props) => {
   const getSimplifiedTracks = async () => {
     const response = await getSimplifiedTracksByCompetitionUnit(String(competitionUnitId));
     if (response.success) {
-      const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(raceTime.start, response.data);
+      const simplifiedTracks = response.data; // the simplified tracks.
+      const firstPingTime = getFirstPingTimeFromSimplifiedTracks(simplifiedTracks) // first ping time of the whole race
+      const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(firstPingTime, simplifiedTracks);
       simplifiedTracksRef.current = normalizedSimplifiedTracks;
       vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
       handleMapRetrievedTimestamps(vesselParticipantsRef.current);
 
+      // set Race length and start time, end time base on simplified tracks.
+      const { startTimeInMilliseconds, endTimeInMilliseconds, raceLength } = getRaceLengthFromSimplifiedTracks(normalizedSimplifiedTracks, firstPingTime);
+      dispatch(actions.setRaceLength(raceLength));
+      dispatch(actions.setRaceTime({ start: startTimeInMilliseconds, end: endTimeInMilliseconds }));
+      
       socketWorker?.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
@@ -463,7 +470,7 @@ export const PlaybackOldRace = (props) => {
     }
   };
 
-  const handlePlaybackClickedPosition = (targetTime) => {
+  const handlePlaybackClickedPosition = () => {
     dispatch(actions.setIsPlaying(true));
   };
 
