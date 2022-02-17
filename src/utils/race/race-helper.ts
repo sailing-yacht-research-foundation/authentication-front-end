@@ -202,6 +202,7 @@ export const getRaceLengthFromSimplifiedTracks = (normalizedSimplifiedTracks, fi
   let endTime = -Infinity;
   let startTime = Infinity;
   normalizedSimplifiedTracks.forEach(vesselTrack => {
+    if (vesselTrack.tracks.length <= 0) return;
     if (vesselTrack.tracks[0].pingTime < startTime) {
       startTime = vesselTrack.tracks[0].pingTime;
     }
@@ -216,4 +217,14 @@ export const getRaceLengthFromSimplifiedTracks = (normalizedSimplifiedTracks, fi
     startTimeInMilliseconds: firstPingTime + startTime,
     endTimeInMilliseconds: firstPingTime + endTime
   };
+}
+
+export const getFirstPingTimeFromSimplifiedTracks = (simplifiedTracks) => {
+  let startTime = Infinity;
+  simplifiedTracks.forEach(vesselTrack => {
+    if (vesselTrack.tracks.length > 0 && vesselTrack.tracks[0]?.pingTime < startTime) {
+      startTime = vesselTrack.tracks[0].pingTime;
+    }
+  });
+  return startTime;
 }

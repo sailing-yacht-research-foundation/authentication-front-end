@@ -13,6 +13,7 @@ import {
   limitRaceLegsDataByElapsedTime,
   turnTracksToVesselParticipantsData,
   getRaceLengthFromSimplifiedTracks,
+  getFirstPingTimeFromSimplifiedTracks,
 } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
@@ -406,8 +407,8 @@ export const PlaybackOldRace = (props) => {
   const getSimplifiedTracks = async () => {
     const response = await getSimplifiedTracksByCompetitionUnit(String(competitionUnitId));
     if (response.success) {
-      const firstPingTime = response.data[0]?.tracks[0].pingTime; // first ping time of the whole race
       const simplifiedTracks = response.data; // the simplified tracks.
+      const firstPingTime = getFirstPingTimeFromSimplifiedTracks(simplifiedTracks) // first ping time of the whole race
       const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(firstPingTime, simplifiedTracks);
       simplifiedTracksRef.current = normalizedSimplifiedTracks;
       vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
