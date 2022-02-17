@@ -17,6 +17,7 @@ export interface HomeState {
     upcomingResultDistance: number;
     upcomingResultDuration: number;
     noResultFound: boolean;
+    relations: any[];
   }
   
   export type ContainerState = HomeState

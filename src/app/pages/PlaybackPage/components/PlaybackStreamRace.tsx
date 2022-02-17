@@ -293,13 +293,13 @@ export const PlaybackStreamRace = (props) => {
     const { vesselParticipant, vessel, participant, position } = data;
     const { id } = vesselParticipant;
 
-    if (groupedPosition?.current[id]) return;
+    if (groupedPosition?.current[id] || !position) return;
 
     groupedPosition.current[id] = {
       id: id,
       vessel,
       vesselParticipantId: id,
-      positions: [position.lat, position.lon],
+      positions: [{ lat: position.lat, lon: position.lon }],
       lastPosition: { lon: position.lon, lat: position.lat },
       deviceType: 'boat',
       participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },

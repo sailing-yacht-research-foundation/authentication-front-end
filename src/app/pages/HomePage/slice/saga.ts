@@ -4,7 +4,7 @@
 
 import { homeActions } from ".";
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { getLiveAndUpcomingRaces, search } from "services/live-data-server/competition-units";
+import { checkForUserRelationWithCompetitionUnits, getLiveAndUpcomingRaces, search } from "services/live-data-server/competition-units";
 import { toast } from "react-toastify";
 import i18next from 'i18next';
 import { translations } from "locales/translations";
@@ -29,8 +29,10 @@ export function* searchRaces(action) {
             yield put(homeActions.setTotal(0));
             yield put(homeActions.setNoResultsFound(true));
         } else {
+            const results = response.data?.hits?.hits;
             yield put(homeActions.setTotal(response.data?.hits.total?.value));
-            yield put(homeActions.setResults(response.data?.hits?.hits));
+            yield put(homeActions.setResults(results));
+            yield put(homeActions.getRelationWithCompetitionUnits(results.map(r => r._source?.id)));
         }
     } else {
         const priotizedErrorMessage = response.error?.response?.data?.data?.error?.root_cause[0]?.reason;
@@ -55,8 +57,10 @@ export function* getUpcomingRaces(action) {
             yield put(homeActions.setUpcomingRaceResults([]));
             yield put(homeActions.setUpcomingResultTotal(0));
         } else {
+            const results = response.data?.hits?.hits;
             yield put(homeActions.setUpcomingResultTotal(response.data?.hits.total?.value));
-            yield put(homeActions.setUpcomingRaceResults(response.data?.hits?.hits));
+            yield put(homeActions.setUpcomingRaceResults(results));
+            yield put(homeActions.getRelationWithCompetitionUnits(results.map(r => r._source?.id)));
         }
     } else {
         const priotizedErrorMessage = response.error?.response?.data?.data?.error?.root_cause[0]?.reason;
@@ -64,7 +68,18 @@ export function* getUpcomingRaces(action) {
     }
 }
 
+export function* getUserRelationsWithCompetitionUnits (action) {
+    const competitionUnitsIds = action.payload;
+
+    const response = yield call(checkForUserRelationWithCompetitionUnits, competitionUnitsIds);
+
+    if (response.success) {
+        yield put(homeActions.setRelationWithCompetitionUnits(response.data));
+    }
+}
+
 export default function* homeSaga() {
     yield takeLatest(homeActions.searchRaces.type, searchRaces);
     yield takeLatest(homeActions.getLiveAndUpcomingRaces.type, getUpcomingRaces);
+    yield takeLatest(homeActions.getRelationWithCompetitionUnits.type, getUserRelationsWithCompetitionUnits);
 }

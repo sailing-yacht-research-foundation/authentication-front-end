@@ -4,7 +4,7 @@ import moment from 'moment';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { RaceStatus, TIME_FORMAT } from 'utils/constants';
+import { EventState, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { BorderedButton } from 'app/components/SyrfGeneral';
@@ -50,7 +50,7 @@ export const RaceList = (props) => {
                     {record?.id
                         && record?.status === RaceStatus.ON_GOING && <ExpeditionServerActionButtons competitionUnit={record} />}
                     {
-                        event.isEditor && <BorderedButton onClick={() => {
+                        canEditRace() && <BorderedButton onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
                         }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
                     }
@@ -58,6 +58,10 @@ export const RaceList = (props) => {
             }
         },
     ];
+
+    const canEditRace = () => {
+        return event.isEditor && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status);
+    }
 
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
