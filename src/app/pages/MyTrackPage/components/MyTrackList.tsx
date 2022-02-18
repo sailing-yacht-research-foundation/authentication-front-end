@@ -28,7 +28,7 @@ const defaultOptions = {
     }
 };
 
-export const MyTrackList = () => {
+export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
 
     const { t } = useTranslation();
 
@@ -131,6 +131,12 @@ export const MyTrackList = () => {
         },
     ];
 
+    React.useImperativeHandle(ref, () => ({
+        reload() {
+            getAll(pagination.page, pagination.size);
+        }
+    }));
+
     const showTrackDeleteModal = (track) => {
         setTrack(track);
         setShowDeleteModal(true);
@@ -207,7 +213,7 @@ export const MyTrackList = () => {
                 </LottieWrapper>)}
         </>
     )
-}
+});
 
 const FlexWrapper = styled.div`
     display: flex;

@@ -213,3 +213,8 @@ export enum EventParticipatingTypes {
     VESSEL = 'VESSEL',
     PERSON = 'PERSON'
 }
+
+export enum ImportTrackType {
+    GPX = 'gpx',
+    EXPEDITION = 'csv'
+}

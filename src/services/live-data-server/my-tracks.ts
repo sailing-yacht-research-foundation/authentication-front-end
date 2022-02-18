@@ -30,3 +30,16 @@ export const downloadTrack = (track, type) => {
             }
         })
 }
+
+export const importGPXTrack = (formData) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/import-gpx`, formData, {
+        headers: { "content-type": "multipart/form-data" }
+    }));
+}
+
+export const importExpeditionTrack = (formData) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/import-expedition-log`, formData, {
+        headers: { "content-type": "multipart/form-data" }
+    }));
+}
+
