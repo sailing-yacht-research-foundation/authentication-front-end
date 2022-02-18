@@ -186,6 +186,12 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
         return marker;
     }
 
+    React.useImperativeHandle(ref, () => ({
+        reload() {
+            getAll();
+        }
+    }));
+
     React.useEffect(() => {
         if (isFocusingOnSearchInput && geoLoc && watchID) {
             geoLoc.clearWatch(watchID);

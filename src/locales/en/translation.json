@@ -837,7 +837,14 @@
     "traveled_overground_distance": "Traveled Over Ground Distance",
     "map_view": "Map View",
     "track_name": "Track Name:",
-    "action": "Action"
+    "action": "Action",
+    "import_track": "Import {{type}} track",
+    "please_select_a_file": "Please select a {{type}} file.",
+    "file": "Track {{type}} File",
+    "import_track_successfully": "Import track successfully!",
+    "import_gpx_track": "Import GPX Track",
+    "import_expedition_track": "Import Expedition Track",
+    "import": "Import"
   },
   "tip": {
     "search_for_races_using_different_criteria": "Search for races using different criteria.",
@@ -979,7 +986,8 @@
     "min_crews_must_be_less_than_max_crews": "Min. crews is required and must be less than max. crews",
     "max_crews_must_be_greater_than_min_crews": "Max. crew is required and must be greater than min. crews",
     "please_input_no_more_than_characters": "Please input no more than {{numberOfChars}} characters.",
-    "please_input_at_least_characters": "Please input at least {{numberOfChars}} characters."
+    "please_input_at_least_characters": "Please input at least {{numberOfChars}} characters.",
+    "please_fill_out_this_field": "Please fill out this field."
   },
   "expedition_server_actions": {
     "race_udp_server_detail": "Race UDP server detail",
