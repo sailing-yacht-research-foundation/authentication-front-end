@@ -18,6 +18,7 @@ import GPXIcon from '../assets/gpx.png';
 import ReactTooltip from 'react-tooltip';
 import { BiTrash } from 'react-icons/bi';
 import { DeleteTrackModal } from './DeleteTrackModal';
+import { Track } from 'types/Track';
 
 const defaultOptions = {
     loop: true,
@@ -34,7 +35,7 @@ export const MyTrackList = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [track, setTrack] = React.useState<any>({});
+    const [track, setTrack] = React.useState<Partial<Track>>({});
 
     const columns = [
         {

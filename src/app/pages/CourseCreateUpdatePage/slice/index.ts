@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { Course } from 'types/Course';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import courseCreateSaga from './saga';
@@ -23,7 +24,7 @@ const slice = createSlice({
     updateCourse(state, action: PayloadAction<any>) { },
     deleteCourse(state, action: PayloadAction<string>) { },
     createCourse(state, action: PayloadAction<any>) { },
-    setCourses(state, action: PayloadAction<any[]>) {
+    setCourses(state, action: PayloadAction<Course[]>) {
       state.courses = action.payload;
     },
     setPage(state, action: PayloadAction<number>) {

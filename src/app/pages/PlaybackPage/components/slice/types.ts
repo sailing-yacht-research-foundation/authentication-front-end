@@ -1,4 +1,5 @@
 import { PlaybackTypes } from "types/Playback";
+import { VesselParticipant } from 'types/EventVesselParticipant';
 
 /* --- STATE --- */
 export interface PlaybackState {
@@ -6,7 +7,7 @@ export interface PlaybackState {
     raceLength: number;
     competitionUnitId?: string;
     competitionUnitDetail?: any;
-    vesselParticipants?: any[];
+    vesselParticipants?: VesselParticipant[];
     isPlaying?: boolean;
     searchRaceId?: string;
     searchRaceDetail?: any;

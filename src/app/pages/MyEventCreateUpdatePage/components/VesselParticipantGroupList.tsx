@@ -10,6 +10,7 @@ import { translations } from 'locales/translations';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { TIME_FORMAT } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
+import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 
 export const VesselParticipantGroupList = (props) => {
 
@@ -52,7 +53,7 @@ export const VesselParticipantGroupList = (props) => {
         rows: []
     });
 
-    const [group, setGroup] = React.useState<any>({});
+    const [group, setGroup] = React.useState<Partial<VesselParticipantGroup>>({});
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 

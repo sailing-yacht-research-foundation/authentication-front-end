@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom';
 import { renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
+import { Vessel } from 'types/Vessel';
 
 const defaultOptions = {
     loop: true,
@@ -94,7 +95,7 @@ export const VesselList = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [vessel, setVessel] = React.useState<any>({});
+    const [vessel, setVessel] = React.useState<Partial<Vessel>>({});
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 

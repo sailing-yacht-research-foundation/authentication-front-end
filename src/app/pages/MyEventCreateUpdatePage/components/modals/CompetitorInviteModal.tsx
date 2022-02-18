@@ -14,6 +14,7 @@ import { AdminType, CompetitorType } from 'utils/constants';
 import { searchGroupForAssigns } from 'services/live-data-server/groups';
 import { SyrfFormButton, SyrfFormSelect } from 'app/components/SyrfForm';
 import { useHistory } from 'react-router-dom';
+import { Participant } from 'types/Participant';
 
 export const CompetitorInviteModal = (props) => {
 
@@ -25,7 +26,7 @@ export const CompetitorInviteModal = (props) => {
 
     const [items, setItems] = React.useState<any[]>([]);
 
-    const participants = React.useRef<any[]>([]);
+    const participants = React.useRef<Participant[]>([]);
 
     const user = useSelector(selectUser);
 

@@ -22,6 +22,7 @@ import { PDFUploadForm } from './PDFUploadForm';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { VerifyPhoneModal } from 'app/components/VerifyPhoneNumberModal';
 import { VesselFormFields } from './VesselFormFields';
+import { Vessel } from 'types/Vessel';
 
 const fieldsValidate = {
     STATELINE: 'isVerifiedSatelliteNumber',
@@ -35,7 +36,7 @@ export const VesselForm = () => {
     const [form] = useForm();
     const { id } = useParams<{ id: string }>();
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-    const [vessel, setVessel] = React.useState<any>({});
+    const [vessel, setVessel] = React.useState<Partial<Vessel>>({});
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
     const [showRemovePhotoModal, setShowRemovePhotoModal] = React.useState<boolean>(false);
     const [showRemoveDeckPlanModal, setShowRemoveDeckPlanModal] = React.useState<boolean>(false);

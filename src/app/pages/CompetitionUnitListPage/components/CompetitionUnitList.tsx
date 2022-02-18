@@ -12,6 +12,7 @@ import { getAllCompetitionUnits } from 'services/live-data-server/competition-un
 import { Link } from 'react-router-dom';
 import { TIME_FORMAT } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
+import { CompetitionUnit } from 'types/CompetitionUnit';
 
 const defaultOptions = {
     loop: true,
@@ -81,7 +82,7 @@ export const CompetitionUnitList = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
+    const [competitionUnit, setCompetitionUnit] = React.useState<Partial<CompetitionUnit>>({});
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
