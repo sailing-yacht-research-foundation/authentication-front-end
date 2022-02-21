@@ -146,10 +146,16 @@ const workercode = () => {
     function processAndParseTracksData(source) {
         const data = Object.assign({}, source);
 
-        if (!Object.keys(vesselParticipants)?.length || !data?.vesselParticipantId || !raceTime?.start) return;
+        if (!Object.keys(vesselParticipants)?.length || !raceTime?.start) return;
 
-        const currentVesselParticipantId = data?.vesselParticipantId;
-        if (!vesselParticipants[currentVesselParticipantId]) return;
+        let currentVesselParticipantId = data?.vesselParticipantId;
+        if (!vesselParticipants[currentVesselParticipantId]) {
+            if (Object.keys(vesselParticipants).length === 1) { // trackId is included so only 1 track.
+                currentVesselParticipantId = Object.keys(vesselParticipants)[0];
+            } else {
+                return;
+            }
+        }
 
         const selectedVesselParticipant = Object.assign({}, vesselParticipants[currentVesselParticipantId]);
 
