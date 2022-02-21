@@ -40,6 +40,7 @@ const workercode = () => {
     let hasMoreData = true;
     let elapsedTimeHasBeenChanged = false;
     let coursePoints = {};
+    let trackId = '';
 
     self.addEventListener('message', function (e) {
         const data = e.data;
@@ -53,14 +54,15 @@ const workercode = () => {
                 console.warn(e);
             }
         } else if (data.action === workerEvent.SEND_DATA_TO_WORKER) {
-            vesselParticipants = data?.data?.vesselParticipants ?? vesselParticipants;
-            raceTime = data?.data?.raceTime ?? raceTime;
-            competitionUnitId = data?.data?.competitionUnitId ?? competitionUnitId;
-            retrievedTimestamps = data?.data?.retrievedTimestamps ?? retrievedTimestamps;
-            playbackSpeed = data?.data?.playbackSpeed ?? playbackSpeed;
-            coursePoints = data?.data?.coursePoints ?? coursePoints;
+            vesselParticipants = data.data?.vesselParticipants ?? vesselParticipants;
+            raceTime = data.data?.raceTime ?? raceTime;
+            competitionUnitId = data.data?.competitionUnitId ?? competitionUnitId;
+            retrievedTimestamps = data.data?.retrievedTimestamps ?? retrievedTimestamps;
+            playbackSpeed = data.data?.playbackSpeed ?? playbackSpeed;
+            coursePoints = data.data?.coursePoints ?? coursePoints;
+            trackId = data.data?.trackId?? trackId;
 
-            let newElapsedTime = data?.data?.elapsedTime ?? elapsedTime;
+            let newElapsedTime = data.data?.elapsedTime ?? elapsedTime;
             if (newElapsedTime < elapsedTime) {
                 elapsedTimeHasBeenChanged = true;
                 lastRetrievedTimestamp = newElapsedTime;
@@ -235,13 +237,15 @@ const workercode = () => {
             if ((elaspedTimeInReceivedTimestamps(receivedTimestamps, timeToLoadAt + 1500, timeToLoadAt + 2500) && elapsedTime !== 0)) return;
 
             try {
+                const socketParams = {
+                    competitionUnitId: competitionUnitId,
+                    startTimeFetch: timeToLoadAt,
+                    timeToLoad: timeToLoad,
+                };
+                if (trackId) socketParams.trackId = trackId;
                 ws.send(JSON.stringify({
                     action: "playback_v2",
-                    data: {
-                        competitionUnitId: competitionUnitId,
-                        startTimeFetch: timeToLoadAt,
-                        timeToLoad: timeToLoad,
-                    },
+                    data: socketParams,
                 }));
                 elapsedTimeHasBeenChanged = false;
             } catch (e) {
