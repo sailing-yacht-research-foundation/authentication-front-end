@@ -22,6 +22,10 @@ import { EventState, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'ut
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import ReactTooltip from 'react-tooltip';
+import { CalendarEvent } from 'types/CalendarEvent';
+import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
+import { CompetitionUnit } from 'types/CompetitionUnit';
+import { Course } from 'types/Course';
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
@@ -52,17 +56,17 @@ export const CompetitionUnitForm = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
+    const [competitionUnit, setCompetitionUnit] = React.useState<Partial<CompetitionUnit>>({});
 
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
 
-    const [eventData, setEventData] = React.useState<any>(null);
+    const [eventData, setEventData] = React.useState<Partial<CalendarEvent>>({});
 
-    const [groups, setGroups] = React.useState<any[]>([]);
+    const [groups, setGroups] = React.useState<VesselParticipantGroup[]>([]);
 
-    const [, setLastCreatedRace] = React.useState<any>({});
+    const [, setLastCreatedRace] = React.useState<Partial<CompetitionUnit>>({});
 
-    const [courses, setCourses] = React.useState<any[]>([]);
+    const [courses, setCourses] = React.useState<Course[]>([]);
 
     const [error, setError] = React.useState<any>({});
 
@@ -275,7 +279,7 @@ export const CompetitionUnitForm = () => {
         const selectedDate = (startDate || moment())?.toObject();
         const selectedTime = (startTime || moment())?.toObject();
         const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
-        const eventDateTime = new Date(eventData?.approximateStartTime);
+        const eventDateTime = new Date(eventData?.approximateStartTime!);
 
         if (selectedDateTime.getTime() >= eventDateTime.getTime()) {
             return {
@@ -347,11 +351,11 @@ export const CompetitionUnitForm = () => {
     }
 
     const dateLimiter = (current) => {
-        if (!eventData) {
+        if (!eventData.id) {
             return current && current < moment().startOf('day');
         }
 
-        return current && current < moment(new Date(eventData?.approximateStartTime)).startOf('day');
+        return current && current < moment(new Date(eventData.approximateStartTime!)).startOf('day');
     };
 
     return (

@@ -6,12 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { GroupAvatar } from './GroupAvatar';
 import { VisibilityOfGroup } from 'app/pages/MyGroupPage/components/VisibilityOfGroup';
+import { Group } from 'types/Group';
 
 export const LeftPane = (props) => {
 
     const { t } = useTranslation();
 
-    const { group } = props;
+    const { group } : { group: Group } = props;
 
     return (
         <Wrapper>

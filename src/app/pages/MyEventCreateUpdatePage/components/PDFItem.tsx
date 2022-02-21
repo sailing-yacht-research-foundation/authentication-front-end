@@ -4,10 +4,11 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { uploadPdfs } from 'services/live-data-server/event-calendars';
+import { CalendarEvent } from 'types/CalendarEvent';
 
 export const PDFItem = (props) => {
 
-    const { event, item, reloadParent } = props;
+    const { event, item, reloadParent }: { event: CalendarEvent, item: any, reloadParent: Function } = props;
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 

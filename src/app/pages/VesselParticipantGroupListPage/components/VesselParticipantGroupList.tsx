@@ -11,6 +11,7 @@ import { DeleteVesselParticipantGroupModal } from './DeleteVesselParticipantGrou
 import { getAllVesselParticipantGroups } from 'services/live-data-server/vessel-participant-group';
 import { TIME_FORMAT } from 'utils/constants';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 
 const defaultOptions = {
     loop: true,
@@ -69,7 +70,7 @@ export const VesselParticipantGroupList = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [group, setGroup] = React.useState<any>({});
+    const [group, setGroup] = React.useState<Partial<VesselParticipantGroup>>({});
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 

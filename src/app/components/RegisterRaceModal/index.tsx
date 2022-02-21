@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { joinCompetitionUnit } from 'services/live-data-server/open-competition';
+import { Vessel } from 'types/Vessel';
 
 export const RegisterRaceModal = (props) => {
 
@@ -15,7 +16,7 @@ export const RegisterRaceModal = (props) => {
 
     const { showModal, setShowModal, raceName, raceId, lon, lat, setRelation } = props;
 
-    const [boats, setBoats] = React.useState<any[]>([]);
+    const [boats, setBoats] = React.useState<Vessel[]>([]);
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 

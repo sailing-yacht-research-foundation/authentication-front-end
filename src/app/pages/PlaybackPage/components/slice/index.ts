@@ -1,4 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
+import { CompetitionUnit } from "types/CompetitionUnit";
+import { VesselParticipant } from "types/EventVesselParticipant";
 import { PlaybackTypes } from "types/Playback";
 import { createSlice } from "utils/@reduxjs/toolkit";
 import { useInjectReducer, useInjectSaga } from "utils/redux-injectors";
@@ -39,16 +41,16 @@ const slice = createSlice({
         setCompetitionUnitId(state, action: PayloadAction<string>) {
             state.competitionUnitId = action.payload;
         },
-        setCompetitionUnitDetail(state, action: PayloadAction<any>) {
+        setCompetitionUnitDetail(state, action: PayloadAction<CompetitionUnit>) {
             state.competitionUnitDetail = action.payload;
         },
-        setVesselParticipants(state, action: PayloadAction<any>) {
+        setVesselParticipants(state, action: PayloadAction<VesselParticipant[]>) {
             state.vesselParticipants = action.payload;
         },
-        setIsPlaying(state, action: PayloadAction<any>) {
+        setIsPlaying(state, action: PayloadAction<boolean>) {
             state.isPlaying = action.payload;
         },
-        setSearchRaceId(state, action: PayloadAction<any>) {
+        setSearchRaceId(state, action: PayloadAction<string>) {
             state.searchRaceId = action.payload;
         },
         setSearchRaceDetail(state, action: PayloadAction<any>) {

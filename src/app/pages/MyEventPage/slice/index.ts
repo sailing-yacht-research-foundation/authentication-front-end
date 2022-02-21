@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { CalendarEvent } from 'types/CalendarEvent';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import myEventListSaga from './saga';
@@ -16,7 +17,7 @@ const slice = createSlice({
   name: 'myEventList',
   initialState,
   reducers: {
-    setResults(state, action: PayloadAction<any[]>) {
+    setResults(state, action: PayloadAction<CalendarEvent[]>) {
       state.results = action.payload;
     },
     setTotal(state, action: PayloadAction<number>) {

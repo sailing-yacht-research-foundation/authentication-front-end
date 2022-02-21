@@ -15,6 +15,8 @@ import { EventState, ParticipantInvitationStatus } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { renderAvatar } from 'utils/user-utils';
 import { BlockParticipantConfirmModal } from 'app/pages/MyEventPage/components/modals/BlockParticipantConfirmModal';
+import { CalendarEvent } from 'types/CalendarEvent';
+import { Participant } from 'types/Participant';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -26,7 +28,7 @@ export const ParticipantList = (props) => {
 
     const { t } = useTranslation();
 
-    const { eventId, event } = props;
+    const { eventId, event }: { eventId: string, event: CalendarEvent } = props;
 
     const columns = [
         {
@@ -106,7 +108,7 @@ export const ParticipantList = (props) => {
         rows: []
     });
 
-    const [participant, setParticipant] = React.useState<any>({});
+    const [participant, setParticipant] = React.useState<Partial<Participant>>({});
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -195,7 +197,7 @@ export const ParticipantList = (props) => {
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
                     {
-                        ![EventState.COMPLETED, EventState.CANCELED].includes(event.status) && <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
+                        ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!) && <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
                             style={{ marginRight: '5px' }}
                             size={18} />}>{t(translations.participant_list.invite)}</CreateButton>
                     }

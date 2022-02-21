@@ -11,12 +11,14 @@ import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { RaceManageButtons } from './RaceManageButtons';
+import { CalendarEvent } from 'types/CalendarEvent';
+import { CompetitionUnit } from 'types/CompetitionUnit';
 
 export const RaceList = (props) => {
 
     const { t } = useTranslation();
 
-    const { event, canManageEvent } = props;
+    const { event, canManageEvent }: { event: CalendarEvent, canManageEvent: Function } = props;
 
     const columns = [
         {
@@ -73,7 +75,7 @@ export const RaceList = (props) => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [competitionUnit, setCompetitionUnit] = React.useState<any>({});
+    const [competitionUnit, setCompetitionUnit] = React.useState<Partial<CompetitionUnit>>({});
 
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
