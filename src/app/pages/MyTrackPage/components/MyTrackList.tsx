@@ -52,8 +52,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
                             }
-                            {!record?.event.isPrivate ? (<Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{[record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ')}</Link>) :
-                                (<Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>)}
+                            <Link to={`/playback/?raceId=${record.competitionUnit?.id}&trackId=${record?.trackJson?.id}`}>{!record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name}</Link>
                         </FlexWrapper>
                     );
                 return (
