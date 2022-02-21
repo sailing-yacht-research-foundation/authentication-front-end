@@ -102,7 +102,7 @@ export const Playback = (props) => {
 
     const renderViewsCount = () => {
         if (competitionUnitDetail?.calendarEvent?.isPrivate) return <></>; // race is from a track now event, not event track.
-        return playbackType && [PlaybackTypes.OLDRACE, PlaybackTypes.STREAMINGRACE].includes(playbackType) && <RightItemContainer>{renderNumberWithCommas(viewCounts)} views</RightItemContainer>;
+        return playbackType && [PlaybackTypes.STREAMINGRACE].includes(playbackType) && <RightItemContainer>{renderNumberWithCommas(viewCounts)} views</RightItemContainer>;
     }
 
     const renderSpeedControl = () => {

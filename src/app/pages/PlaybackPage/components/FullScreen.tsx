@@ -24,14 +24,20 @@ export const FullScreen = (props) => {
     }
 
     React.useEffect(() => {
-        window.addEventListener('fullscreenchange', function (e) {
-            if (document?.fullscreenElement) {
-                setIsFullScreen(true);
-            } else {
-                setIsFullScreen(false);
-            }
-        });
+        window.addEventListener('fullscreenchange', onFullScreenChanged);
+
+        return () => {
+            window.addEventListener('fullscreenchange', onFullScreenChanged);
+        }
     }, []);
+
+    const onFullScreenChanged = (e) => {
+        if (document?.fullscreenElement) {
+            setIsFullScreen(true);
+        } else {
+            setIsFullScreen(false);
+        }
+    }
 
     const handleCloseFullScreen = () => {
         if (document?.fullscreenElement) {
