@@ -132,7 +132,7 @@ export function* getRaceLegs({ type, payload }) {
   }
 }
 
-export function* getRaceLength({ type, payload }) {
+export function* getRaceStartTimeAndEndTime({ type, payload }) {
   const { raceId } = payload;
   if (!raceId) return;
 
@@ -140,9 +140,6 @@ export function* getRaceLength({ type, payload }) {
   if (result.success) {
     const startMillis = new Date(result.data.startTime).getTime();
     const endMillis = new Date(result.data.endTime).getTime();
-
-    const raceLength = Math.ceil(endMillis - startMillis);
-    yield put(playbackActions.setRaceLength(raceLength));
     yield put(playbackActions.setRaceTime({ start: startMillis, end: endMillis }));
   }
 }
@@ -161,7 +158,6 @@ export function* getOldRaceData({ type, payload }) {
   const { raceId } = payload;
   if (!raceId) return;
 
-  yield put(playbackActions.getRaceLength({ raceId }));
   yield put(playbackActions.getRaceLegs({ raceId }));
   yield put(playbackActions.getRaceCourseDetail({ raceId }));
 }
@@ -186,7 +182,6 @@ export default function* playbackSaga() {
     takeLatest(playbackActions.getSearchRaceDetail.type, getSearchRaceDetail),
     takeLatest(playbackActions.getRaceData.type, getRaceData),
     takeLatest(playbackActions.getOldRaceData.type, getOldRaceData),
-    takeLatest(playbackActions.getRaceLength.type, getRaceLength),
     takeLatest(playbackActions.getRaceLegs.type, getRaceLegs),
     takeLatest(playbackActions.getRaceSimplifiedTracks.type, getRaceSimplifiedTracks),
     takeLatest(playbackActions.getRaceCourseDetail.type, getRaceCourseDetail),

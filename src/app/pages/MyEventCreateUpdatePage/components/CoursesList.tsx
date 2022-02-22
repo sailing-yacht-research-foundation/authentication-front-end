@@ -9,6 +9,7 @@ import { CourseDeleteModal } from 'app/pages/CourseCreateUpdatePage/components/C
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
+import { Course } from 'types/Course';
 
 export const CoursesList = (props) => {
 
@@ -52,7 +53,7 @@ export const CoursesList = (props) => {
         },
     ];
 
-    const [course, setCourse] = React.useState<any>({});
+    const [course, setCourse] = React.useState<Partial<Course>>({});
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 

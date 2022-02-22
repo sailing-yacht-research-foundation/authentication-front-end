@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { Group, GroupMember } from 'types/Group';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import groupDetailSaga from './saga';
@@ -23,10 +24,10 @@ const slice = createSlice({
     name: 'groupDetail',
     initialState,
     reducers: {
-        setAdmins(state, action: PayloadAction<any[]>) {
+        setAdmins(state, action: PayloadAction<GroupMember[]>) {
             state.admins = action.payload;
         },
-        setMembers(state, action: PayloadAction<any[]>) {
+        setMembers(state, action: PayloadAction<GroupMember[]>) {
             state.members = action.payload;
         },
         setCurrentMemberPage(state, action: PayloadAction<number>) {
@@ -49,7 +50,7 @@ const slice = createSlice({
         setIsGettingMembers(state, action: PayloadAction<boolean>) {
             state.isGettingMembers = action.payload;
         },
-        setGroup(state, action: PayloadAction<any>) {
+        setGroup(state, action: PayloadAction<Group>) {
             state.group = action.payload;
         },
         getGroup(state, action: PayloadAction<string>) {},

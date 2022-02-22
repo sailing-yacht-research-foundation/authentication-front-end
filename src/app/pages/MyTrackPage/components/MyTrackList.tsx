@@ -18,6 +18,7 @@ import GPXIcon from '../assets/gpx.png';
 import ReactTooltip from 'react-tooltip';
 import { BiTrash } from 'react-icons/bi';
 import { DeleteTrackModal } from './DeleteTrackModal';
+import { Track } from 'types/Track';
 
 const defaultOptions = {
     loop: true,
@@ -28,13 +29,13 @@ const defaultOptions = {
     }
 };
 
-export const MyTrackList = () => {
+export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
 
     const { t } = useTranslation();
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [track, setTrack] = React.useState<any>({});
+    const [track, setTrack] = React.useState<Partial<Track>>({});
 
     const columns = [
         {
@@ -51,8 +52,7 @@ export const MyTrackList = () => {
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
                             }
-                            {!record?.event.isPrivate ? (<Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{[record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ')}</Link>) :
-                                (<Link to={`/playback/?raceId=${record.competitionUnit?.id}`}>{record.event?.name}</Link>)}
+                            <Link to={`/playback/?raceId=${record.competitionUnit?.id}&trackId=${record?.trackJson?.id}`}>{!record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name}</Link>
                         </FlexWrapper>
                     );
                 return (
@@ -131,6 +131,12 @@ export const MyTrackList = () => {
         },
     ];
 
+    React.useImperativeHandle(ref, () => ({
+        reload() {
+            getAll(pagination.page, pagination.size);
+        }
+    }));
+
     const showTrackDeleteModal = (track) => {
         setTrack(track);
         setShowDeleteModal(true);
@@ -207,7 +213,7 @@ export const MyTrackList = () => {
                 </LottieWrapper>)}
         </>
     )
-}
+});
 
 const FlexWrapper = styled.div`
     display: flex;

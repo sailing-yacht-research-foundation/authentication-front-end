@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom';
 import { renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
+import { Vessel } from 'types/Vessel';
 
 const defaultOptions = {
     loop: true,
@@ -46,10 +47,7 @@ export const VesselList = () => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
-                const userId = localStorage.getItem('user_id');
-                if ((userId && userId === record.createdById) || (uuid === record.createdById))
-                    return <Link data-tip={t(translations.tip.update_this_boat)} to={`/boats/${record.id}/update`}>{text}</Link>;
-                return text;
+                return <Link data-tip={t(translations.tip.update_this_boat)} to={`/boats/${record.id}/update`}>{text}</Link>;
             },
         },
         {
@@ -57,6 +55,12 @@ export const VesselList = () => {
             dataIndex: 'lengthInMeters',
             key: 'lengthInMeters',
             render: (value) => renderEmptyValue(value),
+        },
+        {
+            title: t(translations.vessel_list_page.role),
+            dataIndex: 'role',
+            key: 'role',
+            render: (value, record) => record?.isOwner ? t(translations.vessel_list_page.owner) : t(translations.vessel_list_page.admin),
         },
         {
             title: t(translations.vessel_list_page.created_date),
@@ -68,17 +72,13 @@ export const VesselList = () => {
             title: t(translations.vessel_list_page.action),
             key: 'action',
             render: (text, record) => {
-                const userId = localStorage.getItem('user_id');
-                if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
                         <BorderedButton data-tip={t(translations.tip.update_this_boat)} onClick={() => {
                             history.push(`/boats/${record.id}/update`);
                         }} type="primary">{t(translations.vessel_list_page.update)}</BorderedButton>
                         <BorderedButton data-tip={t(translations.tip.delete_boat)} danger onClick={() => showDeleteVesselModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
-                        <ReactTooltip/>
+                        <ReactTooltip />
                     </Space>;
-
-                return <></>;
             },
             width: '20%',
         },
@@ -95,7 +95,7 @@ export const VesselList = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [vessel, setVessel] = React.useState<any>({});
+    const [vessel, setVessel] = React.useState<Partial<Vessel>>({});
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
@@ -145,11 +145,11 @@ export const VesselList = () => {
                     <PageHeading>{t(translations.vessel_list_page.vessels)}</PageHeading>
                     <PageDescription>{t(translations.vessel_list_page.vessel_are_yatchs)}</PageDescription>
                 </PageInfoContainer>
-                <CreateButton 
+                <CreateButton
                     data-tip={t(translations.tip.create_a_new_boat)}
                     onClick={() => history.push("/boats/create")} icon={<AiFillPlusCircle
-                    style={{ marginRight: '5px' }}
-                    size={18} />}>{t(translations.vessel_list_page.create_a_new_vessel)}</CreateButton>
+                        style={{ marginRight: '5px' }}
+                        size={18} />}>{t(translations.vessel_list_page.create_a_new_vessel)}</CreateButton>
             </PageHeaderContainerResponsive>
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>

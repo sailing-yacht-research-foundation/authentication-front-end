@@ -20,12 +20,13 @@ import { VesselList } from './VesselList';
 import { toast } from 'react-toastify';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { HiLockClosed } from 'react-icons/hi';
+import { CalendarEvent } from 'types/CalendarEvent';
 
 export const EventDetail = () => {
 
     const { eventId } = useParams<{ eventId: string }>();
 
-    const [event, setEvent] = React.useState<any>({});
+    const [event, setEvent] = React.useState<Partial<CalendarEvent>>({});
 
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
@@ -61,7 +62,7 @@ export const EventDetail = () => {
     const menus = [
         {
             name: t(translations.my_event_create_update_page.open_registration),
-            show: event.isOpen && event.allowRegistration === false && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
+            show: event.isOpen && event.allowRegistration === false && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status!),
             handler: () => toggleRegistration(true),
             icon: <GiArchiveRegister />,
             spinning: isOpeningClosingRegistration,
@@ -69,7 +70,7 @@ export const EventDetail = () => {
         },
         {
             name: t(translations.my_event_create_update_page.close_registration),
-            show: event.isOpen && event.allowRegistration === true && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status),
+            show: event.isOpen && event.allowRegistration === true && ![EventState.CANCELED, EventState.COMPLETED].includes(event.status!),
             handler: () => toggleRegistration(false),
             icon: <HiLockClosed />,
             spinning: isOpeningClosingRegistration,
@@ -129,7 +130,7 @@ export const EventDetail = () => {
     }
 
     const canManageEvent = () => {
-        return event.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(event.status);
+        return event.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!);
     }
 
     const navigateToEventHostProfile = (profileId) => {

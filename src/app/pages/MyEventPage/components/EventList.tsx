@@ -21,6 +21,8 @@ import ReactTooltip from 'react-tooltip';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { RaceList } from './RaceList';
 import { EventAdmins } from 'app/pages/EventDetailPage/components/EventAdmins';
+import { CalendarEvent } from 'types/CalendarEvent';
+import { Track } from 'types/Track';
 
 const defaultOptions = {
   loop: true,
@@ -144,7 +146,7 @@ export const EventList = () => {
 
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-  const [event, setEvent] = React.useState<any>({});
+  const [event, setEvent] = React.useState<Partial<CalendarEvent>>({});
 
   const [mappedResults, setMappedResults] = React.useState<any[]>([]);
 

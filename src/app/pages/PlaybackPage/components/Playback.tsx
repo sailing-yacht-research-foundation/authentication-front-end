@@ -95,13 +95,14 @@ export const Playback = (props) => {
         });
 
         let convertedPlayTimeInMiliseconds = Number(newPlayTimeInMilisecondsInString.join(''));
+        if (convertedPlayTimeInMiliseconds < 0) convertedPlayTimeInMiliseconds = 0;
         dispatch(actions.setElapsedTime(convertedPlayTimeInMiliseconds));
         if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(convertedPlayTimeInMiliseconds);
     }
 
     const renderViewsCount = () => {
         if (competitionUnitDetail?.calendarEvent?.isPrivate) return <></>; // race is from a track now event, not event track.
-        return playbackType && [PlaybackTypes.OLDRACE, PlaybackTypes.STREAMINGRACE].includes(playbackType) && <RightItemContainer>{renderNumberWithCommas(viewCounts)} views</RightItemContainer>;
+        return playbackType && [PlaybackTypes.STREAMINGRACE].includes(playbackType) && <RightItemContainer>{renderNumberWithCommas(viewCounts)} views</RightItemContainer>;
     }
 
     const renderSpeedControl = () => {
