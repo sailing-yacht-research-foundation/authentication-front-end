@@ -17,7 +17,7 @@ const workercode = () => {
             self.postMessage({
                 action: workerEvent.UPDATE_DATA_TO_MAIN_THREAD,
                 data: {
-                    mappedVesselParticipants: generateVesselParticipantsLastPosition(data.vesselParticipants, data.elapsedTime, data.retrievedTimestamps),
+                    mappedVesselParticipants: generateVesselParticipantsLastPosition(data.vesselParticipants, data.elapsedTime, data.retrievedTimestamps, data.vesselParticipantsPreviousHeading),
                     mappedMarks: generateCourseGeometriesBaseOnCoursePointTrack(data.coursePoints, data.elapsedTime, data.retrievedTimestamps, data.courseGeometries)
                 }
             });
@@ -73,7 +73,7 @@ const workercode = () => {
         return normalizeSequencedGeometries(sequencedGeometries);
     }
 
-    function generateVesselParticipantsLastPosition(vesselParticipantsObject, selectedTimestamp, retrievedTimestamps) {
+    function generateVesselParticipantsLastPosition(vesselParticipantsObject, selectedTimestamp, retrievedTimestamps, previousHeadings) {
         const vesselParticipants = Object.keys(vesselParticipantsObject).map(
             (key) => vesselParticipantsObject[key]
         );
@@ -104,9 +104,17 @@ const workercode = () => {
                 filteredPositions[1]?.lon && filteredPositions[1]?.lat
                     ? [filteredPositions[1].lon, filteredPositions[1].lat]
                     : currentCoordinateForHeading;
-            const heading = generateLastHeading(previousCoordinateForHeading, currentCoordinateForHeading);
-            lastPosition.heading = heading;
 
+            if (lastPosition.cog) // heading/course from ws
+                lastPosition.heading = lastPosition.cog;
+            else {
+                lastPosition.heading = generateLastHeading(previousCoordinateForHeading, currentCoordinateForHeading); // calculated heading if not exist.
+                let previousHeading = previousHeadings[vP.id];
+                if (previousHeading && Math.abs(lastPosition.heading - previousHeading) > 180) { 
+                    lastPosition.heading = lastPosition.heading - 360;
+                }
+            }
+           
             return Object.assign({}, vP, { positions: filteredPositions, lastPosition });
         });
 

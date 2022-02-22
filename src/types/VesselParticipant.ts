@@ -6,6 +6,7 @@ export interface VesselParticipantPosition {
   sog?: number;
   twa?: number;
   heading?: any;
+  previousHeading?: any;
 }
 
 export interface VesselParticipant {
