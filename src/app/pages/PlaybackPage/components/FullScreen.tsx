@@ -27,7 +27,7 @@ export const FullScreen = (props) => {
         window.addEventListener('fullscreenchange', onFullScreenChanged);
 
         return () => {
-            window.addEventListener('fullscreenchange', onFullScreenChanged);
+            window.removeEventListener('fullscreenchange', onFullScreenChanged);
         }
     }, []);
 
