@@ -104,8 +104,11 @@ const workercode = () => {
                 filteredPositions[1]?.lon && filteredPositions[1]?.lat
                     ? [filteredPositions[1].lon, filteredPositions[1].lat]
                     : currentCoordinateForHeading;
-            const heading = generateLastHeading(previousCoordinateForHeading, currentCoordinateForHeading);
-            lastPosition.heading = heading;
+
+            if (lastPosition.cog) // heading/course from ws
+                lastPosition.heading = lastPosition.cog;
+            else
+                lastPosition.heading = generateLastHeading(previousCoordinateForHeading, currentCoordinateForHeading); // calculated heading if not exist.
 
             return Object.assign({}, vP, { positions: filteredPositions, lastPosition });
         });
