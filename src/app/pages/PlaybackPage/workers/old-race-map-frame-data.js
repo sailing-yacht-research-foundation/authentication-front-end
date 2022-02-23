@@ -110,11 +110,12 @@ const workercode = () => {
             else {
                 lastPosition.heading = generateLastHeading(previousCoordinateForHeading, currentCoordinateForHeading); // calculated heading if not exist.
                 let previousHeading = previousHeadings[vP.id];
-                if (previousHeading && Math.abs(lastPosition.heading - previousHeading) > 180) { 
+                if (previousHeading !== undefined && previousHeading !== null
+                    && Math.abs(lastPosition.heading - previousHeading) > 180) {
                     lastPosition.heading = lastPosition.heading - 360;
                 }
             }
-           
+
             return Object.assign({}, vP, { positions: filteredPositions, lastPosition });
         });
 

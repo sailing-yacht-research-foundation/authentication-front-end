@@ -446,13 +446,14 @@ export const PlaybackStreamRace = (props) => {
         ? [currentPositions[positionLength - 2].lon, currentPositions[positionLength - 2].lat]
         : [lon, lat];
 
-    let heading: number;    
-    if  (calculatedData?.derivedCOG) { // maybe undefined?
+    let heading: number;
+    if (calculatedData?.derivedCOG) { // maybe undefined?
       heading = calculatedData.derivedCOG;
     } else {
       heading = generateLastHeading(previousCoordinate, [lon, lat]);
       const previousHeading = currentGroupedPosition.previousHeading;
-      if (previousHeading && Math.abs(heading - previousHeading) > 180) { 
+      if (previousHeading !== undefined && previousHeading !== null
+        && Math.abs(heading - previousHeading) > 180) {
         heading = heading - 360;
       }
     }
