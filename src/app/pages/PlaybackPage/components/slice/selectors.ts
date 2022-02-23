@@ -71,6 +71,11 @@ export const selectRaceTime = createSelector(
   (playbackState) => playbackState.raceTime
 )
 
+export const selectRealRaceTime = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.realRaceTime
+)
+
 export const selectRaceRetrievedTimestamps = createSelector(
   [selectDomain],
   (playbackState) => playbackState.raceRetrievedTimestamps

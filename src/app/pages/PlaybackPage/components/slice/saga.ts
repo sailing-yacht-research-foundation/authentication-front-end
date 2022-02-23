@@ -15,8 +15,6 @@ import {
 import { getVesselParticipantGroupById } from "services/live-data-server/vessel-participant-group";
 import { PlaybackTypes } from "types/Playback";
 import { playbackActions } from ".";
-import { selectRaceTime } from "./selectors";
-
 export function* getCompetitionUnitDetail({ type, payload }) {
   const { id } = payload;
 
@@ -139,10 +137,22 @@ export function* getRaceStartTimeAndEndTime({ type, payload }) {
 
   const result = yield call(getTimeByCompetitionUnit, raceId);
   if (result.success) {
-    const raceTime = yield select(selectRaceTime);
     const startMillis = new Date(result.data.startTime).getTime();
     const endMillis = new Date(result.data.endTime).getTime();
-    yield put(playbackActions.setRaceTime({ ...raceTime, realStart: startMillis, realEnd: endMillis }));
+    yield put(playbackActions.setRealRaceTime({ start: startMillis, end: endMillis }));
+  }
+}
+
+export function* getAndSetRaceLengthUsingServerData({ type, payload }) {
+  const { raceId } = payload;
+  if (!raceId) return;
+
+  const result = yield call(getTimeByCompetitionUnit, raceId);
+  if (result.success) {
+    const startMillis = new Date(result.data.startTime).getTime();
+    const endMillis = new Date(result.data.endTime).getTime();
+    yield put(playbackActions.setRaceTime({ start: startMillis, end: endMillis }));
+    yield put(playbackActions.setRaceLength(endMillis - startMillis));
   }
 }
 
@@ -190,5 +200,6 @@ export default function* playbackSaga() {
     takeLatest(playbackActions.getRaceCourseDetail.type, getRaceCourseDetail),
     takeLatest(playbackActions.getTimeBeforeRaceBegin.type, getTimeBeforeRaceBegin),
     takeLatest(playbackActions.getRaceStartTimeAndEndTime.type, getRaceStartTimeAndEndTime),
+    takeLatest(playbackActions.getAndSetRaceLengthUsingServerData.type, getAndSetRaceLengthUsingServerData),
   ]);
 }

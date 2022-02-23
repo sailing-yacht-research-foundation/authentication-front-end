@@ -1,11 +1,11 @@
 import React from 'react';
-import { milisecondsToMinutes, renderNumberWithCommas } from 'utils/helpers';
+import { milisecondsToMinutes, renderNumberWithCommas, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helpers';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectRaceTime, selectViewCounts } from './slice/selectors';
+import { selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectRaceTime, selectRealRaceTime, selectViewCounts } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
 import { PlaybackTypes } from 'types/Playback';
 import { media } from 'styles/media';
@@ -36,12 +36,18 @@ export const Playback = (props) => {
     const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
     const viewCounts = useSelector(selectViewCounts);
     const raceTime = useSelector(selectRaceTime);
+    const realRaceTime = useSelector(selectRealRaceTime);
 
     const dispatch = useDispatch();
 
     const { actions } = usePlaybackSlice();
 
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
+
+    const [isRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime, setIsRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime] = React.useState<boolean>(false);
+
+    const [startMarkerWith, setStartMarkerWidth] = React.useState<number>(0);
+    const [endMarkerWidth, setEndMarkerWidth] = React.useState<number>(0);
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
         let percentage = 0;
@@ -125,27 +131,30 @@ export const Playback = (props) => {
         return <>Live <LiveDot className={isLive ? 'live' : ''}></LiveDot></>;
     }
 
-    const getMarkerWidth = (time, raceLength) => {
+    const getMarkerWidth = (time) => {
         let percentage = 0;
 
-        console.log(raceTime);
-
         if (time > 0)
-            percentage = (time / raceLength) * 100;
+            percentage = ((time - raceTime.start) / raceLength) * 100;
 
         if (percentage > 100) percentage = 100;
 
-        // return percentage;
-        return <></>;
+        return percentage;
     }
 
-    const isRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime = () => {
-        return raceTime.realStart > raceTime.start && raceTime.realEnd < raceTime.end;
-    }
+    React.useEffect(() => {
+        if (realRaceTime.start > 0 && realRaceTime.end > 0 && raceTime.start > 0 && raceTime.end > 0) {
+            setIsRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime(PlaybackTypes.OLDRACE === playbackType
+                && realRaceTime.start >= raceTime.start
+                && realRaceTime.start < raceTime.end
+                && realRaceTime.end <= raceTime.end);
+            setStartMarkerWidth(getMarkerWidth(realRaceTime.start));
+            setEndMarkerWidth(getMarkerWidth(realRaceTime.end));
+        }
+    }, [realRaceTime, raceTime]);
 
     return (
         <PlaybackWrapper>
-            {getMarkerWidth(raceTime.realStart, raceLength)}
             <PlaybackTopRightItemsContainer>
                 {isLoading && <RightItemContainer> <Spin spinning={true}></Spin></RightItemContainer>}
                 {renderViewsCount()}
@@ -160,8 +169,12 @@ export const Playback = (props) => {
                     <TimeText>{PlaybackTypes.OLDRACE === playbackType && milisecondsToMinutes(elapsedTime)}</TimeText>
                     <ProgressBarWrapper>
                         <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
-                            <TimeMarker>Start</TimeMarker>
-                            <TimeMarker>End</TimeMarker>
+                            {
+                                isRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime && <>
+                                    <StartMarker style={{ left: `${startMarkerWith}%` }}></StartMarker>
+                                    <EndMarker style={{ left: `${endMarkerWidth}%` }}></EndMarker>
+                                </>
+                            }
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                         </ProgressBar>
                     </ProgressBarWrapper>
@@ -335,17 +348,46 @@ const LiveDot = styled.span`
     }
 `;
 
-const TimeMarker = styled.div`
+const TimeMarker = `
     position: absolute;
-    top: -35px;
+    top: -30px;
+    font-size: 12px;
     &:before {
         content: " ";
-        top: 30px;
+        top: 23px;
         left: 50%;
         transform: translateX(-50%);
         position: absolute;
         width: 2px;
         height: 20px;
         background: #4F61A5;
+    }
+`;
+
+const StartMarker = styled.div`
+    ${TimeMarker}
+    &:after {
+        content: "Start";
+        position: absolute;
+        width: 40px;
+        transform: translateX(-35%);
+        display: none;
+        ${media.medium`
+            display: block
+        `};
+    }
+`;
+
+const EndMarker = styled.div`
+    ${TimeMarker}
+    &:after {
+        content: "End";
+        position: absolute;
+        width: 40px;
+        transform: translateX(-35%);
+        display: none;
+        ${media.medium`
+            display: block
+        `};
     }
 `;
