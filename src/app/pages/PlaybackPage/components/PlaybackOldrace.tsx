@@ -71,6 +71,7 @@ export const PlaybackOldRace = (props) => {
   const raceLegsRef = useRef<any>();
   const playbackSpeedRef = useRef<any>(PlaybackSpeed.speed1X);
   const coursePointsRef = useRef<any>({});
+  const vesselParticipantsPreviousHeading = useRef<any>({});
   const courseGeometries = useRef<any[]>([]);
   const rawSimplifiedTracks = useRef<any>([]);
 
@@ -357,6 +358,9 @@ export const PlaybackOldRace = (props) => {
     const data = e.data;
 
     if (data.action === WorkerEvent.UPDATE_WORKER_DATA_TO_MAIN_THREAD) {
+      data.data.mappedVesselParticipants.forEach(vp => {
+        vesselParticipantsPreviousHeading.current[vp.id] = vp.lastPosition?.heading;
+      });
       eventEmitter?.emit(RaceEmitterEvent.PING, data.data.mappedVesselParticipants);
       eventEmitter?.emit(RaceEmitterEvent.UPDATE_COURSE, data.data.mappedMarks);
 
@@ -535,7 +539,8 @@ export const PlaybackOldRace = (props) => {
         elapsedTime,
         retrievedTimestamps,
         courseGeometries: courseGeometries.current,
-        coursePoints: coursePointsRef.current
+        coursePoints: coursePointsRef.current,
+        vesselParticipantsPreviousHeading: vesselParticipantsPreviousHeading.current
       }
     });
 
