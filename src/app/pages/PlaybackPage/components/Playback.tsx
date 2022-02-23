@@ -44,7 +44,8 @@ export const Playback = (props) => {
 
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
 
-    const [isRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime, setIsRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime] = React.useState<boolean>(false);
+    const [isRaceStartMarkWithinPlaybackRange, setIsRaceStartMarkWithinPlaybackRange] = React.useState<boolean>(false);
+    const [isRaceEndMarksWithinPlaybackRange, setIsRaceEndMarkWithinPlaybackRange] = React.useState<boolean>(false);
 
     const [startMarkerWith, setStartMarkerWidth] = React.useState<number>(0);
     const [endMarkerWidth, setEndMarkerWidth] = React.useState<number>(0);
@@ -144,10 +145,8 @@ export const Playback = (props) => {
 
     React.useEffect(() => {
         if (realRaceTime.start > 0 && realRaceTime.end > 0 && raceTime.start > 0 && raceTime.end > 0) {
-            setIsRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime(PlaybackTypes.OLDRACE === playbackType
-                && realRaceTime.start >= raceTime.start
-                && realRaceTime.start < raceTime.end
-                && realRaceTime.end <= raceTime.end);
+            setIsRaceStartMarkWithinPlaybackRange(realRaceTime.start >= raceTime.start && realRaceTime.start < raceTime.end);
+            setIsRaceEndMarkWithinPlaybackRange(realRaceTime.end <= raceTime.end)
             setStartMarkerWidth(getMarkerWidth(realRaceTime.start));
             setEndMarkerWidth(getMarkerWidth(realRaceTime.end));
         }
@@ -170,12 +169,10 @@ export const Playback = (props) => {
                     <TimeText>{PlaybackTypes.OLDRACE === playbackType && milisecondsToMinutes(elapsedTime)}</TimeText>
                     <ProgressBarWrapper>
                         <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
-                            {
-                                isRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime && <>
-                                    <StartMarker style={{ left: `${startMarkerWith}%` }}></StartMarker>
-                                    <EndMarker style={{ left: `${endMarkerWidth}%` }}></EndMarker>
-                                </>
-                            }
+                            {playbackType === PlaybackTypes.OLDRACE && <>
+                                {isRaceStartMarkWithinPlaybackRange && <StartMarker style={{ left: `${startMarkerWith}%` }}></StartMarker>}
+                                {isRaceEndMarksWithinPlaybackRange && <EndMarker style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
+                            </>}
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                         </ProgressBar>
                     </ProgressBarWrapper>
