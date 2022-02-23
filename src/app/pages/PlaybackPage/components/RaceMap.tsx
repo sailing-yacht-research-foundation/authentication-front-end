@@ -129,6 +129,8 @@ export const RaceMap = (props) => {
     }
 
     sequencedCourses.forEach((sequencedCourse) => {
+      if (sequencedCourse.coordinates.length === 0) return;
+
       const courseGeometryType = String(sequencedCourse.geometryType).toLowerCase();
       if (courseGeometryType === objectType.point) {
         const coordinate = sequencedCourse.coordinates[0];

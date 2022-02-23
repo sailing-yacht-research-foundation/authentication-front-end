@@ -20,7 +20,12 @@ export const initialState: PlaybackState = {
     raceSimplifiedTracks: [],
     raceLegs: [],
     raceCourseDetail: {},
-    raceTime: {},
+    raceTime: {
+        start: 0,
+        end: 0,
+        realStart:0,
+        realEnd: 0
+    },
     raceRetrievedTimestamps: [],
     timeBeforeRaceBegin: 0,
     isConnecting: false,

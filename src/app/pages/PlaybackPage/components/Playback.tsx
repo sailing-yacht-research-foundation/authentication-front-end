@@ -5,7 +5,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectViewCounts } from './slice/selectors';
+import { selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectRaceTime, selectViewCounts } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
 import { PlaybackTypes } from 'types/Playback';
 import { media } from 'styles/media';
@@ -35,6 +35,7 @@ export const Playback = (props) => {
     const playbackType = useSelector(selectPlaybackType);
     const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
     const viewCounts = useSelector(selectViewCounts);
+    const raceTime = useSelector(selectRaceTime);
 
     const dispatch = useDispatch();
 
@@ -124,8 +125,27 @@ export const Playback = (props) => {
         return <>Live <LiveDot className={isLive ? 'live' : ''}></LiveDot></>;
     }
 
+    const getMarkerWidth = (time, raceLength) => {
+        let percentage = 0;
+
+        console.log(raceTime);
+
+        if (time > 0)
+            percentage = (time / raceLength) * 100;
+
+        if (percentage > 100) percentage = 100;
+
+        // return percentage;
+        return <></>;
+    }
+
+    const isRealStartTimeAndEndTimeWithinFirstPingTimeAndLastPingTime = () => {
+        return raceTime.realStart > raceTime.start && raceTime.realEnd < raceTime.end;
+    }
+
     return (
         <PlaybackWrapper>
+            {getMarkerWidth(raceTime.realStart, raceLength)}
             <PlaybackTopRightItemsContainer>
                 {isLoading && <RightItemContainer> <Spin spinning={true}></Spin></RightItemContainer>}
                 {renderViewsCount()}
@@ -140,6 +160,8 @@ export const Playback = (props) => {
                     <TimeText>{PlaybackTypes.OLDRACE === playbackType && milisecondsToMinutes(elapsedTime)}</TimeText>
                     <ProgressBarWrapper>
                         <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
+                            <TimeMarker>Start</TimeMarker>
+                            <TimeMarker>End</TimeMarker>
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                         </ProgressBar>
                     </ProgressBarWrapper>
@@ -229,6 +251,7 @@ const ProgressBar = styled.div`
     border-radius: 5px;
     width: 100%;
     cursor: pointer;
+    position: relative;
 `;
 
 const ProgressedBar = styled.div`
@@ -309,5 +332,20 @@ const LiveDot = styled.span`
 
     &.live {
         background: #ff0000;
+    }
+`;
+
+const TimeMarker = styled.div`
+    position: absolute;
+    top: -35px;
+    &:before {
+        content: " ";
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        position: absolute;
+        width: 2px;
+        height: 20px;
+        background: #4F61A5;
     }
 `;

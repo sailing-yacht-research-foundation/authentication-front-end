@@ -427,7 +427,7 @@ export const PlaybackOldRace = (props) => {
       // set Race length and start time, end time base on simplified tracks.
       const { startTimeInMilliseconds, endTimeInMilliseconds, raceLength } = getRaceLengthFromSimplifiedTracks(normalizedSimplifiedTracks, firstPingTime);
       dispatch(actions.setRaceLength(raceLength));
-      dispatch(actions.setRaceTime({ start: startTimeInMilliseconds, end: endTimeInMilliseconds }));
+      dispatch(actions.setRaceTime({ ...raceTime, start: startTimeInMilliseconds, end: endTimeInMilliseconds }));
 
       socketWorker?.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
