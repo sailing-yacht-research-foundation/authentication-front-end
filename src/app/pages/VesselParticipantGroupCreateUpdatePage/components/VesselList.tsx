@@ -14,6 +14,8 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { create as createVessel } from 'services/live-data-server/vessels';
 import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVesselModal';
 import ReactTooltip from 'react-tooltip';
+import { VesselParticipant } from 'types/EventVesselParticipant';
+import { Vessel } from 'types/Vessel';
 
 export const VesselList = (props) => {
 
@@ -21,9 +23,9 @@ export const VesselList = (props) => {
 
     const { t } = useTranslation();
 
-    const [vesselParticipants, setVesselParticipants] = React.useState<any[]>([]);
+    const [vesselParticipants, setVesselParticipants] = React.useState<VesselParticipant[]>([]);
 
-    const [numberOfBoatsToCreate, setNumberOfBoatsToCreate] = React.useState<any>(0);
+    const [numberOfBoatsToCreate, setNumberOfBoatsToCreate] = React.useState<number>(0);
 
     const columns = [
         {
@@ -79,7 +81,7 @@ export const VesselList = (props) => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [vessel, setVessel] = React.useState<any>({});
+    const [vessel, setVessel] = React.useState<Partial<Vessel>>({});
 
     const showDeleteVesselModal = (vessel) => {
         setShowDeleteModal(true);
@@ -122,7 +124,7 @@ export const VesselList = (props) => {
     }
 
     const removeFromGroup = async (vesselId) => {
-        const vesselParticipant: any = findVesselParticipantByVesselIdAndGroupId(vesselId);
+        const vesselParticipant: VesselParticipant = findVesselParticipantByVesselIdAndGroupId(vesselId);
 
         if (vesselParticipant) {
             setIsLoading(true);
@@ -207,7 +209,7 @@ export const VesselList = (props) => {
                     <PageHeaderTextSmall>{t(translations.vessel_list_page.vessels)}</PageHeaderTextSmall>
                     <Space>
                         <Input value={numberOfBoatsToCreate} onChange={e => {
-                            setNumberOfBoatsToCreate(e.target.value)
+                            setNumberOfBoatsToCreate(Number(e.target.value))
                         }} type="number" style={{ width: '70px' }} />
                         <CreateButton
                             data-tip={t(translations.tip.create_n_boats)}

@@ -12,6 +12,8 @@ import {
   generateRaceLegsData,
   limitRaceLegsDataByElapsedTime,
   turnTracksToVesselParticipantsData,
+  getRaceLengthFromSimplifiedTracks,
+  getFirstPingTimeFromSimplifiedTracks,
 } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
@@ -69,6 +71,7 @@ export const PlaybackOldRace = (props) => {
   const raceLegsRef = useRef<any>();
   const playbackSpeedRef = useRef<any>(PlaybackSpeed.speed1X);
   const coursePointsRef = useRef<any>({});
+  const vesselParticipantsPreviousHeading = useRef<any>({});
   const courseGeometries = useRef<any[]>([]);
 
   const competitionUnitId = useSelector(selectCompetitionUnitId);
@@ -83,6 +86,7 @@ export const PlaybackOldRace = (props) => {
   const raceLength = useSelector(selectRaceLength);
   const userCoordinate = useSelector(selectUserCoordinate);
   const playbackSpeed = useSelector(selectPlaybackSpeed);
+  const [trackId, setTrackId] = React.useState<string>('');
 
   const { actions } = usePlaybackSlice();
 
@@ -138,6 +142,7 @@ export const PlaybackOldRace = (props) => {
     // Get old race additional data
     if (competitionUnitDetail?.id) {
       dispatch(actions.getOldRaceData({ raceId: competitionUnitDetail.id }));
+      getSimplifiedTracks();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,15 +151,17 @@ export const PlaybackOldRace = (props) => {
   // Manage subscription of websocket
   useEffect(() => {
     if (connectionStatus === WebsocketConnectionStatus.OPEN && isReady) {
+      const socketParams: any = {
+        competitionUnitId: competitionUnitId,
+        startTimeFetch: raceTime.start,
+        timeToLoad: 30,
+      };
+      if (trackId) socketParams.trackId = trackId;
       socketWorker?.postMessage({
         action: WorkerEvent.SEND_WS_MESSAGE,
         data: {
           action: "playback_v2",
-          data: {
-            competitionUnitId: competitionUnitId,
-            startTimeFetch: raceTime.start,
-            timeToLoad: 30,
-          },
+          data: socketParams
         }
       });
     }
@@ -202,7 +209,8 @@ export const PlaybackOldRace = (props) => {
         action: WorkerEvent.SEND_DATA_TO_WORKER,
         data: {
           vesselParticipants: vesselParticipantsRef.current,
-          competitionUnitId: competitionUnitId
+          competitionUnitId: competitionUnitId,
+          trackId: trackId
         }
       });
     }
@@ -217,9 +225,6 @@ export const PlaybackOldRace = (props) => {
         raceTime: raceTime
       }
     })
-    if (raceTime?.start) {
-      getSimplifiedTracks();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceTime]);
 
@@ -279,7 +284,7 @@ export const PlaybackOldRace = (props) => {
         removeVesselParticipantFromTheRace(data.data);
       }
     });
-
+    setTrackIdIfExists();
     mapDataWorker?.addEventListener('message', mapData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -331,6 +336,9 @@ export const PlaybackOldRace = (props) => {
     const data = e.data;
 
     if (data.action === WorkerEvent.UPDATE_WORKER_DATA_TO_MAIN_THREAD) {
+      data.data.mappedVesselParticipants.forEach(vp => {
+        vesselParticipantsPreviousHeading.current[vp.id] = vp.lastPosition?.heading;
+      });
       eventEmitter?.emit(RaceEmitterEvent.PING, data.data.mappedVesselParticipants);
       eventEmitter?.emit(RaceEmitterEvent.UPDATE_COURSE, data.data.mappedMarks);
 
@@ -345,6 +353,12 @@ export const PlaybackOldRace = (props) => {
       mapDataWorker = new Worker(MapFrameDataWorker);
       mapDataWorker?.addEventListener('message', mapData);
     }
+  }
+
+  const setTrackIdIfExists = () => {
+    const search = location.search.substring(1);
+    const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+    if (params.trackId) setTrackId(params.trackId);
   }
 
   const addNewVesselParticipantToTheRace = (data) => {
@@ -407,10 +421,17 @@ export const PlaybackOldRace = (props) => {
   const getSimplifiedTracks = async () => {
     const response = await getSimplifiedTracksByCompetitionUnit(String(competitionUnitId));
     if (response.success) {
-      const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(raceTime.start, response.data);
+      const simplifiedTracks = response.data; // the simplified tracks.
+      const firstPingTime = getFirstPingTimeFromSimplifiedTracks(simplifiedTracks) // first ping time of the whole race
+      const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(firstPingTime, simplifiedTracks);
       simplifiedTracksRef.current = normalizedSimplifiedTracks;
       vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
       handleMapRetrievedTimestamps(vesselParticipantsRef.current);
+
+      // set Race length and start time, end time base on simplified tracks.
+      const { startTimeInMilliseconds, endTimeInMilliseconds, raceLength } = getRaceLengthFromSimplifiedTracks(normalizedSimplifiedTracks, firstPingTime);
+      dispatch(actions.setRaceLength(raceLength));
+      dispatch(actions.setRaceTime({ start: startTimeInMilliseconds, end: endTimeInMilliseconds }));
 
       socketWorker?.postMessage({
         action: WorkerEvent.SEND_DATA_TO_WORKER,
@@ -463,7 +484,7 @@ export const PlaybackOldRace = (props) => {
     }
   };
 
-  const handlePlaybackClickedPosition = (targetTime) => {
+  const handlePlaybackClickedPosition = () => {
     dispatch(actions.setIsPlaying(true));
   };
 
@@ -484,7 +505,8 @@ export const PlaybackOldRace = (props) => {
         elapsedTime,
         retrievedTimestamps,
         courseGeometries: courseGeometries.current,
-        coursePoints: coursePointsRef.current
+        coursePoints: coursePointsRef.current,
+        vesselParticipantsPreviousHeading: vesselParticipantsPreviousHeading.current
       }
     });
 
@@ -530,11 +552,15 @@ export const PlaybackOldRace = (props) => {
     lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
   };
 
+  const isScrapedRace = () => competitionUnitDetail ? (competitionUnitDetail.scrapedOriginalId || competitionUnitDetail.scrapedUrl) : false;
+
   return (
     <div style={{ height: "100%", position: "relative" }}>
-      <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-        <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
-      </LeaderboardContainer>
+      {
+        !isScrapedRace() && <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
+          <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
+        </LeaderboardContainer>
+      }
       <MapContainer
         style={{
           height: "100%",

@@ -13,8 +13,6 @@ export function* getGroupMembers({ type, payload }) {
         yield put(groupDetailActions.setMembers(response.data?.rows));
         yield put(groupDetailActions.setCurrentMemberPage(response.data?.page));
         yield put(groupDetailActions.setMemberTotal(response.data?.count));
-    } else {
-        showToastMessageOnRequestError(response.error);
     }
 }
 
@@ -28,8 +26,6 @@ export function* getGroupAdmins({ type, payload }) {
         yield put(groupDetailActions.setAdmins(response.data?.rows));
         yield put(groupDetailActions.setCurrentAdminPage(response.data?.page));
         yield put(groupDetailActions.setAdminTotal(response.data?.count));
-    } else {
-        showToastMessageOnRequestError(response.error);
     }
 }
 

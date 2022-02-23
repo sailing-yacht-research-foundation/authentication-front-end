@@ -73,7 +73,8 @@ export const enum GroupMemberStatus {
     INVITED = 'INVITED',
     REQUESTED = 'REQUESTED',
     ACCEPTED = 'ACCEPTED',
-    DECLINED = 'DECLINED'
+    DECLINED = 'DECLINED',
+    BLOCKED = 'BLOCKED'
 };
 
 export const enum GroupVisibility {
@@ -211,4 +212,9 @@ export enum EventTypes {
 export enum EventParticipatingTypes {
     VESSEL = 'VESSEL',
     PERSON = 'PERSON'
+}
+
+export enum ImportTrackType {
+    GPX = 'gpx',
+    EXPEDITION = 'csv'
 }

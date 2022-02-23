@@ -17,6 +17,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import ReactTooltip from 'react-tooltip';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 
 export const VesselParticipantGroupForm = () => {
     const history = useHistory();
@@ -35,7 +36,7 @@ export const VesselParticipantGroupForm = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [group, setGroup] = React.useState<any>({});
+    const [group, setGroup] = React.useState<Partial<VesselParticipantGroup>>({});
 
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 

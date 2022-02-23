@@ -64,7 +64,8 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
                 const competitionUnit = data.competitionUnit;
                 return {
                     ...competitionUnit,
-                    event: data.event
+                    event: data.event,
+                    track: data?.trackJson
                 };
             });
 
@@ -179,12 +180,18 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
                 marker.closePopup();
             })
             .on('click', () => {
-                window.open(`/playback?raceId=${race.id}`);
+                window.open(`/playback?raceId=${race.id}&trackId=${race.track?.id}`);
             })
             .addTo(map);
 
         return marker;
     }
+
+    React.useImperativeHandle(ref, () => ({
+        reload() {
+            getAll();
+        }
+    }));
 
     React.useEffect(() => {
         if (isFocusingOnSearchInput && geoLoc && watchID) {

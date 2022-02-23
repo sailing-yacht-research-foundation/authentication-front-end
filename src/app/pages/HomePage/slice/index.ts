@@ -22,6 +22,7 @@ export const initialState: HomeState = {
  upcomingResultTotal: 0,
  upcomingResultDistance: 5, // miles
  upcomingResultDuration: 2, // month,
+ relations: []
 };
 
 const slice = createSlice({
@@ -80,7 +81,11 @@ const slice = createSlice({
     getLiveAndUpcomingRaces(state, action: PayloadAction<any>) {},
     setNoResultsFound(state, action: PayloadAction<boolean>) {
       state.noResultFound = action.payload;
-    }
+    },
+    setRelationWithCompetitionUnits(state, action: PayloadAction<any[]>) {
+      state.relations = action.payload;
+    },
+    getRelationWithCompetitionUnits(state, action: PayloadAction<string[]>) {}
   },
 });
 

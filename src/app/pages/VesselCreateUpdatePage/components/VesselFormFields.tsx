@@ -167,7 +167,7 @@ export const VesselFormFields = (props) => {
                         name="hullColorBelowWaterline"
                         rules={[{ max: 15, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
 
@@ -192,7 +192,7 @@ export const VesselFormFields = (props) => {
                         name="deckColor"
                         rules={[{ max: 15, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
 
@@ -202,7 +202,7 @@ export const VesselFormFields = (props) => {
                         name="mmsi"
                         rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
 
@@ -212,7 +212,7 @@ export const VesselFormFields = (props) => {
                         name="ssbTransceiver"
                         rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}  
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -224,7 +224,7 @@ export const VesselFormFields = (props) => {
                         name="homeport"
                         rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
 
@@ -234,7 +234,7 @@ export const VesselFormFields = (props) => {
                         name="rigging"
                         rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
 
@@ -246,6 +246,7 @@ export const VesselFormFields = (props) => {
                         <SyrfPhoneInput
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
+                            inputProps={{ autoComplete: 'off' }}
                             placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
                     </Form.Item>
                 </Col>
@@ -260,6 +261,7 @@ export const VesselFormFields = (props) => {
                         <SyrfPhoneInput
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
+                            inputProps={{ autoComplete: 'off' }}
                             placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
                     </Form.Item>
                     {vessel?.satelliteNumber && renderVerifiedStatus('isVerifiedSatelliteNumber')}
@@ -273,6 +275,7 @@ export const VesselFormFields = (props) => {
                         <SyrfPhoneInput
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
+                            inputProps={{ autoComplete: 'off' }}
                             placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
                     </Form.Item>
                     {vessel?.onboardPhone && renderVerifiedStatus('isVerifiedOnboardPhone')}
@@ -284,7 +287,7 @@ export const VesselFormFields = (props) => {
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.onboard_email)}</SyrfFieldLabel>}
                         name="onboardEmail"
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -294,7 +297,7 @@ export const VesselFormFields = (props) => {
                 name="epirbHexId"
                 rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
             >
-                <SyrfInputField autoCorrect="off" />
+                <SyrfInputField autoComplete="off" autoCorrect="off" />
             </Form.Item>
 
             <Row gutter={12}>
@@ -306,7 +309,7 @@ export const VesselFormFields = (props) => {
                         getValueFromEvent={normFile}
                         data-tip={t(translations.vessel_create_update_page.photo)}
                     >
-                        <SyrfInputField type={'file'} accept="image/png, image/jpeg" />
+                        <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
                     </Form.Item>
                 </Col>
 
@@ -318,7 +321,7 @@ export const VesselFormFields = (props) => {
                         getValueFromEvent={normFile}
                         data-tip={t(translations.vessel_create_update_page.deck_plan)}
                     >
-                        <SyrfInputField type={'file'} accept="image/png, image/jpeg" />
+                        <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
                     </Form.Item>
                 </Col>
 
@@ -330,7 +333,7 @@ export const VesselFormFields = (props) => {
                         getValueFromEvent={normFile}
                         data-tip={t(translations.vessel_create_update_page.hull_diagram)}
                     >
-                        <SyrfInputField type={'file'} accept="image/png, image/jpeg" />
+                        <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
                     </Form.Item>
                 </Col>
             </Row>

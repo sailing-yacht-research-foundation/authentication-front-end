@@ -15,6 +15,7 @@ import ReactTooltip from 'react-tooltip';
 import { createGroup, updateGroup, getGroupById } from 'services/live-data-server/groups';
 import { DeleteGroupModal } from './DeleteGroupModal';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { Group } from 'types/Group';
 
 const groupVisibilities = [
     {
@@ -65,7 +66,7 @@ export const GroupForm = () => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const [group, setGroup] = React.useState<any>({});
+    const [group, setGroup] = React.useState<Partial<Group>>({});
 
     const [formChanged, setFormChanged] = React.useState<boolean>(false);
 

@@ -88,16 +88,16 @@ export const PrivateUserInformation = (props) => {
         if (type === FIELD_VALIDATE.email)
             return <ItemVerifyMessage className={verified ? 'verified' : ''}>{t(translations.profile_page.update_profile.your_email_is, { verify_status: (verified ? 'verified' : 'not verified') })}</ItemVerifyMessage>;
 
-            if (userPhoneNumberExists) {
-                return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.update_profile.your_phone_is_verified)}</ItemVerifyMessage>) :
-                    (
-                        <ItemVerifyMessage>{t(translations.profile_page.update_profile.your_phone_is_not_verified)} <a href="/" onClick={(e) => {
-                            e.preventDefault();
-                            sendVerificationCode();
-                            setShowPhoneVerifyModal(true);
-                        }}>{t(translations.profile_page.update_profile.verify)}</a></ItemVerifyMessage>
-                    )
-            }
+        if (userPhoneNumberExists) {
+            return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.update_profile.your_phone_is_verified)}</ItemVerifyMessage>) :
+                (
+                    <ItemVerifyMessage>{t(translations.profile_page.update_profile.your_phone_is_not_verified)} <a href="/" onClick={(e) => {
+                        e.preventDefault();
+                        sendVerificationCode();
+                        setShowPhoneVerifyModal(true);
+                    }}>{t(translations.profile_page.update_profile.verify)}</a></ItemVerifyMessage>
+                )
+        }
     }
 
     const handleSuggestionVisible = () => {
@@ -276,6 +276,7 @@ export const PrivateUserInformation = (props) => {
                         rules={[{ type: 'string' }]}
                     >
                         <SyrfPhoneInput
+                            inputProps={{ autoComplete: 'off' }}
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />

@@ -174,5 +174,17 @@ export const revokeGroupAsEditor = (groupId, eventId) => {
 }
 
 export const getValidOrganizableGroup = () => {
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/valid-organizer`, ));
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/valid-organizer`));
+}
+
+export const blockMember = (groupId, memberId) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/block`, {
+        userId: memberId
+    }));
+}
+
+export const unBlockMember = (groupId, memberId) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/unblock`, {
+        userId: memberId
+    }));
 }

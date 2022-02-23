@@ -35,6 +35,7 @@ import { FormItemEndDate } from './FormItemEndDate';
 import { ImportEventDataModal } from './modals/ImportEventDataModal';
 import { create as createCourse } from 'services/live-data-server/courses';
 import { FormItems } from './FormItems';
+import { CalendarEvent } from 'types/CalendarEvent';
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -58,7 +59,7 @@ export const MyEventForm = () => {
     const [mode, setMode] = React.useState<string>('');
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
-    const [event, setEvent] = React.useState<any>({});
+    const [event, setEvent] = React.useState<Partial<CalendarEvent>>({});
     const [error, setError] = React.useState<any>({
         startTime: '',
     });

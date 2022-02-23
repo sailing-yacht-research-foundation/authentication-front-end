@@ -293,13 +293,13 @@ export const PlaybackStreamRace = (props) => {
     const { vesselParticipant, vessel, participant, position } = data;
     const { id } = vesselParticipant;
 
-    if (groupedPosition?.current[id]) return;
+    if (groupedPosition?.current[id] || !position) return;
 
     groupedPosition.current[id] = {
       id: id,
       vessel,
       vesselParticipantId: id,
-      positions: [position.lat, position.lon],
+      positions: [{ lat: position.lat, lon: position.lon }],
       lastPosition: { lon: position.lon, lat: position.lat },
       deviceType: 'boat',
       participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },
@@ -426,7 +426,7 @@ export const PlaybackStreamRace = (props) => {
   const handleAddPosition = (data) => {
     messageHistory.current.push(data);
 
-    const { raceData, lat, lon } = data;
+    const { raceData, lat, lon, calculatedData } = data;
     const { vesselParticipantId } = raceData;
 
     // Reject vessel participant id
@@ -445,7 +445,20 @@ export const PlaybackStreamRace = (props) => {
       positionLength >= 2
         ? [currentPositions[positionLength - 2].lon, currentPositions[positionLength - 2].lat]
         : [lon, lat];
-    const heading = generateLastHeading(previousCoordinate, [lon, lat]);
+
+    let heading: number;
+    if (calculatedData?.derivedCOG) { // maybe undefined?
+      heading = calculatedData.derivedCOG;
+    } else {
+      heading = generateLastHeading(previousCoordinate, [lon, lat]);
+      const previousHeading = currentGroupedPosition.previousHeading;
+      if (previousHeading !== undefined && previousHeading !== null
+        && Math.abs(heading - previousHeading) > 180) {
+        heading = heading - 360;
+      }
+    }
+
+    currentGroupedPosition.previousHeading = heading;
 
     // Save data
     currentPositions.push({ lat, lon, heading });

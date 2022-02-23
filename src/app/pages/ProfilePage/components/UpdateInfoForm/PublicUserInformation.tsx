@@ -57,7 +57,7 @@ export const PublicUserInformation = (props) => {
                         }]}
                         data-tip={t(translations.tip.first_name)}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
 
@@ -71,7 +71,7 @@ export const PublicUserInformation = (props) => {
                         }]}
                         data-tip={t(translations.tip.last_name)}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                 </Col>
             </Row>
