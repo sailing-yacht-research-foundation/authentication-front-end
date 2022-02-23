@@ -2,7 +2,7 @@
  * Root saga manages watcher lifecycle
  */
 
-import { all, call, put, takeLatest, select } from "@redux-saga/core/effects";
+import { all, call, put, takeLatest } from "@redux-saga/core/effects";
 import {
   getCompetitionUnitById,
   getCourseByCompetitionUnit,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { milisecondsToMinutes, renderNumberWithCommas, replaceObjectPropertiesFromNullToEmptyString } from 'utils/helpers';
+import { milisecondsToMinutes, renderNumberWithCommas } from 'utils/helpers';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
@@ -151,6 +151,7 @@ export const Playback = (props) => {
             setStartMarkerWidth(getMarkerWidth(realRaceTime.start));
             setEndMarkerWidth(getMarkerWidth(realRaceTime.end));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [realRaceTime, raceTime]);
 
     return (

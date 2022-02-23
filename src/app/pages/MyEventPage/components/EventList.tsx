@@ -22,7 +22,6 @@ import { AiOutlineCalendar } from 'react-icons/ai';
 import { RaceList } from './RaceList';
 import { EventAdmins } from 'app/pages/EventDetailPage/components/EventAdmins';
 import { CalendarEvent } from 'types/CalendarEvent';
-import { Track } from 'types/Track';
 
 const defaultOptions = {
   loop: true,

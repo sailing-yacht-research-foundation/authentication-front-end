@@ -35,8 +35,6 @@ const defaultOptions = {
     }
 };
 
-const uuid = localStorage.getItem('uuid');
-
 export const VesselList = () => {
 
     const { t } = useTranslation();
