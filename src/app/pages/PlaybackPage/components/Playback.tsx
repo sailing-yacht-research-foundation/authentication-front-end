@@ -45,7 +45,7 @@ export const Playback = (props) => {
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
 
     const [isRaceStartMarkWithinPlaybackRange, setIsRaceStartMarkWithinPlaybackRange] = React.useState<boolean>(false);
-    const [isRaceEndMarksWithinPlaybackRange, setIsRaceEndMarkWithinPlaybackRange] = React.useState<boolean>(false);
+    const [isRaceEndMarkWithinPlaybackRange, setIsRaceEndMarkWithinPlaybackRange] = React.useState<boolean>(false);
 
     const [startMarkerWith, setStartMarkerWidth] = React.useState<number>(0);
     const [endMarkerWidth, setEndMarkerWidth] = React.useState<number>(0);
@@ -171,7 +171,7 @@ export const Playback = (props) => {
                         <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
                             {playbackType === PlaybackTypes.OLDRACE && <>
                                 {isRaceStartMarkWithinPlaybackRange && <StartMarker style={{ left: `${startMarkerWith}%` }}></StartMarker>}
-                                {isRaceEndMarksWithinPlaybackRange && <EndMarker style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
+                                {isRaceEndMarkWithinPlaybackRange && <EndMarker style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
                             </>}
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                         </ProgressBar>
