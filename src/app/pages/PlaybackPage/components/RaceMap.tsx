@@ -186,9 +186,23 @@ export const RaceMap = (props) => {
     current.legs = legs;
   }
 
+  const _removeOrphanedBoatsIfExist = (boatLayers, participants) => {
+    Object.keys(boatLayers).forEach(boatId => {
+      if (!participants.map(p => p.id).includes(boatId)) {
+        const boatLayer = boatLayers[boatId]?.layer;
+        if (boatLayer && boatLayer instanceof L.Marker) {
+          map.removeLayer(boatLayers[boatId].layer);
+          delete boatLayers[boatId];
+        }
+      }
+    });
+  }
+
   const _updateBoats = (participants, current) => {
     if (!participants?.length) return; // no participants, no render.
     // Zoom to race location, on first time update. 
+    _removeOrphanedBoatsIfExist(current.boats, participants);
+
     if (!current.zoomedToRaceLocation) {
       current.zoomedToRaceLocation = _zoomToRaceLocation(current);
     }
