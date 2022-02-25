@@ -15,7 +15,6 @@ import {
 import { getVesselParticipantGroupById } from "services/live-data-server/vessel-participant-group";
 import { PlaybackTypes } from "types/Playback";
 import { playbackActions } from ".";
-
 export function* getCompetitionUnitDetail({ type, payload }) {
   const { id } = payload;
 
@@ -71,10 +70,10 @@ export function* getRaceData({ type, payload }) {
 
     // Old race
     if (competitionUnitResult.data.isCompleted) {
-       yield put(playbackActions.setPlaybackType(PlaybackTypes.OLDRACE));
-       const response = yield call(getRaceViewsCount, raceId);
-       if (response.success) yield put(playbackActions.setViewsCount(response?.data?.count));
-       return;
+      yield put(playbackActions.setPlaybackType(PlaybackTypes.OLDRACE));
+      const response = yield call(getRaceViewsCount, raceId);
+      if (response.success) yield put(playbackActions.setViewsCount(response?.data?.count));
+      return;
     }
 
     // Streaming race
@@ -140,7 +139,20 @@ export function* getRaceStartTimeAndEndTime({ type, payload }) {
   if (result.success) {
     const startMillis = new Date(result.data.startTime).getTime();
     const endMillis = new Date(result.data.endTime).getTime();
+    yield put(playbackActions.setRealRaceTime({ start: startMillis, end: endMillis }));
+  }
+}
+
+export function* getAndSetRaceLengthUsingServerData({ type, payload }) {
+  const { raceId } = payload;
+  if (!raceId) return;
+
+  const result = yield call(getTimeByCompetitionUnit, raceId);
+  if (result.success) {
+    const startMillis = new Date(result.data.startTime).getTime();
+    const endMillis = new Date(result.data.endTime).getTime();
     yield put(playbackActions.setRaceTime({ start: startMillis, end: endMillis }));
+    yield put(playbackActions.setRaceLength(endMillis - startMillis));
   }
 }
 
@@ -158,6 +170,7 @@ export function* getOldRaceData({ type, payload }) {
   const { raceId } = payload;
   if (!raceId) return;
 
+  yield put(playbackActions.getRaceStartTimeAndEndTime({ raceId }));
   yield put(playbackActions.getRaceLegs({ raceId }));
   yield put(playbackActions.getRaceCourseDetail({ raceId }));
 }
@@ -186,5 +199,7 @@ export default function* playbackSaga() {
     takeLatest(playbackActions.getRaceSimplifiedTracks.type, getRaceSimplifiedTracks),
     takeLatest(playbackActions.getRaceCourseDetail.type, getRaceCourseDetail),
     takeLatest(playbackActions.getTimeBeforeRaceBegin.type, getTimeBeforeRaceBegin),
+    takeLatest(playbackActions.getRaceStartTimeAndEndTime.type, getRaceStartTimeAndEndTime),
+    takeLatest(playbackActions.getAndSetRaceLengthUsingServerData.type, getAndSetRaceLengthUsingServerData),
   ]);
 }

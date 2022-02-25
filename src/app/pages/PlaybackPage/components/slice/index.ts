@@ -20,12 +20,20 @@ export const initialState: PlaybackState = {
     raceSimplifiedTracks: [],
     raceLegs: [],
     raceCourseDetail: {},
-    raceTime: {},
+    raceTime: {
+        start: 0,
+        end: 0,
+    },
+    realRaceTime: {
+        start: 0,
+        end: 0,
+    },
     raceRetrievedTimestamps: [],
     timeBeforeRaceBegin: 0,
     isConnecting: false,
     speed: 1,
     viewsCount: 0,
+    isSimplifiedPlayback: false,
 };
 
 const slice = createSlice({
@@ -71,6 +79,9 @@ const slice = createSlice({
         setRaceTime(state, action: PayloadAction<any>) {
             state.raceTime = action.payload;
         },
+        setRealRaceTime(state, action: PayloadAction<any>) {
+            state.realRaceTime = action.payload;
+        },
         setRetrievedTimestamps(state, action: PayloadAction<any>) {
             state.raceRetrievedTimestamps = action.payload;
         },
@@ -90,11 +101,15 @@ const slice = createSlice({
         getRaceCourseDetail(state, action: PayloadAction<any>) {},
         getOldRaceData(state, action: PayloadAction<any>) {},
         getTimeBeforeRaceBegin(state, action: PayloadAction<any>) {},
+        getAndSetRaceLengthUsingServerData(state, action: PayloadAction<any>) {},
         setPlaybackSpeed(state, action: PayloadAction<number>) {
             state.speed = action.payload;
         },
         setViewsCount(state, action: PayloadAction<number>) {
             state.viewsCount = action.payload;
+        },
+        setIsSimplifiedPlayback(state, action: PayloadAction<boolean>) {
+            state.isSimplifiedPlayback = action.payload;
         }
     },
 });

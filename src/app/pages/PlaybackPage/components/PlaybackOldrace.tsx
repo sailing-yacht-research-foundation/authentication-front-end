@@ -73,6 +73,7 @@ export const PlaybackOldRace = (props) => {
   const coursePointsRef = useRef<any>({});
   const vesselParticipantsPreviousHeading = useRef<any>({});
   const courseGeometries = useRef<any[]>([]);
+  const rawSimplifiedTracks = useRef<any>([]);
 
   const competitionUnitId = useSelector(selectCompetitionUnitId);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
@@ -93,6 +94,17 @@ export const PlaybackOldRace = (props) => {
   const [connectionStatus, setConnectionStatus] = React.useState(WebsocketConnectionStatus.UNINSTANTIATED);
 
   const { t } = useTranslation();
+
+
+  const usePrevious = <T extends unknown>(value: T): T | undefined => {
+    const ref = React.useRef<T>();
+    React.useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+
+  const previousValue = usePrevious<{ raceLength: number }>({ raceLength });
 
   useEffect(() => {
     handleSetIsConnecting(true);
@@ -230,6 +242,17 @@ export const PlaybackOldRace = (props) => {
 
   useEffect(() => {
     raceLengthRef.current = raceLength;
+
+    if (previousValue?.raceLength !== undefined && previousValue.raceLength < 0 && raceLength > 0) {
+      mapRetrievedTimeStampsAndNormalizeSimplifiedTracks(raceTime.start, rawSimplifiedTracks.current);
+      socketWorker?.postMessage({
+        action: WorkerEvent.SEND_DATA_TO_WORKER,
+        data: {
+          vesselParticipants: vesselParticipantsRef.current
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceLength]);
 
   useEffect(() => {
@@ -418,27 +441,38 @@ export const PlaybackOldRace = (props) => {
     console.log(value);
   };
 
+  const mapRetrievedTimeStampsAndNormalizeSimplifiedTracks = (firstPingTime, simplifiedTracks) => {
+    const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(firstPingTime, simplifiedTracks);
+    simplifiedTracksRef.current = normalizedSimplifiedTracks;
+    vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
+    handleMapRetrievedTimestamps(vesselParticipantsRef.current);
+
+    return normalizedSimplifiedTracks;
+  }
+
   const getSimplifiedTracks = async () => {
     const response = await getSimplifiedTracksByCompetitionUnit(String(competitionUnitId));
     if (response.success) {
-      const simplifiedTracks = response.data; // the simplified tracks.
+      const simplifiedTracks = rawSimplifiedTracks.current = response.data; // the simplified tracks.
       const firstPingTime = getFirstPingTimeFromSimplifiedTracks(simplifiedTracks) // first ping time of the whole race
-      const normalizedSimplifiedTracks = normalizeSimplifiedTracksPingTime(firstPingTime, simplifiedTracks);
-      simplifiedTracksRef.current = normalizedSimplifiedTracks;
-      vesselParticipantsRef.current = turnTracksToVesselParticipantsData(vesselParticipantsRef.current, simplifiedTracksRef.current);
-      handleMapRetrievedTimestamps(vesselParticipantsRef.current);
+      const normalizedSimplifiedTracks = mapRetrievedTimeStampsAndNormalizeSimplifiedTracks(firstPingTime, simplifiedTracks);
 
       // set Race length and start time, end time base on simplified tracks.
-      const { startTimeInMilliseconds, endTimeInMilliseconds, raceLength } = getRaceLengthFromSimplifiedTracks(normalizedSimplifiedTracks, firstPingTime);
-      dispatch(actions.setRaceLength(raceLength));
-      dispatch(actions.setRaceTime({ start: startTimeInMilliseconds, end: endTimeInMilliseconds }));
+      const { startTimeInMilliseconds, endTimeInMilliseconds, raceLength } = getRaceLengthFromSimplifiedTracks(normalizedSimplifiedTracks, firstPingTime);;
 
-      socketWorker?.postMessage({
-        action: WorkerEvent.SEND_DATA_TO_WORKER,
-        data: {
-          vesselParticipants: vesselParticipantsRef.current
-        }
-      });
+      dispatch(actions.setRaceLength(raceLength));
+
+      if (raceLength > 0) {
+        dispatch(actions.setRaceTime({ start: startTimeInMilliseconds, end: endTimeInMilliseconds }));
+        socketWorker?.postMessage({
+          action: WorkerEvent.SEND_DATA_TO_WORKER,
+          data: {
+            vesselParticipants: vesselParticipantsRef.current
+          }
+        });
+      } else {
+        dispatch(actions.getAndSetRaceLengthUsingServerData({ raceId: competitionUnitId }));
+      }
     }
 
     setIsLoading(false);
@@ -468,7 +502,8 @@ export const PlaybackOldRace = (props) => {
   const handleSetElapsedTime = (elapsedTime) => {
     const time = (playbackSpeedRef.current !== PlaybackSpeed.speed1X)
       ? elapsedTime + (playbackSpeedRef.current * 1000) : elapsedTime; // we bypass playback 1x, only add time to other speeds
-    const isElapsedTimeLessThanRaceLength = elapsedTime < raceLengthRef.current;
+    const raceLength = raceLengthRef.current;
+    const isElapsedTimeLessThanRaceLength = elapsedTime < raceLength;
 
     if (isElapsedTimeLessThanRaceLength) {
       dispatch(actions.setElapsedTime(time));
@@ -478,8 +513,8 @@ export const PlaybackOldRace = (props) => {
           elapsedTime: elapsedTime
         }
       });
-    } else if (!isElapsedTimeLessThanRaceLength) {
-      dispatch(actions.setElapsedTime(raceLengthRef.current));
+    } else if (!isElapsedTimeLessThanRaceLength && raceLength > 0) {
+      dispatch(actions.setElapsedTime(raceLength));
       dispatch(actions.setIsPlaying(false));
     }
   };

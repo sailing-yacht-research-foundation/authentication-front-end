@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import queryString from "querystring";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCompetitionUnitDetail, selectPlaybackType, selectSearchRaceDetail } from "./components/slice/selectors";
+import { selectCompetitionUnitDetail, selectIsSimplifiedPlayback, selectPlaybackType, selectSearchRaceDetail } from "./components/slice/selectors";
 import { usePlaybackSlice } from "./components/slice";
 import { PlaybackTypes } from "types/Playback";
 import { IoIosArrowBack } from "react-icons/io";
@@ -18,6 +18,7 @@ import { PlaybackMobileIssue } from './components/PlaybackMobileIssue';
 import { Share } from "./components/Share";
 import { FullScreen } from './components/FullScreen';
 import { Link } from "react-router-dom";
+import { StyleConstants } from "styles/StyleConstants";
 
 export const PlaybackPage = (props) => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
@@ -31,6 +32,7 @@ export const PlaybackPage = (props) => {
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
   const searchRaceData = useSelector(selectSearchRaceDetail);
   const playbackType = useSelector(selectPlaybackType);
+  const isSimplifiedPlayback = useSelector(selectIsSimplifiedPlayback);
 
   const headerInfoElementRef = useRef<any>();
   const contentContainerRef = useRef<any>();
@@ -43,6 +45,7 @@ export const PlaybackPage = (props) => {
   // Init detail
   useEffect(() => {
     dispatch(actions.getRaceData({ raceId: parsedQueryString?.raceId }));
+    checkForUrlParams();
 
     return () => {
       dispatch(actions.setSearchRaceId(""));
@@ -108,6 +111,14 @@ export const PlaybackPage = (props) => {
     }
   };
 
+  const checkForUrlParams = () => {
+    const search = location.search.substring(1);
+    const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+    if (params.fullScreen && params.fullScreen === 'true') {
+      dispatch(actions.setIsSimplifiedPlayback(true));
+    }
+  }
+
   const handleHistoryGoBack = () => {
     if (history.action !== "POP") {
       history.goBack();
@@ -117,8 +128,8 @@ export const PlaybackPage = (props) => {
   };
 
   return (
-    <Wrapper ref={playbackContainerRef}>
-      <PageHeadContainer>
+    <Wrapper style={{ marginTop: isSimplifiedPlayback ? '0' : `${StyleConstants.NAV_BAR_HEIGHT}px` }} ref={playbackContainerRef}>
+      <PageHeadContainer style={{ display: isSimplifiedPlayback ? 'none' : 'block' }}>
         <GobackButton onClick={handleHistoryGoBack}>
           <IoIosArrowBack style={{ fontSize: "40px", color: "#1890ff" }} />
         </GobackButton>
