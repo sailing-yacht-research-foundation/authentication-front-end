@@ -33,6 +33,7 @@ export const initialState: PlaybackState = {
     isConnecting: false,
     speed: 1,
     viewsCount: 0,
+    canIncreaseDecreaseSpeed: true,
 };
 
 const slice = createSlice({
@@ -106,6 +107,9 @@ const slice = createSlice({
         },
         setViewsCount(state, action: PayloadAction<number>) {
             state.viewsCount = action.payload;
+        },
+        setCanIncreaseDecreaseSpeed(state, action: PayloadAction<boolean>) {
+            state.canIncreaseDecreaseSpeed = action.payload;
         }
     },
 });

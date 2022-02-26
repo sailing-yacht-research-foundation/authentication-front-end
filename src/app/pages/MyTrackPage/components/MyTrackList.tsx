@@ -52,7 +52,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
                             }
-                            <Link to={`/playback/?raceId=${record.competitionUnit?.id}&trackId=${record?.trackJson?.id}`}>{!record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name}</Link>
+                            <Link to={() => renderTrackParamIfExists(record)}>{!record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name}</Link>
                         </FlexWrapper>
                     );
                 return (
@@ -130,6 +130,14 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             }
         },
     ];
+
+    const renderTrackParamIfExists = (record) => {
+        let url = `/playback/?raceId=${record.competitionUnit?.id}`;
+        if (record.trackJson?.id) {
+            url = `/playback/?raceId=${record.competitionUnit?.id}&trackId=${record?.trackJson?.id}`;
+        }
+        return url;
+    }
 
     React.useImperativeHandle(ref, () => ({
         reload() {

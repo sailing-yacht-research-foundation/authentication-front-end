@@ -5,7 +5,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectRaceTime, selectRealRaceTime, selectViewCounts } from './slice/selectors';
+import { selectCanIncreaseDecreaseSpeed, selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectRaceTime, selectRealRaceTime, selectViewCounts } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
 import { PlaybackTypes } from 'types/Playback';
 import { media } from 'styles/media';
@@ -37,6 +37,7 @@ export const Playback = (props) => {
     const viewCounts = useSelector(selectViewCounts);
     const raceTime = useSelector(selectRaceTime);
     const realRaceTime = useSelector(selectRealRaceTime);
+    const canIncreaseDecreaseSpeed = useSelector(selectCanIncreaseDecreaseSpeed);
 
     const dispatch = useDispatch();
 
@@ -114,7 +115,10 @@ export const Playback = (props) => {
     }
 
     const renderSpeedControl = () => {
-        return playbackType && [PlaybackTypes.OLDRACE].includes(playbackType) && <RightItemContainer>
+        return playbackType 
+            && canIncreaseDecreaseSpeed
+            && [PlaybackTypes.OLDRACE].includes(playbackType) 
+            && <RightItemContainer>
             <SpeedControl />
         </RightItemContainer>
     }

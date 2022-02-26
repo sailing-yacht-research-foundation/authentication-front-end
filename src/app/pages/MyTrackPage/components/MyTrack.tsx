@@ -68,7 +68,7 @@ export const MyTrack = () => {
       </PageHeaderContainerResponsive>
       <StyledTabs<React.ElementType> animated defaultActiveKey="1">
         <TabPane tab={renderIcon(BsListUl, translate.tracks)} key="1">
-          <MyTrackList ref={trackListRef}/>
+          <MyTrackList ref={trackListRef} />
         </TabPane>
 
         <TabPane tab={renderIcon(FiMap, translate.map)} key="2">
