@@ -59,7 +59,7 @@ export const GroupItemRow = (props) => {
     const undoJoin = async (e) => {
         e.stopPropagation();
         setIsLoading(true);
-        const response = await leaveGroup(group.id);
+        const response = await leaveGroup(group.id!);
         setIsLoading(false);
 
         handlePostJoinActions(response);
@@ -68,7 +68,7 @@ export const GroupItemRow = (props) => {
     const joinGroup = async (e) => {
         e.stopPropagation();
         setIsLoading(true);
-        const response = await requestJoinGroup(group.id);
+        const response = await requestJoinGroup(group.id!);
         setIsLoading(false);
 
         handlePostJoinActions(response);

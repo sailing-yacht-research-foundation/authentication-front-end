@@ -19,12 +19,12 @@ const defaultLottieOptions = {
   }
 };
 
-export function ForgotPasswordForm(props) {
+export function ForgotPasswordForm() {
   const [requestedResetPassword, setRequestedResetPassword] = React.useState(false);
 
   const [isSendingResetPasswordRequest, setIsSendingResetPasswordRequest] = React.useState<boolean>(false);
 
-  const [email, setEmail] = React.useState('');
+  const [email, setEmail] = React.useState<string>('');
 
   const { t } = useTranslation();
 
@@ -35,7 +35,7 @@ export function ForgotPasswordForm(props) {
     sendForgotPasswordCode(email);
   }
 
-  const sendForgotPasswordCode = async (email) => {
+  const sendForgotPasswordCode = async (email: string) => {
     setIsSendingResetPasswordRequest(true);
     const response = await sendForgotPassword(email);
     setIsSendingResetPasswordRequest(false);

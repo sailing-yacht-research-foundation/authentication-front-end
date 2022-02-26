@@ -6,10 +6,13 @@ import { PaginationContainer } from '../SyrfGeneral';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
+interface FollowRequestModal {
+    showModal: boolean,
+    setShowModal: Function,
+    reloadFollowRequestsCount?: Function
+}
 
-export const FollowRequestModal = (props) => {
-
-    const { showModal, setShowModal, reloadFollowRequestsCount } = props;
+export const FollowRequestModal = ({ showModal, setShowModal, reloadFollowRequestsCount } : FollowRequestModal) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -23,7 +26,7 @@ export const FollowRequestModal = (props) => {
 
     const reload = () => {
         getFollowRequests(pagination.page);
-        if (reloadFollowRequestsCount && typeof reloadFollowRequestsCount === 'function')
+        if (reloadFollowRequestsCount)
             reloadFollowRequestsCount();
     }
 
@@ -33,7 +36,7 @@ export const FollowRequestModal = (props) => {
         return <span>{t(translations.public_profile.you_dont_have_any_follow_requests)}</span>
     }
 
-    const getFollowRequests = async (page) => {
+    const getFollowRequests = async (page: number) => {
         setIsLoading(true);
         const response = await getRequestedFollowRequests(page);
         setIsLoading(false);

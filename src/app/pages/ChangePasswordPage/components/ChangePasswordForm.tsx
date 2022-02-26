@@ -16,7 +16,7 @@ import { translations } from 'locales/translations';
 import { changePassword } from 'services/live-data-server/user';
 import ReactTooltip from 'react-tooltip';
 
-export const ChangePasswordForm = (props) => {
+export const ChangePasswordForm = () => {
 
     const { t } = useTranslation();
 

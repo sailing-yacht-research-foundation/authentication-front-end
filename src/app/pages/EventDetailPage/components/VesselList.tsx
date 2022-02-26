@@ -9,8 +9,9 @@ import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
 import { useHistory } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
+import { CalendarEvent } from 'types/CalendarEvent';
 
-export const VesselList = (props) => {
+export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
 
     const { t } = useTranslation();
 
@@ -67,9 +68,9 @@ export const VesselList = (props) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const getAll = async (page) => {
+    const getAll = async (page: number) => {
         setIsLoading(true);
-        const response = await getEventRegisteredVessels(event.id, page);
+        const response = await getEventRegisteredVessels(event.id!, page);
         setIsLoading(false);
 
         if (response.success) {
@@ -82,7 +83,7 @@ export const VesselList = (props) => {
         }
     }
 
-    const onPaginationChanged = (page) => {
+    const onPaginationChanged = (page: number) => {
         getAll(page);
     }
 

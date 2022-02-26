@@ -304,7 +304,7 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
  * @param requestPromise 
  * @returns Formatted promise response.
  */
-export const formatServicePromiseResponse = (requestPromise) => {
+export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
     return requestPromise.then(response => {
         return {
             success: true,

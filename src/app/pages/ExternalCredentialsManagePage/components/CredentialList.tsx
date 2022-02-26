@@ -7,13 +7,16 @@ import { BorderedButton, DeleteButton, LottieMessage, LottieWrapper, PageDescrip
 import { Table, Spin, Space } from 'antd';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-credentials.json';
-import { getCredentialByPage } from 'services/live-data-server/external-platform';
+import { getCredentialByPage, removeCredential } from 'services/live-data-server/external-platform';
 import ReactTooltip from 'react-tooltip';
 import { CreateButton } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { LinkNewCredentialModal } from './modals/LinkNewCredentialModal';
-import { DeleteCredentialModal } from 'app/pages/VesselListPage/components/DeleteCredentialModal';
 import { MODE } from 'utils/constants';
+import { ConfirmModal } from 'app/components/ConfirmModal';
+import { toast } from 'react-toastify';
+import { showToastMessageOnRequestError } from 'utils/helpers';
+import { Credential } from 'types/Credential';
 
 const defaultOptions = {
     loop: true,
@@ -24,7 +27,7 @@ const defaultOptions = {
     }
 };
 
-export const CredentialList = (props) => {
+export const CredentialList = () => {
 
     const { t } = useTranslation();
 
@@ -50,10 +53,10 @@ export const CredentialList = (props) => {
             key: 'action',
             render: (text, record) => {
                 return <Space size={10}>
-                    <BorderedButton type="primary" onClick={()=> showUpdateCredentialModal(record)}>{t(translations.credentail_manager_page.edit)}</BorderedButton>
+                    <BorderedButton type="primary" onClick={() => showUpdateCredentialModal(record)}>{t(translations.credentail_manager_page.edit)}</BorderedButton>
                     <DeleteButton danger onClick={() => {
-                    showDeleteCredentialModal(record)
-                }}>{t(translations.credentail_manager_page.unlink)}</DeleteButton>
+                        showDeleteCredentialModal(record)
+                    }}>{t(translations.credentail_manager_page.unlink)}</DeleteButton>
                 </Space>;
             }
         },
@@ -69,7 +72,7 @@ export const CredentialList = (props) => {
 
     const [showCreateModal, setShowCreateModal] = React.useState<boolean>(false);
 
-    const [credential, setCredential] = React.useState<any>({});
+    const [credential, setCredential] = React.useState<Partial<Credential>>({});
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
@@ -80,7 +83,7 @@ export const CredentialList = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const getAll = async (page) => {
+    const getAll = async (page: number) => {
         setIsChangingPage(true);
         const response = await getCredentialByPage({ page, size: 10 });
         setIsChangingPage(false);
@@ -95,16 +98,16 @@ export const CredentialList = (props) => {
         }
     }
 
-    const onPaginationChanged = (page) => {
+    const onPaginationChanged = (page: number) => {
         getAll(page);
     }
 
-    const showDeleteCredentialModal = (credential) => {
+    const showDeleteCredentialModal = (credential: Credential) => {
         setShowDeleteModal(true);
         setCredential(credential);
     }
 
-    const showUpdateCredentialModal = (credential) => {
+    const showUpdateCredentialModal = (credential: Credential) => {
         setShowCreateModal(true);
         setMode(MODE.UPDATE);
         setCredential(credential);
@@ -120,10 +123,28 @@ export const CredentialList = (props) => {
         setShowCreateModal(true);
     }
 
+    const performDeleteCredential = async () => {
+        const response = await removeCredential(credential.id!);
+
+        setShowDeleteModal(false);
+
+        if (response.success) {
+            toast.success(t(translations.delete_credential_modal.successfully_deleted));
+            onCredentialDeleted();
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     return (
         <Wrapper>
             <ProfileTabs />
-            <DeleteCredentialModal onCredentialDeleted={onCredentialDeleted} credential={credential} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal}/>
+            <ConfirmModal
+                showModal={showDeleteModal}
+                onOk={performDeleteCredential}
+                onCancel={() => setShowDeleteModal(false)}
+                title={t(translations.delete_credential_modal.are_you_sure_you_want_to_delete)}
+                content={t(translations.delete_credential_modal.you_will_delete)} />
             <LinkNewCredentialModal mode={mode} credential={credential} reloadParent={() => getAll(pagination.page)} showModal={showCreateModal} setShowModal={setShowCreateModal} />
             <>
                 <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>

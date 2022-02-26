@@ -8,8 +8,22 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import ReactTooltip from 'react-tooltip';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
+import { CompetitionUnit } from 'types/CompetitionUnit';
+import { CalendarEvent } from 'types/CalendarEvent';
 
-export const RaceManageButtons = (props) => {
+interface RaceManageButtons {
+    race: CompetitionUnit,
+    canManageEvent: Function,
+    event: CalendarEvent,
+    setCompetitionUnit: Function,
+    showRegisterModal: boolean,
+    setShowRegisterModal: Function,
+    isAuthenticated: boolean,
+    showDeleteRaceModal: Function,
+    relations: any[]
+}
+
+export const RaceManageButtons = (props: RaceManageButtons) => {
     const { race, canManageEvent, event, setCompetitionUnit, showRegisterModal, setShowRegisterModal, isAuthenticated, showDeleteRaceModal, relations } = props;
 
     const history = useHistory();
@@ -36,9 +50,9 @@ export const RaceManageButtons = (props) => {
 
     const canRegisterToRace = () => { // race is scheduled and event is open and allow for registration and event status is on going or scheduled and the user is not admin.
         const isNotAdminOrParticipant = relation && !relation.isAdmin && !relation.isParticipating;
-        const eventIsRegattaAndOngoingOrScheduled = event.isOpen && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status);
+        const eventIsRegattaAndOngoingOrScheduled = event.isOpen && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status!);
         const isNotEventEditor = !event.isEditor;
-        const raceIsScheduled = [RaceStatus.SCHEDULED].includes(race.status);
+        const raceIsScheduled = [RaceStatus.SCHEDULED].includes(race.status!);
 
         return isNotAdminOrParticipant && eventIsRegattaAndOngoingOrScheduled && isNotEventEditor && raceIsScheduled;
     }
