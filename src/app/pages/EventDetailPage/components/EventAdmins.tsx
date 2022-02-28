@@ -9,14 +9,21 @@ import { renderAvatar } from 'utils/user-utils';
 import ReactTooltip from 'react-tooltip';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
+import { CalendarEvent } from 'types/CalendarEvent';
 
 const editorHeadlessStyles = {
     width: '25px',
     height: '25px',
     marginRight: '5px'
 }
+interface EventAdmins {
+    event: Partial<CalendarEvent>,
+    headless?: boolean,
+    groups?: any[],
+    editors?: any[]
+}
 
-export const EventAdmins = (props) => {
+export const EventAdmins = (props: EventAdmins) => {
 
     const { event, headless, groups, editors } = props;
 
@@ -32,7 +39,7 @@ export const EventAdmins = (props) => {
 
     const getAdmins = async () => {
         setIsLoading(true);
-        const response = await getEditors(event.id);
+        const response = await getEditors(event.id!);
         setIsLoading(false);
 
         if (response.success) {

@@ -6,8 +6,17 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { removeAsAdmin } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { Profile } from 'types/Profile';
 
-export const RemoveAsAdminModal = (props) => {
+interface RemoveAsAdminModal {
+    groupId: string,
+    member: any,
+    showModal: boolean,
+    setShowModal: Function,
+    onAdminRemoved: Function
+}
+
+export const RemoveAsAdminModal = (props: RemoveAsAdminModal) => {
 
     const { t } = useTranslation();
 

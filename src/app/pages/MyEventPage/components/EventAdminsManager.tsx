@@ -29,7 +29,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
 
     const getAdmins = async () => {
         setIsLoading(true);
-        const response = await getEditors(event.id);
+        const response = await getEditors(event.id!);
         setIsLoading(false);
 
         if (response.success) {

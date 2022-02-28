@@ -8,7 +8,13 @@ import { acceptFollowRequest, rejectFollowRequest } from '../../../services/live
 import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 
-export const RequestItem = (props) => {
+interface RequestItem {
+    request: any,
+    hideModal: Function,
+    reloadParentList?: Function
+}
+
+export const RequestItem = (props: RequestItem) => {
 
     const { t } = useTranslation();
 

@@ -10,11 +10,19 @@ import { toast } from 'react-toastify';
 import { joinCompetitionUnit } from 'services/live-data-server/open-competition';
 import { Vessel } from 'types/Vessel';
 
-export const RegisterRaceModal = (props) => {
+interface RegisterRaceModal {
+    showModal: boolean
+    setShowModal: Function,
+    raceName: string,
+    raceId: string,
+    lon: number,
+    lat: number,
+    setRelation?: Function
+}
+
+export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, lon, lat, setRelation } : RegisterRaceModal) => {
 
     const { t } = useTranslation();
-
-    const { showModal, setShowModal, raceName, raceId, lon, lat, setRelation } = props;
 
     const [boats, setBoats] = React.useState<Vessel[]>([]);
 
@@ -53,9 +61,9 @@ export const RegisterRaceModal = (props) => {
         if (response.success) {
             hideModal();
             toast.success(t(translations.home_page.successfully_registered_to_join_this_competition));
-            if (setRelation) setRelation({ 
+            if (setRelation) setRelation({
                 isParticipating: true
-             });
+            });
         } else {
             showToastMessageOnRequestError(response.error);
         }

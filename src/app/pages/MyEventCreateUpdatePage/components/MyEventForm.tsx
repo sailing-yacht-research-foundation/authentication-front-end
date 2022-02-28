@@ -301,7 +301,7 @@ export const MyEventForm = () => {
 
     const initData = async () => {
         setIsSavingEvent(true);
-        const response = await get(eventId || event?.id);
+        const response = await get(eventId || event?.id!);
         setIsSavingEvent(false);
 
         if (response.success) {

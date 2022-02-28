@@ -91,7 +91,7 @@ export const CompetitionUnitList = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const getAll = async (page) => {
+    const getAll = async (page: number) => {
         setIsChangingPage(true);
         const response = await getAllCompetitionUnits(page);
         setIsChangingPage(false);
@@ -106,11 +106,11 @@ export const CompetitionUnitList = () => {
         }
     }
 
-    const onPaginationChanged = (page) => {
+    const onPaginationChanged = (page: number) => {
         getAll(page);
     }
 
-    const showDeleteRaceModal = (competitionUnit) => {
+    const showDeleteRaceModal = (competitionUnit: CompetitionUnit) => {
         setShowDeleteModal(true);
         setCompetitionUnit(competitionUnit);
     }

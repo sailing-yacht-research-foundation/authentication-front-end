@@ -26,7 +26,7 @@ export const PDFItem = (props) => {
         fmData.append(pdfKey, file);
 
         setIsLoading(true);
-        const response = await uploadPdfs(event.id, fmData);
+        const response = await uploadPdfs(event.id!, fmData);
         setIsLoading(false);
 
         if (response.success) {

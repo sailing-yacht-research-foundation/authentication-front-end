@@ -159,14 +159,14 @@ export const CompetitionUnitForm = () => {
         }
     }
 
-    const canManageRace = (event) => {
+    const canManageRace = (event: CalendarEvent) => {
         if (!event.isEditor) {
             toast.info(t(translations.competition_unit_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
             history.push('/events');
             return false;
         }
 
-        if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status)) {
+        if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status!)) {
             toast.info(t(translations.competition_unit_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
             history.push('/events');
             return false;
@@ -187,7 +187,7 @@ export const CompetitionUnitForm = () => {
         return false;
     }
 
-    const setDefaultClassForRace = (vesselGroups) => {
+    const setDefaultClassForRace = (vesselGroups: VesselParticipantGroup[]) => {
         if (location.pathname.includes(MODE.UPDATE)) return;
 
         const defaultVesselGroup = vesselGroups[0];

@@ -12,7 +12,7 @@ if (uuid === null) {
         localStorage.setItem('uuid', uuid);
 }
 
-export const login = ({ email, password }) => {
+export const login = ({ email, password }: { email: string, password: string }) => {
     return axios.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/login`, {
         username: email,
         password: password,
@@ -49,7 +49,7 @@ export const anonymousLogin = () => {
     })
 }
 
-export const validateToken = (token) => {
+export const validateToken = (token: string) => {
     return syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/validate-token`, {
         token: token,
         renew: false
@@ -68,7 +68,7 @@ export const validateToken = (token) => {
 }
 
 
-export const renewToken = (refreshToken) => {
+export const renewToken = (refreshToken: string) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/renew-token`, {
         refresh_token: refreshToken
     }));
@@ -76,17 +76,17 @@ export const renewToken = (refreshToken) => {
 
 export const register = (data) => {
     return axios.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`, data)
-    .then(response => {
-        return {
-            success: true,
-            user: response.data.user
-        }
-    }).catch(error => {
-        return {
-            sucess: false,
-            error: error
-        }
-    })
+        .then(response => {
+            return {
+                success: true,
+                user: response.data.user
+            }
+        }).catch(error => {
+            return {
+                sucess: false,
+                error: error
+            }
+        })
 }
 
 export const verifyEmail = () => {
@@ -99,7 +99,7 @@ export const sendForgotPassword = (email) => {
     }));
 }
 
-export const logout = (refresh_token) => {
+export const logout = (refresh_token: string) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/logout`, {
         refresh_token
     }));
