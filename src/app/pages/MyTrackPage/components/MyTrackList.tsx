@@ -134,7 +134,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
     const renderTrackParamIfExists = (record) => {
         let url = `/playback/?raceId=${record.competitionUnit?.id}`;
         if (record.trackJson?.id) {
-            url = `/playback/?raceId=${record.competitionUnit?.id}&trackId=${record?.trackJson?.id}`;
+            url += `&trackId=${record.trackJson.id}`;
         }
         return url;
     }
