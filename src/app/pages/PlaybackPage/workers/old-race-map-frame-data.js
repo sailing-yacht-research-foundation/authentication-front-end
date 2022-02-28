@@ -93,7 +93,7 @@ const workercode = () => {
                 const nearestPos = findNearestPositions(vP.positions, selectedTimestamp, 1000, { excludeSelectedTimestamp: true });
                 const interpolatedPosition = interpolateNearestPositions(nearestPos, selectedTimestamp);
 
-                if (interpolatedPosition) {
+                if (interpolatedPosition && validateLatLng(interpolatedPosition.lat, interpolatedPosition.lon)) {
                     lastPosition.lat = interpolatedPosition.lat;
                     lastPosition.lon = interpolatedPosition.lon;
                 }
@@ -200,6 +200,11 @@ const workercode = () => {
         bearing = toDegrees(bearing);
         return (bearing + 360) % 360;
     };
+
+    function validateLatLng(lat, lng) {    
+        let pattern = new RegExp('^-?([1-8]?[1-9]|[1-9]0)\\.{1}\\d{1,6}');
+        return pattern.test(lat) && pattern.test(lng);
+      }
 };
 
 let code = workercode.toString();
