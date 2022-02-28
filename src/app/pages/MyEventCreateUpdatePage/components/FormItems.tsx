@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Form, Select, Switch, Row, Col } from 'antd';
 import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfInputNumber } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
-import { EventState, MODE } from 'utils/constants';
+import { certifications, EventState, EventTypes, MODE } from 'utils/constants';
 import { useLocation } from 'react-router-dom';
 import { getValidOrganizableGroup } from 'services/live-data-server/groups';
 import { ItemAvatar } from 'app/components/SyrfGeneral';
@@ -27,8 +27,11 @@ export const FormItems = (props) => {
 
     const [validGroups, setValidGroups] = React.useState<any[]>([]);
 
+    const [selectedEventType, setSelectedEventType] = React.useState<string>('');
+
     const eventTypes = [
         { name: 'One Design', value: 'ONE_DESIGN' },
+        { name: 'Handicap Race', value: 'HANDICAP_RACE' },
         { name: 'Kite Surfing', value: 'KITESURFING' },
         { name: 'Winging', value: 'WINGING' },
         { name: 'Wind Surfing', value: 'WINDSURFING' },
@@ -47,6 +50,7 @@ export const FormItems = (props) => {
             setSelectedOrganizerGroup(!!event.organizerGroupId)
             setIsCrewed(!!event.isCrewed);
             setParticipatingFee(!!event.participatingFee ? event.participatingFee : 0);
+            setSelectedEventType(event.eventTypes);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, event]);
@@ -74,6 +78,10 @@ export const FormItems = (props) => {
         }
     }
 
+    const renderCertificationsDropdownList = () => {
+        return certifications.map((type, index) => <Select.Option key={index} value={type}>{type}</Select.Option>)
+    }
+
     React.useEffect(() => {
         getAllValidOrganizerGroups();
     }, []);
@@ -87,7 +95,7 @@ export const FormItems = (props) => {
                         name="eventTypes"
                         data-tip={t(translations.tip.event_types)}
                     >
-                        <SyrfFormSelect>
+                        <SyrfFormSelect onChange={value => setSelectedEventType(String(value))}>
                             {renderEventTypesSelection()}
                         </SyrfFormSelect>
                     </Form.Item>
@@ -104,14 +112,14 @@ export const FormItems = (props) => {
             </Row>
 
             <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.organizer_group)}</SyrfFieldLabel>}
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.planning_organization)}</SyrfFieldLabel>}
                 name="organizerGroupId">
                 <SyrfFormSelect onChange={value => setSelectedOrganizerGroup(!!value)}>
                     {renderValidOrganizerGroups()}
                 </SyrfFormSelect>
             </Form.Item>
 
-            { selectedOrganizerGroup &&
+            {selectedOrganizerGroup &&
                 <Row gutter={12}>
                     <Col xs={24} sm={24} md={participantFeeValid ? 12 : 24} lg={participantFeeValid ? 12 : 24}>
                         <Form.Item
@@ -192,12 +200,16 @@ export const FormItems = (props) => {
                 </>}
             </Row>
 
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_certifications)}</SyrfFieldLabel>}
-                name="requiredCertifications"
-            >
-                <SyrfInputField placeholder={t(translations.forms.please_input_in_commas_separated_format)} />
-            </Form.Item>
+            {
+                EventTypes.HANDICAP_RACE === selectedEventType && <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_certificates)}</SyrfFieldLabel>}
+                    name="requiredCertifications"
+                >
+                    <SyrfFormSelect mode="multiple">
+                        {renderCertificationsDropdownList()}
+                    </SyrfFormSelect>
+                </Form.Item>
+            }
 
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
@@ -216,7 +228,7 @@ export const FormItems = (props) => {
                 data-tip={t(translations.tip.regatta)}
                 valuePropName="checked"
             >
-                <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} checkedChildren={'Open Regatta'} />
+                <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} />
             </Form.Item>
         </>
     )

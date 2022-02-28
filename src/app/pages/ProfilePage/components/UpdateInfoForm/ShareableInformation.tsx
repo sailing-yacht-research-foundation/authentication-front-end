@@ -1,13 +1,14 @@
 import React from 'react';
-import { Col, Row, Form, DatePicker, Button, Image } from 'antd';
+import { Col, Row, Form, DatePicker, Button, Image, Select } from 'antd';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { SyrfFieldLabel, SyrfFormTitle, SyrfInputField, SyrfPhoneInput } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormSelect, SyrfFormTitle, SyrfInputField, SyrfPhoneInput } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { removeCovidCard, removePassportPhoto } from 'services/live-data-server/user';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { FormPhotoHeaderContainer, FormPhotoWrapper } from 'app/components/SyrfGeneral';
+import { certifications } from 'utils/constants';
 
 export const ShareableInformation = (props) => {
 
@@ -54,6 +55,10 @@ export const ShareableInformation = (props) => {
         }
 
         setShowRemoveCovidCardConfirmModal(false);
+    }
+
+    const renderCertificationsDropdownList = () => {
+        return certifications.map((type, index) => <Select.Option key={index} value={type}>{type}</Select.Option>)
     }
 
     return (
@@ -204,16 +209,10 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.certifications)}</SyrfFieldLabel>}
                         name="certifications"
                         data-tip={t(translations.profile_page.update_profile.certifications)}
-                        rules={[() => ({ // add custom validator here to avoid antd form issue with field name certifications.
-                            validator(_, value) {
-                                if (value && value.length > 125) {
-                                    return Promise.reject(t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 125 }));
-                                }
-                                return Promise.resolve();
-                            },
-                        })]}
                     >
-                        <SyrfInputField />
+                        <SyrfFormSelect mode="multiple">
+                            {renderCertificationsDropdownList()}
+                        </SyrfFormSelect>
                     </Form.Item>
                 </Col>
 
