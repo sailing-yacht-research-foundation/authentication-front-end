@@ -112,9 +112,8 @@ export const PlaybackPage = (props) => {
   };
 
   const checkForUrlParams = () => {
-    const search = location.search.substring(1);
-    const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
-    if (params.fullScreen && params.fullScreen === 'true') {
+    const params = new URLSearchParams(location.search);
+    if (params.get('fullScreen') === 'true') {
       dispatch(actions.setIsSimplifiedPlayback(true));
     }
   }
@@ -129,7 +128,7 @@ export const PlaybackPage = (props) => {
 
   return (
     <Wrapper style={{ marginTop: isSimplifiedPlayback ? '0' : `${StyleConstants.NAV_BAR_HEIGHT}px` }} ref={playbackContainerRef}>
-      <PageHeadContainer style={{ display: isSimplifiedPlayback ? 'none' : 'block' }}>
+      <PageHeadContainer style={{ display: isSimplifiedPlayback ? 'none' : 'flex' }}>
         <GobackButton onClick={handleHistoryGoBack}>
           <IoIosArrowBack style={{ fontSize: "40px", color: "#1890ff" }} />
         </GobackButton>
