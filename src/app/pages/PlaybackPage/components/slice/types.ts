@@ -22,6 +22,7 @@ export interface PlaybackState {
     isConnecting?: boolean,
     speed?: number;
     viewsCount: number;
+    isSimplifiedPlayback: boolean;
 }
 
 export type ContainerState = PlaybackState;

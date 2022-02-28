@@ -100,3 +100,8 @@ export const selectViewCounts = createSelector(
   [selectDomain],
   (playbackState) => playbackState.viewsCount
 )
+
+export const selectIsSimplifiedPlayback = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.isSimplifiedPlayback
+)
