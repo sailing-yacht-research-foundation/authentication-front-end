@@ -218,3 +218,5 @@ export enum ImportTrackType {
     GPX = 'gpx',
     EXPEDITION = 'csv'
 }
+
+export const certifications = ['ORC', 'ORR', 'IRC'];

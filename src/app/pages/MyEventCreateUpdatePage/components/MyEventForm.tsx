@@ -76,7 +76,7 @@ export const MyEventForm = () => {
         let currentDate = moment();
         let currentTime = moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
-        const certifications = !!requiredCertifications ? requiredCertifications.split(',') : [];
+        const certifications = requiredCertifications || [];
 
         const startTimeValidation = handleCheckIsStartTimeValid();
         const endTimeValidation = handleCheckIsEndDateTimeValid();
@@ -329,7 +329,7 @@ export const MyEventForm = () => {
                     name: editor.groupName,
                     isIndividualAssignment: false
                 }))],
-                requiredCertifications: response.data?.requiredCertifications.join(',')
+                requiredCertifications: response.data?.requiredCertifications
             });
             setEvent(response.data);
             setCoordinates({
