@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Form, Input, DatePicker, Row, Col, Spin } from 'antd';
+import { Form, Input, DatePicker, Row, Col, Spin, Button } from 'antd';
 import { SyrfFormButton } from 'app/components/SyrfForm';
 import { media } from 'styles/media';
 import { AiFillCloseCircle } from 'react-icons/ai';
@@ -236,6 +236,7 @@ export const FilterPane = (props) => {
                     </Form.Item>
                 </Form>
             </Spin>
+            {searchKeyword.length > 0 && <Button onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</Button> }
         </Wrapper >
     )
 }
