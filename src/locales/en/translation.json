@@ -44,9 +44,10 @@
     "register_as_competitor": "Register as Competitor",
     "live_and_upcoming": {
       "live_and_upcoming_races": "Live and upcoming races.",
+      "live_and_upcoming_events": "Live and Upcoming Events",
       "miles": "miles",
       "nmi": "NMi",
-      "there_are_no_live_or_upcoming_races": "There are no live or upcoming races."
+      "there_are_no_live_or_upcoming_races": "There are no live or upcoming races or events, please extend the filter to discover more."
     }
   },
   "about_page": {
@@ -553,9 +554,9 @@
     "is_crewed": "Is Crewed",
     "min_crew": "Min. Crews",
     "max_crew": "Max. Crews",
-    "require_covid_vaccination": "Require COVID Vaccination?",
-    "require_certifications": "Require certifications?",
-    "organizer_group": "Organizer Group",
+    "require_covid_vaccination": "Require COVID Vaccination",
+    "require_certificates": "Require Certificates",
+    "planning_organization": "Planning Organization",
     "pdf_documents":"PDF documents",
     "download_all":"Download All",
     "download": "Download",

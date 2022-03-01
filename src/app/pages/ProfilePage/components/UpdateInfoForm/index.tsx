@@ -103,6 +103,8 @@ export const UpdateInfo = (props) => {
                     if (value instanceof File) {
                         form.append(key, value);
                     }
+                } else if ('certifications' === key && !!value && Array.isArray(value)) {
+                    form.append(key, value.join(','));
                 } else {
                     form.append(key, value || '');
                 }
@@ -141,7 +143,7 @@ export const UpdateInfo = (props) => {
                 ...info,
                 passportIssueDate: info?.passportIssueDate ? moment(info.passportIssueDate) : '',
                 passportExpirationDate: info?.passportExpirationDate ? moment(info.passportExpirationDate) : '',
-                foodAllergies: info?.foodAllergies ? info.foodAllergies.join(", ") : ''
+                foodAllergies: info?.foodAllergies ? info.foodAllergies.join(", ") : '',
             });
             setShareableInformation(info);
         }

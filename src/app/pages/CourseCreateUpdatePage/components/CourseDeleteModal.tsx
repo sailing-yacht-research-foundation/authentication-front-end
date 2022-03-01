@@ -6,8 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { deleteCourse } from 'services/live-data-server/courses';
 import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { Course } from 'types/Course';
 
-export const CourseDeleteModal = (props) => {
+interface CourseDeleteModal {
+    course: Partial<Course>,
+    showDeleteModal: boolean,
+    setShowDeleteModal: Function,
+    onCourseDeleted: Function
+}
+
+export const CourseDeleteModal = (props: CourseDeleteModal) => {
 
     const { t } = useTranslation();
 
@@ -19,7 +27,7 @@ export const CourseDeleteModal = (props) => {
     } = props;
 
     const performDeleteCourse = async () => {
-        const response = await deleteCourse(course.id);
+        const response = await deleteCourse(course.id!);
 
         setShowDeleteModal(false);
 

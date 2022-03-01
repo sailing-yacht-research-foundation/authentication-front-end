@@ -379,9 +379,8 @@ export const PlaybackOldRace = (props) => {
   }
 
   const setTrackIdIfExists = () => {
-    const search = location.search.substring(1);
-    const params = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
-    if (params.trackId) trackIdRef.current = params.trackId;
+    const params = new URLSearchParams(location.search);
+    if (params.get('trackId')) trackIdRef.current = params.get('trackId') || '';
   }
 
   const addNewVesselParticipantToTheRace = (data) => {

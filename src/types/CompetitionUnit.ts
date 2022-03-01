@@ -1,3 +1,4 @@
+import { RaceStatus } from "utils/constants";
 import { CalendarEvent } from "./CalendarEvent";
 import { EventLocation } from "./EventLocation";
 
@@ -21,7 +22,7 @@ export interface CompetitionUnit {
     approximateEndLocation: any;
     country: string;
     city: string;
-    status: string;
+    status: RaceStatus;
     openGraphImage: string;
     scrapedOriginalId: string;
     scrapedUrl: string;

@@ -1,8 +1,9 @@
 import { SYRF_SERVER } from 'services/service-constants';
+import { Participant } from 'types/Participant';
 import { formatServicePromiseResponse } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
-export const getAllByCalendarEventId = (calendarEventId, page, size = 10) => {
+export const getAllByCalendarEventId = (calendarEventId: string, page: number, size: number = 10) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants`, {
         params: {
             page: page,
@@ -11,7 +12,7 @@ export const getAllByCalendarEventId = (calendarEventId, page, size = 10) => {
     }))
 }
 
-export const getAllByCalendarEventIdWithFilter = (calendarEventId, page, assignMode) => {
+export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page: number, assignMode: string) => {
     let assign: any = null;
     if (assignMode === 'all') {
         assign = null;
@@ -25,7 +26,7 @@ export const getAllByCalendarEventIdWithFilter = (calendarEventId, page, assignM
     }))
 }
 
-export const get = (id) => {
+export const get = (id: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${id}`))
 }
 
@@ -35,31 +36,29 @@ export const create = (data) => {
     }))
 }
 
-export const update = (id, data) => {
-    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${id}`, {
-        ...data
-    }))
+export const update = (id: string, data) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${id}`, data))
 }
 
-export const deleteParticipant = (id) => {
+export const deleteParticipant = (id: string) => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${id}`))
 }
 
-export const getAllByVesselParticipantId = (vesselParticipantId) => {
+export const getAllByVesselParticipantId = (vesselParticipantId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants/${vesselParticipantId}/participants`))
 }
 
-export const registerParticipantsToVesselParticipant = (vesselParticipantId, participants: any[]) => {
+export const registerParticipantsToVesselParticipant = (vesselParticipantId: string, participants: any[]) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants/${vesselParticipantId}/participants`, {
         participantIds: participants
     }))
 }
 
-export const unregisterParticipantFromVesselParticipant = (vesselParticipantId, participantId) => {
+export const unregisterParticipantFromVesselParticipant = (vesselParticipantId: string, participantId: string) => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants/${vesselParticipantId}/participants/${participantId}`))
 }
 
-export const getMyInvitedEvents = (page, size = 10) => {
+export const getMyInvitedEvents = (page: number, size: number = 10) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/my-invitation`, {
         params: {
             page,
@@ -68,18 +67,18 @@ export const getMyInvitedEvents = (page, size = 10) => {
     }))
 }
 
-export const acceptInvitation = (requestId, vesselId, vesselParticipantGroupId) => {
+export const acceptInvitation = (requestId: string, vesselId: string, vesselParticipantGroupId: string) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${requestId}/accept-invitation`, {
         vesselId,
         vesselParticipantGroupId
     }))
 }
 
-export const rejectInvitation = (requestId) => {
+export const rejectInvitation = (requestId: string) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${requestId}/reject-invitation`));
 }
 
-export const blockParticipant = (participantId) => {
+export const blockParticipant = (participantId: string) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${participantId}/block`));
 }
 

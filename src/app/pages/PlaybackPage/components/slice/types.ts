@@ -23,6 +23,7 @@ export interface PlaybackState {
     speed?: number;
     viewsCount: number;
     canIncreaseDecreaseSpeed: boolean;
+    isSimplifiedPlayback: boolean;
 }
 
 export type ContainerState = PlaybackState;

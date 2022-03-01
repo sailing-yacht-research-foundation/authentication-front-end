@@ -32,6 +32,8 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
         {
             mode === MODE.UPDATE && (
                 <>
+                    <PDFUploadForm event={event} reloadParent={reloadParent} />
+
                     <SyrfFormWrapper ref={raceListRef}>
                         <CompetitionUnitList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
@@ -47,8 +49,6 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
                     <SyrfFormWrapper>
                         <ParticipantList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
-
-                    <PDFUploadForm event={event} reloadParent={reloadParent} />
 
                     {
                         event.status === EventState.DRAFT && <SyrfFormWrapper>

@@ -26,7 +26,7 @@ export const PDFItem = (props) => {
         fmData.append(pdfKey, file);
 
         setIsLoading(true);
-        const response = await uploadPdfs(event.id, fmData);
+        const response = await uploadPdfs(event.id!, fmData);
         setIsLoading(false);
 
         if (response.success) {
@@ -38,20 +38,24 @@ export const PDFItem = (props) => {
         }
     }
 
+    const canUpload = () => {
+        return event.isEditor;
+    }
+
     const getFileDownloadURLUsingPdfKey = (pdfKey) => {
         return event[pdfKey];
     }
 
     return (<List.Item
         actions={[<Spin spinning={isLoading}>
-            <Upload
+            {canUpload() && <Upload
                 accept=".pdf"
                 showUploadList={false}
                 customRequest={options => uploadPDF(options, item.formFieldName)}
             >
                 <Button type="link">{t(translations.my_event_create_update_page.upload)}</Button>
-            </Upload>
-        </Spin>, checkIfPdfExist(item.formFieldName) && <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a>]}
+            </Upload>}
+        </Spin>, checkIfPdfExist(item.formFieldName) ? <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a> : <span>N/A</span>]}
     >
         <span>{item.name}</span>
     </List.Item>)

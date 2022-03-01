@@ -45,7 +45,7 @@ export const SiderContent = (props) => {
 
   const [selectedKey, setSelectedKey] = React.useState<string>('1');
 
-  const [openKey, setOpenKey] = React.useState('');
+  const [openKey, setOpenKey] = React.useState<string>('');
 
   const [renderedDefaultActive, setRenderedDefaultActive] = React.useState<boolean>(false);
 

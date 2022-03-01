@@ -66,6 +66,7 @@ import { TourProvider } from '@reactour/tour';
 import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
+import { selectIsSimplifiedPlayback } from './pages/PlaybackPage/components/slice/selectors';
 
 const { Sider, Content } = Layout;
 
@@ -106,6 +107,8 @@ export function App(props) {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const isSiderToggled = useSelector(selectIsSiderToggled);
+
+  const isSimplifiedPlayback = useSelector(selectIsSimplifiedPlayback);
 
   const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
 
@@ -158,7 +161,7 @@ export function App(props) {
   }
 
   const renderSider = () => {
-    if (isAuthenticated && isSiderToggled)
+    if (isAuthenticated && isSiderToggled && !isSimplifiedPlayback)
       return (
         <StyledSider
           collapsible
@@ -177,7 +180,7 @@ export function App(props) {
   return (
     <BrowserRouter>
       <Layout style={{ minHeight: '100vh' }}>
-        <Header />
+        { !isSimplifiedPlayback && <Header /> }
         <AgreementModal />
         {renderSider()}
         <Layout className="site-layout">

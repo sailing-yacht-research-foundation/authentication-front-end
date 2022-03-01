@@ -34,6 +34,7 @@ export const initialState: PlaybackState = {
     speed: 1,
     viewsCount: 0,
     canIncreaseDecreaseSpeed: true,
+    isSimplifiedPlayback: false,
 };
 
 const slice = createSlice({
@@ -110,7 +111,10 @@ const slice = createSlice({
         },
         setCanIncreaseDecreaseSpeed(state, action: PayloadAction<boolean>) {
             state.canIncreaseDecreaseSpeed = action.payload;
-        }
+        },
+        setIsSimplifiedPlayback(state, action: PayloadAction<boolean>) {
+            state.isSimplifiedPlayback = action.payload;
+        },
     },
 });
 

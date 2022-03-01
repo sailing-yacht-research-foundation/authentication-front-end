@@ -6,8 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { deleteCompetitionUnit } from 'services/live-data-server/competition-units';
 import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { CompetitionUnit } from 'types/CompetitionUnit';
 
-export const DeleteCompetitionUnitModal = (props) => {
+interface DeleteCompetitionUnitModal {
+    competitionUnit: Partial<CompetitionUnit>,
+    showDeleteModal: boolean,
+    setShowDeleteModal: Function,
+    onCompetitionUnitDeleted: Function
+}
+
+export const DeleteCompetitionUnitModal = (props: DeleteCompetitionUnitModal) => {
 
     const { t } = useTranslation();
 

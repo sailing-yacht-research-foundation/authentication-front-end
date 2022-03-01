@@ -64,13 +64,13 @@ export const search = (params) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
 
-export const create = (calendarEventId, data) => {
+export const create = (calendarEventId: string, data) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
         ...data
     }))
 }
 
-export const getAllByCalendarEventId = (calendarEventId, page, size = 10) => {
+export const getAllByCalendarEventId = (calendarEventId: string, page: number, size: number = 10) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
         params: {
             page: page,
@@ -79,7 +79,7 @@ export const getAllByCalendarEventId = (calendarEventId, page, size = 10) => {
     }));
 }
 
-export const getAllCompetitionUnits = (page) => {
+export const getAllCompetitionUnits = (page: number) => {
     const userId: any = localStorage.getItem('user_id');
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units${!!userId ? `?createdById_eq=${userId}` : ''}`, {
         params: {
@@ -88,17 +88,17 @@ export const getAllCompetitionUnits = (page) => {
     }))
 }
 
-export const get = (calendarEventId, competitionUnitId) => {
+export const get = (calendarEventId: string, competitionUnitId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`))
 }
 
-export const update = (calendarEventId, competitionUnitId, data) => {
+export const update = (calendarEventId: string, competitionUnitId: string, data) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`, {
         ...data
     }))
 }
 
-export const deleteCompetitionUnit = (calendarEventId, competitionUnitId) => {
+export const deleteCompetitionUnit = (calendarEventId?: string, competitionUnitId?: string) => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units/${competitionUnitId}`))
 }
 
@@ -106,7 +106,7 @@ export const getCompetitionUnitList = () => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units`))
 }
 
-export const getCompetitionUnitById = (id) => {
+export const getCompetitionUnitById = (id: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}`));
 };
 
@@ -124,14 +124,14 @@ export const searchScrapedRaceById = (id: string) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
 
-export const cloneCourse = (fromCompetitionUnitId, toCompetitionUnitId, newName) => {
+export const cloneCourse = (fromCompetitionUnitId: string, toCompetitionUnitId: string, newName: string) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${toCompetitionUnitId}/clone-course`, {
         cloneFromCompetitionId: fromCompetitionUnitId,
         newName: newName
     }))
 }
 
-export const getAllCompetitionUnitsByEventIdWithSort = (calendarEventId, page) => {
+export const getAllCompetitionUnitsByEventIdWithSort = (calendarEventId: string, page: number) => {
     const userId: any = localStorage.getItem('user_id');
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units?sort=createdAt&srdir=-1${!!userId ? `&createdById_eq=${userId}` : ''}`, {
         params: {
@@ -156,7 +156,7 @@ export const getCourseByCompetitionUnit = (id: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/course`))
 }
 
-export const getSuggestion = (fieldName, word) => {
+export const getSuggestion = (fieldName: string, word: string) => {
     const searchParams = {
         "suggest": {
             "autocomplete": {
@@ -175,15 +175,15 @@ export const getSuggestion = (fieldName, word) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/search`, searchParams))
 }
 
-export const getRaceViewsCount = (competitionUnitId) => {
+export const getRaceViewsCount = (competitionUnitId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/viewers-count`));
 }
 
-export const stopRace = (competitionUnitId) => {
+export const stopRace = (competitionUnitId: string) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/stop-race`));
 }
 
-export const startRace = (competitionUnitId) => {
+export const startRace = (competitionUnitId: string) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/prepare-race`));
 }
 

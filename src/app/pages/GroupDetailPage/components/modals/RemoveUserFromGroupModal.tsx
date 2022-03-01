@@ -6,8 +6,17 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { removeMemberFromTheGroup } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { Profile } from 'types/Profile';
 
-export const RemoveMemberFromGroupModal = (props) => {
+interface RemoveMemberFromGroupModal {
+    groupId: string,
+    member: any,
+    showModal: boolean,
+    setShowModal: Function,
+    onMemberRemoved: Function
+}
+
+export const RemoveMemberFromGroupModal = (props: RemoveMemberFromGroupModal) => {
 
     const { t } = useTranslation();
 

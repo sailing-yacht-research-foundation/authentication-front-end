@@ -100,7 +100,7 @@ export const GroupForm = () => {
                 toast.success(t(translations.group_create_update_page.successfully_updated_your_group));
             }
 
-            history.push(`/groups/${response?.data?.id}`);
+            history.push(`/groups/${response.data?.id}`);
             setMode(MODE.UPDATE);
         } else {
             showToastMessageOnRequestError(response.error)

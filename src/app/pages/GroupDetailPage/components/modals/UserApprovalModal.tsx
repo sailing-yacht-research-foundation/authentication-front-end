@@ -22,7 +22,7 @@ export const UserApprovalModal = (props) => {
         rows: []
     });
 
-    const getJoinRequests = async (page) => {
+    const getJoinRequests = async (page: number) => {
         setIsLoading(true);
         const response = await getUserJoinRequests(groupId, page);
         setIsLoading(false);
@@ -38,10 +38,10 @@ export const UserApprovalModal = (props) => {
     }
 
     const renderAdmins = () => {
-        return pagination.rows.map((item, index) => <UserItemRow key={index} item={item} buttons={renderActionButtons(item)} />);
+        return pagination.rows.map((item, index) => <UserItemRow key={index} item={item} buttons={renderActionButtons()} />);
     }
 
-    const onPaginationChanged = (page) => {
+    const onPaginationChanged = (page: number) => {
         getJoinRequests(page);
     }
 
@@ -50,7 +50,7 @@ export const UserApprovalModal = (props) => {
     }, []);
 
 
-    const renderActionButtons = (item) => {
+    const renderActionButtons = () => {
         return (
             <Space size={10}>
                 <Button type="primary" icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
@@ -62,6 +62,7 @@ export const UserApprovalModal = (props) => {
             </Space>
         );
     }
+    
     return (
         <Modal
             title={'Admin Manager'}
