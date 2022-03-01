@@ -74,6 +74,7 @@ export const PlaybackOldRace = (props) => {
   const vesselParticipantsPreviousHeading = useRef<any>({});
   const courseGeometries = useRef<any[]>([]);
   const rawSimplifiedTracks = useRef<any>([]);
+  const trackIdRef =useRef<string>();
 
   const competitionUnitId = useSelector(selectCompetitionUnitId);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
@@ -87,7 +88,6 @@ export const PlaybackOldRace = (props) => {
   const raceLength = useSelector(selectRaceLength);
   const userCoordinate = useSelector(selectUserCoordinate);
   const playbackSpeed = useSelector(selectPlaybackSpeed);
-  const [trackId, setTrackId] = React.useState<string>('');
 
   const { actions } = usePlaybackSlice();
 
@@ -168,7 +168,7 @@ export const PlaybackOldRace = (props) => {
         startTimeFetch: raceTime.start,
         timeToLoad: 30,
       };
-      if (trackId) socketParams.trackId = trackId;
+      if (trackIdRef.current) socketParams.trackId = trackIdRef.current;
       socketWorker?.postMessage({
         action: WorkerEvent.SEND_WS_MESSAGE,
         data: {
@@ -222,7 +222,7 @@ export const PlaybackOldRace = (props) => {
         data: {
           vesselParticipants: vesselParticipantsRef.current,
           competitionUnitId: competitionUnitId,
-          trackId: trackId
+          trackId: trackIdRef.current
         }
       });
     }
@@ -380,7 +380,7 @@ export const PlaybackOldRace = (props) => {
 
   const setTrackIdIfExists = () => {
     const params = new URLSearchParams(location.search);
-    if (params.get('trackId')) setTrackId(params.get('trackId')!);
+    if (params.get('trackId')) trackIdRef.current = params.get('trackId') || '';
   }
 
   const addNewVesselParticipantToTheRace = (data) => {
@@ -472,6 +472,9 @@ export const PlaybackOldRace = (props) => {
       } else {
         dispatch(actions.getAndSetRaceLengthUsingServerData({ raceId: competitionUnitId }));
       }
+    } else {
+      dispatch(actions.getAndSetRaceLengthUsingServerData({ raceId: competitionUnitId }));
+      dispatch(actions.setCanIncreaseDecreaseSpeed(false));
     }
 
     setIsLoading(false);
@@ -528,7 +531,7 @@ export const PlaybackOldRace = (props) => {
     const vesselParticipants = vesselParticipantsRef.current;
 
     // If no retrieved timestamps
-    if (!retrievedTimestamps.length || !isPlaying || !Object.keys(vesselParticipants)?.length) {
+    if ( !isPlaying || (!trackIdRef.current && (!retrievedTimestamps.length || !Object.keys(vesselParticipants)?.length))) {
       return;
     }
 

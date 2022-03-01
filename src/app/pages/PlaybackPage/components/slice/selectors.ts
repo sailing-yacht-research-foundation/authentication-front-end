@@ -101,6 +101,11 @@ export const selectViewCounts = createSelector(
   (playbackState) => playbackState.viewsCount
 )
 
+export const selectCanIncreaseDecreaseSpeed = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.canIncreaseDecreaseSpeed
+)
+
 export const selectIsSimplifiedPlayback = createSelector(
   [selectDomain],
   (playbackState) => playbackState.isSimplifiedPlayback

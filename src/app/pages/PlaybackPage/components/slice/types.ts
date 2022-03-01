@@ -22,6 +22,7 @@ export interface PlaybackState {
     isConnecting?: boolean,
     speed?: number;
     viewsCount: number;
+    canIncreaseDecreaseSpeed: boolean;
     isSimplifiedPlayback: boolean;
 }
 
