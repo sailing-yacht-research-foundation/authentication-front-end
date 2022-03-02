@@ -17,6 +17,7 @@ import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUp
 import { selectLastSubscribedCompetitionUnitId } from 'app/pages/CompetitionUnitCreateUpdatePage/slice/selectors';
 import { logout as ldsLogout } from 'services/live-data-server/auth';
 import { FollowRequest } from 'app/components/SocialProfile';
+import { UserNotification } from '../Notification';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -65,7 +66,10 @@ export const Nav = () => {
     <Wrapper>
       {isAuthenenticated ? (
         <>
-          <FollowRequest />
+          <UserNotification />
+
+          {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
+
           <StyledButtonCreate
             type="primary"
             shape="round"
@@ -75,7 +79,6 @@ export const Nav = () => {
             onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
               style={{ marginRight: '5px' }}
               size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>
-          {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
           <DropDownWrapper>
             <UserDropdown logout={logout} />
             <SelectLanguage />
