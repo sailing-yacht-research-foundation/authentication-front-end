@@ -153,7 +153,7 @@ export const EventDetail = () => {
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 <EventActions>
-                    <Space>
+                    <Space wrap style={{ justifyContent: 'flex-end' }}>
                         {
                             canManageEvent() &&
                             <>
