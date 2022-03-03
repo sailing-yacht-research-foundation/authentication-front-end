@@ -6,6 +6,8 @@ import { NotificationList } from './components/NotificationList';
 import { Dropdown, Spin } from 'antd';
 import { getUserNotifications } from 'services/live-data-server/notifications';
 import { Notification } from 'types/Notification';
+import { isMobile } from 'react-device-detect';
+import { useHistory } from 'react-router-dom';
 
 export const UserNotification = () => {
 
@@ -17,6 +19,8 @@ export const UserNotification = () => {
     });
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [outOfData, setOutOfData] = React.useState<boolean>(false);
+
+    const history = useHistory();
 
     const getNotifications = async (page, size) => {
         if (outOfData) return;
@@ -40,30 +44,47 @@ export const UserNotification = () => {
         getNotifications(pagination.page + 1, pagination.size);
     }
 
+    const navigateToNotificationCenter = () => {
+        history.push('/notifications');
+    }
+
     React.useEffect(() => {
         getNotifications(pagination.page, pagination.size);
     }, []);
 
     return (
-        <NotificationButtonWrapper
-            placement="bottomCenter"
-            trigger={['hover']}
-            icon={
+        <>
+            {isMobile ? (<NotificationButtonWrapperMobile onClick={navigateToNotificationCenter}>
                 <NotificationIconWrapper>
                     <StyledNotificationButton />
                     {pagination.count > 0 && <NumberOfNotifications>{pagination.count}</NumberOfNotifications>}
                 </NotificationIconWrapper>
-            }
-            overlay={
-                <NotificationList
-                    loadMore={loadMore}
-                    outOfData={outOfData}
-                    pagination={pagination}
-                    isLoading={isLoading}
-                    notifications={pagination.rows} />}>
-        </NotificationButtonWrapper>
+            </NotificationButtonWrapperMobile>) : (<NotificationButtonWrapper
+                placement="bottomCenter"
+                trigger={['hover']}
+                icon={
+                    <NotificationIconWrapper>
+                        <StyledNotificationButton />
+                        {pagination.count > 0 && <NumberOfNotifications>{pagination.count}</NumberOfNotifications>}
+                    </NotificationIconWrapper>
+                }
+                overlay={
+                    <NotificationList
+                        loadMore={loadMore}
+                        outOfData={outOfData}
+                        pagination={pagination}
+                        isLoading={isLoading}
+                        notifications={pagination.rows} />}>
+            </NotificationButtonWrapper>)}
+        </>
     );
 }
+
+const NotificationButtonWrapperMobile = styled.div`
+    display: block;
+    line-height: 0;
+    margin-top: 20px;
+`;
 
 const NotificationButtonWrapper = styled(Dropdown.Button)`
     display: block;
@@ -101,4 +122,6 @@ const NumberOfNotifications = styled.div`
     justify-content: center;
     align-items: center;
     color: #fff;
+    white-space: nowrap;
+    cursor: pointer;
 `;
