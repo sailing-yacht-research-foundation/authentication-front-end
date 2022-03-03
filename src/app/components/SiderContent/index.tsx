@@ -31,12 +31,14 @@ export const SiderContent = (props) => {
     { key: '6', paths: ['data'] },
     { key: '8', paths: ['integrations'], subMenuKey: 'profile' },
     { key: '9', paths: ['change-password'], subMenuKey: 'profile' },
+    { key: '12', paths: ['account/settings'], subMenuKey: 'profile' },
     { key: '7', paths: ['account'], subMenuKey: 'profile' },
     { key: '2', paths: ['tracks'] },
     { key: '4', paths: ['groups'] },
     { key: '10', paths: ['profile/search'], subMenuKey: 'profile' },
     { key: '11', paths: ['profile'], subMenuKey: 'profile' },
     { key: '1', paths: ['search'] },
+    { key: '13', paths: ['notifications'] },
   ];
 
   const history = useHistory();
@@ -112,6 +114,9 @@ export const SiderContent = (props) => {
         <SyrfSubmenu key="profile" icon={<UserOutlined />} title={t(translations.side_menu.profile.title)}>
           <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />}>
             <StyledLink to={'/account'}>{t(translations.side_menu.profile.name)}</StyledLink>
+          </SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="12" icon={<ProfileOutlined />}>
+            <StyledLink to={'/account/settings'}>{t(translations.side_menu.profile.settings)}</StyledLink>
           </SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.integrations)} key="8" icon={<MdOutlineAccountTree />}>
             <StyledLink to={'/account/integrations'}>{t(translations.side_menu.profile.integrations)}</StyledLink>

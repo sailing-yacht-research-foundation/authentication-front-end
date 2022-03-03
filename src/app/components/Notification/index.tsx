@@ -47,7 +47,7 @@ export const UserNotification = () => {
     return (
         <NotificationButtonWrapper
             placement="bottomCenter"
-            trigger={['click']}
+            trigger={['hover']}
             icon={
                 <NotificationIconWrapper>
                     <StyledNotificationButton />

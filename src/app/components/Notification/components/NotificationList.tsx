@@ -7,6 +7,8 @@ import { Notification } from 'types/Notification';
 import { NotificationItem } from './NotificationItem';
 import { media } from 'styles/media';
 import { StyleConstants } from 'styles/StyleConstants';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 
 interface NotificationList {
     notifications: Notification[],
@@ -19,29 +21,35 @@ interface NotificationList {
 
 export const NotificationList = (props: NotificationList) => {
 
+    const { t } = useTranslation();
+
     const { notifications, loadMore, outOfData, pagination, isLoading, renderAsPage } = props;
+
+    const history = useHistory();
 
     const renderNotificationItems = () => {
         return notifications.map(notification => <NotificationItem notification={notification} />)
     }
 
+    const navigateToSettings = () => {
+        history.push('/account/settings');
+    }
+
+    const navigateToNotificationsPage = () => {
+        history.push('/notifications');
+    }
+
     const menu = (
         <Menu>
             <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    Mark all as read
-                </a>
+                {t(translations.notifications.mark_all_as_read)}
             </Menu.Item>
-            <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    Notification Settings
-                </a>
+            <Menu.Item onClick={navigateToSettings}>
+                {t(translations.notifications.notification_settings)}
             </Menu.Item>
-            <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    Open Notification Center
-                </a>
-            </Menu.Item>
+            {!renderAsPage && <Menu.Item onClick={navigateToNotificationsPage}>
+                {t(translations.notifications.open_notification_center)}
+            </Menu.Item>}
         </Menu>
     );
 
@@ -56,7 +64,7 @@ export const NotificationList = (props: NotificationList) => {
 
     const NotificationListContent = () => <Spin spinning={isLoading}>
         <NotificationHeaderWrapper>
-            <NotificationTitle>Notifications</NotificationTitle>
+            <NotificationTitle>{t(translations.notifications.notifications)}</NotificationTitle>
             <NotificationOptionWrapper overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />}>
             </NotificationOptionWrapper>
         </NotificationHeaderWrapper>
@@ -65,7 +73,7 @@ export const NotificationList = (props: NotificationList) => {
             {renderNotificationItems()}
         </NotificationListWrapper>
         {canLoadMore() && <NotificationLoadMoreWrapper>
-            <Button onClick={loadMoreNotifications} type="link">See more</Button>
+            <Button onClick={loadMoreNotifications} type="link">{t(translations.notifications.see_more)}</Button>
         </NotificationLoadMoreWrapper>}
     </Spin>;
 
@@ -107,12 +115,16 @@ const Wrapper = styled.div`
     box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2),0 2px 4px 0 rgba(0, 0, 0, 0.1),inset 0 0 0 1px rgba(255,255,255,0.5);
     width: 360px;
     border-radius: 5px;
+    padding: 5px;
+    max-height: 500px;
+    overflow-y: auto;
 `;
 
 const WrapperAsPage = styled.div`
-    width: 100%;px
+    width: 100%;
     background: #fff;
     margin-top: calc(${StyleConstants.NAV_BAR_HEIGHT} + 25px);
+    padding: 10px;
 
     ${media.medium`
         width: 55%;

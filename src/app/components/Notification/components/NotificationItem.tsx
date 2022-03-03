@@ -6,17 +6,16 @@ import { NotificationTypes } from 'utils/constants';
 import Group from '../assets/group.png';
 import Event from '../assets/event.png';
 import Follow from '../assets/follow.png';
-import { useTranslation } from 'react-i18next';
-import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { StyleConstants } from 'styles/StyleConstants';
 import { markNotificationsAsRead } from 'services/live-data-server/notifications';
+import { useHistory } from 'react-router-dom';
 
 export const NotificationItem = ({ notification }: { notification: Notification }) => {
 
-    const { t } = useTranslation();
-
     const [isRead, setIsRead] = React.useState<boolean>(false);
+
+    const history = useHistory();
 
     React.useEffect(() => {
         setIsRead(!!notification.readAt);
@@ -42,6 +41,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
 
     const markAsRead = async (e) => {
         e.stopPropagation();
+
         const response = await markNotificationsAsRead([notification.id]);
 
         if (response.success) {
@@ -51,8 +51,33 @@ export const NotificationItem = ({ notification }: { notification: Notification 
         }
     }
 
+    const navigateToTarget = (e) => {
+        switch (notification.notificationType) {
+            case NotificationTypes.USER_INVITED_TO_GROUP:
+                history.push(`/groups`);
+                break;
+            case NotificationTypes.REQUEST_JOIN_GROUP:
+            case NotificationTypes.USER_ADDED_TO_GROUP_ADMIN:
+            case NotificationTypes.GROUP_ACHIEVE_BADGE:
+                history.push(`/groups/${notification.metadata?.groupId}`);
+                break;
+            case NotificationTypes.COMPETITION_START_TRACKING:
+            case NotificationTypes.EVENT_INACTIVITY_DELETION:
+            case NotificationTypes.USER_ADDED_TO_EVENT_ADMIN:
+            case NotificationTypes.USER_INVITED_TO_PRIVATE_REGATTA:
+            case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
+                history.push(`/events/${notification.metadata?.calendarEventId}`);
+                break;
+            case NotificationTypes.USER_NEW_FOLLOWER:
+                history.push(`/profile/${notification.metadata?.followerId}`);
+                break;
+        }
+
+        markAsRead(e);
+    }
+
     return (
-        <NotificationItemWrapper>
+        <NotificationItemWrapper onClick={navigateToTarget}>
             <NotificationItemAvatarWrapper>
                 <NotificationItemAvatarContainer>
                     <img src={renderNotificationAvatar()} className='avatar-img' />
@@ -73,6 +98,7 @@ const NotificationItemWrapper = styled.div`
     padding: 5px;
     cursor: pointer;
     position: relative;
+    overflow: hidden;
 `;
 
 const NotificationItemAvatarWrapper = styled.div``;
@@ -88,10 +114,7 @@ const NotificationItemTitle = styled.span`
     font-weight: 400;
     line-height: 20px;
     margin-right: 8px;
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    padding-right: 20px;
     font-weight: 600;
 `;
 
@@ -100,12 +123,11 @@ const NotificationItemDetail = styled.div`
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
-    height: 20px;
     line-height: 20px;
-    overflow: hidden;
     text-decoration: none;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: pre-wrap;
+    word-wrap: break-word; 
 `;
 
 const NotificationItemTime = styled.span`
@@ -129,7 +151,7 @@ const NotificationItemAvatarContainer = styled.div`
 `;
 
 const ReadButton = styled.div`
-    top: 10px;
+    top: 13px;
     width: 8px;
     height: 8px;
     border-radius: 50%;
