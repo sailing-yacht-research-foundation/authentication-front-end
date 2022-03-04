@@ -16,8 +16,8 @@ import ReactGA from 'react-ga4';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { selectLastSubscribedCompetitionUnitId } from 'app/pages/CompetitionUnitCreateUpdatePage/slice/selectors';
 import { logout as ldsLogout } from 'services/live-data-server/auth';
-import { FollowRequest } from 'app/components/SocialProfile';
 import { UserNotification } from '../Notification';
+import { FollowRequestModal } from '../SocialProfile/FollowRequestModal';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -67,9 +67,8 @@ export const Nav = () => {
       {isAuthenenticated ? (
         <>
           <UserNotification />
-
+          <FollowRequestModal/>
           {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
-
           <StyledButtonCreate
             type="primary"
             shape="round"

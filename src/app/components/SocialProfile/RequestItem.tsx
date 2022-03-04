@@ -30,7 +30,7 @@ export const RequestItem = (props: RequestItem) => {
         setIsLoading(false);
 
         if (response.success) {
-            if (reloadParentList && typeof reloadParentList === 'function') reloadParentList();
+            if (reloadParentList) reloadParentList();
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -42,7 +42,7 @@ export const RequestItem = (props: RequestItem) => {
         setIsLoading(false);
 
         if (response.success) {
-            if (reloadParentList && typeof reloadParentList === 'function') reloadParentList();
+            if (reloadParentList) reloadParentList();
         } else {
             showToastMessageOnRequestError(response.error);
         }

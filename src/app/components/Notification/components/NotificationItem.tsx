@@ -10,12 +10,18 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { StyleConstants } from 'styles/StyleConstants';
 import { markNotificationsAsRead } from 'services/live-data-server/notifications';
 import { useHistory } from 'react-router-dom';
+import { useSocialSlice } from 'app/components/SocialProfile/slice';
+import { useDispatch } from 'react-redux';
 
 export const NotificationItem = ({ notification }: { notification: Notification }) => {
 
     const [isRead, setIsRead] = React.useState<boolean>(false);
 
     const history = useHistory();
+
+    const { actions } = useSocialSlice();
+
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
         setIsRead(!!notification.readAt);
@@ -70,6 +76,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 break;
             case NotificationTypes.USER_NEW_FOLLOWER:
                 history.push(`/profile/${notification.metadata?.followerId}`);
+                dispatch(actions.setShowFollowRequestModal(true));
                 break;
         }
 
@@ -95,7 +102,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
 
 const NotificationItemWrapper = styled.div`
     display: flex;
-    padding: 5px;
+    padding: 10px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -144,8 +151,8 @@ const NotificationItemTime = styled.span`
 `;
 
 const NotificationItemAvatarContainer = styled.div`
-    width: 55px;
-    height: 55px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     border: 1px solid #eee;
 `;
