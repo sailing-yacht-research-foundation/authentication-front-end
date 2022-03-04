@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Notification } from 'types/Notification';
 import moment from 'moment';
-import { NotificationTypes } from 'utils/constants';
+import { FollowStatus, NotificationTypes } from 'utils/constants';
 import Group from '../assets/group.png';
 import Event from '../assets/event.png';
 import Follow from '../assets/follow.png';
@@ -125,7 +125,9 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 break;
             case NotificationTypes.USER_NEW_FOLLOWER:
                 history.push(`/profile/${notification.metadata?.followerId}`);
-                dispatch(actions.setShowFollowRequestModal(true));
+                if (notification.metadata?.status === FollowStatus.REQUESTED) {
+                    dispatch(actions.setShowFollowRequestModal(true));
+                }
                 break;
         }
 
