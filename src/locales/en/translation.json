@@ -1207,6 +1207,7 @@
     "mark_all_as_read": "Mark All As Read",
     "notification_settings": "Notification Settings",
     "open_notification_center": "Open Notification Center",
-    "see_more": "See more"
+    "see_more": "See more",
+    "you_dont_have_any_notifications": "You don't have any notifications."
   }
 }

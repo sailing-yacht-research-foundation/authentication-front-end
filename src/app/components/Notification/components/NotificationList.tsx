@@ -9,6 +9,9 @@ import { media } from 'styles/media';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
+import { LottieMessage } from 'app/components/SyrfGeneral';
+import Lottie from 'react-lottie';
+import NoResult from '../assets/noresult.json';
 
 interface INotificationList {
     notifications: Notification[],
@@ -19,6 +22,15 @@ interface INotificationList {
     renderAsPage?: boolean
 }
 
+const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: NoResult,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
+
 export const NotificationList = (props: INotificationList) => {
 
     const { t } = useTranslation();
@@ -28,7 +40,16 @@ export const NotificationList = (props: INotificationList) => {
     const history = useHistory();
 
     const renderNotificationItems = () => {
-        return notifications.map(notification => <NotificationItem notification={notification} />)
+        if (notifications.length > 0)
+            return notifications.map(notification => <NotificationItem notification={notification} />);
+
+        return <LottieWrapper>
+            <Lottie
+                options={defaultOptions}
+                height={150}
+                width={150} />
+            <LottieMessage>{t(translations.notifications.you_dont_have_any_notifications)}</LottieMessage>
+        </LottieWrapper>
     }
 
     const navigateToSettings = () => {
@@ -139,4 +160,19 @@ const NotificationLoadMoreWrapper = styled.div`
     display: block;
     text-align: center;
     padding: 10px 0;
+`;
+
+const LottieWrapper = styled.div`
+    text-align: center;
+    margin-top: 15px;
+
+    > div {
+        width: 100% !important;
+    }
+
+    ${media.medium`
+        > div {
+            width: 150px !important;
+        }
+    `}
 `;
