@@ -12,6 +12,12 @@ import { markNotificationsAsRead } from 'services/live-data-server/notifications
 import { useHistory } from 'react-router-dom';
 import { useSocialSlice } from 'app/components/SocialProfile/slice';
 import { useDispatch } from 'react-redux';
+import { AiOutlineUsergroupAdd } from 'react-icons/ai';
+import { MdAdminPanelSettings, MdEventBusy, MdGroupAdd, MdOutgoingMail } from 'react-icons/md';
+import { GiAchievement } from 'react-icons/gi';
+import { VscDebugStart } from 'react-icons/vsc';
+import { IoCreateSharp, IoShieldCheckmark } from 'react-icons/io5';
+import { BsPersonPlus } from 'react-icons/bs';
 
 export const NotificationItem = ({ notification }: { notification: Notification }) => {
 
@@ -27,6 +33,48 @@ export const NotificationItem = ({ notification }: { notification: Notification 
         setIsRead(!!notification.readAt);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const renderNotificationBadge = () => {
+        let icon, className = '';
+        switch (notification.notificationType) {
+            case NotificationTypes.USER_INVITED_TO_GROUP:
+                icon = <AiOutlineUsergroupAdd />;
+                break;
+            case NotificationTypes.REQUEST_JOIN_GROUP:
+                icon = <MdGroupAdd />;
+                break;
+            case NotificationTypes.USER_ADDED_TO_GROUP_ADMIN:
+                icon = <MdAdminPanelSettings />;
+                break;
+            case NotificationTypes.GROUP_ACHIEVE_BADGE:
+                icon = <GiAchievement />;
+                break;
+            case NotificationTypes.COMPETITION_START_TRACKING:
+                icon = <VscDebugStart />;
+                break;
+            case NotificationTypes.EVENT_INACTIVITY_DELETION:
+                className = 'delete';
+                icon = <MdEventBusy />;
+                break;
+            case NotificationTypes.USER_ADDED_TO_EVENT_ADMIN:
+                icon = <IoShieldCheckmark />;
+                break;
+            case NotificationTypes.USER_INVITED_TO_PRIVATE_REGATTA:
+                icon = <MdOutgoingMail />;
+                break;
+            case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
+                icon = <IoCreateSharp />;
+                break;
+            case NotificationTypes.USER_NEW_FOLLOWER:
+                className = 'follow';
+                icon = <BsPersonPlus />;
+                break;
+        }
+
+        return <NotificationBadge className={className}>
+            {icon}
+        </NotificationBadge>
+    }
 
     const renderNotificationAvatar = () => {
         switch (notification.notificationType) {
@@ -90,6 +138,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 <NotificationItemAvatarContainer>
                     <img alt={notification.notificationTitle} src={renderNotificationAvatar()} className='avatar-img' />
                 </NotificationItemAvatarContainer>
+                {renderNotificationBadge()}
             </NotificationItemAvatarWrapper>
             <NotificationItemInfo>
                 <NotificationItemTitle>{notification.notificationTitle}</NotificationItemTitle>
@@ -109,7 +158,9 @@ const NotificationItemWrapper = styled.div`
     overflow: hidden;
 `;
 
-const NotificationItemAvatarWrapper = styled.div``;
+const NotificationItemAvatarWrapper = styled.div`
+    position: relative;
+`;
 
 const NotificationItemInfo = styled.div`
     margin-left: 10px;
@@ -166,4 +217,32 @@ const ReadButton = styled.div`
     background: ${StyleConstants.MAIN_TONE_COLOR};
     position: absolute;
     right: 10px;
+`;
+
+const NotificationBadge = styled.div`
+    position: absolute;
+    right: 0;
+    top: 40px;
+    font-size: 16px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background: #40a9ff;
+    box-shadow: 0 12px 28px 0 rgba(0,0,0,0.2),0 2px 4px 0 rgba(0,0,0,0.1),inset 0 0 0 1px rgba(255,255,255,0.5);
+
+    &.delete {
+        background: #DC6E1E;
+    }
+
+    &.follow {
+        background: #16a085;
+    }
+
+    &.add {
+        background: #95e1c1;
+    }
 `;
