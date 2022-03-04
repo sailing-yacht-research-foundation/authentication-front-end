@@ -65,7 +65,7 @@ export const RequestItem = (props: IRequestItem) => {
                         <span>{request.followerCount}</span>
                     </ItemInfoContainer>
                     <ItemButtonContainer>
-                        <Space size={5}>
+                        <Space size={5} wrap style={{ justifyContent: 'flex-end' }}>
                             <Button onClick={acceptJoinRequest} type="primary">{t(translations.public_profile.accept)}</Button>
                             <Button onClick={rejectJoinRequest}>{t(translations.public_profile.reject)}</Button>
                         </Space>

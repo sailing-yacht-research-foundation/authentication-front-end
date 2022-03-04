@@ -8,6 +8,7 @@ import { getUserNotifications } from 'services/live-data-server/notifications';
 import { Notification } from 'types/Notification';
 import { isMobile } from 'react-device-detect';
 import { useHistory } from 'react-router-dom';
+import { media } from 'styles/media';
 
 export const UserNotification = () => {
 
@@ -85,10 +86,15 @@ const NotificationButtonWrapperMobile = styled.div`
     display: block;
     line-height: 0;
     margin-top: 20px;
+    margin-left: -20px;
+    position: relative;
+    left: -10px;
 `;
 
 const NotificationButtonWrapper = styled(Dropdown.Button)`
     display: block;
+    position: relative;
+    left: -20px;
 
     button {
         border: none;
@@ -112,7 +118,7 @@ const NotificationIconWrapper = styled.div`
 
 const NumberOfNotifications = styled.div`
     position: absolute;
-    right: 10px;
+    right: 0px;
     background: #DC6E1E;
     padding: 2px 3px;
     font-size: 10px;
@@ -125,4 +131,8 @@ const NumberOfNotifications = styled.div`
     color: #fff;
     white-space: nowrap;
     cursor: pointer;
+
+    ${media.medium`
+        right: 10px;
+    `};
 `;
