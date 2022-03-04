@@ -20,6 +20,7 @@ import { MdGroups, MdOutlineAccountTree } from 'react-icons/md';
 import { Link } from '../Link';
 import { FaUserFriends } from 'react-icons/fa';
 import { ImProfile } from 'react-icons/im';
+import { AiOutlineSetting } from 'react-icons/ai';
 
 export const SiderContent = (props) => {
 
@@ -115,7 +116,7 @@ export const SiderContent = (props) => {
           <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />}>
             <StyledLink to={'/account'}>{t(translations.side_menu.profile.name)}</StyledLink>
           </SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="12" icon={<ProfileOutlined />}>
+          <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="12" icon={<AiOutlineSetting />}>
             <StyledLink to={'/account/settings'}>{t(translations.side_menu.profile.settings)}</StyledLink>
           </SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.integrations)} key="8" icon={<MdOutlineAccountTree />}>

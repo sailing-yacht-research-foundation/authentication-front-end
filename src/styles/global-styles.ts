@@ -278,4 +278,8 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 50%;
     border: 1px solid #eee;
   }
+
+  .ant-menu-submenu-popup a {
+    color: unset;
+  }
 `;
