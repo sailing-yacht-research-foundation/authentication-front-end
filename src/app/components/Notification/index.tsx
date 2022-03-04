@@ -63,7 +63,7 @@ export const UserNotification = () => {
                 </NotificationIconWrapper>
             </NotificationButtonWrapperMobile>) : (<NotificationButtonWrapper
                 placement="bottomCenter"
-                trigger={['click']}
+                trigger={['hover']}
                 icon={
                     <NotificationIconWrapper>
                         <StyledNotificationButton />
