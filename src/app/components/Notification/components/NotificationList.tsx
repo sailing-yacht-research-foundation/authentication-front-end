@@ -9,7 +9,8 @@ import { media } from 'styles/media';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-interface NotificationList {
+
+interface INotificationList {
     notifications: Notification[],
     loadMore: Function,
     outOfData: boolean,
@@ -18,7 +19,7 @@ interface NotificationList {
     renderAsPage?: boolean
 }
 
-export const NotificationList = (props: NotificationList) => {
+export const NotificationList = (props: INotificationList) => {
 
     const { t } = useTranslation();
 

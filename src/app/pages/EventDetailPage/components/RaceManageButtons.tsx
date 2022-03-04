@@ -11,7 +11,7 @@ import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 import { CalendarEvent } from 'types/CalendarEvent';
 
-interface RaceManageButtons {
+interface IRaceManageButtons {
     race: CompetitionUnit,
     canManageEvent: Function,
     event: CalendarEvent,
@@ -23,7 +23,7 @@ interface RaceManageButtons {
     relations: any[]
 }
 
-export const RaceManageButtons = (props: RaceManageButtons) => {
+export const RaceManageButtons = (props: IRaceManageButtons) => {
     const { race, canManageEvent, event, setCompetitionUnit, showRegisterModal, setShowRegisterModal, isAuthenticated, showDeleteRaceModal, relations } = props;
 
     const history = useHistory();

@@ -1,9 +1,7 @@
 import React from 'react';
-import { Wrapper } from 'app/components/SyrfGeneral';
 import { NotificationList } from 'app/components/Notification/components/NotificationList';
 import { getUserNotifications } from 'services/live-data-server/notifications';
 import { Notification } from 'types/Notification';
-import { SyrfFormWrapper } from 'app/components/SyrfForm';
 import { Row } from 'antd';
 
 export const NotificationCenterPage = () => {
@@ -40,6 +38,7 @@ export const NotificationCenterPage = () => {
 
     React.useEffect(() => {
         getNotifications(pagination.page, pagination.size);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

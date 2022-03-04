@@ -10,13 +10,13 @@ import { PaginationContainer } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import { useLocation } from 'react-router-dom';
 
-interface InfluencerModal {
+interface IInfluencerModal {
     showModal: boolean,
     setShowModal: Function,
     reloadParentList?: Function
 }
 
-export const InfluencerModal = ({ showModal, setShowModal, reloadParentList }: InfluencerModal) => {
+export const InfluencerModal = ({ showModal, setShowModal, reloadParentList }: IInfluencerModal) => {
 
     const { t } = useTranslation();
 

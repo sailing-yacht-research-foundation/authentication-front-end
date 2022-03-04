@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { joinCompetitionUnit } from 'services/live-data-server/open-competition';
 import { Vessel } from 'types/Vessel';
 
-interface RegisterRaceModal {
+interface IRegisterRaceModal {
     showModal: boolean
     setShowModal: Function,
     raceName: string,
@@ -20,7 +20,7 @@ interface RegisterRaceModal {
     setRelation?: Function
 }
 
-export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, lon, lat, setRelation } : RegisterRaceModal) => {
+export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, lon, lat, setRelation } : IRegisterRaceModal) => {
 
     const { t } = useTranslation();
 

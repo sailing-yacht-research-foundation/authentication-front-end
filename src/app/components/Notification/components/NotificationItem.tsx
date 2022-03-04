@@ -25,6 +25,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
 
     React.useEffect(() => {
         setIsRead(!!notification.readAt);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const renderNotificationAvatar = () => {
@@ -87,7 +88,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
         <NotificationItemWrapper onClick={navigateToTarget}>
             <NotificationItemAvatarWrapper>
                 <NotificationItemAvatarContainer>
-                    <img src={renderNotificationAvatar()} className='avatar-img' />
+                    <img alt={notification.notificationTitle} src={renderNotificationAvatar()} className='avatar-img' />
                 </NotificationItemAvatarContainer>
             </NotificationItemAvatarWrapper>
             <NotificationItemInfo>

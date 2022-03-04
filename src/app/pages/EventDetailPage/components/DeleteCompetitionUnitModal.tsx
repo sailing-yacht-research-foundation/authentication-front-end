@@ -8,14 +8,14 @@ import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 
-interface DeleteCompetitionUnitModal {
+interface IDeleteCompetitionUnitModal {
     competitionUnit: Partial<CompetitionUnit>,
     showDeleteModal: boolean,
     setShowDeleteModal: Function,
     onCompetitionUnitDeleted: Function
 }
 
-export const DeleteCompetitionUnitModal = (props: DeleteCompetitionUnitModal) => {
+export const DeleteCompetitionUnitModal = (props: IDeleteCompetitionUnitModal) => {
 
     const { t } = useTranslation();
 

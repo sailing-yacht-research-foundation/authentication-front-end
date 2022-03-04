@@ -9,13 +9,13 @@ import { useHistory } from 'react-router';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { Group } from 'types/Group';
 
-interface LeaveGroupModal {
+interface ILeaveGroupModal {
     group: Partial<Group>,
     showModal: boolean,
     setShowModal: Function
 }
 
-export const LeaveGroupModal = (props: LeaveGroupModal) => {
+export const LeaveGroupModal = (props: ILeaveGroupModal) => {
 
     const { t } = useTranslation();
 

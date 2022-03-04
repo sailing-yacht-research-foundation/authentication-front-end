@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { MdNotifications } from 'react-icons/md';
 import { StyleConstants } from 'styles/StyleConstants';
 import { NotificationList } from './components/NotificationList';
-import { Dropdown, Spin } from 'antd';
+import { Dropdown } from 'antd';
 import { getUserNotifications } from 'services/live-data-server/notifications';
 import { Notification } from 'types/Notification';
 import { isMobile } from 'react-device-detect';
@@ -50,6 +50,7 @@ export const UserNotification = () => {
 
     React.useEffect(() => {
         getNotifications(pagination.page, pagination.size);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

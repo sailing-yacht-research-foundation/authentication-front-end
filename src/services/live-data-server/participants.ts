@@ -1,5 +1,4 @@
 import { SYRF_SERVER } from 'services/service-constants';
-import { Participant } from 'types/Participant';
 import { formatServicePromiseResponse } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 

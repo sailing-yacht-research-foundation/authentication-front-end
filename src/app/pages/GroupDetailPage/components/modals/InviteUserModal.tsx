@@ -19,14 +19,14 @@ const defaultOptions = {
     }
 };
 
-interface InviteUserModal {
+interface IInviteUserModal {
     groupId: string,
     showModal: boolean,
     setShowModal: Function,
     onUsersInvited: Function
 }
 
-export const InviteUserModal = (props: InviteUserModal) => {
+export const InviteUserModal = (props: IInviteUserModal) => {
 
     const { t } = useTranslation();
 

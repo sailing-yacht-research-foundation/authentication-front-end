@@ -8,14 +8,14 @@ import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { Course } from 'types/Course';
 
-interface CourseDeleteModal {
+interface ICourseDeleteModal {
     course: Partial<Course>,
     showDeleteModal: boolean,
     setShowDeleteModal: Function,
     onCourseDeleted: Function
 }
 
-export const CourseDeleteModal = (props: CourseDeleteModal) => {
+export const CourseDeleteModal = (props: ICourseDeleteModal) => {
 
     const { t } = useTranslation();
 
