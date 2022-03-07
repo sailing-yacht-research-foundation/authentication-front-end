@@ -70,7 +70,7 @@ export const UserNotification = () => {
             {isMobile ? (<NotificationButtonWrapperMobile onClick={navigateToNotificationCenter}>
                 <NotificationIconWrapper>
                     <StyledNotificationButton />
-                    {pagination.count > 0 && <NumberOfNotifications>{pagination.count}</NumberOfNotifications>}
+                    {numberOfUnreadNotifications > 0 && <NumberOfNotifications>{numberOfUnreadNotifications}</NumberOfNotifications>}
                 </NotificationIconWrapper>
             </NotificationButtonWrapperMobile>) : (<NotificationButtonWrapper
                 placement="bottomCenter"
