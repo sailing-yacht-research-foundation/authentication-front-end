@@ -83,7 +83,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
     }
 
     const renderNotificationAvatar = () => {
-        if (notification?.notificationThumbnail)
+        if (notification.notificationThumbnail)
             return renderAvatar(notification.notificationThumbnail);
 
         switch (notification.notificationType) {
