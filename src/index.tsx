@@ -31,8 +31,6 @@ import reportWebVitals from 'reportWebVitals';
 // Initialize languages
 import './locales/i18n';
 
-import { subscribeUser } from './subscription';
-
 require('./initWorker.js');
 
 // Observe loading of Inter (to remove 'Inter', remove the <link> tag in
@@ -71,5 +69,3 @@ if (module.hot) {
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-subscribeUser();

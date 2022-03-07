@@ -41,7 +41,21 @@ export const Nav = () => {
   const logout = () => {
     ldsLogout(refreshToken!);
     dispatch(loginActions.setLogout());
+    unregisterPushSubscription();
     history.push('/signin');
+  }
+
+  const unregisterPushSubscription = () => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(function (reg) {
+        reg.pushManager.getSubscription().then(function (subscription) {
+          if (subscription)
+            subscription.unsubscribe().catch(function (e) {
+              console.error(e);
+            });
+        })
+      });
+    }
   }
 
   const initGoogleAnalytic = () => {
@@ -67,7 +81,7 @@ export const Nav = () => {
       {isAuthenenticated ? (
         <>
           <UserNotification />
-          <FollowRequestModal/>
+          <FollowRequestModal />
           {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
           <StyledButtonCreate
             type="primary"
