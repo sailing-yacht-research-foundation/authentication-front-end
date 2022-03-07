@@ -58,6 +58,8 @@ export const ExpeditionServerActionButtons = (props) => {
 
     const sessionTokenRef = React.useRef<string>(sessionToken);
 
+    const showedConnectedMessage = React.useRef<boolean>(false);
+
     const { actions } = useCompetitionUnitManagerSlice();
 
     const dispatch = useDispatch();
@@ -172,7 +174,8 @@ export const ExpeditionServerActionButtons = (props) => {
             timestamp: formattedData?.data?.timestamp
         });
 
-        if (!competitionUnit) {
+        if (!competitionUnit && !showedConnectedMessage.current) {
+            showedConnectedMessage.current = true;
             message.success(t(translations.expedition_server_actions.stream_to_expedition_connected));
         }
     }
