@@ -224,7 +224,7 @@ const NotificationItemAvatarContainer = styled.div`
 `;
 
 const ReadButton = styled.div`
-    top: 13px;
+    top: 17px;
     width: 8px;
     height: 8px;
     border-radius: 50%;

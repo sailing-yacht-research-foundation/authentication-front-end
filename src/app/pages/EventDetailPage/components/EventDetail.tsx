@@ -82,7 +82,7 @@ export const EventDetail = () => {
     React.useEffect(() => {
         fetchEvent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [eventId]);
 
     const fetchEvent = async () => {
         setIsFetchingEvent(true);
