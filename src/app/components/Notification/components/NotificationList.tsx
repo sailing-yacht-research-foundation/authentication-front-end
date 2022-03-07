@@ -46,8 +46,8 @@ export const NotificationList = (props: INotificationList) => {
     const { actions } = useNotificationSlice();
 
     const renderNotificationItems = () => {
-        if (notifications.length > 0)
-            return notifications.map(notification => <NotificationItem notification={notification} />);
+        // if (notifications.length > 0)
+        //     return notifications.map(notification => <NotificationItem notification={notification} />);
 
         return <LottieWrapper>
             <Lottie
@@ -178,6 +178,7 @@ const LottieWrapper = styled.div`
 
     > div {
         width: 100% !important;
+        height: auto !important;
     }
 
     ${media.medium`
