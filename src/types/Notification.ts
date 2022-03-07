@@ -8,4 +8,5 @@ export interface Notification {
     metadata: any;
     createdAt: Date;
     readAt?: Date;
+    notificationThumbnail: string;
 }

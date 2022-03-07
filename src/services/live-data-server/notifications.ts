@@ -16,3 +16,11 @@ export const markNotificationsAsRead = (ids: string[]) => {
         ids: ids
     }))
 }
+
+export const getNotificationsUnreadCount = () => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/notifications/unread`))
+}
+
+export const markAllNotificationAsRead = () => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/notifications/mark-all-as-read`))
+}

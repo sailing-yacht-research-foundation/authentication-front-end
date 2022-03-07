@@ -9,6 +9,9 @@ import { Notification } from 'types/Notification';
 import { isMobile } from 'react-device-detect';
 import { useHistory } from 'react-router-dom';
 import { media } from 'styles/media';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUnreadNotificationsCount } from './slice/selectors';
+import { useNotificationSlice } from './slice';
 
 export const UserNotification = () => {
 
@@ -20,6 +23,12 @@ export const UserNotification = () => {
     });
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [outOfData, setOutOfData] = React.useState<boolean>(false);
+
+    const numberOfUnreadNotifications = useSelector(selectUnreadNotificationsCount);
+
+    const dispatch = useDispatch();
+
+    const { actions } = useNotificationSlice();
 
     const history = useHistory();
 
@@ -49,8 +58,10 @@ export const UserNotification = () => {
         history.push('/notifications');
     }
 
+
     React.useEffect(() => {
         getNotifications(pagination.page, pagination.size);
+        dispatch(actions.getNotificationUnreadCount());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -67,7 +78,7 @@ export const UserNotification = () => {
                 icon={
                     <NotificationIconWrapper>
                         <StyledNotificationButton />
-                        {pagination.count > 0 && <NumberOfNotifications>{pagination.count}</NumberOfNotifications>}
+                        {numberOfUnreadNotifications > 0 && <NumberOfNotifications>{numberOfUnreadNotifications}</NumberOfNotifications>}
                     </NotificationIconWrapper>
                 }
                 overlay={

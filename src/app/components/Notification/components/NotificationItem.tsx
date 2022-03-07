@@ -12,12 +12,14 @@ import { markNotificationsAsRead } from 'services/live-data-server/notifications
 import { useHistory } from 'react-router-dom';
 import { useSocialSlice } from 'app/components/SocialProfile/slice';
 import { useDispatch } from 'react-redux';
-import { AiOutlineUsergroupAdd } from 'react-icons/ai';
+import { AiOutlineGlobal, AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { MdAdminPanelSettings, MdEventBusy, MdGroupAdd, MdOutgoingMail } from 'react-icons/md';
 import { GiAchievement } from 'react-icons/gi';
 import { VscDebugStart } from 'react-icons/vsc';
 import { IoCreateSharp, IoShieldCheckmark } from 'react-icons/io5';
 import { BsPersonPlus } from 'react-icons/bs';
+import { useNotificationSlice } from '../slice';
+import { renderAvatar } from 'utils/user-utils';
 
 export const NotificationItem = ({ notification }: { notification: Notification }) => {
 
@@ -26,6 +28,8 @@ export const NotificationItem = ({ notification }: { notification: Notification 
     const history = useHistory();
 
     const { actions } = useSocialSlice();
+
+    const notificationActions = useNotificationSlice().actions;
 
     const dispatch = useDispatch();
 
@@ -69,6 +73,8 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 className = 'follow';
                 icon = <BsPersonPlus />;
                 break;
+            default:
+                icon = <AiOutlineGlobal />;
         }
 
         return <NotificationBadge className={className}>
@@ -77,6 +83,9 @@ export const NotificationItem = ({ notification }: { notification: Notification 
     }
 
     const renderNotificationAvatar = () => {
+        if (notification?.notificationThumbnail)
+            return renderAvatar(notification.notificationThumbnail);
+
         switch (notification.notificationType) {
             case NotificationTypes.USER_INVITED_TO_GROUP:
             case NotificationTypes.REQUEST_JOIN_GROUP:
@@ -97,10 +106,13 @@ export const NotificationItem = ({ notification }: { notification: Notification 
     const markAsRead = async (e) => {
         e.stopPropagation();
 
+        if (isRead) return;
+
         const response = await markNotificationsAsRead([notification.id]);
 
         if (response.success) {
-            setIsRead(true)
+            setIsRead(true);
+            dispatch(notificationActions.getNotificationUnreadCount());
         } else {
             showToastMessageOnRequestError(response.error);
         }

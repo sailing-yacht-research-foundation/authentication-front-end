@@ -12,6 +12,8 @@ import { useHistory } from 'react-router-dom';
 import { LottieMessage } from 'app/components/SyrfGeneral';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/noresult.json';
+import { useDispatch } from 'react-redux';
+import { useNotificationSlice } from '../slice';
 
 interface INotificationList {
     notifications: Notification[],
@@ -39,6 +41,10 @@ export const NotificationList = (props: INotificationList) => {
 
     const history = useHistory();
 
+    const dispatch = useDispatch();
+
+    const { actions } = useNotificationSlice();
+
     const renderNotificationItems = () => {
         if (notifications.length > 0)
             return notifications.map(notification => <NotificationItem notification={notification} />);
@@ -60,9 +66,13 @@ export const NotificationList = (props: INotificationList) => {
         history.push('/notifications');
     }
 
+    const markAllAsRead = () => {
+        dispatch(actions.markAllAsRead());
+    }
+
     const menu = (
         <Menu>
-            <Menu.Item>
+            <Menu.Item onClick={markAllAsRead}>
                 {t(translations.notifications.mark_all_as_read)}
             </Menu.Item>
             <Menu.Item onClick={navigateToSettings}>
