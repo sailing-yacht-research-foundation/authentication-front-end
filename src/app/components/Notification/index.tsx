@@ -109,6 +109,9 @@ const NotificationButtonWrapper = styled(Dropdown.Button)`
 
     button {
         border: none;
+        &:after {
+            display: none;
+        }
     }
 `;
 
