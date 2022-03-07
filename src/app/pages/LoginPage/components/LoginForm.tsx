@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ReactComponent as Logo } from '../assets/logo-dark.svg';
 import { login } from 'services/live-data-server/auth';
+// eslint-disable-next-line
 import { subscribeUser } from 'subscription';
 
 const layout = {
