@@ -51,7 +51,7 @@ export const Settings = () => {
             <SyrfFormWrapper>
                 <Spin spinning={isLoading}>
                     <SyrfFormTitle>{t(translations.profile_page.update_profile.notifications)}</SyrfFormTitle>
-                    {authUser && <Form
+                    {authUser.id && <Form
                         name="basic"
                         onValuesChange={() => setFormHasBeenChanged(true)}
                         onFinish={onFinish}
