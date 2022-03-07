@@ -18,6 +18,7 @@ import { selectLastSubscribedCompetitionUnitId } from 'app/pages/CompetitionUnit
 import { logout as ldsLogout } from 'services/live-data-server/auth';
 import { UserNotification } from '../Notification';
 import { FollowRequestModal } from '../SocialProfile/FollowRequestModal';
+import { unregisterPushSubscription } from 'utils/helpers';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -43,19 +44,6 @@ export const Nav = () => {
     dispatch(loginActions.setLogout());
     unregisterPushSubscription();
     history.push('/signin');
-  }
-
-  const unregisterPushSubscription = () => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then(function (reg) {
-        reg.pushManager.getSubscription().then(function (subscription) {
-          if (subscription)
-            subscription.unsubscribe().catch(function (e) {
-              console.error(e);
-            });
-        })
-      });
-    }
   }
 
   const initGoogleAnalytic = () => {

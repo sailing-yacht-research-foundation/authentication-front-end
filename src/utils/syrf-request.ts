@@ -6,6 +6,7 @@ import { message } from 'antd';
 import i18next from 'i18next';
 import { translations } from 'locales/translations';
 import { subscribeUser } from 'subscription';
+import { unregisterPushSubscription } from './helpers';
 
 let isCallingRefresh = false;
 
@@ -55,6 +56,7 @@ class Request {
                         localStorage.setItem('session_token', response?.data?.newtoken);
                         localStorage.setItem('refresh_token', response?.data?.refresh_token);
                         if (!localStorage.getItem('is_guest')) { // this user is a real user, we subscribe the notification.
+                            unregisterPushSubscription();
                             subscribeUser();
                         }
                     } else {
