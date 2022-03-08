@@ -13,14 +13,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAcceptedMemberResults } from '../../slice/selectors';
 import { useGroupDetailSlice } from '../../slice';
 
-interface AddAdminModal {
+interface IAddAdminModal {
     showModal: boolean,
     setShowModal: Function,
     onAdminAdded: Function,
     groupId?: string
 }
 
-export const AddAdminModal = (props: AddAdminModal) => {
+export const AddAdminModal = (props: IAddAdminModal) => {
 
     const { t } = useTranslation();
 

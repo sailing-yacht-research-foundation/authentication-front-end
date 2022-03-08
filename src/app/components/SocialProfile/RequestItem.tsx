@@ -8,13 +8,13 @@ import { acceptFollowRequest, rejectFollowRequest } from '../../../services/live
 import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 
-interface RequestItem {
+interface IRequestItem {
     request: any,
     hideModal: Function,
     reloadParentList?: Function
 }
 
-export const RequestItem = (props: RequestItem) => {
+export const RequestItem = (props: IRequestItem) => {
 
     const { t } = useTranslation();
 
@@ -30,7 +30,7 @@ export const RequestItem = (props: RequestItem) => {
         setIsLoading(false);
 
         if (response.success) {
-            if (reloadParentList && typeof reloadParentList === 'function') reloadParentList();
+            if (reloadParentList) reloadParentList();
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -42,7 +42,7 @@ export const RequestItem = (props: RequestItem) => {
         setIsLoading(false);
 
         if (response.success) {
-            if (reloadParentList && typeof reloadParentList === 'function') reloadParentList();
+            if (reloadParentList) reloadParentList();
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -65,7 +65,7 @@ export const RequestItem = (props: RequestItem) => {
                         <span>{request.followerCount}</span>
                     </ItemInfoContainer>
                     <ItemButtonContainer>
-                        <Space size={5}>
+                        <Space size={5} wrap style={{ justifyContent: 'flex-end' }}>
                             <Button onClick={acceptJoinRequest} type="primary">{t(translations.public_profile.accept)}</Button>
                             <Button onClick={rejectJoinRequest}>{t(translations.public_profile.reject)}</Button>
                         </Space>

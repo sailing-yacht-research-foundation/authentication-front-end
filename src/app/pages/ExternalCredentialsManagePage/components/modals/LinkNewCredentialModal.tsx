@@ -9,7 +9,7 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { submitNewCredential } from 'services/live-data-server/external-platform';
 import { MODE } from 'utils/constants';
 
-interface LinkNewCredentialModal {
+interface ILinkNewCredentialModal {
     showModal: boolean,
     setShowModal: Function,
     reloadParent?: Function,
@@ -17,7 +17,7 @@ interface LinkNewCredentialModal {
     mode: string
 }
 
-export const LinkNewCredentialModal = (props: LinkNewCredentialModal) => {
+export const LinkNewCredentialModal = (props: ILinkNewCredentialModal) => {
 
     const { t } = useTranslation();
 

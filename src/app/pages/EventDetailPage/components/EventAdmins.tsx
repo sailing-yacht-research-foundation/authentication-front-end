@@ -16,14 +16,14 @@ const editorHeadlessStyles = {
     height: '25px',
     marginRight: '5px'
 }
-interface EventAdmins {
+interface IEventAdmins {
     event: Partial<CalendarEvent>,
     headless?: boolean,
     groups?: any[],
     editors?: any[]
 }
 
-export const EventAdmins = (props: EventAdmins) => {
+export const EventAdmins = (props: IEventAdmins) => {
 
     const { event, headless, groups, editors } = props;
 

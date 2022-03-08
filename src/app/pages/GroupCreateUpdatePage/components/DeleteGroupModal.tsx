@@ -8,14 +8,14 @@ import { deleteGroup } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { Group } from 'types/Group';
 
-interface DeleteGroupModal {
+interface IDeleteGroupModal {
     group: Partial<Group>,
     showDeleteModal: boolean,
     setShowDeleteModal: Function,
     onGroupDeleted: Function
 }
 
-export const DeleteGroupModal = (props: DeleteGroupModal) => {
+export const DeleteGroupModal = (props: IDeleteGroupModal) => {
 
     const { t } = useTranslation();
 

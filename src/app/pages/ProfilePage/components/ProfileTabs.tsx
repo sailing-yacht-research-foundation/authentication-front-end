@@ -13,9 +13,10 @@ export const ProfileTabs = (props) => {
     const location = useLocation();
 
     const tabs = [
-        { path: '/account', name: t(translations.profile_page.update_profile.account_settings) },
+        { path: '/account', name: t(translations.profile_page.update_profile.account_information) },
         { path: '/account/change-password', name: t(translations.profile_page.update_profile.password_security) },
         { path: '/account/integrations', name: t(translations.profile_page.update_profile.integrations) },
+        { path: '/account/settings', name: t(translations.profile_page.update_profile.account_settings) },
     ];
 
     return (

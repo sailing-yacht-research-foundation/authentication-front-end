@@ -49,6 +49,8 @@ import { PublicProfilePage } from './pages/PublicProfilePage/Loadable';
 import { ProfileSearchPage } from './pages/ProfileSearchPage/Loadable';
 import { ExternalCredentialsManagePage } from './pages/ExternalCredentialsManagePage/Loadable';
 import { LiveraftCreateUpdatePage } from './pages/LiferaftCreateUpdatePage/Loadable';
+import { NotificationCenterPage } from './pages/NotificationCenterPage/Loadable';
+import { ProfileSettingsPage } from './pages/ProfileSettingsPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -227,6 +229,8 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/:profileId'} component={PublicProfilePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:boatId/liferafts/create'} component={LiveraftCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:boatId/liferafts/:id/update'} component={LiveraftCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/notifications'} component={NotificationCenterPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/settings'} component={ProfileSettingsPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

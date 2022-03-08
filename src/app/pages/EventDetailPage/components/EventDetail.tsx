@@ -82,7 +82,7 @@ export const EventDetail = () => {
     React.useEffect(() => {
         fetchEvent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [eventId]);
 
     const fetchEvent = async () => {
         setIsFetchingEvent(true);
@@ -153,7 +153,7 @@ export const EventDetail = () => {
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 <EventActions>
-                    <Space>
+                    <Space wrap style={{ justifyContent: 'flex-end' }}>
                         {
                             canManageEvent() &&
                             <>

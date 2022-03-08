@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ReactComponent as Logo } from '../assets/logo-dark.svg';
 import { login } from 'services/live-data-server/auth';
+import { subscribeUser } from 'subscription';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
@@ -52,6 +53,7 @@ export const LoginForm = (props) => {
         localStorage.removeItem('is_guest');
         localStorage.setItem('user_id', response.user.id);
         history.push('/');
+        subscribeUser();
       } else {
         toast.info(t(translations.login_page.please_verify_your_account));
       }

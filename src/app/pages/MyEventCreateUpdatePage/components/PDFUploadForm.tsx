@@ -8,13 +8,13 @@ import { PDFItem } from './PDFItem';
 import { DownloadOutlined } from '@ant-design/icons';
 import { CalendarEvent } from 'types/CalendarEvent';
 
-interface PDFUploadForm {
+interface IPDFUploadForm {
     event: Partial<CalendarEvent>,
     reloadParent?: Function,
     fullWidth?: boolean
 }
 
-export const PDFUploadForm = (props: PDFUploadForm) => {
+export const PDFUploadForm = (props: IPDFUploadForm) => {
 
     const { event, reloadParent, fullWidth } = props;
 

@@ -169,7 +169,8 @@
       "profile_setting": "Profile Settings",
       "discover_friends": "Discover Friends",
       "my_profile": "My Profile",
-      "integrations": "Integrations"
+      "integrations": "Integrations",
+      "settings": "Settings"
     },
     "app_connection": "App Connections",
     "organizational_membership": "Organizational Memberships",
@@ -231,7 +232,8 @@
       "delete_my_account": "Delete My Account",
       "you_will_delete_your_account_along_with_all_associated_information": "You will delete your account along with all associated information.",
       "permantly_delete_my_account": "Permantly delete my account",
-      "account_settings": "Account settings",
+      "account_information": "Account Information",
+      "account_settings": "Account Settings",
       "password_security": "Password & Security",
       "problem_updating_profile": "There was a problem updating your profile.",
       "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
@@ -261,7 +263,10 @@
       "are_you_sure_you_want_to_remove_covid_card": "Are you sure you want to remove covid card?",
       "remove_passport_photo": "Remove Passport Photo",
       "are_you_sure_you_want_to_remove_passport_photo": "Are you sure you want to remove passport photo?",
-      "remove": "Remove"
+      "remove": "Remove",
+      "notifications": "Notifications",
+      "turn_on_mobile_notification": "Turn on mobile notification",
+      "turn_on_email_notification": "Turn on email notification"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"
@@ -1196,5 +1201,13 @@
     "deleted_successfully": "Successfully deleted liferaft.",
     "are_you_sure_you_want_to_delete_this_liferaft": "Are you sure you want to delete this liferaft?",
     "all_information_associated_with_this_liferaft_will_be_deleted": "All information associated with this liferaft will be deleted, are you sure you want to continue?"
+  },
+  "notifications": {
+    "notifications": "Notifications",
+    "mark_all_as_read": "Mark All As Read",
+    "notification_settings": "Notification Settings",
+    "open_notification_center": "Open Notification Center",
+    "see_more": "See more",
+    "you_dont_have_any_notifications": "You don't have any notifications."
   }
 }
