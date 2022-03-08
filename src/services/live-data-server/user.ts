@@ -33,6 +33,21 @@ export const updateProfile = (data) => {
         })
 }
 
+export const updateProfileSettings = (data) => {
+    return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`, data)
+        .then(response => {
+            return {
+                success: true,
+                user: response.data
+            }
+        }).catch(error => {
+            return {
+                sucess: false,
+                error: error
+            }
+        })
+}
+
 export const deleteUserAccount = () => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`))
 }
