@@ -58,7 +58,6 @@ export const UserNotification = () => {
         history.push('/notifications');
     }
 
-
     React.useEffect(() => {
         getNotifications(pagination.page, pagination.size);
         dispatch(actions.getNotificationUnreadCount());

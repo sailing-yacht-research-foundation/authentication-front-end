@@ -14,6 +14,7 @@
          showToastMessageOnRequestError(response.error);
      } else {
          yield put(notificationActions.getNotificationUnreadCount());
+         yield put(notificationActions.setMarkAllAsReadSuccess(true));
      }
  }
   

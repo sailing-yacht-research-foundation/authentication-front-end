@@ -6,6 +6,7 @@ import notificationSaga from './saga';
 
 export const initialState: NotificationState = {
     unreadCount: 0,
+    markAllAsReadSuccess: false,
 };
 
 const slice = createSlice({
@@ -16,7 +17,10 @@ const slice = createSlice({
             state.unreadCount = action.payload;
         },
         markAllAsRead(state) {},
-        getNotificationUnreadCount(state) {}
+        getNotificationUnreadCount(state) {},
+        setMarkAllAsReadSuccess(state, action: PayloadAction<boolean>) {
+            state.markAllAsReadSuccess = action.payload;
+        }
     },
 });
 

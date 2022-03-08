@@ -21,7 +21,7 @@ interface INotificationList {
     outOfData: boolean,
     pagination: any,
     isLoading: boolean,
-    renderAsPage?: boolean
+    renderAsPage?: boolean,
 }
 
 const defaultOptions = {

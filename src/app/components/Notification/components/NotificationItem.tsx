@@ -11,7 +11,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { markNotificationsAsRead } from 'services/live-data-server/notifications';
 import { useHistory } from 'react-router-dom';
 import { useSocialSlice } from 'app/components/SocialProfile/slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineGlobal, AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { MdAdminPanelSettings, MdEventBusy, MdGroupAdd, MdOutgoingMail } from 'react-icons/md';
 import { GiAchievement } from 'react-icons/gi';
@@ -20,6 +20,7 @@ import { IoCreateSharp, IoShieldCheckmark } from 'react-icons/io5';
 import { BsPersonPlus } from 'react-icons/bs';
 import { useNotificationSlice } from '../slice';
 import { renderAvatar } from 'utils/user-utils';
+import { selectMarkAllAsReadSuccess } from '../slice/selectors';
 
 export const NotificationItem = ({ notification }: { notification: Notification }) => {
 
@@ -31,7 +32,15 @@ export const NotificationItem = ({ notification }: { notification: Notification 
 
     const notificationActions = useNotificationSlice().actions;
 
+    const markAllAsReadSuccess = useSelector(selectMarkAllAsReadSuccess);
+
     const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        if (markAllAsReadSuccess)
+        setIsRead(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [markAllAsReadSuccess]);
 
     React.useEffect(() => {
         setIsRead(!!notification.readAt);
