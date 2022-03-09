@@ -850,7 +850,13 @@
     "import_track_successfully": "Import track successfully!",
     "import_gpx_track": "Import GPX Track",
     "import_expedition_track": "Import Expedition Track",
-    "import": "Import"
+    "import": "Import",
+    "boat_name": "Boat Name",
+    "select_a_boat": "Select a Boat",
+    "boat_name_for_the_track": "Boat Name for the Track",
+    "select_existing_boats": "Select existing Boats",
+    "create_a_new_boat": "Create a new Boat",
+    "use_default_track_name": "Use default Track Name"
   },
   "tip": {
     "search_for_races_using_different_criteria": "Search for races using different criteria.",
