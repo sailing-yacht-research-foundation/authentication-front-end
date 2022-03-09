@@ -7,7 +7,7 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { ProfileTabs } from '../ProfilePage/components/ProfileTabs';
 import { Form, Spin, Switch } from 'antd';
-import { updateProfile } from 'services/live-data-server/user';
+import { updateProfileSettings } from 'services/live-data-server/user';
 import { toast } from 'react-toastify';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
@@ -30,7 +30,7 @@ export const Settings = () => {
 
         setIsLoading(true);
 
-        const response = await updateProfile({
+        const response = await updateProfileSettings({
             optInMobileNotification: !!optInMobileNotification,
             optInEmailNotification: !!optInEmailNotification,
             isStreamer: !!authUser.isStreamer // we leave it for now 'cause Jon didn't mention anything about it.
