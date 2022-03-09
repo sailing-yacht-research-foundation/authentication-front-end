@@ -36,7 +36,16 @@
         "city": "City:",
         "country": "Country:",
         "event_name": "Event:",
-        "date": "Date:"
+        "date": "Date:",
+        "mark_as_hidden": "Mark As Hidden",
+        "mark_as_completed": "Mark As Completed",
+        "delete_this_race": "Delete This Race",
+        "are_you_sure_you_want_to_mark_this_race_as_hidden": "Are you sure you want to mark this race as hidden?",
+        "this_race_will_be_hidden_are_you_sure_you_want_to_continue": "This race will be hidden, are you sure you want to continue?",
+        "are_you_sure_you_want_to_mark_this_race_as_completed": "Are you sure you want to mark this race as completed?",
+        "this_race_will_be_marked_as_completed_are_you_sure_you_want_to_continue": "This race will be marked as completed, are you sure you want to continue?",
+        "are_you_sure_you_want_to_force_delete_this_race": "Are you sure you want to force delete this race?",
+        "this_race_will_be_deleted_are_you_sure_you_want_to_continue": "This race will be deleted, are you sure you want to continue?"
       }
     },
     "search_performed_no_result_found": "Searched for {{keyword}}, no result found.",
@@ -366,7 +375,8 @@
     "resend": "Resend",
     "code_is_required": "Code is required and must be a 6-digit number.",
     "block": "Block",
-    "unblock": "Unblock"
+    "unblock": "Unblock",
+    "your_action_is_successful": "You action is successful."
   },
   "data_page": {
     "syrf_race_data": "SYRF Race Data",
