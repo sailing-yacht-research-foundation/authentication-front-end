@@ -11,7 +11,7 @@ import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { selectIsAuthenticated, selectUser, selectUserRole } from 'app/pages/LoginPage/slice/selectors';
 import { CreateButton } from 'app/components/SyrfGeneral';
 import { FiEdit } from 'react-icons/fi';
 import { selectRelations } from '../../slice/selectors';
@@ -30,7 +30,11 @@ export const ResultItem = (props) => {
     const eventText = renderEmptyValue(race._source?.event_name, ' ');
     const eventElement = eventId && race._source.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText;
     const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
+
     const isAuthenticated = useSelector(selectIsAuthenticated);
+
+    const userRole = useSelector(selectUserRole);
+
     const history = useHistory();
 
     const showRegisterModalOrRedirect = () => {

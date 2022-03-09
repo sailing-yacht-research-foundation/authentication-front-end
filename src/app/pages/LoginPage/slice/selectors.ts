@@ -40,3 +40,8 @@ export const selectGetProfileAttemptsCount = createSelector(
   [selectDomain],
   (loginState) => loginState.get_profile_attempts_count
 )
+
+export const selectUserRole = createSelector(
+  [selectDomain],
+  (loginState) => loginState.role
+)
