@@ -98,7 +98,6 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
     }
 
     const renderFormFieldsBaseOnRadioValue = () => {
-        console.log(selectedRadioValue);
         switch (selectedRadioValue) {
             case radioValue.CREATE_NEW_BOAT:
                 return <Form.Item
