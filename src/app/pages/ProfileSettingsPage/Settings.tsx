@@ -32,7 +32,8 @@ export const Settings = () => {
 
         const response = await updateProfile({
             optInMobileNotification: !!optInMobileNotification,
-            optInEmailNotification: !!optInEmailNotification
+            optInEmailNotification: !!optInEmailNotification,
+            isStreamer: !!authUser.isStreamer // we leave it for now 'cause Jon didn't mention anything about it.
         });
 
         setIsLoading(false);
