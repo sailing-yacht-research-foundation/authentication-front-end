@@ -201,7 +201,7 @@ export const EventDetail = () => {
                         <VesselList event={event} />
                     </EventSection>
 
-                    <PDFUploadForm fullWidth event={event} />
+                    <PDFUploadForm reloadParent={fetchEvent} fullWidth event={event} />
 
                     <EventSection>
                         <EventAdmins event={event} />
