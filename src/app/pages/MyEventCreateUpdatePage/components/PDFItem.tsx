@@ -31,7 +31,8 @@ export const PDFItem = (props) => {
 
         if (response.success) {
             onSuccess();
-            reloadParent();
+            if (reloadParent)
+                reloadParent();
         } else {
             onError();
             showToastMessageOnRequestError(response.error);
