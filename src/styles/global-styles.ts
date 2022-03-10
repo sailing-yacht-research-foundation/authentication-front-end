@@ -5,7 +5,7 @@ export const GlobalStyle = createGlobalStyle`
   html,
   body {
     height: 100%;
-    width: 100%;
+    width: 100% !important;
     line-height: 1.5;
     max-width: 2560px;
     display: block;

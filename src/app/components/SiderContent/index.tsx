@@ -141,6 +141,7 @@ const SiderWrapper = styled.div`
   position: fixed;
   width: 256px;
   overflow: hidden;
+  overflow-y: auto;
 
   ${media.large`
     width: auto;

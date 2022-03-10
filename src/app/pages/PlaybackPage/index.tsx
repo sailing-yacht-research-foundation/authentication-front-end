@@ -90,6 +90,10 @@ export const PlaybackPage = (props) => {
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   useEffect(() => {
