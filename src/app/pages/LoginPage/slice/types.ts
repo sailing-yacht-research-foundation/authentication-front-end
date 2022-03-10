@@ -7,7 +7,6 @@ export interface LoginState {
   user_coordinate?: null | Coordinate;
   refresh_token?: string;
   get_profile_attempts_count?: number;
-  role?: string;
 }
 
 export type ContainerState = LoginState

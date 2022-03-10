@@ -11,8 +11,7 @@ export const initialState: LoginState = {
   syrf_authenticated: !!localStorage.getItem('session_token') && !!localStorage.getItem('is_guest'),
   user_coordinate: JSON.parse(localStorage.getItem('user_coordinate') || 'null'),
   refresh_token: !!localStorage.getItem('refresh_token') ? String(localStorage.getItem('refresh_token')) : '',
-  get_profile_attempts_count: 0,
-  role: ''
+  get_profile_attempts_count: 0
 };
 
 const slice = createSlice({
@@ -56,9 +55,6 @@ const slice = createSlice({
     },
     setFailedGetProfileAttemptsCount(state, action: PayloadAction<number>) {
       state.get_profile_attempts_count = action.payload;
-    },
-    setUserRole(state, action: PayloadAction<string>) {
-      state.role = action.payload;
     }
   },
 });

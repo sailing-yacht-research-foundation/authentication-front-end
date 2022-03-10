@@ -957,7 +957,8 @@
     "if_you_havent_linked_any_credentials": "If you haven't linked any credentials, you can go to this page to link your credential.",
     "integrations_page": "Integrations page",
     "your_interests": "Your interests",
-    "event_types": "Select an event type"
+    "event_types": "Select an event type",
+    "super_admin_options": "Super Admin Options"
   },
   "forms": {
     "first_name_is_required": "First name is required.",

@@ -50,7 +50,6 @@ export const LoginForm = (props) => {
       dispatch(actions.getUser());
       if (response.user?.email_verified) {
         dispatch(actions.setIsAuthenticated(true));
-        dispatch(actions.setUserRole(response.user?.role));
         localStorage.removeItem('is_guest');
         localStorage.setItem('user_id', response.user.id);
         history.push('/');

@@ -10,15 +10,17 @@ import { translations } from 'locales/translations';
 import { RaceStatus, TIME_FORMAT, UserRole } from 'utils/constants';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
-import { useSelector } from 'react-redux';
-import { selectIsAuthenticated, selectUserRole } from 'app/pages/LoginPage/slice/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { CreateButton } from 'app/components/SyrfGeneral';
 import { FiEdit } from 'react-icons/fi';
-import { selectRelations } from '../../slice/selectors';
+import { selectRelations, selectResults, selectUpcomingRaces } from '../../slice/selectors';
 import { IoEllipsisHorizontal } from 'react-icons/io5';
 import { forceDeleteCompetitionUnit, markCompetitionUnitAsCompleted, markCompetitionUnitAsHidden } from 'services/live-data-server/competition-units';
 import { toast } from 'react-toastify';
 import { ConfirmModal } from 'app/components/ConfirmModal';
+import { useHomeSlice } from '../../slice';
+import ReactTooltip from 'react-tooltip';
 
 export const ResultItem = (props) => {
 
@@ -40,9 +42,17 @@ export const ResultItem = (props) => {
 
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
-    const userRole = useSelector(selectUserRole);
+    const authUser = useSelector(selectUser);
 
-    const canManageRace = () => userRole === UserRole.SUPER_ADMIN && race._source?.source !== 'SYRF';
+    const canManageRace = () => authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== 'SYRF';
+
+    const dispatch = useDispatch();
+
+    const { actions } = useHomeSlice();
+
+    const results = useSelector(selectResults);
+
+    const upcomingResults = useSelector(selectUpcomingRaces);
 
     const history = useHistory();
 
@@ -85,6 +95,7 @@ export const ResultItem = (props) => {
         if (response.success) {
             setShowMarkAsHiddenConfirmModal(false);
             toast.success(t(translations.app.your_action_is_successful));
+            updateResults(race._source.id);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -96,6 +107,7 @@ export const ResultItem = (props) => {
         if (response.success) {
             setShowMarkAsCompletedConfirmModal(false);
             toast.success(t(translations.app.your_action_is_successful));
+            updateResults(race._source.id);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -107,9 +119,21 @@ export const ResultItem = (props) => {
         if (response.success) {
             setShowDeleteRaceConfirmModal(false);
             toast.success(t(translations.app.your_action_is_successful));
+            updateResults(race._source.id);
         } else {
             showToastMessageOnRequestError(response.error);
         }
+    }
+
+    const updateResults = (raceIdToFilter) => {
+        const filteredSearchResults = results.filter(r => r._source.id !== raceIdToFilter);
+        const filteredUpcomingResults = upcomingResults.filter(r => r._source.id !== raceIdToFilter);
+        dispatch(actions.setUpcomingRaceResults(filteredUpcomingResults))
+        dispatch(actions.setResults(filteredSearchResults));
+    }
+
+    const isNotCompleted = () => {
+        return race._source.approx_end_time_ms && moment(race._source.approx_end_time_ms).isSameOrAfter(moment());
     }
 
     const menu = (
@@ -117,9 +141,11 @@ export const ResultItem = (props) => {
             <Menu.Item onClick={showMarkAsHiddenModal}>
                 {t(translations.home_page.filter_tab.filter_result.mark_as_hidden)}
             </Menu.Item>
-            <Menu.Item onClick={showMarkAsCompletedModal}>
-                {t(translations.home_page.filter_tab.filter_result.mark_as_completed)}
-            </Menu.Item>
+            {
+                isNotCompleted() && <Menu.Item onClick={showMarkAsCompletedModal}>
+                    {t(translations.home_page.filter_tab.filter_result.mark_as_completed)}
+                </Menu.Item>
+            }
             <Menu.Item onClick={showDeleteRaceModal}>
                 {t(translations.home_page.filter_tab.filter_result.delete_this_race)}
             </Menu.Item>
@@ -163,7 +189,7 @@ export const ResultItem = (props) => {
                         <GiPositionMarker />
                         {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
                     </Space>
-                    {canManageRace() && <StyledDropDown overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />}
+                    {canManageRace() && <StyledDropDown data-tip={t(translations.tip.super_admin_options)} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />}
                 </HeadDescriptionWrapper>}
                 <Name><Link to={`/playback?raceId=${race._id}`}>{race._source?.name}</Link></Name>
                 {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
@@ -185,6 +211,7 @@ export const ResultItem = (props) => {
                     }
                 </Space>
             </Wrapper>
+            <ReactTooltip/>
         </>
     )
 }
