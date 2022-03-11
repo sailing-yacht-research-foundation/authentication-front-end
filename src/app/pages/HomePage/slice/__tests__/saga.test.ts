@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { getLiveAndUpcomingRaces, search } from 'services/live-data-server/competition-units';
 import * as slice from '..';
 
@@ -53,6 +53,10 @@ describe('home Saga', () => {
         let searchRacePutDescriptor = searchRaceIterator.next().value;
         expect(searchRacePutDescriptor).toEqual(
             put(slice.homeActions.setNoResultsFound(false)),
+        );
+
+        expect(searchRaceIterator.next().value).toEqual(
+            delay(100),
         );
 
         expect(searchRaceIterator.next().value).toEqual(
@@ -114,6 +118,10 @@ describe('home Saga', () => {
         let searchRacePutDescriptor = searchRaceIterator.next().value;
         expect(searchRacePutDescriptor).toEqual(
             put(slice.homeActions.setNoResultsFound(false)),
+        );
+
+        expect(searchRaceIterator.next().value).toEqual(
+            delay(100),
         );
 
         expect(searchRaceIterator.next().value).toEqual(
