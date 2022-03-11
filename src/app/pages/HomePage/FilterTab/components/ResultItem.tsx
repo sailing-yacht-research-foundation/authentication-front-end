@@ -44,7 +44,9 @@ export const ResultItem = (props) => {
 
     const authUser = useSelector(selectUser);
 
-    const canManageRace = () => authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== 'SYRF';
+    const canManageRace = () => {
+        return authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== 'SYRF';
+    };
 
     const dispatch = useDispatch();
 
@@ -171,7 +173,7 @@ export const ResultItem = (props) => {
             <ConfirmModal
                 showModal={showDeleteRaceConfirmModal}
                 title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_force_delete_this_race)}
-                content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_marked_as_completed_are_you_sure_you_want_to_continue)}
+                content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_deleted_are_you_sure_you_want_to_continue)}
                 onOk={forceDeleteRace}
                 onCancel={() => setShowDeleteRaceConfirmModal(false)}
             />
@@ -184,13 +186,17 @@ export const ResultItem = (props) => {
                 lat={race._source?.approx_start_point?.coordinates[1]}
                 raceId={race._source?.id} />
             <Wrapper key={props.index}>
-                {race._source?.start_country && <HeadDescriptionWrapper>
+                <HeadDescriptionWrapper>
                     <Space size={5}>
-                        <GiPositionMarker />
-                        {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
+                        {race._source?.start_country ?
+                            <>
+                                <GiPositionMarker />
+                                {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
+                            </> : <div></div>
+                        }
                     </Space>
                     {canManageRace() && <StyledDropDown data-tip={t(translations.tip.super_admin_options)} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />}
-                </HeadDescriptionWrapper>}
+                </HeadDescriptionWrapper>
                 <Name><Link to={`/playback?raceId=${race._id}`}>{race._source?.name}</Link></Name>
                 {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
                 <DescriptionWrapper>
@@ -211,7 +217,7 @@ export const ResultItem = (props) => {
                     }
                 </Space>
             </Wrapper>
-            <ReactTooltip/>
+            <ReactTooltip />
         </>
     )
 }

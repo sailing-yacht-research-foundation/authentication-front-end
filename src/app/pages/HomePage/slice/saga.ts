@@ -3,7 +3,7 @@
  */
 
 import { homeActions } from ".";
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { checkForUserRelationWithCompetitionUnits, getLiveAndUpcomingRaces, search } from "services/live-data-server/competition-units";
 import { toast } from "react-toastify";
 import i18next from 'i18next';
@@ -15,6 +15,7 @@ export function* searchRaces(action) {
     const params = action.payload;
 
     yield put(homeActions.setNoResultsFound(false));
+    yield delay(100); // delay for taking time to append selected criteria
     yield put(homeActions.setIsSearching(true));
 
     const response = yield call(search, params);

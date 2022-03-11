@@ -213,7 +213,7 @@ export const ResultSuggestion = (props) => {
     React.useEffect(() => {
         document.onkeyup = handleSelectionUsingArrowKey;
         return () => {
-            document.onkeydown = null;
+            document.onkeyup = null;
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
