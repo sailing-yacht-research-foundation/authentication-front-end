@@ -18,14 +18,14 @@ export function* searchRaces(action) {
     yield delay(100); // delay for taking time to append selected criteria
     yield put(homeActions.setIsSearching(true));
 
-    const response = yield call(search, params);
     const searchKeyword = yield select(selectSearchKeyword);
+    const response = yield call(search, {...params, keyword: searchKeyword});
 
     yield put(homeActions.setIsSearching(false));
 
     if (response.success) {
         if (response.data?.hits?.total?.value === 0) {
-            toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: params.keyword }));
+            toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: searchKeyword }));
             yield put(homeActions.setResults([]));
             yield put(homeActions.setTotal(0));
             yield put(homeActions.setNoResultsFound(true));

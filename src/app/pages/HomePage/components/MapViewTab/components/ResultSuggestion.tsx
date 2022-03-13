@@ -159,6 +159,7 @@ export const ResultSuggestion = (props) => {
         suggestionItems.current = [];
         setSelectedCriteria('');
         selectedCriteriaRef.current = '';
+        selectedIndex.current = -1;
         if (setShowSuggestion) setShowSuggestion(false);
     }
 
