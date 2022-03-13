@@ -534,7 +534,7 @@
     "cancel_event": "Cancel Event",
     "publish": "Publish",
     "publish_this_event": "Publish This Event",
-    "once_you_publish_this_event_you": "Once you publish an event it becomes visible to everyone. You can still make changes but you will not be able to delete the event.",
+    "once_you_publish_this_event_you": "Once you publish an event it becomes visible to everyone. You can still change the event information, but you can not hide the event. You are about to make the event name, start time and starting and ending locations visible to the entire internet. Please ensure you have not accidentally used your home address as the start or end location for this event.",
     "invite_competitors": "Invite competitors",
     "search_for_competitors": "Search for competitors",
     "stop_this_race": "Stop this race",
@@ -565,7 +565,9 @@
     "pdf_documents":"PDF documents",
     "download_all":"Download All",
     "download": "Download",
-    "upload": "Upload"
+    "upload": "Upload",
+    "keep_draft": "Keep Draft",
+    "make_public": "Make Public"
   },
   "course_list": {
     "name": "Name",
