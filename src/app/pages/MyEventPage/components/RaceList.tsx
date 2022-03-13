@@ -20,7 +20,7 @@ export const RaceList = (props) => {
 
     const columns = [
         {
-            title: t(translations.competition_unit_list_page.name),
+            title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
@@ -36,7 +36,7 @@ export const RaceList = (props) => {
             width: '25%'
         },
         {
-            title: t(translations.competition_unit_list_page.created_date),
+            title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
@@ -52,7 +52,7 @@ export const RaceList = (props) => {
                     {
                         canEditRace() && <BorderedButton onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
-                        }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
+                        }} type="primary">{t(translations.general.update)}</BorderedButton>
                     }
                 </Space>)
             }

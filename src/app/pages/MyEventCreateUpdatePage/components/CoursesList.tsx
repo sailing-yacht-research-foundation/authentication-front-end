@@ -27,26 +27,26 @@ export const CoursesList = (props) => {
 
     const columns = [
         {
-            title: t(translations.course_list.name),
+            title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
             render: (value) => value,
         },
         {
-            title: t(translations.course_list.created_date),
+            title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
-            title: t(translations.course_list.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
                     <BorderedButton onClick={() => {
                         history.push(`/events/${eventId}/courses/${record.id}/update`)
-                    }} type="primary">{t(translations.course_list.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteModal(record)}>{t(translations.course_list.delete)}</BorderedButton>
+                    }} type="primary">{t(translations.general.update)}</BorderedButton>
+                    <BorderedButton danger onClick={() => showDeleteModal(record)}>{t(translations.general.delete)}</BorderedButton>
                 </Space>
             ),
             width: '20%',
@@ -107,7 +107,7 @@ export const CoursesList = (props) => {
                     <PageHeaderTextSmall>{t(translations.course_list.course)}</PageHeaderTextSmall>
                     <CreateButton onClick={() => history.push(`/events/${eventId}/courses/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.course_list.create)}</CreateButton>
+                        size={18} />}>{t(translations.general.create)}</CreateButton>
                 </PageHeaderContainer>
                 <TableWrapper>
                     <Table columns={columns}

@@ -22,7 +22,7 @@ export const RaceList = (props) => {
 
     const columns = [
         {
-            title: t(translations.competition_unit_list_page.name),
+            title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
@@ -42,13 +42,13 @@ export const RaceList = (props) => {
             render: (value) => value,
         },
         {
-            title: t(translations.competition_unit_list_page.created_date),
+            title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
-            title: t(translations.competition_unit_list_page.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => {
                 return <RaceManageButtons

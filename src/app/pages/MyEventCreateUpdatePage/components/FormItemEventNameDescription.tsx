@@ -14,7 +14,7 @@ export const FormItemEventNameDescription = (props) => {
     return (
         <>
             <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.name)}</SyrfFieldLabel>}
+                label={<SyrfFieldLabel>{t(translations.general.name)}</SyrfFieldLabel>}
                 name="name"
                 className="event-name-step"
                 data-tip={t(translations.tip.name_of_the_event)}
