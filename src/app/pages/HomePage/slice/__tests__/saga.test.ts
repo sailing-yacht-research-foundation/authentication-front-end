@@ -63,7 +63,7 @@ describe('home Saga', () => {
             put(slice.homeActions.setIsSearching(true)),
         );
 
-        const selectDescriptor = searchRaceIterator.next(response).value;
+        const selectDescriptor = searchRaceIterator.next().value;
         expect(selectDescriptor).toEqual(
             select(selectSearchKeyword),
         );
@@ -71,10 +71,10 @@ describe('home Saga', () => {
         const callDescriptor = searchRaceIterator.next(params).value;
 
         expect(callDescriptor).toEqual(
-            call(search, {...params, keyword: 'east'}),
+            call(search, { ...params, keyword: { keyword: 'east' } }),
         );
 
-        searchRacePutDescriptor = searchRaceIterator.next().value;
+        searchRacePutDescriptor = searchRaceIterator.next(response).value;
         expect(searchRacePutDescriptor).toEqual(
             put(slice.homeActions.setIsSearching(false)),
         );
@@ -129,17 +129,17 @@ describe('home Saga', () => {
             put(slice.homeActions.setIsSearching(true)),
         );
 
-        const selectDescriptor = searchRaceIterator.next(response).value;
+        const selectDescriptor = searchRaceIterator.next().value;
         expect(selectDescriptor).toEqual(
             select(selectSearchKeyword),
         );
 
         const callDescriptor = searchRaceIterator.next(params).value;
         expect(callDescriptor).toEqual(
-            call(search, {...params, keyword: 'east'}),
+            call(search, { ...params, keyword: { keyword: 'east' } }),
         );
 
-        searchRacePutDescriptor = searchRaceIterator.next().value;
+        searchRacePutDescriptor = searchRaceIterator.next(response).value;
         expect(searchRacePutDescriptor).toEqual(
             put(slice.homeActions.setIsSearching(false)),
         );

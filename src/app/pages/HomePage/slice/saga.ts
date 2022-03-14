@@ -20,7 +20,6 @@ export function* searchRaces(action) {
 
     const searchKeyword = yield select(selectSearchKeyword);
     const response = yield call(search, { ...params, keyword: searchKeyword });
-
     yield put(homeActions.setIsSearching(false));
 
     if (response.success) {
