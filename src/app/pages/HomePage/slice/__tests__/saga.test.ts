@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { getLiveAndUpcomingRaces, search } from 'services/live-data-server/competition-units';
 import * as slice from '..';
 
@@ -56,21 +56,25 @@ describe('home Saga', () => {
         );
 
         expect(searchRaceIterator.next().value).toEqual(
+            delay(100),
+        );
+
+        expect(searchRaceIterator.next().value).toEqual(
             put(slice.homeActions.setIsSearching(true)),
+        );
+
+        const selectDescriptor = searchRaceIterator.next().value;
+        expect(selectDescriptor).toEqual(
+            select(selectSearchKeyword),
         );
 
         const callDescriptor = searchRaceIterator.next(params).value;
 
         expect(callDescriptor).toEqual(
-            call(search, params),
+            call(search, { ...params, keyword: { keyword: 'east' } }),
         );
 
-        const selectDescriptor = searchRaceIterator.next(response).value;
-        expect(selectDescriptor).toEqual(
-            select(selectSearchKeyword),
-        );
-
-        searchRacePutDescriptor = searchRaceIterator.next().value;
+        searchRacePutDescriptor = searchRaceIterator.next(response).value;
         expect(searchRacePutDescriptor).toEqual(
             put(slice.homeActions.setIsSearching(false)),
         );
@@ -111,26 +115,31 @@ describe('home Saga', () => {
         const params = {
             keyword: 'east'
         };
+
         let searchRacePutDescriptor = searchRaceIterator.next().value;
         expect(searchRacePutDescriptor).toEqual(
             put(slice.homeActions.setNoResultsFound(false)),
         );
 
         expect(searchRaceIterator.next().value).toEqual(
+            delay(100),
+        );
+
+        expect(searchRaceIterator.next().value).toEqual(
             put(slice.homeActions.setIsSearching(true)),
         );
 
-        const callDescriptor = searchRaceIterator.next(params).value;
-        expect(callDescriptor).toEqual(
-            call(search, params),
-        );
-
-        const selectDescriptor = searchRaceIterator.next(response).value;
+        const selectDescriptor = searchRaceIterator.next().value;
         expect(selectDescriptor).toEqual(
             select(selectSearchKeyword),
         );
 
-        searchRacePutDescriptor = searchRaceIterator.next().value;
+        const callDescriptor = searchRaceIterator.next(params).value;
+        expect(callDescriptor).toEqual(
+            call(search, { ...params, keyword: { keyword: 'east' } }),
+        );
+
+        searchRacePutDescriptor = searchRaceIterator.next(response).value;
         expect(searchRacePutDescriptor).toEqual(
             put(slice.homeActions.setIsSearching(false)),
         );

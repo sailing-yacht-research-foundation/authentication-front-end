@@ -3,7 +3,7 @@
  */
 
 import { homeActions } from ".";
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { checkForUserRelationWithCompetitionUnits, getLiveAndUpcomingRaces, search } from "services/live-data-server/competition-units";
 import { toast } from "react-toastify";
 import i18next from 'i18next';
@@ -15,16 +15,16 @@ export function* searchRaces(action) {
     const params = action.payload;
 
     yield put(homeActions.setNoResultsFound(false));
+    yield delay(100); // delay for taking time to append selected criteria
     yield put(homeActions.setIsSearching(true));
 
-    const response = yield call(search, params);
     const searchKeyword = yield select(selectSearchKeyword);
-
+    const response = yield call(search, { ...params, keyword: searchKeyword });
     yield put(homeActions.setIsSearching(false));
 
     if (response.success) {
         if (response.data?.hits?.total?.value === 0) {
-            toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: params.keyword }));
+            toast.info(i18next.t(translations.home_page.search_performed_no_result_found, { keyword: searchKeyword }));
             yield put(homeActions.setResults([]));
             yield put(homeActions.setTotal(0));
             yield put(homeActions.setNoResultsFound(true));
@@ -39,7 +39,7 @@ export function* searchRaces(action) {
         showToastMessageOnRequestError(response.error, priotizedErrorMessage);
     }
 
-    window?.history?.pushState('', 'syrf.io', '/?' + Object.entries({...params, keyword: searchKeyword }).map(([key, val]) => `${key}=${val}`).join('&'));
+    window?.history?.pushState('', 'syrf.io', '/?' + Object.entries({ ...params, keyword: searchKeyword }).map(([key, val]) => `${key}=${val}`).join('&'));
 }
 
 export function* getUpcomingRaces(action) {
@@ -68,7 +68,7 @@ export function* getUpcomingRaces(action) {
     }
 }
 
-export function* getUserRelationsWithCompetitionUnits (action) {
+export function* getUserRelationsWithCompetitionUnits(action) {
     const competitionUnitsIds = action.payload;
 
     const response = yield call(checkForUserRelationWithCompetitionUnits, competitionUnitsIds);
