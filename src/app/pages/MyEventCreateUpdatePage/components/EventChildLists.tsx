@@ -32,6 +32,8 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
         {
             mode === MODE.UPDATE && (
                 <>
+                    <PDFUploadForm event={event} reloadParent={reloadParent} />
+
                     <SyrfFormWrapper ref={raceListRef}>
                         <CompetitionUnitList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
@@ -48,11 +50,9 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
                         <ParticipantList event={event} eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
-                    <PDFUploadForm event={event} reloadParent={reloadParent} />
-
                     {
                         event.status === EventState.DRAFT && <SyrfFormWrapper>
-                            <SyrfFormButton onClick={() => setShowConfirmPublishEventModal(true)}>{t(translations.my_event_create_update_page.publish)}</SyrfFormButton>
+                            <SyrfFormButton onClick={() => setShowConfirmPublishEventModal(true)}>{t(translations.my_event_create_update_page.make_public)}</SyrfFormButton>
                         </SyrfFormWrapper>
                     }
 

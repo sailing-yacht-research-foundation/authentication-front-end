@@ -7,7 +7,15 @@ import { translations } from 'locales/translations';
 import { removeAsAdmin } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 
-export const RemoveAsAdminModal = (props) => {
+interface IRemoveAsAdminModal {
+    groupId: string,
+    member: any,
+    showModal: boolean,
+    setShowModal: Function,
+    onAdminRemoved: Function
+}
+
+export const RemoveAsAdminModal = (props: IRemoveAsAdminModal) => {
 
     const { t } = useTranslation();
 

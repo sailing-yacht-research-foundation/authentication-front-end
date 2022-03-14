@@ -49,6 +49,8 @@ import { PublicProfilePage } from './pages/PublicProfilePage/Loadable';
 import { ProfileSearchPage } from './pages/ProfileSearchPage/Loadable';
 import { ExternalCredentialsManagePage } from './pages/ExternalCredentialsManagePage/Loadable';
 import { LiveraftCreateUpdatePage } from './pages/LiferaftCreateUpdatePage/Loadable';
+import { NotificationCenterPage } from './pages/NotificationCenterPage/Loadable';
+import { ProfileSettingsPage } from './pages/ProfileSettingsPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -66,6 +68,7 @@ import { TourProvider } from '@reactour/tour';
 import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
+import { selectIsSimplifiedPlayback } from './pages/PlaybackPage/components/slice/selectors';
 
 const { Sider, Content } = Layout;
 
@@ -106,6 +109,8 @@ export function App(props) {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const isSiderToggled = useSelector(selectIsSiderToggled);
+
+  const isSimplifiedPlayback = useSelector(selectIsSimplifiedPlayback);
 
   const [isDesktopSiderToggled, setIsDesktopSiderToggled] = useState<boolean>(true);
 
@@ -158,7 +163,7 @@ export function App(props) {
   }
 
   const renderSider = () => {
-    if (isAuthenticated && isSiderToggled)
+    if (isAuthenticated && isSiderToggled && !isSimplifiedPlayback)
       return (
         <StyledSider
           collapsible
@@ -177,7 +182,7 @@ export function App(props) {
   return (
     <BrowserRouter>
       <Layout style={{ minHeight: '100vh' }}>
-        <Header />
+        { !isSimplifiedPlayback && <Header /> }
         <AgreementModal />
         {renderSider()}
         <Layout className="site-layout">
@@ -224,6 +229,8 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/:profileId'} component={PublicProfilePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:boatId/liferafts/create'} component={LiveraftCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:boatId/liferafts/:id/update'} component={LiveraftCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/notifications'} component={NotificationCenterPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/settings'} component={ProfileSettingsPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

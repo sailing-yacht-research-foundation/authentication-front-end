@@ -85,7 +85,7 @@ export const RaceList = (props) => {
 
     const getAll = async (page) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventId(event.id, page);
+        const response = await getAllByCalendarEventId(event.id!, page);
         setIsLoading(false);
 
         if (response.success) {

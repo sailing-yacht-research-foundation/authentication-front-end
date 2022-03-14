@@ -44,9 +44,10 @@
     "register_as_competitor": "Register as Competitor",
     "live_and_upcoming": {
       "live_and_upcoming_races": "Live and upcoming races.",
+      "live_and_upcoming_events": "Live and Upcoming Events",
       "miles": "miles",
       "nmi": "NMi",
-      "there_are_no_live_or_upcoming_races": "There are no live or upcoming races."
+      "there_are_no_live_or_upcoming_races": "There are no live or upcoming races or events, please extend the filter to discover more."
     }
   },
   "about_page": {
@@ -168,7 +169,8 @@
       "profile_setting": "Profile Settings",
       "discover_friends": "Discover Friends",
       "my_profile": "My Profile",
-      "integrations": "Integrations"
+      "integrations": "Integrations",
+      "settings": "Settings"
     },
     "app_connection": "App Connections",
     "organizational_membership": "Organizational Memberships",
@@ -230,7 +232,8 @@
       "delete_my_account": "Delete My Account",
       "you_will_delete_your_account_along_with_all_associated_information": "You will delete your account along with all associated information.",
       "permantly_delete_my_account": "Permantly delete my account",
-      "account_settings": "Account settings",
+      "account_information": "Account Information",
+      "account_settings": "Account Settings",
       "password_security": "Password & Security",
       "problem_updating_profile": "There was a problem updating your profile.",
       "your_file_is_too_large_please_choose_another": "You file is too large. Please select another smaller file.",
@@ -260,7 +263,10 @@
       "are_you_sure_you_want_to_remove_covid_card": "Are you sure you want to remove covid card?",
       "remove_passport_photo": "Remove Passport Photo",
       "are_you_sure_you_want_to_remove_passport_photo": "Are you sure you want to remove passport photo?",
-      "remove": "Remove"
+      "remove": "Remove",
+      "notifications": "Notifications",
+      "turn_on_mobile_notification": "Turn on mobile notification",
+      "turn_on_email_notification": "Turn on email notification"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"
@@ -528,7 +534,7 @@
     "cancel_event": "Cancel Event",
     "publish": "Publish",
     "publish_this_event": "Publish This Event",
-    "once_you_publish_this_event_you": "Once you publish an event it becomes visible to everyone. You can still make changes but you will not be able to delete the event.",
+    "once_you_publish_this_event_you": "Once you publish an event it becomes visible to everyone. You can still change the event information, but you can not hide the event. You are about to make the event name, start time and starting and ending locations visible to the entire internet. Please ensure you have not accidentally used your home address as the start or end location for this event.",
     "invite_competitors": "Invite competitors",
     "search_for_competitors": "Search for competitors",
     "stop_this_race": "Stop this race",
@@ -553,13 +559,15 @@
     "is_crewed": "Is Crewed",
     "min_crew": "Min. Crews",
     "max_crew": "Max. Crews",
-    "require_covid_vaccination": "Require COVID Vaccination?",
-    "require_certifications": "Require certifications?",
-    "organizer_group": "Organizer Group",
+    "require_covid_vaccination": "Require COVID Vaccination",
+    "require_certificates": "Require Certificates",
+    "planning_organization": "Planning Organization",
     "pdf_documents":"PDF documents",
     "download_all":"Download All",
     "download": "Download",
-    "upload": "Upload"
+    "upload": "Upload",
+    "keep_draft": "Keep Draft",
+    "make_public": "Make Public"
   },
   "course_list": {
     "name": "Name",
@@ -844,7 +852,13 @@
     "import_track_successfully": "Import track successfully!",
     "import_gpx_track": "Import GPX Track",
     "import_expedition_track": "Import Expedition Track",
-    "import": "Import"
+    "import": "Import",
+    "boat_name": "Boat Name",
+    "select_a_boat": "Select a Boat",
+    "boat_name_for_the_track": "Boat Name for the Track",
+    "select_existing_boats": "Select existing Boats",
+    "create_a_new_boat": "Create a new Boat",
+    "use_default_track_name": "Use default Track Name"
   },
   "tip": {
     "search_for_races_using_different_criteria": "Search for races using different criteria.",
@@ -1195,5 +1209,13 @@
     "deleted_successfully": "Successfully deleted liferaft.",
     "are_you_sure_you_want_to_delete_this_liferaft": "Are you sure you want to delete this liferaft?",
     "all_information_associated_with_this_liferaft_will_be_deleted": "All information associated with this liferaft will be deleted, are you sure you want to continue?"
+  },
+  "notifications": {
+    "notifications": "Notifications",
+    "mark_all_as_read": "Mark All As Read",
+    "notification_settings": "Notification Settings",
+    "open_notification_center": "Open Notification Center",
+    "see_more": "See more",
+    "you_dont_have_any_notifications": "You don't have any notifications."
   }
 }

@@ -5,7 +5,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectViewCounts } from './slice/selectors';
+import { selectCanIncreaseDecreaseSpeed, selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectRaceTime, selectRealRaceTime, selectViewCounts } from './slice/selectors';
 import { usePlaybackSlice } from './slice';
 import { PlaybackTypes } from 'types/Playback';
 import { media } from 'styles/media';
@@ -35,12 +35,21 @@ export const Playback = (props) => {
     const playbackType = useSelector(selectPlaybackType);
     const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
     const viewCounts = useSelector(selectViewCounts);
+    const raceTime = useSelector(selectRaceTime);
+    const realRaceTime = useSelector(selectRealRaceTime);
+    const canIncreaseDecreaseSpeed = useSelector(selectCanIncreaseDecreaseSpeed);
 
     const dispatch = useDispatch();
 
     const { actions } = usePlaybackSlice();
 
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
+
+    const [isRaceStartMarkWithinPlaybackRange, setIsRaceStartMarkWithinPlaybackRange] = React.useState<boolean>(false);
+    const [isRaceEndMarkWithinPlaybackRange, setIsRaceEndMarkWithinPlaybackRange] = React.useState<boolean>(false);
+
+    const [startMarkerWith, setStartMarkerWidth] = React.useState<number>(0);
+    const [endMarkerWidth, setEndMarkerWidth] = React.useState<number>(0);
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
         let percentage = 0;
@@ -106,7 +115,10 @@ export const Playback = (props) => {
     }
 
     const renderSpeedControl = () => {
-        return playbackType && [PlaybackTypes.OLDRACE].includes(playbackType) && <RightItemContainer>
+        return playbackType 
+            && canIncreaseDecreaseSpeed
+            && [PlaybackTypes.OLDRACE].includes(playbackType) 
+            && <RightItemContainer>
             <SpeedControl />
         </RightItemContainer>
     }
@@ -124,6 +136,27 @@ export const Playback = (props) => {
         return <>Live <LiveDot className={isLive ? 'live' : ''}></LiveDot></>;
     }
 
+    const getMarkerWidth = (time) => {
+        let percentage = 0;
+
+        if (time > 0)
+            percentage = ((time - raceTime.start) / raceLength) * 100;
+
+        if (percentage > 100) percentage = 100;
+
+        return percentage;
+    }
+
+    React.useEffect(() => {
+        if (realRaceTime.start > 0 && realRaceTime.end > 0 && raceTime.start > 0 && raceTime.end > 0) {
+            setIsRaceStartMarkWithinPlaybackRange(realRaceTime.start >= raceTime.start && realRaceTime.start < raceTime.end);
+            setIsRaceEndMarkWithinPlaybackRange(realRaceTime.end <= raceTime.end)
+            setStartMarkerWidth(getMarkerWidth(realRaceTime.start));
+            setEndMarkerWidth(getMarkerWidth(realRaceTime.end));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [realRaceTime, raceTime]);
+
     return (
         <PlaybackWrapper>
             <PlaybackTopRightItemsContainer>
@@ -140,6 +173,10 @@ export const Playback = (props) => {
                     <TimeText>{PlaybackTypes.OLDRACE === playbackType && milisecondsToMinutes(elapsedTime)}</TimeText>
                     <ProgressBarWrapper>
                         <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
+                            {playbackType === PlaybackTypes.OLDRACE && <>
+                                {isRaceStartMarkWithinPlaybackRange && <StartMarker style={{ left: `${startMarkerWith}%` }}></StartMarker>}
+                                {isRaceEndMarkWithinPlaybackRange && <EndMarker style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
+                            </>}
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                         </ProgressBar>
                     </ProgressBarWrapper>
@@ -229,6 +266,7 @@ const ProgressBar = styled.div`
     border-radius: 5px;
     width: 100%;
     cursor: pointer;
+    position: relative;
 `;
 
 const ProgressedBar = styled.div`
@@ -309,5 +347,49 @@ const LiveDot = styled.span`
 
     &.live {
         background: #ff0000;
+    }
+`;
+
+const TimeMarker = `
+    position: absolute;
+    top: -30px;
+    font-size: 12px;
+    &:before {
+        content: " ";
+        top: 23px;
+        left: 50%;
+        transform: translateX(-50%);
+        position: absolute;
+        width: 2px;
+        height: 20px;
+        background: #4F61A5;
+    }
+`;
+
+const StartMarker = styled.div`
+    ${TimeMarker}
+    &:after {
+        content: "Start";
+        position: absolute;
+        width: 40px;
+        transform: translateX(-35%);
+        display: none;
+        ${media.medium`
+            display: block
+        `};
+    }
+`;
+
+const EndMarker = styled.div`
+    ${TimeMarker}
+    &:after {
+        content: "End";
+        position: absolute;
+        width: 40px;
+        transform: translateX(-35%);
+        display: none;
+        ${media.medium`
+            display: block
+        `};
     }
 `;

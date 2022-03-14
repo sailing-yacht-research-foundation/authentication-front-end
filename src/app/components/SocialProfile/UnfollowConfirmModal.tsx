@@ -3,7 +3,14 @@ import { Modal } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 
-export const UnfollowConfirmModal = (props) => {
+interface IUnfollowConfirmModal {
+    profileName: string,
+    unfollow: ((e: React.MouseEvent<HTMLElement, MouseEvent>) => void),
+    hideModal: ((e: React.MouseEvent<HTMLElement, MouseEvent>) => void),
+    visible: boolean
+}
+
+export const UnfollowConfirmModal = (props: IUnfollowConfirmModal) => {
 
     const { profileName, unfollow, hideModal, visible } = props;
 

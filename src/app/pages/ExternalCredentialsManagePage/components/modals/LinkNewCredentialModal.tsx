@@ -9,7 +9,15 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { submitNewCredential } from 'services/live-data-server/external-platform';
 import { MODE } from 'utils/constants';
 
-export const LinkNewCredentialModal = (props) => {
+interface ILinkNewCredentialModal {
+    showModal: boolean,
+    setShowModal: Function,
+    reloadParent?: Function,
+    credential: any,
+    mode: string
+}
+
+export const LinkNewCredentialModal = (props: ILinkNewCredentialModal) => {
 
     const { t } = useTranslation();
 
@@ -66,8 +74,8 @@ export const LinkNewCredentialModal = (props) => {
                     onFinish={onFinish}
                     style={{ width: '100%' }}
                     initialValues={{
-                      source: 'YACHTSCORING',
-                      username: credential?.userId || ''
+                        source: 'YACHTSCORING',
+                        username: credential?.userId || ''
                     }}
                 >
                     <Form.Item

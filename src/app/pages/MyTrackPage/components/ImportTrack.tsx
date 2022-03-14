@@ -1,17 +1,29 @@
-import { Modal, Spin, Form } from 'antd';
-import { useForm } from 'antd/lib/form/Form';
-import { SyrfFieldLabel, SyrfFormButton, SyrfInputField } from 'app/components/SyrfForm';
-import { translations } from 'locales/translations';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { importExpeditionTrack, importGPXTrack } from 'services/live-data-server/my-tracks';
+import { getMany } from 'services/live-data-server/vessels';
+import { Vessel } from 'types/Vessel';
 import { ImportTrackType } from 'utils/constants';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { Modal, Spin, Form, Select, Switch, Radio } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfInputField } from 'app/components/SyrfForm';
+import { translations } from 'locales/translations';
+
+const radioValue = {
+    USE_DEFAULT_BOATS: 1,
+    CREATE_NEW_BOAT: 2,
+    USE_DEFAULT_NAME: 3
+}
 
 export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: { onTrackImported: Function, showModal: boolean, setShowModal: Function, type: ImportTrackType }) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+    const [boats, setBoats] = React.useState<Vessel[]>([]);
+
+    const [selectedRadioValue, setSelectedRadioValue] = React.useState<number>(radioValue.USE_DEFAULT_BOATS);
 
     const [form] = useForm();
 
@@ -27,8 +39,15 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
     const onFinish = async (values) => {
         const form = new FormData();
         let response;
-        form.append('importFile', values['file']);
-        form.append('trackName', values['trackName']);
+        const { file, trackName, vesselId, vesselName } = values;
+
+        form.append('importFile', file);
+        form.append('trackName', trackName);
+        if (selectedRadioValue === radioValue.USE_DEFAULT_BOATS) {
+            form.append('vesselId', vesselId);
+        } else if (selectedRadioValue === radioValue.CREATE_NEW_BOAT) {
+            form.append('vesselName', vesselName);
+        }
 
         setIsLoading(true);
 
@@ -51,6 +70,56 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
     const hideModal = () => {
         setShowModal(false);
         form.resetFields();
+    }
+
+    const getUserBoats = async () => {
+        const response = await getMany(1, 100);
+
+        if (response.success) {
+            setBoats(response.data?.rows);
+            if (response.data?.count > 0) {
+                form.setFieldsValue({
+                    vesselId: response.data?.rows[0]?.id
+                });
+            }
+        }
+    }
+
+    const renderBoatsList = () => {
+        return boats.map(item => <Select.Option value={item.id}>{item.publicName}</Select.Option>)
+    }
+
+    React.useEffect(() => {
+        getUserBoats();
+    }, []);
+
+    const onRadioChanged = (e) => {
+        setSelectedRadioValue(e.target.value);
+    }
+
+    const renderFormFieldsBaseOnRadioValue = () => {
+        switch (selectedRadioValue) {
+            case radioValue.CREATE_NEW_BOAT:
+                return <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.my_tracks_page.boat_name)}</SyrfFieldLabel>}
+                    name="vesselName"
+                    rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
+                        max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 })
+                    }]}
+                >
+                    <SyrfInputField />
+                </Form.Item>;
+            case radioValue.USE_DEFAULT_BOATS:
+                return <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.my_tracks_page.select_a_boat)}</SyrfFieldLabel>}
+                    name="vesselId"
+                    rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
+                >
+                    <SyrfFormSelect>
+                        {renderBoatsList()}
+                    </SyrfFormSelect>
+                </Form.Item>
+        }
     }
 
     return (
@@ -78,6 +147,18 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
                     >
                         <SyrfInputField />
                     </Form.Item>
+
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.my_tracks_page.boat_name_for_the_track)}</SyrfFieldLabel>}
+                    >
+                        <Radio.Group onChange={onRadioChanged} value={selectedRadioValue}>
+                            <Radio value={radioValue.USE_DEFAULT_BOATS}>{t(translations.my_tracks_page.select_existing_boats)}</Radio>
+                            <Radio value={radioValue.CREATE_NEW_BOAT}>{t(translations.my_tracks_page.create_a_new_boat)}</Radio>
+                            <Radio value={radioValue.USE_DEFAULT_NAME}>{t(translations.my_tracks_page.use_default_track_name)}</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+
+                    {renderFormFieldsBaseOnRadioValue()}
 
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_tracks_page.file, { type })}</SyrfFieldLabel>}

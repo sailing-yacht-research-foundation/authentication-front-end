@@ -304,7 +304,7 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
  * @param requestPromise 
  * @returns Formatted promise response.
  */
-export const formatServicePromiseResponse = (requestPromise) => {
+export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
     return requestPromise.then(response => {
         return {
             success: true,
@@ -425,3 +425,16 @@ export const checkIfIsSafari = () => {
         navigator.userAgent.indexOf('FxiOS') === -1;
 
 }
+
+export const unregisterPushSubscription = () => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(function (reg) {
+        reg.pushManager.getSubscription().then(function (subscription) {
+          if (subscription)
+            subscription.unsubscribe().catch(function (e) {
+              console.error(e);
+            });
+        })
+      });
+    }
+  }

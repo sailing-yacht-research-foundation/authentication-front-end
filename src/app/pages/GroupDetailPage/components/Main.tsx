@@ -35,7 +35,7 @@ export const Main = () => {
     React.useEffect(() => {
         dispatch(actions.getGroup(groupId));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [groupId]);
 
     return (
         <Wrapper>

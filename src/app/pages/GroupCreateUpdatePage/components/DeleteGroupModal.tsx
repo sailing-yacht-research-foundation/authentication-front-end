@@ -6,8 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { deleteGroup } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { Group } from 'types/Group';
 
-export const DeleteGroupModal = (props) => {
+interface IDeleteGroupModal {
+    group: Partial<Group>,
+    showDeleteModal: boolean,
+    setShowDeleteModal: Function,
+    onGroupDeleted: Function
+}
+
+export const DeleteGroupModal = (props: IDeleteGroupModal) => {
 
     const { t } = useTranslation();
 
@@ -19,7 +27,7 @@ export const DeleteGroupModal = (props) => {
     } = props;
 
     const performDeleteCompetitionUnit = async () => {
-        const response = await deleteGroup(group.id);
+        const response = await deleteGroup(group.id!);
 
         setShowDeleteModal(false);
 

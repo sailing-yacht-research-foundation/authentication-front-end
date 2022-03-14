@@ -16,7 +16,9 @@ import ReactGA from 'react-ga4';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { selectLastSubscribedCompetitionUnitId } from 'app/pages/CompetitionUnitCreateUpdatePage/slice/selectors';
 import { logout as ldsLogout } from 'services/live-data-server/auth';
-import { FollowRequest } from 'app/components/SocialProfile';
+import { UserNotification } from '../Notification';
+import { FollowRequestModal } from '../SocialProfile/FollowRequestModal';
+import { unregisterPushSubscription } from 'utils/helpers';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -38,8 +40,9 @@ export const Nav = () => {
   const refreshToken = useSelector(selectRefreshToken);
 
   const logout = () => {
-    ldsLogout(refreshToken);
+    ldsLogout(refreshToken!);
     dispatch(loginActions.setLogout());
+    unregisterPushSubscription();
     history.push('/signin');
   }
 
@@ -65,7 +68,9 @@ export const Nav = () => {
     <Wrapper>
       {isAuthenenticated ? (
         <>
-          <FollowRequest />
+          <UserNotification />
+          <FollowRequestModal />
+          {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
           <StyledButtonCreate
             type="primary"
             shape="round"
@@ -75,7 +80,6 @@ export const Nav = () => {
             onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
               style={{ marginRight: '5px' }}
               size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>
-          {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
           <DropDownWrapper>
             <UserDropdown logout={logout} />
             <SelectLanguage />

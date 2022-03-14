@@ -7,7 +7,15 @@ import { translations } from 'locales/translations';
 import { removeMemberFromTheGroup } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 
-export const RemoveMemberFromGroupModal = (props) => {
+interface IRemoveMemberFromGroupModal {
+    groupId: string,
+    member: any,
+    showModal: boolean,
+    setShowModal: Function,
+    onMemberRemoved: Function
+}
+
+export const RemoveMemberFromGroupModal = (props: IRemoveMemberFromGroupModal) => {
 
     const { t } = useTranslation();
 

@@ -24,6 +24,7 @@
   },
   "include": [
     "src",
-    "internals/startingTemplate/**/*"
+    "internals/startingTemplate/**/*",
+    "public/sw.js"
   ]
 }

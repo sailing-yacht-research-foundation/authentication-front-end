@@ -20,6 +20,7 @@ import { MdGroups, MdOutlineAccountTree } from 'react-icons/md';
 import { Link } from '../Link';
 import { FaUserFriends } from 'react-icons/fa';
 import { ImProfile } from 'react-icons/im';
+import { AiOutlineSetting } from 'react-icons/ai';
 
 export const SiderContent = (props) => {
 
@@ -31,12 +32,14 @@ export const SiderContent = (props) => {
     { key: '6', paths: ['data'] },
     { key: '8', paths: ['integrations'], subMenuKey: 'profile' },
     { key: '9', paths: ['change-password'], subMenuKey: 'profile' },
+    { key: '12', paths: ['account/settings'], subMenuKey: 'profile' },
     { key: '7', paths: ['account'], subMenuKey: 'profile' },
     { key: '2', paths: ['tracks'] },
     { key: '4', paths: ['groups'] },
     { key: '10', paths: ['profile/search'], subMenuKey: 'profile' },
     { key: '11', paths: ['profile'], subMenuKey: 'profile' },
     { key: '1', paths: ['search'] },
+    { key: '13', paths: ['notifications'] },
   ];
 
   const history = useHistory();
@@ -45,7 +48,7 @@ export const SiderContent = (props) => {
 
   const [selectedKey, setSelectedKey] = React.useState<string>('1');
 
-  const [openKey, setOpenKey] = React.useState('');
+  const [openKey, setOpenKey] = React.useState<string>('');
 
   const [renderedDefaultActive, setRenderedDefaultActive] = React.useState<boolean>(false);
 
@@ -113,6 +116,9 @@ export const SiderContent = (props) => {
           <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />}>
             <StyledLink to={'/account'}>{t(translations.side_menu.profile.name)}</StyledLink>
           </SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="12" icon={<AiOutlineSetting />}>
+            <StyledLink to={'/account/settings'}>{t(translations.side_menu.profile.settings)}</StyledLink>
+          </SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.integrations)} key="8" icon={<MdOutlineAccountTree />}>
             <StyledLink to={'/account/integrations'}>{t(translations.side_menu.profile.integrations)}</StyledLink>
           </SyrfMenuItem>
@@ -135,6 +141,7 @@ const SiderWrapper = styled.div`
   position: fixed;
   width: 256px;
   overflow: hidden;
+  overflow-y: auto;
 
   ${media.large`
     width: auto;

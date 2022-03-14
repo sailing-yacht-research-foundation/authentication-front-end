@@ -6,10 +6,17 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { PDFItem } from './PDFItem';
 import { DownloadOutlined } from '@ant-design/icons';
+import { CalendarEvent } from 'types/CalendarEvent';
 
-export const PDFUploadForm = (props) => {
+interface IPDFUploadForm {
+    event: Partial<CalendarEvent>,
+    reloadParent?: Function,
+    fullWidth?: boolean
+}
 
-    const { event, reloadParent } = props;
+export const PDFUploadForm = (props: IPDFUploadForm) => {
+
+    const { event, reloadParent, fullWidth } = props;
 
     const list = [
         {
@@ -43,7 +50,7 @@ export const PDFUploadForm = (props) => {
     }
 
     return (
-        <SyrfFormWrapper>
+        <SyrfFormWrapper style={fullWidth ? { width: '100%', padding: '30px 15px' }: {}}>
             <PageHeaderContainer>
                 <PageHeaderTextSmall>{t(translations.my_event_create_update_page.pdf_documents)}</PageHeaderTextSmall>
                 {(!!event.noticeOfRacePDF || !!event.mediaWaiverPDF || !!event.disclaimerPDF) && <CreateButton onClick={downloadAllPdfs} icon={<DownloadOutlined />}>{t(translations.my_event_create_update_page.download_all)}</CreateButton>}

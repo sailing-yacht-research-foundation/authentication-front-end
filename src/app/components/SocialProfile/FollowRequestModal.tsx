@@ -5,13 +5,19 @@ import { getRequestedFollowRequests } from '../../../services/live-data-server/p
 import { PaginationContainer } from '../SyrfGeneral';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectShowFollowRequestModal } from './slice/selector';
+import { useSocialSlice } from './slice';
 
-
-export const FollowRequestModal = (props) => {
-
-    const { showModal, setShowModal, reloadFollowRequestsCount } = props;
+export const FollowRequestModal = () => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+    const showFollowRequestModal = useSelector(selectShowFollowRequestModal);
+
+    const dispatch = useDispatch();
+
+    const { actions } = useSocialSlice();
 
     const { t } = useTranslation();
 
@@ -23,17 +29,15 @@ export const FollowRequestModal = (props) => {
 
     const reload = () => {
         getFollowRequests(pagination.page);
-        if (reloadFollowRequestsCount && typeof reloadFollowRequestsCount === 'function')
-            reloadFollowRequestsCount();
     }
 
     const renderFollowRequests = () => {
         if (pagination.rows.length > 0)
-            return pagination.rows.map(request => <RequestItem key={request.id} hideModal={() => setShowModal(false)} reloadParentList={reload} request={request} />);
+            return pagination.rows.map(request => <RequestItem key={request.id} hideModal={hideRequestModal} reloadParentList={reload} request={request} />);
         return <span>{t(translations.public_profile.you_dont_have_any_follow_requests)}</span>
     }
 
-    const getFollowRequests = async (page) => {
+    const getFollowRequests = async (page: number) => {
         setIsLoading(true);
         const response = await getRequestedFollowRequests(page);
         setIsLoading(false);
@@ -48,8 +52,8 @@ export const FollowRequestModal = (props) => {
         }
     }
 
-    const hideInvitationModal = () => {
-        setShowModal(false);
+    const hideRequestModal = () => {
+        dispatch(actions.setShowFollowRequestModal(false));
     }
 
     React.useEffect(() => {
@@ -58,7 +62,7 @@ export const FollowRequestModal = (props) => {
     }, []);
 
     return (
-        <Modal visible={showModal} footer={null} title={t(translations.public_profile.requested_to_follow_you)} onCancel={hideInvitationModal}>
+        <Modal visible={showFollowRequestModal} footer={null} title={t(translations.public_profile.requested_to_follow_you)} onCancel={hideRequestModal}>
             <Spin spinning={isLoading}>
                 {renderFollowRequests()}
                 {pagination.total > 10 && <PaginationContainer>

@@ -71,7 +71,7 @@ export const Nav = (props) => {
 
     const undoJoin = async () => {
         setIsLoading(true);
-        const response = await leaveGroup(group.id);
+        const response = await leaveGroup(group.id!);
         setIsLoading(false);
 
         if (!response.success) {

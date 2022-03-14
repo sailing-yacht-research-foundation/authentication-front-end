@@ -16,11 +16,14 @@ export interface PlaybackState {
     raceLegs?: any;
     raceCourseDetail?: any;
     raceTime?: any;
+    realRaceTime?: any;
     raceRetrievedTimestamps?: number[],
     timeBeforeRaceBegin?: number,
     isConnecting?: boolean,
     speed?: number;
     viewsCount: number;
+    canIncreaseDecreaseSpeed: boolean;
+    isSimplifiedPlayback: boolean;
 }
 
 export type ContainerState = PlaybackState;

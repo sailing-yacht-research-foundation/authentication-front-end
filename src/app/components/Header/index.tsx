@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import { HeaderContent } from './HeaderContent';
 import { useLocation } from 'react-router-dom';
 
-export const Header = (props) => {
+export const Header = () => {
     const routersWithNoHeader = ['/signin'];
 
     const location = useLocation();

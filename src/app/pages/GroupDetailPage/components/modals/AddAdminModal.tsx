@@ -13,7 +13,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAcceptedMemberResults } from '../../slice/selectors';
 import { useGroupDetailSlice } from '../../slice';
 
-export const AddAdminModal = (props) => {
+interface IAddAdminModal {
+    showModal: boolean,
+    setShowModal: Function,
+    onAdminAdded: Function,
+    groupId?: string
+}
+
+export const AddAdminModal = (props: IAddAdminModal) => {
 
     const { t } = useTranslation();
 
@@ -59,7 +66,7 @@ export const AddAdminModal = (props) => {
             });
     }
 
-    const onSearch = async (keyword) => {
+    const onSearch = async (keyword: string) => {
         dispatch(actions.searchAcceptedMembers({ groupId, keyword, status: GroupMemberStatus.ACCEPTED }));
     }
 

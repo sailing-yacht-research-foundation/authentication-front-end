@@ -59,11 +59,11 @@ export const CoursesList = (props) => {
 
     const history = useHistory();
 
-    const onPaginationChanged = (page) => {
+    const onPaginationChanged = (page: number): void => {
         getCourseUsingCalendarEventId(page);
     }
 
-    const showDeleteModal = (course) => {
+    const showDeleteModal = (course: Course) => {
         setShowCourseDeleteModal(true);
         setCourse(course);
     }

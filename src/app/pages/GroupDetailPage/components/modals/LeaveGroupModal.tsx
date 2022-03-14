@@ -7,8 +7,15 @@ import { translations } from 'locales/translations';
 import { leaveGroup } from 'services/live-data-server/groups';
 import { useHistory } from 'react-router';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { Group } from 'types/Group';
 
-export const LeaveGroupModal = (props) => {
+interface ILeaveGroupModal {
+    group: Partial<Group>,
+    showModal: boolean,
+    setShowModal: Function
+}
+
+export const LeaveGroupModal = (props: ILeaveGroupModal) => {
 
     const { t } = useTranslation();
 
@@ -21,7 +28,7 @@ export const LeaveGroupModal = (props) => {
     const history = useHistory();
 
     const performRemoveMember = async () => {
-        const response = await leaveGroup(group.id);
+        const response = await leaveGroup(group.id!);
 
         setShowModal(false);
 

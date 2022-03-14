@@ -17,8 +17,11 @@ import KMLIcon from '../assets/kml.png';
 import GPXIcon from '../assets/gpx.png';
 import ReactTooltip from 'react-tooltip';
 import { BiTrash } from 'react-icons/bi';
-import { DeleteTrackModal } from './DeleteTrackModal';
 import { Track } from 'types/Track';
+import { ConfirmModal } from 'app/components/ConfirmModal';
+import { toast } from 'react-toastify';
+import { showToastMessageOnRequestError } from 'utils/helpers';
+import { deleteEvent } from 'services/live-data-server/event-calendars';
 
 const defaultOptions = {
     loop: true,
@@ -52,7 +55,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
                             }
-                            <Link to={`/playback/?raceId=${record.competitionUnit?.id}&trackId=${record?.trackJson?.id}`}>{!record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name}</Link>
+                            <Link to={() => renderTrackParamIfExists(record)}>{!record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name}</Link>
                         </FlexWrapper>
                     );
                 return (
@@ -131,6 +134,14 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         },
     ];
 
+    const renderTrackParamIfExists = (record) => {
+        let url = `/playback/?raceId=${record.competitionUnit?.id}`;
+        if (record.trackJson?.id) {
+            url += `&trackId=${record.trackJson.id}`;
+        }
+        return url;
+    }
+
     React.useImperativeHandle(ref, () => ({
         reload() {
             getAll(pagination.page, pagination.size);
@@ -184,13 +195,28 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         getAll(pagination.page, pagination.size);
     }
 
+    const performDeleteTrack = async () => {
+        const response = await deleteEvent(track?.event?.id!);
+
+        setShowDeleteModal(false);
+
+        if (response.success) {
+            toast.success(t(translations.delete_track_modal.successfully_deleted, { name: track?.event?.name }));
+            onTrackDeleted();
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     return (
         <>
-            <DeleteTrackModal
-                onTrackDeleted={onTrackDeleted}
-                track={track}
-                showDeleteModal={showDeleteModal}
-                setShowDeleteModal={setShowDeleteModal} />
+            <ConfirmModal
+                title={t(translations.delete_track_modal.are_you_sure_you_want_to_delete)}
+                content={t(translations.delete_track_modal.you_will_delete)}
+                showModal={showDeleteModal}
+                onOk={performDeleteTrack}
+                onCancel={() => setShowDeleteModal(false)}
+            />
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>

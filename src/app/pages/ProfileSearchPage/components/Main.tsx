@@ -91,7 +91,13 @@ const SearchResultWrapper = styled.div`
     
 `;
 
-const SearchBar = styled(Input.Search)``;
+const SearchBar = styled(Input.Search)`
+    input {
+        ::placeholder {
+            white-space: nowrap;
+        }
+    }
+`;
 
 const Wrapper = styled.div`
     display: flex;

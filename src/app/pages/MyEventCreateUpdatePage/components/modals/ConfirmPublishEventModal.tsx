@@ -30,7 +30,7 @@ export const ConfirmPublishEventModal = (props) => {
     }
 
     return (
-        <Modal visible={showModal} onOk={publishEvent} onCancel={() => setShowModal(false)} title={t(translations.my_event_create_update_page.publish_this_event)}>
+        <Modal okText={t(translations.my_event_create_update_page.make_public)} cancelText={t(translations.my_event_create_update_page.keep_draft)} visible={showModal} onOk={publishEvent} onCancel={() => setShowModal(false)} title={t(translations.my_event_create_update_page.publish_this_event)}>
             <span>{t(translations.my_event_create_update_page.once_you_publish_this_event_you)}</span>
         </Modal>
     )

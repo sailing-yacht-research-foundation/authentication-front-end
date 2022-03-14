@@ -10,7 +10,13 @@ import { getUserAttribute } from 'utils/user-utils';
 import { PaginationContainer } from 'app/components/SyrfGeneral';
 import { useLocation } from 'react-router-dom';
 
-export const PeopleYouMayKnowModal = (props) => {
+interface IPeopleYouMayKnowModal {
+    showModal: boolean,
+    setShowModal: Function,
+    reloadParentList?: Function
+}
+
+export const PeopleYouMayKnowModal = (props: IPeopleYouMayKnowModal) => {
 
     const { t } = useTranslation();
 

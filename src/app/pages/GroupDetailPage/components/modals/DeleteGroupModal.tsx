@@ -29,7 +29,7 @@ export const DeleteGroupModal = (props) => {
                     return;
                 }
 
-                const response = await deleteGroup(group.id);
+                const response = await deleteGroup(group.id!);
 
                 if (response.success) {
                     toast.success(t(translations.group.removed_the_group));
@@ -61,7 +61,7 @@ export const DeleteGroupModal = (props) => {
                 style={{ width: '100%' }}
 
                 initialValues={{
-                    geometry_name: '',
+                    groupName: '',
                 }}
             >
                 <ModalMessage>

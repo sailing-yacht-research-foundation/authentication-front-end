@@ -21,6 +21,7 @@ import { toast } from 'react-toastify';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { HiLockClosed } from 'react-icons/hi';
 import { CalendarEvent } from 'types/CalendarEvent';
+import { PDFUploadForm } from 'app/pages/MyEventCreateUpdatePage/components/PDFUploadForm';
 
 export const EventDetail = () => {
 
@@ -81,7 +82,7 @@ export const EventDetail = () => {
     React.useEffect(() => {
         fetchEvent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [eventId]);
 
     const fetchEvent = async () => {
         setIsFetchingEvent(true);
@@ -152,7 +153,7 @@ export const EventDetail = () => {
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 <EventActions>
-                    <Space>
+                    <Space wrap style={{ justifyContent: 'flex-end' }}>
                         {
                             canManageEvent() &&
                             <>
@@ -199,6 +200,8 @@ export const EventDetail = () => {
                     <EventSection>
                         <VesselList event={event} />
                     </EventSection>
+
+                    <PDFUploadForm reloadParent={fetchEvent} fullWidth event={event} />
 
                     <EventSection>
                         <EventAdmins event={event} />
