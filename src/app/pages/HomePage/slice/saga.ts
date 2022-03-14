@@ -19,7 +19,7 @@ export function* searchRaces(action) {
     yield put(homeActions.setIsSearching(true));
 
     const searchKeyword = yield select(selectSearchKeyword);
-    const response = yield call(search, {...params, keyword: searchKeyword});
+    const response = yield call(search, { ...params, keyword: searchKeyword });
 
     yield put(homeActions.setIsSearching(false));
 
@@ -40,7 +40,7 @@ export function* searchRaces(action) {
         showToastMessageOnRequestError(response.error, priotizedErrorMessage);
     }
 
-    window?.history?.pushState('', 'syrf.io', '/?' + Object.entries({...params, keyword: searchKeyword }).map(([key, val]) => `${key}=${val}`).join('&'));
+    window?.history?.pushState('', 'syrf.io', '/?' + Object.entries({ ...params, keyword: searchKeyword }).map(([key, val]) => `${key}=${val}`).join('&'));
 }
 
 export function* getUpcomingRaces(action) {
@@ -69,7 +69,7 @@ export function* getUpcomingRaces(action) {
     }
 }
 
-export function* getUserRelationsWithCompetitionUnits (action) {
+export function* getUserRelationsWithCompetitionUnits(action) {
     const competitionUnitsIds = action.payload;
 
     const response = yield call(checkForUserRelationWithCompetitionUnits, competitionUnitsIds);
