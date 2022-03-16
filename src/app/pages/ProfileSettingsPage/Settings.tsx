@@ -13,8 +13,6 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 export const Settings = () => {
 
-    const authUser = useSelector(selectUser);
-
     const [formHasBeenChanged, setFormHasBeenChanged] = React.useState<boolean>(false);
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -40,8 +38,6 @@ export const Settings = () => {
         const { muserNewFollower, muserAchievedBadge, mgroupAchievedBadge, mrequestedJoinGroup,
             muserInvitedToGroup, muserAddedToEventAdmin, meventInactivityWarning, mopenEventNearbyCreated,
             meventInactivityDeletion, muserInvitedToPrivateRegatta, ocsDetected } = values;
-
-            console.log(values);
 
         setIsLoading(true);
 
