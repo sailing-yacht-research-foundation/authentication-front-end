@@ -1,6 +1,6 @@
 import { BorderedButton, LottieMessage } from 'app/components/SyrfGeneral';
 import React from 'react';
-import { getPlans, getCustomerPortalLink } from 'services/live-data-server/subscription';
+import { getPlans, getCustomerPortalLink, checkout } from 'services/live-data-server/subscription';
 import styled from 'styled-components';
 import { media } from 'styles/media';
 import { StyleConstants } from 'styles/StyleConstants';
@@ -10,6 +10,7 @@ import CustomerPortal from '../assets/customer-portal.json';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { Spin, Button } from 'antd';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 const defaultOptions = {
     loop: true,
@@ -27,6 +28,8 @@ export const Main = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [portalLink, setCustomerPortalLink] = React.useState<string>('');
+
+    const [isCheckingOut, setIsCheckingOut] = React.useState<boolean>(false);
 
     const [plans, setPlans] = React.useState<Plan[]>([]);
 
@@ -56,6 +59,20 @@ export const Main = () => {
         window.open(portalLink, '_blank');
     }
 
+    const performCheckout = async (pricingId: string, quantity: number = 1) => {
+        if (isCheckingOut) return;
+
+        setIsCheckingOut(true);
+        const response = await checkout(pricingId, quantity);
+        setIsCheckingOut(false);
+
+        if (response.success) {
+            window.open(response.data.url, '_blank');
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     React.useEffect(() => {
         getSyrfPlans();
         getCustomerPortal();
@@ -77,7 +94,7 @@ export const Main = () => {
                 </PlanItemHeader>
                 {
                     index % 2 == 0 ? (<PlanItemContent>
-                        <BorderedButton type='primary'>Upgrade</BorderedButton>
+                        <BorderedButton onClick={() => performCheckout(p.pricings[0].id, 1)} type='primary'>Upgrade</BorderedButton>
                         <Button type='link'>Learn more about this plan</Button>
                     </PlanItemContent>) : (<PlanItemContent>
                         <BorderedButton>Cancel Subscription</BorderedButton>
