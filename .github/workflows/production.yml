@@ -79,5 +79,4 @@ jobs:
             docker pull \$IMAGE_ID:\$VERSION
             docker container rm -f syrf_my_sailing_profile || true
             docker run -d -p 3002:5000 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
-            docker rmi -f $(docker images -f "dangling=true" -q)
           EOF
