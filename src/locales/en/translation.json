@@ -276,7 +276,8 @@
       "remove": "Remove",
       "notifications": "Notifications",
       "turn_on_mobile_notification": "Turn on mobile notification",
-      "turn_on_email_notification": "Turn on email notification"
+      "turn_on_email_notification": "Turn on email notification",
+      "subscription": "Subscription"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"

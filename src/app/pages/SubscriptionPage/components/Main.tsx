@@ -8,9 +8,9 @@ import { Plan } from 'types/Plan';
 import Lottie from 'react-lottie';
 import CustomerPortal from '../assets/customer-portal.json';
 import { useTranslation } from 'react-i18next';
-import { translations } from 'locales/translations';
 import { Spin, Button } from 'antd';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { ProfileTabs } from 'app/pages/ProfilePage/components/ProfileTabs';
 
 const defaultOptions = {
     loop: true,
@@ -80,7 +80,7 @@ export const Main = () => {
 
     const renderPlans = () => {
         if (plans.length > 0)
-            return plans.map((p, index) => (<PlanItem className={index % 2 == 0 ? '': 'active'}>
+            return plans.map((p, index) => (<PlanItem className={index % 2 == 0 ? '' : 'active'}>
                 <PlanItemHeader>
                     <PlanItemTitle>
                         <PlanTitle>{p.tierName}</PlanTitle>
@@ -106,29 +106,42 @@ export const Main = () => {
     }
 
     return (
-        <Wrapper>
-            <SectionWrapper>
-                <SectionTitle>Plans</SectionTitle>
-                <Spin spinning={isLoading}>
-                    <PlanWrapper>
-                        {renderPlans()}
-                    </PlanWrapper>
-                </Spin>
-            </SectionWrapper>
-            <SectionWrapper>
-                <SectionTitle>Customer Portal</SectionTitle>
-                <LottieWrapper>
-                    <Lottie
-                        options={defaultOptions}
-                        height={400}
-                        width={400} />
-                    <LottieMessage>Customer portal is where you can see your purchase history, current active plan, payment method and manage subscription.</LottieMessage>
-                    {<BorderedButton onClick={openCustomerPortal} disabled={!portalLink} type="primary">Go to my portal</BorderedButton>}
-                </LottieWrapper>
-            </SectionWrapper>
-        </Wrapper>
+        <OuterWrapper>
+            <ProfileTabs/>
+            <Wrapper>
+                <SectionWrapper>
+                    <SectionTitle>Plans</SectionTitle>
+                    <Spin spinning={isLoading}>
+                        <PlanWrapper>
+                            {renderPlans()}
+                        </PlanWrapper>
+                    </Spin>
+                </SectionWrapper>
+                <SectionWrapper>
+                    <SectionTitle>Customer Portal</SectionTitle>
+                    <LottieWrapper>
+                        <Lottie
+                            options={defaultOptions}
+                            height={400}
+                            width={400} />
+                        <LottieMessage>Customer portal is where you can see your purchase history, current active plan, payment method and manage subscription.</LottieMessage>
+                        {<BorderedButton onClick={openCustomerPortal} disabled={!portalLink} type="primary">Go to my portal</BorderedButton>}
+                    </LottieWrapper>
+                </SectionWrapper>
+            </Wrapper>
+        </OuterWrapper>
     )
 }
+
+const OuterWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 132px;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    padding-bottom: 50px;
+`;
 
 const SectionTitle = styled.h2``;
 
@@ -141,12 +154,13 @@ const SectionWrapper = styled.div`
 const Wrapper = styled.div`
     width: 100%;
     background: #fff;
-    margin-top: calc(${StyleConstants.NAV_BAR_HEIGHT} + 25px);
+    margin-top: 30px;
     padding: 10px;
     border-radius: 5px;
-    padding: 30px 25px;
+    padding-bottom: 30px;
 
-    ${media.medium`
+    ${media.large`
+        padding: 30px 25px;
         width: 75%;
     `}; 
 `;
@@ -154,16 +168,31 @@ const Wrapper = styled.div`
 const PlanWrapper = styled.div`
     display: flex;
     padding: 25px 0;
+    flex-direction: column;
+
+    ${media.medium`
+        flex-direction: row;
+    `}
 `;
 
 const PlanItem = styled.div`
-    width: 33.3333%;
+    width: 100%;
     padding: 15px;
     border-radius: 5px;
     margin: 0 5px;
     border: 1px solid rgba(52, 152, 219, 1);
+    
+    &:not(:first-child) {
+        margin-top: 10px;
+    }
 
-    &.free {}
+    ${media.medium`
+        width: 33.3333%;
+
+        &:not(:first-child) {
+            margin-top: 0;
+        }
+    `}
 
     &.active {
         background-color: #6D79F3;
