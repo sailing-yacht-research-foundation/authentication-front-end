@@ -11,6 +11,7 @@ import { updateProfileSettings, getUserSettings } from 'services/live-data-serve
 import { toast } from 'react-toastify';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
+import { media } from 'styles/media';
 export const Settings = () => {
 
     const [formHasBeenChanged, setFormHasBeenChanged] = React.useState<boolean>(false);
@@ -110,19 +111,19 @@ export const Settings = () => {
                             euserInvitedToGroup: settings.emailNotificationSettings.userInvitedToGroup, euserAddedToEventAdmin: settings.emailNotificationSettings.userAddedToEventAdmin,
                             eeventInactivityWarning: settings.emailNotificationSettings.eventInactivityWarning, eopenEventNearbyCreated: settings.emailNotificationSettings.openEventNearbyCreated,
                             eeventInactivityDeletion: settings.emailNotificationSettings.eventInactivityDeletion, euserInvitedToPrivateRegatta: settings.emailNotificationSettings.userInvitedToPrivateRegatta,
-                            
+
                             buserNewFollower: settings.browserNotificationSettings.userNewFollower, buserAchievedBadge: settings.browserNotificationSettings.userAchievedBadge,
                             bgroupAchievedBadge: settings.browserNotificationSettings.groupAchievedBadge, brequestedJoinGroup: settings.browserNotificationSettings.requestedJoinGroup,
                             buserInvitedToGroup: settings.browserNotificationSettings.userInvitedToGroup, buserAddedToEventAdmin: settings.browserNotificationSettings.userAddedToEventAdmin,
                             beventInactivityWarning: settings.browserNotificationSettings.eventInactivityWarning, bopenEventNearbyCreated: settings.browserNotificationSettings.openEventNearbyCreated,
                             beventInactivityDeletion: settings.browserNotificationSettings.eventInactivityDeletion, buserInvitedToPrivateRegatta: settings.browserNotificationSettings.userInvitedToPrivateRegatta,
-                            
+
                             puserNewFollower: settings.persistentNotificationSettings.userNewFollower, puserAchievedBadge: settings.persistentNotificationSettings.userAchievedBadge,
                             pgroupAchievedBadge: settings.persistentNotificationSettings.groupAchievedBadge, prequestedJoinGroup: settings.persistentNotificationSettings.requestedJoinGroup,
                             puserInvitedToGroup: settings.persistentNotificationSettings.userInvitedToGroup, puserAddedToEventAdmin: settings.persistentNotificationSettings.userAddedToEventAdmin,
                             peventInactivityWarning: settings.persistentNotificationSettings.eventInactivityWarning, popenEventNearbyCreated: settings.persistentNotificationSettings.openEventNearbyCreated,
                             peventInactivityDeletion: settings.persistentNotificationSettings.eventInactivityDeletion, puserInvitedToPrivateRegatta: settings.persistentNotificationSettings.userInvitedToPrivateRegatta,
-                            
+
                             muserNewFollower: settings.mobileNotificationSettings.userNewFollower, muserAchievedBadge: settings.mobileNotificationSettings.userAchievedBadge,
                             mgroupAchievedBadge: settings.mobileNotificationSettings.groupAchievedBadge, mrequestedJoinGroup: settings.mobileNotificationSettings.requestedJoinGroup,
                             muserInvitedToGroup: settings.mobileNotificationSettings.userInvitedToGroup, muserAddedToEventAdmin: settings.mobileNotificationSettings.userAddedToEventAdmin,
@@ -134,8 +135,8 @@ export const Settings = () => {
                         <SyrfFormTitle>{t(translations.profile_page.update_profile.notifications)}</SyrfFormTitle>
 
                         <SyrfFormSubTitle>{t(translations.profile_page.update_profile.email_notification_settings)}</SyrfFormSubTitle>
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_new_follower)}</SyrfFieldLabel>}
                                     name="euserNewFollower"
@@ -144,7 +145,7 @@ export const Settings = () => {
                                     <Switch />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_achieved_badge)}</SyrfFieldLabel>}
                                     name="euserAchievedBadge"
@@ -154,8 +155,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.group_achieved_badge)}</SyrfFieldLabel>}
                                     name="egroupAchievedBadge"
@@ -164,7 +165,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.requested_join_group)}</SyrfFieldLabel>}
                                     name="erequestedJoinGroup"
@@ -174,8 +175,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_group)}</SyrfFieldLabel>}
                                     name="euserInvitedToGroup"
@@ -184,7 +185,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_added_to_event_as_admin)}</SyrfFieldLabel>}
                                     name="euserAddedToEventAdmin"
@@ -194,8 +195,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_warning)}</SyrfFieldLabel>}
                                     name="eeventInactivityWarning"
@@ -204,7 +205,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.open_event_nearby_created)}</SyrfFieldLabel>}
                                     name="eopenEventNearbyCreated"
@@ -214,8 +215,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_deletion)}</SyrfFieldLabel>}
                                     name="eeventInactivityDeletion"
@@ -224,7 +225,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_private_regatta)}</SyrfFieldLabel>}
                                     name="euserInvitedToPrivateRegatta"
@@ -237,8 +238,8 @@ export const Settings = () => {
                         <Divider />
 
                         <SyrfFormSubTitle>{t(translations.profile_page.update_profile.browser_notification_settings)}</SyrfFormSubTitle>
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_new_follower)}</SyrfFieldLabel>}
                                     name="buserNewFollower"
@@ -247,7 +248,7 @@ export const Settings = () => {
                                     <Switch />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_achieved_badge)}</SyrfFieldLabel>}
                                     name="buserAchievedBadge"
@@ -257,8 +258,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.group_achieved_badge)}</SyrfFieldLabel>}
                                     name="bgroupAchievedBadge"
@@ -267,7 +268,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.requested_join_group)}</SyrfFieldLabel>}
                                     name="brequestedJoinGroup"
@@ -277,8 +278,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_group)}</SyrfFieldLabel>}
                                     name="buserInvitedToGroup"
@@ -287,7 +288,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_added_to_event_as_admin)}</SyrfFieldLabel>}
                                     name="buserAddedToEventAdmin"
@@ -297,8 +298,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_warning)}</SyrfFieldLabel>}
                                     name="beventInactivityWarning"
@@ -307,7 +308,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.open_event_nearby_created)}</SyrfFieldLabel>}
                                     name="bopenEventNearbyCreated"
@@ -317,8 +318,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_deletion)}</SyrfFieldLabel>}
                                     name="beventInactivityDeletion"
@@ -327,7 +328,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_private_regatta)}</SyrfFieldLabel>}
                                     name="buserInvitedToPrivateRegatta"
@@ -340,8 +341,8 @@ export const Settings = () => {
                         <Divider />
 
                         <SyrfFormSubTitle>{t(translations.profile_page.update_profile.mobile_notification_settings)}</SyrfFormSubTitle>
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_new_follower)}</SyrfFieldLabel>}
                                     name="muserNewFollower"
@@ -350,7 +351,7 @@ export const Settings = () => {
                                     <Switch />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_achieved_badge)}</SyrfFieldLabel>}
                                     name="muserAchievedBadge"
@@ -360,8 +361,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.group_achieved_badge)}</SyrfFieldLabel>}
                                     name="mgroupAchievedBadge"
@@ -370,7 +371,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.requested_join_group)}</SyrfFieldLabel>}
                                     name="mrequestedJoinGroup"
@@ -380,8 +381,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_group)}</SyrfFieldLabel>}
                                     name="muserInvitedToGroup"
@@ -390,7 +391,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_added_to_event_as_admin)}</SyrfFieldLabel>}
                                     name="muserAddedToEventAdmin"
@@ -400,8 +401,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_warning)}</SyrfFieldLabel>}
                                     name="meventInactivityWarning"
@@ -410,7 +411,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.open_event_nearby_created)}</SyrfFieldLabel>}
                                     name="mopenEventNearbyCreated"
@@ -420,8 +421,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_deletion)}</SyrfFieldLabel>}
                                     name="meventInactivityDeletion"
@@ -430,7 +431,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_private_regatta)}</SyrfFieldLabel>}
                                     name="muserInvitedToPrivateRegatta"
@@ -450,8 +451,8 @@ export const Settings = () => {
                         <Divider />
 
                         <SyrfFormSubTitle>{t(translations.profile_page.update_profile.persistent_notification_settings)}</SyrfFormSubTitle>
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_new_follower)}</SyrfFieldLabel>}
                                     name="puserNewFollower"
@@ -460,7 +461,7 @@ export const Settings = () => {
                                     <Switch />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_achieved_badge)}</SyrfFieldLabel>}
                                     name="puserAchievedBadge"
@@ -470,8 +471,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.group_achieved_badge)}</SyrfFieldLabel>}
                                     name="pgroupAchievedBadge"
@@ -480,7 +481,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.requested_join_group)}</SyrfFieldLabel>}
                                     name="prequestedJoinGroup"
@@ -490,8 +491,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_group)}</SyrfFieldLabel>}
                                     name="puserInvitedToGroup"
@@ -500,7 +501,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_added_to_event_as_admin)}</SyrfFieldLabel>}
                                     name="puserAddedToEventAdmin"
@@ -510,8 +511,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_warning)}</SyrfFieldLabel>}
                                     name="peventInactivityWarning"
@@ -520,7 +521,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.open_event_nearby_created)}</SyrfFieldLabel>}
                                     name="popenEventNearbyCreated"
@@ -530,8 +531,8 @@ export const Settings = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={12}>
-                            <Col span={12}>
+                        <Row gutter={50}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_deletion)}</SyrfFieldLabel>}
                                     name="peventInactivityDeletion"
@@ -540,7 +541,7 @@ export const Settings = () => {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col xs={24} sm={24} md={12} lg={12}>
                                 <Form.Item
                                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_private_regatta)}</SyrfFieldLabel>}
                                     name="puserInvitedToPrivateRegatta"
@@ -570,4 +571,40 @@ const Wrapper = styled.div`
     width: 100%;
     position: relative;
     padding-bottom: 50px;
+
+    .ant-form-item-control-input {
+        text-align: right;
+    }
+
+    .ant-form  {
+        .ant-form-item {
+            .ant-form-item-control {
+                flex: 1 1 !important;
+            }
+            .ant-form-item-label {
+                flex: 1 1 !important;
+                label {
+                    line-height: 1.5em !important;
+                }
+            }
+        }
+    }
+
+    ${media.large`
+        .ant-form-item-control-input {
+            text-align: none;
+        }
+
+        .ant-form  {
+            .ant-form-item {
+                .ant-form-item-control {
+                    flex: 1 1 !important;
+                }
+                .ant-form-item-label {
+                   text-align: left;
+                   flex: none !important;
+                }
+            }
+        }
+    `};
 `;
