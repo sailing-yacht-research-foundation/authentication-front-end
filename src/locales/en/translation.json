@@ -274,8 +274,21 @@
       "are_you_sure_you_want_to_remove_passport_photo": "Are you sure you want to remove passport photo?",
       "remove": "Remove",
       "notifications": "Notifications",
-      "turn_on_mobile_notification": "Turn on mobile notification",
-      "turn_on_email_notification": "Turn on email notification"
+      "email_notification_settings": "Email Notification Settings",
+      "mobile_notification_settings": "Mobile Notification Settings",
+      "browser_notification_settings": "Browser Notification Settings",
+      "persistent_notification_settings": "Persistent Notification Settings",
+      "user_new_follower": "User Has New Follower",
+      "user_achieved_badge": "User Achieved New Badges",
+      "group_achieved_badge": "Group Achieved New Badges",
+      "requested_join_group": "Someone Requested To Join Group",
+      "user_invited_to_group": "User Invited To Groups",
+      "user_added_to_event_as_admin": "User Added To Event As Admin",
+      "event_inactivity_warning": "Event Inactivity Warning",
+      "open_event_nearby_created": "Open Events Nearby Created",
+      "event_inactivity_deletion": "Event Inactivity Deletion",
+      "user_invited_to_private_regatta": "User Invited To Private Regatta",
+      "ocs_detected": "OCS Detected"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"

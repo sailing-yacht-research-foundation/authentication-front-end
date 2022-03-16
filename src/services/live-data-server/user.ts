@@ -105,3 +105,7 @@ export const removeCovidCard = () => {
 export const removePassportPhoto = () => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/passport-photo`))
 }
+
+export const getUserSettings = () => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/settings`)); 
+}
