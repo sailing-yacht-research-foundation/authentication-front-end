@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { useDispatch } from 'react-redux';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormTitle, SyrfFormWrapper, SyrfFormSubTitle } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -73,7 +72,7 @@ export const Settings = () => {
         setIsLoading(false);
 
         if (response.success) {
-            toast.success(t(translations.profile_page.update_profile.upload_profile_picture_successfully));
+            toast.success(t(translations.app.your_action_is_successful));
             dispatch(actions.getUser());
         } else {
             showToastMessageOnRequestError(response.error);

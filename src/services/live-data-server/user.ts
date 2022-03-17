@@ -34,7 +34,7 @@ export const updateProfile = (data) => {
 }
 
 export const updateProfileSettings = (data) => {
-    return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`, data)
+    return syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/settings`, data)
         .then(response => {
             return {
                 success: true,
