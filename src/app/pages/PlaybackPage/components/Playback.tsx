@@ -149,11 +149,14 @@ export const Playback = (props) => {
 
     React.useEffect(() => {
         if (realRaceTime.start > 0 && realRaceTime.end > 0 && raceTime.start > 0 && raceTime.end > 0) {
-            if (raceTime.start !== raceTime.end) { // no collision.
+            const startMarkWidth = getMarkerWidth(realRaceTime.start);
+            const endMarkWidth = getMarkerWidth(realRaceTime.end);
+            if (raceTime.start !== raceTime.end &&
+                startMarkWidth !== endMarkWidth) { // no collision.
                 setIsRaceStartMarkWithinPlaybackRange(realRaceTime.start >= raceTime.start && realRaceTime.start < raceTime.end);
                 setIsRaceEndMarkWithinPlaybackRange(realRaceTime.end <= raceTime.end)
-                setStartMarkerWidth(getMarkerWidth(realRaceTime.start));
-                setEndMarkerWidth(getMarkerWidth(realRaceTime.end));
+                setStartMarkerWidth(startMarkWidth);
+                setEndMarkerWidth(endMarkWidth);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
