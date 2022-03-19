@@ -287,8 +287,10 @@
       "event_inactivity_warning": "Event Inactivity Warning",
       "open_event_nearby_created": "Open Events Nearby Created",
       "event_inactivity_deletion": "Event Inactivity Deletion",
-      "user_invited_to_private_regatta": "User Invited To Private Regatta",
-      "ocs_detected": "OCS Detected"
+      "user_invited_to_regatta": "User Invited To Regatta",
+      "ocs_detected": "OCS Detected",
+      "competition_unit_start_soon": "Competition Unit Starts Soon",
+      "new_competition_added_to_event": "New Competition Added To Event"
     },
     "successfully_linked_your_instagram_account": "Successfully linked your Instagram account!",
     "successfully_linked_your_facebook_account": "Successfully linked your Facebook account!"

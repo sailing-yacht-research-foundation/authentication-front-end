@@ -25,47 +25,51 @@ export const Settings = () => {
 
     const [settings, setUserSettings] = React.useState<any>({});
 
+    const emailSettingFields = ['euserNewFollower', 'euserAchievedBadge', 'egroupAchievedBadge', 'erequestedJoinGroup',
+        'euserInvitedToGroup', 'euserAddedToEventAdmin', 'eeventInactivityWarning', 'eopenEventNearbyCreated',
+        'eeventInactivityDeletion', 'euserInvitedToPrivateRegatta'];
+
+    const browserSettingFields = ['buserNewFollower', 'buserAchievedBadge', 'bgroupAchievedBadge', 'brequestedJoinGroup',
+        'buserInvitedToGroup', 'buserAddedToEventAdmin', 'beventInactivityWarning', 'bopenEventNearbyCreated',
+        'beventInactivityDeletion', 'buserInvitedToPrivateRegatta'];
+
+    const persistentSettingFields = ['puserNewFollower', 'puserAchievedBadge', 'pgroupAchievedBadge', 'prequestedJoinGroup',
+        'puserInvitedToGroup', 'puserAddedToEventAdmin', 'peventInactivityWarning', 'popenEventNearbyCreated',
+        'peventInactivityDeletion', 'puserInvitedToPrivateRegatta'];
+
+    const mobileSettingFields = ['muserNewFollower', 'muserAchievedBadge', 'mgroupAchievedBadge', 'mrequestedJoinGroup',
+        'muserInvitedToGroup', 'muserAddedToEventAdmin', 'meventInactivityWarning', 'mopenEventNearbyCreated',
+        'meventInactivityDeletion', 'muserInvitedToPrivateRegatta', 'ocsDetected', 'newCompetitionAddedToEvent', 'competitionStartingSoon'];
+
     const onFinish = async (values) => {
-        const { euserNewFollower, euserAchievedBadge, egroupAchievedBadge, erequestedJoinGroup,
-            euserInvitedToGroup, euserAddedToEventAdmin, eeventInactivityWarning, eopenEventNearbyCreated,
-            eeventInactivityDeletion, euserInvitedToPrivateRegatta } = values;
-        const { buserNewFollower, buserAchievedBadge, bgroupAchievedBadge, brequestedJoinGroup,
-            buserInvitedToGroup, buserAddedToEventAdmin, beventInactivityWarning, bopenEventNearbyCreated,
-            beventInactivityDeletion, buserInvitedToPrivateRegatta } = values;
-        const { puserNewFollower, puserAchievedBadge, pgroupAchievedBadge, prequestedJoinGroup,
-            puserInvitedToGroup, puserAddedToEventAdmin, peventInactivityWarning, popenEventNearbyCreated,
-            peventInactivityDeletion, puserInvitedToPrivateRegatta } = values;
-        const { muserNewFollower, muserAchievedBadge, mgroupAchievedBadge, mrequestedJoinGroup,
-            muserInvitedToGroup, muserAddedToEventAdmin, meventInactivityWarning, mopenEventNearbyCreated,
-            meventInactivityDeletion, muserInvitedToPrivateRegatta, ocsDetected } = values;
 
         setIsLoading(true);
 
         const response = await updateProfileSettings({
             emailNotificationSettings: {
-                userNewFollower: euserNewFollower, userAchievedBadge: euserAchievedBadge, groupAchievedBadge: egroupAchievedBadge,
-                requestedJoinGroup: erequestedJoinGroup, userInvitedToGroup: euserInvitedToGroup, userAddedToEventAdmin: euserAddedToEventAdmin,
-                eventInactivityWarning: eeventInactivityWarning, openEventNearbyCreated: eopenEventNearbyCreated,
-                eventInactivityDeletion: eeventInactivityDeletion, userInvitedToPrivateRegatta: euserInvitedToPrivateRegatta
+                userNewFollower: values['euserNewFollower'], userAchievedBadge: values['euserAchievedBadge'], groupAchievedBadge: values['egroupAchievedBadge'],
+                requestedJoinGroup: values['erequestedJoinGroup'], userInvitedToGroup: values['euserInvitedToGroup'], userAddedToEventAdmin: values['euserAddedToEventAdmin'],
+                eventInactivityWarning: values['eeventInactivityWarning'], openEventNearbyCreated: values['eopenEventNearbyCreated'],
+                eventInactivityDeletion: values['eeventInactivityDeletion'], userInvitedToPrivateRegatta: values['euserInvitedToPrivateRegatta']
             },
             browserNotificationSettings: {
-                userNewFollower: buserNewFollower, userAchievedBadge: buserAchievedBadge, groupAchievedBadge: bgroupAchievedBadge,
-                requestedJoinGroup: brequestedJoinGroup, userInvitedToGroup: buserInvitedToGroup, userAddedToEventAdmin: buserAddedToEventAdmin,
-                eventInactivityWarning: beventInactivityWarning, openEventNearbyCreated: bopenEventNearbyCreated,
-                eventInactivityDeletion: beventInactivityDeletion, userInvitedToPrivateRegatta: buserInvitedToPrivateRegatta
+                userNewFollower: values['buserNewFollower'], userAchievedBadge: values['buserAchievedBadge'], groupAchievedBadge: values['bgroupAchievedBadge'],
+                requestedJoinGroup: values['brequestedJoinGroup'], userInvitedToGroup: values['buserInvitedToGroup'], userAddedToEventAdmin: values['buserAddedToEventAdmin'],
+                eventInactivityWarning: values['beventInactivityWarning'], openEventNearbyCreated: values['bopenEventNearbyCreated'],
+                eventInactivityDeletion: values['beventInactivityDeletion'], userInvitedToPrivateRegatta: values['buserInvitedToPrivateRegatta']
             },
             mobileNotificationSettings: {
-                userNewFollower: muserNewFollower, userAchievedBadge: muserAchievedBadge, groupAchievedBadge: mgroupAchievedBadge,
-                requestedJoinGroup: mrequestedJoinGroup, userInvitedToGroup: muserInvitedToGroup, userAddedToEventAdmin: muserAddedToEventAdmin,
-                eventInactivityWarning: meventInactivityWarning, openEventNearbyCreated: mopenEventNearbyCreated,
-                eventInactivityDeletion: meventInactivityDeletion, userInvitedToPrivateRegatta: muserInvitedToPrivateRegatta,
-                ocsDetected
+                userNewFollower: values['muserNewFollower'], userAchievedBadge: values['muserAchievedBadge'], groupAchievedBadge: values['mgroupAchievedBadge'],
+                requestedJoinGroup: values['mrequestedJoinGroup'], userInvitedToGroup: values['muserInvitedToGroup'], userAddedToEventAdmin: values['muserAddedToEventAdmin'],
+                eventInactivityWarning: values['meventInactivityWarning'], openEventNearbyCreated: values['mopenEventNearbyCreated'],
+                eventInactivityDeletion: values['meventInactivityDeletion'], userInvitedToPrivateRegatta: values['muserInvitedToPrivateRegatta'],
+                ocsDetected: values['ocsDetected'], newCompetitionAddedToEvent: values['newCompetitionAddedToEvent'], competitionStartingSoon: values['competitionStartingSoon']
             },
             persistentNotificationSettings: {
-                userNewFollower: puserNewFollower, userAchievedBadge: puserAchievedBadge, groupAchievedBadge: pgroupAchievedBadge,
-                requestedJoinGroup: prequestedJoinGroup, userInvitedToGroup: puserInvitedToGroup, userAddedToEventAdmin: puserAddedToEventAdmin,
-                eventInactivityWarning: peventInactivityWarning, openEventNearbyCreated: popenEventNearbyCreated,
-                eventInactivityDeletion: peventInactivityDeletion, userInvitedToPrivateRegatta: puserInvitedToPrivateRegatta
+                userNewFollower: values['puserNewFollower'], userAchievedBadge: values['puserAchievedBadge'], groupAchievedBadge: values['pgroupAchievedBadge'],
+                requestedJoinGroup: values['prequestedJoinGroup'], userInvitedToGroup: values['puserInvitedToGroup'], userAddedToEventAdmin: values['puserAddedToEventAdmin'],
+                eventInactivityWarning: values['peventInactivityWarning'], openEventNearbyCreated: values['popenEventNearbyCreated'],
+                eventInactivityDeletion: values['peventInactivityDeletion'], userInvitedToPrivateRegatta: values['puserInvitedToPrivateRegatta']
             }
         });
 
@@ -89,6 +93,49 @@ export const Settings = () => {
         } else {
             showToastMessageOnRequestError(response.error);
         }
+    }
+
+    const renderFormFieldTitle = (field) => {
+        const fields = [{ key: "ocsDetected", title: t(translations.profile_page.update_profile.ocs_detected) },
+        { key: "userNewFollower", title: t(translations.profile_page.update_profile.user_new_follower) },
+        { key: "requestedJoinGroup", title: t(translations.profile_page.update_profile.requested_join_group) },
+        { key: "userAchievedBadge", title: t(translations.profile_page.update_profile.user_achieved_badge) },
+        { key: "groupAchievedBadge", title: t(translations.profile_page.update_profile.group_achieved_badge) },
+        { key: "userInvitedToGroup", title: t(translations.profile_page.update_profile.user_invited_to_group) },
+        { key: "eventInactivityWarning", title: t(translations.profile_page.update_profile.event_inactivity_warning) },
+        { key: "userAddedToEventAdmin", title: t(translations.profile_page.update_profile.user_added_to_event_as_admin) },
+        { key: "openEventNearbyCreated", title: t(translations.profile_page.update_profile.open_event_nearby_created) },
+        { key: "eventInactivityDeletion", title: t(translations.profile_page.update_profile.event_inactivity_deletion) },
+        { key: "competitionStartingSoon", title: t(translations.profile_page.update_profile.competition_unit_start_soon) },
+        { key: "newCompetitionAddedToEvent", title: t(translations.profile_page.update_profile.new_competition_added_to_event) },
+        { key: "userInvitedToPrivateRegatta", title: t(translations.profile_page.update_profile.user_invited_to_regatta) }];
+
+        for (let i = 0; i < fields.length; i++) {
+            if (field.includes(fields[i].key)) {
+                return fields[i].title;
+            }
+        }
+    }
+
+    const renderFormFields = (fields: string[]) => {
+        return fields.reduce(
+            function (accumulator: any[], currentValue, currentIndex, array: any[]) {
+                if (currentIndex % 2 === 0)
+                    accumulator.push(array.slice(currentIndex, currentIndex + 2));
+                return accumulator;
+            }, []).map(fields => (
+                <Row gutter={50}>
+                    {fields.map(field => <Col xs={24} sm={24} md={12} lg={12}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{renderFormFieldTitle(field)}</SyrfFieldLabel>}
+                            name={field}
+                            valuePropName="checked">
+                            <Switch />
+                        </Form.Item>
+                    </Col>)}
+                </Row>
+            ))
+
     }
 
     React.useEffect(() => {
@@ -128,427 +175,29 @@ export const Settings = () => {
                             muserInvitedToGroup: settings.mobileNotificationSettings.userInvitedToGroup, muserAddedToEventAdmin: settings.mobileNotificationSettings.userAddedToEventAdmin,
                             meventInactivityWarning: settings.mobileNotificationSettings.eventInactivityWarning, mopenEventNearbyCreated: settings.mobileNotificationSettings.openEventNearbyCreated,
                             meventInactivityDeletion: settings.mobileNotificationSettings.eventInactivityDeletion, muserInvitedToPrivateRegatta: settings.mobileNotificationSettings.userInvitedToPrivateRegatta,
-                            ocsDetected: settings.mobileNotificationSettings.ocsDetected
+                            ocsDetected: settings.mobileNotificationSettings.ocsDetected, newCompetitionAddedToEvent: settings.mobileNotificationSettings.newCompetitionAddedToEvent,
+                            competitionStartingSoon: settings.mobileNotificationSettings.competitionStartingSoon
                         }}
                     >
                         <SyrfFormTitle>{t(translations.profile_page.update_profile.notifications)}</SyrfFormTitle>
 
                         <SyrfFormSubTitle>{t(translations.profile_page.update_profile.email_notification_settings)}</SyrfFormSubTitle>
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_new_follower)}</SyrfFieldLabel>}
-                                    name="euserNewFollower"
-                                    valuePropName="checked"
-                                >
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_achieved_badge)}</SyrfFieldLabel>}
-                                    name="euserAchievedBadge"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.group_achieved_badge)}</SyrfFieldLabel>}
-                                    name="egroupAchievedBadge"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.requested_join_group)}</SyrfFieldLabel>}
-                                    name="erequestedJoinGroup"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_group)}</SyrfFieldLabel>}
-                                    name="euserInvitedToGroup"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_added_to_event_as_admin)}</SyrfFieldLabel>}
-                                    name="euserAddedToEventAdmin"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_warning)}</SyrfFieldLabel>}
-                                    name="eeventInactivityWarning"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.open_event_nearby_created)}</SyrfFieldLabel>}
-                                    name="eopenEventNearbyCreated"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_deletion)}</SyrfFieldLabel>}
-                                    name="eeventInactivityDeletion"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_private_regatta)}</SyrfFieldLabel>}
-                                    name="euserInvitedToPrivateRegatta"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        {renderFormFields(emailSettingFields)}
 
                         <Divider />
 
                         <SyrfFormSubTitle>{t(translations.profile_page.update_profile.browser_notification_settings)}</SyrfFormSubTitle>
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_new_follower)}</SyrfFieldLabel>}
-                                    name="buserNewFollower"
-                                    valuePropName="checked"
-                                >
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_achieved_badge)}</SyrfFieldLabel>}
-                                    name="buserAchievedBadge"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.group_achieved_badge)}</SyrfFieldLabel>}
-                                    name="bgroupAchievedBadge"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.requested_join_group)}</SyrfFieldLabel>}
-                                    name="brequestedJoinGroup"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_group)}</SyrfFieldLabel>}
-                                    name="buserInvitedToGroup"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_added_to_event_as_admin)}</SyrfFieldLabel>}
-                                    name="buserAddedToEventAdmin"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_warning)}</SyrfFieldLabel>}
-                                    name="beventInactivityWarning"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.open_event_nearby_created)}</SyrfFieldLabel>}
-                                    name="bopenEventNearbyCreated"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_deletion)}</SyrfFieldLabel>}
-                                    name="beventInactivityDeletion"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_private_regatta)}</SyrfFieldLabel>}
-                                    name="buserInvitedToPrivateRegatta"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        {renderFormFields(browserSettingFields)}
 
                         <Divider />
 
                         <SyrfFormSubTitle>{t(translations.profile_page.update_profile.mobile_notification_settings)}</SyrfFormSubTitle>
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_new_follower)}</SyrfFieldLabel>}
-                                    name="muserNewFollower"
-                                    valuePropName="checked"
-                                >
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_achieved_badge)}</SyrfFieldLabel>}
-                                    name="muserAchievedBadge"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.group_achieved_badge)}</SyrfFieldLabel>}
-                                    name="mgroupAchievedBadge"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.requested_join_group)}</SyrfFieldLabel>}
-                                    name="mrequestedJoinGroup"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_group)}</SyrfFieldLabel>}
-                                    name="muserInvitedToGroup"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_added_to_event_as_admin)}</SyrfFieldLabel>}
-                                    name="muserAddedToEventAdmin"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_warning)}</SyrfFieldLabel>}
-                                    name="meventInactivityWarning"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.open_event_nearby_created)}</SyrfFieldLabel>}
-                                    name="mopenEventNearbyCreated"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_deletion)}</SyrfFieldLabel>}
-                                    name="meventInactivityDeletion"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_private_regatta)}</SyrfFieldLabel>}
-                                    name="muserInvitedToPrivateRegatta"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.ocs_detected)}</SyrfFieldLabel>}
-                            name="ocsDetected"
-                            valuePropName="checked">
-                            <Switch />
-                        </Form.Item>
+                        {renderFormFields(mobileSettingFields)}
 
                         <Divider />
 
                         <SyrfFormSubTitle>{t(translations.profile_page.update_profile.persistent_notification_settings)}</SyrfFormSubTitle>
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_new_follower)}</SyrfFieldLabel>}
-                                    name="puserNewFollower"
-                                    valuePropName="checked"
-                                >
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_achieved_badge)}</SyrfFieldLabel>}
-                                    name="puserAchievedBadge"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.group_achieved_badge)}</SyrfFieldLabel>}
-                                    name="pgroupAchievedBadge"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.requested_join_group)}</SyrfFieldLabel>}
-                                    name="prequestedJoinGroup"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_group)}</SyrfFieldLabel>}
-                                    name="puserInvitedToGroup"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_added_to_event_as_admin)}</SyrfFieldLabel>}
-                                    name="puserAddedToEventAdmin"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_warning)}</SyrfFieldLabel>}
-                                    name="peventInactivityWarning"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.open_event_nearby_created)}</SyrfFieldLabel>}
-                                    name="popenEventNearbyCreated"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={50}>
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.event_inactivity_deletion)}</SyrfFieldLabel>}
-                                    name="peventInactivityDeletion"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={12} lg={12}>
-                                <Form.Item
-                                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.user_invited_to_private_regatta)}</SyrfFieldLabel>}
-                                    name="puserInvitedToPrivateRegatta"
-                                    valuePropName="checked">
-                                    <Switch />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        {renderFormFields(persistentSettingFields)}
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
