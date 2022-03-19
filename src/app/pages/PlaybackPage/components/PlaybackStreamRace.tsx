@@ -479,8 +479,10 @@ export const PlaybackStreamRace = (props) => {
   };
 
   return (
-    <div style={{ height: "100%" }}>
-      <ModalCountdownTimer />
+    <div style={{ height: "100%", position: "relative" }}>
+      <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
+        <ModalCountdownTimer />
+      </LeaderboardContainer>
       <MapContainer
         style={{
           height: "100vh",
@@ -516,6 +518,10 @@ export const PlaybackStreamRace = (props) => {
     </div>
   );
 };
+
+const LeaderboardContainer = styled.div`
+  transition: all 0.3s;
+`;
 
 const StreamToExpeditionContainer = styled.div`
   position: absolute;
