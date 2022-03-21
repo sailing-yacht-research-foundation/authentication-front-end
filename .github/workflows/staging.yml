@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - develop
-      - dev-test
 env:
   IMAGE_NAME: syrf_my_sailing_profile
 jobs:
