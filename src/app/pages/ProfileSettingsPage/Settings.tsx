@@ -106,8 +106,8 @@ export const Settings = () => {
         { key: "userAddedToEventAdmin", title: t(translations.profile_page.update_profile.user_added_to_event_as_admin) },
         { key: "openEventNearbyCreated", title: t(translations.profile_page.update_profile.open_event_nearby_created) },
         { key: "eventInactivityDeletion", title: t(translations.profile_page.update_profile.event_inactivity_deletion) },
-        { key: "competitionStartingSoon", title: t(translations.profile_page.update_profile.competition_unit_start_soon) },
-        { key: "newCompetitionAddedToEvent", title: t(translations.profile_page.update_profile.new_competition_added_to_event) },
+        { key: "competitionStartingSoon", title: t(translations.profile_page.update_profile.race_starts_soon) },
+        { key: "newCompetitionAddedToEvent", title: t(translations.profile_page.update_profile.new_race_added_to_event) },
         { key: "userInvitedToPrivateRegatta", title: t(translations.profile_page.update_profile.user_invited_to_regatta) }];
 
         for (let i = 0; i < fields.length; i++) {
