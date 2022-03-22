@@ -23,8 +23,8 @@ const buttonStyle = {
 const playbackTime = {
     forward: 5000,
     backward: 5000,
-    fastForward: 15000,
-    fastBackward: 15000,
+    fastForward: 10000,
+    fastBackward: 10000,
 }
 
 export const Playback = (props) => {
@@ -69,16 +69,12 @@ export const Playback = (props) => {
 
     const backward = (miliseconds) => {
         let backwardTime = elapsedTime - miliseconds;
-        const selectedMillis = backwardTime > 0 ? backwardTime : 0;
-        dispatch(actions.setElapsedTime(selectedMillis));
-        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(selectedMillis);
+        playAtSpecificElapsedTime(backwardTime);
     }
 
     const forward = (miliseconds) => {
         let forwardTime = elapsedTime + miliseconds;
-        const selectedMillis = forwardTime > raceLength ? raceLength : forwardTime
-        dispatch(actions.setElapsedTime(selectedMillis));
-        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(selectedMillis);
+        playAtSpecificElapsedTime(forwardTime);
     }
 
     const playAtClickedPosition = (e) => {
@@ -115,12 +111,12 @@ export const Playback = (props) => {
     }
 
     const renderSpeedControl = () => {
-        return playbackType 
+        return playbackType
             && canIncreaseDecreaseSpeed
-            && [PlaybackTypes.OLDRACE].includes(playbackType) 
+            && [PlaybackTypes.OLDRACE].includes(playbackType)
             && <RightItemContainer>
-            <SpeedControl />
-        </RightItemContainer>
+                <SpeedControl />
+            </RightItemContainer>
     }
 
     const backToRaceArea = () => {
@@ -145,6 +141,24 @@ export const Playback = (props) => {
         if (percentage > 100) percentage = 100;
 
         return percentage;
+    }
+
+    const playAtStartMarker = (e) => {
+        e.stopPropagation();
+        let time = realRaceTime.start - raceTime.start;
+        playAtSpecificElapsedTime(time);
+    }
+
+    const playAtEndMarker = (e) => {
+        e.stopPropagation();
+        let time = realRaceTime.end - raceTime.start;
+        playAtSpecificElapsedTime(time);
+    }
+
+    const playAtSpecificElapsedTime = (time) => {
+        const selectedMillis = time > 0 ? time : 0;
+        dispatch(actions.setElapsedTime(selectedMillis));
+        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(selectedMillis);
     }
 
     React.useEffect(() => {
@@ -179,8 +193,8 @@ export const Playback = (props) => {
                     <ProgressBarWrapper>
                         <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
                             {playbackType === PlaybackTypes.OLDRACE && <>
-                                {isRaceStartMarkWithinPlaybackRange && <StartMarker style={{ left: `${startMarkerWith}%` }}></StartMarker>}
-                                {isRaceEndMarkWithinPlaybackRange && <EndMarker style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
+                                {isRaceStartMarkWithinPlaybackRange && <StartMarker onClick={playAtStartMarker} style={{ left: `${startMarkerWith}%` }}></StartMarker>}
+                                {isRaceEndMarkWithinPlaybackRange && <EndMarker onClick={playAtEndMarker} style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
                             </>}
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                         </ProgressBar>
