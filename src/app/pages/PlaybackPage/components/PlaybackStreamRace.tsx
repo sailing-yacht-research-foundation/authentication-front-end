@@ -23,7 +23,6 @@ import { usePlaybackSlice } from "./slice";
 import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceStatus, WebsocketConnectionStatus, WSMessageDataType } from "utils/constants";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
-import { Leaderboard } from "./Leaderboard";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
 import { ExpeditionServerActionButtons } from "app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons";
@@ -480,9 +479,8 @@ export const PlaybackStreamRace = (props) => {
   };
 
   return (
-    <div style={{ height: "100%" }}>
+    <div style={{ height: "100%", position: "relative" }}>
       <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-        <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
         <ModalCountdownTimer />
       </LeaderboardContainer>
       <MapContainer

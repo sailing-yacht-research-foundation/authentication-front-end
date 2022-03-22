@@ -17,7 +17,6 @@ jobs:
         with:
           token: ${{ secrets.CI_TOKEN }}
           submodules: true
-
       - name: Init submodule to repo
         run: git submodule update --init
       - name: Build image

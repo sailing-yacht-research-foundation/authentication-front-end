@@ -84,6 +84,17 @@ export const SyrfFormTitle = styled.div`
     padding-bottom: 35px;
 `;
 
+export const SyrfFormSubTitle = styled.h3`
+    font-family: ${StyleConstants.FONT_ROBOTO};
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 35px;
+    letter-spacing: 0.03em;
+    text-align: left;
+    padding-bottom: 5px;
+`;
+
 export const SyrfFormButton = styled(Button)`
     width: 100%;
     height: 36px;
