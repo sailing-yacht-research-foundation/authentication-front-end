@@ -75,6 +75,7 @@ jobs:
             [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo \$VERSION | sed -e 's/^v//')
             echo IMAGE_ID=\$IMAGE_ID
             echo VERSION=\$VERSION
+            docker system prune -a -f
             docker pull \$IMAGE_ID:\$VERSION
             docker container rm -f syrf_my_sailing_profile || true
             docker run -d -p 3002:5000 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION
