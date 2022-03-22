@@ -52,7 +52,7 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
 
                     {
                         event.status === EventState.DRAFT && <SyrfFormWrapper>
-                            <SyrfFormButton onClick={() => setShowConfirmPublishEventModal(true)}>{t(translations.my_event_create_update_page.publish)}</SyrfFormButton>
+                            <SyrfFormButton onClick={() => setShowConfirmPublishEventModal(true)}>{t(translations.my_event_create_update_page.make_public)}</SyrfFormButton>
                         </SyrfFormWrapper>
                     }
 

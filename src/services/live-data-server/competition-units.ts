@@ -56,7 +56,8 @@ export const search = (params) => {
 
     searchParams._source = [
         "id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month",
-        "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration", "status"
+        "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration", "status",
+        "approx_end_time_ms"
     ]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
@@ -336,7 +337,8 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
 
     searchParams._source = [
         "id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month",
-        "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration", "status"
+        "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration", "status",
+        "approx_end_time_ms"
     ]; // only the fields we need
     searchParams.from = (page - 1) * size;
     searchParams.size = size;
@@ -346,4 +348,16 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
 
 export const checkForUserRelationWithCompetitionUnits = (competitionUnits: string[] = []) => {
     return  formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/check-user-relation`, competitionUnits))
+}
+
+export const markCompetitionUnitAsHidden = (competitionUnitId: string) => {
+    return  formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/mark-hidden`,))
+}
+
+export const markCompetitionUnitAsCompleted = (competitionUnitId: string) => {
+    return  formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/mark-finished`,))
+}
+
+export const forceDeleteCompetitionUnit = (competitionUnitId: string) => {
+    return  formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/force`,))
 }

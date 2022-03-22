@@ -159,6 +159,7 @@ export const ResultSuggestion = (props) => {
         suggestionItems.current = [];
         setSelectedCriteria('');
         selectedCriteriaRef.current = '';
+        selectedIndex.current = -1;
         if (setShowSuggestion) setShowSuggestion(false);
     }
 
@@ -213,7 +214,7 @@ export const ResultSuggestion = (props) => {
     React.useEffect(() => {
         document.onkeyup = handleSelectionUsingArrowKey;
         return () => {
-            document.onkeydown = null;
+            document.onkeyup = null;
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

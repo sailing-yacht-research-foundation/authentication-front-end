@@ -12,7 +12,14 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.CI_TOKEN }}
+          submodules: true
+
+      - name: Init submodule to repo
+        run: git submodule update --init
       - name: Build image
         run: docker build . --file Dockerfile-ci --tag $IMAGE_NAME
           --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
