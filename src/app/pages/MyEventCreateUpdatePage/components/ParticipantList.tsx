@@ -32,7 +32,7 @@ export const ParticipantList = (props) => {
 
     const columns = [
         {
-            title: t(translations.participant_list.public_name),
+            title: t(translations.general.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => <UserWrapper>

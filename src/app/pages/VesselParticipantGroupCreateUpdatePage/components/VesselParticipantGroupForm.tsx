@@ -129,7 +129,7 @@ export const VesselParticipantGroupForm = () => {
                         danger
                         icon={<BiTrash
                             style={{ marginRight: '5px' }}
-                            size={18} />}>{t(translations.vessel_participant_group_create_update_page.delete)}</DeleteButton>
+                            size={18} />}>{t(translations.general.delete)}</DeleteButton>
                     <ReactTooltip />
                 </>}
             </PageHeaderContainerResponsive>

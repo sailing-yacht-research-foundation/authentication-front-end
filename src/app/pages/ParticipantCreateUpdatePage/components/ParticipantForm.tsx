@@ -138,7 +138,7 @@ export const ParticipantForm = () => {
                             data-tip={t(translations.tip.delete_competitor)}
                             onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                                 style={{ marginRight: '5px' }}
-                                size={18} />}>{t(translations.participant_unit_create_update_page.delete)}</DeleteButton>
+                                size={18} />}>{t(translations.general.delete)}</DeleteButton>
                         <ReactTooltip />
                     </>}
 
@@ -154,7 +154,7 @@ export const ParticipantForm = () => {
                         onValuesChange={() => setFormChanged(true)}
                     >
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.participant_unit_create_update_page.public_name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.general.public_name)}</SyrfFieldLabel>}
                             name="publicName"
                             data-tip={t(translations.tip.competitor_name)}
                             rules={[

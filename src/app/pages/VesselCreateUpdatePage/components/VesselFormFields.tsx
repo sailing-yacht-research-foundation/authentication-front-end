@@ -66,7 +66,7 @@ export const VesselFormFields = (props) => {
     return (
         <>
             <Form.Item
-                label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.public_name)}</SyrfFieldLabel>}
+                label={<SyrfFieldLabel>{t(translations.general.public_name)}</SyrfFieldLabel>}
                 name="publicName"
                 rules={[{ required: true, message: t(translations.forms.boat_name_is_required) }, 
                     { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
@@ -343,7 +343,7 @@ export const VesselFormFields = (props) => {
                     {vessel.photo && <FormPhotoWrapper>
                         <FormPhotoHeaderContainer>
                             <h3>{t(translations.vessel_create_update_page.boat_photo)}</h3>
-                            <Button type="link" danger onClick={() => setShowRemovePhotoModal(true)}>{t(translations.app.remove)}</Button>
+                            <Button type="link" danger onClick={() => setShowRemovePhotoModal(true)}>{t(translations.general.remove)}</Button>
                         </FormPhotoHeaderContainer>
                         <Image src={vessel?.photo[0]} />
 
@@ -354,7 +354,7 @@ export const VesselFormFields = (props) => {
                     {vessel.deckPlan && <FormPhotoWrapper>
                         <FormPhotoHeaderContainer>
                             <h3>{t(translations.vessel_create_update_page.deck_plan_photo)}</h3>
-                            <Button type="link" danger onClick={() => setShowRemoveDeckPlanModal(true)}>{t(translations.app.remove)}</Button>
+                            <Button type="link" danger onClick={() => setShowRemoveDeckPlanModal(true)}>{t(translations.general.remove)}</Button>
                         </FormPhotoHeaderContainer>
                         <Image src={vessel.deckPlan} />
                     </FormPhotoWrapper>}
@@ -364,7 +364,7 @@ export const VesselFormFields = (props) => {
                     {vessel.hullDiagram && <FormPhotoWrapper>
                         <FormPhotoHeaderContainer>
                             <h3>{t(translations.vessel_create_update_page.hull_diagram_photo)}</h3>
-                            <Button type="link" danger onClick={() => setShowRemoveHullDiagram(true)}>{t(translations.app.remove)}</Button>
+                            <Button type="link" danger onClick={() => setShowRemoveHullDiagram(true)}>{t(translations.general.remove)}</Button>
                         </FormPhotoHeaderContainer>
                         <Image src={vessel.hullDiagram} />
                     </FormPhotoWrapper>}
