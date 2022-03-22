@@ -42,7 +42,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
 
     const columns = [
         {
-            title: t(translations.my_tracks_page.name),
+            title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
@@ -77,7 +77,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             }
         },
         {
-            title: t(translations.my_tracks_page.created_date),
+            title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
@@ -121,7 +121,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             }
         },
         {
-            title: t(translations.my_tracks_page.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => {
                 return <Space size={10}>

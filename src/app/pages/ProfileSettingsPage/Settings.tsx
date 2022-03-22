@@ -76,7 +76,7 @@ export const Settings = () => {
         setIsLoading(false);
 
         if (response.success) {
-            toast.success(t(translations.app.your_action_is_successful));
+            toast.success(t(translations.general.your_action_is_successful));
             dispatch(actions.getUser());
         } else {
             showToastMessageOnRequestError(response.error);

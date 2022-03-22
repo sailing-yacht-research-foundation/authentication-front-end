@@ -41,7 +41,7 @@ export const VesselList = () => {
 
     const columns = [
         {
-            title: t(translations.vessel_list_page.public_name),
+            title: t(translations.general.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
@@ -61,20 +61,20 @@ export const VesselList = () => {
             render: (value, record) => record?.isOwner ? t(translations.vessel_list_page.owner) : t(translations.vessel_list_page.admin),
         },
         {
-            title: t(translations.vessel_list_page.created_date),
+            title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
-            title: t(translations.vessel_list_page.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => {
                     return <Space size="middle">
                         <BorderedButton data-tip={t(translations.tip.update_this_boat)} onClick={() => {
                             history.push(`/boats/${record.id}/update`);
-                        }} type="primary">{t(translations.vessel_list_page.update)}</BorderedButton>
-                        <BorderedButton data-tip={t(translations.tip.delete_boat)} danger onClick={() => showDeleteVesselModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
+                        }} type="primary">{t(translations.general.update)}</BorderedButton>
+                        <BorderedButton data-tip={t(translations.tip.delete_boat)} danger onClick={() => showDeleteVesselModal(record)}>{t(translations.general.delete)}</BorderedButton>
                         <ReactTooltip />
                     </Space>;
             },

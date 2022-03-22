@@ -71,8 +71,8 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
         {canManageEvent() && <>
             <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                 history.push(`/events/${race.calendarEventId}/races/${race.id}/update`);
-            }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-            <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteRaceModal(race)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton></>}
+            }} type="primary">{t(translations.general.update)}</BorderedButton>
+            <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteRaceModal(race)}>{t(translations.general.delete)}</BorderedButton></>}
         <ReactTooltip />
     </Space>)
 }

@@ -24,7 +24,7 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
 
     const columns = [
         {
-            title: t(translations.competition_unit_list_page.name),
+            title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
@@ -33,14 +33,14 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
             width: '20%',
         },
         {
-            title: t(translations.competition_unit_list_page.status),
+            title: t(translations.general.status),
             dataIndex: 'status',
             key: 'status',
             render: (value) => value,
             width: '20%',
         },
         {
-            title: t(translations.competition_unit_list_page.created_date),
+            title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
@@ -54,8 +54,8 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
                     {record.status === RaceStatus.ON_GOING && <CreateButton onClick={() => openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
                     <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                         history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
-                    }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-                    {record.status !== RaceStatus.COMPLETED && <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>}
+                    }} type="primary">{t(translations.general.update)}</BorderedButton>
+                    {record.status !== RaceStatus.COMPLETED && <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.general.delete)}</BorderedButton>}
                     <ReactTooltip />
                 </Space>
             ),
@@ -129,7 +129,7 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
                     <PageHeaderTextSmall>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderTextSmall>
                     <CreateButton data-tip={t(translations.tip.create_race)} onClick={() => history.push(`/events/${eventId}/races/create`)} icon={<AiFillPlusCircle
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.competition_unit_list_page.create)}</CreateButton>
+                        size={18} />}>{t(translations.general.create)}</CreateButton>
                 </PageHeaderContainer>
                 <TableWrapper>
                     <Table columns={columns}

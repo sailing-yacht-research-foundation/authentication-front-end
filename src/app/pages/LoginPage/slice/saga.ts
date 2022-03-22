@@ -61,7 +61,7 @@ export function* getNewToken() {
         yield put(loginActions.setRefreshToken(response.data.refresh_token));
     } else {
         yield put(loginActions.setLogout());
-        toast.info(i18next.t(translations.app.your_session_is_expired));
+        toast.info(i18next.t(translations.general.your_session_is_expired));
     }
 }
 
