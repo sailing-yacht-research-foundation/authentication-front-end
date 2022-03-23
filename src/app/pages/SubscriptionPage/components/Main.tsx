@@ -1,9 +1,8 @@
 import { BorderedButton, LottieMessage } from 'app/components/SyrfGeneral';
 import React from 'react';
-import { getPlans, getCustomerPortalLink, checkout } from 'services/live-data-server/subscription';
+import { getPlans, getCustomerPortalLink, checkout, previewSwitchPlan } from 'services/live-data-server/subscription';
 import styled from 'styled-components';
 import { media } from 'styles/media';
-import { StyleConstants } from 'styles/StyleConstants';
 import { Plan } from 'types/Plan';
 import Lottie from 'react-lottie';
 import CustomerPortal from '../assets/customer-portal.json';
@@ -30,6 +29,8 @@ export const Main = () => {
     const [portalLink, setCustomerPortalLink] = React.useState<string>('');
 
     const [isCheckingOut, setIsCheckingOut] = React.useState<boolean>(false);
+
+    const [pricingDetail, setPricingDetail] = React.useState<any>({});
 
     const [plans, setPlans] = React.useState<Plan[]>([]);
 
@@ -73,6 +74,16 @@ export const Main = () => {
         }
     }
 
+    const openPreviewSwitchPlan = async (pricingId: string, quantity: number = 1) => {
+        const response = await previewSwitchPlan(pricingId, quantity);
+
+        if (response.success) {
+            setPricingDetail(response.data)
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     React.useEffect(() => {
         getSyrfPlans();
         getCustomerPortal();
@@ -86,11 +97,17 @@ export const Main = () => {
                         <PlanTitle>{p.tierName}</PlanTitle>
                         <PlanSubTitle>{p.description}</PlanSubTitle>
                     </PlanItemTitle>
-                    {
-                        p.pricings.length > 0 && <PlanItemPrice>
-                            <PriceText>${p.pricings[0].amount}/</PriceText><span>{p.pricings[0].recurring.intervalCount} {p.pricings[0].recurring.interval}</span>
-                        </PlanItemPrice>
-                    }
+                    <PlanItemPriceWrapper>
+                        {
+                            p.pricings.length > 0 && p.pricings.map((pricing, index) =>
+                                <>
+                                    <PlanItemPrice onClick={() => openPreviewSwitchPlan(pricing.id, 1)}>
+                                        <PriceText>${pricing.amount}/</PriceText><span>{pricing.recurring.intervalCount} {pricing.recurring.interval}</span>
+                                    </PlanItemPrice>
+                                { index + 1 !==  p.pricings.length && <PricingOrText>Or</PricingOrText>}
+                                </>)
+                        }
+                    </PlanItemPriceWrapper>
                 </PlanItemHeader>
                 {
                     index % 2 == 0 ? (<PlanItemContent>
@@ -107,7 +124,7 @@ export const Main = () => {
 
     return (
         <OuterWrapper>
-            <ProfileTabs/>
+            <ProfileTabs />
             <Wrapper>
                 <SectionWrapper>
                     <SectionTitle>Plans</SectionTitle>
@@ -196,7 +213,7 @@ const PlanItem = styled.div`
 
     &.active {
         background-color: #6D79F3;
-        h3, span {
+        h3, span, div {
             color: #fff;
         }
         button span {
@@ -223,7 +240,8 @@ const PlanItemTitle = styled.div`
 `;
 
 const PlanItemPrice = styled.span`
-
+    text-align: right;
+    cursor: pointer;
 `;
 
 const PriceText = styled.span`
@@ -259,4 +277,15 @@ const PlanItemContent = styled.div`
     padding-top: 30px;
     padding-bottom: 10px;
     display: flex;
+`;
+
+const PlanItemPriceWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const PricingOrText = styled.div`
+    display: block;
+    text-align: right;
+    margin: 3px 0;
 `;
