@@ -61,7 +61,7 @@ class Request {
                         }
                     } else {
                         store.dispatch(loginActions.setLogout());
-                        message.info(i18next.t(translations.app.your_session_is_expired));
+                        message.info(i18next.t(translations.general.your_session_is_expired));
                     }
                 }
             } else if (err.response?.status === 400
@@ -77,7 +77,7 @@ class Request {
                     localStorage.setItem('tried_getting_token', '1');
                     window.location.reload();
                 } else {
-                    message.info(i18next.t(translations.app.our_service_is_temporary_unavailable_at_the_moment));
+                    message.info(i18next.t(translations.general.our_service_is_temporary_unavailable_at_the_moment));
                 }
             }
         }

@@ -29,7 +29,7 @@ export const VesselList = (props) => {
 
     const columns = [
         {
-            title: t(translations.vessel_list_page.public_name),
+            title: t(translations.general.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
@@ -43,7 +43,7 @@ export const VesselList = (props) => {
             render: (value) => renderEmptyValue(value),
         },
         {
-            title: t(translations.vessel_list_page.created_date),
+            title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
@@ -63,7 +63,7 @@ export const VesselList = (props) => {
                         }} type="primary">{t(translations.vessel_participant_group_create_update_page.add_to_group)}</BorderedButton> :
                         <DeleteButton data-tip={t(translations.tip.remove_boat_from_class)} onClick={() => removeFromGroup(record.id)}>{t(translations.vessel_participant_group_create_update_page.delete_from_group)}</DeleteButton>
                     }
-                    <BorderedButton data-tip={t(translations.tip.delete_boat)} danger onClick={() => showDeleteVesselModal(record)}>{t(translations.vessel_list_page.delete)}</BorderedButton>
+                    <BorderedButton data-tip={t(translations.tip.delete_boat)} danger onClick={() => showDeleteVesselModal(record)}>{t(translations.general.delete)}</BorderedButton>
                     <ReactTooltip />
                 </Space>;
             },
@@ -216,7 +216,7 @@ export const VesselList = (props) => {
                             onClick={() => createNVessels()}
                             icon={<AiFillPlusCircle
                                 style={{ marginRight: '5px' }}
-                                size={18} />}>{t(translations.vessel_list_page.create)}</CreateButton>
+                                size={18} />}>{t(translations.general.create)}</CreateButton>
                     </Space>
                 </PageHeaderContainer>
                 <TableWrapper>

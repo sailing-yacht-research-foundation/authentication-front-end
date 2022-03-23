@@ -31,7 +31,7 @@ export const CompetitionUnitList = () => {
 
     const columns = [
         {
-            title: t(translations.competition_unit_list_page.name),
+            title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
@@ -39,19 +39,19 @@ export const CompetitionUnitList = () => {
             }
         },
         {
-            title: t(translations.competition_unit_list_page.event_name),
+            title: t(translations.general.event_name),
             dataIndex: 'eventName',
             key: 'eventName',
             render: (text, record) => <Link to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>,
         },
         {
-            title: t(translations.competition_unit_list_page.created_date),
+            title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
-            title: t(translations.competition_unit_list_page.action),
+            title: t(translations.general.action),
             key: 'action',
             width: '20%',
             render: (text, record) => {
@@ -60,8 +60,8 @@ export const CompetitionUnitList = () => {
                     return <Space size="middle">
                         <BorderedButton onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
-                        }} type="primary">{t(translations.competition_unit_list_page.update)}</BorderedButton>
-                        <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                        }} type="primary">{t(translations.general.update)}</BorderedButton>
+                        <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>
                     </Space>;
 
                 return <></>;

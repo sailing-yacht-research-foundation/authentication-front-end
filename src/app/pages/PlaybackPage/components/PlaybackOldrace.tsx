@@ -33,7 +33,6 @@ import { usePlaybackSlice } from "./slice";
 import { MAP_DEFAULT_VALUE, PlaybackSpeed, RaceEmitterEvent, WebsocketConnectionStatus, WorkerEvent } from "utils/constants";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
-import { Leaderboard } from "./Leaderboard";
 import { Playback } from "./Playback";
 import { RaceMap } from "./RaceMap";
 import { ConnectionLoader } from './ConnectionLoader';
@@ -589,15 +588,8 @@ export const PlaybackOldRace = (props) => {
     lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
   };
 
-  const isScrapedRace = () => competitionUnitDetail ? (competitionUnitDetail.scrapedOriginalId || competitionUnitDetail.scrapedUrl) : false;
-
   return (
     <div style={{ height: "100%", position: "relative" }}>
-      {
-        !isScrapedRace() && <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-          <Leaderboard emitter={eventEmitter} participantsData={participantsData}></Leaderboard>
-        </LeaderboardContainer>
-      }
       <MapContainer
         style={{
           height: "100%",

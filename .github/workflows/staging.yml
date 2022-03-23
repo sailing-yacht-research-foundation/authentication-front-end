@@ -12,7 +12,13 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.CI_TOKEN }}
+          submodules: true
+      - name: Init submodule to repo
+        run: git submodule update --init
       - name: Build image
         run: docker build . --file Dockerfile-ci --tag $IMAGE_NAME
           --build-arg REACT_APP_FACEBOOK_CLIENT_ID=''
@@ -69,6 +75,7 @@ jobs:
             [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo \$VERSION | sed -e 's/^v//')
             echo IMAGE_ID=\$IMAGE_ID
             echo VERSION=\$VERSION
+            docker system prune -a -f
             docker pull \$IMAGE_ID:\$VERSION
             docker container rm -f syrf_my_sailing_profile || true
             docker run -d -p 3002:5000 --name syrf_my_sailing_profile \$IMAGE_ID:\$VERSION

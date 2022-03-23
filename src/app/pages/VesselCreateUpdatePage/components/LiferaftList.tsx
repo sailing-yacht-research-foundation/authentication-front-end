@@ -79,7 +79,7 @@ export const LiferaftList = (props) => {
                     <BorderedButton onClick={() => {
                         history.push(`/boats/${vesselId}/liferafts/${record.id}/update`);
                     }} type="primary">{t(translations.liferaft_create_update_page.update)}</BorderedButton>
-                    <BorderedButton data-tip={t(translations.tip.delete_this_liferaft)} danger onClick={() => showDeleteLiferaftModal(record)}>{t(translations.competition_unit_list_page.delete)}</BorderedButton>
+                    <BorderedButton data-tip={t(translations.tip.delete_this_liferaft)} danger onClick={() => showDeleteLiferaftModal(record)}>{t(translations.general.delete)}</BorderedButton>
                 </Space>
             ),
         },

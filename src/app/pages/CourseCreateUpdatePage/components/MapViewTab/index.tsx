@@ -125,7 +125,7 @@ export const MapViewTab = () => {
                         <>
                             <DeleteButton data-tip={t(translations.tip.delete_course)} onClick={() => mapViewRef.current?.deleteCourse()} danger icon={<BiTrash
                                 style={{ marginRight: '5px' }}
-                                size={18} />}>{t(translations.course_create_update_page.delete)}</DeleteButton>
+                                size={18} />}>{t(translations.general.delete)}</DeleteButton>
                             <ReactTooltip />
                         </>}
 

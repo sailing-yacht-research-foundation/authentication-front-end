@@ -260,7 +260,7 @@ export const VesselForm = () => {
                 <Space size={10}>
                     {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.vessel_create_update_page.delete)}</DeleteButton>}
+                        size={18} />}>{t(translations.general.delete)}</DeleteButton>}
 
                 </Space>
             </PageHeaderContainerResponsive>
