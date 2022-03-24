@@ -233,6 +233,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/notifications'} component={NotificationCenterPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/settings'} component={ProfileSettingsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/subscription'} component={SubscriptionPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/payment-success'} component={SubscriptionPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

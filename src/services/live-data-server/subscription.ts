@@ -10,33 +10,32 @@ export const getCustomerPortalLink = () => {
     return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/subscription/customer-portal`));
 }
 
-export const previewSwitchPlan = (pricingId: string, quantity: number) => {
+export const previewSwitchPlan = (pricingId: string, quantity: number = 1) => {
     return formatServicePromiseResponse(syrfService.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/subscription/preview-plan`, {
         pricingId,
         quantity
     }));
 }
 
-export const checkout = (pricingId: string, quantity: number) => {
+export const checkout = (pricingId: string, quantity: number = 1) => {
     return formatServicePromiseResponse(syrfService.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/subscription/checkout`, {
         pricingId,
         quantity
     }));
 }
 
-export const switchPlan = (pricingId: string, quantity: number, prorationDate: number) => { // prorationDate is in UNIX timestamp format 
+export const switchPlan = (pricingId: string, quantity: number = 1) => { // prorationDate is in UNIX timestamp format 
     return formatServicePromiseResponse(syrfService.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/subscription/switch-plan`, {
         pricingId,
         quantity,
-        prorationDate
+        prorationDate: Date.now()
     }));
 }
 
-export const cancelPlan = (pricingId: string, quantity: number) => {
-    return formatServicePromiseResponse(syrfService.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/subscription/cancel-plan`, {
-        data: {
-            pricingId,
-            quantity
-        }
-    }));
+export const cancelPlan = () => {
+    return formatServicePromiseResponse(syrfService.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/subscription/cancel-plan`));
+}
+
+export const getUserActivePlan = () => {
+    return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/subscription/active-plan`));
 }

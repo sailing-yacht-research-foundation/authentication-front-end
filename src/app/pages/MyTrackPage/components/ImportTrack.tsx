@@ -6,7 +6,7 @@ import { getMany } from 'services/live-data-server/vessels';
 import { Vessel } from 'types/Vessel';
 import { ImportTrackType } from 'utils/constants';
 import { showToastMessageOnRequestError } from 'utils/helpers';
-import { Modal, Spin, Form, Select, Switch, Radio } from 'antd';
+import { Modal, Spin, Form, Select, Radio } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
@@ -91,6 +91,7 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
 
     React.useEffect(() => {
         getUserBoats();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onRadioChanged = (e) => {

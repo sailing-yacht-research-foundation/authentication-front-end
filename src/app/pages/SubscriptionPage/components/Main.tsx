@@ -1,15 +1,28 @@
 import { BorderedButton, LottieMessage } from 'app/components/SyrfGeneral';
 import React from 'react';
-import { getPlans, getCustomerPortalLink, checkout, previewSwitchPlan } from 'services/live-data-server/subscription';
+import { getPlans, getCustomerPortalLink, checkout, cancelPlan, getUserActivePlan } from 'services/live-data-server/subscription';
 import styled from 'styled-components';
 import { media } from 'styles/media';
 import { Plan } from 'types/Plan';
 import Lottie from 'react-lottie';
 import CustomerPortal from '../assets/customer-portal.json';
 import { useTranslation } from 'react-i18next';
-import { Spin, Button } from 'antd';
+import { Spin } from 'antd';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { ProfileTabs } from 'app/pages/ProfilePage/components/ProfileTabs';
+import { ConfirmModal } from 'app/components/ConfirmModal';
+import { toast } from 'react-toastify';
+import { translations } from 'locales/translations';
+import { ModalPreviewPricing } from './ModalPreviewPricing';
+interface ActivePlan {
+    status: string;
+    tierCode: string;
+    tierName: string;
+    productId: string;
+    pricingId: string;
+    interval: string;
+    intervalCount: number;
+}
 
 const defaultOptions = {
     loop: true,
@@ -30,9 +43,15 @@ export const Main = () => {
 
     const [isCheckingOut, setIsCheckingOut] = React.useState<boolean>(false);
 
-    const [pricingDetail, setPricingDetail] = React.useState<any>({});
+    const [currentActivePlan, setCurrentActivePlan] = React.useState<Partial<ActivePlan>>({});
+
+    const [showCancelSubscriptionModal, setShowCancelSubscriptionModal] = React.useState<boolean>(false);
+
+    const [showPreviewModal, setShowPreviewModal] = React.useState<boolean>(false);
 
     const [plans, setPlans] = React.useState<Plan[]>([]);
+
+    const [selectedPricingId, setSelectedPricingId] = React.useState<string>('');
 
     const getSyrfPlans = async () => {
         setIsLoading(true);
@@ -60,11 +79,11 @@ export const Main = () => {
         window.open(portalLink, '_blank');
     }
 
-    const performCheckout = async (pricingId: string, quantity: number = 1) => {
+    const performCheckout = async (pricingId: string) => {
         if (isCheckingOut) return;
 
         setIsCheckingOut(true);
-        const response = await checkout(pricingId, quantity);
+        const response = await checkout(pricingId);
         setIsCheckingOut(false);
 
         if (response.success) {
@@ -74,24 +93,65 @@ export const Main = () => {
         }
     }
 
-    const openPreviewSwitchPlan = async (pricingId: string, quantity: number = 1) => {
-        const response = await previewSwitchPlan(pricingId, quantity);
-
-        if (response.success) {
-            setPricingDetail(response.data)
-        } else {
-            showToastMessageOnRequestError(response.error);
-        }
-    }
-
     React.useEffect(() => {
         getSyrfPlans();
         getCustomerPortal();
+        getActivePlan();
     }, []);
+
+    const performCancelSubscription = async () => {
+        const response = await cancelPlan();
+
+        if (response.success) {
+            if (response.data.cancelAtPeriodEnd) {
+                toast.success(t(translations.subscription_page.your_subscription_will_be_cancelled_at_the_period_end));
+            } else {
+                toast.success(t(translations.general.your_action_is_successful));
+            }
+            getActivePlan();
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
+        setShowCancelSubscriptionModal(false);
+    }
+
+    const getActivePlan = async () => {
+        const response = await getUserActivePlan();
+
+        if (response.success) {
+            setCurrentActivePlan(response.data);
+        }
+    }
+
+    const performCheckoutOrCancelPan = (pricingId: string) => {
+        if (isPricingActive(pricingId)) {
+            setShowCancelSubscriptionModal(true);
+        } else {
+            if (currentActivePlan.productId) {
+                openPreviewSwitchPlan(pricingId);
+            } else {
+                performCheckout(pricingId);
+            }
+        }
+    }
+
+    const isPricingActive = (pricingId: string) => {
+        return pricingId === currentActivePlan.pricingId;
+    }
+
+    const isPlanActive = (productId: string) => {
+        return productId === currentActivePlan.productId;
+    }
+
+    const openPreviewSwitchPlan = (pricingId: string) => {
+        setShowPreviewModal(true);
+        setSelectedPricingId(pricingId);
+    }
 
     const renderPlans = () => {
         if (plans.length > 0)
-            return plans.map((p, index) => (<PlanItem className={index % 2 == 0 ? '' : 'active'}>
+            return plans.map((p) => (<PlanItem className={isPlanActive(p.productId) ? 'active' : ''}>
                 <PlanItemHeader>
                     <PlanItemTitle>
                         <PlanTitle>{p.tierName}</PlanTitle>
@@ -99,31 +159,44 @@ export const Main = () => {
                     </PlanItemTitle>
                     <PlanItemPriceWrapper>
                         {
-                            p.pricings.length > 0 && p.pricings.map((pricing, index) =>
+                            p.pricings.length > 0 && p.pricings.map((pricing) =>
                                 <>
-                                    <PlanItemPrice onClick={() => openPreviewSwitchPlan(pricing.id, 1)}>
-                                        <PriceText>${pricing.amount}/</PriceText><span>{pricing.recurring.intervalCount} {pricing.recurring.interval}</span>
+                                    <PlanItemPrice>
+                                        <div>
+                                            <PriceText>${pricing.amount}/</PriceText>
+                                            <span>{pricing.recurring.intervalCount} {pricing.recurring.interval}</span>
+                                        </div>
+                                        <div>
+                                            <BorderedButton
+                                                type={!isPlanActive(p.productId) ? 'primary' : undefined}
+                                                onClick={() => performCheckoutOrCancelPan(pricing.id)}
+                                                className={isPricingActive(pricing.id) ? 'cancelable' : ''}
+                                            >{isPricingActive(pricing.id) ? t(translations.general.cancel) : t(translations.general.upgrade)}</BorderedButton>
+                                        </div>
                                     </PlanItemPrice>
-                                { index + 1 !==  p.pricings.length && <PricingOrText>Or</PricingOrText>}
                                 </>)
                         }
                     </PlanItemPriceWrapper>
                 </PlanItemHeader>
-                {
-                    index % 2 == 0 ? (<PlanItemContent>
-                        <BorderedButton onClick={() => performCheckout(p.pricings[0].id, 1)} type='primary'>Upgrade</BorderedButton>
-                        <Button type='link'>Learn more about this plan</Button>
-                    </PlanItemContent>) : (<PlanItemContent>
-                        <BorderedButton>Cancel Subscription</BorderedButton>
-                    </PlanItemContent>)
-                }
             </PlanItem>));
 
-        return <NoPlanText>We don't have any plans right now.</NoPlanText>
+        return <NoPlanText>{t(translations.subscription_page.we_dont_have_any_plans_right_now)}</NoPlanText>
     }
 
     return (
         <OuterWrapper>
+            <ModalPreviewPricing
+                setShowModal={setShowPreviewModal}
+                pricingId={selectedPricingId}
+                reloadParent={getActivePlan}
+                showModal={showPreviewModal} />
+            <ConfirmModal
+                showModal={showCancelSubscriptionModal}
+                content={t(translations.subscription_page.are_you_sure_you_want_to_cancel_subscription)}
+                title={t(translations.subscription_page.cancel_subscription)}
+                onOk={performCancelSubscription}
+                onCancel={() => setShowCancelSubscriptionModal(false)}
+            />
             <ProfileTabs />
             <Wrapper>
                 <SectionWrapper>
@@ -135,14 +208,14 @@ export const Main = () => {
                     </Spin>
                 </SectionWrapper>
                 <SectionWrapper>
-                    <SectionTitle>Customer Portal</SectionTitle>
+                    <SectionTitle>{t(translations.subscription_page.customer_portal)}</SectionTitle>
                     <LottieWrapper>
                         <Lottie
                             options={defaultOptions}
                             height={400}
                             width={400} />
-                        <LottieMessage>Customer portal is where you can see your purchase history, current active plan, payment method and manage subscription.</LottieMessage>
-                        {<BorderedButton onClick={openCustomerPortal} disabled={!portalLink} type="primary">Go to my portal</BorderedButton>}
+                        <LottieMessage>{t(translations.subscription_page.customer_portal_is_where)}</LottieMessage>
+                        {<BorderedButton onClick={openCustomerPortal} disabled={!portalLink} type="primary">{t(translations.subscription_page.go_to_my_portal)}</BorderedButton>}
                     </LottieWrapper>
                 </SectionWrapper>
             </Wrapper>
@@ -219,14 +292,22 @@ const PlanItem = styled.div`
         button span {
             color: #6D79F3 !important;
         }
-    }
+        .preview span {
+            color: #fff !important;
+        }
 
+        button.cancelable {
+            background: #DC6E1E;
+            span {
+                color: #fff !important;
+            }
+        }
+    }
 `;
 
 const PlanItemHeader = styled.div`
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
 `;
 
 const PlanTitle = styled.h3`
@@ -239,9 +320,12 @@ const PlanItemTitle = styled.div`
 
 `;
 
-const PlanItemPrice = styled.span`
-    text-align: right;
+const PlanItemPrice = styled.div`
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
 `;
 
 const PriceText = styled.span`
@@ -273,19 +357,8 @@ const NoPlanText = styled.span`
     text-align: center;
 `;
 
-const PlanItemContent = styled.div`
-    padding-top: 30px;
-    padding-bottom: 10px;
-    display: flex;
-`;
-
 const PlanItemPriceWrapper = styled.div`
     display: flex;
     flex-direction: column;
-`;
-
-const PricingOrText = styled.div`
-    display: block;
-    text-align: right;
-    margin: 3px 0;
+    margin-top: 10px;
 `;

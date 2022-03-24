@@ -35,7 +35,7 @@ export const PlaybackStreamRace = (props) => {
   const [, setSocketUrl] = useState(streamUrl);
   const [eventEmitter,] = useState(new EventEmitter());
 
-  const [participantsData, setParticipantsData] = useState([]);
+  const [, setParticipantsData] = useState([]);
   const [raceIdentity, setRaceIdentity] = useState({ name: "Race name", description: "Race description" });
 
   const dispatch = useDispatch();
