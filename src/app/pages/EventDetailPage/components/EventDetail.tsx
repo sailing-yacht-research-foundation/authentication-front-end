@@ -175,7 +175,7 @@ export const EventDetail = () => {
                 </EventActions>
             </PageHeaderContainerResponsive>
 
-            <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
+           { coordinates.lat && coordinates.lng && <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding /> }
 
             <EventDescriptionContainer>
                 <EventSection>
