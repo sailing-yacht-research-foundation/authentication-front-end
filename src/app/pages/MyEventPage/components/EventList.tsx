@@ -47,7 +47,7 @@ export const EventList = () => {
 
   const columns = [
     {
-      title: t(translations.my_event_list_page.name),
+      title: t(translations.general.name),
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => {
@@ -119,8 +119,8 @@ export const EventList = () => {
             record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status) && <>
               <BorderedButton onClick={() => {
                 history.push(`/events/${record.id}/update`)
-              }} type="primary">{t(translations.my_event_list_page.update)}</BorderedButton>
-              {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.my_event_list_page.delete)}</BorderedButton>}
+              }} type="primary">{t(translations.general.update)}</BorderedButton>
+              {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>}
             </>
           }
           <ReactTooltip />

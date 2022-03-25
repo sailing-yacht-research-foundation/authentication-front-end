@@ -42,7 +42,7 @@ export const InvitedEventLists = (props) => {
 
     const columns = [
         {
-            title: t(translations.my_event_list_page.name),
+            title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {

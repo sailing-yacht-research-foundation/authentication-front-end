@@ -384,7 +384,7 @@ export const CompetitionUnitForm = () => {
                                 onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                                     style={{ marginRight: '5px' }}
                                     size={18}
-                                />}>{t(translations.competition_unit_create_update_page.delete)}</DeleteButton>
+                                />}>{t(translations.general.delete)}</DeleteButton>
                             <ReactTooltip />
                         </>}
                 </Space>
@@ -403,7 +403,7 @@ export const CompetitionUnitForm = () => {
                         }}
                     >
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.general.name)}</SyrfFieldLabel>}
                             name="name"
                             data-tip={t(translations.tip.race_name)}
                             rules={[{ required: true, message: t(translations.forms.race_name_is_required) }, {

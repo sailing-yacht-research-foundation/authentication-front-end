@@ -150,9 +150,9 @@ export const MembersManager = (props) => {
                 </Menu.Item>
                 {
                     member.status !== GroupMemberStatus.BLOCKED ? (<Menu.Item key="1">
-                        <a onClick={(e) => showBlockModal(e, member)} href="/">{t(translations.app.block)}</a>
+                        <a onClick={(e) => showBlockModal(e, member)} href="/">{t(translations.general.block)}</a>
                     </Menu.Item>) : (<Menu.Item key="1">
-                        <a onClick={(e) => unblock(e, member)} href="/">{t(translations.app.unblock)}</a>
+                        <a onClick={(e) => unblock(e, member)} href="/">{t(translations.general.unblock)}</a>
                     </Menu.Item>)
                 }
             </Menu>

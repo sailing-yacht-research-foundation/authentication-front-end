@@ -27,7 +27,7 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
 
     const columns = [
         {
-            title: t(translations.vessel_list_page.public_name),
+            title: t(translations.general.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
         },

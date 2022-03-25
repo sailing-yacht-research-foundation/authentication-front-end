@@ -3,8 +3,6 @@ A React app for Sailors & Developers to access their sailing profile.
 
 
 ## Project structure
-
-    ├── amplify                  # amplify backend auto generated files
     ├── build                    # app generated files using build command                      
     ├── node_modules                   
     ├── public                   # public assets
@@ -16,7 +14,6 @@ A React app for Sailors & Developers to access their sailing profile.
     │   ├── utils         # helpers
     │   ├── index.tsx     # app global index file
     ├── internals           
-    ├── syrf-backend             # backend-relative services
     ├── docker-compose.yml         
     ├── tsconfig.json
     ├── dockerfile
@@ -30,6 +27,9 @@ A React app for Sailors & Developers to access their sailing profile.
 First, please copy the .env-example to .env and fillout all the variables needed. Please contact the team if you dont have the variables.
 
 Then in the project root, run
+``git submodule update --init``
+
+And
 ``docker-compose up``
 
 The app will run at ``locahost:3002``

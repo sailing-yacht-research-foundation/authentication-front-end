@@ -96,7 +96,7 @@ export const ResultItem = (props) => {
 
         if (response.success) {
             setShowMarkAsHiddenConfirmModal(false);
-            toast.success(t(translations.app.your_action_is_successful));
+            toast.success(t(translations.general.your_action_is_successful));
             updateResults(race._source.id);
         } else {
             showToastMessageOnRequestError(response.error);
@@ -108,7 +108,7 @@ export const ResultItem = (props) => {
 
         if (response.success) {
             setShowMarkAsCompletedConfirmModal(false);
-            toast.success(t(translations.app.your_action_is_successful));
+            toast.success(t(translations.general.your_action_is_successful));
             updateResults(race._source.id);
         } else {
             showToastMessageOnRequestError(response.error);
@@ -120,7 +120,7 @@ export const ResultItem = (props) => {
 
         if (response.success) {
             setShowDeleteRaceConfirmModal(false);
-            toast.success(t(translations.app.your_action_is_successful));
+            toast.success(t(translations.general.your_action_is_successful));
             updateResults(race._source.id);
         } else {
             showToastMessageOnRequestError(response.error);

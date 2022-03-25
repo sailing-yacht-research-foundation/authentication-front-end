@@ -12,7 +12,7 @@ export const MarkerInfo = (props) => {
     const identifierElement = isIdentifierExist ? (
         name ? (<RacerInfoContainer>
             <RacerInfoTitle>
-                {t(translations.playback_page.name)}:
+                {t(translations.general.name)}:
             </RacerInfoTitle>
             <br />
             {name}
