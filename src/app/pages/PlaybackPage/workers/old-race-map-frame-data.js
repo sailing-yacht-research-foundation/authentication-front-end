@@ -105,11 +105,14 @@ const workercode = () => {
                     ? [filteredPositions[1].lon, filteredPositions[1].lat]
                     : currentCoordinateForHeading;
 
-            if (lastPosition.cog) // heading/course from ws
+            if (lastPosition.cog) { // heading/course from ws
                 lastPosition.heading = lastPosition.cog;
-            else {
+            } else {
                 lastPosition.heading = generateLastHeading(previousCoordinateForHeading, currentCoordinateForHeading); // calculated heading if not exist.
                 let previousHeading = previousHeadings[vP.id];
+                if (Math.abs(previousHeading) > 180) {
+                    previousHeading -= 360;
+                }
                 if (previousHeading !== undefined && previousHeading !== null
                     && Math.abs(lastPosition.heading - previousHeading) > 180) {
                     lastPosition.heading = lastPosition.heading - 360;
@@ -201,10 +204,10 @@ const workercode = () => {
         return (bearing + 360) % 360;
     };
 
-    function validateLatLng(lat, lng) {    
+    function validateLatLng(lat, lng) {
         let pattern = new RegExp('^-?([1-8]?[1-9]|[1-9]0)\\.{1}\\d{1,6}');
         return pattern.test(lat) && pattern.test(lng);
-      }
+    }
 };
 
 let code = workercode.toString();
