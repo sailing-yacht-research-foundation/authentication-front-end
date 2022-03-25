@@ -124,7 +124,7 @@ export const Main = () => {
         }
     }
 
-    const performCheckoutOrCancelPan = (pricingId: string) => {
+    const performCheckoutOrCancelPlan = (pricingId: string) => {
         if (isPricingActive(pricingId)) {
             setShowCancelSubscriptionModal(true);
         } else {
@@ -169,7 +169,7 @@ export const Main = () => {
                                         <div>
                                             <BorderedButton
                                                 type={!isPlanActive(p.productId) ? 'primary' : undefined}
-                                                onClick={() => performCheckoutOrCancelPan(pricing.id)}
+                                                onClick={() => performCheckoutOrCancelPlan(pricing.id)}
                                                 className={isPricingActive(pricing.id) ? 'cancelable' : ''}
                                             >{isPricingActive(pricing.id) ? t(translations.general.cancel) : t(translations.general.upgrade)}</BorderedButton>
                                         </div>
