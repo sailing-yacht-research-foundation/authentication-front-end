@@ -49,6 +49,8 @@ export const Main = () => {
 
     const [showPreviewModal, setShowPreviewModal] = React.useState<boolean>(false);
 
+    const [isPerformingCancelPlan, setIsPerformingCancelPlan] = React.useState<boolean>(false);
+
     const [plans, setPlans] = React.useState<Plan[]>([]);
 
     const [selectedPricingId, setSelectedPricingId] = React.useState<string>('');
@@ -100,7 +102,9 @@ export const Main = () => {
     }, []);
 
     const performCancelSubscription = async () => {
+        setIsPerformingCancelPlan(true);
         const response = await cancelPlan();
+        setIsPerformingCancelPlan(false);
 
         if (response.success) {
             if (response.data.cancelAtPeriodEnd) {
@@ -191,6 +195,7 @@ export const Main = () => {
                 reloadParent={getActivePlan}
                 showModal={showPreviewModal} />
             <ConfirmModal
+                loading={isPerformingCancelPlan}
                 showModal={showCancelSubscriptionModal}
                 content={t(translations.subscription_page.are_you_sure_you_want_to_cancel_subscription)}
                 title={t(translations.subscription_page.cancel_subscription)}
