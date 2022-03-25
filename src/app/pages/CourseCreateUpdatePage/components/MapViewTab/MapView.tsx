@@ -96,7 +96,7 @@ export const MapView = React.forwardRef((props, ref) => {
 
     const map = useMap();
 
-    const layerOrder = React.useRef(1);
+    const layerOrder = React.useRef(0);
 
     const geometryName = React.useRef('');
 
