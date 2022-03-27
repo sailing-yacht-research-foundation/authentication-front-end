@@ -10,6 +10,7 @@ import ReactTooltip from 'react-tooltip';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 import { CalendarEvent } from 'types/CalendarEvent';
+import { StopRaceConfirmModal } from 'app/pages/MyEventCreateUpdatePage/components/modals/StopRaceConfirmModal';
 
 interface IRaceManageButtons {
     race: CompetitionUnit,
@@ -20,19 +21,23 @@ interface IRaceManageButtons {
     setShowRegisterModal: Function,
     isAuthenticated: boolean,
     showDeleteRaceModal: Function,
-    relations: any[]
+    relations: any[],
+    reloadParent?: Function
 }
 
 export const RaceManageButtons = (props: IRaceManageButtons) => {
-    const { race, canManageEvent, event, setCompetitionUnit, showRegisterModal, setShowRegisterModal, isAuthenticated, showDeleteRaceModal, relations } = props;
+    const { race, reloadParent, canManageEvent, event, setCompetitionUnit,
+        showRegisterModal, setShowRegisterModal, isAuthenticated, showDeleteRaceModal, relations } = props;
 
     const history = useHistory();
 
     const [relation, setRelation] = React.useState<any>(null);
 
+    const [showStopRaceConfirmModal, setShowStopRaceConfirmModal] = React.useState<boolean>(false);
+
     const { t } = useTranslation();
 
-    const showRegisterModalOrRedirect = (competitionUnit) => {
+    const showRegisterModalOrRedirect = (competitionUnit: CompetitionUnit) => {
         if (isAuthenticated) {
             setCompetitionUnit(competitionUnit);
             setShowRegisterModal(true);
@@ -41,11 +46,16 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
         }
     }
 
+    const openStopRaceConfirmModal = (competitionUnit: CompetitionUnit) => {
+        setCompetitionUnit(competitionUnit);
+        setShowStopRaceConfirmModal(true);
+    }
+
     React.useEffect(() => {
         if (relations.length > 0) {
             setRelation(relations.find(r => r.id === race.id));
         }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [relations]);
 
     const canRegisterToRace = () => { // race is scheduled and event is open and allow for registration and event status is on going or scheduled and the user is not admin.
@@ -57,7 +67,15 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
         return isNotAdminOrParticipant && eventIsRegattaAndOngoingOrScheduled && isNotEventEditor && raceIsScheduled;
     }
 
+    const canStopRace = () => {
+        const isAdmin = relation?.isAdmin;
+        const isRaceOnGoing = [RaceStatus.ON_GOING].includes(race.status!);
+
+        return isAdmin && isRaceOnGoing;
+    }
+
     return (<Space size="middle">
+        <StopRaceConfirmModal reloadParent={reloadParent} race={race} showModal={showStopRaceConfirmModal} setShowModal={setShowStopRaceConfirmModal} />
         <RegisterRaceModal
             showModal={showRegisterModal}
             setShowModal={setShowRegisterModal}
@@ -68,6 +86,7 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
             raceId={race.id}
         />
         {canRegisterToRace() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegisterModalOrRedirect(race)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
+        {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
         {canManageEvent() && <>
             <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
                 history.push(`/events/${race.calendarEventId}/races/${race.id}/update`);
