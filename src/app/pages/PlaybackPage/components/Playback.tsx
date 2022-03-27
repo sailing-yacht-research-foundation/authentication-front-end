@@ -183,6 +183,11 @@ export const Playback = (props) => {
         setTimeWhenMouseHover(milisecondsToMinutes(getMousePositionFromProgressBar(e)));
     }
 
+    const hideTimeTooltip = (e) => {
+        e.stopPropagation();
+        setHoverWidthOffset('-999px')
+    }
+
     React.useEffect(() => {
         if (realRaceTime.start > 0 && realRaceTime.end > 0 && raceTime.start > 0 && raceTime.end > 0) {
             const startMarkWidth = getMarkerWidth(realRaceTime.start);
@@ -215,8 +220,8 @@ export const Playback = (props) => {
                     <ProgressBarWrapper>
                         <ProgressBar ref={progressBarContainerRef} onMouseLeave={() => setHoverWidthOffset('-999px')} onMouseMove={getWidthOffsetBaseOnMouseHover} onClick={playAtClickedPosition}>
                             {playbackType === PlaybackTypes.OLDRACE && <>
-                                {isRaceStartMarkWithinPlaybackRange && <StartMarker onClick={playAtStartMarker} style={{ left: `${startMarkerWith}%` }}></StartMarker>}
-                                {isRaceEndMarkWithinPlaybackRange && <EndMarker onClick={playAtEndMarker} style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
+                                {isRaceStartMarkWithinPlaybackRange && <StartMarker onMouseMove={(e) => hideTimeTooltip(e)} onClick={playAtStartMarker} style={{ left: `${startMarkerWith}%` }}></StartMarker>}
+                                {isRaceEndMarkWithinPlaybackRange && <EndMarker onMouseMove={(e) => hideTimeTooltip(e)} onClick={playAtEndMarker} style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
                             </>}
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                             <ProgressBarTime style={{ left: hoverWidthOffset }}>{timeWhenMouseHover}</ProgressBarTime>
@@ -443,6 +448,7 @@ const ProgressBarTime = styled.div`
     padding: 5px;
     box-shadow: 0 12px 28px 0 rgba(0,0,0,0.2),0 2px 4px 0 rgba(0,0,0,0.1),inset 0 0 0 1px rgba(255,255,255,0.5);
     border-radius: 5px;
+    white-space: nowrap;
 
     &:after {
         border-right:  0.5em solid transparent;
