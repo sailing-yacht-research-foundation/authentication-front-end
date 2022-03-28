@@ -139,13 +139,6 @@ export const EventDetail = () => {
         history.push(`/profile/${profileId}`);
     }
 
-    const canShowEventLocation = () => {
-        return coordinates.lat !== null
-            && coordinates.lat !== undefined
-            && coordinates.lng !== undefined
-            && coordinates.lng !== null;
-    }
-
     return (
         <Spin spinning={isFetchingEvent}>
             <PageHeaderContainerResponsive>
@@ -182,7 +175,7 @@ export const EventDetail = () => {
                 </EventActions>
             </PageHeaderContainerResponsive>
 
-            {canShowEventLocation() && <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />}
+            <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
 
             <EventDescriptionContainer>
                 <EventSection>
