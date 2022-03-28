@@ -47,10 +47,8 @@ export const LocationPicker = (props) => {
 
     const canShowPicker = coordinates.lat !== null
         && coordinates.lat !== undefined
-        && ((coordinates.lng !== undefined
-            && coordinates.lng !== null)
-            || (coordinates.lon !== undefined
-                && coordinates.lon !== null))
+        && coordinates.lng !== undefined
+        && coordinates.lng !== null
 
 
     return (
