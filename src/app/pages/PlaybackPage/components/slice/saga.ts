@@ -3,6 +3,7 @@
  */
 
 import { all, call, put, takeLatest } from "@redux-saga/core/effects";
+import moment from "moment";
 import {
   getCompetitionUnitById,
   getCourseByCompetitionUnit,
@@ -67,6 +68,14 @@ export function* getRaceData({ type, payload }) {
   if (competitionUnitResult.success) {
     yield put(playbackActions.setCompetitionUnitId(raceId));
     yield put(playbackActions.setCompetitionUnitDetail(competitionUnitResult.data));
+
+    const params = new URLSearchParams(window.location.search); // this is for when playing a track, the endTime is passed, we show the plackback not live race.
+    if (params.get('endTime')) {
+      const endTime = params.get('endTime');
+      if (moment(endTime).isBefore(moment())) {
+        return yield put(playbackActions.setPlaybackType(PlaybackTypes.OLDRACE));
+      }
+    }
 
     // Old race
     if (competitionUnitResult.data.isCompleted) {
