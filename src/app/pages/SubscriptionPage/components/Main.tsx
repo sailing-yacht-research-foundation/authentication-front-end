@@ -14,6 +14,8 @@ import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
 import { translations } from 'locales/translations';
 import { ModalPreviewPricing } from './ModalPreviewPricing';
+import { TIME_FORMAT } from 'utils/constants';
+import moment from 'moment';
 interface ActivePlan {
     status: string;
     tierCode: string;
@@ -22,6 +24,7 @@ interface ActivePlan {
     pricingId: string;
     interval: string;
     intervalCount: number;
+    cancelAt: number;
 }
 
 const defaultOptions = {
@@ -160,6 +163,7 @@ export const Main = () => {
                     <PlanItemTitle>
                         <PlanTitle>{p.tierName}</PlanTitle>
                         <PlanSubTitle>{p.description}</PlanSubTitle>
+                        {isPlanActive(p.productId) && currentActivePlan.cancelAt && <div>{t(translations.subscription_page.expire_at)} {moment(currentActivePlan.cancelAt).format(TIME_FORMAT.date_text_with_time)}</div>}
                     </PlanItemTitle>
                     <PlanItemPriceWrapper>
                         {
@@ -176,6 +180,7 @@ export const Main = () => {
                                                 onClick={() => performCheckoutOrCancelPlan(pricing.id)}
                                                 className={isPricingActive(pricing.id) ? 'cancelable' : ''}
                                             >{isPricingActive(pricing.id) ? t(translations.general.cancel) : t(translations.general.upgrade)}</BorderedButton>
+
                                         </div>
                                     </PlanItemPrice>
                                 </>)
@@ -205,7 +210,7 @@ export const Main = () => {
             <ProfileTabs />
             <Wrapper>
                 <SectionWrapper>
-                    <SectionTitle>Plans</SectionTitle>
+                    <SectionTitle>{t(translations.subscription_page.plans)}</SectionTitle>
                     <Spin spinning={isLoading}>
                         <PlanWrapper>
                             {renderPlans()}
