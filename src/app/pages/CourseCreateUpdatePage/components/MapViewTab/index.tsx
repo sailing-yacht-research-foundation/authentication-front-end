@@ -26,7 +26,7 @@ export const MapViewTab = () => {
 
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
-    const [currentEvent, setCurrentEvent] = React.useState<any>({ });
+    const [currentEvent, setCurrentEvent] = React.useState<any>({});
 
     const mapViewRef = React.useRef<any>();
 
@@ -76,7 +76,7 @@ export const MapViewTab = () => {
             setMode(MODE.UPDATE);
 
         handleGetCurrentEvent(params?.eventId);
-        
+
 
         return () => {
             window.removeEventListener('resize', performResize);
