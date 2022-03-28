@@ -200,7 +200,7 @@ export const RaceMap = (props) => {
 
   const _updateBoats = (participants, current) => {
     if (!participants?.length) return; // no participants, no render.
-    // Zoom to race location, on first time update. 
+    // Zoom to race location, on first time update.
     _removeOrphanedBoatsIfExist(current.boats, participants);
 
     if (!current.zoomedToRaceLocation) {
@@ -369,18 +369,7 @@ export const RaceMap = (props) => {
         );
 
         const currentHeading = participant.lastPosition?.heading || 0;
-        const previousHeading = localBoats[participant.id].layer?.options?.rotationAngle || 0;
-        let targetHeading = currentHeading;
-
-        if (Math.abs(currentHeading - previousHeading) >= 180) {
-          if (previousHeading >= 0 && targetHeading < 0) {
-            targetHeading = 360 + targetHeading;
-          } else if (previousHeading < 0 && targetHeading > 0) {
-            targetHeading = -360 + targetHeading;
-          }
-        }
-
-        localBoats[participant.id].layer.setRotationAngle(targetHeading || 0);
+        localBoats[participant.id].layer.setRotationAngle(currentHeading || 0);
       }
     });
 
