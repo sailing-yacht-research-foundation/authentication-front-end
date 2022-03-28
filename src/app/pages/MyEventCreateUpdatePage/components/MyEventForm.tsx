@@ -261,12 +261,12 @@ export const MyEventForm = () => {
             if (selector === 'start') {
                 setCoordinates({
                     lat: lat,
-                    lon: lon
+                    lng: lon
                 });
             } else {
                 setEndCoordinates({
                     lat: lat,
-                    lon: lon
+                    lng: lon
                 })
             }
         }
