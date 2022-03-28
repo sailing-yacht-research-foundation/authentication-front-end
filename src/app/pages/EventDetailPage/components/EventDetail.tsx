@@ -29,7 +29,7 @@ export const EventDetail = () => {
 
     const [event, setEvent] = React.useState<Partial<CalendarEvent>>({});
 
-    const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
+    const [coordinates, setCoordinates] = React.useState<{ lat: number, lng: number }>(MAP_DEFAULT_VALUE.CENTER);
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
 
     const [isFetchingEvent, setIsFetchingEvent] = React.useState<boolean>(false);
@@ -140,8 +140,10 @@ export const EventDetail = () => {
     }
 
     const canShowEventLocation = () => {
-        return coordinates.lat !== null &&
-            coordinates.lng !== null;
+        return coordinates.lat !== null
+            && coordinates.lat !== undefined
+            && coordinates.lng !== undefined
+            && coordinates.lng !== null;
     }
 
     return (
