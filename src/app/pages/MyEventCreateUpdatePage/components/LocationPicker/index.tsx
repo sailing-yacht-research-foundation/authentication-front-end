@@ -45,17 +45,18 @@ export const LocationPicker = (props) => {
         if (onRemoveEndLocation) onRemoveEndLocation();
     }
 
-    const canShowPicker = () => {
-        return coordinates.lat !== null
-            && coordinates.lat !== undefined
-            && coordinates.lng !== undefined
-            && coordinates.lng !== null;
-    }
+    const canShowPicker = coordinates.lat !== null
+        && coordinates.lat !== undefined
+        && ((coordinates.lng !== undefined
+            && coordinates.lng !== null)
+            || (coordinates.lon !== undefined
+                && coordinates.lon !== null))
+
 
     return (
         <div style={{ position: "relative" }}>
             {!hideLocationControls && <Radio.Group options={options} onChange={handleChangeOption} optionType="button" buttonStyle="solid" value={selectedOpt} />}
-            {canShowPicker() ? <Wrapper style={{ height: height || '450px', padding: noPadding ? '0' : '30px 0' }}>
+            {canShowPicker ? <Wrapper style={{ height: height || '450px', padding: noPadding ? '0' : '30px 0' }}>
                 {
                     endCoordinates && !hideLocationControls &&
                     <RemoveLocationButton onClick={handleRemoveEndLocation}>Remove End Location</RemoveLocationButton>
