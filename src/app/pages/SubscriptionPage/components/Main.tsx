@@ -3,7 +3,7 @@ import React from 'react';
 import { getPlans, getCustomerPortalLink, checkout, cancelPlan, getUserActivePlan } from 'services/live-data-server/subscription';
 import styled from 'styled-components';
 import { media } from 'styles/media';
-import { Plan } from 'types/Plan';
+import { Plan, Pricing } from 'types/Plan';
 import Lottie from 'react-lottie';
 import CustomerPortal from '../assets/customer-portal.json';
 import { useTranslation } from 'react-i18next';
@@ -156,6 +156,22 @@ export const Main = () => {
         setSelectedPricingId(pricingId);
     }
 
+    const renderPlanButton = (plan: Plan, pricing: Pricing) => {
+        if (!isPricingActive(pricing.id)) {
+            return <BorderedButton
+                type={!isPlanActive(plan.productId) ? 'primary' : undefined}
+                onClick={() => performCheckoutOrCancelPlan(pricing.id)}
+            >{t(translations.general.upgrade)}</BorderedButton>
+        } else if (isPricingActive(pricing.id) && !currentActivePlan.cancelAt) {
+            return <BorderedButton
+                onClick={() => performCheckoutOrCancelPlan(pricing.id)}
+                className={'cancelable'}
+            >{t(translations.general.cancel)}</BorderedButton>
+        }
+
+        return <></>;
+    }
+
     const renderPlans = () => {
         if (plans.length > 0)
             return plans.map((p) => (<PlanItem className={isPlanActive(p.productId) ? 'active' : ''}>
@@ -175,12 +191,7 @@ export const Main = () => {
                                             <span>{pricing.recurring.intervalCount} {pricing.recurring.interval}</span>
                                         </div>
                                         <div>
-                                            <BorderedButton
-                                                type={!isPlanActive(p.productId) ? 'primary' : undefined}
-                                                onClick={() => performCheckoutOrCancelPlan(pricing.id)}
-                                                className={isPricingActive(pricing.id) ? 'cancelable' : ''}
-                                            >{isPricingActive(pricing.id) ? t(translations.general.cancel) : t(translations.general.upgrade)}</BorderedButton>
-
+                                            {renderPlanButton(p, pricing)}
                                         </div>
                                     </PlanItemPrice>
                                 </>)
