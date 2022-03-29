@@ -77,3 +77,13 @@ export const verifyPhones = (vesselId, field, code) => {
         code
     }))
 }
+
+export const sendOnboardEmailCode = (vesselId) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${vesselId}/send-verification-email`))
+}
+
+export const verifyOnboardEmail = (vesselId, code) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels/${vesselId}/verify-email`, {
+        "code": code
+    }))
+}

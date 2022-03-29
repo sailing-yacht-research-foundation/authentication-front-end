@@ -21,7 +21,7 @@ import { FilterWorldSailingNumber } from 'utils/world-sailing-number';
 import countryCodeSource from '../../assets/world-sailing-number-countrycode.json';
 import { sendPhoneVerification, verifyPhoneNumber } from 'services/live-data-server/user';
 import { toast } from 'react-toastify';
-import { VerifyPhoneModal } from 'app/components/VerifyPhoneNumberModal';
+import { VerifyPhoneModal } from 'app/components/VerifyModal/VerifyPhoneModal';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { ItemVerifyMessage } from 'app/components/SyrfGeneral';
 import { useDispatch } from 'react-redux';

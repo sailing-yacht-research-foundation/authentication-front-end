@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useForm } from 'antd/lib/form/Form';
-import { createMultipart, updateMultipart, get, removePhotos, sendPhoneVerification, verifyPhones } from 'services/live-data-server/vessels';
+import { createMultipart, updateMultipart, get, removePhotos, sendPhoneVerification, verifyPhones, sendOnboardEmailCode, verifyOnboardEmail } from 'services/live-data-server/vessels';
 import { toast } from 'react-toastify';
 import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVesselModal';
 import { BiTrash } from 'react-icons/bi';
@@ -20,9 +20,10 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { LiferaftList } from './LiferaftList';
 import { PDFUploadForm } from './PDFUploadForm';
 import { ConfirmModal } from 'app/components/ConfirmModal';
-import { VerifyPhoneModal } from 'app/components/VerifyPhoneNumberModal';
+import { VerifyPhoneModal } from 'app/components/VerifyModal/VerifyPhoneModal';
 import { VesselFormFields } from './VesselFormFields';
 import { Vessel } from 'types/Vessel';
+import { VerifyEmailModal } from 'app/components/VerifyModal/VerifyEmailModal';
 
 const fieldsValidate = {
     STATELINE: 'isVerifiedSatelliteNumber',
@@ -43,6 +44,7 @@ export const VesselForm = () => {
     const [showRemoveHullDiagram, setShowRemoveHullDiagram] = React.useState<boolean>(false);
     const [showVerifyOnboardPhoneModal, setShowVerifyOnboardPhoneModal] = React.useState<boolean>(false);
     const [showVerifySatellitePhoneModal, setShowVerifySatellitePhoneModal] = React.useState<boolean>(false);
+    const [showVerifyOnboardEmailModal, setShowVerifyOnboardEmailModal] = React.useState<boolean>(false);
     const [isSaving, setIsSaving] = React.useState<boolean>(false);
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
@@ -219,6 +221,29 @@ export const VesselForm = () => {
         }
     }
 
+    const performVerifyOnboardEmail = async (code) => {
+        const response = await verifyOnboardEmail(vessel.id, code);
+
+        if (response.success) {
+            toast.success(t(translations.vessel_create_update_page.successfully_verified_onboard_email));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
+        setShowVerifyOnboardEmailModal(false);
+        initModeAndData();
+    }
+
+    const performSendVerifyOnboardEmailCode = async () => {
+        const response = await sendOnboardEmailCode(vessel.id);
+
+        if (response.success) {
+            toast.success(t(translations.vessel_create_update_page.please_check_you_email_for_verification));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     return (
         <Wrapper>
             <DeleteVesselModal
@@ -247,6 +272,7 @@ export const VesselForm = () => {
                 onOk={removeHullDiagram} />
             <VerifyPhoneModal verifyPhone={(code) => verifyPhone('ONBOARD_PHONE', code)} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showVerifyOnboardPhoneModal} setShowPhoneVerifyModal={setShowVerifyOnboardPhoneModal} />
             <VerifyPhoneModal verifyPhone={(code) => verifyPhone('SATELLITE', code)} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showVerifySatellitePhoneModal} setShowPhoneVerifyModal={setShowVerifySatellitePhoneModal} />
+            <VerifyEmailModal verifyCode={(code) => performVerifyOnboardEmail(code)} sendCode={performSendVerifyOnboardEmailCode} showModal={showVerifyOnboardEmailModal} setShowModal={setShowVerifyOnboardEmailModal} />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => history.push("/boats")}>
@@ -283,7 +309,9 @@ export const VesselForm = () => {
                             setShowRemoveDeckPlanModal={setShowRemoveDeckPlanModal}
                             setShowVerifyOnboardPhoneModal={setShowVerifyOnboardPhoneModal}
                             setShowVerifySatellitePhoneModal={setShowVerifySatellitePhoneModal}
+                            setShowVerifyOnboardEmailModal={setShowVerifyOnboardEmailModal}
                             sendVerificationCode={sendVerificationCode}
+                            sendOnboardEmailCode={performSendVerifyOnboardEmailCode}
                             formChanged={formChanged}
                             fieldsValidate={fieldsValidate}
                             vessel={vessel} />

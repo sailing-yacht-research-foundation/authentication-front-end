@@ -11,6 +11,7 @@ import { EditorsField } from './EditorsField';
 export const VesselFormFields = (props) => {
     const { vessel, sendVerificationCode, setShowVerifyOnboardPhoneModal, setShowVerifySatellitePhoneModal,
         fieldsValidate, setShowRemovePhotoModal, setShowRemoveDeckPlanModal,
+        setShowVerifyOnboardEmailModal, sendOnboardEmailCode,
         setShowRemoveHullDiagram, formChanged } = props;
 
     const { t } = useTranslation();
@@ -50,8 +51,13 @@ export const VesselFormFields = (props) => {
             (
                 <ItemVerifyMessage>{t(translations.vessel_create_update_page.not_verified)} <a href="/" onClick={(e) => {
                     e.preventDefault();
-                    sendVerificationCode(field);
-                    showPhoneVerifyModalBasedOnField(field);
+                    if (field === 'isVerifiedOnboardEmail') {
+                        setShowVerifyOnboardEmailModal(true);
+                        sendOnboardEmailCode();
+                    } else {
+                        sendVerificationCode(field);
+                        showPhoneVerifyModalBasedOnField(field);
+                    }
                 }}>{t(translations.vessel_create_update_page.verify)}</a></ItemVerifyMessage>
             )
     }
@@ -68,8 +74,8 @@ export const VesselFormFields = (props) => {
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.general.public_name)}</SyrfFieldLabel>}
                 name="publicName"
-                rules={[{ required: true, message: t(translations.forms.boat_name_is_required) }, 
-                    { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
+                rules={[{ required: true, message: t(translations.forms.boat_name_is_required) },
+                { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
             >
                 <SyrfInputField autoCorrect="off" />
             </Form.Item>
@@ -210,7 +216,7 @@ export const VesselFormFields = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.ssbTransceiver)}</SyrfFieldLabel>}
                         name="ssbTransceiver"
-                        rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}  
+                        rules={[{ max: 40, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 40 }) }]}
                     >
                         <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
@@ -289,6 +295,7 @@ export const VesselFormFields = (props) => {
                     >
                         <SyrfInputField autoComplete="off" autoCorrect="off" />
                     </Form.Item>
+                    {vessel?.onboardEmail && renderVerifiedStatus('isVerifiedOnboardEmail')}
                 </Col>
             </Row>
 
