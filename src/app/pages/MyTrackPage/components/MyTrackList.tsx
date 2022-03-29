@@ -141,7 +141,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             url += `&trackId=${record.trackJson.id}`;
         }
         if (record?.trackJson?.endTime) {
-            url += `endTime=${record.trackJson.endTime}`;
+            url += `&endTime=${record.trackJson.endTime}`;
         }
 
         return url;
