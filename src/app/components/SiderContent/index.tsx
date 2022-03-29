@@ -21,6 +21,7 @@ import { Link } from '../Link';
 import { FaUserFriends } from 'react-icons/fa';
 import { ImProfile } from 'react-icons/im';
 import { AiOutlineSetting } from 'react-icons/ai';
+import { BsFillCreditCardFill } from 'react-icons/bs';
 
 export const SiderContent = (props) => {
 
@@ -32,7 +33,8 @@ export const SiderContent = (props) => {
     { key: '6', paths: ['data'] },
     { key: '8', paths: ['integrations'], subMenuKey: 'profile' },
     { key: '9', paths: ['change-password'], subMenuKey: 'profile' },
-    { key: '12', paths: ['account/settings'], subMenuKey: 'profile' },
+    { key: '12', paths: ['settings'], subMenuKey: 'profile' },
+    { key: '13', paths: ['subscription'], subMenuKey: 'profile' },
     { key: '7', paths: ['account'], subMenuKey: 'profile' },
     { key: '2', paths: ['tracks'] },
     { key: '4', paths: ['groups'] },
@@ -116,7 +118,10 @@ export const SiderContent = (props) => {
           <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="7" icon={<ProfileOutlined />}>
             <StyledLink to={'/account'}>{t(translations.side_menu.profile.name)}</StyledLink>
           </SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.name)} key="12" icon={<AiOutlineSetting />}>
+          <SyrfMenuItem title={t(translations.side_menu.profile.subscription)} key="13" icon={<BsFillCreditCardFill />}>
+            <StyledLink to={'/account/subscription'}>{t(translations.side_menu.profile.subscription)}</StyledLink>
+          </SyrfMenuItem>
+          <SyrfMenuItem title={t(translations.side_menu.profile.settings)} key="12" icon={<AiOutlineSetting />}>
             <StyledLink to={'/account/settings'}>{t(translations.side_menu.profile.settings)}</StyledLink>
           </SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.integrations)} key="8" icon={<MdOutlineAccountTree />}>
@@ -125,10 +130,10 @@ export const SiderContent = (props) => {
           <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} key="9">
             <StyledLink to={'/account/change-password'}>{t(translations.side_menu.profile.change_password)}</StyledLink>
           </SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<FaUserFriends />} key="10">
+          <SyrfMenuItem title={t(translations.side_menu.profile.discover_friends)} icon={<FaUserFriends />} key="10">
             <StyledLink to={'/profile/search'}>{t(translations.side_menu.profile.discover_friends)}</StyledLink>
           </SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<ImProfile />} key="11">
+          <SyrfMenuItem title={t(translations.side_menu.profile.my_profile)} icon={<ImProfile />} key="11">
             <StyledLink to={'/profile'}>{t(translations.side_menu.profile.my_profile)}</StyledLink>
           </SyrfMenuItem>
         </SyrfSubmenu>

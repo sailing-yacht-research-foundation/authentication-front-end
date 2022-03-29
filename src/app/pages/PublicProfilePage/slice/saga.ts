@@ -9,6 +9,7 @@ import { showToastMessageOnRequestError } from "utils/helpers";
 
 function* getProfile({ type, payload }) {
     const profileId = payload;
+    yield put(publicProfileActions.setGetProfileFailed(false));
     yield put(publicProfileActions.setIsLoadingProfile(true));
     const response = yield call(getProfileById, profileId);
     yield put(publicProfileActions.setIsLoadingProfile(false));
