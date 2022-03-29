@@ -23,8 +23,8 @@ const buttonStyle = {
 const playbackTime = {
     forward: 5000,
     backward: 5000,
-    fastForward: 15000,
-    fastBackward: 15000,
+    fastForward: 10000,
+    fastBackward: 10000,
 }
 
 export const Playback = (props) => {
@@ -50,6 +50,8 @@ export const Playback = (props) => {
 
     const [startMarkerWith, setStartMarkerWidth] = React.useState<number>(0);
     const [endMarkerWidth, setEndMarkerWidth] = React.useState<number>(0);
+    const [hoverWidthOffset, setHoverWidthOffset] = React.useState<string>('-999px');
+    const [timeWhenMouseHover, setTimeWhenMouseHover] = React.useState<string>('');
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
         let percentage = 0;
@@ -69,19 +71,15 @@ export const Playback = (props) => {
 
     const backward = (miliseconds) => {
         let backwardTime = elapsedTime - miliseconds;
-        const selectedMillis = backwardTime > 0 ? backwardTime : 0;
-        dispatch(actions.setElapsedTime(selectedMillis));
-        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(selectedMillis);
+        playAtSpecificElapsedTime(backwardTime);
     }
 
     const forward = (miliseconds) => {
         let forwardTime = elapsedTime + miliseconds;
-        const selectedMillis = forwardTime > raceLength ? raceLength : forwardTime
-        dispatch(actions.setElapsedTime(selectedMillis));
-        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(selectedMillis);
+        playAtSpecificElapsedTime(forwardTime);
     }
 
-    const playAtClickedPosition = (e) => {
+    const getMousePositionFromProgressBar = (e) => {
         let rect = e.target.getBoundingClientRect();
         let progressWidth = 0;
 
@@ -105,8 +103,14 @@ export const Playback = (props) => {
 
         let convertedPlayTimeInMiliseconds = Number(newPlayTimeInMilisecondsInString.join(''));
         if (convertedPlayTimeInMiliseconds < 0) convertedPlayTimeInMiliseconds = 0;
-        dispatch(actions.setElapsedTime(convertedPlayTimeInMiliseconds));
-        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(convertedPlayTimeInMiliseconds);
+
+        return convertedPlayTimeInMiliseconds;
+    }
+
+    const playAtClickedPosition = (e) => {
+        const elaspedTimeAtMousePosition = getMousePositionFromProgressBar(e);
+        dispatch(actions.setElapsedTime(elaspedTimeAtMousePosition));
+        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(elaspedTimeAtMousePosition);
     }
 
     const renderViewsCount = () => {
@@ -115,12 +119,12 @@ export const Playback = (props) => {
     }
 
     const renderSpeedControl = () => {
-        return playbackType 
+        return playbackType
             && canIncreaseDecreaseSpeed
-            && [PlaybackTypes.OLDRACE].includes(playbackType) 
+            && [PlaybackTypes.OLDRACE].includes(playbackType)
             && <RightItemContainer>
-            <SpeedControl />
-        </RightItemContainer>
+                <SpeedControl />
+            </RightItemContainer>
     }
 
     const backToRaceArea = () => {
@@ -145,6 +149,43 @@ export const Playback = (props) => {
         if (percentage > 100) percentage = 100;
 
         return percentage;
+    }
+
+    const playAtStartMarker = (e) => {
+        e.stopPropagation();
+        let time = realRaceTime.start - raceTime.start;
+        playAtSpecificElapsedTime(time);
+    }
+
+    const playAtEndMarker = (e) => {
+        e.stopPropagation();
+        let time = realRaceTime.end - raceTime.start;
+        playAtSpecificElapsedTime(time);
+    }
+
+    const playAtSpecificElapsedTime = (time) => {
+        const selectedMillis = time > 0 ? time : 0;
+        dispatch(actions.setElapsedTime(selectedMillis));
+        if (onPlaybackTimeManualUpdate) onPlaybackTimeManualUpdate(selectedMillis);
+    }
+
+    const getWidthOffsetBaseOnMouseHover = (e) => {
+        let rect = e.target.getBoundingClientRect();
+        let progressWidth = 0;
+
+        if (progressBarContainerRef.current) {
+            progressWidth = progressBarContainerRef.current.offsetWidth;
+        }
+
+        let clickedWidth = e.clientX - rect.left;
+        let leftOffset = (clickedWidth / progressWidth) * 100;
+        setHoverWidthOffset(`calc(${leftOffset}% - 35px)`);
+        setTimeWhenMouseHover(milisecondsToMinutes(getMousePositionFromProgressBar(e)));
+    }
+
+    const hideTimeTooltip = (e) => {
+        e.stopPropagation();
+        setHoverWidthOffset('-999px')
     }
 
     React.useEffect(() => {
@@ -177,12 +218,13 @@ export const Playback = (props) => {
                 <PlaybackLengthContainer>
                     <TimeText>{PlaybackTypes.OLDRACE === playbackType && milisecondsToMinutes(elapsedTime)}</TimeText>
                     <ProgressBarWrapper>
-                        <ProgressBar ref={progressBarContainerRef} onClick={playAtClickedPosition}>
+                        <ProgressBar ref={progressBarContainerRef} onMouseLeave={() => setHoverWidthOffset('-999px')} onMouseMove={getWidthOffsetBaseOnMouseHover} onClick={playAtClickedPosition}>
                             {playbackType === PlaybackTypes.OLDRACE && <>
-                                {isRaceStartMarkWithinPlaybackRange && <StartMarker style={{ left: `${startMarkerWith}%` }}></StartMarker>}
-                                {isRaceEndMarkWithinPlaybackRange && <EndMarker style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
+                                {isRaceStartMarkWithinPlaybackRange && <StartMarker onMouseMove={(e) => hideTimeTooltip(e)} onClick={playAtStartMarker} style={{ left: `${startMarkerWith}%` }}></StartMarker>}
+                                {isRaceEndMarkWithinPlaybackRange && <EndMarker onMouseMove={(e) => hideTimeTooltip(e)} onClick={playAtEndMarker} style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
                             </>}
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
+                            <ProgressBarTime style={{ left: hoverWidthOffset }}>{timeWhenMouseHover}</ProgressBarTime>
                         </ProgressBar>
                     </ProgressBarWrapper>
                     <TimeText style={{ justifyContent: 'flex-end' }}>{renderRaceLengthBaseOnPlaybackType()}</TimeText>
@@ -396,5 +438,26 @@ const EndMarker = styled.div`
         ${media.medium`
             display: block
         `};
+    }
+`;
+
+const ProgressBarTime = styled.div`
+    position: absolute;
+    top: -50px;
+    background: #fff;
+    padding: 5px;
+    box-shadow: 0 12px 28px 0 rgba(0,0,0,0.2),0 2px 4px 0 rgba(0,0,0,0.1),inset 0 0 0 1px rgba(255,255,255,0.5);
+    border-radius: 5px;
+    white-space: nowrap;
+
+    &:after {
+        border-right:  0.5em solid transparent;
+        border-left:  0.5em solid transparent;
+        border-top:  0.4em solid #fff;
+        position:  absolute;
+        content:  "";
+        bottom:  -0.3em;
+        left:  50%;
+        transform: translateX(-50%);
     }
 `;

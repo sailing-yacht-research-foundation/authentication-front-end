@@ -56,11 +56,11 @@ describe('home Saga', () => {
         );
 
         expect(searchRaceIterator.next().value).toEqual(
-            delay(100),
+            put(slice.homeActions.setIsSearching(true)),
         );
 
         expect(searchRaceIterator.next().value).toEqual(
-            put(slice.homeActions.setIsSearching(true)),
+            delay(100),
         );
 
         const selectDescriptor = searchRaceIterator.next().value;
@@ -122,11 +122,11 @@ describe('home Saga', () => {
         );
 
         expect(searchRaceIterator.next().value).toEqual(
-            delay(100),
+            put(slice.homeActions.setIsSearching(true)),
         );
 
         expect(searchRaceIterator.next().value).toEqual(
-            put(slice.homeActions.setIsSearching(true)),
+            delay(100),
         );
 
         const selectDescriptor = searchRaceIterator.next().value;
