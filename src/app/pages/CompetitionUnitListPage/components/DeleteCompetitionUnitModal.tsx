@@ -19,6 +19,8 @@ export const DeleteCompetitionUnitModal = (props: IDeleteCompetitionUnitModal) =
 
     const { t } = useTranslation();
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const {
         competitionUnit,
         showDeleteModal,
@@ -27,7 +29,9 @@ export const DeleteCompetitionUnitModal = (props: IDeleteCompetitionUnitModal) =
     } = props;
 
     const performDeleteCompetitionUnit = async () => {
+        setIsLoading(true);
         const response = await deleteCompetitionUnit(competitionUnit.calendarEventId, competitionUnit.id);
+        setIsLoading(false);
 
         setShowDeleteModal(false);
 
@@ -41,11 +45,10 @@ export const DeleteCompetitionUnitModal = (props: IDeleteCompetitionUnitModal) =
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.delete_competition_unit_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
-            onOk={() => {
-                performDeleteCompetitionUnit();
-            }}
+            onOk={performDeleteCompetitionUnit}
             onCancel={() => {
                 setShowDeleteModal(false);
             }}>

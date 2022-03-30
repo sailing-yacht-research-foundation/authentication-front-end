@@ -85,6 +85,7 @@ export const ImportEventDataModal = (props) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.my_event_create_update_page.import_data_from_external_source)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
             visible={showModal}

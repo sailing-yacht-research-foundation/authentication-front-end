@@ -48,6 +48,8 @@ export const PublicProfile = () => {
 
     const [showConfirmBlockModal, setShowConfirmBlockModal] = React.useState<boolean>(false);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const { t } = useTranslation();
 
     const getUserProfile = async () => {
@@ -63,7 +65,10 @@ export const PublicProfile = () => {
     }
 
     const unfollow = async () => {
+        setIsLoading(true);
         const response = await unfollowProfile(profile.id);
+        setIsLoading(false);
+
         setShowUnfollowConfirmModal(false);
         if (response.success) {
             setFollowStatus(response?.data?.status);
@@ -72,9 +77,12 @@ export const PublicProfile = () => {
     }
 
     const block = async () => {
+        setIsLoading(true);
         const response = await blockUser(profile.id);
+        setIsLoading(false);
 
         if (response.success) {
+            getUserProfile();
             toast.info(t(translations.public_profile.successfully_blocked_user, { userName: profile.name }));
         } else {
             showToastMessageOnRequestError(response.error);
@@ -161,12 +169,13 @@ export const PublicProfile = () => {
     return (
         <Wrapper>
             <ConfirmModal
+                loading={isLoading}
                 showModal={showConfirmBlockModal}
                 title={t(translations.public_profile.are_you_sure_you_want_to_block, { userName: profile.name })}
                 content={t(translations.public_profile.are_you_really_sure_you_want_to_block_user_they_will_no_longer_see_you_on_syrf_and, { userName: profile.name })}
                 onOk={block}
                 onCancel={() => setShowConfirmBlockModal(false)} />
-            <UnfollowConfirmModal profileName={profile.name} unfollow={unfollow} visible={showConfirmUnfollowModal} hideModal={() => setShowUnfollowConfirmModal(false)} />
+            <UnfollowConfirmModal isLoading={isLoading} profileName={profile.name} unfollow={unfollow} visible={showConfirmUnfollowModal} hideModal={() => setShowUnfollowConfirmModal(false)} />
             {
                 profile.id && (!profile.isPrivate || currentUserId === profile.id) && <>
                     <FollowerModal reloadParent={handlePostFollowUnfollowAction} profileId={profileId || currentUserId} showModal={showFollowerModal} setShowModal={setShowFollowerModal} />

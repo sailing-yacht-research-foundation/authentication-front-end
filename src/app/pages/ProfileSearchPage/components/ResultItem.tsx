@@ -20,6 +20,8 @@ export const ResultItem = ({ profile }) => {
 
     const [showUnfollowModal, setShowUnfollowModal] = React.useState<boolean>(false);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const follow = async () => {
         const response = await followProfile(profile.id);
         if (response.success) {
@@ -28,7 +30,9 @@ export const ResultItem = ({ profile }) => {
     }
 
     const unfollow = async () => {
+        setIsLoading(true);
         const response = await unfollowProfile(profile.id);
+        setIsLoading(false);
         setShowUnfollowModal(false);
         if (response.success) {
             setFollowStatus(response?.data?.status);
@@ -49,7 +53,7 @@ export const ResultItem = ({ profile }) => {
 
     return (
         <PeopleItem>
-            <UnfollowConfirmModal profileName={profile.name} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} visible={showUnfollowModal} />
+            <UnfollowConfirmModal isLoading={isLoading} profileName={profile.name} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} visible={showUnfollowModal} />
             <PeopleInnerWrapper>
                 <PeopleAvatar>
                     <img alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />

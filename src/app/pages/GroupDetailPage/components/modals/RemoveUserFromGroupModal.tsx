@@ -27,8 +27,12 @@ export const RemoveMemberFromGroupModal = (props: IRemoveMemberFromGroupModal) =
         groupId
     } = props;
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const performRemoveMember = async () => {
+        setIsLoading(true);
         const response = await removeMemberFromTheGroup(groupId, member.id);
+        setIsLoading(false);
 
         setShowModal(false);
 
@@ -42,6 +46,7 @@ export const RemoveMemberFromGroupModal = (props: IRemoveMemberFromGroupModal) =
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.group.are_you_sure_you_want_to_remove_person_out_of_this_group, { memberName: member.member?.name })}
             visible={showModal}
             onOk={() => {
