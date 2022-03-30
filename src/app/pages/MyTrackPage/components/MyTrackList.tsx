@@ -140,8 +140,8 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         if (record.trackJson?.id) {
             url += `&trackId=${record.trackJson.id}`;
         }
-        if (record?.trackJson?.endTime) {
-            url += `&endTime=${record.trackJson.endTime}`;
+        if (record?.trackJson?.endTime && record?.trackJson?.startTime) {
+            url += `&startTime=${record.trackJson.startTime}&endTime=${record.trackJson.endTime}`;
         }
 
         return url;

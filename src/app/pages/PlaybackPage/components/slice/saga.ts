@@ -70,10 +70,17 @@ export function* getRaceData({ type, payload }) {
     yield put(playbackActions.setCompetitionUnitDetail(competitionUnitResult.data));
 
     const params = new URLSearchParams(window.location.search); // this is for when playing a track, the endTime is passed, we show the plackback not live race.
-    if (params.get('endTime')) {
-      const endTime = params.get('endTime');
+    const endTime = params.get('endTime');
+    const startTime = params.get('startTime');
+    if (endTime && startTime) { // from this point we use the time from the trackJson of the track
       if (moment(endTime).isBefore(moment())) {
-        return yield put(playbackActions.setPlaybackType(PlaybackTypes.OLDRACE));
+        const startMillis = new Date(startTime).getTime();
+        const endMillis = new Date(endTime).getTime();
+        yield put(playbackActions.setRealRaceTime({ start: startMillis, end: endMillis }));
+        yield put(playbackActions.setRaceTime({ start: startMillis, end: endMillis }));
+        yield put(playbackActions.setRaceLength(endMillis - startMillis));
+        yield put(playbackActions.setPlaybackType(PlaybackTypes.OLDRACE));
+        return;
       }
     }
 

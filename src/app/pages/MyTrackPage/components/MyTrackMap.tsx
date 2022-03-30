@@ -180,7 +180,7 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
                 marker.closePopup();
             })
             .on('click', () => {
-                window.open(`/playback?raceId=${race.id}${race.track?.id ? `&trackId=${race.track?.id}` : ''}${race.track?.endTime ? `&endTime=${race.track.endTime}` : ''}`);
+                window.open(`/playback?raceId=${race.id}${race.track?.id ? `&trackId=${race.track?.id}` : ''}${race.track?.endTime ? `&startTime=${race.track.startTime}&endTime=${race.track.endTime}` : ''}`);
             })
             .addTo(map);
 
