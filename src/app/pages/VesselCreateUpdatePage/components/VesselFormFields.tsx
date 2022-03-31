@@ -293,7 +293,7 @@ export const VesselFormFields = (props) => {
                         label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.onboard_email)}</SyrfFieldLabel>}
                         name="onboardEmail"
                     >
-                        <SyrfInputField autoComplete="off" autoCorrect="off" />
+                        <SyrfInputField id='onboardEmail' autoComplete="off" autoCorrect="off" />
                     </Form.Item>
                     {vessel?.onboardEmail && renderVerifiedStatus('isVerifiedOnboardEmail')}
                 </Col>
