@@ -135,7 +135,7 @@ export const ResultItem = (props) => {
     }
 
     const isNotCompleted = () => {
-        return race._source.approx_end_time_ms && moment(race._source.approx_end_time_ms).isSameOrAfter(moment());
+        return !race._source.approx_end_time_ms || (race._source.approx_end_time_ms && moment(race._source.approx_end_time_ms).isSameOrAfter(moment()));
     }
 
     const menu = (
