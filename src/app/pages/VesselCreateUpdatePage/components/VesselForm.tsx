@@ -140,7 +140,7 @@ export const VesselForm = () => {
     }, []);
 
     const removePhoto = async () => {
-        const response = await removePhotos(vessel.id, {
+        const response = await removePhotos(vessel.id!, {
             isDeletePhoto: true
         });
 
@@ -157,7 +157,7 @@ export const VesselForm = () => {
     }
 
     const removeDeckPlan = async () => {
-        const response = await removePhotos(vessel.id, {
+        const response = await removePhotos(vessel.id!, {
             isDeleteDeckPlan: true
         });
 
@@ -174,7 +174,7 @@ export const VesselForm = () => {
     }
 
     const removeHullDiagram = async () => {
-        const response = await removePhotos(vessel.id, {
+        const response = await removePhotos(vessel.id!, {
             isDeleteHullDiagram: true
         });
 
@@ -191,7 +191,7 @@ export const VesselForm = () => {
     }
 
     const verifyPhone = async (field, code) => {
-        const response = await verifyPhones(vessel.id, field, code);
+        const response = await verifyPhones(vessel.id!, field, code);
 
         if (response.success) {
             toast.success(t(translations.vessel_create_update_page.successfully_verified_phone_number));
@@ -207,9 +207,9 @@ export const VesselForm = () => {
     const sendVerificationCode = async (field) => {
         let response;
         if (fieldsValidate.ONBOARD_PHONE === field) {
-            response = await sendPhoneVerification(vessel.id, 'ONBOARD_PHONE');
+            response = await sendPhoneVerification(vessel.id!, 'ONBOARD_PHONE');
         } else {
-            response = await sendPhoneVerification(vessel.id, 'SATELLITE');
+            response = await sendPhoneVerification(vessel.id!, 'SATELLITE');
         }
 
         if (response.success) {
