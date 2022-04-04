@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTour } from '@reactour/tour';
 import styled from 'styled-components';
 import { getUserAttribute } from 'utils/user-utils';
-import { updateProfile } from 'services/live-data-server/user';
+import { updateUserSpecificAttributes } from 'services/live-data-server/user';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import { useHistory } from 'react-router';
 
@@ -38,21 +38,11 @@ export const TutorialModal = React.forwardRef((props, ref) => {
     const updateTourAttribute = async (showuserTour: boolean) => {
         if (isAuthenticated && user.attributes) {
             const userData = {
-                firstName: user.firstName,
-                lastName: user.lastName,
                 attributes: {
-                    picture: getUserAttribute(user, 'picture'),
-                    language: getUserAttribute(user, 'language'),
-                    locale: getUserAttribute(user, 'locale'),
-                    bio: getUserAttribute(user, 'bio'),
-                    sailing_number: getUserAttribute(user, 'sailing_number'),
-                    birthdate: getUserAttribute(user, 'birthdate'),
-                    address: getUserAttribute(user, 'address'),
-                    phone_number: getUserAttribute(user, 'phone_number'),
                     showed_tour: showuserTour
                 }
             }
-            await updateProfile(userData);
+            await updateUserSpecificAttributes(userData);
             dispatch(actions.getUser());
         }
     }
