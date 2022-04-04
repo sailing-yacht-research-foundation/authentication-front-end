@@ -194,6 +194,8 @@ const workercode = () => {
 
         const selectedPoint = coursePoints[currentPointId];
 
+        if (!selectedPoint) return;
+
         data.tracks?.forEach(track => {
             let trackData = Object.assign({}, track);
             trackData.timestamp = track.timestamp - raceTime.start;
