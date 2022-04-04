@@ -17,6 +17,7 @@ export const ProfileTabs = (props) => {
         { path: '/account/change-password', name: t(translations.profile_page.update_profile.password_security) },
         { path: '/account/integrations', name: t(translations.profile_page.update_profile.integrations) },
         { path: '/account/settings', name: t(translations.profile_page.update_profile.account_settings) },
+        { path: '/account/subscription', name: t(translations.profile_page.update_profile.subscription) },
     ];
 
     return (

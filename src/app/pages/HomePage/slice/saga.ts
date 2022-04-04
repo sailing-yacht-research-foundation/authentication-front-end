@@ -15,8 +15,8 @@ export function* searchRaces(action) {
     const params = action.payload;
 
     yield put(homeActions.setNoResultsFound(false));
-    yield delay(100); // delay for taking time to append selected criteria
     yield put(homeActions.setIsSearching(true));
+    yield delay(100); // delay for taking time to append selected criteria
 
     const searchKeyword = yield select(selectSearchKeyword);
     const response = yield call(search, { ...params, keyword: searchKeyword });

@@ -2,7 +2,6 @@ import "leaflet/dist/leaflet.css";
 
 import React, { useEffect, useRef, useState } from "react";
 import { MapContainer } from "react-leaflet";
-import styled from "styled-components";
 import { useLocation } from "react-router";
 import queryString from "querystring";
 import {
@@ -50,7 +49,7 @@ export const PlaybackOldRace = (props) => {
 
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
 
-  const [participantsData, setParticipantsData] = useState([]);
+  const [, setParticipantsData] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -620,7 +619,3 @@ export const PlaybackOldRace = (props) => {
     </div>
   );
 };
-
-const LeaderboardContainer = styled.div`
-  transition: all 0.3s;
-`;
