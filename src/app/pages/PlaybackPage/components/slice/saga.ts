@@ -163,6 +163,11 @@ export function* getAndSetRaceLengthUsingServerData({ type, payload }) {
   const { raceId } = payload;
   if (!raceId) return;
 
+  const params = new URLSearchParams(window.location.search); 
+  const endTime = params.get('endTime');
+  const startTime = params.get('startTime');
+  if (endTime && startTime && moment(endTime).isBefore(moment())) return; // at this point, the race length is defined by the track, not race or simplified track, no need calling time from server.
+
   const result = yield call(getTimeByCompetitionUnit, raceId);
   if (result.success) {
     const startMillis = new Date(result.data.startTime).getTime();
