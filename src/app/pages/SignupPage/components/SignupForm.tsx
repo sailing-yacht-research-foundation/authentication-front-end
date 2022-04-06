@@ -103,7 +103,10 @@ export const SignupForm = () => {
                         name="email"
                         rules={[{ required: true, message: t(translations.forms.email_is_required) }, {
                             type: 'email', message: t(translations.forms.email_must_be_valid)
-                        }]}
+                        }, {
+                            pattern: /^\S+$/,
+                            message: t(translations.misc.email_must_not_contain_blank)
+                        },]}
                     >
                         <Input autoComplete="off" autoCapitalize="none" autoCorrect="off" />
                     </Form.Item>

@@ -6,9 +6,15 @@ import {
 } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { showToastMessageOnRequestError } from 'utils/helpers';
 
-export const VerifyEmailModal = (props) => {
+interface IVerifyEmailModal {
+    showModal: boolean,
+    setShowModal: Function,
+    sendCode: Function,
+    verifyCode: Function
+}
+
+export const VerifyEmailModal = (props: IVerifyEmailModal) => {
 
     const { t } = useTranslation();
 
