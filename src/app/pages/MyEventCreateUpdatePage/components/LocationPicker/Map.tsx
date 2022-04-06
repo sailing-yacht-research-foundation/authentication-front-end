@@ -3,6 +3,8 @@ import * as L from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import ReactDOMServer from 'react-dom/server';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 let marker;
 let endMarker;
@@ -16,7 +18,10 @@ export const Map = (props) => {
 
     const { onMapClicked, coordinates, endCoordinates, zoom, noMarkerInteraction, setFormChanged, option } = props;
 
+    const { t } = useTranslation();
+
     const map = useMap();
+
     const selectedOption = React.useRef("start");
 
     const initMapClickEvent = () => {
@@ -40,21 +45,39 @@ export const Map = (props) => {
                 html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#FFF', fontSize: '35px' }} />),
                 iconSize: [20, 20],
                 iconAnchor: [18, 42],
-                className: 'my-race'
+                className: 'my-race',
+                popupAnchor: [0, -45],
             })
-        }).addTo(map);
+        })
+            .bindPopup(t(translations.general.start))
+            .on("mouseover", function (e) {
+                marker.openPopup();
+            })
+            .on("mouseout", function (e) {
+                marker.closePopup();
+            })
+            .addTo(map);
     }
 
     const setEndMarker = (coordinates) => {
         if (endMarker) map.removeLayer(endMarker);
         endMarker = new L.marker(coordinates, {
             icon: L.divIcon({
-                html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#4F61A5', fontSize: '35px' }} />),
+                html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#f1c40f', fontSize: '35px' }} />),
                 iconSize: [20, 20],
                 iconAnchor: [18, 42],
-                className: 'my-race'
+                className: 'my-race',
+                popupAnchor: [0, -45],
             })
-        }).addTo(map);
+        })
+            .bindPopup(t(translations.general.end))
+            .on("mouseover", function (e) {
+                endMarker.openPopup();
+            })
+            .on("mouseout", function () {
+                endMarker.closePopup();
+            })
+            .addTo(map);
     }
 
     const removeEndMarker = () => {
