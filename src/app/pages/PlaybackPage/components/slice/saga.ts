@@ -3,6 +3,7 @@
  */
 
 import { all, call, put, takeLatest } from "@redux-saga/core/effects";
+import moment from "moment";
 import {
   getCompetitionUnitById,
   getCourseByCompetitionUnit,
@@ -67,6 +68,21 @@ export function* getRaceData({ type, payload }) {
   if (competitionUnitResult.success) {
     yield put(playbackActions.setCompetitionUnitId(raceId));
     yield put(playbackActions.setCompetitionUnitDetail(competitionUnitResult.data));
+
+    const params = new URLSearchParams(window.location.search); // this is for when playing a track, the endTime is passed, we show the plackback not live race.
+    const endTime = params.get('endTime');
+    const startTime = params.get('startTime');
+    if (endTime && startTime) { // from this point we use the time from the trackJson of the track
+      if (moment(endTime).isBefore(moment())) {
+        const startMillis = new Date(startTime).getTime();
+        const endMillis = new Date(endTime).getTime();
+        yield put(playbackActions.setRealRaceTime({ start: startMillis, end: endMillis }));
+        yield put(playbackActions.setRaceTime({ start: startMillis, end: endMillis }));
+        yield put(playbackActions.setRaceLength(endMillis - startMillis));
+        yield put(playbackActions.setPlaybackType(PlaybackTypes.OLDRACE));
+        return;
+      }
+    }
 
     // Old race
     if (competitionUnitResult.data.isCompleted) {
@@ -146,6 +162,11 @@ export function* getRaceStartTimeAndEndTime({ type, payload }) {
 export function* getAndSetRaceLengthUsingServerData({ type, payload }) {
   const { raceId } = payload;
   if (!raceId) return;
+
+  const params = new URLSearchParams(window.location.search); 
+  const endTime = params.get('endTime');
+  const startTime = params.get('startTime');
+  if (endTime && startTime && moment(endTime).isBefore(moment())) return; // at this point, the race length is defined by the track, not race or simplified track, no need calling time from server.
 
   const result = yield call(getTimeByCompetitionUnit, raceId);
   if (result.success) {
