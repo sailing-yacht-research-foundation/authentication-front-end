@@ -21,6 +21,8 @@ export const Profile = () => {
 
     const [showDeleteUserModal, setShowDeleteUserModal] = React.useState<boolean>(false);
 
+    const [isDeletingUser, setIsDeletingUser] = React.useState<boolean>(false);
+
     const authUser = useSelector(selectUser);
 
     const history = useHistory();
@@ -38,7 +40,9 @@ export const Profile = () => {
     }
 
     const deleteUser = async () => {
+        setIsDeletingUser(true);
         const response = await deleteUserAccount();
+        setIsDeletingUser(false);
 
         if (response.success) {
             onUserDeleted();
@@ -56,6 +60,7 @@ export const Profile = () => {
     return (
         <Wrapper>
             <ConfirmModal
+                loading={isDeletingUser}
                 showModal={showDeleteUserModal}
                 onOk={deleteUser}
                 onCancel={() => setShowDeleteUserModal(false)}

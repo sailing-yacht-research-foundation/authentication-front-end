@@ -7,11 +7,11 @@ import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/sel
 import { getUserAttribute } from 'utils/user-utils';
 import { languagesList } from 'utils/languages-util';
 import { useState } from 'react';
-import { updateProfile } from 'services/live-data-server/user';
+import { updateUserSpecificAttributes } from 'services/live-data-server/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 
-export const SelectLanguage = (props) => {
+export const SelectLanguage = () => {
 
     const { i18n } = useTranslation();
 
@@ -31,21 +31,11 @@ export const SelectLanguage = (props) => {
 
         if (isAuthenticated && user.attributes) {
             const userData = {
-                firstName: user.firstName,
-                lastName: user.lastName,
                 attributes: {
-                    picture: getUserAttribute(user,'picture'),
                     language: lng,
-                    locale: getUserAttribute(user,'locale'),
-                    bio: getUserAttribute(user,'bio'),
-                    sailing_number: getUserAttribute(user,'sailing_number'),
-                    birthdate: getUserAttribute(user,'birthdate'),
-                    address: getUserAttribute(user,'address'),
-                    phone_number: getUserAttribute(user,'phone_number'),
-                    showed_tour: getUserAttribute(user, 'showed_tour'),
                 }
             }
-            await updateProfile(userData);
+            await updateUserSpecificAttributes(userData);
             dispatch(actions.getUser());
         }
     }
