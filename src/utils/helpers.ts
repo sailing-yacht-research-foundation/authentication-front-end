@@ -355,13 +355,14 @@ export const parseKeyword = (keyword) => {
             }
 
             if (nextWord === expression) {
-                result += (word+ fuzziness + ') ');
+                result += (word + fuzziness + ') ');
             }
             else {
+                const optionalFuzziness = word !== expression ? fuzziness : '';
                 if (typeof nextWord === 'undefined') {
-                    result += (word + fuzziness + ')')
+                    result += (word + optionalFuzziness + ')')
                 } else {
-                    result += (word + fuzziness + ' ');
+                    result += (word + optionalFuzziness + ' ');
                 }
             }
         }
