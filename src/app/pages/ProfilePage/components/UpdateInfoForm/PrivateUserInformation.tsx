@@ -276,7 +276,7 @@ export const PrivateUserInformation = (props) => {
                         rules={[{ type: 'string' }]}
                     >
                         <SyrfPhoneInput
-                            inputProps={{ autoComplete: 'off' }}
+                            inputProps={{ autoComplete: 'none' }}
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
