@@ -26,8 +26,12 @@ export const CourseDeleteModal = (props: ICourseDeleteModal) => {
         onCourseDeleted
     } = props;
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const performDeleteCourse = async () => {
+        setIsLoading(true);
         const response = await deleteCourse(course.id!);
+        setIsLoading(false);
 
         setShowDeleteModal(false);
 
@@ -41,6 +45,7 @@ export const CourseDeleteModal = (props: ICourseDeleteModal) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.delete_course_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
             onOk={() => {

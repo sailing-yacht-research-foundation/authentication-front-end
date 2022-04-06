@@ -19,8 +19,12 @@ export const DeleteEventModal = (props) => {
         setShowDeleteModal
     } = props;
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const performDeleteRace = async () => {
+        setIsLoading(true);
         const response = await deleteEvent(event.id);
+        setIsLoading(false);
 
         setShowDeleteModal(false);
 
@@ -34,6 +38,7 @@ export const DeleteEventModal = (props) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.delete_event_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
             onOk={() => {

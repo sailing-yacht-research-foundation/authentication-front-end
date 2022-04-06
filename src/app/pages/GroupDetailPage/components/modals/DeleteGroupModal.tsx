@@ -19,6 +19,8 @@ export const DeleteGroupModal = (props) => {
 
     const history = useHistory();
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const checkAndRemoveGroup = () => {
         form
             .validateFields()
@@ -29,7 +31,9 @@ export const DeleteGroupModal = (props) => {
                     return;
                 }
 
+                setIsLoading(true);
                 const response = await deleteGroup(group.id!);
+                setIsLoading(false);
 
                 if (response.success) {
                     toast.success(t(translations.group.removed_the_group));
@@ -49,6 +53,7 @@ export const DeleteGroupModal = (props) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.group.are_you_sure_you_want_to_delete_this_group)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
             onOk={checkAndRemoveGroup}

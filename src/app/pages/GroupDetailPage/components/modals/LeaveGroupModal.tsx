@@ -19,6 +19,8 @@ export const LeaveGroupModal = (props: ILeaveGroupModal) => {
 
     const { t } = useTranslation();
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const {
         group,
         showModal,
@@ -28,7 +30,9 @@ export const LeaveGroupModal = (props: ILeaveGroupModal) => {
     const history = useHistory();
 
     const performRemoveMember = async () => {
+        setIsLoading(true);
         const response = await leaveGroup(group.id!);
+        setIsLoading(false);
 
         setShowModal(false);
 
@@ -46,6 +50,7 @@ export const LeaveGroupModal = (props: ILeaveGroupModal) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.group.are_you_sure_you_want_to_leave_this_group)}
             visible={showModal}
             onOk={() => {

@@ -26,8 +26,12 @@ export const DeleteGroupModal = (props: IDeleteGroupModal) => {
         onGroupDeleted
     } = props;
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const performDeleteCompetitionUnit = async () => {
+        setIsLoading(true);
         const response = await deleteGroup(group.id!);
+        setIsLoading(false);
 
         setShowDeleteModal(false);
 
@@ -41,6 +45,7 @@ export const DeleteGroupModal = (props: IDeleteGroupModal) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.delete_vessel_participant_group_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
             onOk={() => {

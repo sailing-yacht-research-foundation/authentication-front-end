@@ -27,8 +27,12 @@ export const RemoveAsAdminModal = (props: IRemoveAsAdminModal) => {
         onAdminRemoved
     } = props;
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const performRemoveAsAdmin = async () => {
+        setIsLoading(true);
         const response = await removeAsAdmin(groupId, member.id);
+        setIsLoading(false);
 
         setShowModal(false);
 
@@ -42,6 +46,7 @@ export const RemoveAsAdminModal = (props: IRemoveAsAdminModal) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.group.are_you_sure_you_want_to_remove_this_admin)}
             visible={showModal}
             onOk={() => {

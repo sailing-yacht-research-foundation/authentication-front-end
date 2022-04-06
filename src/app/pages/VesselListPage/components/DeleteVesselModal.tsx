@@ -18,8 +18,12 @@ export const DeleteVesselModal = (props) => {
         onVesselDeleted
     } = props;
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const performDeleteCompetitionUnit = async () => {
+        setIsLoading(true);
         const response = await deleteVessel(vessel.id);
+        setIsLoading(false);
 
         setShowDeleteModal(false);
 
@@ -33,11 +37,10 @@ export const DeleteVesselModal = (props) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.delete_vessel_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
-            onOk={() => {
-                performDeleteCompetitionUnit();
-            }}
+            onOk={performDeleteCompetitionUnit}
             onCancel={() => {
                 setShowDeleteModal(false);
             }}>

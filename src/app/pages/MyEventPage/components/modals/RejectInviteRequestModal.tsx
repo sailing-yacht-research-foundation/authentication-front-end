@@ -6,14 +6,25 @@ import { rejectInvitation } from 'services/live-data-server/participants';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 
-export const RejectInviteRequestModal = (props) => {
+interface IRejectInviteRequestModal {
+    showModal: boolean,
+    setShowModal: Function,
+    request: any,
+    reloadParent: Function
+}
+
+export const RejectInviteRequestModal = (props: IRejectInviteRequestModal) => {
 
     const { showModal, setShowModal, request, reloadParent } = props;
+
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const { t } = useTranslation();
 
     const reject = async () => {
+        setIsLoading(true);
         const response = await rejectInvitation(request.id);
+        setIsLoading(false);
 
         if (response.success) {
             toast.success(t(translations.my_event_list_page.successfully_rejected_this_invitation));
@@ -25,7 +36,7 @@ export const RejectInviteRequestModal = (props) => {
     }
 
     return (
-        <Modal visible={showModal} onOk={reject} onCancel={() => setShowModal(false)} title={t(translations.my_event_list_page.reject_invitation)}>
+        <Modal confirmLoading={isLoading} visible={showModal} onOk={reject} onCancel={() => setShowModal(false)} title={t(translations.my_event_list_page.reject_invitation)}>
             <span>{t(translations.my_event_list_page.are_you_sure_you_want_to_reject_this_invitation)}</span>
         </Modal>
     )
