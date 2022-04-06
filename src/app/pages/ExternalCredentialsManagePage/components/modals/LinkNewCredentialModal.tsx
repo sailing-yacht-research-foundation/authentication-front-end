@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Form, Select, Spin } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfInputField } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormButton, SyrfInputField, SyrfPasswordInputField } from 'app/components/SyrfForm';
 import { toast } from 'react-toastify';
 import { SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
@@ -91,7 +91,7 @@ export const LinkNewCredentialModal = (props: ILinkNewCredentialModal) => {
                         name="password"
                         rules={[{ required: true, message: t(translations.credentail_manager_page.password_is_required) }]}
                     >
-                        <SyrfInputField />
+                        <SyrfPasswordInputField />
                     </Form.Item>
 
                     <Form.Item
