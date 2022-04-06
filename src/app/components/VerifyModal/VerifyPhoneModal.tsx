@@ -18,6 +18,8 @@ export const VerifyPhoneModal = (props) => {
         verifyPhone
     } = props;
 
+    const [isVerifying, setIsVerifying] = React.useState<boolean>(false);
+
     const [verifyPhoneForm] = Form.useForm();
 
     const verifyFormAndPhoneNumber = () => {
@@ -25,7 +27,9 @@ export const VerifyPhoneModal = (props) => {
             .validateFields()
             .then(async values => {
                 const { code } = values;
+                setIsVerifying(true);
                 verifyPhone(code);
+                setIsVerifying(false);
                 verifyPhoneForm.resetFields();
             });
     }
@@ -34,6 +38,7 @@ export const VerifyPhoneModal = (props) => {
         <Modal
             title={t(translations.general.please_verify_your_phone_number)}
             visible={showPhoneVerifyModal}
+            confirmLoading={isVerifying}
             onOk={() => {
                 verifyFormAndPhoneNumber();
             }}
