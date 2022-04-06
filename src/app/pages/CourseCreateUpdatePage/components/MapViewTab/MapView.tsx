@@ -26,6 +26,8 @@ import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import BoatPinIcon from '../../assets/boat_pin.png';
 import StartPinIcon from '../../assets/start_pin.png';
+import { create as createMarkTracker } from 'services/live-data-server/mark-tracker';
+import { CourseSequencedGeometry } from 'types/Course';
 
 require('leaflet-draw');
 
@@ -96,7 +98,7 @@ export const MapView = React.forwardRef((props, ref) => {
 
     const map = useMap();
 
-    const layerOrder = React.useRef(1);
+    const layerOrder = React.useRef(0);
 
     const geometryName = React.useRef('');
 
@@ -110,9 +112,9 @@ export const MapView = React.forwardRef((props, ref) => {
 
     const { actions } = useCourseSlice();
 
-    const couseSequencedGeometries = useSelector(selectCourseSequencedGeometries);
+    const courseSequencedGeometries = useSelector(selectCourseSequencedGeometries);
 
-    const mutableCouseSequencedGeometries = React.useRef<any[]>([]);
+    const mutableCourseSequencedGeometries = React.useRef<any[]>([]);
 
     const history = useHistory();
 
@@ -201,7 +203,7 @@ export const MapView = React.forwardRef((props, ref) => {
                 courseNameForm.setFieldsValue({ course_name: response.data.name });
                 const courseSequencedGeometriesData = response.data?.courseSequencedGeometries;
                 if (courseSequencedGeometriesData.length > 0) {
-                    mutableCouseSequencedGeometries.current = courseSequencedGeometriesData;
+                    mutableCourseSequencedGeometries.current = courseSequencedGeometriesData;
                     dispatch(actions.setCourseSequencedGeometries(courseSequencedGeometriesData));
                     drawGeometries(courseSequencedGeometriesData, drawnItems);
                 }
@@ -253,7 +255,7 @@ export const MapView = React.forwardRef((props, ref) => {
     const registerOnLayersDeletedEvent = () => {
         map.on(L.Draw.Event.DELETED, function (e) {
             e.layers.eachLayer(layer => {
-                mutableCouseSequencedGeometries.current = mutableCouseSequencedGeometries.current.filter(geometry => {
+                mutableCourseSequencedGeometries.current = mutableCourseSequencedGeometries.current.filter(geometry => {
                     return geometry.id !== layer.options._id;
                 });
 
@@ -264,7 +266,7 @@ export const MapView = React.forwardRef((props, ref) => {
                     }
                 });
             });
-            dispatch(actions.setCourseSequencedGeometries(mutableCouseSequencedGeometries.current));
+            dispatch(actions.setCourseSequencedGeometries(mutableCourseSequencedGeometries.current));
         });
     }
 
@@ -294,10 +296,10 @@ export const MapView = React.forwardRef((props, ref) => {
         map.on(L.Draw.Event.EDITED, function (e) {
             const layers = e.layers;
             layers.eachLayer(layer => {
-                let geometry = mutableCouseSequencedGeometries.current.filter(geometry => {
+                let geometry = mutableCourseSequencedGeometries.current.filter(geometry => {
                     return geometry.id === layer.options._id;
                 })[0];
-                mutableCouseSequencedGeometries.current = mutableCouseSequencedGeometries.current.filter(geometry => {
+                mutableCourseSequencedGeometries.current = mutableCourseSequencedGeometries.current.filter(geometry => {
                     return geometry.id !== layer.options._id;
                 });
                 if (geometry) {
@@ -330,11 +332,11 @@ export const MapView = React.forwardRef((props, ref) => {
                             drawPointAndBoat(layer.getLatLngs().map(point => [point.lat, point.lng]), geometry.id);
                             break;
                     }
-                    mutableCouseSequencedGeometries.current.push(geometry);
+                    mutableCourseSequencedGeometries.current.push(geometry);
                 }
                 registerLayerNameAndTooltipClickEvent(layer);
             });
-            dispatch(actions.setCourseSequencedGeometries(mutableCouseSequencedGeometries.current));
+            dispatch(actions.setCourseSequencedGeometries(mutableCourseSequencedGeometries.current));
         });
     }
 
@@ -383,7 +385,7 @@ export const MapView = React.forwardRef((props, ref) => {
                                 // Starboard is for the boat pin and it’s always on the right side of the start line
                                 // index == 0 means the pin, 1 means the boat.
                                 // Check drawPointAndBoat function for more information.
-                            },
+                            }
                         });
                     });
                     drawPointAndBoat(layer.getLatLngs().map(point => [point.lat, point.lng]), layerId);
@@ -396,8 +398,8 @@ export const MapView = React.forwardRef((props, ref) => {
 
             registerLayerNameAndTooltipClickEvent(layer);
             drawnItems.addLayer(layer);
-            mutableCouseSequencedGeometries.current = [...mutableCouseSequencedGeometries.current, geometry];
-            dispatch(actions.setCourseSequencedGeometries(JSON.parse(JSON.stringify(mutableCouseSequencedGeometries.current))));
+            mutableCourseSequencedGeometries.current = [...mutableCourseSequencedGeometries.current, geometry];
+            dispatch(actions.setCourseSequencedGeometries(JSON.parse(JSON.stringify(mutableCourseSequencedGeometries.current))));
             layerOrder.current++;
         });
     }
@@ -500,34 +502,62 @@ export const MapView = React.forwardRef((props, ref) => {
                 layer.unbindTooltip();
                 registerLayerNameAndTooltipClickEvent(layer);
                 setEditingLayerId('');
-                let geometry = mutableCouseSequencedGeometries.current.filter(geometry => {
+                let geometry = mutableCourseSequencedGeometries.current.filter(geometry => {
                     return geometry.id === layer.options._id;
                 })[0];
                 if (geometry) {
                     geometry = JSON.parse(JSON.stringify(geometry));
                     geometry.properties.name = name;
-                    mutableCouseSequencedGeometries.current = mutableCouseSequencedGeometries.current.filter(geometry => {
+                    mutableCourseSequencedGeometries.current = mutableCourseSequencedGeometries.current.filter(geometry => {
                         return geometry.id !== layer.options._id;
                     });
-                    mutableCouseSequencedGeometries.current = [...mutableCouseSequencedGeometries.current, geometry];
-                    dispatch(actions.setCourseSequencedGeometries(mutableCouseSequencedGeometries.current));
+                    mutableCourseSequencedGeometries.current = [...mutableCourseSequencedGeometries.current, geometry];
+                    dispatch(actions.setCourseSequencedGeometries(mutableCourseSequencedGeometries.current));
                 }
             }
         }
     }
 
+    const addTrackerIdForCourseIfNotExists = async () => {
+        const clonedcourseSequencedGeometries: CourseSequencedGeometry[] = JSON.parse(JSON.stringify(courseSequencedGeometries));
+
+        for(let geometry of clonedcourseSequencedGeometries) {
+            for (let point of geometry.points) {
+                if (!point.markTrackerId) {
+                    point.markTrackerId = await generateTracker();
+                }
+            }
+        }
+
+        return clonedcourseSequencedGeometries;
+    }
+
+    const generateTracker = async () => {
+        const response = await createMarkTracker({
+            "name": "Event Tracker",
+            "userProfileId": null,
+            "calendarEventId": eventId
+        });
+
+        if (response.success) return response.data?.id;
+
+        return null;
+    }
+
     const saveCourse = async (name) => {
-        if (couseSequencedGeometries.length === 0) {
+        if (courseSequencedGeometries.length === 0) {
             toast.error(t(translations.course_create_update_page.you_cannot_create_course));
         }
         else {
             let response;
             toast.info(t(translations.course_create_update_page.saving));
 
+            const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists();
+
             if (mode === MODE.CREATE)
-                response = await create(eventId, name, couseSequencedGeometries);
+                response = await create(eventId, name, modifiedCourseSequencedGeometries);
             else
-                response = await update(course.calendarEventId, courseId, name, couseSequencedGeometries);
+                response = await update(course.calendarEventId, courseId, name, modifiedCourseSequencedGeometries);
 
             if (response.success) {
                 toast.success(t(translations.course_create_update_page.successfully_created_your_course));

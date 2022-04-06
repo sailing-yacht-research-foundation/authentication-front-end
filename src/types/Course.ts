@@ -20,8 +20,8 @@ export interface Course {
 
 export interface CourseSequencedGeometry {
     id: string;
-    validFrom: null;
-    validTo: null;
+    validFrom: any;
+    validTo: any;
     courseId: string;
     geometryType: string;
     order: number;
@@ -30,7 +30,7 @@ export interface CourseSequencedGeometry {
     updatedAt: Date;
     createdById: string;
     updatedById: string;
-    developerId: null;
+    developerId: string;
     points: Point[];
 }
 
@@ -39,8 +39,8 @@ export interface Point {
     position: number[];
     order: number;
     properties: PointProperties;
-    markTrackerId: null;
-    tracker: null;
+    markTrackerId: string;
+    tracker: any;
 }
 
 export interface PointProperties {

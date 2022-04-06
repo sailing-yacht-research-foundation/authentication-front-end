@@ -104,15 +104,27 @@ const workercode = () => {
                 filteredPositions[1]?.lon && filteredPositions[1]?.lat
                     ? [filteredPositions[1].lon, filteredPositions[1].lat]
                     : currentCoordinateForHeading;
-
-            if (lastPosition.cog) // heading/course from ws
+            if (lastPosition.cog) { // heading/course from ws
                 lastPosition.heading = lastPosition.cog;
-            else {
+            } else {
                 lastPosition.heading = generateLastHeading(previousCoordinateForHeading, currentCoordinateForHeading); // calculated heading if not exist.
                 let previousHeading = previousHeadings[vP.id];
-                if (previousHeading !== undefined && previousHeading !== null
-                    && Math.abs(lastPosition.heading - previousHeading) > 180) {
-                    lastPosition.heading = lastPosition.heading - 360;
+                // Rotate the boat on the shorter angle
+                if (previousHeading !== undefined && previousHeading !== null) {
+                  // This is the case the boat already turned more than 360. Need to add it on the next heading
+                  const rotationCount = Math.trunc(previousHeading / 360);
+                  lastPosition.heading += rotationCount * 360;
+                  if (Math.abs(lastPosition.heading - previousHeading) > 180) {
+                    if ((previousHeading >= 0 && lastPosition.heading < 0) || (previousHeading > 0 && lastPosition.heading > 0)) {
+                      // Rotate the boat clockwise if its previous heading is + and next heading is -. Eg. from 150 to -50 => 150 to 310 instead
+                      // Also rotate clockwise if both are positive Eg. from 300 to 10 => 300 to 370
+                      lastPosition.heading += 360;
+                    } else if ((previousHeading < 0 && lastPosition.heading > 0) || (previousHeading < 0 && lastPosition.heading < 0)) {
+                      // Rotate counter clockwise if its previous heading is - and next heading is +. Eg. from -150 to 50 => -150 to -310
+                      // Also rotate counter clockwise if both are negative Eg. from -300 to -10 => -300 to -370
+                      lastPosition.heading -= 360;
+                    }
+                  }
                 }
             }
 
@@ -198,13 +210,13 @@ const workercode = () => {
             Math.sin(startLat) * Math.cos(destLat) * Math.cos(destLng - startLng);
         bearing = Math.atan2(y, x);
         bearing = toDegrees(bearing);
-        return (bearing + 360) % 360;
+        return bearing;
     };
 
-    function validateLatLng(lat, lng) {    
+    function validateLatLng(lat, lng) {
         let pattern = new RegExp('^-?([1-8]?[1-9]|[1-9]0)\\.{1}\\d{1,6}');
         return pattern.test(lat) && pattern.test(lng);
-      }
+    }
 };
 
 let code = workercode.toString();

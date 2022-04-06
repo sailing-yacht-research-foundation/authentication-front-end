@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import React from 'react';
 import { MapContainer } from 'react-leaflet';
 import styled from 'styled-components';
-import { Button, Radio } from  'antd';
+import { Button, Radio } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { Map } from './Map';
@@ -45,19 +45,25 @@ export const LocationPicker = (props) => {
         if (onRemoveEndLocation) onRemoveEndLocation();
     }
 
+    const canShowPicker = coordinates.lat !== null
+        && coordinates.lat !== undefined
+        && coordinates.lng !== undefined
+        && coordinates.lng !== null
+
+
     return (
         <div style={{ position: "relative" }}>
-            { !hideLocationControls && <Radio.Group options={options} onChange={handleChangeOption} optionType="button" buttonStyle="solid" value={selectedOpt} /> }
-            <Wrapper style={{ height: height || '450px', padding: noPadding ? '0' : '30px 0' }}>
+            {!hideLocationControls && <Radio.Group options={options} onChange={handleChangeOption} optionType="button" buttonStyle="solid" value={selectedOpt} />}
+            {canShowPicker ? <Wrapper style={{ height: height || '450px', padding: noPadding ? '0' : '30px 0' }}>
                 {
-                    endCoordinates && !hideLocationControls && 
+                    endCoordinates && !hideLocationControls &&
                     <RemoveLocationButton onClick={handleRemoveEndLocation}>Remove End Location</RemoveLocationButton>
                 }
                 <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
                     <Map option={selectedOpt} setFormChanged={setFormChanged} noMarkerInteraction={noMarkerInteraction || false} coordinates={coordinates} endCoordinates={endCoordinates} onMapClicked={onMapClicked} zoom={zoom || DEFAULT_ZOOM} />
                 </MapContainer>
                 <PickerDescription>{locationDescription || t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
-            </Wrapper>
+            </Wrapper> : (<></>)}
         </div>
     )
 }
