@@ -53,13 +53,13 @@ export const SignupForm = () => {
             privacyPolicyVersion: privacyPolicy.version
         });
 
+        setIsSigningUp(false);
+
         if (response.success) {
-            setIsSigningUp(false);
             history.push('/verify-account');
             toast.info(t(translations.signup_page.register_success));
         } else {
-            setIsSigningUp(false);
-            if (response.error?.response?.status === 409) {
+            if (response.error?.response.data.errorCode === 'E015') { // E015 means the user already exists
                 toast.error(t(translations.signup_page.user_already_exists));
             } else {
                 toast.error(t(translations.signup_page.cannot_sign_you_up_at_the_moment));
