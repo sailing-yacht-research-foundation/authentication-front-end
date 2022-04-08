@@ -184,6 +184,9 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                     dispatch(actions.setShowFollowRequestModal(true));
                 }
                 break;
+            case NotificationTypes.KUDOS_RECEIVED:
+                history.push(`/playback?raceId=${notification.metadata?.competitionUnitId}`);
+                break;
         }
 
         markAsRead(e);
