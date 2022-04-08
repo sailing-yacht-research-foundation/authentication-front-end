@@ -17,8 +17,9 @@ import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPlaybackType } from "./slice/selectors";
+import { selectCompetitionUnitDetail, selectPlaybackType } from "./slice/selectors";
 import { PlaybackTypes } from "types/Playback";
+import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -43,6 +44,10 @@ export const RaceMap = (props) => {
   const dispatch = useDispatch();
 
   const playbackType = useSelector(selectPlaybackType);
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
 
   const map = useMap();
 
@@ -269,6 +274,12 @@ export const RaceMap = (props) => {
     }
   }
 
+  const _canSendKudos = () => {
+    return !competitionUnitDetail.calendarEvent?.isPrivate // event is not a track now event
+      && playbackType === PlaybackTypes.STREAMINGRACE
+      && isAuthenticated;
+  }
+
   const _initializeBoatMarker = (participant, layer) => {
     if (layer) {
       const currentCoordinate = {
@@ -313,7 +324,7 @@ export const RaceMap = (props) => {
       const renderedBoatIcon = (
         <BoatIconWrapper style={styleSetup}>
           <BoatIcon style={svgStyle} />
-          {playbackType === PlaybackTypes.STREAMINGRACE && <KudoReactionContainer className={'kudo-menu'}>
+          {_canSendKudos() && <KudoReactionContainer className={'kudo-menu'}>
             <KudoReactionMenuButton />
           </KudoReactionContainer>}
         </BoatIconWrapper>
@@ -335,7 +346,8 @@ export const RaceMap = (props) => {
       marker.on("click", function (e) {
         marker.openPopup();
 
-        _setVesselParticipantIdAndShowKudosMenu(participant);
+        if (_canSendKudos())
+          _setVesselParticipantIdAndShowKudosMenu(participant);
 
         const coordinate = {
           lat: e.latlng.lat,
