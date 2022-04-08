@@ -35,6 +35,7 @@ export const initialState: PlaybackState = {
     viewsCount: 0,
     canIncreaseDecreaseSpeed: true,
     isSimplifiedPlayback: false,
+    vesselParticipantForShowingKudos: {}
 };
 
 const slice = createSlice({
@@ -115,6 +116,9 @@ const slice = createSlice({
         setIsSimplifiedPlayback(state, action: PayloadAction<boolean>) {
             state.isSimplifiedPlayback = action.payload;
         },
+        setVesselParticipantIdForShowingKudos(state, action: PayloadAction<any>) {
+            state.vesselParticipantForShowingKudos = action.payload;
+        }
     },
 });
 
