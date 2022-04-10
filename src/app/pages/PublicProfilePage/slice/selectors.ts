@@ -65,3 +65,13 @@ export const selectIsLoadingProfile = createSelector(
   [selectDomain],
   siderState => siderState.isLoadingProfile,
 );
+
+export const selectFollowerPageSize = createSelector(
+  [selectDomain],
+  siderState => siderState.followerPageSize,
+);
+
+export const selectFollowingPageSize = createSelector(
+  [selectDomain],
+  siderState => siderState.followingPageSize,
+);

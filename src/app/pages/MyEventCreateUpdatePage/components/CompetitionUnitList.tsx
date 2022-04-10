@@ -66,7 +66,8 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        pageSize: 10,
     });
 
     const [competitionUnit, setCompetitionUnit] = React.useState<Partial<CompetitionUnit>>({});
@@ -77,17 +78,18 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const getAll = async (page: number) => {
+    const getAll = async (page: number, size: number) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventId(eventId, page);
+        const response = await getAllByCalendarEventId(eventId, page, size);
         setIsLoading(false);
 
         if (response.success) {
             setPagination({
                 ...pagination,
-                rows: response.data?.rows,
+                rows: response.data.rows,
                 page: page,
-                total: response.data?.count
+                total: response.data.count,
+                pageSize: response.data.size
             });
         }
     }
@@ -97,16 +99,16 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
         setCompetitionUnit(competitionUnit);
     }
 
-    const onPaginationChanged = (page: number) => {
-        getAll(page);
+    const onPaginationChanged = (page, size) => {
+        getAll(page, size);
     }
 
     const onCompetitionUnitDeleted = () => {
-        getAll(pagination.page);
+        getAll(pagination.page, pagination.pageSize);
     }
 
     React.useEffect(() => {
-        getAll(1);
+        getAll(pagination.page, pagination.pageSize);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -117,7 +119,7 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
 
     return (
         <>
-            <StopRaceConfirmModal reloadParent={() => getAll(pagination.page)} race={competitionUnit} showModal={showStopRaceConfirmModal} setShowModal={setShowStopRaceConfirmModal} />
+            <StopRaceConfirmModal reloadParent={() => getAll(pagination.page, pagination.pageSize)} race={competitionUnit} showModal={showStopRaceConfirmModal} setShowModal={setShowStopRaceConfirmModal} />
             <DeleteCompetitionUnitModal
                 competitionUnit={competitionUnit}
                 onCompetitionUnitDeleted={onCompetitionUnitDeleted}
@@ -138,7 +140,8 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
                             defaultPageSize: 10,
                             current: pagination.page,
                             total: pagination.total,
-                            onChange: onPaginationChanged
+                            pageSize: pagination.pageSize,
+                            onChange: onPaginationChanged,
                         }} />
                 </TableWrapper>
             </Spin>

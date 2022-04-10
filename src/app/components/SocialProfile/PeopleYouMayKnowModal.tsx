@@ -82,8 +82,13 @@ export const PeopleYouMayKnowModal = (props: IPeopleYouMayKnowModal) => {
             <Spin spinning={isLoading}>
                 {renderProfiles()}
                 {
-                    pagination.total > 10 && <PaginationContainer>
-                        <Pagination current={pagination.page} onChange={(page, size) => getPeopleYouMayKnow(page, size)} total={pagination.total} />
+                    pagination.total > pagination.size && <PaginationContainer>
+                        <Pagination 
+                                                    showSizeChanger={true}
+                            pageSize={pagination.size} 
+                            current={pagination.page} 
+                            onChange={(page, size) => getPeopleYouMayKnow(page, size)} 
+                            total={pagination.total} />
                     </PaginationContainer>
                 }
             </Spin>

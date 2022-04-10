@@ -95,3 +95,23 @@ export const selectPerformedSearch = createSelector(
     [selectDomain],
     group => group.performedSearch,
 );
+
+export const selectGroupPageSize = createSelector(
+    [selectDomain],
+    group => group.groupPageSize,
+);
+
+export const selectGroupSearchPageSize = createSelector(
+    [selectDomain],
+    group => group.groupSearchPageSize,
+);
+
+export const selectInvitationPageSize = createSelector(
+    [selectDomain],
+    group => group.invitationPageSize,
+);
+
+export const selectRequestedGroupPageSize = createSelector(
+    [selectDomain],
+    group => group.requestedGroupPageSize,
+);

@@ -65,3 +65,13 @@ export const selectAcceptedMemberResults = createSelector(
     [selectDomain],
     group => group.acceptedMemberResults,
 );
+
+export const selectMemberPageSize = createSelector(
+    [selectDomain],
+    group => group.memberPageSize,
+);
+
+export const selectAdminPageSize = createSelector(
+    [selectDomain],
+    group => group.adminPageSize,
+);

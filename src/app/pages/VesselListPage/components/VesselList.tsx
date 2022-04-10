@@ -86,7 +86,7 @@ export const VesselList = () => {
         page: 1,
         total: 0,
         rows: [],
-        size: 10
+        pageSize: 10
     });
 
     const history = useHistory();
@@ -110,9 +110,10 @@ export const VesselList = () => {
         if (response.success) {
             setPagination({
                 ...pagination,
-                rows: response.data?.rows,
+                rows: response.data.rows,
                 page: page,
-                total: response.data?.count
+                total: response.data.count,
+                pageSize: response.data.size
             });
         }
     }
@@ -157,7 +158,8 @@ export const VesselList = () => {
                                 defaultPageSize: 10,
                                 current: pagination.page,
                                 total: pagination.total,
-                                onChange: onPaginationChanged
+                                pageSize: pagination.pageSize,
+                                onChange: onPaginationChanged,
                             }} />
                     </TableWrapper>
                 </Spin>

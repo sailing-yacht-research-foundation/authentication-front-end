@@ -199,6 +199,7 @@ export const EventList = () => {
               dataSource={mappedResults}
               pagination={{
                 defaultPageSize: 10,
+                pageSize: size,
                 current: page,
                 total: total,
                 onChange: onPaginationChanged,

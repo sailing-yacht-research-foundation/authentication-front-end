@@ -240,3 +240,5 @@ export enum NotificationTypes {
 export enum UserRole {
     SUPER_ADMIN = 'SUPERADMIN'
 }
+
+export const DEFAULT_PAGE_SIZE = 10;
