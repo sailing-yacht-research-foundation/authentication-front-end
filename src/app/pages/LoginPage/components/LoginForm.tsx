@@ -15,6 +15,7 @@ import { translations } from 'locales/translations';
 import { ReactComponent as Logo } from '../assets/logo-dark.svg';
 import { login } from 'services/live-data-server/auth';
 import { subscribeUser } from 'subscription';
+import { AuthCode } from 'utils/constants';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
@@ -59,7 +60,7 @@ export const LoginForm = (props) => {
       }
     } else {
       switch (response.error?.response.data.errorCode) {
-        case errorCodes.WRONG_CREDENTIALS:
+        case AuthCode.WRONG_CREDENTIALS:
           toast.error(t(translations.login_page.credentials_are_not_correct));
           break;
         default:
