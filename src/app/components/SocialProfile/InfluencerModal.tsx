@@ -9,6 +9,7 @@ import { getUserAttribute } from 'utils/user-utils';
 import { PaginationContainer } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import { useLocation } from 'react-router-dom';
+import { DEFAULT_PAGE_SIZE } from 'utils/constants';
 
 interface IInfluencerModal {
     showModal: boolean,
@@ -79,7 +80,7 @@ export const InfluencerModal = ({ showModal, setShowModal, reloadParentList }: I
             <Spin spinning={isLoading}>
                 {renderProfiles()}
                 {
-                    pagination.total > pagination.size && <PaginationContainer>
+                    pagination.total > DEFAULT_PAGE_SIZE && <PaginationContainer>
                         <Pagination 
                             current={pagination.page} 
                             pageSize={pagination.size} 

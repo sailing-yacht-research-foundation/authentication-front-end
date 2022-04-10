@@ -9,6 +9,7 @@ import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getUserAttribute } from 'utils/user-utils';
 import { PaginationContainer } from 'app/components/SyrfGeneral';
 import { useLocation } from 'react-router-dom';
+import { DEFAULT_PAGE_SIZE } from 'utils/constants';
 
 interface IPeopleYouMayKnowModal {
     showModal: boolean,
@@ -82,7 +83,7 @@ export const PeopleYouMayKnowModal = (props: IPeopleYouMayKnowModal) => {
             <Spin spinning={isLoading}>
                 {renderProfiles()}
                 {
-                    pagination.total > pagination.size && <PaginationContainer>
+                    pagination.total > DEFAULT_PAGE_SIZE && <PaginationContainer>
                         <Pagination 
                                                     showSizeChanger={true}
                             pageSize={pagination.size} 
