@@ -240,3 +240,8 @@ export enum NotificationTypes {
 export enum UserRole {
     SUPER_ADMIN = 'SUPERADMIN'
 }
+
+export enum AuthCode {
+  WRONG_CREDENTIALS = 'E012',
+  USER_ALREADY_EXISTS = 'E015'
+}
