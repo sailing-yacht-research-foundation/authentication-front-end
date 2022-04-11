@@ -2,9 +2,10 @@ import React from 'react';
 import { Modal, Spin, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../../slice';
-import { selectFollowerCurrentPage, selectFollowers, selectFollowerTotalRecords, selectModalLoading } from '../../slice/selectors';
+import { selectFollowerCurrentPage, selectFollowerPageSize, selectFollowers, selectFollowerTotalRecords, selectModalLoading } from '../../slice/selectors';
 import { UserFollowerFollowingRow } from 'app/components/SocialProfile/UserFollowerFollowingRow';
 import { PaginationContainer } from 'app/pages/GroupDetailPage/components/Members';
+import { DEFAULT_PAGE_SIZE } from 'utils/constants';
 
 export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent }) => {
 
@@ -18,6 +19,8 @@ export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent
 
     const followerTotalRecords = useSelector(selectFollowerTotalRecords);
 
+    const followerPageSize = useSelector(selectFollowerPageSize);
+
     const isLoading = useSelector(selectModalLoading);
 
     const [performedAction, setPerformedAction] = React.useState<boolean>(false);
@@ -28,8 +31,8 @@ export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent
         })
     }
 
-    const getFollowers = (page) => {
-        dispatch(actions.getFollowers({ page: page, profileId }));
+    const getFollowers = (page, size) => {
+        dispatch(actions.getFollowers({ page: page, size: size, profileId }));
     }
 
     const hideModal = () => {
@@ -40,7 +43,7 @@ export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent
     }
 
     React.useEffect(() => {
-        dispatch(actions.getFollowers({ page: 1, profileId }));
+        dispatch(actions.getFollowers({ page: 1, size: 10, profileId }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [profileId]);
 
@@ -53,8 +56,12 @@ export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent
         >
             <Spin spinning={isLoading}>
                 {renderFollowers()}
-                {followerTotalRecords > 10 && <PaginationContainer>
-                    <Pagination current={followerCurrentPage} onChange={(page) => getFollowers(page)} total={followerTotalRecords} />
+                {followerTotalRecords > DEFAULT_PAGE_SIZE && <PaginationContainer>
+                    <Pagination 
+                        current={followerCurrentPage} 
+                        onChange={(page, size) => getFollowers(page, size)}
+                        pageSize={followerPageSize}
+                        total={followerTotalRecords} />
                 </PaginationContainer>}
             </Spin>
         </Modal >

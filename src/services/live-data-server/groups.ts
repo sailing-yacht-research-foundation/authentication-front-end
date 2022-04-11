@@ -2,10 +2,11 @@ import syrfRequest from 'utils/syrf-request';
 import { SYRF_SERVER } from 'services/service-constants';
 import { formatServicePromiseResponse } from 'utils/helpers';
 
-export const getMyGroups = (page: number) => {
+export const getMyGroups = (page: number, size: number) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/my-groups`, {
         params: {
-            page: page
+            page: page,
+            size: size
         }
     }))
 }
@@ -26,10 +27,11 @@ export const searchGroupForAssigns = (keyword: string) => {
     }));
 }
 
-export const searchGroups = (searchKeyword: string, page: number) => {
+export const searchGroups = (searchKeyword: string, page: number, size: number) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups?q=${searchKeyword}`, {
         params: {
-            page: page
+            page: page,
+            size
         }
     }))
 }
@@ -46,10 +48,11 @@ export const getGroupById = (id: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${id}/detail`))
 }
 
-export const getGroupInvitations = (page: number, status: string) => {
+export const getGroupInvitations = (page: number, size: number,status: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/my-groups?status=${status}`, {
         params: {
-            page: page
+            page: page,
+            size
         }
     }))
 }
@@ -58,18 +61,20 @@ export const requestJoinGroup = (groupId: string) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/join`))
 }
 
-export const getAdmins = (groupId: string, page: number) => {
+export const getAdmins = (groupId: string, page: number, size: number) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/members?isAdmin_eq=true`, {
         params: {
-            page: page
+            page: page,
+            size
         }
     }))
 }
 
-export const getMembers = (groupId: string, page: number) => {
+export const getMembers = (groupId: string, page: number, size: number) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/members?isAdmin_eq=false`, {
         params: {
-            page: page
+            page: page,
+            size
         }
     }))
 }

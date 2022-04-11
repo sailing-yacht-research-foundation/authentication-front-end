@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectGroupCurrentPage, selectInvitationCurrentPage, selectInvitations, selectInvitationTotalPage } from '../slice/selectors';
+import { selectGroupCurrentPage, selectGroupPageSize, selectRequestedGroupCurrentPage, selectRequestedGroupPageSize, selectRequestedGroups, selectRequestedGroupTotalPage } from '../slice/selectors';
 import { useGroupSlice } from '../slice';
 import { Modal, Pagination, Spin } from 'antd';
 import { PaginationContainer } from 'app/pages/GroupDetailPage/components/Members';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { GroupMemberStatus } from 'utils/constants';
+import { DEFAULT_PAGE_SIZE } from 'utils/constants';
 import { GroupInvitationItemRow } from './GroupInvitationItemRow';
 
 export const RequestedModal = (props) => {
@@ -16,13 +16,17 @@ export const RequestedModal = (props) => {
 
     const { showModal, setShowModal, reloadParentList } = props;
 
-    const invitations = useSelector(selectInvitations);
+    const requested = useSelector(selectRequestedGroups);
 
-    const invitationTotal = useSelector(selectInvitationTotalPage);
+    const requestedTotal = useSelector(selectRequestedGroupTotalPage);
 
-    const invitationCurrentPage = useSelector(selectInvitationCurrentPage);
+    const requestedCurrentPage = useSelector(selectRequestedGroupCurrentPage);
 
     const myGroupCurrentPage = useSelector(selectGroupCurrentPage);
+
+    const groupPageSize = useSelector(selectGroupPageSize);
+
+    const requestedGroupPageSize = useSelector(selectRequestedGroupPageSize);
 
     const dispatch = useDispatch();
 
@@ -31,38 +35,40 @@ export const RequestedModal = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const renderInvitationItem = () => {
-        if (invitations.length > 0)
-            return invitations.map(request => <GroupInvitationItemRow key={request.id} setIsLoading={setIsLoading} request={request} />);
-        return <EmptyInvitationMessage>{t(translations.group.you_dont_have_any_invitations_right_now)}</EmptyInvitationMessage>
+        if (requested.length > 0)
+            return requested.map(request => <GroupInvitationItemRow hideButtons key={request.id} setIsLoading={setIsLoading} request={request} />);
+        return <EmptyInvitationMessage>{t(translations.group.you_have_not_requested_to_join_any_groups)}</EmptyInvitationMessage>
     }
 
-    const onPaginationChanged = (page) => {
-        dispatch(actions.getGroupInvitations({ page: page, invitationType: GroupMemberStatus.INVITED }));
+    const onPaginationChanged = (page, size) => {
+        dispatch(actions.getRequestedGroups({ page: page, size: size }));
     }
 
     const hideInvitationModal = () => {
-        dispatch(actions.getGroups(myGroupCurrentPage));
+        dispatch(actions.getGroups({ page: myGroupCurrentPage, size: groupPageSize }));
         if (reloadParentList) reloadParentList();
         setShowModal(false);
     }
 
     React.useEffect(() => {
-        dispatch(actions.getGroupInvitations({ page: 1, invitationType: GroupMemberStatus.INVITED }));
+        dispatch(actions.getRequestedGroups({ page: 1, size: DEFAULT_PAGE_SIZE }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <Modal visible={showModal} title={t(translations.group.invitations_title)} footer={null} onCancel={hideInvitationModal}>
+        <Modal visible={showModal} title={t(translations.group.requested)} footer={null} onCancel={hideInvitationModal}>
             <Spin spinning={isLoading}>
                 <InvitationList>
                     {renderInvitationItem()}
                 </InvitationList>
                 <PaginationContainer>
                     {
-                        invitationTotal > 10 && <Pagination
+                        requestedTotal > DEFAULT_PAGE_SIZE && <Pagination
                             onChange={onPaginationChanged}
-                            current={invitationCurrentPage}
-                            total={invitationTotal} />
+                            current={requestedCurrentPage}
+                            pageSize={requestedGroupPageSize}
+                            showSizeChanger
+                            total={requestedTotal} />
                     }
                 </PaginationContainer>
             </Spin>

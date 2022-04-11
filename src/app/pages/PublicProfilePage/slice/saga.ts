@@ -23,32 +23,34 @@ function* getProfile({ type, payload }) {
 }
 
 function* getProfileFollowers({ type, payload }) {
-    const { profileId, page } = payload;
+    const { profileId, page, size } = payload;
     yield put(publicProfileActions.setModalLoading(true));
-    const response = yield call(getFollowers, profileId, page);
+    const response = yield call(getFollowers, profileId, page, size);
     yield put(publicProfileActions.setModalLoading(false));
 
     if (response.success) {
         yield put(publicProfileActions.setCurrentFollowerPage(page));
-        yield put(publicProfileActions.setTotalFollowerRecords(response.data?.count));
-        yield put(publicProfileActions.setFollowers(response.data?.rows));
-        yield put(publicProfileActions.setFollowerTotalPage(response.data?.count < 10 ? 1 : Math.ceil(response.data?.count / 10)));
+        yield put(publicProfileActions.setTotalFollowerRecords(response.data.count));
+        yield put(publicProfileActions.setFollowers(response.data.rows));
+        yield put(publicProfileActions.setFollowerTotalPage(response.data.count < 10 ? 1 : Math.ceil(response.data.count / 10)));
+        yield put(publicProfileActions.setFollowerPageSize(response.data.size));
     } else {
         yield put(publicProfileActions.setFollowers([]));
     }
 }
 
 function* getProfileFollowing({ type, payload }) {
-    const { profileId, page } = payload;
+    const { profileId, page, size } = payload;
     yield put(publicProfileActions.setModalLoading(true));
-    const response = yield call(getFollowings, profileId, page);
+    const response = yield call(getFollowings, profileId, page, size);
     yield put(publicProfileActions.setModalLoading(false));
 
     if (response.success) {
         yield put(publicProfileActions.setCurrentFollowingPage(page));
-        yield put(publicProfileActions.setTotalFollowingRecords(response.data?.count));
-        yield put(publicProfileActions.setFollowing(response.data?.rows));
-        yield put(publicProfileActions.setFollowingTotalPage(response.data?.count < 10 ? 1 : Math.ceil(response.data?.count / 10)));
+        yield put(publicProfileActions.setTotalFollowingRecords(response.data.count));
+        yield put(publicProfileActions.setFollowing(response.data.rows));
+        yield put(publicProfileActions.setFollowingTotalPage(response.data.count < 10 ? 1 : Math.ceil(response.data.count / 10)));
+        yield put(publicProfileActions.setFollowingPageSize(response.data.size));
     } else {
         yield put(publicProfileActions.setFollowing([]));
     }

@@ -4,28 +4,30 @@ import { showToastMessageOnRequestError } from "utils/helpers";
 import { groupDetailActions } from ".";
 
 export function* getGroupMembers({ type, payload }) {
-    const { page, groupId } = payload;
+    const { page, groupId, size } = payload;
     yield put(groupDetailActions.setIsGettingMembers(true));
-    const response = yield call(getMembers, groupId, page);
+    const response = yield call(getMembers, groupId, page, size);
     yield put(groupDetailActions.setIsGettingMembers(false));
 
     if (response.success) {
-        yield put(groupDetailActions.setMembers(response.data?.rows));
-        yield put(groupDetailActions.setCurrentMemberPage(response.data?.page));
-        yield put(groupDetailActions.setMemberTotal(response.data?.count));
+        yield put(groupDetailActions.setMembers(response.data.rows));
+        yield put(groupDetailActions.setCurrentMemberPage(response.data.page));
+        yield put(groupDetailActions.setMemberTotal(response.data.count));
+        yield put(groupDetailActions.setMemberPageSize(response.data.size));
     }
 }
 
 export function* getGroupAdmins({ type, payload }) {
-    const { page, groupId } = payload;
+    const { page, groupId, size } = payload;
     yield put(groupDetailActions.setIsGettingAdmins(true));
-    const response = yield call(getAdmins, groupId, page);
+    const response = yield call(getAdmins, groupId, page, size);
     yield put(groupDetailActions.setIsGettingAdmins(false));
 
     if (response.success) {
-        yield put(groupDetailActions.setAdmins(response.data?.rows));
-        yield put(groupDetailActions.setCurrentAdminPage(response.data?.page));
-        yield put(groupDetailActions.setAdminTotal(response.data?.count));
+        yield put(groupDetailActions.setAdmins(response.data.rows));
+        yield put(groupDetailActions.setCurrentAdminPage(response.data.page));
+        yield put(groupDetailActions.setAdminTotal(response.data.count));
+        yield put(groupDetailActions.setAdminPageSize(response.data.size));
     }
 }
 

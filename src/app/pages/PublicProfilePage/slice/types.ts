@@ -12,6 +12,8 @@ export interface PublicProfileState {
     isModalLoading: boolean;
     getProfileFailed: boolean;
     isLoadingProfile: boolean;
+    followerPageSize: number;
+    followingPageSize: number;
 }
 
 export type ContainerState = PublicProfileState

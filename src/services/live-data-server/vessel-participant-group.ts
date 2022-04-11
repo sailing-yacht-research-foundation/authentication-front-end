@@ -8,8 +8,10 @@ export const getVesselParticipantGroups = () => {
 
 export const getVesselParticipantGroupsByEventId = (calendarEventId: string, page: number, size: number = 10) => {
   return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/groups`, {
-    page: page,
-    size
+    params: {
+      page: page,
+      size
+    }
   }))
 }
 
@@ -32,7 +34,7 @@ export const create = (data: any) => {
 
 export const update = (vesselParticipantGroupId: string, data: any) => {
   return formatServicePromiseResponse(syrfService.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups/${vesselParticipantGroupId}`, {
-      ...data
+    ...data
   }))
 }
 

@@ -3,7 +3,7 @@ import { Input, Tag } from 'antd';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupSlice } from '../slice';
-import { selectInvitationTotalPage, selectSearchKeyword } from '../slice/selectors';
+import { selectGroupSearchPageSize, selectInvitationTotalPage, selectSearchKeyword } from '../slice/selectors';
 import { InvitationModal } from './InvitationModal';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
@@ -18,9 +18,11 @@ export const SearchGroup = () => {
 
     const { actions } = useGroupSlice();
 
+    const searchGroupPageSize = useSelector(selectGroupSearchPageSize);
+
     const searchForGroups = (keyword) => {
         if (keyword.length === 0) return;
-        dispatch(actions.searchForGroups({ keyword, page: 1 }));
+        dispatch(actions.searchForGroups({ keyword, page: 1, size: searchGroupPageSize }));
         setShowSuggestions(false);
     }
 

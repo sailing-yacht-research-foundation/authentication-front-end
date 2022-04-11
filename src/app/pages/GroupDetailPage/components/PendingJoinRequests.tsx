@@ -9,7 +9,7 @@ import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { GroupMemberStatus } from 'utils/constants';
+import { DEFAULT_PAGE_SIZE, GroupMemberStatus } from 'utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectMemberCurrentPage } from '../slice/selectors';
@@ -106,7 +106,7 @@ export const PendingJoinRequests = (props) => {
                             {renderRequests()}
                         </MemberList>
                         {
-                            (pagination.total > 10) && <PaginationContainer>
+                            (pagination.total > DEFAULT_PAGE_SIZE) && <PaginationContainer>
                                 <Pagination defaultCurrent={pagination.page} current={pagination.page} onChange={onPaginationChanged} total={pagination.total} />
                             </PaginationContainer>
                         }

@@ -22,7 +22,8 @@ export const CoursesList = (props) => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        pageSize: 10
     });
 
     const columns = [
@@ -59,8 +60,8 @@ export const CoursesList = (props) => {
 
     const history = useHistory();
 
-    const onPaginationChanged = (page: number): void => {
-        getCourseUsingCalendarEventId(page);
+    const onPaginationChanged = (page, size): void => {
+        getCourseUsingCalendarEventId(page, size);
     }
 
     const showDeleteModal = (course: Course) => {
@@ -69,28 +70,30 @@ export const CoursesList = (props) => {
     }
 
     const onCourseDeleted = () => {
-        getCourseUsingCalendarEventId(pagination.page);
+        getCourseUsingCalendarEventId(pagination.page, pagination.pageSize);
     }
 
-    const getCourseUsingCalendarEventId = async (page) => {
+    const getCourseUsingCalendarEventId = async (page, size) => {
         setIsLoading(true);
         const response = await getByEventId(eventId, {
-            page: page
+            page,
+            size
         });
         setIsLoading(false);
 
         if (response.success) {
             setPagination({
                 ...pagination,
-                rows: response.data?.rows,
+                rows: response.data.rows,
                 page: page,
-                total: response.data?.count
+                total: response.data.count,
+                pageSize: response.data.size
             });
         }
     }
 
     React.useEffect(() => {
-        getCourseUsingCalendarEventId(1);
+        getCourseUsingCalendarEventId(pagination.page, pagination.pageSize);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
