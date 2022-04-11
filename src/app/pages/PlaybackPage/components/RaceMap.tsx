@@ -13,6 +13,13 @@ import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
 import { MarkerInfo } from "./MarkerInfo";
 import { RaceEmitterEvent } from "utils/constants";
+import styled from "styled-components";
+import { VscReactions } from "react-icons/vsc";
+import { usePlaybackSlice } from "./slice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCompetitionUnitDetail, selectPlaybackType } from "./slice/selectors";
+import { PlaybackTypes } from "types/Playback";
+import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -31,6 +38,16 @@ const objectType = {
 
 export const RaceMap = (props) => {
   const { emitter } = props;
+
+  const { actions } = usePlaybackSlice();
+
+  const dispatch = useDispatch();
+
+  const playbackType = useSelector(selectPlaybackType);
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
 
   const map = useMap();
 
@@ -257,6 +274,12 @@ export const RaceMap = (props) => {
     }
   }
 
+  const _canSendKudos = () => {
+    return !competitionUnitDetail.calendarEvent?.isPrivate // event is not a track now event
+      && playbackType === PlaybackTypes.STREAMINGRACE
+      && isAuthenticated;
+  }
+
   const _initializeBoatMarker = (participant, layer) => {
     if (layer) {
       const currentCoordinate = {
@@ -299,9 +322,12 @@ export const RaceMap = (props) => {
       };
 
       const renderedBoatIcon = (
-        <div style={styleSetup}>
+        <BoatIconWrapper style={styleSetup}>
           <BoatIcon style={svgStyle} />
-        </div>
+          {_canSendKudos() && <KudoReactionContainer className={'kudo-menu'}>
+            <KudoReactionMenuButton />
+          </KudoReactionContainer>}
+        </BoatIconWrapper>
       );
 
       const markerIcon = L.divIcon({
@@ -319,6 +345,9 @@ export const RaceMap = (props) => {
 
       marker.on("click", function (e) {
         marker.openPopup();
+
+        if (_canSendKudos())
+          _setVesselParticipantIdAndShowKudosMenu(participant);
 
         const coordinate = {
           lat: e.latlng.lat,
@@ -340,6 +369,10 @@ export const RaceMap = (props) => {
       return marker;
     }
   };
+
+  const _setVesselParticipantIdAndShowKudosMenu = (vesselParticipant) => {
+    dispatch(actions.setVesselParticipantIdForShowingKudos(vesselParticipant));
+  }
 
   const _removeTrackLayersFromMap = (legLayers) => {
     Object.keys(legLayers).forEach((key) => {
@@ -584,3 +617,24 @@ export const RaceMap = (props) => {
 
   return <></>;
 };
+
+const KudoReactionContainer = styled.div`
+  position: absolute;
+  display: none;
+  transform: none !important;
+`;
+
+const BoatIconWrapper = styled.div`
+  position: relative;
+  &:hover ${KudoReactionContainer} {
+    display: block;
+  }
+`;
+
+const KudoReactionMenuButton = styled(VscReactions)`
+  color: #000;
+  background: #fff;
+  border-radius: 10px;
+  font-size: 27px;
+  padding: 3px;
+`;

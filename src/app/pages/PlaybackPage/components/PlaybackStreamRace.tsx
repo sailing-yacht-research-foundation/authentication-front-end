@@ -28,6 +28,7 @@ import { RaceMap } from "./RaceMap";
 import { ExpeditionServerActionButtons } from "app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons";
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
+import { KudosReaction } from "./KudosReaction";
 
 export const PlaybackStreamRace = (props) => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -510,6 +511,7 @@ export const PlaybackStreamRace = (props) => {
           <StreamToExpeditionContainer>
             <ExpeditionServerActionButtons competitionUnit={competitionUnitDetail} />
           </StreamToExpeditionContainer>}
+          <KudosReaction/>
       </MapContainer>
 
       <div style={{ width: "100%", position: "relative" }}>
