@@ -120,8 +120,9 @@ export const InvitedEventLists = (props) => {
             setPagination({
                 ...pagination,
                 page: page,
-                total: response?.data?.count,
-                rows: response.data?.rows,
+                total: response.data.count,
+                rows: response.data.rows,
+                size: response.data.size
             });
         }
     }
@@ -165,6 +166,7 @@ export const InvitedEventLists = (props) => {
                                 defaultPageSize: 10,
                                 current: pagination.page,
                                 total: pagination.total,
+                                pageSize: pagination.size,
                                 onChange: onPaginationChanged,
                             }}
                         />

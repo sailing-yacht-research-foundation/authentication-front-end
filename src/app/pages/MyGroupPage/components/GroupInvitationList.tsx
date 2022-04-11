@@ -6,10 +6,8 @@ import { Spin } from 'antd';
 import { InvitationModal } from './InvitationModal';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
-import { useSelector } from 'react-redux';
-import { selectInvitationTotalPage } from '../slice/selectors';
 import { useTranslation } from 'react-i18next';
-import { GroupMemberStatus } from 'utils/constants';
+import { DEFAULT_PAGE_SIZE, GroupMemberStatus } from 'utils/constants';
 
 export const GroupInvitationList = () => {
 
@@ -30,11 +28,9 @@ export const GroupInvitationList = () => {
         setShowModal(true);
     }
 
-    const invitationTotals = useSelector(selectInvitationTotalPage);
-
-    const getInvitations = async (page) => {
+    const getInvitations = async (page, size) => {
         setIsLoading(true);
-        const response = await getGroupInvitations(page, GroupMemberStatus.INVITED);
+        const response = await getGroupInvitations(page, size, GroupMemberStatus.INVITED);
         setIsLoading(false);
 
         if (response.success) {
@@ -48,7 +44,7 @@ export const GroupInvitationList = () => {
     }
 
     const reloadParentList = () => {
-        getInvitations(1);
+        getInvitations(1, DEFAULT_PAGE_SIZE);
     }
 
     const renderInvitationItem = () => {
@@ -58,7 +54,7 @@ export const GroupInvitationList = () => {
     }
 
     React.useEffect(() => {
-        getInvitations(1);
+        getInvitations(1, DEFAULT_PAGE_SIZE);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -66,8 +62,8 @@ export const GroupInvitationList = () => {
         <Wrapper>
             <InvitationModal reloadParentList={reloadParentList} showModal={showModal} setShowModal={setShowModal} />
             <TitleContainer>
-                <Title>{t(translations.group.invitations, { invitationsTotal: invitationTotals })}</Title>
-                {pagination.total > 10 && <SeeAll onClick={showInvitationModal}>{t(translations.group.see_all)}</SeeAll>}
+                <Title>{t(translations.group.invitations, { invitationsTotal: pagination.total})}</Title>
+                {pagination.total > DEFAULT_PAGE_SIZE && <SeeAll onClick={showInvitationModal}>{t(translations.group.see_all)}</SeeAll>}
             </TitleContainer>
             <Spin spinning={isLoading}>
                 <InvitationList>

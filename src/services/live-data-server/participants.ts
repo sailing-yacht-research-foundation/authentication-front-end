@@ -11,7 +11,7 @@ export const getAllByCalendarEventId = (calendarEventId: string, page: number, s
     }))
 }
 
-export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page: number, assignMode: string) => {
+export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page: number, size: number, assignMode: string) => {
     let assign: any = null;
     if (assignMode === 'all') {
         assign = null;
@@ -20,7 +20,8 @@ export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page:
     }
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants${assign !== null ? `?assigned=${assign}` : ''}`, {
         params: {
-            page: page
+            page: page,
+            size
         }
     }))
 }

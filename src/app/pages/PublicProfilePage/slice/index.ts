@@ -10,6 +10,8 @@ export const initialState: PublicProfileState = {
     following: [],
     currentFollowerPage: 1,
     currentFollowingPage: 1,
+    followerPageSize: 10,
+    followingPageSize: 10,
     followerTotalRecords: 0,
     followingTotalRecords: 0,
     isModalLoading: false,
@@ -61,7 +63,13 @@ const slice = createSlice({
         },
         setIsLoadingProfile(state, action: PayloadAction<boolean>) {
             state.isLoadingProfile = action.payload;
-        }
+        },
+        setFollowerPageSize(state, action: PayloadAction<number>) {
+            state.followerPageSize = action.payload;
+        },
+        setFollowingPageSize(state, action: PayloadAction<number>) {
+            state.followingPageSize = action.payload;
+        },
     },
 });
 

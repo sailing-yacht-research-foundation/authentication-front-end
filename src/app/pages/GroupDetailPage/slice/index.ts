@@ -17,7 +17,9 @@ export const initialState: GroupDetailState = {
     group: {},
     getGroupDetailFailed: false,
     isGettingGroup: false,
-    acceptedMemberResults: []
+    acceptedMemberResults: [],
+    memberPageSize: 10,
+    adminPageSize: 10,
 };
 
 const slice = createSlice({
@@ -63,7 +65,13 @@ const slice = createSlice({
         setAcceptedMemberResults(state, action: PayloadAction<any[]>) {
             state.acceptedMemberResults = action.payload;
         },
-        searchAcceptedMembers(state, action: PayloadAction<any>) {}
+        searchAcceptedMembers(state, action: PayloadAction<any>) {},
+        setMemberPageSize(state, action: PayloadAction<number>) {
+            state.memberPageSize = action.payload;
+        },
+        setAdminPageSize(state, action: PayloadAction<number>) {
+            state.adminPageSize = action.payload;
+        },
     },
 });
 

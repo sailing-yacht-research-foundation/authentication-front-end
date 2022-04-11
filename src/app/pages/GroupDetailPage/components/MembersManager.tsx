@@ -12,12 +12,12 @@ import { InviteUserModal } from './modals/InviteUserModal';
 import { RemoveMemberFromGroupModal } from './modals/RemoveUserFromGroupModal';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectMembers, selecTotalMembers, selectMemberCurrentPage, selectAdminCurrentPage, selectIsGettingMembers } from '../slice/selectors';
+import { selectMembers, selecTotalMembers, selectMemberCurrentPage, selectAdminCurrentPage, selectIsGettingMembers, selectMemberPageSize, selectAdminPageSize } from '../slice/selectors';
 import { useGroupDetailSlice } from '../slice';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { renderNumberWithCommas, showToastMessageOnRequestError } from 'utils/helpers';
-import { GroupMemberStatus } from 'utils/constants';
+import { DEFAULT_PAGE_SIZE, GroupMemberStatus } from 'utils/constants';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 
 const filterModes = {
@@ -49,6 +49,10 @@ export const MembersManager = (props) => {
 
     const memberCurrentPage = useSelector(selectMemberCurrentPage);
 
+    const memberPageSize = useSelector(selectMemberPageSize);
+
+    const adminPageSize = useSelector(selectAdminPageSize);
+
     const dispatch = useDispatch();
 
     const { actions } = useGroupDetailSlice();
@@ -76,12 +80,12 @@ export const MembersManager = (props) => {
         return <span>{t(translations.group.we_dont_have_any_members_right_now)}</span>
     }
 
-    const getMembers = (page, status) => {
-        dispatch(actions.getMembers({ page: page, groupId: groupId, status: status }))
+    const getMembers = (page, size, status) => {
+        dispatch(actions.getMembers({ page: page, groupId: groupId, status: status, size }))
     }
 
-    const onPaginationChanged = (page) => {
-        getMembers(page, filterMode);
+    const onPaginationChanged = (page, size) => {
+        getMembers(page, size, filterMode);
     }
 
     const removeFromGroup = (e, member) => {
@@ -91,11 +95,11 @@ export const MembersManager = (props) => {
     }
 
     const onUsersInvited = () => {
-        getMembers(memberCurrentPage, filterMode);
+        getMembers(memberCurrentPage, memberPageSize, filterMode);
     }
 
     const onMemberRemoved = () => {
-        getMembers(memberCurrentPage, filterMode);
+        getMembers(memberCurrentPage, memberPageSize, filterMode);
     }
 
     const setMemberAsAdmin = async (e, member) => {
@@ -103,8 +107,8 @@ export const MembersManager = (props) => {
         const response = await assignAdmin(groupId, member.id);
 
         if (response.success) {
-            getMembers(memberCurrentPage, filterMode);
-            dispatch(actions.getAdmins({ page: adminCurrentPage, groupId: groupId }))
+            getMembers(memberCurrentPage, memberPageSize, filterMode);
+            dispatch(actions.getAdmins({ page: adminCurrentPage, size: adminPageSize, groupId: groupId }))
             toast.success(t(translations.group.successfully_assign_this_member_as_admin));
         } else {
             if (response.error?.response?.status === 404) {
@@ -122,7 +126,7 @@ export const MembersManager = (props) => {
 
         if (response.success) {
             toast.success(t(translations.group.successfully_blocked_member_out_of_the_group));
-            getMembers(memberCurrentPage, filterMode);
+            getMembers(memberCurrentPage, memberPageSize, filterMode);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -137,7 +141,7 @@ export const MembersManager = (props) => {
 
         if (response.success) {
             toast.success(t(translations.group.successfully_unblocked_member_out_of_the_group));
-            getMembers(memberCurrentPage, filterMode);
+            getMembers(memberCurrentPage, memberPageSize, filterMode);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -150,7 +154,7 @@ export const MembersManager = (props) => {
     }
 
     React.useEffect(() => {
-        getMembers(1, '');
+        getMembers(1, 10, '');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -189,8 +193,8 @@ export const MembersManager = (props) => {
     const filterMembers = (event, mode) => {
         event.preventDefault();
         let status = mode;
-        if(status == filterModes.ALL) status = '';
-        getMembers(1, status);
+        if (status == filterModes.ALL) status = '';
+        getMembers(1, DEFAULT_PAGE_SIZE, status);
         setFilterMode(status);
     }
 
@@ -229,7 +233,7 @@ export const MembersManager = (props) => {
                     {renderMembers()}
                 </MemberList>
                 {
-                    (totalMembers > 10) && <PaginationContainer>
+                    (totalMembers > DEFAULT_PAGE_SIZE) && <PaginationContainer>
                         <Pagination defaultCurrent={memberCurrentPage} current={memberCurrentPage} onChange={onPaginationChanged} total={totalMembers} />
                     </PaginationContainer>
                 }

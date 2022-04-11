@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
-import { EventState } from 'utils/constants';
+import { EventState, KudoTypes } from 'utils/constants';
 import { formatServicePromiseResponse, parseKeyword } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
@@ -353,17 +353,24 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
 }
 
 export const checkForUserRelationWithCompetitionUnits = (competitionUnits: string[] = []) => {
-    return  formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/check-user-relation`, competitionUnits))
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/check-user-relation`, competitionUnits))
 }
 
 export const markCompetitionUnitAsHidden = (competitionUnitId: string) => {
-    return  formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/mark-hidden`,))
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/mark-hidden`,))
 }
 
 export const markCompetitionUnitAsCompleted = (competitionUnitId: string) => {
-    return  formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/mark-finished`,))
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/mark-finished`,))
 }
 
 export const forceDeleteCompetitionUnit = (competitionUnitId: string) => {
-    return  formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/force`,))
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/force`));
+}
+
+export const sendKudos = (competitionUnitId: string, kudosType: KudoTypes, vesselParticipantId: string) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/send-kudos`, {
+        vesselParticipantId,
+        kudosType
+    }));
 }
