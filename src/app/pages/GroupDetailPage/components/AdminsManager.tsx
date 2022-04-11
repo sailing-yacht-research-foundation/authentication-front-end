@@ -11,10 +11,19 @@ import { AddAdminModal } from './modals/AddAdminModal';
 import { RemoveMemberFromGroupModal } from './modals/RemoveUserFromGroupModal';
 import { RemoveAsAdminModal } from './modals/RemoveAsAdminModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAdminCurrentPage, selectAdmins, selectIsGettingAdmins, selectMemberCurrentPage, selectTotalAdmins } from '../slice/selectors';
+import {
+    selectAdminCurrentPage,
+    selectAdmins,
+    selectIsGettingAdmins,
+    selectMemberCurrentPage,
+    selectTotalAdmins,
+    selectAdminPageSize,
+    selectMemberPageSize
+} from '../slice/selectors';
 import { useGroupDetailSlice } from '../slice';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { DEFAULT_PAGE_SIZE } from 'utils/constants';
 
 export const AdminsManager = (props) => {
 
@@ -40,6 +49,10 @@ export const AdminsManager = (props) => {
 
     const memberCurrentPage = useSelector(selectMemberCurrentPage);
 
+    const adminPageSize = useSelector(selectAdminPageSize);
+
+    const memberPageSize = useSelector(selectMemberPageSize);
+
     const isGettingAdmins = useSelector(selectIsGettingAdmins);
 
     const dispatch = useDispatch();
@@ -54,19 +67,19 @@ export const AdminsManager = (props) => {
     }
 
     const onMemberRemoved = () => {
-        getAdmins(adminCurrentPage);
+        getAdmins(adminCurrentPage, adminPageSize);
     }
 
-    const getAdmins = (page) => {
-        dispatch(actions.getAdmins({ groupId, page }));
+    const getAdmins = (page, size) => {
+        dispatch(actions.getAdmins({ groupId, page, size }));
     }
 
-    const onPaginationChanged = (page) => {
-        getAdmins(page);
+    const onPaginationChanged = (page, size) => {
+        getAdmins(page, size);
     }
 
     const onAdminAdded = () => {
-        getAdmins(adminCurrentPage);
+        getAdmins(adminCurrentPage, adminPageSize);
     }
 
     const removeFromGroup = (e, member) => {
@@ -82,12 +95,12 @@ export const AdminsManager = (props) => {
     }
 
     const onAdminRemoved = () => {
-        dispatch(actions.getMembers({ groupId: groupId, memberCurrentPage }));
-        dispatch(actions.getAdmins({ groupId: groupId, adminCurrentPage }));
+        dispatch(actions.getMembers({ groupId: groupId, page: memberCurrentPage, size: memberPageSize }));
+        dispatch(actions.getAdmins({ groupId: groupId, page: adminCurrentPage, size: adminPageSize }));
     }
 
     React.useEffect(() => {
-        getAdmins(1);
+        getAdmins(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -128,8 +141,8 @@ export const AdminsManager = (props) => {
                     {renderMembers()}
                 </MemberList>
                 {
-                    (totalAdmins > 10) && <PaginationContainer>
-                        <Pagination defaultCurrent={adminCurrentPage} current={adminCurrentPage} onChange={onPaginationChanged} total={totalAdmins} />
+                    (totalAdmins > DEFAULT_PAGE_SIZE) && <PaginationContainer>
+                        <Pagination pageSize={adminPageSize} defaultCurrent={adminCurrentPage} current={adminCurrentPage} onChange={onPaginationChanged} total={totalAdmins} />
                     </PaginationContainer>
                 }
             </Spin>

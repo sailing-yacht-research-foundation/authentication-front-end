@@ -68,7 +68,8 @@ export const RaceList = (props) => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        pageSize: 10
     });
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -83,17 +84,18 @@ export const RaceList = (props) => {
 
     const [relations, setRelations] = React.useState<any[]>([]);
 
-    const getAll = async (page) => {
+    const getAll = async (page, size) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventId(event.id!, page);
+        const response = await getAllByCalendarEventId(event.id!, page, size);
         setIsLoading(false);
 
         if (response.success) {
             setPagination({
                 ...pagination,
-                rows: response.data?.rows,
+                rows: response.data.rows,
                 page: page,
-                total: response.data?.count
+                total: response.data.count,
+                pageSize: response.data.size,
             });
             getRelations(response.data?.rows.map(c => c.id));
         }
@@ -107,12 +109,12 @@ export const RaceList = (props) => {
         }
     }
 
-    const onPaginationChanged = (page) => {
-        getAll(page);
+    const onPaginationChanged = (page, size) => {
+        getAll(page, size);
     }
 
     const onCompetitionUnitDeleted = () => {
-        getAll(pagination.page);
+        getAll(pagination.page, pagination.pageSize);
     }
 
     const showDeleteRaceModal = (competitionUnit) => {
@@ -122,7 +124,7 @@ export const RaceList = (props) => {
 
 
     React.useEffect(() => {
-        getAll(1);
+        getAll(pagination.page, pagination.pageSize);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -145,7 +147,9 @@ export const RaceList = (props) => {
                             defaultPageSize: 10,
                             current: pagination.page,
                             total: pagination.total,
-                            onChange: onPaginationChanged
+                            pageSize: pagination.pageSize,
+                            onChange: onPaginationChanged,
+                            showSizeChanger: true
                         }} />
                 </TableWrapper>
             </Spin>

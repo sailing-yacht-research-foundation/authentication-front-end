@@ -32,18 +32,20 @@ export const unfollowProfile = (profileId: string) => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/unfollow/${profileId}`))
 }
 
-export const getFollowers = (profileId: string, page: number) => {
+export const getFollowers = (profileId: string, page: number, size: number) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/follower/${profileId}`, {
         params: {
-            page: page
+            page: page,
+            size
         }
     }))
 }
 
-export const getFollowings = (profileId: string, page: number) => {
+export const getFollowings = (profileId: string, page: number, size: number) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/following/${profileId}`, {
         params: {
-            page: page
+            page: page,
+            size
         }
     }))
 }

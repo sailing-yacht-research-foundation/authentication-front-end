@@ -4,7 +4,7 @@ import { Space, Button } from 'antd';
 import { userAcceptInvitationRequest, userRejectInvitationRequest } from 'services/live-data-server/groups';
 import { useGroupSlice } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectGroupCurrentPage, selectInvitationCurrentPage } from '../slice/selectors';
+import { selectGroupCurrentPage, selectGroupPageSize, selectInvitationCurrentPage } from '../slice/selectors';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
@@ -16,7 +16,7 @@ export const GroupInvitationItemRow = (props) => {
 
     const { t } = useTranslation();
 
-    const { request, setIsLoading, reloadParentList, setPerformedAction } = props;
+    const { request, setIsLoading, reloadParentList, setPerformedAction, hideButtons } = props;
 
     const { actions } = useGroupSlice();
 
@@ -26,6 +26,8 @@ export const GroupInvitationItemRow = (props) => {
 
     const groupCurrentPage = useSelector(selectGroupCurrentPage);
 
+    const groupPageSize = useSelector(selectGroupPageSize);
+
     const acceptJoinRequest = async () => {
         setIsLoading(true);
         const response = await userAcceptInvitationRequest(request.id);
@@ -33,7 +35,7 @@ export const GroupInvitationItemRow = (props) => {
 
         if (response.success) {
             dispatch(actions.getGroupInvitations({ page: invitationCurrentPage, invitationType: GroupMemberStatus.INVITED }));
-            dispatch(actions.getGroups(groupCurrentPage));
+            dispatch(actions.getGroups({ page: groupCurrentPage, size: groupPageSize }));
             if (reloadParentList) reloadParentList();
             if (setPerformedAction)
                 setPerformedAction(true);
@@ -67,12 +69,14 @@ export const GroupInvitationItemRow = (props) => {
                     <Link to={`/groups/${request.group?.id}`}>{request.group?.groupName}</Link>
                     <InvitationItemGroupMembersCount>{request.group?.groupType && uppercaseFirstCharacter(request.group?.groupType) + ' • '} <VisibilityOfGroup visibility={request.group?.visibility} /> </InvitationItemGroupMembersCount>
                 </ItemInfoContainer>
-                <ItemButtonContainer>
-                    <Space size={5}>
-                        <Button onClick={acceptJoinRequest} type="primary">{t(translations.group.join)}</Button>
-                        <Button onClick={rejectJoinRequest}>{t(translations.group.cancel)}</Button>
-                    </Space>
-                </ItemButtonContainer>
+                {
+                    !hideButtons && <ItemButtonContainer>
+                        <Space size={5}>
+                            <Button onClick={acceptJoinRequest} type="primary">{t(translations.group.join)}</Button>
+                            <Button onClick={rejectJoinRequest}>{t(translations.group.cancel)}</Button>
+                        </Space>
+                    </ItemButtonContainer>
+                }
             </RightInfoContainer>
         </InvitationItem>
     )

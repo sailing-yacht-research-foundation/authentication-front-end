@@ -11,7 +11,7 @@ import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupSlice } from '../slice';
-import { selectGroupCurrentPage, selectRequestedGroupCurrentPage } from '../slice/selectors';
+import { selectGroupCurrentPage, selectGroupPageSize, selectRequestedGroupCurrentPage } from '../slice/selectors';
 import { renderAvatar } from 'utils/user-utils';
 import ReactTooltip from 'react-tooltip';
 
@@ -33,6 +33,8 @@ export const GroupItemRow = (props) => {
 
     const groupCurrentPage = useSelector(selectGroupCurrentPage);
 
+    const groupPageSize = useSelector(selectGroupPageSize)
+
     const renderButtonByStatus = () => {
         if (!showGroupButton) return <></>;
 
@@ -50,7 +52,7 @@ export const GroupItemRow = (props) => {
         if (response.success) {
             if (onGroupJoinRequested) onGroupJoinRequested();
             dispatch(actions.getRequestedGroups(requestedGroupsCurrentPage));
-            dispatch(actions.getGroups(groupCurrentPage));
+            dispatch(actions.getGroups({ page: groupCurrentPage, size: groupPageSize }));
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -112,7 +114,7 @@ export const GroupItemRow = (props) => {
                     {renderButtonByStatus()}
                 </Spin>
             </GroupItemAction>
-            <ReactTooltip/>
+            <ReactTooltip />
         </GroupItem>
     )
 }

@@ -50,7 +50,8 @@ export const VesselParticipantGroupList = (props) => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        pageSize: 10
     });
 
     const [group, setGroup] = React.useState<Partial<VesselParticipantGroup>>({});
@@ -61,17 +62,18 @@ export const VesselParticipantGroupList = (props) => {
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
-    const getAll = async (page) => {
+    const getAll = async (page, size) => {
         setIsLoading(true);
-        const response = await getVesselParticipantGroupsByEventId(eventId, page);
+        const response = await getVesselParticipantGroupsByEventId(eventId, page, size);
         setIsLoading(false);
 
         if (response.success) {
             setPagination({
                 ...pagination,
-                rows: response.data?.rows,
+                rows: response.data.rows,
                 page: page,
-                total: response.data?.count
+                total: response.data.count,
+                pageSize: response.data.size,
             });
         }
     }
@@ -81,16 +83,16 @@ export const VesselParticipantGroupList = (props) => {
         setGroup(group);
     }
 
-    const onPaginationChanged = (page) => {
-        getAll(page);
+    const onPaginationChanged = (page, size) => {
+        getAll(page, size);
     }
 
     const onGroupDeleted = () => {
-        getAll(pagination.page);
+        getAll(pagination.page, pagination.pageSize);
     }
 
     React.useEffect(() => {
-        getAll(1);
+        getAll(pagination.page, pagination.pageSize);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -116,6 +118,7 @@ export const VesselParticipantGroupList = (props) => {
                             defaultPageSize: 10,
                             current: pagination.page,
                             total: pagination.total,
+                            pageSize: pagination.pageSize,
                             onChange: onPaginationChanged
                         }} />
                 </TableWrapper>

@@ -23,6 +23,10 @@ export const initialState: GroupState = {
     isGettingRequestedGroups: false,
     isModalLoading: false,
     performedSearch: false,
+    groupPageSize: 10,
+    groupSearchPageSize: 10,
+    invitationPageSize: 10,
+    requestedGroupPageSize: 10
 };
 
 const slice = createSlice({
@@ -53,7 +57,7 @@ const slice = createSlice({
         setIsLoading(state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload;
         },
-        getGroups(state, action: PayloadAction<number>) {},
+        getGroups(state, action: PayloadAction<any>) {},
         getGroupInvitations(state, action: PayloadAction<any>) {},
         searchForGroups(state, action: PayloadAction<any>) {},
         setSearchKeyword(state, action: PayloadAction<string>) {
@@ -77,7 +81,7 @@ const slice = createSlice({
         setRequestedGroupTotalPage(state, action: PayloadAction<number>) {
             state.requestedGroupTotalPage = action.payload;
         },
-        getRequestedGroups(state, action: PayloadAction<number>) {},
+        getRequestedGroups(state, action: PayloadAction<any>) {},
         setisGettingRequestedGroups(state, action: PayloadAction<boolean>) {
             state.isGettingRequestedGroups = action.payload;
         },
@@ -86,6 +90,19 @@ const slice = createSlice({
         },
         setPerformedSearch(state, action: PayloadAction<boolean>) {
             state.performedSearch = action.payload;
+        },
+        setGroupPageSize(state, action: PayloadAction<number>) {
+            state.groupPageSize = action.payload;
+        },
+        setGroupSearchPageSize(state, action: PayloadAction<number>) {
+            state.groupSearchPageSize = action.payload;
+        },
+        setGroupInvitationPageSize(state, action: PayloadAction<number>) {
+            state.invitationPageSize = action.payload;
+        },
+        setRequestedGroupPageSize(state, action: PayloadAction<number>) {
+            console.log(action.payload);
+            state.requestedGroupPageSize = action.payload;
         }
     },
 });
