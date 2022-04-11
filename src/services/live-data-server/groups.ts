@@ -66,8 +66,8 @@ export const getAdmins = (groupId: string, page: number) => {
     }))
 }
 
-export const getMembers = (groupId: string, page: number) => {
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/members?isAdmin_eq=false`, {
+export const getMembers = (groupId: string, page: number, status: string = '') => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/members?isAdmin_eq=false${status ? `&status_eq=${status}` : ''}`, {
         params: {
             page: page
         }

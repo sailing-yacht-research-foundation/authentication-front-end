@@ -261,3 +261,8 @@ export const ItemVerifyMessage = styled.div`
 export const IconWrapper = styled.span`
     margin-right: 5px;
 `;
+
+export const FilterWrapper = styled.div`
+    text-align: right;
+    text-transform: capitalize;
+`;

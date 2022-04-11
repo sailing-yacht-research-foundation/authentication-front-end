@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown, Space, Spin, Table, Menu } from 'antd';
-import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { CreateButton, DeleteButton, FilterWrapper, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
@@ -224,11 +224,6 @@ export const ParticipantList = (props) => {
         </>
     )
 }
-
-const FilterWrapper = styled.div`
-    text-align: right;
-    text-transform: capitalize;
-`;
 
 const AvatarWrapper = styled.div`
     width: 30px;
