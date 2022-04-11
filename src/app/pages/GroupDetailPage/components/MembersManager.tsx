@@ -219,15 +219,15 @@ export const MembersManager = (props) => {
             <RemoveMemberFromGroupModal groupId={groupId} onMemberRemoved={onMemberRemoved} member={member} showModal={showRemoveFromGroupModal} setShowModal={setShowRemoveFromGroupModal} />
             <SectionTitleWrapper>
                 <SectionTitle>{t(translations.group.members, { membersCount: renderNumberWithCommas(totalMembers) })}</SectionTitle>
-                {group?.isAdmin && <CreateButton onClick={() => setShowModal(true)} icon={<IoMdPersonAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>Invite</CreateButton>}
+                {group.isAdmin && <CreateButton onClick={() => setShowModal(true)} icon={<IoMdPersonAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>Invite</CreateButton>}
             </SectionTitleWrapper>
-            <FilterWrapper>
+            {group.isAdmin && <FilterWrapper>
                 <Dropdown overlay={menu}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                         {filterMode === '' ? t(translations.group.all) : filterMode.toLowerCase()} <DownOutlined />
                     </a>
                 </Dropdown>
-            </FilterWrapper>
+            </FilterWrapper>}
             <Spin spinning={isGettingMembers}>
                 <MemberList>
                     {renderMembers()}
