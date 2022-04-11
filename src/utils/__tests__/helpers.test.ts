@@ -5,14 +5,14 @@ describe("Parse keyword when doing search", () => {
     const keyword =
       "J/80 North American Championship 2021 - Race Day 3 - Race 1";
     const expectedResult =
-      "name:(J\\/80~ North~ American~ Championship~ 2021~ -~ Race~ Day~ 3~ -~ Race~ 1~)";
+      "name:(J\\/80 North~ American~ Championship~ 2021~ - Race~ Day~ 3~ - Race~ 1~)";
     expect(parseKeyword(keyword)).toBe(expectedResult);
     done();
   });
 
   it("Should consider single keyword is the name criteria", (done) => {
     const keyword = "Nottingham yatch race.";
-    const expectedResult = "name:(Nottingham~ yatch~ race.~)";
+    const expectedResult = "name:(Nottingham~ yatch~ race.)";
     expect(parseKeyword(keyword)).toBe(expectedResult);
     done();
   });
