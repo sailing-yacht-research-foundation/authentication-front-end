@@ -248,3 +248,8 @@ export enum KudoTypes {
     STAR = 'STAR',
     HEART = 'HEART',
 }
+
+export enum AuthCode {
+  WRONG_CREDENTIALS = 'E012',
+  USER_ALREADY_EXISTS = 'E015'
+}

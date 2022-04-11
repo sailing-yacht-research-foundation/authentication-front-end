@@ -43,15 +43,21 @@ export const search = (params) => {
     }
 
     const searchParams: any = {
-        query: query,
-        sort: [
-            "_score",
-            {
-                "approx_start_time_ms": {
-                    "order": "desc"
-                }
+      query: {
+        function_score: {
+          query,
+          script_score: {
+            script: {
+              id: "search-score",
+              params: {
+                now: Date.now(),
+              },
             },
-        ]
+          },
+          boost_mode: "sum",
+        },
+      },
+      sort: ["_score"],
     };
 
     searchParams._source = [
