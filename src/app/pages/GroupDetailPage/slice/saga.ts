@@ -4,9 +4,9 @@ import { showToastMessageOnRequestError } from "utils/helpers";
 import { groupDetailActions } from ".";
 
 export function* getGroupMembers({ type, payload }) {
-    const { page, groupId, size } = payload;
+    const { page, groupId, status, size } = payload;
     yield put(groupDetailActions.setIsGettingMembers(true));
-    const response = yield call(getMembers, groupId, page, size);
+    const response = yield call(getMembers, groupId, page, size, status);
     yield put(groupDetailActions.setIsGettingMembers(false));
 
     if (response.success) {

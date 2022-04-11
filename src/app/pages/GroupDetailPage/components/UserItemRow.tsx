@@ -24,6 +24,8 @@ export const UserItemRow = (props) => {
                 return <StyledTag color="cyan">{t(translations.group.requested)}</StyledTag>;
             case GroupMemberStatus.DECLINED:
                 return <StyledTag color="magenta">{t(translations.group.declined)}</StyledTag>;
+            case GroupMemberStatus.BLOCKED:
+                return <StyledTag color="magenta">{t(translations.group.blocked)}</StyledTag>;
             default:
                 return <></>;
         }
@@ -33,10 +35,10 @@ export const UserItemRow = (props) => {
         <UserItem className={pendingJoinRequest ? 'breakline' : ''}>
             <UserInnerContainer>
                 <UserAvatarContainer>
-                    <img src={renderAvatar(item?.member?.avatar)} alt={item?.member?.name}/>
+                    <img src={renderAvatar(item?.member?.avatar)} alt={item?.member?.name} />
                 </UserAvatarContainer>
                 <UserInforContainer>
-                    <UserName onClick={()=> history.push(`/profile/${item?.member?.id}`)}>{item?.member?.name || item?.email} {renderTag()}</UserName>
+                    <UserName onClick={() => history.push(`/profile/${item?.member?.id}`)}>{item?.member?.name || item?.email} {renderTag()}</UserName>
                     <UserDescription>{item?.isAdmin ? t(translations.group.admin) : t(translations.group.member)}</UserDescription>
                 </UserInforContainer>
             </UserInnerContainer>
