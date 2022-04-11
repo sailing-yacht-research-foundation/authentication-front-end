@@ -8,7 +8,8 @@ import {
     selectUpcomingRacePage,
     selectUpcomingRacePageSize,
     selectUpcomingRaceTotal,
-    selectUpcomingRaces
+    selectUpcomingRaces,
+    selectSearchKeyword
 } from '../../slice/selectors';
 import { ResultItem } from './ResultItem';
 import { selectUserCoordinate } from 'app/pages/LoginPage/slice/selectors';
@@ -38,6 +39,8 @@ export const LiveAndHappeningRaces = () => {
 
     const resultsCount = useSelector(selectUpcomingRaceTotal);
 
+    const searchKeyword = useSelector(selectSearchKeyword);
+
     const durations = [
         { name: '2 months', value: 2 },
         { name: '5 months', value: 5 },
@@ -57,7 +60,9 @@ export const LiveAndHappeningRaces = () => {
     }, []);
 
     const getLiveAndUpcomingRaces = (duration, distance, page, size) => {
-        dispatch(actions.getLiveAndUpcomingRaces({ duration, distance, page, size, coordinate: userCoordinates }));
+        const params = new URLSearchParams(window.location.search);
+        if (searchKeyword.length === 0 && !params.get('keyword'))
+            dispatch(actions.getLiveAndUpcomingRaces({ duration, distance, page, size, coordinate: userCoordinates }));
     }
 
     const renderResults = () => {
