@@ -136,14 +136,20 @@ export const RaceMap = (props) => {
       const boats = current.boats;
       Object.keys(boats).forEach(key => {
         if (!boats[key]) return;
-        if (moment.duration(moment().diff(moment(boats[key].lastPing))).asMinutes() > 1) {
+        
+        const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMinutes() > 1;
+
+        if (noPingReceivedFromTheBoatAfter1Minute) {
           boats[key].layer._icon.firstElementChild.style.fill = '#808080';
         } else {
-          if (boats[key].ocsReceivedAt && moment.duration(moment().diff(moment(boats[key].ocsReceivedAt))).asSeconds() < 10) {
+          const ocsReceivedAfter10Seconds = boats[key].ocsReceivedAt && moment.duration(moment().diff(moment(boats[key].ocsReceivedAt))).asSeconds() < 10;
+          
+          if (ocsReceivedAfter10Seconds) {
             return;
           } else {
             delete boats[key]['ocsReceivedAt'];
           }
+          
           boats[key].layer._icon.firstElementChild.style.fill = boats[key].originalColor;
         }
       });
