@@ -42,8 +42,6 @@ export const RaceMap = (props) => {
 
   const { actions } = usePlaybackSlice();
 
-  let updateBoatColorInterval;
-
   const dispatch = useDispatch();
 
   const playbackType = useSelector(selectPlaybackType);
@@ -109,16 +107,9 @@ export const RaceMap = (props) => {
       });
 
       emitter.on(RaceEmitterEvent.OCS_DETECTED, _changeBoatColorToRedIfOCSDetected);
+
+      emitter.on(RaceEmitterEvent.UPDATE_BOAT_COLOR, _updateBoatColorIfPingNotReceived);
     }
-
-    _updateBoatColorIfPingNotReceived();
-
-    return () => {
-      if (updateBoatColorInterval) {
-        clearInterval(updateBoatColorInterval);
-      }
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -131,29 +122,27 @@ export const RaceMap = (props) => {
   }
 
   const _updateBoatColorIfPingNotReceived = () => {
-    updateBoatColorInterval = setInterval(() => {
-      const { current } = raceStatus;
-      const boats = current.boats;
-      Object.keys(boats).forEach(key => {
-        if (!boats[key]) return;
-        
-        const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMinutes() > 1;
+    const { current } = raceStatus;
+    const boats = current.boats;
+    Object.keys(boats).forEach(key => {
+      if (!boats[key]) return;
 
-        if (noPingReceivedFromTheBoatAfter1Minute) {
-          boats[key].layer._icon.firstElementChild.style.fill = '#808080';
+      const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMinutes() > 1;
+
+      if (noPingReceivedFromTheBoatAfter1Minute) {
+        boats[key].layer._icon.firstElementChild.style.fill = '#808080';
+      } else {
+        const ocsReceivedLessThan10Seconds = boats[key].ocsReceivedAt && moment.duration(moment().diff(moment(boats[key].ocsReceivedAt))).asSeconds() < 10;
+
+        if (ocsReceivedLessThan10Seconds) {
+          return;
         } else {
-          const ocsReceivedLessThan10Seconds = boats[key].ocsReceivedAt && moment.duration(moment().diff(moment(boats[key].ocsReceivedAt))).asSeconds() < 10;
-          
-          if (ocsReceivedLessThan10Seconds) {
-            return;
-          } else {
-            delete boats[key]['ocsReceivedAt'];
-          }
-
-          boats[key].layer._icon.firstElementChild.style.fill = boats[key].originalColor;
+          delete boats[key]['ocsReceivedAt'];
         }
-      });
-    }, 1000);
+
+        boats[key].layer._icon.firstElementChild.style.fill = boats[key].originalColor;
+      }
+    });
   }
 
   const _updateCourse = (courseGeometries) => {

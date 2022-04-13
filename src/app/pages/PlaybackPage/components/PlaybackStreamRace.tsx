@@ -412,6 +412,7 @@ export const PlaybackStreamRace = () => {
     // Emit latest event
     eventEmitter.emit(RaceEmitterEvent.PING, currentPositions);
     eventEmitter.emit(RaceEmitterEvent.LEG_UPDATE, currentPositions);
+    eventEmitter.emit(RaceEmitterEvent.UPDATE_BOAT_COLOR);
     handleUpdateLeaderPosition(currentPositions);
 
     handleDebug("=== Current Positions ===");

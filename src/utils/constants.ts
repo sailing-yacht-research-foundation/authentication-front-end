@@ -122,7 +122,8 @@ export const enum RaceEmitterEvent {
     UPDATE_COURSE_MARK = 'update-course-mark',
     ZOOM_TO_PARTICIPANT = 'zoom-to-participant',
     UPDATE_COURSE = 'update-course',
-    OCS_DETECTED = 'ocs-detected'
+    OCS_DETECTED = 'ocs-detected',
+    UPDATE_BOAT_COLOR = 'update-boat-color'
 }
 
 export const DEFAULT_GROUP_AVATAR = '/default-avatar.jpeg';
