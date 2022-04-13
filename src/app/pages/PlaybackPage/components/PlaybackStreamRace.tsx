@@ -94,6 +94,7 @@ export const PlaybackStreamRace = () => {
         eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
         eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
         eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
+        eventEmitter.off(RaceEmitterEvent.OCS_DETECTED, () => {});
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
