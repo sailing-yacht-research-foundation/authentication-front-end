@@ -142,14 +142,14 @@ export const RaceMap = (props) => {
         if (noPingReceivedFromTheBoatAfter1Minute) {
           boats[key].layer._icon.firstElementChild.style.fill = '#808080';
         } else {
-          const ocsReceivedAfter10Seconds = boats[key].ocsReceivedAt && moment.duration(moment().diff(moment(boats[key].ocsReceivedAt))).asSeconds() < 10;
+          const ocsReceivedLessThan10Seconds = boats[key].ocsReceivedAt && moment.duration(moment().diff(moment(boats[key].ocsReceivedAt))).asSeconds() < 10;
           
-          if (ocsReceivedAfter10Seconds) {
+          if (ocsReceivedLessThan10Seconds) {
             return;
           } else {
             delete boats[key]['ocsReceivedAt'];
           }
-          
+
           boats[key].layer._icon.firstElementChild.style.fill = boats[key].originalColor;
         }
       });
