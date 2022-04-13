@@ -106,7 +106,9 @@ export const RaceMap = (props) => {
       emitter.on(RaceEmitterEvent.UPDATE_COURSE, (courses: MappedCourseGeometrySequenced) => {
         current.courseData = JSON.parse(JSON.stringify(courses));
         _updateCourse(courses);
-      })
+      });
+
+      emitter.on(RaceEmitterEvent.OCS_DETECTED, _changeBoatColorToRedIfOCSDetected);
     }
 
     _updateBoatColorIfPingNotReceived();

@@ -20,7 +20,7 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceStatus, WebsocketConnectionStatus, WSMessageDataType } from "utils/constants";
+import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType } from "utils/constants";
 import { stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
@@ -30,7 +30,7 @@ import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { KudosReaction } from "./KudosReaction";
 
-export const PlaybackStreamRace = (props) => {
+export const PlaybackStreamRace = () => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
 
   const [, setSocketUrl] = useState(streamUrl);
@@ -170,6 +170,10 @@ export const PlaybackStreamRace = (props) => {
             updateCourseMarksPosition(data);
           } else if (dataType === WSMessageDataType.COURSE_UPDATED) {
             eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE, normalizeSequencedGeometries(data.courseSequencedGeometries));
+          } else if (dataType === WSMessageDataType.EVENT) {
+            if (data?.eventType === WebsocketRaceEvent.VESSEL_OCS) {
+              eventEmitter.emit(RaceEmitterEvent.OCS_DETECTED, data?.vesselParticipantId);
+            }
           }
         }
       } catch (e) {

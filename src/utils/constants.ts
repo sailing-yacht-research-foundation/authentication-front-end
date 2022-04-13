@@ -121,7 +121,8 @@ export const enum RaceEmitterEvent {
     REMOVE_PARTICIPANT = 'remove-vesselparticipant',
     UPDATE_COURSE_MARK = 'update-course-mark',
     ZOOM_TO_PARTICIPANT = 'zoom-to-participant',
-    UPDATE_COURSE = 'update-course'
+    UPDATE_COURSE = 'update-course',
+    OCS_DETECTED = 'ocs-detected'
 }
 
 export const DEFAULT_GROUP_AVATAR = '/default-avatar.jpeg';
@@ -145,7 +146,8 @@ export enum WSMessageDataType {
     NEW_PARTICIPANT_JOINED = 'new-participant-joined',
     VESSEL_PARTICIPANT_REMOVED = 'vessel-participant-removed',
     MAKR_TRACK = 'mark-track',
-    COURSE_UPDATED = 'course-updated'
+    COURSE_UPDATED = 'course-updated',
+    EVENT = 'event'
 }
 
 export enum FollowStatus {
@@ -254,4 +256,8 @@ export const DEFAULT_PAGE_SIZE = 10;
 export enum AuthCode {
   WRONG_CREDENTIALS = 'E012',
   USER_ALREADY_EXISTS = 'E015'
+}
+
+export enum WebsocketRaceEvent {
+    VESSEL_OCS = 'VesselOCS'
 }
