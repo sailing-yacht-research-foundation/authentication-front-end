@@ -18,6 +18,8 @@ export const ShareableInformation = (props) => {
 
     const [showRemovePassportConfirmModal, setShowRemovePassportConfirmModal] = React.useState<boolean>(false);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const { t } = useTranslation();
 
     const normFile = (e: any) => {
@@ -28,7 +30,9 @@ export const ShareableInformation = (props) => {
     }
 
     const removeUserPassportPhoto = async () => {
+        setIsLoading(true);
         const response = await removePassportPhoto();
+        setIsLoading(false);
 
         if (response.success) {
             setShareableInformation({
@@ -43,7 +47,9 @@ export const ShareableInformation = (props) => {
     }
 
     const removeUserCovidCard = async () => {
+        setIsLoading(true);
         const response = await removeCovidCard();
+        setIsLoading(false);
 
         if (response.success) {
             setShareableInformation({
@@ -64,12 +70,14 @@ export const ShareableInformation = (props) => {
     return (
         <Wrapper>
             <ConfirmModal
+                loading={isLoading}
                 showModal={showRemoveCovidCardConfirmModal}
                 onCancel={() => setShowRemoveCovidCardConfirmModal(false)}
                 title={t(translations.profile_page.update_profile.remove_covid_card)}
                 content={t(translations.profile_page.update_profile.are_you_sure_you_want_to_remove_covid_card)}
                 onOk={removeUserCovidCard} />
             <ConfirmModal
+                loading={isLoading}
                 showModal={showRemovePassportConfirmModal}
                 title={t(translations.profile_page.update_profile.remove_passport_photo)}
                 content={t(translations.profile_page.update_profile.are_you_sure_you_want_to_remove_passport_photo)}
