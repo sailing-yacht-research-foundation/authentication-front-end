@@ -9,6 +9,7 @@ import { media } from 'styles/media';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectGetGroupFailed, selectGroupDetail, selectIsGettingGroup } from '../slice/selectors';
+import { OrganizationStripeNotSetupAlert } from './OrganizationStripeNotSetupAlert';
 
 export const Main = () => {
     const group = useSelector(selectGroupDetail);
@@ -41,6 +42,7 @@ export const Main = () => {
         <Wrapper>
             <Spin spinning={isLoading}>
                 <Nav group={group} />
+                <OrganizationStripeNotSetupAlert />
                 <Container>
                     <LeftPane group={group} />
                     <Members group={group} />
