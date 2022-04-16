@@ -52,7 +52,7 @@ const slice = createSlice({
         setIsGettingMembers(state, action: PayloadAction<boolean>) {
             state.isGettingMembers = action.payload;
         },
-        setGroup(state, action: PayloadAction<Group>) {
+        setGroup(state, action: PayloadAction<Partial<Group>>) {
             state.group = action.payload;
         },
         getGroup(state, action: PayloadAction<string>) {},
@@ -72,6 +72,11 @@ const slice = createSlice({
         setAdminPageSize(state, action: PayloadAction<number>) {
             state.adminPageSize = action.payload;
         },
+        clearGroupData(state) {
+            state.group = {};
+            state.members = [];
+            state.admins = [];
+        }
     },
 });
 

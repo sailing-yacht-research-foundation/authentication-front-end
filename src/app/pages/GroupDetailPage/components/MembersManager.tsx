@@ -154,7 +154,15 @@ export const MembersManager = (props) => {
     }
 
     React.useEffect(() => {
-        getMembers(1, 10, '');
+        if (group.id) {
+            if (group.isAdmin) {
+                getMembers(1, 10, '');
+            }
+            else {
+                setFilterMode(filterModes.ACCEPTED);
+                getMembers(1, 10, filterModes.ACCEPTED);
+            }
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

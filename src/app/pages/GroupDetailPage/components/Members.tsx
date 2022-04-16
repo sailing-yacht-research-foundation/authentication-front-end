@@ -7,14 +7,15 @@ import { MembersManager } from './MembersManager';
 import { PendingJoinRequests } from './PendingJoinRequests';
 
 export const Members = (props) => {
-
     const { group } = props;
 
     return (
         <Wrapper>
             {group.groupMemberId && group.isAdmin && <PendingJoinRequests group={group} />}
-            <AdminsManager group={group} />
-            <MembersManager group={group} />
+            {group.id && <>
+                <AdminsManager group={group} />
+                <MembersManager group={group} />
+            </>}
         </Wrapper>
     );
 }

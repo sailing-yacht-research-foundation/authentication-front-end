@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectGetGroupFailed, selectGroupDetail, selectIsGettingGroup } from '../slice/selectors';
 import { OrganizationStripeNotSetupAlert } from './OrganizationStripeNotSetupAlert';
+import { useLocation } from 'react-router-dom';
+import { GroupOrganizationConnect } from './GroupOrganizationConnect';
 
 export const Main = () => {
     const group = useSelector(selectGroupDetail);
@@ -23,6 +25,8 @@ export const Main = () => {
     const history = useHistory();
 
     const dispatch = useDispatch();
+
+    const location = useLocation();
 
     const { actions } = useGroupDetailSlice();
 
@@ -38,14 +42,23 @@ export const Main = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [groupId]);
 
+    React.useEffect(() => {
+        return () => {
+            dispatch(actions.clearGroupData());
+
+        }
+    }, []);
+
+    const isOrganizationConnectRoute = location.pathname.includes('organization-connect');
+
     return (
         <Wrapper>
             <Spin spinning={isLoading}>
                 <Nav group={group} />
-                <OrganizationStripeNotSetupAlert />
+                <OrganizationStripeNotSetupAlert group={group} />
                 <Container>
                     <LeftPane group={group} />
-                    <Members group={group} />
+                    {isOrganizationConnectRoute ? <GroupOrganizationConnect group={group} /> : <Members group={group} />}
                 </Container>
             </Spin>
         </Wrapper>

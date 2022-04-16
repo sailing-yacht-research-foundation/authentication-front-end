@@ -197,7 +197,7 @@ export const PublicProfile = () => {
                                 {renderBlockButton()}
                             </OptionContainer>
                         </ProfileButtonsWrapper>
-                        {profile.isPrivate && <div>{t(translations.public_profile.profile_is_private)}</div>}
+                        {profile.isPrivate && <PrivateProfileText>{t(translations.public_profile.profile_is_private)}</PrivateProfileText>}
                     </InfoSection>
                     <SubInfoSection>
                         <InfoItem onClick={showFollowersModal}>
@@ -295,4 +295,9 @@ const ProfileButtonsWrapper = styled.div`
 
 const OptionContainer = styled.div`
     text-align: right;
+`;
+
+const PrivateProfileText = styled.div`
+    color: #00000073;
+    padding-bottom: 10px;
 `;

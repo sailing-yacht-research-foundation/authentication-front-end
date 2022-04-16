@@ -51,6 +51,7 @@ import { ExternalCredentialsManagePage } from './pages/ExternalCredentialsManage
 import { LiveraftCreateUpdatePage } from './pages/LiferaftCreateUpdatePage/Loadable';
 import { NotificationCenterPage } from './pages/NotificationCenterPage/Loadable';
 import { ProfileSettingsPage } from './pages/ProfileSettingsPage/Loadable';
+import { SubscriptionPage } from './pages/SubscriptionPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -69,7 +70,6 @@ import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
 import { selectIsSimplifiedPlayback } from './pages/PlaybackPage/components/slice/selectors';
-import { SubscriptionPage } from './pages/SubscriptionPage/Loadable';
 
 const { Sider, Content } = Layout;
 
@@ -221,6 +221,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups'} component={MyGroupsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/create'} component={GroupCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/update'} component={GroupCreateUpdatePage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/organization-connect'} component={GroupDetailPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId'} component={GroupDetailPage} />
               <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
               <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
