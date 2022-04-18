@@ -38,7 +38,7 @@ export const SiderContent = (props) => {
     { key: '7', paths: ['account'], subMenuKey: 'profile' },
     { key: '2', paths: ['tracks'] },
     { key: '4', paths: ['groups'] },
-    { key: '10', paths: ['profile/search'], subMenuKey: 'profile' },
+    { key: '10', paths: ['profile/search'] },
     { key: '11', paths: ['profile'], subMenuKey: 'profile' },
     { key: '1', paths: ['search'] },
     { key: '13', paths: ['notifications'] },
@@ -110,6 +110,10 @@ export const SiderContent = (props) => {
           <StyledLink to={'/boats'}>{t(translations.side_menu.vessels)}</StyledLink>
         </SyrfMenuItem>
 
+        <SyrfMenuItem title={t(translations.side_menu.profile.discover_friends)} icon={<FaUserFriends />} key="10">
+          <StyledLink to={'/profile/search'}>{t(translations.side_menu.profile.discover_friends)}</StyledLink>
+        </SyrfMenuItem>
+
         <SyrfMenuItem key="6" title={t(translations.side_menu.data)} icon={<GoDatabase />}>
           <StyledLink to={'/data'}>{t(translations.side_menu.data)}</StyledLink>
         </SyrfMenuItem>
@@ -129,9 +133,6 @@ export const SiderContent = (props) => {
           </SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.change_password)} icon={<LockOutlined />} key="9">
             <StyledLink to={'/account/change-password'}>{t(translations.side_menu.profile.change_password)}</StyledLink>
-          </SyrfMenuItem>
-          <SyrfMenuItem title={t(translations.side_menu.profile.discover_friends)} icon={<FaUserFriends />} key="10">
-            <StyledLink to={'/profile/search'}>{t(translations.side_menu.profile.discover_friends)}</StyledLink>
           </SyrfMenuItem>
           <SyrfMenuItem title={t(translations.side_menu.profile.my_profile)} icon={<ImProfile />} key="11">
             <StyledLink to={'/profile'}>{t(translations.side_menu.profile.my_profile)}</StyledLink>
