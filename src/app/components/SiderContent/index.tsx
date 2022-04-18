@@ -106,12 +106,12 @@ export const SiderContent = (props) => {
           <StyledLink to={'/groups'}>{t(translations.side_menu.groups)}</StyledLink>
         </SyrfMenuItem>
 
-        <SyrfMenuItem title={t(translations.side_menu.profile.discover_friends)} icon={<FaUserFriends />} key="10">
-          <StyledLink to={'/profile/search'}>{t(translations.side_menu.profile.discover_friends)}</StyledLink>
-        </SyrfMenuItem>
-
         <SyrfMenuItem title={t(translations.side_menu.vessels)} icon={<GiSailboat />} key="5">
           <StyledLink to={'/boats'}>{t(translations.side_menu.vessels)}</StyledLink>
+        </SyrfMenuItem>
+
+        <SyrfMenuItem title={t(translations.side_menu.profile.discover_friends)} icon={<FaUserFriends />} key="10">
+          <StyledLink to={'/profile/search'}>{t(translations.side_menu.profile.discover_friends)}</StyledLink>
         </SyrfMenuItem>
 
         <SyrfMenuItem key="6" title={t(translations.side_menu.data)} icon={<GoDatabase />}>
