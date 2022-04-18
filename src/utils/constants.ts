@@ -253,6 +253,12 @@ export enum KudoTypes {
 export const DEFAULT_PAGE_SIZE = 10;
 
 export enum AuthCode {
-  WRONG_CREDENTIALS = 'E012',
-  USER_ALREADY_EXISTS = 'E015'
+    WRONG_CREDENTIALS = 'E012',
+    USER_ALREADY_EXISTS = 'E015'
+}
+
+export enum GroupTypes {
+    ORGANIZATION = 'ORGANIZATION',
+    COMMITTEE = 'COMMITTEE',
+    TEAM = 'TEAM',
 }
