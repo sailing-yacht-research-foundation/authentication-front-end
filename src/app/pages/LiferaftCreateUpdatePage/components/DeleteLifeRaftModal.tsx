@@ -18,8 +18,12 @@ export const DeleteLiferaftModal = (props) => {
         onLiferaftDeleted
     } = props;
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const performDeleteLiferaft = async () => {
+        setIsLoading(true);
         const response = await deleteLiferaft(liferaft.id);
+        setIsLoading(false);
 
         setShowDeleteModal(false);
 
@@ -35,6 +39,7 @@ export const DeleteLiferaftModal = (props) => {
         <Modal
             title={t(translations.delete_liferaft_modal.are_you_sure_you_want_to_delete_this_liferaft)}
             visible={showDeleteModal}
+            confirmLoading={isLoading}
             onOk={() => {
                 performDeleteLiferaft();
             }}

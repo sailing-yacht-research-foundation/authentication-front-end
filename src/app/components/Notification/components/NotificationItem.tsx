@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Notification } from 'types/Notification';
 import moment from 'moment';
-import { FollowStatus, NotificationTypes } from 'utils/constants';
+import { FollowStatus, KudoTypes, NotificationTypes } from 'utils/constants';
 import Group from '../assets/group.png';
 import Event from '../assets/event.png';
 import Follow from '../assets/follow.png';
@@ -21,6 +21,20 @@ import { BsPersonPlus } from 'react-icons/bs';
 import { useNotificationSlice } from '../slice';
 import { renderAvatar } from 'utils/user-utils';
 import { selectMarkAllAsReadSuccess } from '../slice/selectors';
+import { AiFillHeart, AiFillStar } from 'react-icons/ai';
+import { FaHandsWash } from 'react-icons/fa';
+import { IoThumbsUp } from 'react-icons/io5';
+
+const notificationColors = {
+    DELETE: '#DC6E1E',
+    FOLLOW: '#16a085',
+    ADD: '#95e1c1',
+    DEFAULT: '#40a9ff',
+    LIKE: '#2980b9',
+    HEART: '#e74c3c',
+    APPLAUSE: '#9b59b6',
+    STAR: '#f1c40f',
+}
 
 export const NotificationItem = ({ notification }: { notification: Notification }) => {
 
@@ -48,7 +62,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
     }, []);
 
     const renderNotificationBadge = () => {
-        let icon, className = '';
+        let icon, color = notificationColors.DEFAULT;
         switch (notification.notificationType) {
             case NotificationTypes.USER_INVITED_TO_GROUP:
                 icon = <AiOutlineUsergroupAdd />;
@@ -66,7 +80,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 icon = <VscDebugStart />;
                 break;
             case NotificationTypes.EVENT_INACTIVITY_DELETION:
-                className = 'delete';
+                color = notificationColors.DELETE;
                 icon = <MdEventBusy />;
                 break;
             case NotificationTypes.USER_ADDED_TO_EVENT_ADMIN:
@@ -79,21 +93,41 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 icon = <IoCreateSharp />;
                 break;
             case NotificationTypes.USER_NEW_FOLLOWER:
-                className = 'follow';
+                color = notificationColors.FOLLOW;
                 icon = <BsPersonPlus />;
+                break;
+            case NotificationTypes.KUDOS_RECEIVED:
+                switch(notification.metadata.kudosType) {
+                    case KudoTypes.HEART:
+                        icon = <AiFillHeart/>;
+                        color = notificationColors.HEART
+                        break;
+                    case KudoTypes.THUMBS_UP:
+                        icon =  <IoThumbsUp/>;
+                        color = notificationColors.LIKE
+                        break;
+                    case KudoTypes.STAR:
+                        icon = <AiFillStar/>
+                        color = notificationColors.STAR
+                        break;
+                    case KudoTypes.APPLAUSE:
+                        icon = <FaHandsWash/>
+                        color = notificationColors.APPLAUSE
+                }
                 break;
             default:
                 icon = <AiOutlineGlobal />;
         }
 
-        return <NotificationBadge className={className}>
+        return <NotificationBadge style={{ background: color }}>
             {icon}
         </NotificationBadge>
     }
 
     const renderNotificationAvatar = () => {
-        if (notification.notificationThumbnail)
-            return renderAvatar(notification.notificationThumbnail);
+        const thumbnail = notification.notificationThumbnail || notification.metadata?.notificationThumbnail;
+        if (thumbnail)
+            return renderAvatar(thumbnail);
 
         switch (notification.notificationType) {
             case NotificationTypes.USER_INVITED_TO_GROUP:
@@ -149,6 +183,9 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 if (notification.metadata?.status === FollowStatus.REQUESTED) {
                     dispatch(actions.setShowFollowRequestModal(true));
                 }
+                break;
+            case NotificationTypes.KUDOS_RECEIVED:
+                history.push(`/playback?raceId=${notification.metadata?.competitionUnitId}`);
                 break;
         }
 
@@ -256,16 +293,4 @@ const NotificationBadge = styled.div`
     color: #fff;
     background: #40a9ff;
     box-shadow: 0 12px 28px 0 rgba(0,0,0,0.2),0 2px 4px 0 rgba(0,0,0,0.1),inset 0 0 0 1px rgba(255,255,255,0.5);
-
-    &.delete {
-        background: #DC6E1E;
-    }
-
-    &.follow {
-        background: #16a085;
-    }
-
-    &.add {
-        background: #95e1c1;
-    }
 `;

@@ -21,7 +21,7 @@ import { FilterWorldSailingNumber } from 'utils/world-sailing-number';
 import countryCodeSource from '../../assets/world-sailing-number-countrycode.json';
 import { sendPhoneVerification, verifyPhoneNumber } from 'services/live-data-server/user';
 import { toast } from 'react-toastify';
-import { VerifyPhoneModal } from 'app/components/VerifyPhoneNumberModal';
+import { VerifyPhoneModal } from 'app/components/VerifyModal/VerifyPhoneModal';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { ItemVerifyMessage } from 'app/components/SyrfGeneral';
 import { useDispatch } from 'react-redux';
@@ -276,7 +276,7 @@ export const PrivateUserInformation = (props) => {
                         rules={[{ type: 'string' }]}
                     >
                         <SyrfPhoneInput
-                            inputProps={{ autoComplete: 'off' }}
+                            inputProps={{ autoComplete: 'none' }}
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />

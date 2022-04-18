@@ -110,3 +110,8 @@ export const selectIsSimplifiedPlayback = createSelector(
   [selectDomain],
   (playbackState) => playbackState.isSimplifiedPlayback
 )
+
+export const selectVesselParticipantDataForShowingKudos = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.vesselParticipantForShowingKudos
+)

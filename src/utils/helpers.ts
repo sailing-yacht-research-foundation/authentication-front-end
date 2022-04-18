@@ -326,8 +326,8 @@ export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
 export const parseKeyword = (keyword) => {
     // eslint-disable-next-line
     keyword = keyword.replace(/([\!\*\+\=\<\>\&\|\(\)\[\]\{\}\^\~\?\\/"])/g, "\\$1"); // escape special characters that will make the elastic search crash.
+    const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     const { expression, processedKeyword } = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
-
     const words = processedKeyword.trim().split(' ');
     let parsedWords: any[] = [];
     let result = '';
@@ -344,6 +344,7 @@ export const parseKeyword = (keyword) => {
     parsedWords = parsedWords.flat().filter(word => word).filter(Boolean);
 
     parsedWords.forEach((word, i) => {
+        let fuzziness = !specialChars.test(word) ? '~' : '';
         const nextWord = parsedWords[i + 1];
         word = word.trim();
 
@@ -355,13 +356,14 @@ export const parseKeyword = (keyword) => {
             }
 
             if (nextWord === expression) {
-                result += (word + ') ');
+                result += (word + fuzziness + ') ');
             }
             else {
+                const optionalFuzziness = word !== expression ? fuzziness : '';
                 if (typeof nextWord === 'undefined') {
-                    result += (word + ')')
+                    result += (word + optionalFuzziness + ')')
                 } else {
-                    result += (word + ' ');
+                    result += (word + optionalFuzziness + ' ');
                 }
             }
         }
@@ -428,13 +430,13 @@ export const checkIfIsSafari = () => {
 
 export const unregisterPushSubscription = () => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then(function (reg) {
-        reg.pushManager.getSubscription().then(function (subscription) {
-          if (subscription)
-            subscription.unsubscribe().catch(function (e) {
-              console.error(e);
-            });
-        })
-      });
+        navigator.serviceWorker.ready.then(function (reg) {
+            reg.pushManager.getSubscription().then(function (subscription) {
+                if (subscription)
+                    subscription.unsubscribe().catch(function (e) {
+                        console.error(e);
+                    });
+            })
+        });
     }
-  }
+}

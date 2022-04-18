@@ -36,6 +36,8 @@ export const AddAdminModal = (props: IAddAdminModal) => {
 
     const results = useSelector(selectAcceptedMemberResults);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
@@ -51,7 +53,9 @@ export const AddAdminModal = (props: IAddAdminModal) => {
             .validateFields()
             .then(async values => {
                 const { uuid } = values;
+                setIsLoading(true);
                 const response = await assignAdmin(groupId, uuid);
+                setIsLoading(false);
 
                 if (response.success) {
                     toast.success(t(translations.group.successfully_set_user_as_admin));
@@ -81,6 +85,7 @@ export const AddAdminModal = (props: IAddAdminModal) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.group.add_admins)}
             bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
             visible={showModal}

@@ -108,11 +108,11 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'competitionUnit',
             key: 'competitionUnit.elapsedTime',
             render: (_value, source) => {
-                if (!source?.competitionUnit?.isCompleted) return 'in progress';
-
                 if (source?.trackJson?.startTime && source?.trackJson?.endTime) {
                     return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format(TIME_FORMAT.time)
                 }
+
+                if (!source?.competitionUnit?.isCompleted) return 'in progress';
 
                 const startTime = new Date(source?.competitionUnit?.startTime).getTime();
                 const endTime = new Date(source?.competitionUnit?.endTime).getTime();
@@ -136,9 +136,14 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
 
     const renderTrackParamIfExists = (record) => {
         let url = `/playback/?raceId=${record.competitionUnit?.id}`;
+
         if (record.trackJson?.id) {
             url += `&trackId=${record.trackJson.id}`;
         }
+        if (record?.trackJson?.endTime && record?.trackJson?.startTime) {
+            url += `&startTime=${record.trackJson.startTime}&endTime=${record.trackJson.endTime}`;
+        }
+
         return url;
     }
 

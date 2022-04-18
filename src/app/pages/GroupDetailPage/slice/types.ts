@@ -14,6 +14,8 @@ export interface GroupDetailState {
     isGettingGroup: boolean;
     getGroupDetailFailed: boolean;
     acceptedMemberResults: any[];
+    adminPageSize: number;
+    memberPageSize: number;
   }
   
   export type ContainerState = GroupDetailState;

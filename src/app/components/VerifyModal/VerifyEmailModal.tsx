@@ -7,41 +7,53 @@ import {
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 
-export const VerifyPhoneModal = (props) => {
+interface IVerifyEmailModal {
+    showModal: boolean,
+    setShowModal: Function,
+    sendCode: Function,
+    verifyCode: Function
+}
+
+export const VerifyEmailModal = (props: IVerifyEmailModal) => {
 
     const { t } = useTranslation();
 
     const {
-        showPhoneVerifyModal,
-        setShowPhoneVerifyModal,
-        sendPhoneVerification,
-        verifyPhone
+        showModal,
+        setShowModal,
+        sendCode,
+        verifyCode
     } = props;
 
-    const [verifyPhoneForm] = Form.useForm();
+    const [isVerifying, setIsVerifying] = React.useState<boolean>(false); 
 
-    const verifyFormAndPhoneNumber = () => {
-        verifyPhoneForm
+    const [verifyForm] = Form.useForm();
+
+    const verifyFormAndVerifyCode = () => {
+        verifyForm
             .validateFields()
             .then(async values => {
                 const { code } = values;
-                verifyPhone(code);
-                verifyPhoneForm.resetFields();
+                setIsVerifying(true);
+                verifyCode(code);
+                setIsVerifying(false);
+                verifyForm.resetFields();
             });
     }
 
     return (
         <Modal
-            title={t(translations.general.please_verify_your_phone_number)}
-            visible={showPhoneVerifyModal}
+            title={t(translations.general.please_verify_your_email)}
+            visible={showModal}
+            confirmLoading={isVerifying}
             onOk={() => {
-                verifyFormAndPhoneNumber();
+                verifyFormAndVerifyCode();
             }}
             onCancel={() => {
-                setShowPhoneVerifyModal(false);
+                setShowModal(false);
             }}>
             <Form
-                form={verifyPhoneForm}
+                form={verifyForm}
                 layout="vertical"
                 name="basic"
                 initialValues={{
@@ -63,7 +75,7 @@ export const VerifyPhoneModal = (props) => {
             <div style={{ marginTop: '10px', textAlign: 'right' }}>
                 <span>{t(translations.general.could_not_receive_the_code)} &nbsp; <a style={{ float: 'right' }} href="/" onClick={(e) => {
                     e.preventDefault();
-                    sendPhoneVerification();
+                    sendCode();
                 }}>{t(translations.general.resend)}</a></span>
             </div>
         </Modal>

@@ -8,6 +8,7 @@ import { translations } from 'locales/translations';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectShowFollowRequestModal } from './slice/selector';
 import { useSocialSlice } from './slice';
+import { DEFAULT_PAGE_SIZE } from 'utils/constants';
 
 export const FollowRequestModal = () => {
 
@@ -65,7 +66,7 @@ export const FollowRequestModal = () => {
         <Modal visible={showFollowRequestModal} footer={null} title={t(translations.public_profile.requested_to_follow_you)} onCancel={hideRequestModal}>
             <Spin spinning={isLoading}>
                 {renderFollowRequests()}
-                {pagination.total > 10 && <PaginationContainer>
+                {pagination.total > DEFAULT_PAGE_SIZE && <PaginationContainer>
                     <Pagination current={pagination.page} total={pagination.total} onChange={(page) => getFollowRequests(page)} />
                 </PaginationContainer>}
             </Spin>

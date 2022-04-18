@@ -15,7 +15,9 @@ import {
     selectSearchResults,
     selectSearchCurrentPage,
     selectSearchTotalPage,
-    selectPerformedSearch
+    selectPerformedSearch,
+    selectGroupPageSize,
+    selectGroupSearchPageSize
 } from '../slice/selectors';
 import { GroupItemRow } from './GroupItem';
 import { useGroupSlice } from '../slice';
@@ -53,6 +55,10 @@ export const GroupList = () => {
 
     const isPerformedSearch = useSelector(selectPerformedSearch);
 
+    const groupPageSize = useSelector(selectGroupPageSize);
+
+    const groupSearchPageSize = useSelector(selectGroupSearchPageSize);
+
     const renderGroupItems = () => {
         if (groups.length > 0)
             return groups.map(group => <GroupItemRow
@@ -80,12 +86,12 @@ export const GroupList = () => {
         return <span>{t(translations.group.no_results_found)}</span>
     }
 
-    const onPaginationChanged = (page) => {
-        dispatch(actions.getGroups(page));
+    const onPaginationChanged = (page, size) => {
+        dispatch(actions.getGroups({ page, size }));
     }
 
-    const onSearchPaginationChanged = (page) => {
-        dispatch(actions.searchForGroups({ keyword: searchKeyword, page: page }));
+    const onSearchPaginationChanged = (page, size) => {
+        dispatch(actions.searchForGroups({ keyword: searchKeyword, page, size }));
     }
 
     const onGroupJoinRequested = () => {
@@ -94,8 +100,8 @@ export const GroupList = () => {
 
     const getGroupsOrSearchGroups = () => {
         if (searchKeyword.length > 0)
-            dispatch(actions.searchForGroups({ keyword: searchKeyword, page: searchCurrentPage }));
-        dispatch(actions.getGroups(groupCurrentPage));
+            dispatch(actions.searchForGroups({ keyword: searchKeyword, page: searchCurrentPage, size: groupSearchPageSize }));
+        dispatch(actions.getGroups({ page: groupCurrentPage, size: groupPageSize }));
     }
 
     React.useEffect(() => {
@@ -120,7 +126,11 @@ export const GroupList = () => {
                         <Spin spinning={isLoading}>
                             {renderGroupItems()}
                             <PaginationWrapper>
-                                <Pagination onChange={onPaginationChanged} current={currentPage} total={totalPage} />
+                                <Pagination
+                                    onChange={onPaginationChanged}
+                                    current={currentPage}
+                                    total={totalPage}
+                                    pageSize={groupPageSize} />
                             </PaginationWrapper>
                         </Spin>
                     </>
@@ -132,7 +142,11 @@ export const GroupList = () => {
                         <Spin spinning={isLoading}>
                             {renderGroupResults()}
                             <PaginationWrapper>
-                                <Pagination onChange={onSearchPaginationChanged} current={searchCurrentPage} total={searchTotalPage} />
+                                <Pagination
+                                    onChange={onSearchPaginationChanged}
+                                    current={searchCurrentPage}
+                                    total={searchTotalPage}
+                                    pageSize={groupSearchPageSize} />
                             </PaginationWrapper>
                         </Spin>
                     </>

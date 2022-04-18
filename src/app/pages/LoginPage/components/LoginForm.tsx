@@ -15,15 +15,14 @@ import { translations } from 'locales/translations';
 import { ReactComponent as Logo } from '../assets/logo-dark.svg';
 import { login } from 'services/live-data-server/auth';
 import { subscribeUser } from 'subscription';
+import { AuthCode } from 'utils/constants';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
 };
 
-const ERRORS = { // only have strings from server to compare for now.
-  WRONG_CREDENTIALS: 'Invalid user credentials',
-  USER_IS_DISABLED: 'E012',
-  NEED_VERIFICATION: 'Account is not fully set up'
+const errorCodes = {
+  WRONG_CREDENTIALS: 'E012',
 }
 
 export const LoginForm = (props) => {
@@ -44,11 +43,13 @@ export const LoginForm = (props) => {
 
     const response: any = await login({ email: email, password: password });
 
+    setIsSigningIn(false);
+
     if (response.success) {
-      dispatch(actions.setSessionToken(response.token));
-      dispatch(actions.setRefreshToken(response.user.refresh_token));
-      dispatch(actions.getUser());
       if (response.user?.email_verified) {
+        dispatch(actions.setSessionToken(response.token));
+        dispatch(actions.setRefreshToken(response.user.refresh_token));
+        dispatch(actions.getUser());
         dispatch(actions.setIsAuthenticated(true));
         localStorage.removeItem('is_guest');
         localStorage.setItem('user_id', response.user.id);
@@ -58,13 +59,9 @@ export const LoginForm = (props) => {
         toast.info(t(translations.login_page.please_verify_your_account));
       }
     } else {
-      setIsSigningIn(false);
-      switch (response.error?.response?.data?.message) {
-        case ERRORS.WRONG_CREDENTIALS:
+      switch (response.error?.response.data.errorCode) {
+        case AuthCode.WRONG_CREDENTIALS:
           toast.error(t(translations.login_page.credentials_are_not_correct));
-          break;
-        case ERRORS.NEED_VERIFICATION:
-          toast.info(t(translations.login_page.please_verify_your_account));
           break;
         default:
           toast.info(t(translations.login_page.cannot_login_at_the_moment));
@@ -93,21 +90,33 @@ export const LoginForm = (props) => {
           >
             <Form.Item
               name="email"
-              rules={[{ required: true, message: t(translations.forms.email_is_required) }, {
-                type: 'email', message: t(translations.forms.email_must_be_valid)
-              }]}
+              rules={[
+                { required: true, message: t(translations.forms.email_is_required) },
+                {
+                  pattern: /^\S+$/,
+                  message: t(translations.misc.email_must_not_contain_blank)
+                },
+                { type: 'email', message: t(translations.forms.email_must_be_valid) }]}
             >
-              <SyrfInput placeholder={t(translations.login_page.email.label)} autoCorrect="off" autoCapitalize="none" autoComplete="off" />
+              <SyrfInput
+                placeholder={t(translations.login_page.email.label)}
+                autoCorrect="off"
+                autoCapitalize="none"
+                autoComplete="off" />
             </Form.Item>
 
             <Form.Item
               name="password"
-              rules={[{ required: true, message: t(translations.forms.password_is_required) }, {
-                pattern: /^\S+$/,
-                message: t(translations.misc.password_must_not_contain_blank)
-              }, {
-                max: 16, min: 8, message: t(translations.forms.password_must_be_between)
-              }]}
+              rules={[
+                { required: true, message: t(translations.forms.password_is_required) },
+                {
+                  pattern: /^\S+$/,
+                  message: t(translations.misc.password_must_not_contain_blank)
+                },
+                {
+                  max: 16, min: 8, message: t(translations.forms.password_must_be_between)
+                },
+              ]}
             >
               <SyrfInputPassword placeholder={t(translations.login_page.password.label)} autoCorrect="off" autoCapitalize="none" autoComplete="off" />
             </Form.Item>
@@ -133,7 +142,7 @@ export const LoginForm = (props) => {
           </SyrfSignupButton>
         </SignupContainer>
       </Spin>
-    </Wrapper>
+    </Wrapper >
   );
 }
 

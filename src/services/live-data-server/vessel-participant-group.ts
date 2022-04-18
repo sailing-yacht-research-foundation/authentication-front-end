@@ -6,14 +6,16 @@ export const getVesselParticipantGroups = () => {
   return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups`))
 }
 
-export const getVesselParticipantGroupsByEventId = (calendarEventId, page, size = 10) => {
+export const getVesselParticipantGroupsByEventId = (calendarEventId: string, page: number, size: number = 10) => {
   return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/groups`, {
-    page: page,
-    size
+    params: {
+      page: page,
+      size
+    }
   }))
 }
 
-export const getAllVesselParticipantGroups = (page) => {
+export const getAllVesselParticipantGroups = (page: number) => {
   const userId: any = localStorage.getItem('user_id');
   return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups${!!userId ? `?createdById_eq=${userId}` : ''}`, {
     params: {
@@ -22,25 +24,25 @@ export const getAllVesselParticipantGroups = (page) => {
   }))
 }
 
-export const getVesselParticipantGroupById = (id) => {
+export const getVesselParticipantGroupById = (id: string) => {
   return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups/${id}`))
 };
 
-export const create = (data) => {
+export const create = (data: any) => {
   return formatServicePromiseResponse(syrfService.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups`, data))
 }
 
-export const update = (vesselParticipantGroupId, data) => {
+export const update = (vesselParticipantGroupId: string, data: any) => {
   return formatServicePromiseResponse(syrfService.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups/${vesselParticipantGroupId}`, {
-      ...data
+    ...data
   }))
 }
 
-export const deleteVesselParticipantGroup = (vesselParticipantGroupId) => {
+export const deleteVesselParticipantGroup = (vesselParticipantGroupId: string) => {
   return formatServicePromiseResponse(syrfService.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups/${vesselParticipantGroupId}`))
 }
 
-export const getVesselParticipantGroupsByEventIdWithSort = (calendarEventId, page) => {
+export const getVesselParticipantGroupsByEventIdWithSort = (calendarEventId: string, page: number) => {
   const userId: any = localStorage.getItem('user_id');
   return formatServicePromiseResponse(syrfService.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participant-groups?calendarEventId_eq=${calendarEventId}&sort=createdAt&srdir=1&${!!userId ? `&createdById_eq=${userId}` : ''}`, {
     params: {

@@ -28,7 +28,7 @@ export const GroupSearchAutoComplete = ({ keyword, showSuggestions, setShowSugge
     }, [keyword]);
 
     const getSuggestions = async (keyword) => {
-        const response = await searchGroups(keyword, 1);
+        const response = await searchGroups(keyword, 1, 10);
 
         if (response.success) {
             setResults(response?.data?.rows);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown, Space, Spin, Table, Menu } from 'antd';
-import { CreateButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { CreateButton, DeleteButton, FilterWrapper, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
@@ -105,7 +105,8 @@ export const ParticipantList = (props) => {
     const [pagination, setPagination] = React.useState<any>({
         page: 1,
         total: 0,
-        rows: []
+        rows: [],
+        pageSize: 10
     });
 
     const [participant, setParticipant] = React.useState<Partial<Participant>>({});
@@ -123,20 +124,21 @@ export const ParticipantList = (props) => {
     const filterParticipants = (e, mode) => {
         e.preventDefault();
         setFilterMode(mode);
-        getAllByFilter(pagination.page, mode);
+        getAllByFilter(pagination.page, pagination.pageSize, mode);
     }
 
-    const getAllByFilter = async (page, mode) => {
+    const getAllByFilter = async (page: number, size: number, mode: string) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventIdWithFilter(eventId, page, mode);
+        const response = await getAllByCalendarEventIdWithFilter(eventId, page, size, mode);
         setIsLoading(false);
 
         if (response.success) {
             setPagination({
                 ...pagination,
-                rows: response.data?.rows,
+                rows: response.data.rows,
                 page: page,
-                total: response.data?.count
+                total: response.data.count,
+                pageSize: response.data.size
             });
         }
     }
@@ -146,12 +148,12 @@ export const ParticipantList = (props) => {
         setParticipant(participant);
     }
 
-    const onPaginationChanged = (page) => {
-        getAllByFilter(page, filterMode);
+    const onPaginationChanged = (page, size) => {
+        getAllByFilter(page, size, filterMode);
     }
 
     const onParticipantDeleted = () => {
-        getAllByFilter(pagination.page, filterMode);
+        getAllByFilter(pagination.page, pagination.pageSize, filterMode);
     }
 
     const showBlockParticipant = (participant) => {
@@ -178,7 +180,7 @@ export const ParticipantList = (props) => {
 
     React.useEffect(() => {
         if (!showInviteModal) {
-            getAllByFilter(pagination.page, filterMode);
+            getAllByFilter(pagination.page, pagination.pageSize, filterMode);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showInviteModal]);
@@ -192,7 +194,7 @@ export const ParticipantList = (props) => {
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}
             />
-            <BlockParticipantConfirmModal reloadParent={() => getAllByFilter(pagination.page, filterMode)} participant={participant} showModal={showBlockParticipantModal} setShowModal={setShowBlockParticipantModal} />
+            <BlockParticipantConfirmModal reloadParent={() => getAllByFilter(pagination.page, pagination.pageSize, filterMode)} participant={participant} showModal={showBlockParticipantModal} setShowModal={setShowBlockParticipantModal} />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
@@ -224,11 +226,6 @@ export const ParticipantList = (props) => {
         </>
     )
 }
-
-const FilterWrapper = styled.div`
-    text-align: right;
-    text-transform: capitalize;
-`;
 
 const AvatarWrapper = styled.div`
     width: 30px;

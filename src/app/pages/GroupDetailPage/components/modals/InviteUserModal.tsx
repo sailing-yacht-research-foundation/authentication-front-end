@@ -38,6 +38,8 @@ export const InviteUserModal = (props: IInviteUserModal) => {
 
     const [emails, setEmails] = React.useState<string[]>([]);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const hideInviteModal = () => {
         setShowModal(false);
         form.setFieldsValue({
@@ -62,9 +64,11 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                     return;
                 }
 
-                hideInviteModal();
-
+                setIsLoading(true);
                 const response = await inviteUsersViaEmails(groupId, processedEmails);
+                setIsLoading(false);
+
+                hideInviteModal();
 
                 if (response.success) {
                     toast.success(t(translations.group.invitations_sent));
@@ -87,6 +91,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
     return (
         <>
             <Modal
+                confirmLoading={isLoading}
                 title={t(translations.group.invite_members_via_emails)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
                 visible={showModal}

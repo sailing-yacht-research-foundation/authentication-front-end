@@ -6,19 +6,28 @@ import { DownOutlined } from '@ant-design/icons';
 import { UserItemRow } from './UserItemRow';
 import { assignAdmin, blockMember, unBlockMember } from 'services/live-data-server/groups';
 import { useParams } from 'react-router';
-import { CreateButton } from 'app/components/SyrfGeneral';
+import { CreateButton, FilterWrapper } from 'app/components/SyrfGeneral';
 import { IoMdPersonAdd } from 'react-icons/io';
 import { InviteUserModal } from './modals/InviteUserModal';
 import { RemoveMemberFromGroupModal } from './modals/RemoveUserFromGroupModal';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectMembers, selecTotalMembers, selectMemberCurrentPage, selectAdminCurrentPage, selectIsGettingMembers } from '../slice/selectors';
+import { selectMembers, selecTotalMembers, selectMemberCurrentPage, selectAdminCurrentPage, selectIsGettingMembers, selectMemberPageSize, selectAdminPageSize } from '../slice/selectors';
 import { useGroupDetailSlice } from '../slice';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { renderNumberWithCommas, showToastMessageOnRequestError } from 'utils/helpers';
-import { GroupMemberStatus } from 'utils/constants';
+import { DEFAULT_PAGE_SIZE, GroupMemberStatus } from 'utils/constants';
 import { ConfirmModal } from 'app/components/ConfirmModal';
+
+const filterModes = {
+    REQUESTED: GroupMemberStatus.REQUESTED,
+    DECLINED: GroupMemberStatus.DECLINED,
+    INVITED: GroupMemberStatus.INVITED,
+    BLOCKED: GroupMemberStatus.BLOCKED,
+    ACCEPTED: GroupMemberStatus.ACCEPTED,
+    ALL: ''
+}
 
 export const MembersManager = (props) => {
 
@@ -40,6 +49,10 @@ export const MembersManager = (props) => {
 
     const memberCurrentPage = useSelector(selectMemberCurrentPage);
 
+    const memberPageSize = useSelector(selectMemberPageSize);
+
+    const adminPageSize = useSelector(selectAdminPageSize);
+
     const dispatch = useDispatch();
 
     const { actions } = useGroupDetailSlice();
@@ -50,6 +63,16 @@ export const MembersManager = (props) => {
 
     const isGettingMembers = useSelector(selectIsGettingMembers);
 
+    const [filterMode, setFilterMode] = React.useState<string>('');
+
+    const filterOptions = [
+        { title: t(translations.group.all), mode: '' },
+        { title: t(translations.group.invited), mode: filterModes.INVITED },
+        { title: t(translations.group.accepted), mode: filterModes.ACCEPTED },
+        { title: t(translations.group.declined), mode: filterModes.DECLINED },
+        { title: t(translations.group.blocked), mode: filterModes.BLOCKED }
+    ];
+
     const renderMembers = () => {
         if (members.length > 0)
             return members.map((item, index) => <UserItemRow key={index} item={item} buttons={renderActionButton(item)} />);
@@ -57,12 +80,12 @@ export const MembersManager = (props) => {
         return <span>{t(translations.group.we_dont_have_any_members_right_now)}</span>
     }
 
-    const getMembers = (page) => {
-        dispatch(actions.getMembers({ page: page, groupId: groupId }))
+    const getMembers = (page, size, status) => {
+        dispatch(actions.getMembers({ page: page, groupId: groupId, status: status, size }))
     }
 
-    const onPaginationChanged = (page) => {
-        getMembers(page);
+    const onPaginationChanged = (page, size) => {
+        getMembers(page, size, filterMode);
     }
 
     const removeFromGroup = (e, member) => {
@@ -72,11 +95,11 @@ export const MembersManager = (props) => {
     }
 
     const onUsersInvited = () => {
-        getMembers(memberCurrentPage);
+        getMembers(memberCurrentPage, memberPageSize, filterMode);
     }
 
     const onMemberRemoved = () => {
-        getMembers(memberCurrentPage);
+        getMembers(memberCurrentPage, memberPageSize, filterMode);
     }
 
     const setMemberAsAdmin = async (e, member) => {
@@ -84,8 +107,8 @@ export const MembersManager = (props) => {
         const response = await assignAdmin(groupId, member.id);
 
         if (response.success) {
-            getMembers(memberCurrentPage);
-            dispatch(actions.getAdmins({ page: adminCurrentPage, groupId: groupId }))
+            getMembers(memberCurrentPage, memberPageSize, filterMode);
+            dispatch(actions.getAdmins({ page: adminCurrentPage, size: adminPageSize, groupId: groupId }))
             toast.success(t(translations.group.successfully_assign_this_member_as_admin));
         } else {
             if (response.error?.response?.status === 404) {
@@ -103,7 +126,7 @@ export const MembersManager = (props) => {
 
         if (response.success) {
             toast.success(t(translations.group.successfully_blocked_member_out_of_the_group));
-            getMembers(memberCurrentPage);
+            getMembers(memberCurrentPage, memberPageSize, filterMode);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -118,7 +141,7 @@ export const MembersManager = (props) => {
 
         if (response.success) {
             toast.success(t(translations.group.successfully_unblocked_member_out_of_the_group));
-            getMembers(memberCurrentPage);
+            getMembers(memberCurrentPage, memberPageSize, filterMode);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -131,7 +154,7 @@ export const MembersManager = (props) => {
     }
 
     React.useEffect(() => {
-        getMembers(1);
+        getMembers(1, 10, '');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -167,6 +190,24 @@ export const MembersManager = (props) => {
         );
     }
 
+    const filterMembers = (event, mode) => {
+        event.preventDefault();
+        let status = mode;
+        if (status == filterModes.ALL) status = '';
+        getMembers(1, DEFAULT_PAGE_SIZE, status);
+        setFilterMode(status);
+    }
+
+    const menu = (
+        <Menu>
+            {filterOptions.map((item, index) => (<Menu.Item key={index}>
+                <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterMembers(e, item.mode)}>
+                    {item.title}
+                </a>
+            </Menu.Item>))}
+        </Menu>
+    );
+
     return (
         <SectionContainer>
             <ConfirmModal content={t(translations.group.are_you_really_sure_you_want_to_block_user_they_will_no_longer, { memberName: member.member?.name })}
@@ -178,14 +219,21 @@ export const MembersManager = (props) => {
             <RemoveMemberFromGroupModal groupId={groupId} onMemberRemoved={onMemberRemoved} member={member} showModal={showRemoveFromGroupModal} setShowModal={setShowRemoveFromGroupModal} />
             <SectionTitleWrapper>
                 <SectionTitle>{t(translations.group.members, { membersCount: renderNumberWithCommas(totalMembers) })}</SectionTitle>
-                {group?.isAdmin && <CreateButton onClick={() => setShowModal(true)} icon={<IoMdPersonAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>Invite</CreateButton>}
+                {group.isAdmin && <CreateButton onClick={() => setShowModal(true)} icon={<IoMdPersonAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>Invite</CreateButton>}
             </SectionTitleWrapper>
+            {group.isAdmin && <FilterWrapper>
+                <Dropdown overlay={menu}>
+                    <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
+                        {filterMode === '' ? t(translations.group.all) : filterMode.toLowerCase()} <DownOutlined />
+                    </a>
+                </Dropdown>
+            </FilterWrapper>}
             <Spin spinning={isGettingMembers}>
                 <MemberList>
                     {renderMembers()}
                 </MemberList>
                 {
-                    (totalMembers > 10) && <PaginationContainer>
+                    (totalMembers > DEFAULT_PAGE_SIZE) && <PaginationContainer>
                         <Pagination defaultCurrent={memberCurrentPage} current={memberCurrentPage} onChange={onPaginationChanged} total={totalMembers} />
                     </PaginationContainer>
                 }

@@ -109,3 +109,7 @@ export const removePassportPhoto = () => {
 export const getUserSettings = () => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/settings`)); 
 }
+
+export const updateUserSpecificAttributes = (data) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`, data)); 
+}

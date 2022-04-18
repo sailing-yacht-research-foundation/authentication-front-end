@@ -2,9 +2,10 @@ import React from 'react';
 import { Modal, Spin, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../../slice';
-import { selectFollowing, selectFollowingCurrentPage, selectFollowingTotalRecords, selectModalLoading } from '../../slice/selectors';
+import { selectFollowing, selectFollowingCurrentPage, selectFollowingPageSize, selectFollowingTotalRecords, selectModalLoading } from '../../slice/selectors';
 import { UserFollowerFollowingRow } from 'app/components/SocialProfile/UserFollowerFollowingRow';
 import { PaginationContainer } from 'app/components/SyrfGeneral';
+import { DEFAULT_PAGE_SIZE } from 'utils/constants';
 
 export const FollowingModal = ({ profileId, showModal, setShowModal, reloadParent }) => {
 
@@ -20,6 +21,8 @@ export const FollowingModal = ({ profileId, showModal, setShowModal, reloadParen
 
     const isLoading = useSelector(selectModalLoading);
 
+    const followingPageSize = useSelector(selectFollowingPageSize);
+
     const [performedAction, setPerformedAction] = React.useState<boolean>(false);
 
     const renderFollowings = () => {
@@ -28,8 +31,8 @@ export const FollowingModal = ({ profileId, showModal, setShowModal, reloadParen
         })
     }
 
-    const getFollowing = (page) => {
-        dispatch(actions.getFollowing({ page: page, profileId }));
+    const getFollowing = (page, size) => {
+        dispatch(actions.getFollowing({ page: page, size: size, profileId }));
     }
 
     const hideModal = () => {
@@ -40,7 +43,7 @@ export const FollowingModal = ({ profileId, showModal, setShowModal, reloadParen
     }
 
     React.useEffect(() => {
-        dispatch(actions.getFollowing({ page: 1, profileId }));
+        dispatch(actions.getFollowing({ page: 1, size: 10, profileId }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [profileId]);
 
@@ -52,8 +55,12 @@ export const FollowingModal = ({ profileId, showModal, setShowModal, reloadParen
             footer={null}>
             <Spin spinning={isLoading}>
                 {renderFollowings()}
-                {followingTotalRecords > 10 && <PaginationContainer>
-                    <Pagination current={followingCurrentPage} onChange={(page) => getFollowing(page)} total={followingTotalRecords} />
+                {followingTotalRecords > DEFAULT_PAGE_SIZE && <PaginationContainer>
+                    <Pagination
+                        current={followingCurrentPage}
+                        onChange={(page, size) => getFollowing(page, size)}
+                        pageSize={followingPageSize}
+                        total={followingTotalRecords} />
                 </PaginationContainer>}
             </Spin>
         </Modal >
