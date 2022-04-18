@@ -31,6 +31,10 @@ export const stringToColour = (str) => {
         let value = (hash >> (i * 8)) & 0xFF;
         colour += ('00' + value.toString(16)).substr(-2);
     }
+    
+    console.log(/#([0-9A-Fa-f])([0-9A-Fa-f])((?=\2)\1|(?:\1\2){2})\b/.test('#ccc'));
+    console.log(/#(000)/);
+
     return colour;
 }
 

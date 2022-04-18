@@ -345,8 +345,9 @@ export const RaceMap = (props) => {
       const participantColor = participant.color;
 
       const styleSetup = {
+        stroke: '#fff',
         fill: participantColor,
-        stroke: "#000000",
+        strokeWidth: 25,
         width: "18px",
         height: "36px",
         marginLeft: `-9px`,
