@@ -60,9 +60,9 @@ export const GroupInvitationList = () => {
 
     return (
         <Wrapper>
-            <InvitationModal reloadParentList={reloadParentList} showModal={showModal} setShowModal={setShowModal} />
+            {pagination.total > DEFAULT_PAGE_SIZE && <InvitationModal reloadParentList={reloadParentList} showModal={showModal} setShowModal={setShowModal} />}
             <TitleContainer>
-                <Title>{t(translations.group.invitations, { invitationsTotal: pagination.total})}</Title>
+                <Title>{t(translations.group.invitations, { invitationsTotal: pagination.total })}</Title>
                 {pagination.total > DEFAULT_PAGE_SIZE && <SeeAll onClick={showInvitationModal}>{t(translations.group.see_all)}</SeeAll>}
             </TitleContainer>
             <Spin spinning={isLoading}>
