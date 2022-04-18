@@ -32,6 +32,8 @@ export const ResultItem = (props) => {
 
     const [relation, setRelation] = React.useState<any>(null);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const eventId = race._source?.event;
     const eventText = renderEmptyValue(race._source?.event_name, ' ');
     const eventElement = eventId && race._source.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText;
@@ -92,7 +94,9 @@ export const ResultItem = (props) => {
     }
 
     const markAsHidden = async () => {
+        setIsLoading(true);
         const response = await markCompetitionUnitAsHidden(race._source.id);
+        setIsLoading(false);
 
         if (response.success) {
             setShowMarkAsHiddenConfirmModal(false);
@@ -104,7 +108,9 @@ export const ResultItem = (props) => {
     }
 
     const markAsCompleted = async () => {
+        setIsLoading(true);
         const response = await markCompetitionUnitAsCompleted(race._source.id);
+        setIsLoading(false);
 
         if (response.success) {
             setShowMarkAsCompletedConfirmModal(false);
@@ -116,7 +122,9 @@ export const ResultItem = (props) => {
     }
 
     const forceDeleteRace = async () => {
+        setIsLoading(true);
         const response = await forceDeleteCompetitionUnit(race._source.id);
+        setIsLoading(false);
 
         if (response.success) {
             setShowDeleteRaceConfirmModal(false);
@@ -157,6 +165,7 @@ export const ResultItem = (props) => {
     return (
         <>
             <ConfirmModal
+                loading={isLoading}
                 showModal={showMarkAsHiddenConfirmModal}
                 title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_mark_this_race_as_hidden)}
                 content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_hidden_are_you_sure_you_want_to_continue)}
@@ -164,6 +173,7 @@ export const ResultItem = (props) => {
                 onCancel={() => setShowMarkAsHiddenConfirmModal(false)}
             />
             <ConfirmModal
+                loading={isLoading}
                 showModal={showMarkAsCompletedConfirmModal}
                 title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_mark_this_race_as_completed)}
                 content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_marked_as_completed_are_you_sure_you_want_to_continue)}
@@ -171,6 +181,7 @@ export const ResultItem = (props) => {
                 onCancel={() => setShowMarkAsCompletedConfirmModal(false)}
             />
             <ConfirmModal
+                loading={isLoading}
                 showModal={showDeleteRaceConfirmModal}
                 title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_force_delete_this_race)}
                 content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_deleted_are_you_sure_you_want_to_continue)}

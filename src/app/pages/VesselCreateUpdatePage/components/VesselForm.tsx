@@ -47,6 +47,7 @@ export const VesselForm = () => {
     const [showVerifyOnboardEmailModal, setShowVerifyOnboardEmailModal] = React.useState<boolean>(false);
     const [isSaving, setIsSaving] = React.useState<boolean>(false);
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const onFinish = async (values) => {
         let response;
@@ -142,9 +143,11 @@ export const VesselForm = () => {
     }, []);
 
     const removePhoto = async () => {
+        setIsLoading(true);
         const response = await removePhotos(vessel.id!, {
             isDeletePhoto: true
         });
+        setIsLoading(false);
 
         if (response.success) {
             setVessel({
@@ -159,9 +162,11 @@ export const VesselForm = () => {
     }
 
     const removeDeckPlan = async () => {
+        setIsLoading(true);
         const response = await removePhotos(vessel.id!, {
             isDeleteDeckPlan: true
         });
+        setIsLoading(false);
 
         if (response.success) {
             setVessel({
@@ -176,9 +181,11 @@ export const VesselForm = () => {
     }
 
     const removeHullDiagram = async () => {
+        setIsLoading(true);
         const response = await removePhotos(vessel.id!, {
             isDeleteHullDiagram: true
         });
+        setIsLoading(false);
 
         if (response.success) {
             setVessel({
@@ -253,18 +260,21 @@ export const VesselForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <ConfirmModal
+                loading={isLoading}
                 showModal={showRemovePhotoModal}
                 onCancel={() => setShowRemovePhotoModal(false)}
                 title={t(translations.vessel_create_update_page.remove_photo)}
                 content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove_boat_photo)}
                 onOk={removePhoto} />
             <ConfirmModal
+                loading={isLoading}
                 showModal={showRemoveDeckPlanModal}
                 onCancel={() => setShowRemoveDeckPlanModal(false)}
                 title={t(translations.vessel_create_update_page.remove_deck_plan)}
                 content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove_deck_plan)}
                 onOk={removeDeckPlan} />
             <ConfirmModal
+                loading={isLoading}
                 showModal={showRemoveHullDiagram}
                 onCancel={() => setShowRemoveHullDiagram(false)}
                 title={t(translations.vessel_create_update_page.remove_hull_diagram)}
