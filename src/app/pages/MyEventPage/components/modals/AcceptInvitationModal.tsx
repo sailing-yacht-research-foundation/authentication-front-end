@@ -45,7 +45,7 @@ export const AcceptInvitationModal = (props) => {
     }
 
     const getEventClasses = async () => {
-        const response = await getVesselParticipantGroupsByEventId(request?.event?.id, 100);
+        const response = await getVesselParticipantGroupsByEventId(request?.event?.id, 1, 100);
 
         if (response.success) {
             setClasses(response.data?.rows);

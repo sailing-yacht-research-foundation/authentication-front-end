@@ -101,7 +101,6 @@ const slice = createSlice({
             state.invitationPageSize = action.payload;
         },
         setRequestedGroupPageSize(state, action: PayloadAction<number>) {
-            console.log(action.payload);
             state.requestedGroupPageSize = action.payload;
         }
     },
