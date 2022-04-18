@@ -24,6 +24,7 @@ import { selectMarkAllAsReadSuccess } from '../slice/selectors';
 import { AiFillHeart, AiFillStar } from 'react-icons/ai';
 import { FaHandsWash } from 'react-icons/fa';
 import { IoThumbsUp } from 'react-icons/io5';
+import { IoIosWarning } from 'react-icons/io';
 
 const notificationColors = {
     DELETE: '#DC6E1E',
@@ -34,6 +35,7 @@ const notificationColors = {
     HEART: '#e74c3c',
     APPLAUSE: '#9b59b6',
     STAR: '#f1c40f',
+    WARING: '#ebb134'
 }
 
 export const NotificationItem = ({ notification }: { notification: Notification }) => {
@@ -96,6 +98,10 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 color = notificationColors.FOLLOW;
                 icon = <BsPersonPlus />;
                 break;
+            case NotificationTypes.EVENT_INACTIVITY_WARNING:
+                color = notificationColors.WARING;
+                icon = <IoIosWarning />;
+                break;
             case NotificationTypes.KUDOS_RECEIVED:
                 switch(notification.metadata.kudosType) {
                     case KudoTypes.HEART:
@@ -140,6 +146,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
             case NotificationTypes.USER_ADDED_TO_EVENT_ADMIN:
             case NotificationTypes.USER_INVITED_TO_PRIVATE_REGATTA:
             case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
+            case NotificationTypes.EVENT_INACTIVITY_WARNING:
                 return Event;
             case NotificationTypes.USER_NEW_FOLLOWER:
                 return Follow;
