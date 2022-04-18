@@ -32,9 +32,12 @@ export const stringToColour = (str) => {
         colour += ('00' + value.toString(16)).substr(-2);
     }
 
-    if (/#([0-9A-Fa-f])([0-9A-Fa-f])((?=\2)\1|(?:\1\2){2})\b/.test(colour)
-        || /#[a-fA-F0-9]{2}(0000)/.test(colour)) // exclude red & gray color shades
-        return stringToColour(str);
+
+    if (/#([a-fA-F\d]{1,2})\1{2}\b/.test(colour)
+        || /#[a-fA-F0-9]{2}(0000)/.test(colour)) { // exclude red & gray color shades
+        return stringToColour((Math.random() + 1).toString(36).substring(2));
+    }
+
 
     return colour;
 }
