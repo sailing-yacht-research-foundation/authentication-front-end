@@ -37,6 +37,13 @@ const objectType = {
   polyline: 'polyline'
 };
 
+const colors = {
+  WHITE: '#fff',
+  BLACK: '#000',
+  RED: '#ff0000',
+  GRAY: '#808080'
+}
+
 export const RaceMap = (props) => {
   const { emitter } = props;
 
@@ -117,7 +124,7 @@ export const RaceMap = (props) => {
     const { current } = raceStatus;
     const boats = current.boats;
     if (!boats[vesselParticipantId]) return;
-    boats[vesselParticipantId].layer._icon.firstElementChild.style.fill = '#ff0000';
+    boats[vesselParticipantId].layer._icon.firstElementChild.style.fill = colors.RED;
     boats[vesselParticipantId].ocsReceivedAt = Date.now();
   }
 
@@ -130,7 +137,7 @@ export const RaceMap = (props) => {
       const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMinutes() > 1;
 
       if (noPingReceivedFromTheBoatAfter1Minute) {
-        boats[key].layer._icon.firstElementChild.style.fill = '#808080';
+        boats[key].layer._icon.firstElementChild.style.fill = colors.GRAY;
       } else {
         const ocsReceivedLessThan10Seconds = boats[key].ocsReceivedAt && moment.duration(moment().diff(moment(boats[key].ocsReceivedAt))).asSeconds() < 10;
 
@@ -198,7 +205,7 @@ export const RaceMap = (props) => {
       if ([objectType.line, objectType.lineString, objectType.polyline].includes(courseGeometryType)) {
         coursesData[sequencedCourse.id || ""] = _initPolyline({
           coordinates: sequencedCourse.coordinates,
-          color: "#000000",
+          color: colors.BLACK,
           weight: 3,
           name: sequencedCourse?.properties?.name,
           id: sequencedCourse.id,
@@ -208,7 +215,7 @@ export const RaceMap = (props) => {
       if (courseGeometryType === objectType.polygon) {
         coursesData[sequencedCourse.id || ""] = _initPolygon({
           coordinates: sequencedCourse.coordinates,
-          color: "#000000",
+          color: colors.BLACK,
           weight: 3,
           name: sequencedCourse?.properties?.name,
           id: sequencedCourse.id,
@@ -345,7 +352,7 @@ export const RaceMap = (props) => {
       const participantColor = participant.color;
 
       const styleSetup = {
-        stroke: '#fff',
+        stroke: colors.WHITE,
         fill: participantColor,
         strokeWidth: 25,
         width: "18px",
