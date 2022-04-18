@@ -35,7 +35,7 @@ const notificationColors = {
     HEART: '#e74c3c',
     APPLAUSE: '#9b59b6',
     STAR: '#f1c40f',
-    WARING: '#ebb134'
+    WARNING: '#ebb134'
 }
 
 export const NotificationItem = ({ notification }: { notification: Notification }) => {
@@ -99,7 +99,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 icon = <BsPersonPlus />;
                 break;
             case NotificationTypes.EVENT_INACTIVITY_WARNING:
-                color = notificationColors.WARING;
+                color = notificationColors.WARNING;
                 icon = <IoIosWarning />;
                 break;
             case NotificationTypes.KUDOS_RECEIVED:
