@@ -1,7 +1,7 @@
 import React from 'react';
 import { List } from 'antd';
 import { SyrfFormWrapper } from 'app/components/SyrfForm';
-import { CreateButton, PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
+import { CreateButton, PageHeaderContainer, PageHeaderDescription, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { PDFItem } from './PDFItem';
@@ -11,13 +11,15 @@ export const PDFUploadForm = (props) => {
 
     const { vessel, reloadVessel } = props;
 
+    const { t } = useTranslation();
+
     const list = [
         {
-            name: 'Radar',
+            name: t(translations.vessel_create_update_page.radar),
             formFieldName: 'radar',
         },
         {
-            name: 'Instrument System',
+            name: t(translations.vessel_create_update_page.instrument_system),
             formFieldName: 'instrumentSystem',
         },
         {
@@ -33,28 +35,26 @@ export const PDFUploadForm = (props) => {
             formFieldName: 'vhf',
         },
         {
-            name: 'Pactor Modem',
+            name: t(translations.vessel_create_update_page.pactor_moderm),
             formFieldName: 'pactorModem',
         },
         {
-            name: 'Water Maker',
+            name: t(translations.vessel_create_update_page.water_maker),
             formFieldName: 'waterMaker',
         },
         {
-            name: 'Generator',
+            name: t(translations.vessel_create_update_page.generator),
             formFieldName: 'generator',
         },
         {
-            name: 'Electrical Distribution System',
+            name: t(translations.vessel_create_update_page.electrical_distribution_system),
             formFieldName: 'electricalDistributionSystem',
         },
         {
-            name: 'Engine',
+            name: t(translations.vessel_create_update_page.engine),
             formFieldName: 'engine',
         }
     ];
-
-    const { t } = useTranslation();
 
     const downloadAllPdfs = () => {
         for (const [key, value] of Object.entries(vessel.equipmentManualPdfs)) {
@@ -71,8 +71,11 @@ export const PDFUploadForm = (props) => {
     return (
         <SyrfFormWrapper>
             <PageHeaderContainer>
-                <PageHeaderTextSmall>{t(translations.vessel_create_update_page.pdf_documents)}</PageHeaderTextSmall>
-                { vessel.equipmentManualPdfs && <CreateButton onClick={downloadAllPdfs} icon={<DownloadOutlined />}>{t(translations.vessel_create_update_page.download_all)}</CreateButton>}
+                <div>
+                    <PageHeaderTextSmall>{t(translations.vessel_create_update_page.equipment_manuals)}</PageHeaderTextSmall>
+                    <PageHeaderDescription>{t(translations.vessel_create_update_page.upload_your_equipment_manuals_so_that_your_crews)}</PageHeaderDescription>
+                </div>
+                {vessel.equipmentManualPdfs && <CreateButton onClick={downloadAllPdfs} icon={<DownloadOutlined />}>{t(translations.vessel_create_update_page.download_all)}</CreateButton>}
             </PageHeaderContainer>
 
             <List
