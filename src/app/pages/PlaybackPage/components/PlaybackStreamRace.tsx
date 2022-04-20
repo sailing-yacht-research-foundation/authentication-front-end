@@ -20,8 +20,8 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType } from "utils/constants";
-import { stringToColour } from "utils/helpers";
+import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType } from "utils/constants";
+import { canStreamToExpedition, stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
@@ -94,7 +94,7 @@ export const PlaybackStreamRace = () => {
         eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
         eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
         eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
-        eventEmitter.off(RaceEmitterEvent.OCS_DETECTED, () => {});
+        eventEmitter.off(RaceEmitterEvent.OCS_DETECTED, () => { });
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
@@ -485,12 +485,6 @@ export const PlaybackStreamRace = () => {
     lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
   };
 
-  const canStreamToExpedition = () => {
-    return competitionUnitDetail.id
-    && competitionUnitDetail.status === RaceStatus.ON_GOING
-    && !competitionUnitDetail.calendarEvent?.isPrivate; // not track now but public event race.
-  }
-
   return (
     <div style={{ height: "100%", position: "relative" }}>
       <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
@@ -518,11 +512,11 @@ export const PlaybackStreamRace = () => {
       >
         <RaceMap emitter={eventEmitter} />
 
-        {canStreamToExpedition() &&
+        {canStreamToExpedition(competitionUnitDetail.id, RaceSource.SYRF, competitionUnitDetail.status, competitionUnitDetail.calendarEvent?.isPrivate) &&
           <StreamToExpeditionContainer>
             <ExpeditionServerActionButtons competitionUnit={competitionUnitDetail} />
           </StreamToExpeditionContainer>}
-          <KudosReaction/>
+        <KudosReaction />
       </MapContainer>
 
       <div style={{ width: "100%", position: "relative" }}>

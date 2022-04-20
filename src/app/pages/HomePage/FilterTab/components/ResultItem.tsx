@@ -4,10 +4,10 @@ import { GiPositionMarker } from 'react-icons/gi';
 import { Space, Dropdown, Menu } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
-import { renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
+import { canStreamToExpedition, renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { RaceStatus, TIME_FORMAT, UserRole } from 'utils/constants';
+import { RaceSource, RaceStatus, TIME_FORMAT, UserRole } from 'utils/constants';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,7 +47,7 @@ export const ResultItem = (props) => {
     const authUser = useSelector(selectUser);
 
     const canManageRace = () => {
-        return authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== 'SYRF';
+        return authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== RaceSource.SYRF;
     };
 
     const dispatch = useDispatch();
@@ -171,12 +171,6 @@ export const ResultItem = (props) => {
         return <></>;
     }
 
-    const canStreamToExpedition = () => {
-        return race._source?.id &&
-        race._source?.source === 'SYRF'
-        && [RaceStatus.ON_GOING].includes(race._source?.status); // only show expedition button for ongoing races.
-    }
-
     return (
         <>
             <ConfirmModal
@@ -234,7 +228,7 @@ export const ResultItem = (props) => {
                     </DescriptionItem>}
                 </DescriptionWrapper>
                 <Space size={10}>
-                    {canStreamToExpedition() && <ExpeditionServerActionButtons competitionUnit={race._source} />}
+                    {canStreamToExpedition(race._source?.id, race._source?.source, race._source?.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
                     {canRegister() && <CreateButton
                         icon={<FiEdit
                             style={{ marginRight: '10px' }} />}

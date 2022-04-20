@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
-import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
+import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
 
 /**
  * Check if is mobile
@@ -446,3 +446,8 @@ export const unregisterPushSubscription = () => {
         });
     }
 }
+
+export const canStreamToExpedition = (id: string | undefined, source: string, status: string, isPrivate: boolean) => {
+    return id && source === RaceSource.SYRF && status === RaceStatus.ON_GOING && !isPrivate;
+  }
+  
