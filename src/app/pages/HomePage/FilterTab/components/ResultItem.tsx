@@ -4,15 +4,15 @@ import { GiPositionMarker } from 'react-icons/gi';
 import { Space, Dropdown, Menu } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
-import { renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
+import { canStreamToExpedition, renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { RaceStatus, TIME_FORMAT, UserRole } from 'utils/constants';
+import { RaceSource, RaceStatus, TIME_FORMAT, UserRole } from 'utils/constants';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { CreateButton } from 'app/components/SyrfGeneral';
+import { CreateButton, LiveDot } from 'app/components/SyrfGeneral';
 import { FiEdit } from 'react-icons/fi';
 import { selectRelations, selectResults, selectUpcomingRaces } from '../../slice/selectors';
 import { IoEllipsisHorizontal } from 'react-icons/io5';
@@ -47,7 +47,7 @@ export const ResultItem = (props) => {
     const authUser = useSelector(selectUser);
 
     const canManageRace = () => {
-        return authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== 'SYRF';
+        return authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== RaceSource.SYRF;
     };
 
     const dispatch = useDispatch();
@@ -162,6 +162,15 @@ export const ResultItem = (props) => {
         </Menu>
     );
 
+    const renderLiveDot = () => {
+        if ([RaceStatus.ON_GOING].includes(race._source?.status))
+            return <LiveDotWrapper>
+                <span>{t(translations.general.live)} <LiveDot className='live'></LiveDot></span>
+            </LiveDotWrapper>;
+
+        return <></>;
+    }
+
     return (
         <>
             <ConfirmModal
@@ -219,14 +228,14 @@ export const ResultItem = (props) => {
                     </DescriptionItem>}
                 </DescriptionWrapper>
                 <Space size={10}>
-                    {race._source?.id &&
-                        race._source?.source === 'SYRF'
-                        && [RaceStatus.ON_GOING].includes(race._source?.status) // only show expedition button for ongoing races.
-                        && <ExpeditionServerActionButtons competitionUnit={race._source} />}
-                    {
-                        canRegister() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
+                    {canStreamToExpedition(race._source?.id, race._source?.source, race._source?.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
+                    {canRegister() && <CreateButton
+                        icon={<FiEdit
+                            style={{ marginRight: '10px' }} />}
+                        onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
                     }
                 </Space>
+                {renderLiveDot()}
             </Wrapper>
             <ReactTooltip />
         </>
@@ -239,6 +248,7 @@ const Wrapper = styled.div`
     padding: 10px;
     margin-bottom: 10px;
     width: 100%;
+    position: relative;
 `;
 
 const Name = styled.h3`
@@ -277,5 +287,15 @@ const StyledOptionsButton = styled(IoEllipsisHorizontal)`
 const StyledDropDown = styled(Dropdown.Button)`
    button {
     border: none;
+   }
+`;
+
+const LiveDotWrapper = styled.div`
+   position: absolute;
+   right: 10px;
+   bottom: 20px;
+   color: red;
+   span {
+       margin-left: 3px;
    }
 `;
