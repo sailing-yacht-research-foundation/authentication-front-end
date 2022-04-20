@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCompetitionUnitDetail, selectPlaybackType } from "./slice/selectors";
 import { PlaybackTypes } from "types/Playback";
 import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
+import moment from "moment";
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -35,6 +36,13 @@ const objectType = {
   polygon: 'polygon',
   polyline: 'polyline'
 };
+
+const colors = {
+  WHITE: '#fff',
+  BLACK: '#000',
+  RED: '#ff0000',
+  GRAY: '#808080'
+}
 
 export const RaceMap = (props) => {
   const { emitter } = props;
@@ -103,10 +111,46 @@ export const RaceMap = (props) => {
       emitter.on(RaceEmitterEvent.UPDATE_COURSE, (courses: MappedCourseGeometrySequenced) => {
         current.courseData = JSON.parse(JSON.stringify(courses));
         _updateCourse(courses);
-      })
+      });
+
+      emitter.on(RaceEmitterEvent.OCS_DETECTED, _changeBoatColorToRedIfOCSDetected);
+
+      emitter.on(RaceEmitterEvent.UPDATE_BOAT_COLOR, _updateBoatColorIfPingNotReceived);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const _changeBoatColorToRedIfOCSDetected = (vesselParticipantId) => {
+    const { current } = raceStatus;
+    const boats = current.boats;
+    if (!boats[vesselParticipantId]) return;
+    boats[vesselParticipantId].layer._icon.firstElementChild.style.fill = colors.RED;
+    boats[vesselParticipantId].ocsReceivedAt = Date.now();
+  }
+
+  const _updateBoatColorIfPingNotReceived = () => {
+    const { current } = raceStatus;
+    const boats = current.boats;
+    Object.keys(boats).forEach(key => {
+      if (!boats[key]) return;
+
+      const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMinutes() > 1;
+
+      if (noPingReceivedFromTheBoatAfter1Minute) {
+        boats[key].layer._icon.firstElementChild.style.fill = colors.GRAY;
+      } else {
+        const ocsReceivedLessThan10Seconds = boats[key].ocsReceivedAt && moment.duration(moment().diff(moment(boats[key].ocsReceivedAt))).asSeconds() < 10;
+
+        if (ocsReceivedLessThan10Seconds) {
+          return;
+        } else {
+          delete boats[key]['ocsReceivedAt'];
+        }
+
+        boats[key].layer._icon.firstElementChild.style.fill = boats[key].originalColor;
+      }
+    });
+  }
 
   const _updateCourse = (courseGeometries) => {
     _drawCourse(courseGeometries);
@@ -161,7 +205,7 @@ export const RaceMap = (props) => {
       if ([objectType.line, objectType.lineString, objectType.polyline].includes(courseGeometryType)) {
         coursesData[sequencedCourse.id || ""] = _initPolyline({
           coordinates: sequencedCourse.coordinates,
-          color: "#000000",
+          color: colors.BLACK,
           weight: 3,
           name: sequencedCourse?.properties?.name,
           id: sequencedCourse.id,
@@ -171,7 +215,7 @@ export const RaceMap = (props) => {
       if (courseGeometryType === objectType.polygon) {
         coursesData[sequencedCourse.id || ""] = _initPolygon({
           coordinates: sequencedCourse.coordinates,
-          color: "#000000",
+          color: colors.BLACK,
           weight: 3,
           name: sequencedCourse?.properties?.name,
           id: sequencedCourse.id,
@@ -308,8 +352,9 @@ export const RaceMap = (props) => {
       const participantColor = participant.color;
 
       const styleSetup = {
+        stroke: colors.WHITE,
         fill: participantColor,
-        stroke: "#000000",
+        strokeWidth: 25,
         width: "18px",
         height: "36px",
         marginLeft: `-9px`,
@@ -390,18 +435,31 @@ export const RaceMap = (props) => {
     const localBoats = { ...boats };
 
     participants.forEach((participant) => {
+      const participantLastPosition = participant.lastPosition;
       const selectedBoatMarker = boatMarkers.filter((bM) => bM.id === participant.id);
+
       if (!localBoats[participant.id])
         localBoats[participant.id] = {
           layer: selectedBoatMarker[0].layer,
           id: selectedBoatMarker[0].id,
+          originalColor: participant.color,
+          lastPing: Date.now(),
+          lastPosition: participantLastPosition,
         };
       else {
+        const boatPosition = localBoats[participant.id].lastPosition;
+
+        if (boatPosition.lon !== participantLastPosition.lon && // update boat last position and lastPing base on the lon lat different.
+          boatPosition.lat !== participantLastPosition.lat) {
+          localBoats[participant.id].lastPosition = participantLastPosition;
+          localBoats[participant.id].lastPing = Date.now();
+        }
+
         localBoats[participant.id].layer.setLatLng(
-          new L.LatLng(participant.lastPosition?.lat || 0, participant.lastPosition?.lon || 0)
+          new L.LatLng(participantLastPosition?.lat || 0, participantLastPosition?.lon || 0)
         );
 
-        const currentHeading = participant.lastPosition?.heading || 0;
+        const currentHeading = participantLastPosition?.heading || 0;
         localBoats[participant.id].layer.setRotationAngle(currentHeading || 0);
       }
     });

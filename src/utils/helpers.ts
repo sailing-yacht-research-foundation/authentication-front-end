@@ -31,6 +31,12 @@ export const stringToColour = (str) => {
         let value = (hash >> (i * 8)) & 0xFF;
         colour += ('00' + value.toString(16)).substr(-2);
     }
+
+    if (/#([a-fA-F\d]{1,2})\1{2}\b/.test(colour)
+        || /#[a-fA-F0-9]{2}(0000)/.test(colour)) { // exclude red & gray color shades
+        return stringToColour((Math.random()).toString(36).substring(2));
+    }
+
     return colour;
 }
 
