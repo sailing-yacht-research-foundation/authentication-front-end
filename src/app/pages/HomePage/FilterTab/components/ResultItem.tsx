@@ -238,6 +238,7 @@ export const ResultItem = (props) => {
                         onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
                     }
                 </Space>
+                {renderLiveDot()}
             </Wrapper>
             <ReactTooltip />
         </>

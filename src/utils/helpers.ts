@@ -455,7 +455,6 @@ export const canStreamToExpedition = (id: string | undefined, source: string, st
     return id && source === RaceSource.SYRF && status === RaceStatus.ON_GOING && !isPrivate;
 }
 
-
 export const handleGoBack = (history) => {
     if (history.action !== "POP") {
         history.goBack();
