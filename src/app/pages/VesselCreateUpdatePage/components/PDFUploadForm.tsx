@@ -35,7 +35,7 @@ export const PDFUploadForm = (props) => {
             formFieldName: 'vhf',
         },
         {
-            name: t(translations.vessel_create_update_page.pactor_moderm),
+            name: t(translations.vessel_create_update_page.pactor_modem),
             formFieldName: 'pactorModem',
         },
         {
