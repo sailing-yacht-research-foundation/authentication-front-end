@@ -502,12 +502,6 @@ export const PlaybackStreamRace = () => {
     lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
   };
 
-  const canStreamToExpedition = () => {
-    return competitionUnitDetail.id
-    && competitionUnitDetail.status === RaceStatus.ON_GOING
-    && !competitionUnitDetail.calendarEvent?.isPrivate; // not track now but public event race.
-  }
-
   return (
     <div style={{ height: "100%", position: "relative" }}>
       <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
