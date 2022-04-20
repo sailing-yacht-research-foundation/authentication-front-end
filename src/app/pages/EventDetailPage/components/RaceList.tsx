@@ -55,6 +55,7 @@ export const RaceList = (props) => {
                     race={record}
                     canManageEvent={canManageEvent}
                     event={event}
+                    reloadParent={reloadParent}
                     relations={relations}
                     isAuthenticated={isAuthenticated}
                     showDeleteRaceModal={showDeleteRaceModal}
@@ -111,6 +112,10 @@ export const RaceList = (props) => {
 
     const onPaginationChanged = (page, size) => {
         getAll(page, size);
+    }
+
+    const reloadParent = () => {
+        getAll(pagination.page, pagination.pageSize);
     }
 
     const onCompetitionUnitDeleted = () => {

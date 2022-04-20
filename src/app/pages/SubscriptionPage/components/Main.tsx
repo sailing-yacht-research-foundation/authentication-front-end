@@ -92,7 +92,7 @@ export const Main = () => {
         setIsCheckingOut(false);
 
         if (response.success) {
-            window.open(response.data.url, '_blank');
+            window.location.href = response.data.url;
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -161,7 +161,7 @@ export const Main = () => {
             return <BorderedButton
                 type={!isPlanActive(plan.productId) ? 'primary' : undefined}
                 onClick={() => performCheckoutOrCancelPlan(pricing.id)}
-            >{t(translations.general.upgrade)}</BorderedButton>
+            >{t(currentActivePlan.pricingId ? translations.general.switch : translations.general.subscribe)}</BorderedButton>
         } else if (isPricingActive(pricing.id) && !currentActivePlan.cancelAt) {
             return <BorderedButton
                 onClick={() => performCheckoutOrCancelPlan(pricing.id)}
