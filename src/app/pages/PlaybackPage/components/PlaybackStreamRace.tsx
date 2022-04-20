@@ -20,7 +20,7 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType } from "utils/constants";
+import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType } from "utils/constants";
 import { canStreamToExpedition, stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";

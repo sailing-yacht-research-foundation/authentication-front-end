@@ -21,10 +21,6 @@ const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
 };
 
-const errorCodes = {
-  WRONG_CREDENTIALS: 'E012',
-}
-
 export const LoginForm = (props) => {
   const { actions } = UseLoginSlice();
   // Used to dispatch slice actions

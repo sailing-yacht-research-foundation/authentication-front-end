@@ -332,6 +332,7 @@ export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
 export const parseKeyword = (keyword) => {
     // eslint-disable-next-line
     keyword = keyword.replace(/([\!\*\+\=\<\>\&\|\(\)\[\]\{\}\^\~\?\\/"])/g, "\\$1"); // escape special characters that will make the elastic search crash.
+    // eslint-disable-next-line
     const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     const { expression, processedKeyword } = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
     const words = processedKeyword.trim().split(' ');
