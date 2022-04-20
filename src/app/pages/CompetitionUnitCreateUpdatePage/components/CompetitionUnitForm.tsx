@@ -330,6 +330,9 @@ export const CompetitionUnitForm = () => {
         if (response.success) {
             const courses = response.data?.rows;
             setCourses(courses);
+            if (mode === MODE.CREATE) {
+                form.setFieldsValue({ courseId: courses[0]?.id });
+            }
         }
     }
 
