@@ -547,6 +547,7 @@ export const PlaybackOldRace = (props) => {
 
     // // Set elapsed time
     handleSetElapsedTime(elapsedTime + interval);
+    eventEmitter?.emit(RaceEmitterEvent.UPDATE_BOAT_COLOR);
   };
 
   const handleRenderLegs = (elapsedTime, isPlaying) => {
