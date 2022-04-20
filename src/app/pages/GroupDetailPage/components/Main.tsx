@@ -47,6 +47,7 @@ export const Main = () => {
             dispatch(actions.clearGroupData());
 
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const isOrganizationConnectRoute = location.pathname.includes('organization-connect');
