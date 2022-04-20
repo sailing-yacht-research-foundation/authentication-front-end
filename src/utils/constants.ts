@@ -269,3 +269,7 @@ export enum GroupTypes {
     COMMITTEE = 'COMMITTEE',
     TEAM = 'TEAM',
 }
+
+export enum RaceSource {
+    SYRF = 'SYRF'
+}

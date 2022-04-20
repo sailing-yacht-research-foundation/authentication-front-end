@@ -13,7 +13,6 @@ import { useSelector } from 'react-redux';
 import { selectPage, selectPageSize, selectResults, selectTotal } from '../../slice/selectors';
 import { BiTargetLock } from 'react-icons/bi';
 import { StyleConstants } from 'styles/StyleConstants';
-import { FilterSearchBar } from './components/FilterSearchBar';
 import { selectUserCoordinate } from 'app/pages/LoginPage/slice/selectors';
 import { MAP_DEFAULT_VALUE } from "utils/constants";
 
@@ -41,7 +40,7 @@ export const MapViewTab = (props) => {
 
     const userCoordinate = useSelector(selectUserCoordinate);
 
-    const [isFocusingOnSearchInput, setIsFocusingOnSearchInput] = React.useState<boolean>(false);
+    const [isFocusingOnSearchInput,] = React.useState<boolean>(false);
 
     const mapContainerRef = React.useRef<any>();
 
