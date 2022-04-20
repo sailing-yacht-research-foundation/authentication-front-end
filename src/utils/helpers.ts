@@ -34,7 +34,7 @@ export const stringToColour = (str) => {
 
     if (/#([a-fA-F\d]{1,2})\1{2}\b/.test(colour)
         || /#[a-fA-F0-9]{2}(0000)/.test(colour)) { // exclude red & gray color shades
-        return stringToColour((Math.random() + 1).toString(36).substring(2));
+        return stringToColour((Math.random()).toString(36).substring(2));
     }
 
     return colour;

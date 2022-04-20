@@ -76,6 +76,8 @@ export const CredentialList = () => {
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
+    const [isDeletingCredential, setIsDeletingCredential] = React.useState<boolean>(false);
+
     const [mode, setMode] = React.useState<string>(MODE.CREATE);
 
     React.useEffect(() => {
@@ -124,7 +126,9 @@ export const CredentialList = () => {
     }
 
     const performDeleteCredential = async () => {
+        setIsDeletingCredential(true);
         const response = await removeCredential(credential.id!);
+        setIsDeletingCredential(false);
 
         setShowDeleteModal(false);
 
@@ -140,6 +144,7 @@ export const CredentialList = () => {
         <Wrapper>
             <ProfileTabs />
             <ConfirmModal
+                loading={isDeletingCredential}
                 showModal={showDeleteModal}
                 onOk={performDeleteCredential}
                 onCancel={() => setShowDeleteModal(false)}

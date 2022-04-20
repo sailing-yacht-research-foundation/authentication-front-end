@@ -40,6 +40,8 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
 
     const [track, setTrack] = React.useState<Partial<Track>>({});
 
+    const [isDeletingTrack, setIsDeletingTrack] = React.useState<boolean>(false);
+
     const columns = [
         {
             title: t(translations.general.name),
@@ -201,7 +203,9 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
     }
 
     const performDeleteTrack = async () => {
+        setIsDeletingTrack(true);
         const response = await deleteEvent(track?.event?.id!);
+        setIsDeletingTrack(false);
 
         setShowDeleteModal(false);
 
@@ -216,6 +220,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
     return (
         <>
             <ConfirmModal
+                loading={isDeletingTrack}
                 title={t(translations.delete_track_modal.are_you_sure_you_want_to_delete)}
                 content={t(translations.delete_track_modal.you_will_delete)}
                 showModal={showDeleteModal}

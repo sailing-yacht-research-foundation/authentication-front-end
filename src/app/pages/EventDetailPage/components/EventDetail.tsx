@@ -194,6 +194,10 @@ export const EventDetail = () => {
             {event.id &&
                 <>
                     <EventSection>
+                        <EventAdmins event={event} />
+                    </EventSection>
+
+                    <EventSection>
                         <RaceList canManageEvent={canManageEvent} event={event} />
                     </EventSection>
 
@@ -202,10 +206,6 @@ export const EventDetail = () => {
                     </EventSection>
 
                     <PDFUploadForm reloadParent={fetchEvent} fullWidth event={event} />
-
-                    <EventSection>
-                        <EventAdmins event={event} />
-                    </EventSection>
                 </>
             }
         </Spin>
