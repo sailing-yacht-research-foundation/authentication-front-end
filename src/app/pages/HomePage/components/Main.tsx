@@ -181,6 +181,7 @@ const ToggleFilterPane = styled.div`
     padding: 8px;
     box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
     cursor: pointer;
+    z-index: 10;
 
     ${media.medium`
         display: none;

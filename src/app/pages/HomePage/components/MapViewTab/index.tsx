@@ -80,7 +80,6 @@ export const MapViewTab = (props) => {
                     <Pagination defaultCurrent={1} current={page} onChange={onPaginationPageChanged} total={total} pageSize={pageSize} />
                 </PaginationWrapper>
             }
-            <FilterSearchBar setIsFocusingOnSearchInput={setIsFocusingOnSearchInput} />
             {
                 results.length === 0 && <MyLocationWrapper onClick={() => zoomToUserLocation()}>
                     <StyledMyLocationIcon />
