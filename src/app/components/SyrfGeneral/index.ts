@@ -270,3 +270,16 @@ export const FilterWrapper = styled.div`
 export const PageHeaderDescription = styled.span`
     color: #00000073;
 `;
+
+export const LiveDot = styled.span`
+    width: 7px;
+    height: 7px;
+    background: #606060;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+
+    &.live {
+        background: #ff0000;
+    }
+`;
