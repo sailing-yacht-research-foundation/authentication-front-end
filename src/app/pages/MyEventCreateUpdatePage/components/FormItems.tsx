@@ -148,7 +148,7 @@ export const FormItems = (props) => {
             <Row gutter={12}>
                 <Col xs={12} sm={12} md={!isCrewed ? 8 : 4} lg={!isCrewed ? 8 : 4}>
                     <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_covid_vaccination)}</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_proof_of_covid_vaccination)}</SyrfFieldLabel>}
                         name="requireCovidCertificate"
                         valuePropName="checked"
                     >
