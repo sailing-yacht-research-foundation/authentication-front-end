@@ -14,6 +14,7 @@ import { SpeedControl } from './SpeedControl';
 import { BiTargetLock } from 'react-icons/bi';
 import { RaceEmitterEvent, TIME_FORMAT } from 'utils/constants';
 import { Spin } from 'antd';
+import { LiveDot } from 'app/components/SyrfGeneral';
 
 const buttonStyle = {
     fontSize: '25px',
@@ -382,19 +383,6 @@ const TimeText = styled.span`
 const BackToRaceAreaButton = styled(BiTargetLock)`
     font-size: 20px;
     cursor: pointer;
-`;
-
-const LiveDot = styled.span`
-    width: 7px;
-    height: 7px;
-    background: #606060;
-    border-radius: 50%;
-    display: inline-block;
-    margin-left: 10px;
-
-    &.live {
-        background: #ff0000;
-    }
 `;
 
 const TimeMarker = `

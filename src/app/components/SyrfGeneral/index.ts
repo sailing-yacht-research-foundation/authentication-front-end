@@ -266,3 +266,16 @@ export const FilterWrapper = styled.div`
     text-align: right;
     text-transform: capitalize;
 `;
+
+export const LiveDot = styled.span`
+    width: 7px;
+    height: 7px;
+    background: #606060;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+
+    &.live {
+        background: #ff0000;
+    }
+`;
