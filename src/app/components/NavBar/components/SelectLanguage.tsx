@@ -42,7 +42,7 @@ export const SelectLanguage = () => {
 
     const renderSelectedLanguage = (lng) => {
         if (isAuthenticated) {
-            if (lng && languagesList[lng]){
+            if (lng && languagesList[lng]) {
                 return languagesList[lng].nativeName;
             }
 
@@ -115,7 +115,7 @@ export const SelectLanguage = () => {
     )
 
     return (
-        <Dropdown overlay={menu}>
+        <Dropdown trigger={['click']} overlay={menu}>
             <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                 {renderSelectedLanguage(getUserAttribute(user, 'language'))} <DownOutlined />
             </a>

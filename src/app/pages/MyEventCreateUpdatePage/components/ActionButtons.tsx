@@ -107,7 +107,7 @@ export const ActionButtons = ({
                 mode === MODE.UPDATE &&
                 <>
                     <MobileButtonsWrapper>
-                        <Dropdown.Button overlay={menu} placement="bottomCenter">
+                        <Dropdown.Button trigger={['click']} overlay={menu} placement="bottomCenter">
                             {t(translations.my_event_create_update_page.event_options)}
                         </Dropdown.Button>
                     </MobileButtonsWrapper>
