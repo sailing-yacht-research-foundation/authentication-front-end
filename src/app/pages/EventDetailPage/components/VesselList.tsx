@@ -35,8 +35,9 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             title: t(translations.vessel_list_page.length_in_meters),
             dataIndex: 'lengthInMeters',
             key: 'lengthInMeters',
-            render: (text) => renderEmptyValue(text)
+            render: (text) => renderEmptyValue(text),
         },
+
         {
             title: t(translations.participant_list.class_name),
             dataIndex: 'class',
@@ -44,7 +45,6 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             render: (text, record) => {
                 return renderEmptyValue(record?.vesselParticipants[0]?.group?.name);
             },
-            ellipsis: true,
         },
         {
             title: t(translations.participant_list.crew),
@@ -56,7 +56,6 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
                     <ReactTooltip/>
                 </Space>);
             },
-            ellipsis: true,
         },
     ];
 

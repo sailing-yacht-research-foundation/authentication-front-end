@@ -61,12 +61,14 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
 
     React.useEffect(() => {
         checkForOrganizationPayoutInformation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
         if (group.id && (group.groupType !== GroupTypes.ORGANIZATION || !group.isAdmin)) {
             history.push(`/groups/${groupId}`);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [group]);
 
     if (group.id) {

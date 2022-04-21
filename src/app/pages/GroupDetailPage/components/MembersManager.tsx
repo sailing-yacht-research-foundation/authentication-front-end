@@ -205,7 +205,7 @@ export const MembersManager = (props) => {
     const filterMembers = (event, mode) => {
         event.preventDefault();
         let status = mode;
-        if (status == filterModes.ALL) status = '';
+        if (status === filterModes.ALL) status = '';
         getMembers(1, DEFAULT_PAGE_SIZE, status);
         setFilterMode(status);
     }

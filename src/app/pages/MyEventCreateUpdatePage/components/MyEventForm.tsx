@@ -167,14 +167,15 @@ export const MyEventForm = () => {
         initData();
     }
 
-    const createANewDefaultCompetitionUnit = async (event, vesselParticipantGroupId) => {
+    const createANewDefaultCompetitionUnit = async (event, vesselParticipantGroupId, courseId) => {
         const data = {
             name: 'R1',
             startTime: event.approximateStartTime,
             approximateStart: event.approximateStartTime,
             vesselParticipantGroupId: vesselParticipantGroupId,
             calendarEventId: event.id,
-            approximateStart_zone: event.approximateStartTime_zone
+            approximateStart_zone: event.approximateStartTime_zone,
+            courseId: courseId
         };
 
         await createCompetitionUnit(event.id, data);
@@ -193,13 +194,17 @@ export const MyEventForm = () => {
         const response = await createVesselParticipantGroup(data);
 
         if (response.success) {
-            createANewDefaultCompetitionUnit(event, response.data.id);
-            createDefaultCourse(event);
+            const couseId = await createDefaultCourse(event);
+            createANewDefaultCompetitionUnit(event, response.data.id, couseId);
         }
     }
 
     const createDefaultCourse = async (event) => {
-        await createCourse(event.id, 'Default Course', []);
+        const response = await createCourse(event.id, 'Default Course', []);
+
+        if (response.success) return response.data.id;
+
+        return undefined;
     }
 
     const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {

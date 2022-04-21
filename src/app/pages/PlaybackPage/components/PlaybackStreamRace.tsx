@@ -20,8 +20,8 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceStatus, WebsocketConnectionStatus, WSMessageDataType } from "utils/constants";
-import { stringToColour } from "utils/helpers";
+import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType } from "utils/constants";
+import { canStreamToExpedition, stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
@@ -30,7 +30,7 @@ import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { KudosReaction } from "./KudosReaction";
 
-export const PlaybackStreamRace = (props) => {
+export const PlaybackStreamRace = () => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
 
   const [, setSocketUrl] = useState(streamUrl);
@@ -94,6 +94,7 @@ export const PlaybackStreamRace = (props) => {
         eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
         eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
         eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
+        eventEmitter.off(RaceEmitterEvent.OCS_DETECTED, () => { });
       }
       dispatch(actions.setElapsedTime(0));
       dispatch(actions.setRaceLength(0));
@@ -170,6 +171,10 @@ export const PlaybackStreamRace = (props) => {
             updateCourseMarksPosition(data);
           } else if (dataType === WSMessageDataType.COURSE_UPDATED) {
             eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE, normalizeSequencedGeometries(data.courseSequencedGeometries));
+          } else if (dataType === WSMessageDataType.EVENT) {
+            if (data?.eventType === WebsocketRaceEvent.VESSEL_OCS) {
+              eventEmitter.emit(RaceEmitterEvent.OCS_DETECTED, data?.vesselParticipantId);
+            }
           }
         }
       } catch (e) {
@@ -408,6 +413,7 @@ export const PlaybackStreamRace = (props) => {
     // Emit latest event
     eventEmitter.emit(RaceEmitterEvent.PING, currentPositions);
     eventEmitter.emit(RaceEmitterEvent.LEG_UPDATE, currentPositions);
+    eventEmitter.emit(RaceEmitterEvent.UPDATE_BOAT_COLOR);
     handleUpdateLeaderPosition(currentPositions);
 
     handleDebug("=== Current Positions ===");
@@ -506,12 +512,11 @@ export const PlaybackStreamRace = (props) => {
       >
         <RaceMap emitter={eventEmitter} />
 
-        {competitionUnitDetail?.id
-          && competitionUnitDetail?.status === RaceStatus.ON_GOING &&
+        {canStreamToExpedition(competitionUnitDetail.id, RaceSource.SYRF, competitionUnitDetail.status, competitionUnitDetail.calendarEvent?.isPrivate) &&
           <StreamToExpeditionContainer>
             <ExpeditionServerActionButtons competitionUnit={competitionUnitDetail} />
           </StreamToExpeditionContainer>}
-          <KudosReaction/>
+        <KudosReaction />
       </MapContainer>
 
       <div style={{ width: "100%", position: "relative" }}>

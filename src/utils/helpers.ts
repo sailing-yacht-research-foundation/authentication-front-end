@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
-import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
+import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
 
 /**
  * Check if is mobile
@@ -31,6 +31,12 @@ export const stringToColour = (str) => {
         let value = (hash >> (i * 8)) & 0xFF;
         colour += ('00' + value.toString(16)).substr(-2);
     }
+
+    if (/#([a-fA-F\d]{1,2})\1{2}\b/.test(colour)
+        || /#[a-fA-F0-9]{2}(0000)/.test(colour)) { // exclude red & gray color shades
+        return stringToColour((Math.random()).toString(36).substring(2));
+    }
+
     return colour;
 }
 
@@ -326,6 +332,7 @@ export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
 export const parseKeyword = (keyword) => {
     // eslint-disable-next-line
     keyword = keyword.replace(/([\!\*\+\=\<\>\&\|\(\)\[\]\{\}\^\~\?\\/"])/g, "\\$1"); // escape special characters that will make the elastic search crash.
+    // eslint-disable-next-line
     const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     const { expression, processedKeyword } = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
     const words = processedKeyword.trim().split(' ');
@@ -440,3 +447,8 @@ export const unregisterPushSubscription = () => {
         });
     }
 }
+
+export const canStreamToExpedition = (id: string | undefined, source: string, status: string, isPrivate: boolean) => {
+    return id && source === RaceSource.SYRF && status === RaceStatus.ON_GOING && !isPrivate;
+  }
+  
