@@ -34,6 +34,7 @@ export function* getGroupAdmins({ type, payload }) {
 export function* getGroup({ type, payload }) {
     const groupId = payload;
 
+    yield put(groupDetailActions.setGetGroupFailed(false));
     yield put(groupDetailActions.setIsGettingGroup(true));
     const response = yield call(getGroupById, groupId);
     yield put(groupDetailActions.setIsGettingGroup(false));
