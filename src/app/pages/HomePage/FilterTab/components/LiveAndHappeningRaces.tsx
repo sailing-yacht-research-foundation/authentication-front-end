@@ -117,12 +117,12 @@ export const LiveAndHappeningRaces = () => {
         <HeaderContainer>
             <h3>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</h3>
             <Space size={10}>
-                <Dropdown overlay={durationMenus}>
+                <Dropdown trigger={['click']} overlay={durationMenus}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                         {durationToDurationName(duration)} <DownOutlined />
                     </a>
                 </Dropdown>
-                {userCoordinates && <Dropdown overlay={distanceMenus}>
+                {userCoordinates && <Dropdown trigger={['click']} overlay={distanceMenus}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                         {distance} {t(translations.home_page.live_and_upcoming.nmi)} <DownOutlined />
                     </a>
