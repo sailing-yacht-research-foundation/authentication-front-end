@@ -205,7 +205,7 @@ export const ParticipantList = (props) => {
                     }
                 </PageHeaderContainer>
                 <FilterWrapper>
-                    <Dropdown overlay={menu}>
+                    <Dropdown trigger={['click']} overlay={menu}>
                         <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                             {filterMode} <DownOutlined />
                         </a>

@@ -235,7 +235,7 @@ export const MembersManager = (props) => {
                 {group.isAdmin && <CreateButton onClick={() => setShowModal(true)} icon={<IoMdPersonAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>Invite</CreateButton>}
             </SectionTitleWrapper>
             {group.isAdmin && <FilterWrapper>
-                <Dropdown overlay={menu}>
+                <Dropdown trigger={['click']} overlay={menu}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                         {filterMode === '' ? t(translations.group.all) : filterMode.toLowerCase()} <DownOutlined />
                     </a>
