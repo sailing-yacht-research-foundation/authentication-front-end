@@ -15,7 +15,7 @@ import { requestJoinGroup, leaveGroup } from 'services/live-data-server/groups';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectAdminCurrentPage, selectMemberCurrentPage } from '../slice/selectors';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { handleGoBack, showToastMessageOnRequestError } from 'utils/helpers';
 
 export const Nav = (props) => {
 
@@ -118,6 +118,10 @@ export const Nav = (props) => {
         return <div style={{ marginRight: '10px' }}>{button}</div>;
     }
 
+    const goBack = () => {
+        handleGoBack(history);
+    }
+
     React.useEffect(() => {
         if (group.id) {
             setJoinStatus(group.status);
@@ -129,7 +133,7 @@ export const Nav = (props) => {
             <DeleteGroupModal group={group} showModal={showDeleteModal} setShowModal={setShowDeleteModal} />
             <LeaveGroupModal group={group} showModal={showLeaveModal} setShowModal={setShowLeaveModal} />
             <Wrapper>
-                <GobackButton onClick={() => history.push("/groups")}>
+                <GobackButton onClick={goBack}>
                     <IoIosArrowBack style={{ fontSize: '40px', color: '#1890ff' }} />
                 </GobackButton>
                 <RightSectionWrapper>

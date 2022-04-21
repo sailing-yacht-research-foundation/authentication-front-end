@@ -450,5 +450,13 @@ export const unregisterPushSubscription = () => {
 
 export const canStreamToExpedition = (id: string | undefined, source: string, status: string, isPrivate: boolean) => {
     return id && source === RaceSource.SYRF && status === RaceStatus.ON_GOING && !isPrivate;
-  }
-  
+}
+
+
+export const handleGoBack = (history) => {
+    if (history.action !== "POP") {
+        history.goBack();
+    } else {
+        history.push('/');
+    }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Avatar, Spin, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,8 @@ import { ConfirmModal } from 'app/components/ConfirmModal';
 import { ProfileBasicInfoSection } from './ProfileBasicInfoSection';
 import { StyleConstants } from 'styles/StyleConstants';
 import { AntDesignOutlined, UserOutlined } from '@ant-design/icons';
+import { getUserInterestsAsArray, renderAvatar } from 'utils/user-utils';
+import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 
 export const PublicProfile = () => {
 
@@ -108,6 +110,8 @@ export const PublicProfile = () => {
         }
     }, [profile]);
 
+    const interests = getUserInterestsAsArray(profile);
+
     return (
         <Wrapper>
             <ConfirmModal
@@ -138,29 +142,32 @@ export const PublicProfile = () => {
                         followStatus={followStatus} />
                 </SectionWrapper>
 
-                <SectionWrapper>
-                    <SectionTitle>About</SectionTitle>
+                {profile.bio && <SectionWrapper>
+                    <SectionTitle>{t(translations.public_profile.about)}</SectionTitle>
                     <p>{profile.bio}</p>
-                </SectionWrapper>
+                </SectionWrapper>}
+
+                {
+                    interests.length > 0 && <SectionWrapper>
+                        <SectionTitle>{t(translations.public_profile.interests)}</SectionTitle>
+                        <InterestWrapper>
+                            {interests.map(interest => <Interest>
+                                {'CRUISING' === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
+                                    : <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />} {interest.toLowerCase()}</Interest>)}
+                        </InterestWrapper>
+                    </SectionWrapper>
+                }
 
                 <SectionWrapper>
-                    <SectionTitle>Interests</SectionTitle>
-                    <InterestWrapper>
-                        <Interest><ItemAvatar src={`/sport-logos/${String('winging').toLowerCase()}.svg`} /> Cruising</Interest>
-                        <Interest><ItemAvatar src={`/sport-logos/${String('winging').toLowerCase()}.svg`} /> Handicap</Interest>
-                        <Interest><ItemAvatar src={`/sport-logos/${String('winging').toLowerCase()}.svg`} /> One Design</Interest>
-                    </InterestWrapper>
-                </SectionWrapper>
-
-                <SectionWrapper>
-                    <SectionTitle>Groups & Organizations</SectionTitle>
+                    <SectionTitle>{t(translations.public_profile.groups_and_organizations)}</SectionTitle>
                     <Avatar.Group>
-                        <Avatar src="https://joeschmoe.io/api/v1/random" />
-                        <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
-                        <Tooltip title="Ant User" placement="top">
-                            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-                        </Tooltip>
-                        <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
+                        {profile.groups?.map(group => {
+                            return <Tooltip title={group.group?.groupName} placement="top">
+                                <Link to={`/groups/${group.group?.id}`}>
+                                    <Avatar src={group.group?.groupImage || DEFAULT_GROUP_AVATAR} />
+                                </Link>
+                            </Tooltip>;
+                        })}
                     </Avatar.Group>
                 </SectionWrapper>
             </Spin>
@@ -169,7 +176,7 @@ export const PublicProfile = () => {
 }
 
 const SectionWrapper = styled.div`
-    padding: 10px;
+    padding: 15px;
     background: #fff;
     border: 1px solid #eee;
     border-radius: 10px;
@@ -191,6 +198,7 @@ const SectionTitle = styled.h3`
 
 const InterestWrapper = styled.div`
     display: flex;
+    flex-wrap: wrap;
 `;
 
 const Interest = styled.div`
@@ -204,6 +212,8 @@ const Interest = styled.div`
     color: #fff;
     display: flex;
     align-items: center;
+    text-transform: capitalize;
+    flex: 0 0 auto;
 `;
 
 const ItemAvatar = styled.img`
