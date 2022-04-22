@@ -15,7 +15,7 @@ export const initialState: GroupDetailState = {
     isGettingAdmins: false,
     isGettingMembers: false,
     group: {},
-    getGroupDetailFailed: false,
+    isGetGroupDetailFailed: false,
     isGettingGroup: false,
     acceptedMemberResults: [],
     memberPageSize: 10,
@@ -56,8 +56,8 @@ const slice = createSlice({
             state.group = action.payload;
         },
         getGroup(state, action: PayloadAction<string>) {},
-        setGetGroupFailed(state, action: PayloadAction<boolean>) {
-            state.getGroupDetailFailed = action.payload;
+        setIsGetGroupFailed(state, action: PayloadAction<boolean>) {
+            state.isGetGroupDetailFailed = action.payload;
         },
         setIsGettingGroup(state, action: PayloadAction<boolean>) {
             state.isGettingGroup = action.payload;
