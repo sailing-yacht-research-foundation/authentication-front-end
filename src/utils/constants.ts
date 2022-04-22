@@ -213,6 +213,19 @@ export enum EventTypes {
     OTHER = 'OTHER'
 }
 
+export enum USerInterest {
+    ONE_DESIGN = 'ONE_DESIGN',
+    HANDICAP_RACE = 'HANDICAP_RACE',
+    KITESURFING = 'KITESURFING',
+    WINGING = 'WINGING',
+    WINDSURFING = 'WINDSURFING',
+    CRUISING = 'CRUISING',
+    RALLY = 'RALLY',
+    TRAINING = 'TRAINING',
+    OTHER = 'OTHER'
+}
+
+
 export enum EventParticipatingTypes {
     VESSEL = 'VESSEL',
     PERSON = 'PERSON'

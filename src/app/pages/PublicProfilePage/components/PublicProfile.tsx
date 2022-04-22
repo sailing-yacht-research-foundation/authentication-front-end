@@ -16,9 +16,8 @@ import { toast } from 'react-toastify';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { ProfileBasicInfoSection } from './ProfileBasicInfoSection';
 import { StyleConstants } from 'styles/StyleConstants';
-import { AntDesignOutlined, UserOutlined } from '@ant-design/icons';
-import { getUserInterestsAsArray, renderAvatar } from 'utils/user-utils';
-import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
+import { getUserInterestsAsArray } from 'utils/user-utils';
+import { DEFAULT_GROUP_AVATAR, USerInterest } from 'utils/constants';
 
 export const PublicProfile = () => {
 
@@ -147,29 +146,28 @@ export const PublicProfile = () => {
                     <p>{profile.bio}</p>
                 </SectionWrapper>}
 
-                {
-                    interests.length > 0 && <SectionWrapper>
-                        <SectionTitle>{t(translations.public_profile.interests)}</SectionTitle>
-                        <InterestWrapper>
-                            {interests.map(interest => <Interest>
-                                {'CRUISING' === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
-                                    : <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />} {interest.toLowerCase()}</Interest>)}
-                        </InterestWrapper>
-                    </SectionWrapper>
-                }
+                {interests.length > 0 && <SectionWrapper>
+                    <SectionTitle>{t(translations.public_profile.interests)}</SectionTitle>
+                    <InterestWrapper>
+                        {interests.map(interest => <Interest>
+                            {USerInterest.CRUISING === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
+                                : <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />} {interest.toLowerCase()}</Interest>)}
+                    </InterestWrapper>
+                </SectionWrapper>}
 
-                <SectionWrapper>
-                    <SectionTitle>{t(translations.public_profile.groups_and_organizations)}</SectionTitle>
-                    <Avatar.Group>
-                        {profile.groups?.map(group => {
-                            return <Tooltip title={group.group?.groupName} placement="top">
-                                <Link to={`/groups/${group.group?.id}`}>
-                                    <Avatar src={group.group?.groupImage || DEFAULT_GROUP_AVATAR} />
-                                </Link>
-                            </Tooltip>;
-                        })}
-                    </Avatar.Group>
-                </SectionWrapper>
+                {profile.groups?.length > 0 &&
+                    <SectionWrapper>
+                        <SectionTitle>{t(translations.public_profile.groups_and_organizations)}</SectionTitle>
+                        <Avatar.Group>
+                            {profile.groups?.map(group => {
+                                return <Tooltip title={group.group?.groupName} placement="top">
+                                    <Link to={`/groups/${group.group?.id}`}>
+                                        <Avatar src={group.group?.groupImage || DEFAULT_GROUP_AVATAR} />
+                                    </Link>
+                                </Tooltip>;
+                            })}
+                        </Avatar.Group>
+                    </SectionWrapper>}
             </Spin>
         </Wrapper>
     );
