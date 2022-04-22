@@ -17,7 +17,7 @@ import { ConfirmModal } from 'app/components/ConfirmModal';
 import { ProfileBasicInfoSection } from './ProfileBasicInfoSection';
 import { StyleConstants } from 'styles/StyleConstants';
 import { getUserInterestsAsArray } from 'utils/user-utils';
-import { DEFAULT_GROUP_AVATAR, USerInterest } from 'utils/constants';
+import { DEFAULT_GROUP_AVATAR, EventTypes } from 'utils/constants';
 
 export const PublicProfile = () => {
 
@@ -150,7 +150,7 @@ export const PublicProfile = () => {
                     <SectionTitle>{t(translations.public_profile.interests)}</SectionTitle>
                     <InterestWrapper>
                         {interests.map(interest => <Interest>
-                            {USerInterest.CRUISING === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
+                            {EventTypes.CRUISING === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
                                 : <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />} {interest.toLowerCase()}</Interest>)}
                     </InterestWrapper>
                 </SectionWrapper>}
