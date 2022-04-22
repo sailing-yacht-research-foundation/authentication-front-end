@@ -22,6 +22,7 @@ import { GiArchiveRegister } from 'react-icons/gi';
 import { HiLockClosed } from 'react-icons/hi';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { PDFUploadForm } from 'app/pages/MyEventCreateUpdatePage/components/PDFUploadForm';
+import { OrganizationGroup } from './OrganizationGroup';
 
 export const EventDetail = () => {
 
@@ -188,6 +189,10 @@ export const EventDetail = () => {
                         {event?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
                         {!event?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
                     </EventOpenRegistrationContainer>
+                </EventSection>
+
+                <EventSection>
+                    <OrganizationGroup event={event}/>
                 </EventSection>
             </EventDescriptionContainer>
 

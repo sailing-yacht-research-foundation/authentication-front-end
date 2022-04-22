@@ -12,7 +12,7 @@ export interface GroupDetailState {
     isGettingMembers: boolean;
     group: Partial<Group>;
     isGettingGroup: boolean;
-    getGroupDetailFailed: boolean;
+    isGetGroupDetailFailed: boolean;
     acceptedMemberResults: any[];
     adminPageSize: number;
     memberPageSize: number;
