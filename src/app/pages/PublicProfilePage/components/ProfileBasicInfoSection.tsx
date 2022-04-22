@@ -87,7 +87,7 @@ export const ProfileBasicInfoSection = ({
         if (currentUserId === profile.id)
             return <></>;
 
-        return <Dropdown.Button overlay={menu}></Dropdown.Button>;
+        return <Dropdown.Button trigger={['click']} overlay={menu}></Dropdown.Button>;
     }
 
     return <>
