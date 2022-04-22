@@ -34,6 +34,7 @@ export function* getGroupAdmins({ type, payload }) {
 export function* getGroup({ type, payload }) {
     const groupId = payload;
 
+    yield put(groupDetailActions.setIsGetGroupFailed(false));
     yield put(groupDetailActions.setIsGettingGroup(true));
     const response = yield call(getGroupById, groupId);
     yield put(groupDetailActions.setIsGettingGroup(false));
@@ -41,7 +42,7 @@ export function* getGroup({ type, payload }) {
     if (response.success) {
         yield put(groupDetailActions.setGroup(response.data));
     } else {
-        yield put(groupDetailActions.setGetGroupFailed(true));
+        yield put(groupDetailActions.setIsGetGroupFailed(true));
         showToastMessageOnRequestError(response.error);
     }
 }
