@@ -54,7 +54,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
 
     React.useEffect(() => {
         if (markAllAsReadSuccess)
-        setIsRead(true);
+            setIsRead(true);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [markAllAsReadSuccess]);
 
@@ -103,21 +103,21 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 icon = <IoIosWarning />;
                 break;
             case NotificationTypes.KUDOS_RECEIVED:
-                switch(notification.metadata.kudosType) {
+                switch (notification.metadata.kudosType) {
                     case KudoTypes.HEART:
-                        icon = <AiFillHeart/>;
+                        icon = <AiFillHeart />;
                         color = notificationColors.HEART
                         break;
                     case KudoTypes.THUMBS_UP:
-                        icon =  <IoThumbsUp/>;
+                        icon = <IoThumbsUp />;
                         color = notificationColors.LIKE
                         break;
                     case KudoTypes.STAR:
-                        icon = <AiFillStar/>
+                        icon = <AiFillStar />
                         color = notificationColors.STAR
                         break;
                     case KudoTypes.APPLAUSE:
-                        icon = <FaHandsWash/>
+                        icon = <FaHandsWash />
                         color = notificationColors.APPLAUSE
                 }
                 break;
@@ -183,6 +183,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
             case NotificationTypes.USER_ADDED_TO_EVENT_ADMIN:
             case NotificationTypes.USER_INVITED_TO_PRIVATE_REGATTA:
             case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
+            case NotificationTypes.EVENT_INACTIVITY_WARNING:
                 history.push(`/events/${notification.metadata?.calendarEventId}`);
                 break;
             case NotificationTypes.USER_NEW_FOLLOWER:
