@@ -8,7 +8,7 @@ import { Spin } from 'antd';
 import { media } from 'styles/media';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
-import { selectGetGroupFailed, selectGroupDetail, selectIsGettingGroup } from '../slice/selectors';
+import { selectIsGetGroupFailed, selectGroupDetail, selectIsGettingGroup } from '../slice/selectors';
 import { OrganizationStripeNotSetupAlert } from './OrganizationStripeNotSetupAlert';
 import { useLocation } from 'react-router-dom';
 import { GroupOrganizationConnect } from './GroupOrganizationConnect';
@@ -18,7 +18,7 @@ export const Main = () => {
 
     const isLoading = useSelector(selectIsGettingGroup);
 
-    const getgroupFailed = useSelector(selectGetGroupFailed);
+    const isGetGroupFailed = useSelector(selectIsGetGroupFailed);
 
     const { groupId } = useParams<{ groupId: string }>();
 
@@ -31,11 +31,11 @@ export const Main = () => {
     const { actions } = useGroupDetailSlice();
 
     React.useEffect(() => {
-        if (getgroupFailed) {
+        if (isGetGroupFailed) {
             history.push('/groups');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [getgroupFailed]);
+    }, [isGetGroupFailed]);
 
     React.useEffect(() => {
         dispatch(actions.getGroup(groupId));
