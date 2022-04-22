@@ -115,3 +115,7 @@ export const uploadPdfs = (calendarEventId: string, formData: FormData) => {
         headers: { "content-type": "multipart/form-data" }
     }));
 }
+
+export const sendMessageToAllVesselParticipant = (calendarEventId, data) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/send-messages`, data));
+}

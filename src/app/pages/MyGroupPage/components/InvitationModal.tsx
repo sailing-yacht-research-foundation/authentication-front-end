@@ -57,9 +57,10 @@ export const InvitationModal = (props) => {
     }
 
     React.useEffect(() => {
-        dispatch(actions.getGroupInvitations({ page: 1, size: DEFAULT_PAGE_SIZE, invitationType: GroupMemberStatus.INVITED }));
+        if (showModal)
+            dispatch(actions.getGroupInvitations({ page: 1, size: DEFAULT_PAGE_SIZE, invitationType: GroupMemberStatus.INVITED }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [showModal]);
 
     return (
         <Modal visible={showModal} title={t(translations.group.invitations_title)} footer={null} onCancel={hideInvitationModal}>
