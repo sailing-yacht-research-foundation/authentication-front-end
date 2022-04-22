@@ -56,7 +56,7 @@ const slice = createSlice({
             state.group = action.payload;
         },
         getGroup(state, action: PayloadAction<string>) {},
-        setGetGroupFailed(state, action: PayloadAction<boolean>) {
+        setIsGetGroupFailed(state, action: PayloadAction<boolean>) {
             state.isGetGroupDetailFailed = action.payload;
         },
         setIsGettingGroup(state, action: PayloadAction<boolean>) {
