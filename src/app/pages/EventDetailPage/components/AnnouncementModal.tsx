@@ -103,8 +103,8 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
                         maxTagCount={'responsive'}
                         filterOption={(input, option) => {
                             if (option) {
-                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                // the option.props.children[2] is where the name of the participant lies.
+                                return option.props.children[2]?.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
 
                             return false;
