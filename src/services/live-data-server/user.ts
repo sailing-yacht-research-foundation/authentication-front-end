@@ -2,7 +2,6 @@ import { SYRF_SERVER } from "services/service-constants";
 import { formatServicePromiseResponse } from "utils/helpers";
 import syrfRequest from "utils/syrf-request";
 
-
 export const getUser = () => {
     return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/profile`)
         .then(response => {
@@ -112,4 +111,10 @@ export const getUserSettings = () => {
 
 export const updateUserSpecificAttributes = (data) => {
     return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`, data)); 
+}
+
+export const switchDeveloperOption = (status: boolean) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/developer`, {
+        status
+    }))
 }
