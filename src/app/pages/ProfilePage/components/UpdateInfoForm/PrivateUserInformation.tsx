@@ -184,6 +184,7 @@ export const PrivateUserInformation = (props) => {
                                     })}
                                     value={address}
                                     autoCorrect="off"
+                                    allowClear
                                 />
                                 {suggestions.length > 0 && <StyledPLaceDropdown>
                                     {suggestions.map((suggestion) => {
