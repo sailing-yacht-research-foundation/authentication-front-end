@@ -15,7 +15,7 @@ import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils
 import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
-import { AiOutlineCalendar } from 'react-icons/ai';
+import { AiFillNotification, AiOutlineCalendar } from 'react-icons/ai';
 import { VesselList } from './VesselList';
 import { toast } from 'react-toastify';
 import { GiArchiveRegister } from 'react-icons/gi';
@@ -23,7 +23,6 @@ import { HiLockClosed } from 'react-icons/hi';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { PDFUploadForm } from 'app/pages/MyEventCreateUpdatePage/components/PDFUploadForm';
 import { OrganizationGroup } from './OrganizationGroup';
-import { GrAnnounce } from 'react-icons/gr';
 import { AnnouncementModal } from './AnnouncementModal';
 
 export const EventDetail = () => {
@@ -86,7 +85,7 @@ export const EventDetail = () => {
             name: t(translations.my_event_create_update_page.send_an_announcement),
             show: ![EventState.DRAFT, EventState.CANCELED, EventState.COMPLETED].includes(event.status!),
             handler: () => setShowAnnouncementModal(true),
-            icon: <GrAnnounce />,
+            icon: <AiFillNotification />,
             isDelete: false,
             spinning: false,
         }

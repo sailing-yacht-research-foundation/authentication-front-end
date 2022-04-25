@@ -7,8 +7,12 @@ import { useForm } from 'antd/lib/form/Form';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfTextArea } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { Participant } from 'types/Participant';
-import { getAcceptedParticipantByCalendarEventId } from 'services/live-data-server/participants';
+import { getAcceptedAndSelfRegisteredParticipantByCalendarEventId } from 'services/live-data-server/participants';
 import { CalendarEvent } from 'types/CalendarEvent';
+import { sendMessageToVesselParticipants } from 'services/live-data-server/event-calendars';
+import { ItemAvatar } from 'app/components/SyrfGeneral';
+import { useHistory } from 'react-router-dom';
+import { renderAvatar } from 'utils/user-utils';
 
 const radioValue = {
     SEND_TO_ALL: 1,
@@ -27,17 +31,21 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
 
     const { t } = useTranslation();
 
-    const onFinish = async (values) => {
-        const form = new FormData();
-        let response;
-        const { file, trackName, vesselId, vesselName } = values;
+    const history = useHistory();
 
+    const onFinish = async (values) => {
+
+        const { message, participantIds } = values;
 
         setIsLoading(true);
+        const response = await sendMessageToVesselParticipants(event.id!, {
+            message: message,
+            participantIds: participantIds ?? []
+        });
         setIsLoading(false);
 
         if (response.success) {
-            toast.success(t(translations.general.your_action_is_successful));
+            toast.success(t(translations.event_detail_page.successfully_delivered_your_message_to_the_competitors));
             hideModal();
         } else {
             showToastMessageOnRequestError(response.error);
@@ -51,20 +59,23 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
 
     const getAllEventParticipants = async () => {
 
-        const response = await getAcceptedParticipantByCalendarEventId(event.id!, 1, 1000);
+        const response = await getAcceptedAndSelfRegisteredParticipantByCalendarEventId(event.id!, 1, 1000);
 
         if (response.success) {
             setParticipants(response.data?.rows);
-            if (response.data?.count > 0) {
-                form.setFieldsValue({
-                    participants: [response.data?.rows[0]?.id]
-                });
-            }
         }
     }
 
+    const navigateToProfile = (e, item) => {
+        e.stopPropagation();
+        if (item.profile)
+            history.push(`/profile/${item.profile.id}`);
+    }
+
     const renderParticipantsList = () => {
-        return participants.map(item => <Select.Option value={item.id}>{item.publicName}</Select.Option>)
+        return participants.map(item => <Select.Option style={{ padding: '5px' }} value={item.id}>
+            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.profile?.avatar)} /> {item.publicName}
+        </Select.Option>)
     }
 
     React.useEffect(() => {
@@ -87,7 +98,17 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
                     name="participantIds"
                     rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                 >
-                    <SyrfFormSelect>
+                    <SyrfFormSelect mode='multiple'
+                        allowClear
+                        maxTagCount={'responsive'}
+                        filterOption={(input, option) => {
+                            if (option) {
+                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+
+                            return false;
+                        }}>
                         {renderParticipantsList()}
                     </SyrfFormSelect>
                 </Form.Item>

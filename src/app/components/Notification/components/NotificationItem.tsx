@@ -6,13 +6,14 @@ import { FollowStatus, KudoTypes, NotificationTypes } from 'utils/constants';
 import Group from '../assets/group.png';
 import Event from '../assets/event.png';
 import Follow from '../assets/follow.png';
+import Sail from '../assets/sail.png';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { StyleConstants } from 'styles/StyleConstants';
 import { markNotificationsAsRead } from 'services/live-data-server/notifications';
 import { useHistory } from 'react-router-dom';
 import { useSocialSlice } from 'app/components/SocialProfile/slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { AiOutlineGlobal, AiOutlineUsergroupAdd } from 'react-icons/ai';
+import { AiFillNotification, AiOutlineGlobal, AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { MdAdminPanelSettings, MdEventBusy, MdGroupAdd, MdOutgoingMail } from 'react-icons/md';
 import { GiAchievement } from 'react-icons/gi';
 import { VscDebugStart } from 'react-icons/vsc';
@@ -22,11 +23,12 @@ import { useNotificationSlice } from '../slice';
 import { renderAvatar } from 'utils/user-utils';
 import { selectMarkAllAsReadSuccess } from '../slice/selectors';
 import { AiFillHeart, AiFillStar } from 'react-icons/ai';
-import { FaHandsWash } from 'react-icons/fa';
+import { FaHandsWash, FaRobot } from 'react-icons/fa';
 import { IoThumbsUp } from 'react-icons/io5';
 import { IoIosWarning } from 'react-icons/io';
+import { Button } from 'antd';
 
-const notificationColors = {
+const notificationColor = {
     DELETE: '#DC6E1E',
     FOLLOW: '#16a085',
     ADD: '#95e1c1',
@@ -35,10 +37,11 @@ const notificationColors = {
     HEART: '#e74c3c',
     APPLAUSE: '#9b59b6',
     STAR: '#f1c40f',
-    WARNING: '#ebb134'
+    WARNING: '#ebb134',
+    ANNOUNCEMENT: '#16a085'
 }
 
-export const NotificationItem = ({ notification }: { notification: Notification }) => {
+export const NotificationItem = ({ notification, showFullNotificationContent }: { notification: Notification, showFullNotificationContent?: boolean }) => {
 
     const [isRead, setIsRead] = React.useState<boolean>(false);
 
@@ -49,6 +52,8 @@ export const NotificationItem = ({ notification }: { notification: Notification 
     const notificationActions = useNotificationSlice().actions;
 
     const markAllAsReadSuccess = useSelector(selectMarkAllAsReadSuccess);
+
+    const [isShowFull, setIsShowFull] = React.useState<boolean>(false);
 
     const dispatch = useDispatch();
 
@@ -64,7 +69,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
     }, []);
 
     const renderNotificationBadge = () => {
-        let icon, color = notificationColors.DEFAULT;
+        let icon, color = notificationColor.DEFAULT;
         switch (notification.notificationType) {
             case NotificationTypes.USER_INVITED_TO_GROUP:
                 icon = <AiOutlineUsergroupAdd />;
@@ -82,7 +87,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 icon = <VscDebugStart />;
                 break;
             case NotificationTypes.EVENT_INACTIVITY_DELETION:
-                color = notificationColors.DELETE;
+                color = notificationColor.DELETE;
                 icon = <MdEventBusy />;
                 break;
             case NotificationTypes.USER_ADDED_TO_EVENT_ADMIN:
@@ -95,31 +100,39 @@ export const NotificationItem = ({ notification }: { notification: Notification 
                 icon = <IoCreateSharp />;
                 break;
             case NotificationTypes.USER_NEW_FOLLOWER:
-                color = notificationColors.FOLLOW;
+                color = notificationColor.FOLLOW;
                 icon = <BsPersonPlus />;
                 break;
             case NotificationTypes.EVENT_INACTIVITY_WARNING:
-                color = notificationColors.WARNING;
+                color = notificationColor.WARNING;
                 icon = <IoIosWarning />;
                 break;
             case NotificationTypes.KUDOS_RECEIVED:
                 switch (notification.metadata.kudosType) {
                     case KudoTypes.HEART:
                         icon = <AiFillHeart />;
-                        color = notificationColors.HEART
+                        color = notificationColor.HEART
                         break;
                     case KudoTypes.THUMBS_UP:
                         icon = <IoThumbsUp />;
-                        color = notificationColors.LIKE
+                        color = notificationColor.LIKE
                         break;
                     case KudoTypes.STAR:
                         icon = <AiFillStar />
-                        color = notificationColors.STAR
+                        color = notificationColor.STAR
                         break;
                     case KudoTypes.APPLAUSE:
                         icon = <FaHandsWash />
-                        color = notificationColors.APPLAUSE
+                        color = notificationColor.APPLAUSE
                 }
+                break;
+            case NotificationTypes.EVENT_MESSAGES_RECEIVED:
+                icon = <AiFillNotification />
+                color = notificationColor.ANNOUNCEMENT
+                break;
+            case NotificationTypes.SIMULATION_DELETION:
+                icon = <FaRobot />
+                color = notificationColor.WARNING
                 break;
             default:
                 icon = <AiOutlineGlobal />;
@@ -147,7 +160,10 @@ export const NotificationItem = ({ notification }: { notification: Notification 
             case NotificationTypes.USER_INVITED_TO_PRIVATE_REGATTA:
             case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
             case NotificationTypes.EVENT_INACTIVITY_WARNING:
+            case NotificationTypes.EVENT_MESSAGES_RECEIVED:
                 return Event;
+            case NotificationTypes.SIMULATION_DELETION:
+                return Sail;
             case NotificationTypes.USER_NEW_FOLLOWER:
                 return Follow;
         }
@@ -184,6 +200,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
             case NotificationTypes.USER_INVITED_TO_PRIVATE_REGATTA:
             case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
             case NotificationTypes.EVENT_INACTIVITY_WARNING:
+            case NotificationTypes.EVENT_MESSAGES_RECEIVED:
                 history.push(`/events/${notification.metadata?.calendarEventId}`);
                 break;
             case NotificationTypes.USER_NEW_FOLLOWER:
@@ -200,6 +217,21 @@ export const NotificationItem = ({ notification }: { notification: Notification 
         markAsRead(e);
     }
 
+    const showFullNotificationDetail = (e) => {
+        e.stopPropagation();
+        setIsShowFull(true);
+    }
+
+    const renderNotificationDetail = () => {
+        if (notification.notificationMessage.length > 150 && !isShowFull && !showFullNotificationContent)
+            return <NotificationItemDetail>
+                {notification.notificationMessage.substring(0, 150)}
+                <Button style={{ paddingLeft: '0' }} type='link' onClick={showFullNotificationDetail}>...See more</Button>
+            </NotificationItemDetail>
+
+        return <NotificationItemDetail>{notification.notificationMessage}</NotificationItemDetail>
+    }
+
     return (
         <NotificationItemWrapper onClick={navigateToTarget}>
             <NotificationItemAvatarWrapper>
@@ -211,7 +243,7 @@ export const NotificationItem = ({ notification }: { notification: Notification 
             <NotificationItemInfo>
                 <NotificationItemTitle>{notification.notificationTitle}</NotificationItemTitle>
                 {!isRead && <ReadButton onClick={markAsRead} />}
-                <NotificationItemDetail>{notification.notificationMessage}</NotificationItemDetail>
+                {renderNotificationDetail()}
                 <NotificationItemTime>{moment(notification.createdAt).fromNow()}</NotificationItemTime>
             </NotificationItemInfo>
         </NotificationItemWrapper>
