@@ -11,6 +11,15 @@ export const getAllByCalendarEventId = (calendarEventId: string, page: number, s
     }))
 }
 
+export const getAcceptedAndSelfRegisteredParticipantByCalendarEventId = (calendarEventId: string, page: number, size: number = 10) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants?statuses=ACCEPTED,SELF_REGISTERED`, {
+        params: {
+            page: page,
+            size
+        }
+    }))
+}
+
 export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page: number, size: number, assignMode: string) => {
     let assign: any = null;
     if (assignMode === 'all') {

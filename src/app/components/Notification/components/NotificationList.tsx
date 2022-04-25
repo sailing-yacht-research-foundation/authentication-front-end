@@ -22,6 +22,7 @@ interface INotificationList {
     pagination: any,
     isLoading: boolean,
     renderAsPage?: boolean,
+    showFullNotificationContent?: boolean
 }
 
 const defaultOptions = {
@@ -37,7 +38,7 @@ export const NotificationList = (props: INotificationList) => {
 
     const { t } = useTranslation();
 
-    const { notifications, loadMore, outOfData, pagination, isLoading, renderAsPage } = props;
+    const { notifications, loadMore, outOfData, pagination, isLoading, renderAsPage, showFullNotificationContent } = props;
 
     const history = useHistory();
 
@@ -47,7 +48,7 @@ export const NotificationList = (props: INotificationList) => {
 
     const renderNotificationItems = () => {
         if (notifications.length > 0)
-            return notifications.map(notification => <NotificationItem notification={notification} />);
+            return notifications.map(notification => <NotificationItem showFullNotificationContent={showFullNotificationContent} notification={notification} />);
 
         return <LottieWrapper>
             <Lottie

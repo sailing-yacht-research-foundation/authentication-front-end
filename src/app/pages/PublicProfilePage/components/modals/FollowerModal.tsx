@@ -43,9 +43,10 @@ export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent
     }
 
     React.useEffect(() => {
-        dispatch(actions.getFollowers({ page: 1, size: 10, profileId }));
+        if (showModal)
+            dispatch(actions.getFollowers({ page: 1, size: 10, profileId }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [profileId]);
+    }, [profileId, showModal]);
 
     return (
         <Modal
@@ -57,8 +58,8 @@ export const FollowerModal = ({ profileId, showModal, setShowModal, reloadParent
             <Spin spinning={isLoading}>
                 {renderFollowers()}
                 {followerTotalRecords > DEFAULT_PAGE_SIZE && <PaginationContainer>
-                    <Pagination 
-                        current={followerCurrentPage} 
+                    <Pagination
+                        current={followerCurrentPage}
                         onChange={(page, size) => getFollowers(page, size)}
                         pageSize={followerPageSize}
                         total={followerTotalRecords} />
