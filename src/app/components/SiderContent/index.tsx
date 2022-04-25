@@ -58,7 +58,7 @@ export const SiderContent = (props) => {
   const items: Route[] = [
     {
       key: routeKey.SEARCH,
-      path: '/search',
+      path: '/',
       title: t(translations.side_menu.search),
       icon: <SearchOutlined />,
     },
