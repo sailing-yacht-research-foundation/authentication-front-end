@@ -53,7 +53,7 @@ const StyledCollapsed = styled(Collapse)`
     }
 
     ${media.medium`
-    width: 55%;
+    width: 65%;
     padding: 30px 56px;
 `}
 `;
