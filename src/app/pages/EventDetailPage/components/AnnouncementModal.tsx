@@ -79,8 +79,8 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
     }
 
     React.useEffect(() => {
-        // if (event.id)
-        //     getAllEventParticipants();
+        if (event.id)
+            getAllEventParticipants();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event]);
 
