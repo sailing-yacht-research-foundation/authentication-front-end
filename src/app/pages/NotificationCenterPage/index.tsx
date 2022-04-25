@@ -48,6 +48,7 @@ export const NotificationCenterPage = () => {
                 loadMore={loadMore}
                 outOfData={outOfData}
                 pagination={pagination}
+                showFullNotificationContent
                 isLoading={isLoading}
                 notifications={pagination.rows} />
         </Row>
