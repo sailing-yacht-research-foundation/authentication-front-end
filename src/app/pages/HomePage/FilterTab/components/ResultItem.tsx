@@ -214,6 +214,7 @@ export const ResultItem = (props) => {
                                 {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
                             </> : <div></div>
                         }
+                        {renderLiveDot()}
                     </Space>
                     {canManageRace() && <StyledDropDown data-tip={t(translations.tip.super_admin_options)} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />}
                 </HeadDescriptionWrapper>
@@ -235,7 +236,6 @@ export const ResultItem = (props) => {
                         onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
                     }
                 </Space>
-                {renderLiveDot()}
             </Wrapper>
             <ReactTooltip />
         </>
@@ -291,11 +291,11 @@ const StyledDropDown = styled(Dropdown.Button)`
 `;
 
 const LiveDotWrapper = styled.div`
-   position: absolute;
-   right: 10px;
-   bottom: 20px;
    color: red;
    span {
        margin-left: 3px;
    }
+   position: absolute;
+   right: 10px;
+   top: 10px;
 `;
