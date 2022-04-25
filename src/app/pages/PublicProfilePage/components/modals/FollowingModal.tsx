@@ -43,9 +43,10 @@ export const FollowingModal = ({ profileId, showModal, setShowModal, reloadParen
     }
 
     React.useEffect(() => {
-        dispatch(actions.getFollowing({ page: 1, size: 10, profileId }));
+        if (showModal)
+            dispatch(actions.getFollowing({ page: 1, size: 10, profileId }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [profileId]);
+    }, [profileId, showModal]);
 
     return (
         <Modal
