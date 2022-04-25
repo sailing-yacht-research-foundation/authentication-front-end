@@ -79,8 +79,8 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
     }
 
     React.useEffect(() => {
-        if (event.id)
-            getAllEventParticipants();
+        // if (event.id)
+        //     getAllEventParticipants();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event]);
 
@@ -115,47 +115,61 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
         }
     }
 
+    if (participants.length > 0)
+        return (
+            <Modal
+                title={t(translations.event_detail_page.send_announcement)}
+                bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
+                visible={showModal}
+                footer={null}
+                onCancel={hideModal}
+            >
+                <Spin spinning={isLoading}>
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        name="basic"
+                        onFinish={onFinish}
+                        style={{ width: '100%' }}
+                    >
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.event_detail_page.message)}</SyrfFieldLabel>}
+                            name="message"
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
+                                max: 5000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 5000 })
+                            }]}
+                        >
+                            <SyrfTextArea />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.event_detail_page.participants)}</SyrfFieldLabel>}
+                        >
+                            <Radio.Group onChange={onRadioChanged} value={selectedRadioValue}>
+                                <Radio value={radioValue.SEND_TO_ALL}>{t(translations.event_detail_page.send_to_all_competitors)}</Radio>
+                                <Radio value={radioValue.SEND_TO_SOME}>{t(translations.event_detail_page.send_to_some_of_the_competitors)}</Radio>                        </Radio.Group>
+                        </Form.Item>
+
+                        {renderFormFieldsBaseOnRadioValue()}
+
+                        <SyrfFormButton type="primary" htmlType="submit">
+                            {t(translations.event_detail_page.send_announcement)}
+                        </SyrfFormButton>
+                    </Form>
+                </Spin>
+            </Modal>
+        );
+
     return (
         <Modal
-            title={t(translations.event_detail_page.send_announcement)}
-            bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
-            visible={showModal}
-            footer={null}
-            onCancel={hideModal}
-        >
-            <Spin spinning={isLoading}>
-                <Form
-                    form={form}
-                    layout="vertical"
-                    name="basic"
-                    onFinish={onFinish}
-                    style={{ width: '100%' }}
-                >
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.event_detail_page.message)}</SyrfFieldLabel>}
-                        name="message"
-                        rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
-                            max: 5000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 5000 })
-                        }]}
-                    >
-                        <SyrfTextArea />
-                    </Form.Item>
-
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.event_detail_page.participants)}</SyrfFieldLabel>}
-                    >
-                        <Radio.Group onChange={onRadioChanged} value={selectedRadioValue}>
-                            <Radio value={radioValue.SEND_TO_ALL}>{t(translations.event_detail_page.send_to_all_competitors)}</Radio>
-                            <Radio value={radioValue.SEND_TO_SOME}>{t(translations.event_detail_page.send_to_some_of_the_competitors)}</Radio>                        </Radio.Group>
-                    </Form.Item>
-
-                    {renderFormFieldsBaseOnRadioValue()}
-
-                    <SyrfFormButton type="primary" htmlType="submit">
-                        {t(translations.event_detail_page.send_announcement)}
-                    </SyrfFormButton>
-                </Form>
-            </Spin>
-        </Modal>
-    );
+        title={t(translations.event_detail_page.send_announcement)}
+        bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
+        visible={showModal}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        onOk={hideModal}
+        onCancel={hideModal}
+    >
+        <span>{t(translations.event_detail_page.please_invite_at_least_1_competitor_to_send_announcement)}</span>
+    </Modal>
+    )
 }
