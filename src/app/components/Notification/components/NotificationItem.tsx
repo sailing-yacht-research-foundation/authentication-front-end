@@ -27,6 +27,8 @@ import { FaHandsWash, FaRobot } from 'react-icons/fa';
 import { IoThumbsUp } from 'react-icons/io5';
 import { IoIosWarning } from 'react-icons/io';
 import { Button } from 'antd';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 const notificationColor = {
     DELETE: '#DC6E1E',
@@ -56,6 +58,8 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
     const [isShowFull, setIsShowFull] = React.useState<boolean>(false);
 
     const dispatch = useDispatch();
+
+    const { t } = useTranslation();
 
     React.useEffect(() => {
         if (markAllAsReadSuccess)
@@ -226,7 +230,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
         if (notification.notificationMessage.length > 150 && !isShowFull && !showFullNotificationContent)
             return <NotificationItemDetail>
                 {notification.notificationMessage.substring(0, 150)}
-                <Button style={{ paddingLeft: '0' }} type='link' onClick={showFullNotificationDetail}>...See more</Button>
+                <Button style={{ paddingLeft: '0' }} type='link' onClick={showFullNotificationDetail}>...{t(translations.notifications.see_more)}</Button>
             </NotificationItemDetail>
 
         return <NotificationItemDetail>{notification.notificationMessage}</NotificationItemDetail>
