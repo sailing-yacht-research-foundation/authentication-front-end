@@ -20,8 +20,8 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType } from "utils/constants";
-import { canStreamToExpedition, stringToColour } from "utils/helpers";
+import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType, WSTrackingStateUpdate } from "utils/constants";
+import { canStreamToExpedition, getBoatNameFromVesselParticipantObject, stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
@@ -45,7 +45,6 @@ export const PlaybackStreamRace = () => {
     location.search.includes("?") ? location.search.substring(1) : location.search
   );
 
-  const messageHistory = useRef<any[]>([]);
   const competitionUnitId = useSelector(selectCompetitionUnitId);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
   const vesselParticipants = useSelector(selectVesselParticipants);
@@ -154,36 +153,15 @@ export const PlaybackStreamRace = () => {
   // Manage last message from websocket
   useEffect(() => {
     if (lastMessage) {
-      let parsedData: any = {};
       try {
-        parsedData = JSON.parse(lastMessage.data);
-        const { type, dataType, data } = parsedData;
-        if (type === 'data') {
-          if (dataType === WSMessageDataType.POSITION) {
-            handleAddPosition(data);
-          } else if (dataType === WSMessageDataType.VIEWER_COUNT) {
-            handleSetViewsCount(data);
-          } else if (dataType === WSMessageDataType.NEW_PARTICIPANT_JOINED) {
-            addNewBoatToTheRace(data);
-          } else if (dataType === WSMessageDataType.VESSEL_PARTICIPANT_REMOVED) {
-            removeBoatFromTheRace(data);
-          } else if (dataType === WSMessageDataType.MAKR_TRACK) {
-            updateCourseMarksPosition(data);
-          } else if (dataType === WSMessageDataType.COURSE_UPDATED) {
-            eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE, normalizeSequencedGeometries(data.courseSequencedGeometries));
-          } else if (dataType === WSMessageDataType.EVENT) {
-            if (data?.eventType === WebsocketRaceEvent.VESSEL_OCS) {
-              eventEmitter.emit(RaceEmitterEvent.OCS_DETECTED, data?.vesselParticipantId);
-            }
-          }
-        }
+        const message = JSON.parse(lastMessage.data);
+        handleWSData(message);
+        handleDebug("=== WS DATA ===");
+        handleDebug(message);
+        handleDebug("===============");
       } catch (e) {
         console.error(e);
       }
-
-      handleDebug("=== WS DATA ===");
-      handleDebug(parsedData);
-      handleDebug("===============");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastMessage]);
@@ -284,6 +262,63 @@ export const PlaybackStreamRace = () => {
     }, 200);
   }, [raceIdentity]);
 
+  const handleWSData = (wsMessage) => {
+    const { type, dataType, data } = wsMessage;
+    if (type === 'data') {
+      switch (dataType) {
+        case WSMessageDataType.POSITION:
+          handleAddPosition(data);
+          break;
+        case WSMessageDataType.VIEWER_COUNT:
+          handleSetViewsCount(data);
+          break;
+        case WSMessageDataType.NEW_PARTICIPANT_JOINED:
+          addNewBoatToTheRace(data);
+          break;
+        case WSMessageDataType.VESSEL_PARTICIPANT_REMOVED:
+          removeBoatFromTheRace(data);
+          break;
+        case WSMessageDataType.MAKR_TRACK:
+          updateCourseMarksPosition(data);
+          break;
+        case WSMessageDataType.COURSE_UPDATED:
+          eventEmitter.emit(RaceEmitterEvent.UPDATE_COURSE, normalizeSequencedGeometries(data.courseSequencedGeometries));
+          break;
+        case WSMessageDataType.EVENT:
+          if (data?.eventType === WebsocketRaceEvent.VESSEL_OCS) {
+            eventEmitter.emit(RaceEmitterEvent.OCS_DETECTED, data?.vesselParticipantId);
+          }
+          break;
+        case WSMessageDataType.TRACKING_STATE_UPDATE:
+          switch(data?.type) {
+            case WSTrackingStateUpdate.PARTICIPANT_START_TRACKING:
+              message.info(t(translations.playback_page.boat_started_tracking, { boat_name: getBoatNameFromVesselParticipantObject(groupedPosition.current[data?.vesselParticipantId]) }));
+              addPositionToTheBoatWhenItStartsTracking(data?.vesselParticipantId);
+              break;
+            case WSTrackingStateUpdate.PARTICIPANT_STOP_TRACKING:
+              message.info(t(translations.playback_page.boat_stopped_tracking, { boat_name: getBoatNameFromVesselParticipantObject(groupedPosition.current[data?.vesselParticipantId]) }));
+              eventEmitter.emit(RaceEmitterEvent.CHANGE_BOAT_COLOR_TO_GRAY, data?.vesselParticipantId);
+              break;
+          }
+          break;
+      }
+    }
+  }
+
+  const addPositionToTheBoatWhenItStartsTracking = (vesselParticipantId) => {
+    // Add position to groupedPosition
+    const currentGroupedPosition = groupedPosition.current?.[vesselParticipantId];
+    if (!currentGroupedPosition || !currentGroupedPosition?.id) return;
+
+    const lat = competitionUnitDetail.calendarEvent?.location?.coordinates[1];
+    const lon = competitionUnitDetail.calendarEvent?.location?.coordinates[0];
+    currentGroupedPosition.previousHeading = 0;
+    currentGroupedPosition.positions = [{ lat, lon, heading: 0 }];
+    currentGroupedPosition.lastPosition = { lat, lon, heading: 0 };
+
+    groupedPosition.current[vesselParticipantId] = currentGroupedPosition;
+    receivedPositionData.current = true;
+  }
 
   const handleRenderCourseDetail = (course) => {
     const sequencedGeometries = course.courseSequencedGeometries;
@@ -430,8 +465,6 @@ export const PlaybackStreamRace = () => {
   };
 
   const handleAddPosition = (data) => {
-    messageHistory.current.push(data);
-
     const { raceData, lat, lon, calculatedData } = data;
     const { vesselParticipantId } = raceData;
 

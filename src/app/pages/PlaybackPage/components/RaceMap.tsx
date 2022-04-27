@@ -116,11 +116,21 @@ export const RaceMap = (props) => {
       emitter.on(RaceEmitterEvent.OCS_DETECTED, _changeBoatColorToRedIfOCSDetected);
 
       emitter.on(RaceEmitterEvent.UPDATE_BOAT_COLOR, _updateBoatColorIfPingNotReceived);
+
+      emitter.on(RaceEmitterEvent.CHANGE_BOAT_COLOR_TO_GRAY, _changeBoatColorToGray);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const _changeBoatColorToRedIfOCSDetected = (vesselParticipantId) => {
+  const _changeBoatColorToGray = (vesselParticipantId: string) => {
+    const { current } = raceStatus;
+    const boats = current.boats;
+    if (!boats[vesselParticipantId]) return;
+    boats[vesselParticipantId].lastPing = Date.now() - 60000; // change last ping to 60secs ago.
+    boats[vesselParticipantId].layer._icon.firstElementChild.style.fill = colors.GRAY;
+  }
+
+  const _changeBoatColorToRedIfOCSDetected = (vesselParticipantId: string) => {
     const { current } = raceStatus;
     const boats = current.boats;
     if (!boats[vesselParticipantId]) return;
