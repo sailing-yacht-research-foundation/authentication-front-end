@@ -275,3 +275,5 @@ export enum GroupTypes {
 export enum RaceSource {
     SYRF = 'SYRF'
 }
+
+export const insecureRaceSources = ['TACKTRACKER'];
