@@ -15,7 +15,7 @@ import {
 } from "services/live-data-server/competition-units";
 import { getVesselParticipantGroupById } from "services/live-data-server/vessel-participant-group";
 import { PlaybackTypes } from "types/Playback";
-import { insecureRaceSources } from "utils/constants";
+import { sourcesPreventIframe } from "utils/constants";
 import { playbackActions } from ".";
 export function* getCompetitionUnitDetail({ type, payload }) {
   const { id } = payload;
@@ -110,7 +110,7 @@ export function* getRaceData({ type, payload }) {
     yield put(playbackActions.setSearchRaceDetail(raceDetail._source));
 
     if ((raceDetail._source?.url || "").includes("http://")
-      || insecureRaceSources.includes(raceDetail._source?.source)) {
+      || sourcesPreventIframe.includes(raceDetail._source?.source)) {
       return yield put(playbackActions.setPlaybackType(PlaybackTypes.INSECURESCRAPEDRACE));
     }
 

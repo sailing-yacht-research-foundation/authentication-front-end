@@ -276,4 +276,4 @@ export enum RaceSource {
     SYRF = 'SYRF'
 }
 
-export const insecureRaceSources = ['TACKTRACKER'];
+export const sourcesPreventIframe = ['TACKTRACKER'];
