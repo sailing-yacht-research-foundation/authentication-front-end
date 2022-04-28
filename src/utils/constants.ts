@@ -147,7 +147,7 @@ export enum WSMessageDataType {
     VIEWER_COUNT = 'viewers-count',
     NEW_PARTICIPANT_JOINED = 'new-participant-joined',
     VESSEL_PARTICIPANT_REMOVED = 'vessel-participant-removed',
-    MAKR_TRACK = 'mark-track',
+    MARK_TRACK = 'mark-track',
     COURSE_UPDATED = 'course-updated',
     EVENT = 'event',
     TRACKING_STATE_UPDATE = 'tracking-state-update'

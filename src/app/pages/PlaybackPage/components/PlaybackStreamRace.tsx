@@ -278,7 +278,7 @@ export const PlaybackStreamRace = () => {
         case WSMessageDataType.VESSEL_PARTICIPANT_REMOVED:
           removeBoatFromTheRace(data);
           break;
-        case WSMessageDataType.MAKR_TRACK:
+        case WSMessageDataType.MARK_TRACK:
           updateCourseMarksPosition(data);
           break;
         case WSMessageDataType.COURSE_UPDATED:
