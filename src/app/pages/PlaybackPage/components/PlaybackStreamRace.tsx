@@ -293,7 +293,6 @@ export const PlaybackStreamRace = () => {
           switch(data?.type) {
             case WSTrackingStateUpdate.PARTICIPANT_START_TRACKING:
               message.info(t(translations.playback_page.boat_started_tracking, { boat_name: getBoatNameFromVesselParticipantObject(groupedPosition.current[data?.vesselParticipantId]) }));
-              addPositionToTheBoatWhenItStartsTracking(data?.vesselParticipantId);
               break;
             case WSTrackingStateUpdate.PARTICIPANT_STOP_TRACKING:
               message.info(t(translations.playback_page.boat_stopped_tracking, { boat_name: getBoatNameFromVesselParticipantObject(groupedPosition.current[data?.vesselParticipantId]) }));
@@ -303,21 +302,6 @@ export const PlaybackStreamRace = () => {
           break;
       }
     }
-  }
-
-  const addPositionToTheBoatWhenItStartsTracking = (vesselParticipantId) => {
-    // Add position to groupedPosition
-    const currentGroupedPosition = groupedPosition.current?.[vesselParticipantId];
-    if (!currentGroupedPosition?.id) return;
-
-    const lat = competitionUnitDetail.calendarEvent?.location?.coordinates[1];
-    const lon = competitionUnitDetail.calendarEvent?.location?.coordinates[0];
-    currentGroupedPosition.previousHeading = 0;
-    currentGroupedPosition.positions = [{ lat, lon, heading: 0 }];
-    currentGroupedPosition.lastPosition = { lat, lon, heading: 0 };
-
-    groupedPosition.current[vesselParticipantId] = currentGroupedPosition;
-    receivedPositionData.current = true;
   }
 
   const handleRenderCourseDetail = (course) => {

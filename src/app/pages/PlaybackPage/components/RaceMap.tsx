@@ -44,6 +44,8 @@ const colors = {
   GRAY: '#808080'
 }
 
+const NO_PING_TIMEOUT = 60000;
+
 export const RaceMap = (props) => {
   const { emitter } = props;
 
@@ -129,7 +131,7 @@ export const RaceMap = (props) => {
     // There is a listener that checks for last time the boat pings. When the boat didn't ping for more than 60secs it would be grayed out.
     // Line 132 makes the boat turn gray immediately.
     // please check _updateBoatColorIfPingNotReceived and _initLayerAndSetLocationAndHeadingForBoat to understand the flow.
-    boats[vesselParticipantId].lastPing = Date.now() - 60000; 
+    boats[vesselParticipantId].lastPing = Date.now() - NO_PING_TIMEOUT; 
     boats[vesselParticipantId].layer._icon.firstElementChild.style.fill = colors.GRAY;
   }
 
@@ -147,7 +149,7 @@ export const RaceMap = (props) => {
     Object.keys(boats).forEach(key => {
       if (!boats[key]) return;
 
-      const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMinutes() > 1;
+      const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMilliseconds() > NO_PING_TIMEOUT;
 
       if (noPingReceivedFromTheBoatAfter1Minute) {
         boats[key].layer._icon.firstElementChild.style.fill = colors.GRAY;
