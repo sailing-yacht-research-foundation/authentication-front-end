@@ -126,7 +126,7 @@ export const RaceMap = (props) => {
     const { current } = raceStatus;
     const boats = current.boats;
     if (!boats[vesselParticipantId]) return;
-    boats[vesselParticipantId].lastPing = Date.now() - 60000; // change last ping to 60secs ago.
+    boats[vesselParticipantId].lastPing = Date.now() - 60000; // change last ping to 60secs ago to make the boat gray out right away.
     boats[vesselParticipantId].layer._icon.firstElementChild.style.fill = colors.GRAY;
   }
 

@@ -308,7 +308,7 @@ export const PlaybackStreamRace = () => {
   const addPositionToTheBoatWhenItStartsTracking = (vesselParticipantId) => {
     // Add position to groupedPosition
     const currentGroupedPosition = groupedPosition.current?.[vesselParticipantId];
-    if (!currentGroupedPosition || !currentGroupedPosition?.id) return;
+    if (!currentGroupedPosition?.id) return;
 
     const lat = competitionUnitDetail.calendarEvent?.location?.coordinates[1];
     const lon = competitionUnitDetail.calendarEvent?.location?.coordinates[0];
@@ -473,7 +473,7 @@ export const PlaybackStreamRace = () => {
 
     // Add position to groupedPosition
     const currentGroupedPosition = groupedPosition.current?.[vesselParticipantId];
-    if (!currentGroupedPosition || !currentGroupedPosition?.id) return;
+    if (!currentGroupedPosition?.id) return;
 
     // Get current available positions of each grouped positions
     const currentPositions = [...(currentGroupedPosition?.positions || [])];
