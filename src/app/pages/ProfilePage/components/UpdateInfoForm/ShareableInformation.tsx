@@ -64,7 +64,10 @@ export const ShareableInformation = (props) => {
     }
 
     const renderCertificationsDropdownList = () => {
-        return certifications.map((type, index) => <Select.Option key={index} value={type}>{type}</Select.Option>)
+        return <>
+            <Select.Option value={'none'}>{t(translations.forms.none)}</Select.Option>
+            {certifications.map((type, index) => <Select.Option key={index} value={type}>{type}</Select.Option>)}
+        </>
     }
 
     const renderTagsDropdownList = () => {
@@ -234,7 +237,9 @@ export const ShareableInformation = (props) => {
                         name="certifications"
                         data-tip={t(translations.profile_page.update_profile.certifications)}
                     >
-                        <SyrfFormSelect mode="multiple">
+                        <SyrfFormSelect mode="tags"
+                            onChange={values => handleTagsFieldChange(values, 'certifications')}
+                            maxTagCount={'responsive'}>
                             {renderCertificationsDropdownList()}
                         </SyrfFormSelect>
                     </Form.Item>
