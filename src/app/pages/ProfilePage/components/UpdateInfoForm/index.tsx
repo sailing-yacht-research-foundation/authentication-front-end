@@ -141,9 +141,10 @@ export const UpdateInfo = (props) => {
             const info = response.data;
             form.setFieldsValue({
                 ...info,
-                passportIssueDate: info?.passportIssueDate ? moment(info.passportIssueDate) : '',
-                passportExpirationDate: info?.passportExpirationDate ? moment(info.passportExpirationDate) : '',
-                foodAllergies: info?.foodAllergies ? info.foodAllergies.join(", ") : '',
+                passportIssueDate: info.passportIssueDate ? moment(info.passportIssueDate) : '',
+                passportExpirationDate: info.passportExpirationDate ? moment(info.passportExpirationDate) : '',
+                foodAllergies: info.foodAllergies ? info.foodAllergies : [],
+                medicalProblems: info.medicalProblems ? info.medicalProblems.split(',') : [] 
             });
             setShareableInformation(info);
         }
@@ -191,7 +192,7 @@ export const UpdateInfo = (props) => {
                             setFormHasBeenChanged={setFormHasBeenChanged}
                             authUser={authUser} />
 
-                        <ShareableInformation setShareableInformation={setShareableInformation} shareableInformation={shareableInformation} />
+                        <ShareableInformation form={form} setShareableInformation={setShareableInformation} shareableInformation={shareableInformation} />
 
                         <Form.Item>
                             <StyledSyrfFormButtonWrapper>
