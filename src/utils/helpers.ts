@@ -463,3 +463,7 @@ export const handleGoBack = (history) => {
         history.push('/');
     }
 }
+
+export const getBoatNameFromVesselParticipantObject = (vesselparticipant) => {
+    return vesselparticipant?.vessel?.publicName || '';
+}

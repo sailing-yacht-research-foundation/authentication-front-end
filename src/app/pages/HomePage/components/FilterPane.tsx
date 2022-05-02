@@ -234,10 +234,15 @@ export const FilterPane = (props) => {
                     </Form.Item>
                 </Form>
             </Spin>
-            {searchKeyword.length > 0 && <Button onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</Button> }
+            {searchKeyword.length > 0 && <StyledLiveAndHappeningRaceButton onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</StyledLiveAndHappeningRaceButton> }
         </Wrapper >
     )
 }
+
+const StyledLiveAndHappeningRaceButton = styled(Button)`
+    margin-bottom: 10px;
+    margin-top: -10px;
+`;
 
 const Wrapper = styled.div`
     width: 100%;

@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSubTitle } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
