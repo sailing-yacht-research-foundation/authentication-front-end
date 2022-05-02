@@ -185,8 +185,6 @@ const ProfileName = styled.h2`
     margin-top: 15px;
 `;
 
-const ProfileBio = styled.p``;
-
 const FollowButton = styled(Button)`
     margin: 15px 0;
 `;
