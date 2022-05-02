@@ -214,7 +214,6 @@ export const ResultItem = (props) => {
                                 {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
                             </> : <div></div>
                         }
-                        {renderLiveDot()}
                     </Space>
                     <RightResultWrapper>
                         {renderLiveDot()}
