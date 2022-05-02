@@ -51,9 +51,10 @@ export const RequestedModal = (props) => {
     }
 
     React.useEffect(() => {
-        dispatch(actions.getRequestedGroups({ page: 1, size: DEFAULT_PAGE_SIZE }));
+        if (showModal)
+            dispatch(actions.getRequestedGroups({ page: 1, size: DEFAULT_PAGE_SIZE }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [showModal]);
 
     return (
         <Modal visible={showModal} title={t(translations.group.requested)} footer={null} onCancel={hideInvitationModal}>

@@ -4,15 +4,15 @@ import { GiPositionMarker } from 'react-icons/gi';
 import { Space, Dropdown, Menu } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
-import { renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
+import { canStreamToExpedition, renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { RaceStatus, TIME_FORMAT, UserRole } from 'utils/constants';
+import { RaceSource, RaceStatus, TIME_FORMAT, UserRole } from 'utils/constants';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { CreateButton } from 'app/components/SyrfGeneral';
+import { CreateButton, LiveDot } from 'app/components/SyrfGeneral';
 import { FiEdit } from 'react-icons/fi';
 import { selectRelations, selectResults, selectUpcomingRaces } from '../../slice/selectors';
 import { IoEllipsisHorizontal } from 'react-icons/io5';
@@ -32,6 +32,8 @@ export const ResultItem = (props) => {
 
     const [relation, setRelation] = React.useState<any>(null);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const eventId = race._source?.event;
     const eventText = renderEmptyValue(race._source?.event_name, ' ');
     const eventElement = eventId && race._source.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText;
@@ -45,7 +47,7 @@ export const ResultItem = (props) => {
     const authUser = useSelector(selectUser);
 
     const canManageRace = () => {
-        return authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== 'SYRF';
+        return authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== RaceSource.SYRF;
     };
 
     const dispatch = useDispatch();
@@ -92,7 +94,9 @@ export const ResultItem = (props) => {
     }
 
     const markAsHidden = async () => {
+        setIsLoading(true);
         const response = await markCompetitionUnitAsHidden(race._source.id);
+        setIsLoading(false);
 
         if (response.success) {
             setShowMarkAsHiddenConfirmModal(false);
@@ -104,7 +108,9 @@ export const ResultItem = (props) => {
     }
 
     const markAsCompleted = async () => {
+        setIsLoading(true);
         const response = await markCompetitionUnitAsCompleted(race._source.id);
+        setIsLoading(false);
 
         if (response.success) {
             setShowMarkAsCompletedConfirmModal(false);
@@ -116,7 +122,9 @@ export const ResultItem = (props) => {
     }
 
     const forceDeleteRace = async () => {
+        setIsLoading(true);
         const response = await forceDeleteCompetitionUnit(race._source.id);
+        setIsLoading(false);
 
         if (response.success) {
             setShowDeleteRaceConfirmModal(false);
@@ -154,9 +162,19 @@ export const ResultItem = (props) => {
         </Menu>
     );
 
+    const renderLiveDot = () => {
+        if ([RaceStatus.ON_GOING].includes(race._source?.status))
+            return <LiveDotWrapper>
+                <span>{t(translations.general.live)} <LiveDot className='live'></LiveDot></span>
+            </LiveDotWrapper>;
+
+        return <></>;
+    }
+
     return (
         <>
             <ConfirmModal
+                loading={isLoading}
                 showModal={showMarkAsHiddenConfirmModal}
                 title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_mark_this_race_as_hidden)}
                 content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_hidden_are_you_sure_you_want_to_continue)}
@@ -164,6 +182,7 @@ export const ResultItem = (props) => {
                 onCancel={() => setShowMarkAsHiddenConfirmModal(false)}
             />
             <ConfirmModal
+                loading={isLoading}
                 showModal={showMarkAsCompletedConfirmModal}
                 title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_mark_this_race_as_completed)}
                 content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_marked_as_completed_are_you_sure_you_want_to_continue)}
@@ -171,6 +190,7 @@ export const ResultItem = (props) => {
                 onCancel={() => setShowMarkAsCompletedConfirmModal(false)}
             />
             <ConfirmModal
+                loading={isLoading}
                 showModal={showDeleteRaceConfirmModal}
                 title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_force_delete_this_race)}
                 content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_deleted_are_you_sure_you_want_to_continue)}
@@ -194,6 +214,7 @@ export const ResultItem = (props) => {
                                 {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
                             </> : <div></div>
                         }
+                        {renderLiveDot()}
                     </Space>
                     {canManageRace() && <StyledDropDown data-tip={t(translations.tip.super_admin_options)} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />}
                 </HeadDescriptionWrapper>
@@ -208,12 +229,11 @@ export const ResultItem = (props) => {
                     </DescriptionItem>}
                 </DescriptionWrapper>
                 <Space size={10}>
-                    {race._source?.id &&
-                        race._source?.source === 'SYRF'
-                        && [RaceStatus.ON_GOING].includes(race._source?.status) // only show expedition button for ongoing races.
-                        && <ExpeditionServerActionButtons competitionUnit={race._source} />}
-                    {
-                        canRegister() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
+                    {canStreamToExpedition(race._source?.id, race._source?.source, race._source?.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
+                    {canRegister() && <CreateButton
+                        icon={<FiEdit
+                            style={{ marginRight: '10px' }} />}
+                        onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
                     }
                 </Space>
             </Wrapper>
@@ -228,6 +248,7 @@ const Wrapper = styled.div`
     padding: 10px;
     margin-bottom: 10px;
     width: 100%;
+    position: relative;
 `;
 
 const Name = styled.h3`
@@ -267,4 +288,14 @@ const StyledDropDown = styled(Dropdown.Button)`
    button {
     border: none;
    }
+`;
+
+const LiveDotWrapper = styled.div`
+   color: red;
+   span {
+       margin-left: 3px;
+   }
+   position: absolute;
+   right: 10px;
+   top: 10px;
 `;

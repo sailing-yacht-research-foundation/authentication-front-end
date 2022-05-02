@@ -19,6 +19,7 @@ import { Share } from "./components/Share";
 import { FullScreen } from './components/FullScreen';
 import { Link } from "react-router-dom";
 import { StyleConstants } from "styles/StyleConstants";
+import { handleGoBack } from "utils/helpers";
 
 export const PlaybackPage = (props) => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
@@ -123,11 +124,7 @@ export const PlaybackPage = (props) => {
   }
 
   const handleHistoryGoBack = () => {
-    if (history.action !== "POP") {
-      history.goBack();
-    } else {
-      history.push('/');
-    }
+    handleGoBack(history);
   };
 
   return (

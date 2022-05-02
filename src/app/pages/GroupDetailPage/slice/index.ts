@@ -15,7 +15,7 @@ export const initialState: GroupDetailState = {
     isGettingAdmins: false,
     isGettingMembers: false,
     group: {},
-    getGroupDetailFailed: false,
+    isGetGroupDetailFailed: false,
     isGettingGroup: false,
     acceptedMemberResults: [],
     memberPageSize: 10,
@@ -52,12 +52,12 @@ const slice = createSlice({
         setIsGettingMembers(state, action: PayloadAction<boolean>) {
             state.isGettingMembers = action.payload;
         },
-        setGroup(state, action: PayloadAction<Group>) {
+        setGroup(state, action: PayloadAction<Partial<Group>>) {
             state.group = action.payload;
         },
         getGroup(state, action: PayloadAction<string>) {},
-        setGetGroupFailed(state, action: PayloadAction<boolean>) {
-            state.getGroupDetailFailed = action.payload;
+        setIsGetGroupFailed(state, action: PayloadAction<boolean>) {
+            state.isGetGroupDetailFailed = action.payload;
         },
         setIsGettingGroup(state, action: PayloadAction<boolean>) {
             state.isGettingGroup = action.payload;
@@ -72,6 +72,11 @@ const slice = createSlice({
         setAdminPageSize(state, action: PayloadAction<number>) {
             state.adminPageSize = action.payload;
         },
+        clearGroupData(state) {
+            state.group = {};
+            state.members = [];
+            state.admins = [];
+        }
     },
 });
 

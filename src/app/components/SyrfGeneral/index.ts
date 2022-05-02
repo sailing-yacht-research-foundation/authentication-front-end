@@ -9,7 +9,7 @@ export const PageHeaderContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 15px;
+    padding: 30px 0;
 `;
 
 export const PageHeaderContainerResponsive = styled.div`
@@ -265,4 +265,21 @@ export const IconWrapper = styled.span`
 export const FilterWrapper = styled.div`
     text-align: right;
     text-transform: capitalize;
+`;
+
+export const PageHeaderDescription = styled.span`
+    color: #00000073;
+`;
+
+export const LiveDot = styled.span`
+    width: 7px;
+    height: 7px;
+    background: #606060;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+
+    &.live {
+        background: #ff0000;
+    }
 `;

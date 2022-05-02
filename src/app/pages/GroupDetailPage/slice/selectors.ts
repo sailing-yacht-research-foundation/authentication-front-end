@@ -56,9 +56,9 @@ export const selectIsGettingGroup = createSelector(
     group => group.isGettingGroup,
 );
 
-export const selectGetGroupFailed = createSelector(
+export const selectIsGetGroupFailed = createSelector(
     [selectDomain],
-    group => group.getGroupDetailFailed,
+    group => group.isGetGroupDetailFailed,
 );
 
 export const selectAcceptedMemberResults = createSelector(

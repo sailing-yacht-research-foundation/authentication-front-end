@@ -61,6 +61,8 @@ export const MembersManager = (props) => {
 
     const [showRemoveFromGroupModal, setShowRemoveFromGroupModal] = React.useState<boolean>(false);
 
+    const [isBlockingMember, setIsBlockingMember] = React.useState<boolean>(false);
+
     const isGettingMembers = useSelector(selectIsGettingMembers);
 
     const [filterMode, setFilterMode] = React.useState<string>('');
@@ -122,7 +124,9 @@ export const MembersManager = (props) => {
     const block = async (e) => {
         e.preventDefault();
 
+        setIsBlockingMember(true);
         const response = await blockMember(groupId, member.member?.id);
+        setIsBlockingMember(false);
 
         if (response.success) {
             toast.success(t(translations.group.successfully_blocked_member_out_of_the_group));
@@ -154,7 +158,15 @@ export const MembersManager = (props) => {
     }
 
     React.useEffect(() => {
-        getMembers(1, 10, '');
+        if (group.id) {
+            if (group.isAdmin) {
+                getMembers(1, 10, '');
+            }
+            else {
+                setFilterMode(filterModes.ACCEPTED);
+                getMembers(1, 10, filterModes.ACCEPTED);
+            }
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -193,7 +205,7 @@ export const MembersManager = (props) => {
     const filterMembers = (event, mode) => {
         event.preventDefault();
         let status = mode;
-        if (status == filterModes.ALL) status = '';
+        if (status === filterModes.ALL) status = '';
         getMembers(1, DEFAULT_PAGE_SIZE, status);
         setFilterMode(status);
     }
@@ -211,6 +223,7 @@ export const MembersManager = (props) => {
     return (
         <SectionContainer>
             <ConfirmModal content={t(translations.group.are_you_really_sure_you_want_to_block_user_they_will_no_longer, { memberName: member.member?.name })}
+                loading={isBlockingMember}
                 title={t(translations.group.are_you_sure_you_want_to_block, { memberName: member.member?.name })}
                 showModal={showBlockConfirmModal}
                 onCancel={() => setShowBlockConfirmModal(false)}
@@ -222,7 +235,7 @@ export const MembersManager = (props) => {
                 {group.isAdmin && <CreateButton onClick={() => setShowModal(true)} icon={<IoMdPersonAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>Invite</CreateButton>}
             </SectionTitleWrapper>
             {group.isAdmin && <FilterWrapper>
-                <Dropdown overlay={menu}>
+                <Dropdown trigger={['click']} overlay={menu}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
                         {filterMode === '' ? t(translations.group.all) : filterMode.toLowerCase()} <DownOutlined />
                     </a>

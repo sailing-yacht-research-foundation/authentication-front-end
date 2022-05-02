@@ -15,13 +15,15 @@ import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils
 import { IoIosArrowBack } from 'react-icons/io';
 import { Share } from 'app/pages/PlaybackPage/components/Share';
 import { EventAdmins } from './EventAdmins';
-import { AiOutlineCalendar } from 'react-icons/ai';
+import { AiFillNotification, AiOutlineCalendar } from 'react-icons/ai';
 import { VesselList } from './VesselList';
 import { toast } from 'react-toastify';
 import { GiArchiveRegister } from 'react-icons/gi';
 import { HiLockClosed } from 'react-icons/hi';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { PDFUploadForm } from 'app/pages/MyEventCreateUpdatePage/components/PDFUploadForm';
+import { OrganizationGroup } from './OrganizationGroup';
+import { AnnouncementModal } from './AnnouncementModal';
 
 export const EventDetail = () => {
 
@@ -33,6 +35,8 @@ export const EventDetail = () => {
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
 
     const [isFetchingEvent, setIsFetchingEvent] = React.useState<boolean>(false);
+
+    const [showAnnouncementModal, setShowAnnouncementModal] = React.useState<boolean>(false);
 
     const [isOpeningClosingRegistration, setIsOpeningClosingRegistration] = React.useState<boolean>(false);
 
@@ -76,6 +80,14 @@ export const EventDetail = () => {
             icon: <HiLockClosed />,
             spinning: isOpeningClosingRegistration,
             isDelete: false,
+        },
+        {
+            name: t(translations.my_event_create_update_page.send_an_announcement),
+            show: ![EventState.DRAFT, EventState.CANCELED, EventState.COMPLETED].includes(event.status!),
+            handler: () => setShowAnnouncementModal(true),
+            icon: <AiFillNotification />,
+            isDelete: false,
+            spinning: false,
         }
     ];
 
@@ -139,8 +151,34 @@ export const EventDetail = () => {
         history.push(`/profile/${profileId}`);
     }
 
+    const renderEventActions = () => {
+        return <EventActions>
+            <Space wrap style={{ justifyContent: 'flex-end' }}>
+                {canManageEvent() &&
+                    <>
+                        {menus.map((item, index) => {
+                            return item.show && <Spin key={index} spinning={item.spinning}>
+                                {<Button shape="round" onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</Button>}
+                            </Spin>
+                        })}
+                        <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
+                    </>}
+                <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
+                    downloadIcalendarFile(event);
+                }}>
+                    <AiOutlineCalendar style={{ fontSize: '23px' }} />
+                </Button>
+                <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
+            </Space>
+        </EventActions>;
+    }
+
     return (
         <Spin spinning={isFetchingEvent}>
+            <AnnouncementModal
+                event={event}
+                showModal={showAnnouncementModal}
+                setShowModal={setShowAnnouncementModal} />
             <PageHeaderContainerResponsive>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => goBack()}>
@@ -152,27 +190,7 @@ export const EventDetail = () => {
                         <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
-                <EventActions>
-                    <Space wrap style={{ justifyContent: 'flex-end' }}>
-                        {
-                            canManageEvent() &&
-                            <>
-                                {menus.map((item, index) => {
-                                    return item.show && <Spin key={index} spinning={item.spinning}>
-                                        {<Button shape="round" onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</Button>}
-                                    </Spin>
-                                })}
-                                <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
-                            </>
-                        }
-                        <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
-                            downloadIcalendarFile(event);
-                        }}>
-                            <AiOutlineCalendar style={{ fontSize: '23px' }} />
-                        </Button>
-                        <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
-                    </Space>
-                </EventActions>
+                {renderEventActions()}
             </PageHeaderContainerResponsive>
 
             <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
@@ -189,10 +207,18 @@ export const EventDetail = () => {
                         {!event?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
                     </EventOpenRegistrationContainer>
                 </EventSection>
+
+                <EventSection>
+                    <OrganizationGroup event={event} />
+                </EventSection>
             </EventDescriptionContainer>
 
             {event.id &&
                 <>
+                    <EventSection>
+                        <EventAdmins event={event} />
+                    </EventSection>
+
                     <EventSection>
                         <RaceList canManageEvent={canManageEvent} event={event} />
                     </EventSection>
@@ -202,10 +228,6 @@ export const EventDetail = () => {
                     </EventSection>
 
                     <PDFUploadForm reloadParent={fetchEvent} fullWidth event={event} />
-
-                    <EventSection>
-                        <EventAdmins event={event} />
-                    </EventSection>
                 </>
             }
         </Spin>

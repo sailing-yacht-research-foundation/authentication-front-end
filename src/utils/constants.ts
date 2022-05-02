@@ -121,7 +121,9 @@ export const enum RaceEmitterEvent {
     REMOVE_PARTICIPANT = 'remove-vesselparticipant',
     UPDATE_COURSE_MARK = 'update-course-mark',
     ZOOM_TO_PARTICIPANT = 'zoom-to-participant',
-    UPDATE_COURSE = 'update-course'
+    UPDATE_COURSE = 'update-course',
+    OCS_DETECTED = 'ocs-detected',
+    UPDATE_BOAT_COLOR = 'update-boat-color'
 }
 
 export const DEFAULT_GROUP_AVATAR = '/default-avatar.jpeg';
@@ -145,7 +147,8 @@ export enum WSMessageDataType {
     NEW_PARTICIPANT_JOINED = 'new-participant-joined',
     VESSEL_PARTICIPANT_REMOVED = 'vessel-participant-removed',
     MAKR_TRACK = 'mark-track',
-    COURSE_UPDATED = 'course-updated'
+    COURSE_UPDATED = 'course-updated',
+    EVENT = 'event'
 }
 
 export enum FollowStatus {
@@ -235,7 +238,10 @@ export enum NotificationTypes {
     OPEN_EVENT_NEARBY_CREATED = 'OPEN_EVENT_NEARBY_CREATED',
     COMPETITION_START_TRACKING = 'COMPETITION_START_TRACKING',
     NEW_COMPETITION_ADDED_TO_EVENT = 'NEW_COMPETITION_ADDED_TO_EVENT',
-    KUDOS_RECEIVED = 'KUDOS_RECEIVED'
+    KUDOS_RECEIVED = 'KUDOS_RECEIVED',
+    EVENT_INACTIVITY_WARNING = 'EVENT_INACTIVITY_WARNING',
+    EVENT_MESSAGES_RECEIVED = 'EVENT_MESSAGES_RECEIVED',
+    SIMULATION_DELETION = 'SIMULATION_DELETION'
 }
 
 export enum UserRole {
@@ -252,6 +258,20 @@ export enum KudoTypes {
 export const DEFAULT_PAGE_SIZE = 10;
 
 export enum AuthCode {
-  WRONG_CREDENTIALS = 'E012',
-  USER_ALREADY_EXISTS = 'E015'
+    WRONG_CREDENTIALS = 'E012',
+    USER_ALREADY_EXISTS = 'E015'
+}
+
+export enum WebsocketRaceEvent {
+    VESSEL_OCS = 'VesselOCS'
+}
+
+export enum GroupTypes {
+    ORGANIZATION = 'ORGANIZATION',
+    COMMITTEE = 'COMMITTEE',
+    TEAM = 'TEAM',
+}
+
+export enum RaceSource {
+    SYRF = 'SYRF'
 }

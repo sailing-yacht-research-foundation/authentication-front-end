@@ -1,22 +1,23 @@
 import React from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, Image, Spin, Menu, Dropdown } from 'antd';
+import { Avatar, Spin, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../slice';
 import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile } from '../slice/selectors';
 import { FollowerModal } from './modals/FollowerModal';
 import { FollowingModal } from './modals/FollowingModal';
-import { renderAvatar } from 'utils/user-utils';
-import { FollowStatus } from 'utils/constants';
-import { blockUser, followProfile, unblockUser, unfollowProfile } from 'services/live-data-server/profile';
-import { BsCheck, BsPlus, BsCheck2All } from 'react-icons/bs';
+import { blockUser, unfollowProfile } from 'services/live-data-server/profile';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { UnfollowConfirmModal } from 'app/components/SocialProfile/UnfollowConfirmModal';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { ConfirmModal } from 'app/components/ConfirmModal';
+import { ProfileBasicInfoSection } from './ProfileBasicInfoSection';
+import { StyleConstants } from 'styles/StyleConstants';
+import { getUserInterestsAsArray } from 'utils/user-utils';
+import { DEFAULT_GROUP_AVATAR, EventTypes } from 'utils/constants';
 
 export const PublicProfile = () => {
 
@@ -56,14 +57,6 @@ export const PublicProfile = () => {
         dispatch(actions.getProfile(profileId || currentUserId));
     }
 
-    const follow = async () => {
-        const response = await followProfile(profile.id);
-        if (response.success) {
-            setFollowStatus(response?.data?.status);
-            handlePostFollowUnfollowAction();
-        }
-    }
-
     const unfollow = async () => {
         setIsLoading(true);
         const response = await unfollowProfile(profile.id);
@@ -91,61 +84,11 @@ export const PublicProfile = () => {
         setShowConfirmBlockModal(false);
     }
 
-    const unblock = async () => {
-        const response = await unblockUser(profile.id);
-
-        if (response.success) {
-            getUserProfile();
-            toast.info(t(translations.public_profile.successfully_unblocked_user, { userName: profile.name }))
-        } else {
-            showToastMessageOnRequestError(response.error);
-        }
-    }
-
     const handlePostFollowUnfollowAction = () => {
         dispatch(actions.getFollowing({ profileId: profile.id, page: 1 }));
         dispatch(actions.getFollowers({ profileId: profile.id, page: 1 }));
         getUserProfile();
     }
-
-    const renderFollowButton = () => {
-        if (currentUserId === profile.id)
-            return <></>;
-
-        if (!followStatus)
-            return <FollowButton icon={<BsPlus style={{ fontSize: '20px' }} />} onClick={follow} shape="round">{t(translations.public_profile.follow)}</FollowButton>;
-        else if (followStatus === FollowStatus.ACCEPTED)
-            return <FollowButton icon={<BsCheck2All style={{ fontSize: '20px', marginRight: '5px' }} />} type='primary' onClick={() => setShowUnfollowConfirmModal(true)} shape="round">{t(translations.public_profile.following)}</FollowButton>;
-        else if (followStatus === FollowStatus.REQUESTED)
-            return <FollowButton icon={<BsCheck style={{ fontSize: '20px' }} />} type='primary' onClick={() => setShowUnfollowConfirmModal(true)} shape="round">{t(translations.public_profile.requested)}</FollowButton>;
-    }
-
-    const showFollowersModal = () => {
-        if (profile.followerCount > 0 && (!profile.isPrivate || currentUserId === profile.id))
-            setShowFollowerModal(true)
-    }
-
-    const showFollowingsModal = () => {
-        if (profile.followingCount > 0 && (!profile.isPrivate || currentUserId === profile.id))
-            setShowFollowingModal(true)
-    }
-
-    const renderBlockButton = () => {
-        if (currentUserId === profile.id)
-            return <></>;
-
-        return <Dropdown.Button overlay={menu}></Dropdown.Button>;
-    }
-
-    const menu = (
-        <Menu>
-            {
-                !profile.isBlocking ?
-                    (<Menu.Item key="1" onClick={() => setShowConfirmBlockModal(true)}>{t(translations.public_profile.block)}</Menu.Item>) :
-                    (<Menu.Item key="2" onClick={unblock}>{t(translations.public_profile.unblock)}</Menu.Item>)
-            }
-        </Menu >
-    );
 
     React.useEffect(() => {
         if (getProfileFailed)
@@ -166,6 +109,8 @@ export const PublicProfile = () => {
         }
     }, [profile]);
 
+    const interests = getUserInterestsAsArray(profile);
+
     return (
         <Wrapper>
             <ConfirmModal
@@ -184,115 +129,94 @@ export const PublicProfile = () => {
             }
             <Spin spinning={isLoadingProfile}>
                 <SectionWrapper>
-                    <InfoSection>
-                        <AvatarWrapper>
-                            <Image src={renderAvatar(profile.avatar)} />
-                        </AvatarWrapper>
-                        <ProfileName>{profile.name}</ProfileName>
-                        <ProfileBio>{profile.bio}</ProfileBio>
-                        <ProfileButtonsWrapper>
-                            <div></div>
-                            <div>{renderFollowButton()}</div>
-                            <OptionContainer>
-                                {renderBlockButton()}
-                            </OptionContainer>
-                        </ProfileButtonsWrapper>
-                        {profile.isPrivate && <div>{t(translations.public_profile.profile_is_private)}</div>}
-                    </InfoSection>
-                    <SubInfoSection>
-                        <InfoItem onClick={showFollowersModal}>
-                            <InfoNumber>{profile.followerCount}</InfoNumber>
-                            <InfoTitle>{t(translations.public_profile.followers)}</InfoTitle>
-                        </InfoItem>
-                        <InfoItem onClick={showFollowingsModal}>
-                            <InfoNumber>{profile.followingCount}</InfoNumber>
-                            <InfoTitle>{t(translations.public_profile.following)}</InfoTitle>
-                        </InfoItem>
-                    </SubInfoSection>
+                    <ProfileBasicInfoSection
+                        profile={profile}
+                        handlePostFollowUnfollowAction={handlePostFollowUnfollowAction}
+                        setShowFollowerModal={setShowFollowerModal}
+                        setShowFollowingModal={setShowFollowingModal}
+                        setFollowStatus={setFollowStatus}
+                        getUserProfile={getUserProfile}
+                        setShowConfirmBlockModal={setShowConfirmBlockModal}
+                        setShowUnfollowConfirmModal={setShowUnfollowConfirmModal}
+                        followStatus={followStatus} />
                 </SectionWrapper>
+
+                {profile.bio && <SectionWrapper>
+                    <SectionTitle>{t(translations.public_profile.about)}</SectionTitle>
+                    <p>{profile.bio}</p>
+                </SectionWrapper>}
+
+                {interests.length > 0 && <SectionWrapper>
+                    <SectionTitle>{t(translations.public_profile.interests)}</SectionTitle>
+                    <InterestWrapper>
+                        {interests.map(interest => <Interest>
+                            {EventTypes.CRUISING === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
+                                : <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />} {interest.toLowerCase()}</Interest>)}
+                    </InterestWrapper>
+                </SectionWrapper>}
+
+                {profile.groups?.length > 0 &&
+                    <SectionWrapper>
+                        <SectionTitle>{t(translations.public_profile.groups_and_organizations)}</SectionTitle>
+                        <Avatar.Group>
+                            {profile.groups?.map(group => {
+                                return <Tooltip title={group.group?.groupName} placement="top">
+                                    <Link to={`/groups/${group.group?.id}`}>
+                                        <Avatar src={group.group?.groupImage || DEFAULT_GROUP_AVATAR} />
+                                    </Link>
+                                </Tooltip>;
+                            })}
+                        </Avatar.Group>
+                    </SectionWrapper>}
             </Spin>
         </Wrapper>
     );
 }
 
 const SectionWrapper = styled.div`
-    padding: 10px;
-    :not(:first-child) {
-        margin-top: 30px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    &:not(:first-child) {
+        margin-top: 10px;
     }
 `;
 
 const Wrapper = styled.div`
     flex: .7;
-    background: #fff;
+    .ant-dropdown-button .ant-dropdown-trigger {
+        border-radius: 10px !important;
+    }
 `;
 
-const InfoSection = styled.div`
-    text-align: center;
+const SectionTitle = styled.h3`
+    margin-bottom: 15px;
 `;
 
-const AvatarWrapper = styled.div`
-    width: 130px;
-    height: 130px;
-    display: inline-block;
-    margin-top: 30px;
+const InterestWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
+
+const Interest = styled.div`
+    background: ${StyleConstants.SECONDARY_COLOR};
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 4px 7px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    flex: 0 0 auto;
+`;
+
+const ItemAvatar = styled.img`
+    with: 25px;
+    height: 25px;
+    margin-right: 5px;
     border-radius: 50%;
-    overflow: hidden;
-
-    img {
-        border-radius: 50%;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border: 1px solid #eee;
-    }
-`;
-
-const ProfileName = styled.h2`
-    margin-top: 15px;
-`;
-
-const ProfileBio = styled.p`
-
-`;
-
-const FollowButton = styled(Button)`
-    margin: 15px 0;
-`;
-
-const SubInfoSection = styled.div`
-    border-top: 1px solid #eee;
-    padding: 15px 5px;
-
-    display: flex;
-    justify-content: center;
-`;
-
-const InfoItem = styled.div`
-    margin: 0 15px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-`;
-
-const InfoNumber = styled.h3`
-    margin: 3px 0;
-    font-weight: bold;
-`;
-
-const InfoTitle = styled.span``;
-
-const ProfileButtonsWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    & > div {
-        width: 33%;
-    }
-`;
-
-const OptionContainer = styled.div`
-    text-align: right;
 `;

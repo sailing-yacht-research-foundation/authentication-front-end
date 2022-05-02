@@ -193,3 +193,14 @@ export const unBlockMember = (groupId: string, memberId: string) => {
         userId: memberId
     }));
 }
+
+export const connectStripe = (groupId: string, groupOrganizationConnectUrl: string) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/connect-stripe`, {
+        refreshUrl: groupOrganizationConnectUrl,
+        returnUrl: groupOrganizationConnectUrl
+    }));
+}
+
+export const checkForStripePayout = (groupId: string) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/connect-stripe`));
+}

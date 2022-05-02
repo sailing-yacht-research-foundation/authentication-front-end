@@ -12,6 +12,7 @@ import { CreateButton, PageHeaderContainerResponsive, PageHeading, PageInfoConta
 import { BiImport } from "react-icons/bi";
 import { ImportTrack } from "./ImportTrack";
 import { ImportTrackType } from "utils/constants";
+import { media } from "styles/media";
 
 const { TabPane } = Tabs;
 
@@ -52,7 +53,7 @@ export const MyTrack = () => {
         <PageInfoContainer style={{ paddingRight: '8px' }}>
           <PageHeading style={{ padding: '0px', marginTop: '10px', marginBottom: '4px' }}>{t(translations.my_tracks_page.my_tracks)}</PageHeading>
         </PageInfoContainer>
-        <Space size={10} wrap>
+        <StyledSpace size={10} wrap>
           <CreateButton onClick={() => setShowImportGPXTrackModal(true)}
             style={{ margin: '0px' }}
             icon={<BiImport
@@ -64,7 +65,7 @@ export const MyTrack = () => {
             icon={<BiImport
               style={{ marginRight: '5px' }}
               size={18} />}>{t(translations.my_tracks_page.import_expedition_track)}</CreateButton>
-        </Space>
+        </StyledSpace>
       </PageHeaderContainerResponsive>
       <StyledTabs<React.ElementType> animated defaultActiveKey="1">
         <TabPane tab={renderIcon(BsListUl, translate.tracks)} key="1">
@@ -90,4 +91,11 @@ const StyledTabs = styled(Tabs)`
   .ant-tabs-tab:first-child {
     margin-left: 10px;
   }
+`;
+
+const StyledSpace = styled(Space)`
+  display: none;
+  ${media.medium`
+    display: flex;
+  `}
 `;
