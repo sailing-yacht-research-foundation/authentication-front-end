@@ -137,7 +137,10 @@ export const Main = () => {
                 }
             </StyledTabs>
             {(showAdvancedSearch || screenWidthIsGreaterThan1024()) && <FilterPane defaultFocus close={() => dispatch(actions.setShowAdvancedSearch(false))} />}
-            <ToggleFilterPane onClick={() => dispatch(actions.setShowAdvancedSearch(true))} >
+            <ToggleFilterPane onClick={() => {
+                dispatch(actions.setShowAdvancedSearch(true));
+                window.scroll(0, 0);
+            }} >
                 <BsSearch size={25} color={StyleConstants.MAIN_TONE_COLOR} />
             </ToggleFilterPane>
         </Wrapper >
@@ -181,7 +184,7 @@ const ToggleFilterPane = styled.div`
     padding: 8px;
     box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
     cursor: pointer;
-    z-index: 10;
+    z-index: 12;
 
     ${media.medium`
         display: none;
