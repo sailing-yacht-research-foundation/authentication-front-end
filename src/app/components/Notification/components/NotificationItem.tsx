@@ -199,7 +199,6 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
                 history.push(`/groups/${notification.metadata?.groupId}`);
                 break;
             case NotificationTypes.COMPETITION_START_TRACKING:
-            case NotificationTypes.EVENT_INACTIVITY_WARNING:
             case NotificationTypes.USER_ADDED_TO_EVENT_ADMIN:
             case NotificationTypes.USER_INVITED_TO_PRIVATE_REGATTA:
             case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
