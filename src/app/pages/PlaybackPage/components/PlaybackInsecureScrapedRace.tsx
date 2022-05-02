@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { LottieWrapper } from "app/components/SyrfGeneral";
 import Lottie from "react-lottie";
 import Insecure from '../assets/insecure.json'
+import { sourcesPreventIframe } from "utils/constants";
 
 const defaultOptions = {
   loop: false,
@@ -33,20 +34,37 @@ export const PlaybackInsecureScrapedRace = (props) => {
       }}
     >
 
-      <LottieWrapper style={{marginTop:'-40px'}}>
+      <LottieWrapper style={{ marginTop: '-40px' }}>
         <Lottie options={defaultOptions} height={280} width={280} />
-        <h4 style={{ maxWidth: "800px", textAlign: "center", marginTop:'15px' }}>
-          {t(translations.playback_page.insecure_scraped_unfortunately)},&nbsp;
-          {searchRaceData.source ||
-            urlToCompany(searchRaceData.url) ||
-            t(translations.playback_page.insecure_scraped_thisrace)}{" "}
-          {t(translations.playback_page.insecure_scraped_nothttps)}
-          &nbsp; <br /> <br />
-          <a href={searchRaceData.url} rel="noreferrer" target="_blank">
-            {t(translations.playback_page.insecure_scraped_clickhere)}
-          </a>
-          &nbsp;{t(translations.playback_page.insecure_scraped_viewinsecureplayer)}
-        </h4>
+        {sourcesPreventIframe.includes(searchRaceData.source) ? <>
+          <h4 style={{ maxWidth: "800px", textAlign: "center", marginTop: '15px' }}>
+            {t(translations.playback_page.insecure_scraped_unfortunately)},&nbsp;
+            {searchRaceData.source ||
+              urlToCompany(searchRaceData.url) ||
+              t(translations.playback_page.insecure_scraped_thisrace)}{" "}
+            {t(translations.playback_page.prevent_playing_on_iframe)}
+            &nbsp; <br /> <br />
+            <a href={searchRaceData.url} rel="noreferrer" target="_blank">
+              {t(translations.playback_page.insecure_scraped_clickhere)}
+            </a>
+            &nbsp;{t(translations.playback_page.view_in_new_tab)}
+          </h4>
+        </> :
+          <>
+            <h4 style={{ maxWidth: "800px", textAlign: "center", marginTop: '15px' }}>
+              {t(translations.playback_page.insecure_scraped_unfortunately)},&nbsp;
+              {searchRaceData.source ||
+                urlToCompany(searchRaceData.url) ||
+                t(translations.playback_page.insecure_scraped_thisrace)}{" "}
+              {t(translations.playback_page.insecure_scraped_nothttps)}
+              &nbsp; <br /> <br />
+              <a href={searchRaceData.url} rel="noreferrer" target="_blank">
+                {t(translations.playback_page.insecure_scraped_clickhere)}
+              </a>
+              &nbsp;{t(translations.playback_page.insecure_scraped_viewinsecureplayer)}
+            </h4>
+          </>}
+
       </LottieWrapper>
     </div>
   );
