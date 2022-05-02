@@ -332,6 +332,9 @@ export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
 export const parseKeyword = (keyword) => {
     // eslint-disable-next-line
     keyword = keyword.replace(/([\!\*\+\=\<\>\&\|\(\)\[\]\{\}\^\~\?\\/"])/g, "\\$1"); // escape special characters that will make the elastic search crash.
+    keyword = keyword.replace(/(\bAND\b|\bOR\b|\bNOT\b)/g, function (match) {
+        return match.toLowerCase();
+    });
     // eslint-disable-next-line
     const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     const { expression, processedKeyword } = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
@@ -452,11 +455,14 @@ export const canStreamToExpedition = (id: string | undefined, source: string, st
     return id && source === RaceSource.SYRF && status === RaceStatus.ON_GOING && !isPrivate;
 }
 
-
 export const handleGoBack = (history) => {
     if (history.action !== "POP") {
         history.goBack();
     } else {
         history.push('/');
     }
+}
+
+export const getBoatNameFromVesselParticipantObject = (vesselparticipant) => {
+    return vesselparticipant?.vessel?.publicName || '';
 }

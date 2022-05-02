@@ -12,7 +12,7 @@ import { certifications } from 'utils/constants';
 
 export const ShareableInformation = (props) => {
 
-    const { shareableInformation, setShareableInformation } = props;
+    const { shareableInformation, setShareableInformation, form } = props;
 
     const [showRemoveCovidCardConfirmModal, setShowRemoveCovidCardConfirmModal] = React.useState<boolean>(false);
 
@@ -64,7 +64,22 @@ export const ShareableInformation = (props) => {
     }
 
     const renderCertificationsDropdownList = () => {
-        return certifications.map((type, index) => <Select.Option key={index} value={type}>{type}</Select.Option>)
+        return <>
+            <Select.Option value={'none'}>{t(translations.forms.none)}</Select.Option>
+            {certifications.map((type, index) => <Select.Option key={index} value={type}>{type}</Select.Option>)}
+        </>
+    }
+
+    const renderTagsDropdownList = () => {
+        return <Select.Option value={'none'}>{t(translations.forms.none)}</Select.Option>
+    }
+
+    const handleTagsFieldChange = (values, fieldName) => {
+        if (values.includes('none')) {
+            const object = {};
+            object[fieldName] = ['none'];
+            form.setFieldsValue(object);
+        }
     }
 
     return (
@@ -204,9 +219,13 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.food_allergies)}</SyrfFieldLabel>}
                         name="foodAllergies"
                         data-tip={t(translations.profile_page.update_profile.food_allergies)}
-                        rules={[{ max: 50, message: t(translations.forms.food_allergies_must_not_be_more_than_50_characters) }]}
                     >
-                        <SyrfInputField autoComplete="off" placeholder={t(translations.forms.please_input_in_commas_separated_format)} />
+                        <SyrfFormSelect
+                            maxTagCount={'responsive'}
+                            onChange={values => handleTagsFieldChange(values, 'foodAllergies')}
+                            mode="tags">
+                            {renderTagsDropdownList()}
+                        </SyrfFormSelect>
                     </Form.Item>
                 </Col>
             </Row>
@@ -218,7 +237,9 @@ export const ShareableInformation = (props) => {
                         name="certifications"
                         data-tip={t(translations.profile_page.update_profile.certifications)}
                     >
-                        <SyrfFormSelect mode="multiple">
+                        <SyrfFormSelect mode="tags"
+                            onChange={values => handleTagsFieldChange(values, 'certifications')}
+                            maxTagCount={'responsive'}>
                             {renderCertificationsDropdownList()}
                         </SyrfFormSelect>
                     </Form.Item>
@@ -229,9 +250,13 @@ export const ShareableInformation = (props) => {
                         label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.medical_problems)}</SyrfFieldLabel>}
                         name="medicalProblems"
                         data-tip={t(translations.profile_page.update_profile.medical_problems)}
-                        rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_255_characters) }]}
                     >
-                        <SyrfInputField autoComplete="off" />
+                        <SyrfFormSelect
+                            maxTagCount={'responsive'}
+                            onChange={values => handleTagsFieldChange(values, 'medicalProblems')}
+                            mode="tags">
+                            {renderTagsDropdownList()}
+                        </SyrfFormSelect>
                     </Form.Item>
                 </Col>
 

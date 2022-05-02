@@ -44,6 +44,8 @@ const colors = {
   GRAY: '#808080'
 }
 
+const NO_PING_TIMEOUT = 60000;
+
 export const RaceMap = (props) => {
   const { emitter } = props;
 
@@ -116,11 +118,24 @@ export const RaceMap = (props) => {
       emitter.on(RaceEmitterEvent.OCS_DETECTED, _changeBoatColorToRedIfOCSDetected);
 
       emitter.on(RaceEmitterEvent.UPDATE_BOAT_COLOR, _updateBoatColorIfPingNotReceived);
+
+      emitter.on(RaceEmitterEvent.CHANGE_BOAT_COLOR_TO_GRAY, _changeBoatColorToGray);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const _changeBoatColorToRedIfOCSDetected = (vesselParticipantId) => {
+  const _changeBoatColorToGray = (vesselParticipantId: string) => {
+    const { current } = raceStatus;
+    const boats = current.boats;
+    if (!boats[vesselParticipantId]) return;
+    // There is a listener that checks for last time the boat pings. When the boat didn't ping for more than 60secs it would be grayed out.
+    // Line 132 makes the boat turn gray immediately.
+    // please check _updateBoatColorIfPingNotReceived and _initLayerAndSetLocationAndHeadingForBoat to understand the flow.
+    boats[vesselParticipantId].lastPing = Date.now() - NO_PING_TIMEOUT; 
+    boats[vesselParticipantId].layer._icon.firstElementChild.style.fill = colors.GRAY;
+  }
+
+  const _changeBoatColorToRedIfOCSDetected = (vesselParticipantId: string) => {
     const { current } = raceStatus;
     const boats = current.boats;
     if (!boats[vesselParticipantId]) return;
@@ -134,7 +149,7 @@ export const RaceMap = (props) => {
     Object.keys(boats).forEach(key => {
       if (!boats[key]) return;
 
-      const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMinutes() > 1;
+      const noPingReceivedFromTheBoatAfter1Minute = moment.duration(moment().diff(moment(boats[key].lastPing))).asMilliseconds() > NO_PING_TIMEOUT;
 
       if (noPingReceivedFromTheBoatAfter1Minute) {
         boats[key].layer._icon.firstElementChild.style.fill = colors.GRAY;

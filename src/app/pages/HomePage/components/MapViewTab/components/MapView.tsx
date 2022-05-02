@@ -9,7 +9,7 @@ import { GoPrimitiveDot } from 'react-icons/go';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectResults } from '../../../slice/selectors';
+import { selectResults, selectUpcomingRaces } from '../../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -39,11 +39,13 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
 
     const results = useSelector(selectResults);
 
+    const upcomingRaceResults = useSelector(selectUpcomingRaces);
+
     const { t } = useTranslation();
 
     useEffect(() => {
         initializeMapView();
-        if (results.length === 0) // no results and focus on user location
+        if (results.length === 0 || upcomingRaceResults.length === 0) // no results and focus on user location
             zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -51,7 +53,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
     useEffect(() => {
         attachRaceMarkersToMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [results]);
+    }, [results, upcomingRaceResults]);
 
     useImperativeHandle(ref, () => ({
         zoomToCurrentUserLocationIfAllowed() {
@@ -118,6 +120,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
 
     const attachRaceMarkersToMap = () => {
         const resultMarkers: any[] = [];
+        const resultItems = results.length > 0 ? results : upcomingRaceResults;
 
         if (markerCluster) {
             markerCluster.removeLayers(markers);
@@ -130,9 +133,9 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
 
         markerCluster = L.markerClusterGroup();
 
-        if (results.length > 0 && geoLoc && watchID) geoLoc.clearWatch(watchID);
+        if (resultItems.length > 0 && geoLoc && watchID) geoLoc.clearWatch(watchID);
 
-        results.forEach(race => {
+        resultItems.forEach(race => {
             const marker = createResultMarker(race);
             if (marker) {
                 resultMarkers.push(marker);

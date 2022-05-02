@@ -214,9 +214,11 @@ export const ResultItem = (props) => {
                                 {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
                             </> : <div></div>
                         }
-                        {renderLiveDot()}
                     </Space>
-                    {canManageRace() && <StyledDropDown data-tip={t(translations.tip.super_admin_options)} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />}
+                    <RightResultWrapper>
+                        {renderLiveDot()}
+                        {canManageRace() && <StyledDropDown data-tip={t(translations.tip.super_admin_options)} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />}
+                    </RightResultWrapper>
                 </HeadDescriptionWrapper>
                 <Name><Link to={`/playback?raceId=${race._id}`}>{race._source?.name}</Link></Name>
                 {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
@@ -295,7 +297,9 @@ const LiveDotWrapper = styled.div`
    span {
        margin-left: 3px;
    }
-   position: absolute;
-   right: 10px;
-   top: 10px;
 `;
+
+const RightResultWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`

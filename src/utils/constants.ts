@@ -124,7 +124,8 @@ export const enum RaceEmitterEvent {
     ZOOM_TO_PARTICIPANT = 'zoom-to-participant',
     UPDATE_COURSE = 'update-course',
     OCS_DETECTED = 'ocs-detected',
-    UPDATE_BOAT_COLOR = 'update-boat-color'
+    UPDATE_BOAT_COLOR = 'update-boat-color',
+    CHANGE_BOAT_COLOR_TO_GRAY = 'CHANGE_BOAT_COLOR_TO_GRAY'
 }
 
 export const DEFAULT_GROUP_AVATAR = '/default-avatar.jpeg';
@@ -147,9 +148,15 @@ export enum WSMessageDataType {
     VIEWER_COUNT = 'viewers-count',
     NEW_PARTICIPANT_JOINED = 'new-participant-joined',
     VESSEL_PARTICIPANT_REMOVED = 'vessel-participant-removed',
-    MAKR_TRACK = 'mark-track',
+    MARK_TRACK = 'mark-track',
     COURSE_UPDATED = 'course-updated',
-    EVENT = 'event'
+    EVENT = 'event',
+    TRACKING_STATE_UPDATE = 'tracking-state-update'
+}
+
+export enum WSTrackingStateUpdate {
+    PARTICIPANT_START_TRACKING = 'start_tracking',
+    PARTICIPANT_STOP_TRACKING = 'stop_tracking'
 }
 
 export enum FollowStatus {
@@ -276,3 +283,5 @@ export enum GroupTypes {
 export enum RaceSource {
     SYRF = 'SYRF'
 }
+
+export const sourcesPreventIframe = ['TACKTRACKER'];
