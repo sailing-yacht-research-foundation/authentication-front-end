@@ -15,6 +15,7 @@ import {
 } from "services/live-data-server/competition-units";
 import { getVesselParticipantGroupById } from "services/live-data-server/vessel-participant-group";
 import { PlaybackTypes } from "types/Playback";
+import { sourcesPreventIframe } from "utils/constants";
 import { playbackActions } from ".";
 export function* getCompetitionUnitDetail({ type, payload }) {
   const { id } = payload;
@@ -108,7 +109,8 @@ export function* getRaceData({ type, payload }) {
 
     yield put(playbackActions.setSearchRaceDetail(raceDetail._source));
 
-    if ((raceDetail._source?.url || "").includes("http://")) {
+    if ((raceDetail._source?.url || "").includes("http://")
+      || sourcesPreventIframe.includes(raceDetail._source?.source)) {
       return yield put(playbackActions.setPlaybackType(PlaybackTypes.INSECURESCRAPEDRACE));
     }
 
@@ -163,7 +165,7 @@ export function* getAndSetRaceLengthUsingServerData({ type, payload }) {
   const { raceId } = payload;
   if (!raceId) return;
 
-  const params = new URLSearchParams(window.location.search); 
+  const params = new URLSearchParams(window.location.search);
   const endTime = params.get('endTime');
   const startTime = params.get('startTime');
   if (endTime && startTime && moment(endTime).isBefore(moment())) return; // at this point, the race length is defined by the track, not race or simplified track, no need calling time from server.

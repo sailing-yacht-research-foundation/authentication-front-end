@@ -35,6 +35,8 @@ jobs:
           --build-arg REACT_APP_GOOGLE_ANALYTICS_KEY='${{ secrets.GOOGLE_ANALYTICS_KEY_STAGING }}'
           --build-arg REACT_APP_SYRF_STREAMING_SERVER_URL='https://streaming-server-dev.syrf.io'
           --build-arg REACT_APP_PUBLIC_VAPID_KEY='${{ secrets.PUBLIC_DEV_VAPID_KEY }}'
+          --build-arg REACT_APP_DOWNLOAD_LINK_ANDROID='https://play.google.com/store/apps/details?id=io.syrf.tracker'
+          --build-arg REACT_APP_DOWNLOAD_LINK_IOS='https://apps.apple.com/app/liveping-by-syrf-io/id1579555734'
           --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to registry
         # This is where you will update the PAT to GITHUB_TOKEN
