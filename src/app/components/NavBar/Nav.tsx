@@ -8,7 +8,7 @@ import { selectIsAuthenticated, selectRefreshToken } from 'app/pages/LoginPage/s
 import { media } from 'styles/media';
 import { useHistory } from 'react-router';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
-import { Space, Button } from 'antd';
+import { Space, Button, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -71,15 +71,16 @@ export const Nav = () => {
           <UserNotification />
           <FollowRequestModal />
           {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
-          <StyledButtonCreate
-            type="primary"
-            shape="round"
-            size="large"
-            className="event-step"
-            data-tip={t(translations.tip.host_a_new_event_with_races)}
-            onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
-              style={{ marginRight: '5px' }}
-              size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>
+          <Tooltip title={t(translations.tip.host_a_new_event_with_races)}>
+            <StyledButtonCreate
+              type="primary"
+              shape="round"
+              size="large"
+              className="event-step"
+              onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
+                style={{ marginRight: '5px' }}
+                size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>
+          </Tooltip>
           <DropDownWrapper>
             <UserDropdown logout={logout} />
             <SelectLanguage />
