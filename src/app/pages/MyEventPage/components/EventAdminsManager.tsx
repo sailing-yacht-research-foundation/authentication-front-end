@@ -1,4 +1,4 @@
-import { Button, Spin } from 'antd';
+import { Button, Spin, Tooltip } from 'antd';
 import { PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import React from 'react';
@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { getEditors, removeEditor } from 'services/live-data-server/event-calendars';
 import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
-import ReactTooltip from 'react-tooltip';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { revokeGroupAsEditor } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
@@ -33,8 +32,8 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
         setIsLoading(false);
 
         if (response.success) {
-                setIndividualEditors(response?.data?.individualEditors);
-                setGroupEditors(response?.data?.groupEditors);
+            setIndividualEditors(response?.data?.individualEditors);
+            setGroupEditors(response?.data?.groupEditors);
         }
     }
 
@@ -54,7 +53,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
         setIsLoading(false);
 
         onAfterRevoked(response);
-        
+
     }
 
     const revokeIndividual = async (individual) => {
@@ -68,36 +67,40 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
 
     const renderGroupEditors = () => {
         return groupEditors.map(editor => {
-            return <EditorItem data-tip={editor?.group?.groupName}>
-                <EditorItemAvatarContainer>
-                    <img alt={editor?.group?.groupName} src={editor?.group?.groupImage || DEFAULT_GROUP_AVATAR} />
-                </EditorItemAvatarContainer>
-                <EditorItemRightInfo>
-                    <EditorRightInfoInner>
-                        <EditorName onClick={()=> history.push(`/groups/${editor?.group?.id}`)}>{editor?.group?.groupName}</EditorName>
-                        <span>{t(translations.group.group)}</span>
-                    </EditorRightInfoInner>
-                    <EditorRevokeButton onClick={() => revokeGroup(editor?.group)} danger>{t(translations.group.revoke)}</EditorRevokeButton>
-                </EditorItemRightInfo>
-            </EditorItem>
+            return <Tooltip title={editor?.group?.groupName}>
+                <EditorItem>
+                    <EditorItemAvatarContainer>
+                        <img alt={editor?.group?.groupName} src={editor?.group?.groupImage || DEFAULT_GROUP_AVATAR} />
+                    </EditorItemAvatarContainer>
+                    <EditorItemRightInfo>
+                        <EditorRightInfoInner>
+                            <EditorName onClick={() => history.push(`/groups/${editor?.group?.id}`)}>{editor?.group?.groupName}</EditorName>
+                            <span>{t(translations.group.group)}</span>
+                        </EditorRightInfoInner>
+                        <EditorRevokeButton onClick={() => revokeGroup(editor?.group)} danger>{t(translations.group.revoke)}</EditorRevokeButton>
+                    </EditorItemRightInfo>
+                </EditorItem>
+            </Tooltip>
         });
     }
 
     const renderIndividualEditors = () => {
         const userId: any = localStorage.getItem('user_id');
         return individualEditors.map(editor => {
-            return <EditorItem key={editor.id} data-tip={editor?.user?.name}>
-                <EditorItemAvatarContainer>
-                    <img alt={editor?.user?.name} src={renderAvatar(editor?.user?.avatar)} />
-                </EditorItemAvatarContainer>
-                <EditorItemRightInfo>
-                    <EditorRightInfoInner>
-                        <EditorName onClick={()=> history.push(`/profile/${editor?.user?.id}`)}>{editor?.user?.name}</EditorName>
-                        <span>{t(translations.group.individual)}</span>
-                    </EditorRightInfoInner>
-                    {userId !== editor.user?.id && <EditorRevokeButton onClick={() => revokeIndividual(editor?.user)} danger>{t(translations.group.revoke)}</EditorRevokeButton>}
-                </EditorItemRightInfo>
-            </EditorItem>
+            return <Tooltip title={editor?.user?.name}>
+                <EditorItem key={editor.id}>
+                    <EditorItemAvatarContainer>
+                        <img alt={editor?.user?.name} src={renderAvatar(editor?.user?.avatar)} />
+                    </EditorItemAvatarContainer>
+                    <EditorItemRightInfo>
+                        <EditorRightInfoInner>
+                            <EditorName onClick={() => history.push(`/profile/${editor?.user?.id}`)}>{editor?.user?.name}</EditorName>
+                            <span>{t(translations.group.individual)}</span>
+                        </EditorRightInfoInner>
+                        {userId !== editor.user?.id && <EditorRevokeButton onClick={() => revokeIndividual(editor?.user)} danger>{t(translations.group.revoke)}</EditorRevokeButton>}
+                    </EditorItemRightInfo>
+                </EditorItem>
+            </Tooltip>
         });
     }
 
@@ -124,7 +127,6 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
                         {renderIndividualEditors()}
                         {renderGroupEditors()}
                     </EditorWrapper>
-                    <ReactTooltip />
                 </>
             }
         </Spin>

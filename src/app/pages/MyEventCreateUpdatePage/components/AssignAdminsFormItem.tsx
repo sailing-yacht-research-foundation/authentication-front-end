@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Select, Switch } from 'antd';
+import { Form, Select, Switch, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { SyrfFieldLabel, SyrfFormSelect } from 'app/components/SyrfForm';
@@ -116,20 +116,21 @@ export const AssignAdminsFormItem = (props) => {
     }, [event]);
 
     return (
-        <Form.Item
-            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.admins)}</SyrfFieldLabel>}
-            name="admins"
-            data-tip={t(translations.tip.set_admins_for_this_event)}>
-            <SyrfFormSelect mode="multiple"
-                style={{ width: '100%' }}
-                placeholder={t(translations.tip.set_admins_for_this_event)}
-                onSearch={debounceSearch}
-                filterOption={false}
-                allowClear
-                maxTagCount={'responsive' as const}
-            >
-                {renderItemResults()}
-            </SyrfFormSelect>
-        </Form.Item>
+        <Tooltip title={t(translations.tip.set_admins_for_this_event)}>
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.admins)}</SyrfFieldLabel>}
+                name="admins">
+                <SyrfFormSelect mode="multiple"
+                    style={{ width: '100%' }}
+                    placeholder={t(translations.tip.set_admins_for_this_event)}
+                    onSearch={debounceSearch}
+                    filterOption={false}
+                    allowClear
+                    maxTagCount={'responsive' as const}
+                >
+                    {renderItemResults()}
+                </SyrfFormSelect>
+            </Form.Item>
+        </Tooltip>
     )
 }

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Space, Spin, Table } from 'antd';
+import { Space, Spin, Table, Tooltip } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import ReactTooltip from 'react-tooltip';
 import { renderEmptyValue } from 'utils/helpers';
 import { getAllByVesselId } from 'services/live-data-server/liferafts';
 import { SyrfFormWrapper } from 'app/components/SyrfForm';
@@ -76,10 +75,18 @@ export const LiferaftList = (props) => {
             fixed: true,
             render: (text, record) => (
                 <Space size={10}>
-                    <BorderedButton onClick={() => {
-                        history.push(`/boats/${vesselId}/liferafts/${record.id}/update`);
-                    }} type="primary">{t(translations.liferaft_create_update_page.update)}</BorderedButton>
-                    <BorderedButton data-tip={t(translations.tip.delete_this_liferaft)} danger onClick={() => showDeleteLiferaftModal(record)}>{t(translations.general.delete)}</BorderedButton>
+                    <Tooltip title={t(translations.tip.update_information_for_this_liferaft)}>
+                        <BorderedButton onClick={() => {
+                            history.push(`/boats/${vesselId}/liferafts/${record.id}/update`);
+                        }} type="primary">
+                            {t(translations.liferaft_create_update_page.update)}
+                        </BorderedButton>
+                    </Tooltip>
+                    <Tooltip title={t(translations.tip.delete_this_liferaft)}>
+                        <BorderedButton danger onClick={() => showDeleteLiferaftModal(record)}>
+                            {t(translations.general.delete)}
+                        </BorderedButton>
+                    </Tooltip>
                 </Space>
             ),
         },
@@ -129,9 +136,13 @@ export const LiferaftList = (props) => {
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.vessel_create_update_page.liferafts)}</PageHeaderTextSmall>
                     {
-                        <CreateButton data-tip={t(translations.tip.add_liferaft)} onClick={() => history.push(`/boats/${vesselId}/liferafts/create`)} icon={<AiFillPlusCircle
-                            style={{ marginRight: '5px' }}
-                            size={18} />}>{t(translations.vessel_create_update_page.add)}</CreateButton>
+                        <Tooltip title={t(translations.tip.add_liferaft)}>
+                            <CreateButton onClick={() => history.push(`/boats/${vesselId}/liferafts/create`)} icon={<AiFillPlusCircle
+                                style={{ marginRight: '5px' }}
+                                size={18} />}>
+                                {t(translations.vessel_create_update_page.add)}
+                            </CreateButton>
+                        </Tooltip>
                     }
                 </PageHeaderContainer>
                 <TableWrapper>
@@ -140,7 +151,6 @@ export const LiferaftList = (props) => {
                         dataSource={lifeRafts} />
                 </TableWrapper>
             </Spin>
-            <ReactTooltip />
         </SyrfFormWrapper>
     )
 }

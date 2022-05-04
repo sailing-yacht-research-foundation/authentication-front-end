@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, Select } from 'antd';
+import { Spin, Form, Divider, Select, Tooltip } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField, SyrfTextArea, SyrFieldDescription, SyrfFormSelect } from 'app/components/SyrfForm';
 import { GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
 import { createGroup, updateGroup, getGroupById } from 'services/live-data-server/groups';
 import { DeleteGroupModal } from './DeleteGroupModal';
 import { showToastMessageOnRequestError } from 'utils/helpers';
@@ -183,52 +182,56 @@ export const GroupForm = () => {
                             groupType: ''
                         }}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_name)}</SyrfFieldLabel>}
-                            name="groupName"
-                            data-tip={t(translations.tip.group_name)}
-                            rules={[
-                                { required: true, message: t(translations.forms.group_name_is_required) },
-                                { max: 100, message: t(translations.forms.group_name_must_not_be_longer_than_100_chars) }
-                            ]}
-                        >
-                            <SyrfInputField autoCorrect="off" />
-                        </Form.Item>
+                        <Tooltip title={t(translations.tip.group_name)}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_name)}</SyrfFieldLabel>}
+                                name="groupName"
+                                rules={[
+                                    { required: true, message: t(translations.forms.group_name_is_required) },
+                                    { max: 100, message: t(translations.forms.group_name_must_not_be_longer_than_100_chars) }
+                                ]}
+                            >
+                                <SyrfInputField autoCorrect="off" />
+                            </Form.Item>
+                        </Tooltip>
 
-                        <Form.Item
-                            rules={[{ max: 255, message: t(translations.forms.group_description_must_not_be_longer_than_255_chars) }]}
-                            label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_description)}</SyrfFieldLabel>}
-                            name="description"
-                            data-multiline={true}
-                            data-tip={t(translations.tip.group_description)}
-                        >
-                            <SyrfTextArea autoCorrect="off" />
-                        </Form.Item>
+                        <Tooltip title={t(translations.tip.group_description)}>
+                            <Form.Item
+                                rules={[{ max: 255, message: t(translations.forms.group_description_must_not_be_longer_than_255_chars) }]}
+                                label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_description)}</SyrfFieldLabel>}
+                                name="description"
+                                data-multiline={true}
+                            >
+                                <SyrfTextArea autoCorrect="off" />
+                            </Form.Item>
+                        </Tooltip>
 
-                        <Form.Item
-                            data-tip={t(translations.tip.group_visibility)}
-                            style={{ marginBottom: '10px' }}
-                            label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_visibility)}</SyrfFieldLabel>}
-                            name="visibility"
-                            help={<SyrFieldDescription>{t(translations.group_create_update_page.please_choose_a_group_visibility)}</SyrFieldDescription>}
-                            rules={[{ required: true }]}
-                        >
-                            <SyrfFormSelect placeholder={t(translations.group_create_update_page.select_a_visibility)}>
-                                {renderGroupVisibilityList()}
-                            </SyrfFormSelect>
-                        </Form.Item>
+                        <Tooltip title={t(translations.tip.group_visibility)}>
+                            <Form.Item
+                                style={{ marginBottom: '10px' }}
+                                label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_visibility)}</SyrfFieldLabel>}
+                                name="visibility"
+                                help={<SyrFieldDescription>{t(translations.group_create_update_page.please_choose_a_group_visibility)}</SyrFieldDescription>}
+                                rules={[{ required: true }]}
+                            >
+                                <SyrfFormSelect placeholder={t(translations.group_create_update_page.select_a_visibility)}>
+                                    {renderGroupVisibilityList()}
+                                </SyrfFormSelect>
+                            </Form.Item>
+                        </Tooltip>
 
-                        <Form.Item
-                            data-tip={t(translations.tip.group_type)}
-                            style={{ marginBottom: '10px' }}
-                            label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_type)}</SyrfFieldLabel>}
-                            name="groupType"
-                            help={<SyrFieldDescription>{t(translations.group_create_update_page.group_has_a_type_please_choose_one_from_the_list)}</SyrFieldDescription>}
-                        >
-                            <SyrfFormSelect placeholder={t(translations.group_create_update_page.select_a_group_type)}>
-                                {renderGroupTypeList()}
-                            </SyrfFormSelect>
-                        </Form.Item>
+                        <Tooltip title={t(translations.tip.group_type)}>
+                            <Form.Item
+                                style={{ marginBottom: '10px' }}
+                                label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_type)}</SyrfFieldLabel>}
+                                name="groupType"
+                                help={<SyrFieldDescription>{t(translations.group_create_update_page.group_has_a_type_please_choose_one_from_the_list)}</SyrFieldDescription>}
+                            >
+                                <SyrfFormSelect placeholder={t(translations.group_create_update_page.select_a_group_type)}>
+                                    {renderGroupTypeList()}
+                                </SyrfFormSelect>
+                            </Form.Item>
+                        </Tooltip>
 
                         <Divider />
 
@@ -240,7 +243,6 @@ export const GroupForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <ReactTooltip />
         </Wrapper >
     )
 }

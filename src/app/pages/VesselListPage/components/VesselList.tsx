@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Space, Spin } from 'antd';
+import { Table, Space, Spin, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
@@ -23,7 +23,6 @@ import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
 import { Vessel } from 'types/Vessel';
 
 const defaultOptions = {
@@ -45,7 +44,9 @@ export const VesselList = () => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
-                return <Link data-tip={t(translations.tip.update_this_boat)} to={`/boats/${record.id}/update`}>{text}</Link>;
+                return <Tooltip title={t(translations.tip.update_this_boat)}>
+                    <Link to={`/boats/${record.id}/update`}>{text}</Link>
+                </Tooltip>;
             },
         },
         {
@@ -70,13 +71,20 @@ export const VesselList = () => {
             title: t(translations.general.action),
             key: 'action',
             render: (text, record) => {
-                    return <Space size="middle">
-                        <BorderedButton data-tip={t(translations.tip.update_this_boat)} onClick={() => {
+                return <Space size="middle">
+                    <Tooltip title={t(translations.tip.update_this_boat)}>
+                        <BorderedButton onClick={() => {
                             history.push(`/boats/${record.id}/update`);
-                        }} type="primary">{t(translations.general.update)}</BorderedButton>
-                        <BorderedButton data-tip={t(translations.tip.delete_boat)} danger onClick={() => showDeleteVesselModal(record)}>{t(translations.general.delete)}</BorderedButton>
-                        <ReactTooltip />
-                    </Space>;
+                        }} type="primary">
+                            {t(translations.general.update)}
+                        </BorderedButton>
+                    </Tooltip>
+                    <Tooltip title={t(translations.tip.delete_boat)}>
+                        <BorderedButton danger onClick={() => showDeleteVesselModal(record)}>
+                            {t(translations.general.delete)}
+                        </BorderedButton>
+                    </Tooltip>
+                </Space>;
             },
             width: '20%',
         },
@@ -144,11 +152,14 @@ export const VesselList = () => {
                     <PageHeading>{t(translations.vessel_list_page.vessels)}</PageHeading>
                     <PageDescription>{t(translations.vessel_list_page.vessel_are_yatchs)}</PageDescription>
                 </PageInfoContainer>
-                <CreateButton
-                    data-tip={t(translations.tip.create_a_new_boat)}
-                    onClick={() => history.push("/boats/create")} icon={<AiFillPlusCircle
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.vessel_list_page.create_a_new_vessel)}</CreateButton>
+                <Tooltip title={t(translations.tip.create_a_new_boat)}>
+                    <CreateButton
+                        onClick={() => history.push("/boats/create")} icon={<AiFillPlusCircle
+                            style={{ marginRight: '5px' }}
+                            size={18} />}>
+                        {t(translations.vessel_list_page.create_a_new_vessel)}
+                    </CreateButton>
+                </Tooltip>
             </PageHeaderContainerResponsive>
             {pagination.rows.length > 0 ? (
                 <Spin spinning={isChangingPage}>
@@ -171,7 +182,6 @@ export const VesselList = () => {
                         width={400} />
                     <LottieMessage>{t(translations.vessel_list_page.you_dont_have_any_vessels)}</LottieMessage>
                 </LottieWrapper>)}
-            <ReactTooltip />
         </>
     )
 }

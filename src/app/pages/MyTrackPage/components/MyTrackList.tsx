@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Spin, Space } from 'antd';
+import { Table, Spin, Space, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import styled from 'styled-components';
@@ -15,7 +15,6 @@ import { TIME_FORMAT } from 'utils/constants';
 import { timeMillisToHours } from 'utils/time';
 import KMLIcon from '../assets/kml.png';
 import GPXIcon from '../assets/gpx.png';
-import ReactTooltip from 'react-tooltip';
 import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
@@ -48,6 +47,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
+                const trackName = !record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name
                 if (record.competitionUnit)
                     return (
                         <FlexWrapper>
@@ -57,7 +57,9 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
                             }
-                            <Link to={() => renderTrackParamIfExists(record)}>{!record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name}</Link>
+                            <Tooltip title={t(translations.my_tracks_page.watch_this_track, { trackName: trackName })}>
+                                <Link to={() => renderTrackParamIfExists(record)}>{trackName}</Link>
+                            </Tooltip>
                         </FlexWrapper>
                     );
                 return (
@@ -127,10 +129,15 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             key: 'action',
             render: (text, record) => {
                 return <Space size={10}>
-                    <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'kml')} src={KMLIcon} data-tip={t(translations.my_tracks_page.download_as_kml)} />
-                    <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'gpx')} src={GPXIcon} data-tip={t(translations.my_tracks_page.download_as_gpx)} />
-                    {record?.event?.isPrivate && <BiTrash onClick={() => showTrackDeleteModal(record)} data-tip={t(translations.tip.delete_this_track)} style={{ color: 'red', fontSize: '25px', cursor: 'pointer' }} />}
-                    <ReactTooltip />
+                    <Tooltip title={t(translations.my_tracks_page.download_as_kml)}>
+                        <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'kml')} src={KMLIcon} />
+                    </Tooltip>
+                    <Tooltip title={t(translations.my_tracks_page.download_as_gpx)}>
+                        <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'gpx')} src={GPXIcon} />
+                    </Tooltip>
+                    {record?.event?.isPrivate && <Tooltip title={t(translations.tip.delete_this_track)}>
+                        <BiTrash onClick={() => showTrackDeleteModal(record)} style={{ color: 'red', fontSize: '25px', cursor: 'pointer' }} />
+                    </Tooltip>}
                 </Space>;
             }
         },

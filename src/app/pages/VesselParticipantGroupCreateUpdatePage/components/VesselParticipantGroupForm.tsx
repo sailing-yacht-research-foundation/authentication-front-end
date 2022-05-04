@@ -15,7 +15,6 @@ import { VesselList } from './VesselList';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 

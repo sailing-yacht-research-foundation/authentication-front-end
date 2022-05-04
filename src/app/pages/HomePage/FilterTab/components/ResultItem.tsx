@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { GiPositionMarker } from 'react-icons/gi';
-import { Space, Dropdown, Menu } from 'antd';
+import { Space, Dropdown, Menu, Tooltip } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { canStreamToExpedition, renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
@@ -20,7 +20,6 @@ import { forceDeleteCompetitionUnit, markCompetitionUnitAsCompleted, markCompeti
 import { toast } from 'react-toastify';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { useHomeSlice } from '../../slice';
-import ReactTooltip from 'react-tooltip';
 
 export const ResultItem = (props) => {
 
@@ -217,10 +216,16 @@ export const ResultItem = (props) => {
                     </Space>
                     <RightResultWrapper>
                         {renderLiveDot()}
-                        {canManageRace() && <StyledDropDown data-tip={t(translations.tip.super_admin_options)} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />}
+                        {canManageRace() && <Tooltip title={t(translations.tip.super_admin_options)}>
+                            <StyledDropDown overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />} />
+                        </Tooltip>}
                     </RightResultWrapper>
                 </HeadDescriptionWrapper>
-                <Name><Link to={`/playback?raceId=${race._id}`}>{race._source?.name}</Link></Name>
+                <Name>
+                    <Tooltip title={t(translations.home_page.filter_tab.filter_result.watch_this_race, { raceName: race._source?.name })}>
+                        <Link to={`/playback?raceId=${race._id}`}>{race._source?.name}</Link>
+                    </Tooltip>
+                </Name>
                 {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
                 <DescriptionWrapper>
                     <DescriptionItem>
@@ -231,7 +236,7 @@ export const ResultItem = (props) => {
                     </DescriptionItem>}
                 </DescriptionWrapper>
                 <Space size={10}>
-                    {canStreamToExpedition(race._source?.id, race._source?.source, race._source?.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
+                    {isAuthenticated && canStreamToExpedition(race._source?.id, race._source?.source, race._source?.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
                     {canRegister() && <CreateButton
                         icon={<FiEdit
                             style={{ marginRight: '10px' }} />}
@@ -239,7 +244,6 @@ export const ResultItem = (props) => {
                     }
                 </Space>
             </Wrapper>
-            <ReactTooltip />
         </>
     )
 }
