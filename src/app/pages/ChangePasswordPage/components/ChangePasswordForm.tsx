@@ -6,7 +6,8 @@ import {
     SyrfSubmitButton,
     SyrfFormTitle,
     SyrfFieldLabel,
-    SyrfPasswordInputField
+    SyrfPasswordInputField,
+    SyrfFormButton
 } from 'app/components/SyrfForm';
 import styled from 'styled-components';
 import { useState } from 'react';
@@ -15,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { changePassword } from 'services/live-data-server/user';
 import ReactTooltip from 'react-tooltip';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const ChangePasswordForm = () => {
 
@@ -25,19 +27,21 @@ export const ChangePasswordForm = () => {
     const [isChangingPassword, setIsChangingPassword] = useState<boolean>(false);
 
     const onFinish = async (values) => {
-        const { newPassword } = values;
+        const { newPassword, currentPassword } = values;
 
         setIsChangingPassword(true);
-
-        const response: any = await changePassword(newPassword);
+        const response: any = await changePassword(currentPassword, newPassword);
+        setIsChangingPassword(false);
 
         if (response.success) {
             toast.success(t(translations.change_password_page.password_changed_successfully));
             form.resetFields();
-            setIsChangingPassword(false);
         } else {
-            toast.error(t(translations.change_password_page.cannot_change_your_password_at_the_moment));
-            setIsChangingPassword(false);
+            if (response.error.response?.data.errorCode === 401) {
+                showToastMessageOnRequestError(response.error, t(translations.change_password_page.your_current_password_is_incorrect));
+            } else {
+                showToastMessageOnRequestError(response.error);
+            }
         }
     }
 
@@ -57,6 +61,18 @@ export const ChangePasswordForm = () => {
                             oldPassword: '',
                         }}
                     >
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.change_password_page.current_password)}</SyrfFieldLabel>}
+                            name="currentPassword"
+                            data-tip={t(translations.change_password_page.current_password)}
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
+                                pattern: /^\S+$/,
+                                message: t(translations.misc.password_must_not_contain_blank)
+                            }, { max: 16, min: 8, message: t(translations.forms.password_must_be_between) }]}
+                        >
+                            <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
+                        </Form.Item>
+
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                             name="newPassword"
@@ -92,9 +108,9 @@ export const ChangePasswordForm = () => {
                         </Form.Item>
 
                         <Form.Item>
-                            <SyrfSubmitButton type="primary" htmlType="submit">
+                            <SyrfFormButton type="primary" htmlType="submit">
                                 {t(translations.change_password_page.change_password)}
-                            </SyrfSubmitButton>
+                            </SyrfFormButton>
                         </Form.Item>
                     </Form>
                 </Spin>
