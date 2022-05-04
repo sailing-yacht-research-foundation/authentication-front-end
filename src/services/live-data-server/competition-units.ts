@@ -374,3 +374,9 @@ export const sendKudos = (competitionUnitId: string, kudosType: KudoTypes, vesse
         kudosType
     }));
 }
+
+export const simulateRace = (competitionUnitId: string) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/simulations/start`, {
+        competitionUnitId
+    }));
+}

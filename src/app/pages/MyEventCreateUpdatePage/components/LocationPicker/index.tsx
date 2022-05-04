@@ -51,21 +51,24 @@ export const LocationPicker = (props) => {
         && coordinates.lng !== null
 
 
-    return (
-        <div style={{ position: "relative" }}>
-            {!hideLocationControls && <Radio.Group options={options} onChange={handleChangeOption} optionType="button" buttonStyle="solid" value={selectedOpt} />}
-            {canShowPicker ? <Wrapper style={{ height: height || '450px', padding: noPadding ? '0' : '30px 0' }}>
-                {
-                    endCoordinates && !hideLocationControls &&
-                    <RemoveLocationButton onClick={handleRemoveEndLocation}>Remove End Location</RemoveLocationButton>
-                }
-                <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
-                    <Map option={selectedOpt} setFormChanged={setFormChanged} noMarkerInteraction={noMarkerInteraction || false} coordinates={coordinates} endCoordinates={endCoordinates} onMapClicked={onMapClicked} zoom={zoom || DEFAULT_ZOOM} />
-                </MapContainer>
-                <PickerDescription>{locationDescription || t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
-            </Wrapper> : (<></>)}
-        </div>
-    )
+    if (canShowPicker)
+        return (
+            <div style={{ position: "relative" }}>
+                {!hideLocationControls && <Radio.Group options={options} onChange={handleChangeOption} optionType="button" buttonStyle="solid" value={selectedOpt} />}
+                <Wrapper style={{ height: height || '450px', padding: noPadding ? '0' : '30px 0' }}>
+                    {
+                        endCoordinates && !hideLocationControls &&
+                        <RemoveLocationButton onClick={handleRemoveEndLocation}>Remove End Location</RemoveLocationButton>
+                    }
+                    <MapContainer style={{ height: `100%`, width: '100%', zIndex: 1 }} center={coordinates} zoom={DEFAULT_ZOOM}>
+                        <Map option={selectedOpt} setFormChanged={setFormChanged} noMarkerInteraction={noMarkerInteraction || false} coordinates={coordinates} endCoordinates={endCoordinates} onMapClicked={onMapClicked} zoom={zoom || DEFAULT_ZOOM} />
+                    </MapContainer>
+                    <PickerDescription>{locationDescription || t(translations.my_event_create_update_page.please_choose_a_location)}</PickerDescription>
+                </Wrapper>
+            </div>
+        )
+
+    return <></>;
 }
 
 const Wrapper = styled.div`
