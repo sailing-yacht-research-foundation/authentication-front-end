@@ -69,6 +69,8 @@ export const CompetitionUnitForm = () => {
 
     const [error, setError] = React.useState<any>({});
 
+    const isCompetitionUnitPostponed = competitionUnit.status === RaceStatus.POSTPONED;
+
     const onFinish = async (values) => {
         let { name, startDate, startTime, isCompleted, calendarEventId, vesselParticipantGroupId, description, approximateStart_zone, courseId } = values;
         let response;
@@ -83,10 +85,8 @@ export const CompetitionUnitForm = () => {
 
         setIsSaving(true);
 
-        const data = {
+        const data: any = {
             name: name,
-            startTime: moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format("HH:mm:ss")).utc(),
-            approximateStart: moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format("HH:mm:ss")).utc(),
             isCompleted: isCompleted,
             vesselParticipantGroupId: vesselParticipantGroupId,
             description: description,
@@ -100,6 +100,11 @@ export const CompetitionUnitForm = () => {
             approximateStart_zone: approximateStart_zone,
             courseId: courseId,
         };
+
+        if (!isCompetitionUnitPostponed) {
+            data.startTime = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
+            data.approximateStart = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
+        }
 
         if (mode === MODE.CREATE)
             response = await create(calendarEventId, data);
@@ -127,6 +132,12 @@ export const CompetitionUnitForm = () => {
         setCompetitionUnit(response.data);
     }
 
+    const showPostponedMessageToUserIfRaceIsPostponed = (race: CompetitionUnit)  => {
+        if (race.status === RaceStatus.POSTPONED) {
+            toast.info(t(translations.competition_unit_create_update_page.this_race_is_postponed_and_you_can_only));
+        }
+    }
+
     const initModeAndData = async () => {
         const isEventExist = await getEventData();
         if (!isEventExist) return;
@@ -140,6 +151,7 @@ export const CompetitionUnitForm = () => {
 
             if (response.success) {
                 setCompetitionUnit(response.data);
+                showPostponedMessageToUserIfRaceIsPostponed(response.data);
                 form.setFieldsValue({
                     ...response.data,
                     startDate: moment(response.data?.approximateStart),
@@ -280,7 +292,7 @@ export const CompetitionUnitForm = () => {
         const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
         const eventDateTime = new Date(eventData?.approximateStartTime!);
 
-        if (selectedDateTime.getTime() >= eventDateTime.getTime()) {
+        if (selectedDateTime.getTime() >= eventDateTime.getTime() || isCompetitionUnitPostponed) {
             return {
                 isValid: true,
                 errors: { startDate: null, startTime: null }
@@ -428,7 +440,7 @@ export const CompetitionUnitForm = () => {
 
                         <Divider />
 
-                        <Row gutter={12}>
+                        { !isCompetitionUnitPostponed && <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Tooltip title={t(translations.tip.race_start_date)}>
                                     <Form.Item
@@ -505,7 +517,7 @@ export const CompetitionUnitForm = () => {
                                     </Form.Item>
                                 </Tooltip>
                             </Col>
-                        </Row>
+                        </Row>}
 
                         <BoundingBoxPicker userCoordinates={coordinates} coordinates={boundingBoxCoordinates} onCoordinatesRecevied={onCoordinatesRecevied} />
 

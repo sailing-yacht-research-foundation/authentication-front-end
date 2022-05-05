@@ -34,7 +34,11 @@ export const StyledSyrfFormWrapper = styled(SyrfFormWrapper)`
 
 const StyledCollapsedPanel = styled(Collapse.Panel)`
     background: #fff;
-    padding: 30px 20px;
+    padding: 10px 5px;
+
+    ${media.medium`
+        padding: 30px 20px;
+    `};
 `;
 
 const StyledCollapsed = styled(Collapse)`

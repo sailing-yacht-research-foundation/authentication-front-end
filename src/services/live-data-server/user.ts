@@ -51,9 +51,10 @@ export const deleteUserAccount = () => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users`))
 }
 
-export const changePassword = (password) => {
+export const changePassword = (currentPassword, password) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/reset-password/`, {
         value: password,
+        currentPassword,
         temporary: false,
         type: 'password'
     }))
