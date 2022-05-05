@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Table } from 'antd';
+import { Spin, Table, Tooltip } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { getManyByEventId } from 'services/live-data-server/vessel-participants';
@@ -13,7 +13,6 @@ import {
     DeleteButton,
     PageHeaderTextSmall
 } from 'app/components/SyrfGeneral';
-import ReactTooltip from 'react-tooltip';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const VesselParticipantList = (props) => {
@@ -54,20 +53,18 @@ export const VesselParticipantList = (props) => {
             key: 'action',
             render: (text, record) => {
                 if (checkIfParticipantExistsOnVesselParticipant(record.participants)) {
-                    return <>
-                        <DeleteButton data-tip={t(translations.tip.unassign_competitor_to_a_class_and_vessel)} onClick={() => {
+                    return <Tooltip title={t(translations.tip.unassign_competitor_to_a_class_and_vessel)}>
+                        <DeleteButton onClick={() => {
                             removeParticipantFromVesselParticipant(record.id);
                         }} danger>{t(translations.assign_vessel_participant_modal.unassign)}</DeleteButton>
-                        <ReactTooltip />
-                    </>;
+                    </Tooltip>;
                 }
 
-                return <>
-                    <BorderedButton data-tip={t(translations.tip.assign_competitor_to_a_class_and_vessel)} onClick={() => {
+                return <Tooltip title={t(translations.tip.assign_competitor_to_a_class_and_vessel)}>
+                    <BorderedButton onClick={() => {
                         assignParticipantToVesselParticipant(record.id);
                     }} type="primary">{t(translations.assign_vessel_participant_modal.assign)}</BorderedButton>
-                    <ReactTooltip />
-                </>;
+                </Tooltip>;
             },
             width: '33%',
         },
@@ -150,7 +147,6 @@ export const VesselParticipantList = (props) => {
                     />
                 </TableWrapper>
             </Spin >
-            <ReactTooltip />
         </>
     )
 }

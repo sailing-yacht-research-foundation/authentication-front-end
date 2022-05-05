@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Space, Spin, Table } from 'antd';
+import { Space, Spin, Table, Tooltip } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { TIME_FORMAT } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
 import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 
 export const VesselParticipantGroupList = (props) => {
@@ -37,11 +36,20 @@ export const VesselParticipantGroupList = (props) => {
             width: '20%',
             render: (text, record) => {
                 return <Space size="middle">
-                    <BorderedButton data-tip={t(translations.tip.update_class)} onClick={() => {
-                        history.push(`/events/${eventId}/classes/${record.id}/update`);
-                    }} type="primary">{t(translations.general.update)}</BorderedButton>
-                    <BorderedButton data-tip={t(translations.tip.delete_class)} danger onClick={() => showDeleteGroupModal(record)}>{t(translations.general.delete)}</BorderedButton>
-                    <ReactTooltip/>
+                    <Tooltip title={t(translations.tip.update_class)}>
+                        <BorderedButton onClick={() => {
+                            history.push(`/events/${eventId}/classes/${record.id}/update`);
+                        }} type="primary">
+                            {t(translations.general.update)}
+                        </BorderedButton>
+                    </Tooltip>
+                    <Tooltip title={t(translations.tip.delete_class)}>
+                        <BorderedButton
+                            danger
+                            onClick={() => showDeleteGroupModal(record)}>
+                            {t(translations.general.delete)}
+                        </BorderedButton>
+                    </Tooltip>
                 </Space>;
             }
         },
@@ -107,9 +115,13 @@ export const VesselParticipantGroupList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.my_event_create_update_page.Vessel_participant_groups)}</PageHeaderTextSmall>
-                    <CreateButton data-tip={t(translations.tip.create_class)} onClick={() => history.push(`/events/${eventId}/classes/create`)} icon={<AiFillPlusCircle
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.vessel_participant_group_list_page.create)}</CreateButton>
+                    <Tooltip title={t(translations.tip.create_class)}>
+                        <CreateButton onClick={() => history.push(`/events/${eventId}/classes/create`)} icon={<AiFillPlusCircle
+                            style={{ marginRight: '5px' }}
+                            size={18} />}>
+                            {t(translations.vessel_participant_group_list_page.create)}
+                        </CreateButton>
+                    </Tooltip>
                 </PageHeaderContainer>
                 <TableWrapper>
                     <Table columns={columns}
@@ -123,7 +135,6 @@ export const VesselParticipantGroupList = (props) => {
                         }} />
                 </TableWrapper>
             </Spin>
-            <ReactTooltip />
         </>
     )
 }

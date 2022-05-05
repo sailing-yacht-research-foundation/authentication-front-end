@@ -7,12 +7,11 @@ import {
     SyrfTextArea,
 } from 'app/components/SyrfForm';
 import { ChangeAvatar } from '../ChangeAvatar';
-import { Select, Form, Row, Col } from 'antd';
+import { Select, Form, Row, Col, Tooltip } from 'antd';
 import styled from 'styled-components';
 import { localesList as countryList } from 'utils/languages-util';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import ReactTooltip from 'react-tooltip';
 import { WATERSPORTS } from 'utils/constants';
 
 export const PublicUserInformation = (props) => {
@@ -33,7 +32,7 @@ export const PublicUserInformation = (props) => {
         return WATERSPORTS.map((interest, index) => {
             return <Select.Option key={index} value={interest}>
                 {'CRUISING' === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
-                :  <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />}
+                    : <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />}
                 {interest}</Select.Option>
         });
     }
@@ -48,74 +47,77 @@ export const PublicUserInformation = (props) => {
 
             <Row gutter={24}>
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.first_name)}</SyrfFieldLabel>}
-                        name="first_name"
-                        rules={[{ required: true, message: t(translations.forms.first_name_is_required) }, {
-                            max: 15,
-                            message: t(translations.forms.first_name_cannot_be_longer)
-                        }]}
-                        data-tip={t(translations.tip.first_name)}
-                    >
-                        <SyrfInputField autoComplete="off" autoCorrect="off" />
-                    </Form.Item>
+                    <Tooltip title={t(translations.tip.first_name)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.first_name)}</SyrfFieldLabel>}
+                            name="first_name"
+                            rules={[{ required: true, message: t(translations.forms.first_name_is_required) }, {
+                                max: 15,
+                                message: t(translations.forms.first_name_cannot_be_longer)
+                            }]}
+                        >
+                            <SyrfInputField autoComplete="off" autoCorrect="off" />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
 
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.last_name)}</SyrfFieldLabel>}
-                        name="last_name"
-                        rules={[{ required: true, message: t(translations.forms.last_name_is_required) }, {
-                            max: 15,
-                            message: t(translations.forms.last_name_cannot_be_longer)
-                        }]}
-                        data-tip={t(translations.tip.last_name)}
-                    >
-                        <SyrfInputField autoComplete="off" autoCorrect="off" />
-                    </Form.Item>
+                    <Tooltip title={t(translations.tip.last_name)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.last_name)}</SyrfFieldLabel>}
+                            name="last_name"
+                            rules={[{ required: true, message: t(translations.forms.last_name_is_required) }, {
+                                max: 15,
+                                message: t(translations.forms.last_name_cannot_be_longer)
+                            }]}
+                        >
+                            <SyrfInputField autoComplete="off" autoCorrect="off" />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
             </Row>
 
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.country)}</SyrfFieldLabel>}
-                name="country"
-                data-tip={t(translations.tip.country)}
-                rules={[{ required: true }]}
-            >
-                <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_country)}
-                    showSearch
-                    filterOption={(input, option) => {
-                        if (option) {
-                            return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-
-                        return false;
-                    }}
+            <Tooltip title={t(translations.tip.country)}>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.country)}</SyrfFieldLabel>}
+                    name="country"
+                    rules={[{ required: true }]}
                 >
-                    {renderCountryDropdownList()}
-                </SyrfFormSelect>
-            </Form.Item>
+                    <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_country)}
+                        showSearch
+                        filterOption={(input, option) => {
+                            if (option) {
+                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
 
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.biography)}</SyrfFieldLabel>}
-                name="bio"
-                data-tip={t(translations.tip.bio)}
-            >
-                <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
-            </Form.Item>
+                            return false;
+                        }}
+                    >
+                        {renderCountryDropdownList()}
+                    </SyrfFormSelect>
+                </Form.Item>
+            </Tooltip>
 
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.interests)}</SyrfFieldLabel>}
-                name="interests"
-                data-tip={t(translations.tip.your_interests)}
-            >
-                <SyrfFormSelect mode="multiple" maxTagCount={'responsive'}>
-                    {renderInterestsList()}
-                </SyrfFormSelect>
-            </Form.Item>
+            <Tooltip title={t(translations.tip.bio)}>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.biography)}</SyrfFieldLabel>}
+                    name="bio"
+                >
+                    <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
+                </Form.Item>
+            </Tooltip>
 
-            <ReactTooltip />
+            <Tooltip title={t(translations.tip.your_interests)}>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.interests)}</SyrfFieldLabel>}
+                    name="interests"
+                >
+                    <SyrfFormSelect mode="multiple" maxTagCount={'responsive'}>
+                        {renderInterestsList()}
+                    </SyrfFormSelect>
+                </Form.Item>
+            </Tooltip>
         </Wrapper>
     );
 }

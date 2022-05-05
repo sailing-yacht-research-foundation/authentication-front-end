@@ -10,7 +10,6 @@ import { useHomeSlice } from '../../../slice';
 import { selectIsSearching, selectPageSize, selectSearchKeyword } from '../../../slice/selectors';
 import { ReactComponent as SYRFLogo } from '../../assets/logo-dark.svg';
 import { CriteriaSuggestion } from './CriteriaSuggestion';
-import ReactTooltip from 'react-tooltip';
 import { ResultSuggestion } from './ResultSuggestion';
 import { removeWholeTextNodeOnBackSpace, replaceFormattedCriteriaWithRawCriteria } from 'utils/helpers';
 import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
@@ -105,7 +104,6 @@ export const FilterSearchBar = (props) => {
                 <span className="contenteditable-search"
                     style={{ whiteSpace: 'nowrap', lineHeight: '30px' }}
                     contentEditable
-                    data-tip={t(translations.tip.search_for_races_using_different_criteria)}
                     autoCorrect="off"
                     autoCapitalize="none"
                     onFocus={handleOnSearchInputFocus}
@@ -134,7 +132,6 @@ export const FilterSearchBar = (props) => {
                     dispatch(actions.setShowAdvancedSearch(true));
                 }}>{t(translations.home_page.map_view_tab.advanced_search)}</a>
             </AdvancedSearchTextWrapper>
-            <ReactTooltip />
         </SearchBarWrapper>
     )
 }

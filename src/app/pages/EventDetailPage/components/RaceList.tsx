@@ -154,7 +154,6 @@ export const RaceList = (props) => {
                             total: pagination.total,
                             pageSize: pagination.pageSize,
                             onChange: onPaginationChanged,
-                            showSizeChanger: true
                         }} />
                 </TableWrapper>
             </Spin>

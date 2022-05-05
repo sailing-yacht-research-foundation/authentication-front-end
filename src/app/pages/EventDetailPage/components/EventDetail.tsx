@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, message, Space, Spin, Tag } from 'antd';
+import { Button, message, Space, Spin, Tag, Tooltip } from 'antd';
 import { GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
@@ -163,11 +163,13 @@ export const EventDetail = () => {
                         })}
                         <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                     </>}
-                <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
-                    downloadIcalendarFile(event);
-                }}>
-                    <AiOutlineCalendar style={{ fontSize: '23px' }} />
-                </Button>
+                <Tooltip title={t(translations.tip.download_icalendar_file)}>
+                    <Button type="link" onClick={() => {
+                        downloadIcalendarFile(event);
+                    }}>
+                        <AiOutlineCalendar style={{ fontSize: '23px' }} />
+                    </Button>
+                </Tooltip>
                 <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
             </Space>
         </EventActions>;
@@ -203,8 +205,14 @@ export const EventDetail = () => {
                     </EventDescription>
 
                     <EventOpenRegistrationContainer>
-                        {event?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
-                        {!event?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
+                        {event.isOpen ? (
+                            <Tooltip title={translate.anyone_canregist}>
+                                <StyledTag color="blue">{translate.status_open_regis}</StyledTag>
+                            </Tooltip>
+                        )
+                            : (<Tooltip title={translate.only_owner_canview}>
+                                <StyledTag>{translate.status_private}</StyledTag>
+                            </Tooltip>)}
                     </EventOpenRegistrationContainer>
                 </EventSection>
 

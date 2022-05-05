@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Divider, Row, Col, Button, Image, Select } from 'antd';
+import { Form, Divider, Row, Col, Button, Image, Select, Tooltip } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfInputField, SyrfPhoneInput } from 'app/components/SyrfForm';
 import { FormPhotoHeaderContainer, ItemVerifyMessage } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
@@ -309,39 +309,42 @@ export const VesselFormFields = (props) => {
 
             <Row gutter={12}>
                 <Col xs={24} sm={24} md={8} lg={8}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.photo)}</SyrfFieldLabel>}
-                        name="photo"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
-                        data-tip={t(translations.vessel_create_update_page.photo)}
-                    >
-                        <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
-                    </Form.Item>
+                    <Tooltip title={t(translations.vessel_create_update_page.photo)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.photo)}</SyrfFieldLabel>}
+                            name="photo"
+                            valuePropName="fileList"
+                            getValueFromEvent={normFile}
+                        >
+                            <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
 
                 <Col xs={24} sm={24} md={8} lg={8}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.deck_plan)}</SyrfFieldLabel>}
-                        name="deckPlan"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
-                        data-tip={t(translations.vessel_create_update_page.deck_plan)}
-                    >
-                        <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
-                    </Form.Item>
+                    <Tooltip title={t(translations.vessel_create_update_page.deck_plan)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.deck_plan)}</SyrfFieldLabel>}
+                            name="deckPlan"
+                            valuePropName="fileList"
+                            getValueFromEvent={normFile}
+                        >
+                            <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
 
                 <Col xs={24} sm={24} md={8} lg={8}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hull_diagram)}</SyrfFieldLabel>}
-                        name="hullDiagram"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
-                        data-tip={t(translations.vessel_create_update_page.hull_diagram)}
-                    >
-                        <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
-                    </Form.Item>
+                    <Tooltip title={t(translations.vessel_create_update_page.hull_diagram)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.hull_diagram)}</SyrfFieldLabel>}
+                            name="hullDiagram"
+                            valuePropName="fileList"
+                            getValueFromEvent={normFile}
+                        >
+                            <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
             </Row>
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Spin } from 'antd';
+import { Form, Spin, Tooltip } from 'antd';
 import { toast } from 'react-toastify';
 import {
     SyrfFormWrapper,
@@ -15,7 +15,6 @@ import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { changePassword } from 'services/live-data-server/user';
-import ReactTooltip from 'react-tooltip';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const ChangePasswordForm = () => {
@@ -61,51 +60,56 @@ export const ChangePasswordForm = () => {
                             oldPassword: '',
                         }}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.change_password_page.current_password)}</SyrfFieldLabel>}
-                            name="currentPassword"
-                            data-tip={t(translations.change_password_page.current_password)}
-                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
-                                pattern: /^\S+$/,
-                                message: t(translations.misc.password_must_not_contain_blank)
-                            }, { max: 16, min: 8, message: t(translations.forms.password_must_be_between) }]}
-                        >
-                            <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
-                        </Form.Item>
+                        <Tooltip title={t(translations.change_password_page.current_password)}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.change_password_page.current_password)}</SyrfFieldLabel>}
+                                name="currentPassword"
+                                data-tip={t(translations.change_password_page.current_password)}
+                                rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
+                                    pattern: /^\S+$/,
+                                    message: t(translations.misc.password_must_not_contain_blank)
+                                }, { max: 16, min: 8, message: t(translations.forms.password_must_be_between) }]}
+                            >
+                                <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
+                            </Form.Item>
+                        </Tooltip>
 
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
-                            name="newPassword"
-                            data-tip={t(translations.tip.new_password)}
-                            rules={[{ required: true, message: t(translations.forms.new_password_is_required) }, {
-                                pattern: /^\S+$/,
-                                message: t(translations.misc.password_must_not_contain_blank)
-                            }, { max: 16, min: 8, message: t(translations.forms.new_password_must_be_between) }]}
-                        >
-                            <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
-                        </Form.Item>
+                        <Tooltip title={t(translations.tip.new_password)}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
+                                name="newPassword"
+                                rules={[{ required: true, message: t(translations.forms.new_password_is_required) }, {
+                                    pattern: /^\S+$/,
+                                    message: t(translations.misc.password_must_not_contain_blank)
+                                }, { max: 16, min: 8, message: t(translations.forms.new_password_must_be_between) }]}
+                            >
+                                <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
+                            </Form.Item>
+                        </Tooltip>
 
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.change_password_page.confirm_new_password)}</SyrfFieldLabel>}
-                            name="newPasswordConfirmation"
-                            data-tip={t(translations.tip.password_confirmation)}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: t(translations.change_password_page.please_confirm_new_password),
-                                },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        if (!value || getFieldValue('newPassword') === value) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error(t(translations.change_password_page.the_two_passwords_that_you_entered_do_not_match)));
+
+                        <Tooltip title={t(translations.tip.password_confirmation)}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.change_password_page.confirm_new_password)}</SyrfFieldLabel>}
+                                name="newPasswordConfirmation"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: t(translations.change_password_page.please_confirm_new_password),
                                     },
-                                }),
-                            ]}
-                        >
-                            <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
-                        </Form.Item>
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (!value || getFieldValue('newPassword') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error(t(translations.change_password_page.the_two_passwords_that_you_entered_do_not_match)));
+                                        },
+                                    }),
+                                ]}
+                            >
+                                <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
+                            </Form.Item>
+                        </Tooltip>
 
                         <Form.Item>
                             <SyrfFormButton type="primary" htmlType="submit">
@@ -115,7 +119,6 @@ export const ChangePasswordForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <ReactTooltip />
         </Wrapper>
     );
 }

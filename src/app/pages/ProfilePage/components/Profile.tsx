@@ -6,11 +6,10 @@ import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { loginActions } from 'app/pages/LoginPage/slice';
 import { ProfileTabs } from './ProfileTabs';
 import { SyrfButtonDescription, SyrfButtonTitle, SyrfFormTitle, SyrfFormWrapper } from 'app/components/SyrfForm';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Tooltip } from 'antd';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import ReactTooltip from 'react-tooltip';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { deleteUserAccount } from 'services/live-data-server/user';
 import { showToastMessageOnRequestError } from 'utils/helpers';
@@ -78,14 +77,15 @@ export const Profile = () => {
                     </Col>
                     <Col xs={24} sm={24} md={12} lg={12}>
                         <DeleteAccountButtonWrapper>
-                            <Button data-tip={t(translations.tip.delete_account)} danger onClick={() => setShowDeleteUserModal(true)}>
-                                {t(translations.profile_page.update_profile.permantly_delete_my_account)}
-                            </Button>
+                            <Tooltip title={t(translations.tip.delete_account)}>
+                                <Button danger onClick={() => setShowDeleteUserModal(true)}>
+                                    {t(translations.profile_page.update_profile.permantly_delete_my_account)}
+                                </Button>
+                            </Tooltip>
                         </DeleteAccountButtonWrapper>
                     </Col>
                 </Row>
             </SyrfFormWrapper>
-            <ReactTooltip />
         </Wrapper>
     )
 }

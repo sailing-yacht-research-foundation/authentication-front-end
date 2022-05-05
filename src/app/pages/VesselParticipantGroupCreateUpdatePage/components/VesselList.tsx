@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Space, Spin, Table } from 'antd';
+import { Input, Space, Spin, Table, Tooltip } from 'antd';
 import { BorderedButton, CreateButton, DeleteButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { getManyVesselsByEventCalendarId } from 'services/live-data-server/vessels';
@@ -13,7 +13,6 @@ import { toast } from 'react-toastify';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { create as createVessel } from 'services/live-data-server/vessels';
 import { DeleteVesselModal } from 'app/pages/VesselListPage/components/DeleteVesselModal';
-import ReactTooltip from 'react-tooltip';
 import { VesselParticipant } from 'types/EventVesselParticipant';
 import { Vessel } from 'types/Vessel';
 
@@ -33,7 +32,11 @@ export const VesselList = (props) => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
-                return <Link data-tip={t(translations.tip.update_this_boat)} to={`/boats/${record.id}/update`}>{text}</Link>;
+                return (
+                    <Tooltip title={t(translations.tip.update_this_boat)}>
+                        <Link to={`/boats/${record.id}/update`}>{text}</Link>
+                    </Tooltip>
+                );
             },
         },
         {
@@ -56,15 +59,23 @@ export const VesselList = (props) => {
                 const vesselParticipant: any = findVesselParticipantByVesselIdAndGroupId(record.id);
                 return <Space size="middle">
                     {!vesselParticipant ?
-                        <BorderedButton 
-                        data-tip={t(translations.tip.add_boat_to_class)}
-                        onClick={() => {
-                            addToGroup(record.id);
-                        }} type="primary">{t(translations.vessel_participant_group_create_update_page.add_to_group)}</BorderedButton> :
-                        <DeleteButton data-tip={t(translations.tip.remove_boat_from_class)} onClick={() => removeFromGroup(record.id)}>{t(translations.vessel_participant_group_create_update_page.delete_from_group)}</DeleteButton>
+                        <Tooltip title={t(translations.tip.add_boat_to_class)}>
+                            <BorderedButton
+                                onClick={() => {
+                                    addToGroup(record.id);
+                                }} type="primary">{t(translations.vessel_participant_group_create_update_page.add_to_group)}</BorderedButton>
+                        </Tooltip> :
+                        <Tooltip title={t(translations.tip.remove_boat_from_class)}>
+                            <DeleteButton onClick={() => removeFromGroup(record.id)}>
+                                {t(translations.vessel_participant_group_create_update_page.delete_from_group)}
+                            </DeleteButton>
+                        </Tooltip>
                     }
-                    <BorderedButton data-tip={t(translations.tip.delete_boat)} danger onClick={() => showDeleteVesselModal(record)}>{t(translations.general.delete)}</BorderedButton>
-                    <ReactTooltip />
+                    <Tooltip title={t(translations.tip.delete_boat)}>
+                        <BorderedButton danger onClick={() => showDeleteVesselModal(record)}>
+                            {t(translations.general.delete)}
+                        </BorderedButton>
+                    </Tooltip>
                 </Space>;
             },
             width: '20%',
@@ -211,12 +222,15 @@ export const VesselList = (props) => {
                         <Input value={numberOfBoatsToCreate} onChange={e => {
                             setNumberOfBoatsToCreate(Number(e.target.value))
                         }} type="number" style={{ width: '70px' }} />
-                        <CreateButton
-                            data-tip={t(translations.tip.create_n_boats)}
-                            onClick={() => createNVessels()}
-                            icon={<AiFillPlusCircle
-                                style={{ marginRight: '5px' }}
-                                size={18} />}>{t(translations.general.create)}</CreateButton>
+                        <Tooltip title={t(translations.tip.create_n_boats)}>
+                            <CreateButton
+                                onClick={() => createNVessels()}
+                                icon={<AiFillPlusCircle
+                                    style={{ marginRight: '5px' }}
+                                    size={18} />}>
+                                {t(translations.general.create)}
+                            </CreateButton>
+                        </Tooltip>
                     </Space>
                 </PageHeaderContainer>
                 <TableWrapper>
