@@ -51,7 +51,7 @@ export const ParticipantNotPaidSection = ({ event }: { event: Partial<CalendarEv
                     height={150}
                     width={150} />
                 <LottieMessage>{t(translations.event_detail_page.hey_participant_name_this_event_has_participant_fee, { participantingFee: event.participatingFee, participantName: getUserName(authUser) })}</LottieMessage>
-                <BorderedButton type="primary" onClick={pay}>Pay Now</BorderedButton>
+                <BorderedButton type="primary" onClick={pay}>{t(translations.event_detail_page.pay_now)}</BorderedButton>
             </LottieWrapper>
         );
 
