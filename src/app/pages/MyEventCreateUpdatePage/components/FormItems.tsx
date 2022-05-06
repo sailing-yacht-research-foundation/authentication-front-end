@@ -118,7 +118,8 @@ export const FormItems = (props) => {
 
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.free_or_paid)}</SyrfFieldLabel>}
-                name="isPaidEvent">
+                name="isPaidEvent"
+                valuePropName="checked">
                 <Switch
                     onChange={setIsPaidEvent}
                     checkedChildren={t(translations.my_event_create_update_page.paid_event)}
