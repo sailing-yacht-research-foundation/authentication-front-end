@@ -52,6 +52,7 @@ import { LiveraftCreateUpdatePage } from './pages/LiferaftCreateUpdatePage/Loada
 import { NotificationCenterPage } from './pages/NotificationCenterPage/Loadable';
 import { ProfileSettingsPage } from './pages/ProfileSettingsPage/Loadable';
 import { SubscriptionPage } from './pages/SubscriptionPage/Loadable';
+import { PaymentSucessPage } from './pages/PaymentSuccessPage/Loadable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../app/pages/LoginPage/slice/selectors';
@@ -70,6 +71,7 @@ import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
 import { selectIsSimplifiedPlayback } from './pages/PlaybackPage/components/slice/selectors';
+
 
 const { Sider, Content } = Layout;
 
@@ -234,7 +236,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/notifications'} component={NotificationCenterPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/settings'} component={ProfileSettingsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/subscription'} component={SubscriptionPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/payment-success'} component={SubscriptionPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/payment-success'} component={PaymentSucessPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

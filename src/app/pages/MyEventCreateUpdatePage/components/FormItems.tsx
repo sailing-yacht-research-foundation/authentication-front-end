@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, Select, Switch, Row, Col, Tooltip } from 'antd';
-import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfInputNumber } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfInputNumber, SyrFieldDescription } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { certifications, EventState, EventTypes, MODE } from 'utils/constants';
 import { useLocation } from 'react-router-dom';
@@ -29,6 +29,8 @@ export const FormItems = (props) => {
 
     const [selectedEventType, setSelectedEventType] = React.useState<string>('');
 
+    const [isPaidEvent, setIsPaidEvent] = React.useState<boolean>(false);
+
     const eventTypes = [
         { name: 'One Design', value: 'ONE_DESIGN' },
         { name: 'Handicap Race', value: 'HANDICAP_RACE' },
@@ -46,11 +48,13 @@ export const FormItems = (props) => {
             setIsCrewed(false);
             setParticipatingFee(0);
             setSelectedOrganizerGroup(false);
+            setIsPaidEvent(false);
         } else {
             setSelectedOrganizerGroup(!!event.organizerGroupId)
             setIsCrewed(!!event.isCrewed);
             setParticipatingFee(!!event.participatingFee ? event.participatingFee : 0);
             setSelectedEventType(event.eventTypes);
+            setIsPaidEvent(!!event.isPaidEvent);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, event]);
@@ -112,11 +116,24 @@ export const FormItems = (props) => {
                 </Col>
             </Row>
 
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.free_or_paid)}</SyrfFieldLabel>}
+                name="isPaidEvent">
+                <Switch
+                    onChange={setIsPaidEvent}
+                    checkedChildren={t(translations.my_event_create_update_page.paid_event)}
+                    unCheckedChildren={t(translations.my_event_create_update_page.free_event)} />
+
+            </Form.Item>
+
             <Tooltip title={t(translations.tip.planning_organization_is_a_organization_has_connected_payout)}>
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.planning_organization)}</SyrfFieldLabel>}
-                    name="organizerGroupId">
-                    <SyrfFormSelect onChange={value => setSelectedOrganizerGroup(!!value)}>
+                    name="organizerGroupId"
+                    help={isPaidEvent && validGroups.length === 0 ? <SyrFieldDescription>{t(translations.my_event_create_update_page.in_order_to_charge_for_your_events)}</SyrFieldDescription> : <></>}>
+                    <SyrfFormSelect
+                        disabled={isPaidEvent && validGroups.length === 0}
+                        onChange={value => setSelectedOrganizerGroup(!!value)}>
                         {renderValidOrganizerGroups()}
                     </SyrfFormSelect>
                 </Form.Item>
@@ -127,7 +144,8 @@ export const FormItems = (props) => {
                     <Col xs={24} sm={24} md={participantFeeValid ? 12 : 24} lg={participantFeeValid ? 12 : 24}>
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee)}</SyrfFieldLabel>}
-                            name="participatingFee">
+                            name="participatingFee"
+                            help={t(translations.my_event_create_update_page.fee_paid_per_captain)}>
                             <SyrfInputNumber
                                 onChange={(value) => setParticipatingFee(Number(value))}
                                 defaultValue={0}

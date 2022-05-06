@@ -69,6 +69,13 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
+            title: t(translations.participant_list.is_paid),
+            dataIndex: 'isPaid',
+            key: 'isPaid',
+            render: (text, record) => String(text),
+            ellipsis: true,
+        },
+        {
             title: t(translations.participant_list.action),
             key: 'action',
             fixed: true,
