@@ -204,12 +204,19 @@ export const Playback = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [realRaceTime, raceTime]);
 
+    const renderRaceStartTime = () => {
+        if (moment(competitionUnitDetail.approximateStart).isValid())
+            return <RightItemContainer>{moment(competitionUnitDetail.approximateStart).format(TIME_FORMAT.date_text)}</RightItemContainer>
+
+        return <></>;
+    }
+
     return (
         <PlaybackWrapper>
             <PlaybackTopRightItemsContainer>
                 {isLoading && <RightItemContainer> <Spin spinning={true}></Spin></RightItemContainer>}
                 {renderViewsCount()}
-                <RightItemContainer>{moment(competitionUnitDetail?.approximateStart).format(TIME_FORMAT.date_text)}</RightItemContainer>
+                {renderRaceStartTime()}
                 {renderSpeedControl()}
                 <RightItemContainer>
                     <BackToRaceAreaButton onClick={backToRaceArea} />

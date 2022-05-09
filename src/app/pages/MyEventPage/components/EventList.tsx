@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Table, Space, Spin, Tag } from 'antd';
+import { Table, Space, Spin, Tag, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsChangingPage, selectPageSize, selectResults } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
@@ -17,7 +17,6 @@ import { Link } from 'react-router-dom';
 import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
 import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
-import ReactTooltip from 'react-tooltip';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { RaceList } from './RaceList';
 import { EventAdmins } from 'app/pages/EventDetailPage/components/EventAdmins';
@@ -61,8 +60,11 @@ export const EventList = () => {
       render: (isOpen, record) => {
         return (
           <StatusContainer>
-            {record?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
-            {!record?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
+            {record?.isOpen ? (<Tooltip title={translate.anyone_canregist}>
+              <StyledTag color="blue">{translate.status_open_regis}</StyledTag>
+            </Tooltip>) : (<Tooltip title={translate.only_owner_canview}>
+              <StyledTag >{translate.status_private}</StyledTag>
+            </Tooltip>)}
           </StatusContainer>
         );
       }
@@ -109,22 +111,23 @@ export const EventList = () => {
       title: 'Action',
       key: 'action',
       render: (text, record) => {
-        return <Space size="middle">
-          <DownloadButton data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
-            downloadIcalendarFile(record);
-          }} type="primary">
-            <AiOutlineCalendar />
-          </DownloadButton>
-          {
-            record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status) && <>
+        return (
+          <Space size="middle">
+            <Tooltip title={t(translations.tip.download_icalendar_file)}>
+              <DownloadButton onClick={() => {
+                downloadIcalendarFile(record);
+              }} type="primary">
+                <AiOutlineCalendar />
+              </DownloadButton>
+            </Tooltip>
+            {record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status) && <>
               <BorderedButton onClick={() => {
                 history.push(`/events/${record.id}/update`)
               }} type="primary">{t(translations.general.update)}</BorderedButton>
               {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>}
-            </>
-          }
-          <ReactTooltip />
-        </Space>;
+            </>}
+          </Space>
+        );
       }
     },
   ];

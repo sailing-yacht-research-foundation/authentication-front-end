@@ -1,12 +1,11 @@
 import React from 'react';
-import { Space } from 'antd';
+import { Space, Tooltip } from 'antd';
 import { BorderedButton, CreateButton } from 'app/components/SyrfGeneral';
 import { EventState, RaceStatus } from 'utils/constants';
 import { FiEdit } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import ReactTooltip from 'react-tooltip';
 import { RegisterRaceModal } from 'app/components/RegisterRaceModal';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 import { CalendarEvent } from 'types/CalendarEvent';
@@ -51,6 +50,10 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
         setShowStopRaceConfirmModal(true);
     }
 
+    const canDeleteRace = () => {
+        return [RaceStatus.SCHEDULED].includes(race.status);
+    }
+
     React.useEffect(() => {
         if (relations.length > 0) {
             setRelation(relations.find(r => r.id === race.id));
@@ -88,10 +91,15 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
         {canRegisterToRace() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegisterModalOrRedirect(race)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
         {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
         {canManageEvent() && <>
-            <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
-                history.push(`/events/${race.calendarEventId}/races/${race.id}/update`);
-            }} type="primary">{t(translations.general.update)}</BorderedButton>
-            <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteRaceModal(race)}>{t(translations.general.delete)}</BorderedButton></>}
-        <ReactTooltip />
+            <Tooltip title={t(translations.tip.update_race)}>
+                <BorderedButton onClick={() => {
+                    history.push(`/events/${race.calendarEventId}/races/${race.id}/update`);
+                }} type="primary">{t(translations.general.update)}</BorderedButton>
+            </Tooltip>
+
+            { canDeleteRace() && <Tooltip title={t(translations.tip.delete_race)}>
+                <BorderedButton danger onClick={() => showDeleteRaceModal(race)}>{t(translations.general.delete)}</BorderedButton>
+            </Tooltip>}
+        </>}
     </Space>)
 }

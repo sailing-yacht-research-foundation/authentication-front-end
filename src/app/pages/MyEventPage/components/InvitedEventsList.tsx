@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Table, Space, Spin, Tag, Button } from 'antd';
+import { Table, Space, Spin, Tag, Button, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import Invitation from '../assets/invitation.json'
@@ -56,8 +56,15 @@ export const InvitedEventLists = (props) => {
             render: (isOpen, record) => {
                 return (
                     <StatusContainer>
-                        {record?.event.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
-                        {!record?.event.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
+                        {record?.event.isOpen ? (
+                            <Tooltip title={translate.anyone_canregist} color="blue">
+                                <StyledTag >{translate.status_open_regis}</StyledTag>
+                            </Tooltip>
+                        ) : (
+                        <Tooltip title={translate.only_owner_canview}>
+                            <StyledTag >{translate.status_private}</StyledTag>
+                        </Tooltip>
+                        )}
                     </StatusContainer>
                 );
             }

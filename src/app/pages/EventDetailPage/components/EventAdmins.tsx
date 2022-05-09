@@ -1,4 +1,4 @@
-import { Spin } from 'antd';
+import { Spin, Tooltip } from 'antd';
 import { PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import React from 'react';
@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { getEditors } from 'services/live-data-server/event-calendars';
 import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
-import ReactTooltip from 'react-tooltip';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CalendarEvent } from 'types/CalendarEvent';
@@ -58,9 +57,11 @@ export const EventAdmins = (props: IEventAdmins) => {
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
         return editors.filter(Boolean).map((editor, index) => {
             if (editor.group) editor = editor.group;
-            return <EditorItem key={index} onClick={() => history.push(`/groups/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.groupName}>
-                <img alt={editor?.groupName} src={editor?.groupImage || DEFAULT_GROUP_AVATAR} />
-            </EditorItem>
+            return <Tooltip title={editor?.groupName}>
+                <EditorItem key={index} onClick={() => history.push(`/groups/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} >
+                    <img alt={editor?.groupName} src={editor?.groupImage || DEFAULT_GROUP_AVATAR} />
+                </EditorItem>
+            </Tooltip>
         });
     }
 
@@ -69,9 +70,11 @@ export const EventAdmins = (props: IEventAdmins) => {
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
         return editors.filter(Boolean).map((editor, index) => {
             if (editor.user) editor = editor.user;
-            return <EditorItem key={index} onClick={() => history.push(`/profile/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} data-tip={editor?.name}>
-                <img alt={editor?.name} src={renderAvatar(editor?.avatar)} />
-            </EditorItem>
+            return <Tooltip title={editor?.name}>
+                <EditorItem key={index} onClick={() => history.push(`/profile/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}}>
+                    <img alt={editor?.name} src={renderAvatar(editor?.avatar)} />
+                </EditorItem>
+            </Tooltip>
         });
     }
 
@@ -106,7 +109,6 @@ export const EventAdmins = (props: IEventAdmins) => {
                         {renderGroupEditors()}
                         {renderPlusMore()}
                     </EditorWrapper>
-                    <ReactTooltip />
                 </Spin>
             }
         </>

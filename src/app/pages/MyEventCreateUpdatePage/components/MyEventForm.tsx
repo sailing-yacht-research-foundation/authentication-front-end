@@ -16,7 +16,6 @@ import { AdminType, EventParticipatingTypes, EventState, MAP_DEFAULT_VALUE, MODE
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
-import ReactTooltip from 'react-tooltip';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
@@ -690,7 +689,6 @@ export const MyEventForm = () => {
                 </Spin>
             </SyrfFormWrapper>
             <EventChildLists reloadParent={reloadParent} setEvent={setEvent} eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
-            <ReactTooltip />
         </Wrapper>
     )
 }

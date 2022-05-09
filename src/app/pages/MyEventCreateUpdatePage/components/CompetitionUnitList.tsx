@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Space, Spin, Table } from 'antd';
+import { Space, Spin, Table, Tooltip } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -10,12 +10,11 @@ import { translations } from 'locales/translations';
 import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
 import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
-import ReactTooltip from 'react-tooltip';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 
-export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event?: CalendarEvent }) => {
+export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: CalendarEvent }) => {
 
     const { t } = useTranslation();
 
@@ -28,7 +27,11 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link data-tip={t(translations.tip.view_this_race_in_the_playback)} to={`/playback/?raceId=${record.id}`}>{text}</Link>;
+                return (
+                    <Tooltip title={t(translations.tip.view_this_race_in_the_playback)}>
+                        <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>
+                    </Tooltip>
+                );
             },
             width: '20%',
         },
@@ -52,11 +55,16 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
             render: (text, record) => (
                 <Space size="middle">
                     {record.status === RaceStatus.ON_GOING && <CreateButton onClick={() => openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
-                    <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
-                        history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
-                    }} type="primary">{t(translations.general.update)}</BorderedButton>
-                    {record.status !== RaceStatus.COMPLETED && <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteCompetitionUnitModal(record)}>{t(translations.general.delete)}</BorderedButton>}
-                    <ReactTooltip />
+                    <Tooltip title={t(translations.tip.update_race)}>
+                        <BorderedButton onClick={() => {
+                            history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
+                        }} type="primary">{t(translations.general.update)}</BorderedButton>
+                    </Tooltip>
+                    {record.status !== RaceStatus.COMPLETED && <Tooltip title={t(translations.tip.delete_race)}>
+                        <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>
+                            {t(translations.general.delete)}
+                        </BorderedButton>
+                    </Tooltip>}
                 </Space>
             ),
             width: '20%',
@@ -129,9 +137,13 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.competition_unit_list_page.competition_units)}</PageHeaderTextSmall>
-                    <CreateButton data-tip={t(translations.tip.create_race)} onClick={() => history.push(`/events/${eventId}/races/create`)} icon={<AiFillPlusCircle
-                        style={{ marginRight: '5px' }}
-                        size={18} />}>{t(translations.general.create)}</CreateButton>
+                    <Tooltip title={t(translations.tip.create_race)}>
+                        <CreateButton onClick={() => history.push(`/events/${eventId}/races/create`)}
+                            icon={<AiFillPlusCircle
+                                style={{ marginRight: '5px' }}
+                                size={18} />}>{t(translations.general.create)}
+                        </CreateButton>
+                    </Tooltip>
                 </PageHeaderContainer>
                 <TableWrapper>
                     <Table columns={columns}
@@ -145,7 +157,6 @@ export const CompetitionUnitList = ({ eventId, event }: { eventId: string, event
                         }} />
                 </TableWrapper>
             </Spin>
-            <ReactTooltip />
         </>
     )
 }

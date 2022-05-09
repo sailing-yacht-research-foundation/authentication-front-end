@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Table, Space } from 'antd';
+import { Spin, Table, Space, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
@@ -8,7 +8,6 @@ import { renderEmptyValue } from 'utils/helpers';
 import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
 import { useHistory } from 'react-router-dom';
-import ReactTooltip from 'react-tooltip';
 import { CalendarEvent } from 'types/CalendarEvent';
 
 export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
@@ -52,8 +51,9 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             key: 'class',
             render: (text, record) => {
                 return record?.vesselParticipants[0]?.crews?.map(crew => <Space key={crew.id} size={10}>
-                    <CrewItem data-tip={crew.publicName} onClick={() => navigateToProfile(crew)} alt={crew.publicName} src={renderAvatar(crew.profile?.avatar)} />
-                    <ReactTooltip/>
+                    <Tooltip title={crew.publicName}>
+                        <CrewItem onClick={() => navigateToProfile(crew)} alt={crew.publicName} src={renderAvatar(crew.profile?.avatar)} />
+                    </Tooltip>
                 </Space>);
             },
         },

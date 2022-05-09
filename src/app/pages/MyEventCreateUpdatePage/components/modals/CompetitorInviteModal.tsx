@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Spin, Select, Form } from 'antd';
+import { Modal, Spin, Select, Form, Tooltip } from 'antd';
 import { toast } from 'react-toastify';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -141,21 +141,23 @@ export const CompetitorInviteModal = (props) => {
         >
             <Spin spinning={isLoading}>
                 <Form onFinish={onFinish} form={form}>
-                    <Form.Item
-                        name="competitors"
-                        rules={[{ required: true, message: t(translations.forms.competitors_are_required) }]}
-                        data-tip={t(translations.my_event_create_update_page.invite_groups_or_individual_by_searching_them)}>
-                        <SyrfFormSelect mode="multiple"
-                            style={{ width: '100%' }}
-                            placeholder={t(translations.my_event_create_update_page.invite_groups_or_individual_by_searching_them)}
-                            onSearch={debounceSearch}
-                            filterOption={false}
-                            allowClear
-                            maxTagCount={'responsive' as const}
+                    <Tooltip title={t(translations.my_event_create_update_page.invite_groups_or_individual_by_searching_them)}>
+                        <Form.Item
+                            name="competitors"
+                            rules={[{ required: true, message: t(translations.forms.competitors_are_required) }]}
                         >
-                            {renderItemResults()}
-                        </SyrfFormSelect>
-                    </Form.Item>
+                            <SyrfFormSelect mode="multiple"
+                                style={{ width: '100%' }}
+                                placeholder={t(translations.my_event_create_update_page.invite_groups_or_individual_by_searching_them)}
+                                onSearch={debounceSearch}
+                                filterOption={false}
+                                allowClear
+                                maxTagCount={'responsive' as const}
+                            >
+                                {renderItemResults()}
+                            </SyrfFormSelect>
+                        </Form.Item>
+                    </Tooltip>
 
                     <Form.Item>
                         <SyrfFormButton type="primary" htmlType="submit">

@@ -20,7 +20,7 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType, WSTrackingStateUpdate } from "utils/constants";
+import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType, WSTrackingStateUpdate } from "utils/constants";
 import { canStreamToExpedition, getBoatNameFromVesselParticipantObject, stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
@@ -29,6 +29,7 @@ import { ExpeditionServerActionButtons } from "app/pages/CompetitionUnitCreateUp
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { KudosReaction } from "./KudosReaction";
+import { ModalRacePostponed } from "./ModalRacePostponed";
 
 export const PlaybackStreamRace = () => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -505,7 +506,7 @@ export const PlaybackStreamRace = () => {
   return (
     <div style={{ height: "100%", position: "relative" }}>
       <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-        <ModalCountdownTimer />
+        {competitionUnitDetail.status === RaceStatus.POSTPONED ? <ModalRacePostponed /> : <ModalCountdownTimer />}
       </LeaderboardContainer>
       <MapContainer
         style={{
