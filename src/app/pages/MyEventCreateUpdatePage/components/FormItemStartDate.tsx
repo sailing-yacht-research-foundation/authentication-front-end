@@ -26,7 +26,7 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter }) =
                                 if (!value || !getFieldValue('endDate') || moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('endDate').format(TIME_FORMAT.number))) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error(t(translations.my_event_create_update_page.error_starttime_shouldgreater_currenttime)));
+                                return Promise.reject(new Error(t(translations.my_event_create_update_page.error_starttime_should_be_less_than_end_time)));
                             },
                         })]}
                     >
@@ -65,7 +65,7 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter }) =
                                 if (!value || (!getFieldValue('endTime') && !!getFieldValue('endDate')) || isStartDateTimeBeforeEndDateTime) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error(t(translations.my_event_create_update_page.error_starttime_shouldgreater_currenttime)));
+                                return Promise.reject(new Error(t(translations.my_event_create_update_page.error_starttime_should_be_less_than_end_time)));
                             },
                         })]}
                     >
