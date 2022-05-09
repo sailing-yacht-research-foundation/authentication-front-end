@@ -10,8 +10,10 @@ import { translations } from 'locales/translations';
 import { ConfirmPublishEventModal } from './modals/ConfirmPublishEventModal';
 import { ConfirmStopEventModal } from './modals/ConfirmStopEventModal';
 import { PDFUploadForm } from './PDFUploadForm';
+import styled from 'styled-components';
+import { media } from 'styles/media';
 
-export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, reloadParent }) => {
+export const EventChildLists = ({ mode, eventId, event, raceListRef, pdfListRef, setEvent, reloadParent }) => {
 
     const { t } = useTranslation();
 
@@ -32,7 +34,9 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
         {
             mode === MODE.UPDATE && (
                 <>
-                    <PDFUploadForm event={event} reloadParent={reloadParent} />
+                    <PdfWrapper style={{ width: '100%' }} ref={pdfListRef}>
+                        <PDFUploadForm event={event} reloadParent={reloadParent} />
+                    </PdfWrapper>
 
                     <SyrfFormWrapper ref={raceListRef}>
                         <CompetitionUnitList event={event} eventId={eventId || event.id} />
@@ -67,3 +71,10 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, setEvent, r
 
     </>)
 }
+
+const PdfWrapper = styled.div`
+    ${media.medium`
+        width: 100%;
+        padding: 30px 56px;
+    `}
+`;

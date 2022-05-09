@@ -69,6 +69,8 @@ export const MyEventForm = () => {
 
     const raceListRef = React.useRef<any>();
 
+    const pdfListRef = React.useRef<any>();
+
     const onFinish = async (values) => {
         const { startDate, isOpen, lon, lat, endDate, endTime, startTime, endLat, endLon, admins, requiredCertifications, requireCovidCertificate, isCrewed } = values;
         let response;
@@ -159,7 +161,7 @@ export const MyEventForm = () => {
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
         }
 
-        if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (pdfListRef) pdfListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
     const reloadParent = () => {
@@ -181,7 +183,7 @@ export const MyEventForm = () => {
         setMode(MODE.UPDATE);
         history.push(`/events/${event.id}/update`);
         setIsSavingEvent(false);
-        if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (pdfListRef) pdfListRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
     const createDefaultVesselParticipantGroup = async (event) => {
@@ -687,7 +689,7 @@ export const MyEventForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <EventChildLists reloadParent={reloadParent} setEvent={setEvent} eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
+            <EventChildLists reloadParent={reloadParent} setEvent={setEvent} eventId={eventId} event={event} mode={mode} pdfListRef={pdfListRef} raceListRef={raceListRef} />
         </Wrapper>
     )
 }
