@@ -93,7 +93,7 @@ export const FormItems = (props) => {
     const handleSetIsPaidEvent = (value) => {
         setIsPaidEvent(value);
         setSelectedOrganizerGroup(value);
-    } 
+    }
 
     return (
         <>
@@ -136,7 +136,7 @@ export const FormItems = (props) => {
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.planning_organization)}</SyrfFieldLabel>}
                     name="organizerGroupId"
-                    help={isPaidEvent && validGroups.length === 0 ? <SyrFieldDescription>{t(translations.my_event_create_update_page.in_order_to_charge_for_your_events)}</SyrFieldDescription> : <></>}>
+                    rules={[{ required: isPaidEvent, message: t(translations.forms.please_fill_out_this_field) }]}>
                     <SyrfFormSelect
                         allowClear
                         disabled={isPaidEvent && validGroups.length === 0}
@@ -144,6 +144,7 @@ export const FormItems = (props) => {
                         {renderValidOrganizerGroups()}
                     </SyrfFormSelect>
                 </Form.Item>
+                {isPaidEvent && validGroups.length === 0 ? <SyrFieldDescription style={{ position: 'relative', top: '-10px' }}>{t(translations.my_event_create_update_page.in_order_to_charge_for_your_events)}</SyrFieldDescription> : <></>}
             </Tooltip>
 
             {selectedOrganizerGroup &&

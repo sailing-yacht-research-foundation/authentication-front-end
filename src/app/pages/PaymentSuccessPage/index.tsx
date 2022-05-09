@@ -4,7 +4,7 @@ import { Link } from 'app/components/Link';
 import { StyleConstants } from 'styles/StyleConstants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { BorderedButton, LottieMessage, LottieWrapper } from 'app/components/SyrfGeneral';
+import { LottieMessage, LottieWrapper } from 'app/components/SyrfGeneral';
 import Lottie from 'react-lottie';
 import PaymentSuccess from './assets/payment-success.json';
 
@@ -44,15 +44,4 @@ const Wrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   min-height: 320px;
-`;
-
-const Title = styled.div`
-  margin-top: -8vh;
-  font-weight: bold;
-  color: ${p => p.theme.text};
-  font-size: 3.375rem;
-
-  span {
-    font-size: 3.125rem;
-  }
 `;

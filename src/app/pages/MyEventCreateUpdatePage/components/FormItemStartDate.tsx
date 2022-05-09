@@ -4,8 +4,9 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Form, DatePicker, TimePicker, Tooltip } from 'antd';
 import moment from 'moment';
+import { TIME_FORMAT } from 'utils/constants';
 
-export const FormItemStartDate = ({ renderErrorField, handleFieldChange, renderTimezoneDropdownList, error, dateLimiter }) => {
+export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter }) => {
 
     const { t } = useTranslation();
 
@@ -20,13 +21,17 @@ export const FormItemStartDate = ({ renderErrorField, handleFieldChange, renderT
                         rules={[{ type: 'date' }, {
                             required: true,
                             message: t(translations.forms.start_date_is_required)
-                        }]}
-                        validateStatus={(renderErrorField(error, 'startDate') && 'error') || ''}
-                        help={renderErrorField(error, 'startDate')}
+                        }, ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || !getFieldValue('endDate') || moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('endDate').format(TIME_FORMAT.number))) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error(t(translations.my_event_create_update_page.error_starttime_shouldgreater_currenttime)));
+                            },
+                        })]}
                     >
                         <DatePicker
                             allowClear={false}
-                            onChange={(val) => handleFieldChange('startDate', val)}
                             showToday={true}
                             disabledDate={dateLimiter}
                             className="syrf-datepicker"
@@ -49,15 +54,25 @@ export const FormItemStartDate = ({ renderErrorField, handleFieldChange, renderT
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_time)}</SyrfFieldLabel>}
                         name="startTime"
                         className="event-start-time-step"
-                        rules={[{ required: true, message: t(translations.forms.start_time_is_required) }]}
-                        validateStatus={(renderErrorField(error, 'startTime') && 'error') || ''}
-                        help={renderErrorField(error, 'startTime')}
+                        rules={[{ required: true, message: t(translations.forms.start_time_is_required) }, ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const startDate = getFieldValue('startDate').format(TIME_FORMAT.number);
+                                const startTime  =  value.format(TIME_FORMAT.time);
+                                const endDate = getFieldValue('endDate').format(TIME_FORMAT.number);
+                                const endTime = getFieldValue('endTime').format(TIME_FORMAT.time);
+                                const isStartDateTimeBeforeEndDateTime = moment(startDate + ' ' + startTime).isBefore(endDate + ' ' + endTime);
+                                
+                                if (!value || (!getFieldValue('endTime') && !!getFieldValue('endDate')) || isStartDateTimeBeforeEndDateTime) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error(t(translations.my_event_create_update_page.error_starttime_shouldgreater_currenttime)));
+                            },
+                        })]}
                     >
                         <TimePicker
                             allowClear={false}
-                            onChange={(val) => handleFieldChange('startTime', val)}
                             className="syrf-datepicker"
-                            defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
+                            defaultOpenValue={moment('00:00:00', TIME_FORMAT.time)}
                         />
                     </Form.Item>
                 </Tooltip>
