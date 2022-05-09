@@ -50,11 +50,11 @@ export const FormItems = (props) => {
             setSelectedOrganizerGroup(false);
             setIsPaidEvent(false);
         } else {
-            setSelectedOrganizerGroup(!!event.organizerGroupId)
+            setSelectedOrganizerGroup(!!event.organizerGroupId && event.participatingFee > 0);
             setIsCrewed(!!event.isCrewed);
             setParticipatingFee(!!event.participatingFee ? event.participatingFee : 0);
             setSelectedEventType(event.eventTypes);
-            setIsPaidEvent(!!event.isPaidEvent);
+            setIsPaidEvent(event.participatingFee > 0);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, event]);
@@ -90,6 +90,11 @@ export const FormItems = (props) => {
         getAllValidOrganizerGroups();
     }, []);
 
+    const handleSetIsPaidEvent = (value) => {
+        setIsPaidEvent(value);
+        setSelectedOrganizerGroup(value);
+    } 
+
     return (
         <>
             <Row gutter={12}>
@@ -121,7 +126,7 @@ export const FormItems = (props) => {
                 name="isPaidEvent"
                 valuePropName="checked">
                 <Switch
-                    onChange={setIsPaidEvent}
+                    onChange={handleSetIsPaidEvent}
                     checkedChildren={t(translations.my_event_create_update_page.paid_event)}
                     unCheckedChildren={t(translations.my_event_create_update_page.free_event)} />
 
@@ -133,6 +138,7 @@ export const FormItems = (props) => {
                     name="organizerGroupId"
                     help={isPaidEvent && validGroups.length === 0 ? <SyrFieldDescription>{t(translations.my_event_create_update_page.in_order_to_charge_for_your_events)}</SyrFieldDescription> : <></>}>
                     <SyrfFormSelect
+                        allowClear
                         disabled={isPaidEvent && validGroups.length === 0}
                         onChange={value => setSelectedOrganizerGroup(!!value)}>
                         {renderValidOrganizerGroups()}
@@ -146,6 +152,7 @@ export const FormItems = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee)}</SyrfFieldLabel>}
                             name="participatingFee"
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                             help={t(translations.my_event_create_update_page.fee_paid_per_captain)}>
                             <SyrfInputNumber
                                 onChange={(value) => setParticipatingFee(Number(value))}
@@ -158,6 +165,7 @@ export const FormItems = (props) => {
                     {
                         participantFeeValid && <Col xs={24} sm={24} md={12} lg={12}><Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee_type)}</SyrfFieldLabel>}
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                             name="participatingFeeType">
                             <SyrfFormSelect>
                                 {renderParticipatingType()}

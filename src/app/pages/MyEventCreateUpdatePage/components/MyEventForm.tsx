@@ -120,7 +120,8 @@ export const MyEventForm = () => {
                 isIndividualAssignment: item.isIndividualAssignment
             })),
             participatingFee: (values.participatingFee && values.participatingFee !== 0) ? values.participatingFee : undefined,
-            requiredCertifications: certifications
+            requiredCertifications: certifications,
+            organizerGroupId: values.organizerGroupId || null
         };
 
         setIsSavingEvent(true);
