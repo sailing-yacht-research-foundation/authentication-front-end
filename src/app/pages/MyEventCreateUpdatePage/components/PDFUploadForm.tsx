@@ -50,7 +50,7 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
     }
 
     return (
-        <SyrfFormWrapper style={fullWidth ? { width: '100%', padding: '30px 15px' }: {}}>
+        <SyrfFormWrapper style={fullWidth ? { width: '100%', padding: '0' }: {}}>
             <PageHeaderContainer>
                 <PageHeaderTextSmall>{t(translations.my_event_create_update_page.pdf_documents)}</PageHeaderTextSmall>
                 {(!!event.noticeOfRacePDF || !!event.mediaWaiverPDF || !!event.disclaimerPDF) && <CreateButton onClick={downloadAllPdfs} icon={<DownloadOutlined />}>{t(translations.my_event_create_update_page.download_all)}</CreateButton>}

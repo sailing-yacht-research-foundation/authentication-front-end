@@ -74,7 +74,9 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, pdfListRef,
 
 const PdfWrapper = styled.div`
     ${media.medium`
+        margin-top: 30px;
         width: 100%;
-        padding: 30px 56px;
+        display: flex;
+        justify-content: center;
     `}
 `;
