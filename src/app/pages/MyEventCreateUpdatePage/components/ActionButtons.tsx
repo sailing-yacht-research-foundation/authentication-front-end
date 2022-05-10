@@ -12,6 +12,7 @@ import { MdFreeCancellation } from 'react-icons/md';
 import styled from 'styled-components';
 import { media } from 'styles/media';
 import { DeleteButton, IconWrapper } from 'app/components/SyrfGeneral';
+import { useHistory } from 'react-router-dom';
 
 export const ActionButtons = ({
     mode,
@@ -24,6 +25,8 @@ export const ActionButtons = ({
 
     const { t } = useTranslation();
 
+    const history = useHistory();
+
     const [isChangingStatus, setIsChangingStatus] = React.useState<boolean>(false);
 
     const closeEvent = async () => {
@@ -35,6 +38,9 @@ export const ActionButtons = ({
                 status: EventState.COMPLETED
             });
             toast.success(t(translations.my_event_create_update_page.successfully_closed_this_event));
+            if (event.isSimulation) {
+                history.push('/events');
+            }
         } else {
             showToastMessageOnRequestError(response.error);
         }

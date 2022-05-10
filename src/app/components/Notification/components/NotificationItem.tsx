@@ -213,6 +213,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
                 }
                 break;
             case NotificationTypes.KUDOS_RECEIVED:
+            case NotificationTypes.SIMULATION_DELETION:
                 history.push(`/playback?raceId=${notification.metadata?.competitionUnitId}`);
                 break;
         }
