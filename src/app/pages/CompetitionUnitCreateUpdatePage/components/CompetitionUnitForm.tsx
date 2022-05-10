@@ -164,8 +164,8 @@ export const CompetitionUnitForm = () => {
                 message.error(t(translations.competition_unit_create_update_page.race_not_found));
             }
         } else {
-            setDefaultNameForRace();
-            setDefaultTimeForRace();
+            await setDefaultTimeForRace();
+            await setDefaultNameForRace();
             checkIfNoRaceIsOngoing();
         }
     }
@@ -256,6 +256,7 @@ export const CompetitionUnitForm = () => {
         if (response.success) {
             form.setFieldsValue({
                 startDate: moment(response.data?.approximateStartTime),
+                startTime: moment(response.data?.approximateStartTime).add(5, 'minutes'),
                 approximateStart_zone: response.data?.approximateStartTime_zone
             });
         }
