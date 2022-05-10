@@ -236,12 +236,15 @@ export const CompetitionUnitForm = () => {
         const response = await getAllCompetitionUnitsByEventIdWithSort(eventId, 1);
         const races = response.data?.rows;
         
-        if (response.success && response.data.rows?.length > 0) {
+        if (response.success) {
+            if (response.data.rows?.length > 0) {
+                form.setFieldsValue({
+                    startDate: moment(response.data.rows[0].approximateStart),
+                    startTime: moment(response.data.rows[0].approximateStart).add(5, 'minutes'),
+                })
+            }
             form.setFieldsValue({
-                startDate: moment(response.data.rows[0].approximateStart),
-                startTime: moment(response.data.rows[0].approximateStart).add(5, 'minutes'),
                 name: ('R' + ((Number(response.data?.count) + 1) || 1)),
-
             });
             setLastCreatedRace(races[0]);
         }
