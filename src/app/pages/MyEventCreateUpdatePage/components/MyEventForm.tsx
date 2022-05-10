@@ -183,7 +183,7 @@ export const MyEventForm = () => {
         setMode(MODE.UPDATE);
         history.push(`/events/${event.id}/update`);
         setIsSavingEvent(false);
-        pdfListRef.current?.scrollIntoView({ behavior: 'smooth' });
+        pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
     const createDefaultVesselParticipantGroup = async (event) => {
