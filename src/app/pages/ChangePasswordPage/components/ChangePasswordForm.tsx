@@ -3,7 +3,6 @@ import { Form, Spin, Tooltip } from 'antd';
 import { toast } from 'react-toastify';
 import {
     SyrfFormWrapper,
-    SyrfSubmitButton,
     SyrfFormTitle,
     SyrfFieldLabel,
     SyrfPasswordInputField,

@@ -290,7 +290,14 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
     }
 
     if (error?.response) {
-        const errorCode = error?.response.status;
+        const errorCode = error.response?.status;
+        const errorMessage = error.response?.data?.message || error.response?.data?.errorMessage;
+
+        if (errorMessage && errorCode !== 401) {
+            toast.error(errorMessage);
+            return;
+        }
+
         if (errorCode === 500) {
             toast.error(i18next.t(translations.general.oops_it_our_fault));
         } else if (errorCode === 404) {

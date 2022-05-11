@@ -4,8 +4,9 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Form, DatePicker, TimePicker, Tooltip } from 'antd';
 import moment from 'moment';
+import { TIME_FORMAT } from 'utils/constants';
 
-export const FormItemEndDate = ({ renderErrorField, handleFieldChange, endDateLimiter, error, renderTimezoneDropdownList }) => {
+export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList }) => {
     const { t } = useTranslation();
 
     return (
@@ -16,11 +17,16 @@ export const FormItemEndDate = ({ renderErrorField, handleFieldChange, endDateLi
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_date)}</SyrfFieldLabel>}
                         name="endDate"
                         className="event-start-date-step"
-                        validateStatus={(renderErrorField(error, 'endDate') && 'error') || ''}
-                        help={renderErrorField(error, 'endDate')}
+                        rules={[{ type: 'date' }, ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || !getFieldValue('startDate') || moment(value.format(TIME_FORMAT.number)).isSameOrAfter(getFieldValue('startDate').format(TIME_FORMAT.number))) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error(t(translations.my_event_create_update_page.error_endtime_shouldgreater_starttime)));
+                            },
+                        })]}
                     >
                         <DatePicker
-                            onChange={(val) => handleFieldChange('endDate', val)}
                             showToday={true}
                             disabledDate={endDateLimiter}
                             className="syrf-datepicker"
@@ -43,13 +49,24 @@ export const FormItemEndDate = ({ renderErrorField, handleFieldChange, endDateLi
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_time)}</SyrfFieldLabel>}
                         name="endTime"
                         className="event-start-time-step"
-                        validateStatus={(renderErrorField(error, 'endTime') && 'error') || ''}
-                        help={renderErrorField(error, 'endTime')}
+                        rules={[{ required: true, message: t(translations.forms.start_time_is_required) }, ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const startDate = getFieldValue('startDate').format(TIME_FORMAT.number);
+                                const startTime  =  getFieldValue('startTime').format(TIME_FORMAT.time);
+                                const endDate = getFieldValue('endDate').format(TIME_FORMAT.number);
+                                const endTime = value.format(TIME_FORMAT.time);
+                                const isEndDateTimeAfterStartDateTime = moment(endDate + ' ' + endTime).isAfter(startDate + ' ' + startTime);
+
+                                if (!value || (!getFieldValue('startTime') && !!getFieldValue('startDate')) || isEndDateTimeAfterStartDateTime) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error(t(translations.my_event_create_update_page.error_endtime_shouldgreater_starttime)));
+                            },
+                        })]}
                     >
                         <TimePicker
-                            onChange={(val) => handleFieldChange('endTime', val)}
                             className="syrf-datepicker"
-                            defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
+                            defaultOpenValue={moment('00:00:00', TIME_FORMAT.time)}
                         />
                     </Form.Item>
                 </Tooltip>
