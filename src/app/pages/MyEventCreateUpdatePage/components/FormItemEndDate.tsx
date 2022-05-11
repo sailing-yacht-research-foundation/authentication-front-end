@@ -51,11 +51,11 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList }) 
                         className="event-start-time-step"
                         rules={[{ required: true, message: t(translations.forms.start_time_is_required) }, ({ getFieldValue }) => ({
                             validator(_, value) {
-                                const startDate = getFieldValue('startDate').format(TIME_FORMAT.number);
-                                const startTime  =  getFieldValue('startTime').format(TIME_FORMAT.time);
-                                const endDate = getFieldValue('endDate').format(TIME_FORMAT.number);
-                                const endTime = value.format(TIME_FORMAT.time);
-                                const isEndDateTimeAfterStartDateTime = moment(endDate + ' ' + endTime).isAfter(startDate + ' ' + startTime);
+                                const startTime = getFieldValue('startTime');
+                                const startDate = getFieldValue('startDate').local().set({ hour: startTime.hour(), minute: startTime.minutes(), second: startTime.seconds() });
+                                const endTime = getFieldValue('endTime');
+                                const endDate = getFieldValue('endDate').local().set({ hour: endTime.hour(), minute: endTime.minutes(), second: endTime.seconds() });
+                                const isEndDateTimeAfterStartDateTime = endDate.isAfter(startDate);
 
                                 if (!value || (!getFieldValue('startTime') && !!getFieldValue('startDate')) || isEndDateTimeAfterStartDateTime) {
                                     return Promise.resolve();

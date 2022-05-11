@@ -56,12 +56,12 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter }) =
                         className="event-start-time-step"
                         rules={[{ required: true, message: t(translations.forms.start_time_is_required) }, ({ getFieldValue }) => ({
                             validator(_, value) {
-                                const startDate = getFieldValue('startDate').format(TIME_FORMAT.number);
-                                const startTime  =  value.format(TIME_FORMAT.time);
-                                const endDate = getFieldValue('endDate').format(TIME_FORMAT.number);
-                                const endTime = getFieldValue('endTime').format(TIME_FORMAT.time);
-                                const isStartDateTimeBeforeEndDateTime = moment(startDate + ' ' + startTime).isBefore(endDate + ' ' + endTime);
-                                
+                                const startTime = getFieldValue('startTime');
+                                const startDate = getFieldValue('startDate').local().set({ hour: startTime.hour(), minute: startTime.minutes(), second: startTime.seconds() });
+                                const endTime = getFieldValue('endTime');
+                                const endDate = getFieldValue('endDate').local().set({ hour: endTime.hour(), minute: endTime.minutes(), second: endTime.seconds() });
+                                const isStartDateTimeBeforeEndDateTime = startDate.isBefore(endDate);
+
                                 if (!value || (!getFieldValue('endTime') && !!getFieldValue('endDate')) || isStartDateTimeBeforeEndDateTime) {
                                     return Promise.resolve();
                                 }
