@@ -43,7 +43,7 @@ export const KudosReaction = () => {
 
     return (<>
         {
-             <KudoContainer>
+            id &&  <KudoContainer>
                 <KudosReactionItem>
                     <Tooltip title={t(translations.playback_page.send_like_to_participant, { participantName: competitorName })}>
                         <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.THUMBS_UP)} className='like'>

@@ -132,7 +132,7 @@ export const CompetitionUnitForm = () => {
         setCompetitionUnit(response.data);
     }
 
-    const showPostponedMessageToUserIfRaceIsPostponed = (race: CompetitionUnit)  => {
+    const showPostponedMessageToUserIfRaceIsPostponed = (race: CompetitionUnit) => {
         if (race.status === RaceStatus.POSTPONED) {
             toast.info(t(translations.competition_unit_create_update_page.this_race_is_postponed_and_you_can_only));
         }
@@ -164,8 +164,8 @@ export const CompetitionUnitForm = () => {
                 message.error(t(translations.competition_unit_create_update_page.race_not_found));
             }
         } else {
-            setDefaultNameForRace();
-            setDefaultTimeForRace();
+            await setDefaultTimeForRace();
+            await setDefaultNameForRace();
             checkIfNoRaceIsOngoing();
         }
     }
@@ -234,12 +234,19 @@ export const CompetitionUnitForm = () => {
 
     const setDefaultNameForRace = async () => {
         const response = await getAllCompetitionUnitsByEventIdWithSort(eventId, 1);
-
+        const races = response.data?.rows;
+        
         if (response.success) {
-            form.setFieldsValue({ name: 'R' + ((Number(response.data?.count) + 1) || 1) });
-            const races = response.data?.rows;
-            if (races.length > 0)
-                setLastCreatedRace(races[0]);
+            if (response.data.rows?.length > 0) {
+                form.setFieldsValue({
+                    startDate: moment(response.data.rows[0].approximateStart),
+                    startTime: moment(response.data.rows[0].approximateStart).add(5, 'minutes'),
+                })
+            }
+            form.setFieldsValue({
+                name: ('R' + ((Number(response.data?.count) + 1) || 1)),
+            });
+            setLastCreatedRace(races[0]);
         }
     }
 
@@ -249,6 +256,7 @@ export const CompetitionUnitForm = () => {
         if (response.success) {
             form.setFieldsValue({
                 startDate: moment(response.data?.approximateStartTime),
+                startTime: moment(response.data?.approximateStartTime).add(5, 'minutes'),
                 approximateStart_zone: response.data?.approximateStartTime_zone
             });
         }
@@ -440,7 +448,7 @@ export const CompetitionUnitForm = () => {
 
                         <Divider />
 
-                        { !isCompetitionUnitPostponed && <Row gutter={12}>
+                        {!isCompetitionUnitPostponed && <Row gutter={12}>
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Tooltip title={t(translations.tip.race_start_date)}>
                                     <Form.Item

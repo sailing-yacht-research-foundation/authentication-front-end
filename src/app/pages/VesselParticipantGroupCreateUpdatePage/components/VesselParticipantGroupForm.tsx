@@ -139,19 +139,18 @@ export const VesselParticipantGroupForm = () => {
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
-                            name="name"
-                            rules={[
-                                { required: true, message: t(translations.forms.class_name_is_required) },
-                                { max: 100, message: t(translations.forms.class_name_must_not_be_longer_than_100_chars) }
-                            ]}
-                        >
-                            <Tooltip title={t(translations.tip.class_name)}>
+                        <Tooltip title={t(translations.tip.class_name)}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
+                                name="name"
+                                rules={[
+                                    { required: true, message: t(translations.forms.class_name_is_required) },
+                                    { max: 100, message: t(translations.forms.class_name_must_not_be_longer_than_100_chars) }
+                                ]}
+                            >
                                 <SyrfInputField autoCorrect="off" />
-                            </Tooltip>
-                        </Form.Item>
-
+                            </Form.Item>
+                        </Tooltip>
                         <Divider />
 
                         <Form.Item>
@@ -162,12 +161,6 @@ export const VesselParticipantGroupForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-
-            {mode === MODE.UPDATE &&
-                <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                    <VesselList group={group} eventId={eventId} />
-                </SyrfFormWrapper>
-            }
         </Wrapper >
     )
 }
