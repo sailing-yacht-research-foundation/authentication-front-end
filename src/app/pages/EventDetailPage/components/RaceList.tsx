@@ -34,10 +34,10 @@ export const RaceList = (props) => {
             title: t(translations.competition_unit_list_page.start_date),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
-            render: (value) => {
+            render: (value, record) => {
                 if (moment(value).isValid()) {
                     return moment(value).format(TIME_FORMAT.date_text);
-                } else if (RaceStatus.POSTPONED) {
+                } else if (RaceStatus.POSTPONED === record.status) {
                     return t(translations.event_detail_page.this_race_is_postponed_therefore_its_start_time_is_not_available);
                 }
 
