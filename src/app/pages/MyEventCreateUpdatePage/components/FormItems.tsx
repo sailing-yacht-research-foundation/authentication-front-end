@@ -188,6 +188,7 @@ export const FormItems = (props) => {
                 </Col>
                 <Col xs={12} sm={12} md={!isCrewed ? 8 : 4} lg={!isCrewed ? 8 : 4}>
                     <Form.Item
+                        style={{ display: 'none' }}
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.is_crewed)}</SyrfFieldLabel>}
                         name="isCrewed"
                         valuePropName="checked"
@@ -195,40 +196,6 @@ export const FormItems = (props) => {
                         <Switch onChange={value => setIsCrewed(value)} />
                     </Form.Item>
                 </Col>
-                {isCrewed && <>
-                    <Col xs={24} sm={24} md={8} lg={8}>
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.min_crew)}</SyrfFieldLabel>}
-                            name="crewedMinValue"
-                            rules={[({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (value && Number(value) < getFieldValue('crewedMaxValue')) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error(t(translations.forms.min_crews_must_be_less_than_max_crews)));
-                                },
-                            })]}
-                        >
-                            <SyrfInputNumber />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={24} md={8} lg={8}>
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.max_crew)}</SyrfFieldLabel>}
-                            name="crewedMaxValue"
-                            rules={[({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (value && Number(value) > getFieldValue('crewedMinValue')) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error(t(translations.forms.max_crews_must_be_greater_than_min_crews)));
-                                },
-                            })]}
-                        >
-                            <SyrfInputNumber />
-                        </Form.Item>
-                    </Col>
-                </>}
             </Row>
 
             {
