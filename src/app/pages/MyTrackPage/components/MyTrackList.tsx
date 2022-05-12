@@ -47,12 +47,12 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                const trackName = !record?.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name
+                const trackName = !record.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name
                 if (record.competitionUnit)
                     return (
                         <FlexWrapper>
-                            {record?.competitionUnit?.openGraphImage ?
-                                <OpenGraphImage src={record?.competitionUnit?.openGraphImage} alt={record.event.name} /> :
+                            {record.competitionUnit?.openGraphImage ?
+                                <OpenGraphImage src={record.competitionUnit?.openGraphImage} alt={record.event.name} /> :
                                 <NoImageContainer>
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
@@ -90,13 +90,13 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             title: t(translations.my_tracks_page.city),
             dataIndex: 'competitionUnit',
             key: 'competitionUnit.City',
-            render: (value, source) => source?.competitionUnit?.city || '-'
+            render: (value, source) => source.competitionUnit?.city || '-'
         },
         {
             title: t(translations.my_tracks_page.country),
             dataIndex: 'competitionUnit',
             key: 'competitionUnit.Country',
-            render: (_value, source) => source?.competitionUnit?.country || '-'
+            render: (_value, source) => source.competitionUnit?.country || '-'
         },
         {
             title: t(translations.my_tracks_page.phone_model),
@@ -132,14 +132,14 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'competitionUnit',
             key: 'competitionUnit.elapsedTime',
             render: (_value, source) => {
-                if (source?.trackJson?.startTime && source?.trackJson?.endTime) {
+                if (source.trackJson?.startTime && source.trackJson?.endTime) {
                     return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format(TIME_FORMAT.time)
                 }
 
                 if (!source?.competitionUnit?.isCompleted) return 'in progress';
 
-                const startTime = new Date(source?.competitionUnit?.startTime).getTime();
-                const endTime = new Date(source?.competitionUnit?.endTime).getTime();
+                const startTime = new Date(source.competitionUnit?.startTime).getTime();
+                const endTime = new Date(source.competitionUnit?.endTime).getTime();
 
                 return timeMillisToHours(endTime - startTime);
             }
