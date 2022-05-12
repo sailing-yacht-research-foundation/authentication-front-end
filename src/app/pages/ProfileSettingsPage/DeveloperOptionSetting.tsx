@@ -12,6 +12,7 @@ import { UseLoginSlice } from '../LoginPage/slice';
 import { selectUser } from '../LoginPage/slice/selectors';
 import { useForm } from 'antd/lib/form/Form';
 import styled from 'styled-components';
+import { BorderedButton } from 'app/components/SyrfGeneral';
 
 export const DeveloperOptionSetting = () => {
 
@@ -43,7 +44,6 @@ export const DeveloperOptionSetting = () => {
         } else {
             showToastMessageOnRequestError(response.error);
         }
-        
     }
 
     React.useEffect(() => {
@@ -61,7 +61,7 @@ export const DeveloperOptionSetting = () => {
                 onValuesChange={() => setFormHasBeenChanged(true)}
                 onFinish={onFinish}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.are_you_a_developer)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.enable_developer_feature)}</SyrfFieldLabel>}
                     name={'isDeveloper'}
                     valuePropName="checked">
                     <Switch />
@@ -74,12 +74,33 @@ export const DeveloperOptionSetting = () => {
                 </Form.Item>
             </Form>
             {authUser.developerAccountId && <DeveloperEnabledText>{t(translations.profile_page.update_profile.developer_mode_activated_account_id, { developerId: authUser.developerAccountId })}</DeveloperEnabledText>}
+
+            <DeveloperIntroductionSection>
+                <div>
+                    <BorderedButton onClick={() => window.open('https://developers.syrf.io/', '_blank')}>{t(translations.profile_page.update_profile.visit_developer_documentation)}</BorderedButton>
+                </div>
+                <DeveloperIntroductionDescription>{t(translations.profile_page.update_profile.developer_description)} <a target='_blank' href="https://discord.com/invite/EfvufEsDua">https://discord.com/invite/EfvufEsDua</a></DeveloperIntroductionDescription>
+            </DeveloperIntroductionSection>
         </Spin>
     </StyledSyrfFormWrapper>);
 }
+
+const DeveloperIntroductionDescription = styled.span`
+    margin-top: 15px;
+    color: #00000073;
+`;
 
 const DeveloperEnabledText = styled.div`
     text-align: right;
     color: #00000073;
     font-size: 13px;
-`
+`;
+
+const DeveloperIntroductionSection = styled.div`
+    margin-top: 30px;
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+`;
