@@ -285,3 +285,7 @@ export enum RaceSource {
 }
 
 export const sourcesPreventIframe = ['TACKTRACKER'];
+
+export const requiredCompetitorsInformation = [
+    'requireEmergencyContact', 'requireCovidCertificate', 'requireMedicalProblems',
+    'requireFoodAllergies', 'requireImmigrationInfo'];
