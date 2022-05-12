@@ -162,8 +162,7 @@ export const FormItems = (props) => {
                     rules={[{ required: isPaidEvent, message: t(translations.forms.please_fill_out_this_field) }]}>
                     <SyrfFormSelect
                         allowClear
-                        disabled={isPaidEvent && validGroups.length === 0}
-                        onChange={value => setSelectedOrganizerGroup(!!value)}>
+                        disabled={isPaidEvent && validGroups.length === 0}>
                         {renderValidOrganizerGroups()}
                     </SyrfFormSelect>
                 </Form.Item>
@@ -172,7 +171,7 @@ export const FormItems = (props) => {
 
             {selectedOrganizerGroup &&
                 <Row gutter={12}>
-                    <Col xs={24} sm={24} md={participantFeeValid ? 12 : 24} lg={participantFeeValid ? 12 : 24}>
+                    <Col xs={24} sm={24} md={12} lg={12}>
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee)}</SyrfFieldLabel>}
                             name="participatingFee"
@@ -181,13 +180,13 @@ export const FormItems = (props) => {
                             <SyrfInputNumber
                                 onChange={(value) => setParticipatingFee(Number(value))}
                                 defaultValue={0}
-                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '')}
                             />
                         </Form.Item>
                     </Col>
 
                     {
-                        participantFeeValid && <Col xs={24} sm={24} md={12} lg={12}><Form.Item
+                        <Col xs={24} sm={24} md={12} lg={12}><Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee_type)}</SyrfFieldLabel>}
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                             name="participatingFeeType">
