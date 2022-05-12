@@ -47,12 +47,12 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                const trackName = !record.event.isPrivate ? [record.event?.name, record.competitionUnit?.name].filter(Boolean).join(' - ') : record.event?.name
+                const trackName = !record.event?.isPrivate ? [record.event.name, record.competitionUnit.name].filter(Boolean).join(' - ') : record.event?.name
                 if (record.competitionUnit)
                     return (
                         <FlexWrapper>
                             {record.competitionUnit?.openGraphImage ?
-                                <OpenGraphImage src={record.competitionUnit?.openGraphImage} alt={record.event.name} /> :
+                                <OpenGraphImage src={record.competitionUnit.openGraphImage} alt={record.event.name} /> :
                                 <NoImageContainer>
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
