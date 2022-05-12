@@ -136,7 +136,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                     return moment(moment(source.trackJson.endTime).diff(moment(source.trackJson.startTime,))).utc().format(TIME_FORMAT.time)
                 }
 
-                if (!source?.competitionUnit?.isCompleted) return 'in progress';
+                if (!source.competitionUnit?.isCompleted) return 'in progress';
 
                 const startTime = new Date(source.competitionUnit?.startTime).getTime();
                 const endTime = new Date(source.competitionUnit?.endTime).getTime();
