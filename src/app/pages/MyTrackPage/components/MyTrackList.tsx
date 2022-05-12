@@ -19,7 +19,7 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 
 const defaultOptions = {
@@ -97,6 +97,26 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'competitionUnit',
             key: 'competitionUnit.Country',
             render: (_value, source) => source?.competitionUnit?.country || '-'
+        },
+        {
+            title: t(translations.my_tracks_page.phone_model),
+            dataIndex: 'phoneModel',
+            key: 'phoneModel',
+            render: (value,) => renderEmptyValue(value),
+        },
+        {
+            title: t(translations.my_tracks_page.phone_os),
+            dataIndex: 'phoneOS',
+            key: 'phoneOS',
+            render: (value,) => renderEmptyValue(value),
+        },
+        {
+            title: t(translations.my_tracks_page.location_update_count),
+            dataIndex: 'trackJson',
+            key: 'trackJson.locationUpdateCount',
+            render: (_value, source) => {
+                return renderEmptyValue(source.trackJson.locationUpdateCount)
+            }
         },
         {
             title: t(translations.my_tracks_page.traveled_overground_distance),
