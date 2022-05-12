@@ -43,6 +43,25 @@ export const FormItems = (props) => {
         { name: 'Other', value: 'OTHER' },
     ];
 
+    const requiredFields = [
+        {
+            name: 'Emergency Contact',
+            value: 'requireEmergencyContact',
+        },
+        {
+            name: 'Covid Certificate',
+            value: 'requireCovidCertificate',
+        },
+        {
+            name: 'Medical Problems',
+            value: 'requireMedicalProblems'
+        },
+        {
+            name: 'Food Allergies',
+            value: 'requireFoodAllergies'
+        }
+    ]
+
     React.useEffect(() => {
         if (location.pathname.includes(MODE.CREATE)) {
             setIsCrewed(false);
@@ -93,6 +112,10 @@ export const FormItems = (props) => {
     const handleSetIsPaidEvent = (value) => {
         setIsPaidEvent(value);
         setSelectedOrganizerGroup(value);
+    }
+
+    const renderRequiredFields = () => {
+        return requiredFields.map((field, index) => <Select.Option key={index} value={field.value}>{field.name}</Select.Option>)
     }
 
     return (
@@ -176,27 +199,23 @@ export const FormItems = (props) => {
                 </Row>
             }
 
-            <Row gutter={12}>
-                <Col xs={12} sm={12} md={!isCrewed ? 8 : 4} lg={!isCrewed ? 8 : 4}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_proof_of_covid_vaccination)}</SyrfFieldLabel>}
-                        name="requireCovidCertificate"
-                        valuePropName="checked"
-                    >
-                        <Switch />
-                    </Form.Item>
-                </Col>
-                <Col xs={12} sm={12} md={!isCrewed ? 8 : 4} lg={!isCrewed ? 8 : 4}>
-                    <Form.Item
-                        style={{ display: 'none' }}
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.is_crewed)}</SyrfFieldLabel>}
-                        name="isCrewed"
-                        valuePropName="checked"
-                    >
-                        <Switch onChange={value => setIsCrewed(value)} />
-                    </Form.Item>
-                </Col>
-            </Row>
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_competitor_info)}</SyrfFieldLabel>}
+                name="requireFields"
+            >
+                <SyrfFormSelect mode="multiple">
+                    {renderRequiredFields()}
+                </SyrfFormSelect>
+            </Form.Item>
+
+            <Form.Item
+                style={{ display: 'none' }}
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.is_crewed)}</SyrfFieldLabel>}
+                name="isCrewed"
+                valuePropName="checked"
+            >
+                <Switch onChange={value => setIsCrewed(value)} />
+            </Form.Item>
 
             {
                 EventTypes.HANDICAP_RACE === selectedEventType && <Form.Item
