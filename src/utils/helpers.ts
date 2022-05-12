@@ -475,8 +475,9 @@ export const getBoatNameFromVesselParticipantObject = (vesselparticipant) => {
 }
 
 export const renderRaceStartTime = (record, value, t) => {
-    if (moment(value).isValid()) {
-        return moment(value).format(TIME_FORMAT.date_text);
+    const valueAsMomentObject = moment(value);
+    if (valueAsMomentObject.isValid()) {
+        return valueAsMomentObject.format(TIME_FORMAT.date_text);
     } else if (RaceStatus.POSTPONED === record.status) {
         return t(translations.event_detail_page.this_race_is_postponed_therefore_its_start_time_is_not_available);
     }
