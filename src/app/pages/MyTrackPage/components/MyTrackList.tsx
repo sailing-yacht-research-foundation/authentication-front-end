@@ -115,7 +115,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'trackJson',
             key: 'trackJson.locationUpdateCount',
             render: (_value, source) => {
-                return renderEmptyValue(source.trackJson.locationUpdateCount)
+                return renderEmptyValue(source.trackJson?.locationUpdateCount)
             }
         },
         {
@@ -123,7 +123,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'trackJson',
             key: 'trackJson.totalTraveledDistance',
             render: (_value, source) => {
-                const totalTraveledDistance = source?.trackJson?.totalTraveledDistance;
+                const totalTraveledDistance = source.trackJson?.totalTraveledDistance;
                 return totalTraveledDistance ? `${totalTraveledDistance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} NMi` : '-';
             }
         },
