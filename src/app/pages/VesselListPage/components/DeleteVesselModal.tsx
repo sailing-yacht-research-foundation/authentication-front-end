@@ -50,7 +50,7 @@ export const DeleteVesselModal = (props) => {
         );
 
     return (<Modal
-        title={t(translations.delete_vessel_modal.you_are_deleting_default_boat)}
+        title={t(translations.delete_vessel_modal.cannot_delete_default_boat)}
         visible={showDeleteModal}
         cancelButtonProps={{ style: { display: 'none' } }}
         onOk={() => {
@@ -59,7 +59,7 @@ export const DeleteVesselModal = (props) => {
         onCancel={() => {
             setShowDeleteModal(false);
         }}>
-        <ModalMessage>{t(translations.delete_vessel_modal.you_should_not_delete_your_default_boat)}</ModalMessage>
+        <ModalMessage>{t(translations.delete_vessel_modal.you_cannot_not_delete_your_default_boat)}</ModalMessage>
     </Modal>);
 }
 
