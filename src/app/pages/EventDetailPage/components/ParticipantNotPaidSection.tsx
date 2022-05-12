@@ -43,7 +43,7 @@ export const ParticipantNotPaidSection = ({ event }: { event: Partial<CalendarEv
         }
     }
 
-    if (event.isParticipant && !event.isPaid)
+    if (event.isPaidEvent && event.isParticipant && !event.isPaid)
         return (
             <LottieWrapper>
                 <Lottie
