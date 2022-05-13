@@ -1,7 +1,7 @@
 import React from 'react';
 import { SyrfFieldLabel, SyrfFormButton } from 'app/components/SyrfForm';
 import { Form, Spin, Switch } from 'antd';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { StyledSyrfFormWrapper } from './Settings';
 import { switchDeveloperOption } from 'services/live-data-server/user';
@@ -79,7 +79,13 @@ export const DeveloperOptionSetting = () => {
                 <div>
                     <BorderedButton onClick={() => window.open('https://developers.syrf.io/', '_blank')}>{t(translations.profile_page.update_profile.visit_developer_documentation)}</BorderedButton>
                 </div>
-                <DeveloperIntroductionDescription>{t(translations.profile_page.update_profile.developer_description)} <a target='_blank' href="https://discord.com/invite/EfvufEsDua">https://discord.com/invite/EfvufEsDua</a></DeveloperIntroductionDescription>
+                <DeveloperIntroductionDescription>
+                    <Trans
+                        i18nKey={translations.profile_page.update_profile.developer_description} // optional -> fallbacks to defaults if not provided
+                        defaults="Don’t forget to get your developer token by following the instructions in the developer documentation. You should also join our <a target='_blank' href='https://discord.com/invite/EfvufEsDua'>Discord group for support!</a>"
+                        components={{ a: <a /> }}
+                    />
+                </DeveloperIntroductionDescription>
             </DeveloperIntroductionSection>
         </Spin>
     </StyledSyrfFormWrapper>);
