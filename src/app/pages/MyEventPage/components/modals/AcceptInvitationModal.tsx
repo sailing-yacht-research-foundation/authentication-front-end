@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Spin, Form, Select, Button, Space } from 'antd';
+import { Modal, Spin, Form, Select, Button, Space, Checkbox } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -66,10 +66,10 @@ export const AcceptInvitationModal = (props) => {
     }
 
     const onFinish = async (values) => {
-        const { vesselId, vesselParticipantGroupId } = values;
+        const { vesselId, vesselParticipantGroupId, allowShareInformation } = values;
 
         setIsLoading(true);
-        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId);
+        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId, allowShareInformation);
         setIsLoading(false);
 
         if (response.success) {
@@ -134,6 +134,12 @@ export const AcceptInvitationModal = (props) => {
                     </SyrfFormSelect>
                 </Form.Item>
 
+                <Form.Item
+                    name="allowShareInformation"
+                    valuePropName="checked"
+                >
+                    <Checkbox>{t(translations.my_event_list_page.agree_to_share_information)}</Checkbox>
+                </Form.Item>
 
                 {boats.length <= 1 && classes.length > 0 ?
                     (<Space style={{ justifyContent: 'flex-end', width: '100%' }} size={10}>

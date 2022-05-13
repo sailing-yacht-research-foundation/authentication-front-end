@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Spin, Form, Select, Button, Space } from 'antd';
+import { Modal, Spin, Form, Select, Button, Space, Checkbox } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -52,10 +52,10 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
     }
 
     const onFinish = async (values) => {
-        const { vesselId } = values;
+        const { vesselId, allowShareInformation } = values;
 
         setIsLoading(true);
-        const response = await joinCompetitionUnit(raceId, vesselId, lon, lat);
+        const response = await joinCompetitionUnit(raceId, vesselId, allowShareInformation, lon, lat);
         setIsLoading(false);
 
         if (response.success) {
@@ -103,6 +103,13 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
                     >
                         {renderBoatsList()}
                     </SyrfFormSelect>
+                </Form.Item>
+
+                <Form.Item
+                    name="allowShareInformation"
+                    valuePropName="checked"
+                >
+                    <Checkbox>{t(translations.my_event_list_page.agree_to_share_information)}</Checkbox>
                 </Form.Item>
 
                 {boats.length <= 1 ?

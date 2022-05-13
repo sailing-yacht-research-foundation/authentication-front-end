@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown, Space, Spin, Table, Menu, Tooltip } from 'antd';
-import { CreateButton, DeleteButton, FilterWrapper, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, CreateButton, DeleteButton, FilterWrapper, IconWrapper, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
@@ -9,13 +9,17 @@ import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/co
 import styled from 'styled-components';
 import { DownOutlined } from '@ant-design/icons';
 import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
-import { renderEmptyValue } from 'utils/helpers';
-import { EventState, ParticipantInvitationStatus } from 'utils/constants';
+import { flat, renderEmptyValue } from 'utils/helpers';
+import { EventState, ParticipantInvitationStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { renderAvatar } from 'utils/user-utils';
 import { BlockParticipantConfirmModal } from 'app/pages/MyEventPage/components/modals/BlockParticipantConfirmModal';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { Participant } from 'types/Participant';
+import { getDetailedEventParticipantsInfo } from 'services/live-data-server/event-calendars';
+import { CSVLink } from "react-csv";
+import { FaFileCsv } from 'react-icons/fa';
+import moment from 'moment';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -28,6 +32,8 @@ export const ParticipantList = (props) => {
     const { t } = useTranslation();
 
     const { eventId, event }: { eventId: string, event: CalendarEvent } = props;
+
+    const [csvData, setCSVData] = React.useState<any[]>([]);
 
     const columns = [
         {
@@ -146,6 +152,7 @@ export const ParticipantList = (props) => {
                 total: response.data.count,
                 pageSize: response.data.size
             });
+            getParticipantDetail();
         }
     }
 
@@ -184,6 +191,16 @@ export const ParticipantList = (props) => {
         return t(translations.misc.not_available);
     }
 
+    const getParticipantDetail = async () => {
+        const response = await getDetailedEventParticipantsInfo(eventId);
+
+        if (response.success) {
+            const participantsData: any = [];
+            response.data?.data.map((participant) => participantsData.push(flat(participant, {})));
+            setCSVData(participantsData);
+        }
+    }
+
     React.useEffect(() => {
         if (!showInviteModal) {
             getAllByFilter(pagination.page, pagination.pageSize, filterMode);
@@ -204,15 +221,24 @@ export const ParticipantList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
-                    {
-                        ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!) && <Tooltip title={t(translations.tip.create_competitor)}>
-                            <CreateButton onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
-                                style={{ marginRight: '5px' }}
-                                size={18} />}>
-                                {t(translations.participant_list.invite)}
+                    <Space size={10}>
+                        {
+                            ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!) && <Tooltip title={t(translations.tip.create_competitor)}>
+                                <CreateButton onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
+                                    style={{ marginRight: '5px' }}
+                                    size={18} />}>
+                                    {t(translations.participant_list.invite)}
+                                </CreateButton>
+                            </Tooltip>
+                        }
+
+                        {csvData.length > 0 && <Tooltip title={t(translations.tip.export_competitors_info_along_with_their_shared_information)}>
+                            <CreateButton icon={<IconWrapper>
+                                <FaFileCsv size={18} /></IconWrapper>}>
+                                <CSVLink filename={`${event.name}-competitors-${moment().format(TIME_FORMAT.date_text_with_time)}.csv`} data={csvData}>{t(translations.participant_list.export)}</CSVLink>
                             </CreateButton>
-                        </Tooltip>
-                    }
+                        </Tooltip>}
+                    </Space>
                 </PageHeaderContainer>
                 <FilterWrapper>
                     <Dropdown trigger={['click']} overlay={menu}>

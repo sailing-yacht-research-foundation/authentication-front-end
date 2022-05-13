@@ -473,3 +473,18 @@ export const handleGoBack = (history) => {
 export const getBoatNameFromVesselParticipantObject = (vesselparticipant) => {
     return vesselparticipant?.vessel?.publicName || '';
 }
+
+export const flat = (obj, out) => {
+    if (obj) {
+        Object.keys(obj).forEach(key => {
+            if (typeof obj[key] == 'object' && obj[key]?.constructor !== Array) {
+                out = flat(obj[key], out) //recursively call for nesteds
+            } else {
+                if (obj[key])
+                    out[key] = obj[key] //direct assign for values
+            }
+        });
+    }
+
+    return out;
+}
