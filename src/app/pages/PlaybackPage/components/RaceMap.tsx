@@ -335,7 +335,7 @@ export const RaceMap = (props) => {
 
   const _canSendKudos = () => {
     return !competitionUnitDetail.calendarEvent?.isPrivate // event is not a track now event
-      && !competitionUnitDetail.calendarEvent.isSimulation
+      && !competitionUnitDetail.calendarEvent?.isSimulation
       && playbackType === PlaybackTypes.STREAMINGRACE
       && isAuthenticated;
   }
