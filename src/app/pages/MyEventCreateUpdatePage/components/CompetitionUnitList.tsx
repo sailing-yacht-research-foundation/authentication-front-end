@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
+import { renderRaceStartTime } from 'utils/helpers';
 
 export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: CalendarEvent }) => {
 
@@ -41,6 +42,13 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             key: 'status',
             render: (value) => value,
             width: '20%',
+        },
+        {
+            title: t(translations.competition_unit_list_page.start_date),
+            dataIndex: 'approximateStart',
+            key: 'approximateStart',
+            render: (value, record) => renderRaceStartTime(record, value, t),
+            width: '25%'
         },
         {
             title: t(translations.general.created_date),
