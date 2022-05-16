@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { CaretDownOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { RaceEmitterEvent } from "utils/constants";
-import ReactTooltip from "react-tooltip";
+import { Tooltip } from "antd";
+import { translations } from "locales/translations";
+import { useTranslation } from "react-i18next";
 
 export const Leaderboard = ({ participantsData = [], emitter }) => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const { t } = useTranslation();
 
     const handleIsOpenChange = () => {
         setIsOpen(!isOpen);
@@ -27,8 +31,8 @@ export const Leaderboard = ({ participantsData = [], emitter }) => {
     return (
         <Wrapper>
             <HeaderContainer onClick={handleIsOpenChange}>
-                <p style={{ marginBottom: "0px", fontSize:'12px' }}>
-                    <strong>Leader board</strong>
+                <p style={{ marginBottom: "0px", fontSize: '12px' }}>
+                    <strong>{t(translations.playback_page.leaderboard)}</strong>
                 </p>
 
                 <CaretDownOutlined
@@ -37,24 +41,25 @@ export const Leaderboard = ({ participantsData = [], emitter }) => {
             </HeaderContainer>
 
             <ContentContainer style={{ maxHeight: isOpen ? "350px" : "0px", overflow: isOpen ? "auto" : "hidden" }}>
-                {!participantsData.length && <div style={{ marginTop: "8px", color: "#AAAAAA" }}>No participant</div>}
+                {!participantsData.length && <div style={{ marginTop: "8px", color: "#AAAAAA" }}>{t(translations.playback_page.no_participant)}</div>}
                 {!!participantsData.length && (
                     <div>
                         {sortedParticipantsByLeaderboard.map((participant: any) => {
                             return (
-                                <div data-tip={`Click to move to ${participant?.participant?.competitor_name} location`} onClick={() => zoomToParticipant(participant)} key={participant.id} style={{ margin: "8px 0px", cursor: 'pointer' }}>
-                                    <div style={{ borderBottom: `2px solid ${participant?.color}` }}>
-                                        <p style={{ marginBottom: "0px" }}>
-                                            {participant?.participant?.competitor_name}
-                                        </p>
+                                <Tooltip title={t(translations.tip.click_to_move_to_participant_name, { participantName: participant?.participant?.competitor_name })}>
+                                    <div onClick={() => zoomToParticipant(participant)} key={participant.id} style={{ margin: "8px 0px", cursor: 'pointer' }}>
+                                        <div style={{ borderBottom: `2px solid ${participant?.color}` }}>
+                                            <p style={{ marginBottom: "0px" }}>
+                                                {participant?.participant?.competitor_name}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </Tooltip>
                             );
                         })}
                     </div>
                 )}
             </ContentContainer>
-            <ReactTooltip/>
         </Wrapper>
     );
 };

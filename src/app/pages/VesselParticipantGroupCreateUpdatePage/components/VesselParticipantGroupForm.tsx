@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider } from 'antd';
+import { Spin, Form, Divider, Tooltip } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
@@ -15,7 +15,6 @@ import { VesselList } from './VesselList';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 
@@ -122,16 +121,14 @@ export const VesselParticipantGroupForm = () => {
                         <PageDescription>{t(translations.vessel_participant_group_create_update_page.member_of_classes_regattas)}</PageDescription>
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
-                {mode === MODE.UPDATE && <>
+                {mode === MODE.UPDATE && <Tooltip title={t(translations.tip.delete_class)}>
                     <DeleteButton
-                        data-tip={t(translations.tip.delete_class)}
                         onClick={() => setShowDeleteModal(true)}
                         danger
                         icon={<BiTrash
                             style={{ marginRight: '5px' }}
                             size={18} />}>{t(translations.general.delete)}</DeleteButton>
-                    <ReactTooltip />
-                </>}
+                </Tooltip>}
             </PageHeaderContainerResponsive>
             <SyrfFormWrapper>
                 <Spin spinning={isSaving}>
@@ -142,18 +139,18 @@ export const VesselParticipantGroupForm = () => {
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
-                            name="name"
-                            data-tip={t(translations.tip.class_name)}
-                            rules={[
-                                { required: true, message: t(translations.forms.class_name_is_required) },
-                                { max: 100, message: t(translations.forms.class_name_must_not_be_longer_than_100_chars) }
-                            ]}
-                        >
-                            <SyrfInputField autoCorrect="off" />
-                        </Form.Item>
-
+                        <Tooltip title={t(translations.tip.class_name)}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.vessel_participant_group_create_update_page.name)}</SyrfFieldLabel>}
+                                name="name"
+                                rules={[
+                                    { required: true, message: t(translations.forms.class_name_is_required) },
+                                    { max: 100, message: t(translations.forms.class_name_must_not_be_longer_than_100_chars) }
+                                ]}
+                            >
+                                <SyrfInputField autoCorrect="off" />
+                            </Form.Item>
+                        </Tooltip>
                         <Divider />
 
                         <Form.Item>
@@ -164,12 +161,6 @@ export const VesselParticipantGroupForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-
-            {mode === MODE.UPDATE &&
-                <SyrfFormWrapper style={{ marginTop: '30px' }}>
-                    <VesselList group={group} eventId={eventId} />
-                </SyrfFormWrapper>
-            }
         </Wrapper >
     )
 }

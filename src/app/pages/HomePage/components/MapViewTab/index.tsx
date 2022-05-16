@@ -9,12 +9,14 @@ import { MapContainer, } from 'react-leaflet';
 import { MapView } from './components/MapView';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { selectPage, selectPageSize, selectResults, selectTotal } from '../../slice/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPage, selectPageSize, selectResults, selectTotal, selectUpcomingRaceDistanceCriteria, selectUpcomingRaceDurationCriteria, selectUpcomingRacePage, selectUpcomingRacePageSize, selectUpcomingRaces, selectUpcomingRaceTotal } from '../../slice/selectors';
 import { BiTargetLock } from 'react-icons/bi';
 import { StyleConstants } from 'styles/StyleConstants';
 import { selectUserCoordinate } from 'app/pages/LoginPage/slice/selectors';
 import { MAP_DEFAULT_VALUE } from "utils/constants";
+import { LiveAndHappeningRaceFilter } from 'app/components/HomePage/LiveAndHappeningRaceFilter';
+import { useHomeSlice } from '../../slice';
 
 type MapViewProps = {
     zoomToCurrentUserLocationIfAllowed: () => void;
@@ -38,11 +40,27 @@ export const MapViewTab = (props) => {
 
     const results = useSelector(selectResults);
 
+    const upcomingRaceResults = useSelector(selectUpcomingRaces);
+
     const userCoordinate = useSelector(selectUserCoordinate);
 
     const [isFocusingOnSearchInput,] = React.useState<boolean>(false);
 
     const mapContainerRef = React.useRef<any>();
+
+    const currentUpcomingRacePage = useSelector(selectUpcomingRacePage);
+
+    const upcomingRacePageSize = useSelector(selectUpcomingRacePageSize);
+
+    const upcomingRacesCount = useSelector(selectUpcomingRaceTotal);
+
+    const duration = useSelector(selectUpcomingRaceDurationCriteria);
+
+    const distance = useSelector(selectUpcomingRaceDistanceCriteria);
+
+    const dispatch = useDispatch();
+
+    const { actions } = useHomeSlice();
 
     const zoomToUserLocation = () => {
         if (null !== mapViewRef.current) {
@@ -69,25 +87,47 @@ export const MapViewTab = (props) => {
         lng: userCoordinate?.lon || MAP_DEFAULT_VALUE.CENTER.lng
     };
 
+    const onUpcomingPageChanged = (page, size) => {
+        dispatch(actions.getLiveAndUpcomingRaces({ duration, distance, page: page, size: size, coordinate: userCoordinate }));
+    }
+
+    const renderUpcomingRacePagination = () => {
+        if (upcomingRaceResults.length > 0 && results.length === 0)
+            return (
+                <PaginationWrapper>
+                    <Pagination defaultCurrent={1} current={currentUpcomingRacePage} onChange={onUpcomingPageChanged} total={upcomingRacesCount} pageSize={upcomingRacePageSize} />
+                </PaginationWrapper>
+            );
+
+        return <></>;
+    }
+
     return (
         <Wrapper>
+            {results.length === 0 && <StyledLiveAndHappeningRaceFilter />}
+
             <MapContainer className="search-step-results" whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(${window.innerHeight}px - ${StyleConstants.NAV_BAR_HEIGHT} - ${StyleConstants.TAB_BAR_HEIGHT})`, width: '100%', zIndex: 1 }} center={mapCenter} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <MapView isFocusingOnSearchInput={isFocusingOnSearchInput} ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
-            {
-                results.length > 0 && <PaginationWrapper>
-                    <Pagination defaultCurrent={1} current={page} onChange={onPaginationPageChanged} total={total} pageSize={pageSize} />
-                </PaginationWrapper>
-            }
-            {
-                results.length === 0 && <MyLocationWrapper onClick={() => zoomToUserLocation()}>
-                    <StyledMyLocationIcon />
-                    <MyLocationText>{t(translations.home_page.map_view_tab.my_location)}</MyLocationText>
-                </MyLocationWrapper>
-            }
+
+            {results.length > 0 && <PaginationWrapper>
+                <Pagination defaultCurrent={1} current={page} onChange={onPaginationPageChanged} total={total} pageSize={pageSize} />
+            </PaginationWrapper>}
+
+            {renderUpcomingRacePagination()}
+
+            {results.length === 0 && <MyLocationWrapper onClick={() => zoomToUserLocation()}>
+                <StyledMyLocationIcon />
+                <MyLocationText>{t(translations.home_page.map_view_tab.my_location)}</MyLocationText>
+            </MyLocationWrapper>}
         </Wrapper>
     )
 }
+
+const StyledLiveAndHappeningRaceFilter = styled(LiveAndHappeningRaceFilter)`
+    z-index: 900;
+    padding: 0 10px;
+`;
 
 const Wrapper = styled.div`
     position: relative;
@@ -95,7 +135,7 @@ const Wrapper = styled.div`
 
 const MyLocationWrapper = styled.div`
     position: absolute;
-    bottom: 20px;
+    bottom: 50px;
     z-index: 10;
     cursor: pointer;
     left: 10px;
@@ -124,7 +164,7 @@ const MyLocationText = styled.span`
 
 const PaginationWrapper = styled.div`
     position: absolute;
-    bottom: 140px;
+    bottom: 110px;
     left: 0;
     right: 0;
     margin: 0 auto;

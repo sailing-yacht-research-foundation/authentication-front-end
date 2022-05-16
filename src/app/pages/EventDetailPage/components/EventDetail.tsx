@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, message, Space, Spin, Tag } from 'antd';
+import { Button, message, Space, Spin, Tag, Tooltip } from 'antd';
 import { GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
@@ -24,6 +24,7 @@ import { CalendarEvent } from 'types/CalendarEvent';
 import { PDFUploadForm } from 'app/pages/MyEventCreateUpdatePage/components/PDFUploadForm';
 import { OrganizationGroup } from './OrganizationGroup';
 import { AnnouncementModal } from './AnnouncementModal';
+import { ParticipantNotPaidSection } from './ParticipantNotPaidSection';
 
 export const EventDetail = () => {
 
@@ -163,11 +164,13 @@ export const EventDetail = () => {
                         })}
                         <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                     </>}
-                <Button type="link" data-tip={t(translations.tip.download_icalendar_file)} onClick={() => {
-                    downloadIcalendarFile(event);
-                }}>
-                    <AiOutlineCalendar style={{ fontSize: '23px' }} />
-                </Button>
+                <Tooltip title={t(translations.tip.download_icalendar_file)}>
+                    <Button type="link" onClick={() => {
+                        downloadIcalendarFile(event);
+                    }}>
+                        <AiOutlineCalendar style={{ fontSize: '23px' }} />
+                    </Button>
+                </Tooltip>
                 <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
             </Space>
         </EventActions>;
@@ -188,6 +191,7 @@ export const EventDetail = () => {
                         <EventTitle>{event.name}</EventTitle>
                         {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={() => navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
                         <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
+                        { event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee></EventEntranceFeeWrapper> }
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 {renderEventActions()}
@@ -203,8 +207,18 @@ export const EventDetail = () => {
                     </EventDescription>
 
                     <EventOpenRegistrationContainer>
-                        {event?.isOpen && <StyledTag data-tip={translate.anyone_canregist} color="blue">{translate.status_open_regis}</StyledTag>}
-                        {!event?.isOpen && <StyledTag data-tip={translate.only_owner_canview}>{translate.status_private}</StyledTag>}
+                        {event.isOpen ? (
+                            <Tooltip title={translate.anyone_canregist}>
+                                <StyledTag color="blue">{translate.status_open_regis}</StyledTag>
+                            </Tooltip>
+                        )
+                            : (<Tooltip title={translate.only_owner_canview}>
+                                <StyledTag>{translate.status_private}</StyledTag>
+                            </Tooltip>)}
+                        
+                        {!event.isPaidEvent && <Tooltip title={t(translations.event_detail_page.this_event_is_free_and_has_entrance_price_zero)}>
+                                <StyledTag>{t(translations.event_detail_page.free)}</StyledTag>
+                            </Tooltip>}
                     </EventOpenRegistrationContainer>
                 </EventSection>
 
@@ -217,6 +231,10 @@ export const EventDetail = () => {
                 <>
                     <EventSection>
                         <EventAdmins event={event} />
+                    </EventSection>
+
+                    <EventSection>
+                        <ParticipantNotPaidSection event={event}/>
                     </EventSection>
 
                     <EventSection>
@@ -283,4 +301,15 @@ const EventOpenRegistrationContainer = styled.div`
 const StyledTag = styled(Tag)`
     margin-top: 4px;
     margin-bottom: 4px;
+`;
+
+const EventEntranceFeeWrapper = styled.span`
+    line-height: 28px;
+    font-size: 13px;
+`;
+
+const EventEntranceFee = styled.span`
+    color: red;
+
+    font-weight: bold;
 `;

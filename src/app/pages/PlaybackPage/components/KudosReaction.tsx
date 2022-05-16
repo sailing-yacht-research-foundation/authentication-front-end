@@ -4,13 +4,14 @@ import { FaHandsWash } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import { IoThumbsUp } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
 import { sendKudos } from 'services/live-data-server/competition-units';
 import styled from 'styled-components';
 import { KudoTypes } from 'utils/constants';
 import { selectCompetitionUnitDetail, selectVesselParticipantDataForShowingKudos } from './slice/selectors';
-import { message } from 'antd';
+import { message, Tooltip } from 'antd';
 import { usePlaybackSlice } from './slice';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 export const KudosReaction = () => {
 
@@ -24,11 +25,13 @@ export const KudosReaction = () => {
 
     const competitorName = participant?.competitor_name;
 
+    const { t } = useTranslation();
+
     const sendKudosToParticipant = async (kudosType: KudoTypes) => {
         const response = await sendKudos(competitionUnitDetail.id, kudosType, id);
 
         if (response.success) {
-            message.success(`Sucessfully send kudos to ${competitorName}`);
+            message.success(t(translations.playback_page.successfully_send_kudo_to_participant, { participantName: competitorName }));
         }
 
         closeKudosReactionPanel();
@@ -40,33 +43,42 @@ export const KudosReaction = () => {
 
     return (<>
         {
-            id && <KudoContainer>
+            id &&  <KudoContainer>
                 <KudosReactionItem>
-                    <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.THUMBS_UP)} className='like' data-tip={`Send Like to ${competitorName}`}>
-                        <IoThumbsUp />
-                    </KudosReactionItemInner>
+                    <Tooltip title={t(translations.playback_page.send_like_to_participant, { participantName: competitorName })}>
+                        <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.THUMBS_UP)} className='like'>
+                            <IoThumbsUp />
+                        </KudosReactionItemInner>
+                    </Tooltip>
                 </KudosReactionItem>
                 <KudosReactionItem>
-                    <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.APPLAUSE)} className='applause' data-tip={`Send Applause to ${competitorName}`}>
-                        <FaHandsWash />
-                    </KudosReactionItemInner>
+                    <Tooltip title={t(translations.playback_page.send_applause_to_participant, { participantName: competitorName })}>
+                        <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.APPLAUSE)} className='applause'>
+                            <FaHandsWash />
+                        </KudosReactionItemInner>
+                    </Tooltip>
                 </KudosReactionItem>
                 <KudosReactionItem>
-                    <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.HEART)} className='heart' data-tip={`Send Heart to ${competitorName}`}>
-                        <AiFillHeart />
-                    </KudosReactionItemInner>
+                    <Tooltip title={t(translations.playback_page.send_heart_to_participant, { participantName: competitorName })}>
+                        <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.HEART)} className='heart'>
+                            <AiFillHeart />
+                        </KudosReactionItemInner>
+                    </Tooltip>
                 </KudosReactionItem>
                 <KudosReactionItem>
-                    <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.STAR)} className='star' data-tip={`Send Star to ${competitorName}`}>
-                        <AiFillStar />
-                    </KudosReactionItemInner>
+                    <Tooltip title={t(translations.playback_page.send_star_to_participant, { participantName: competitorName })}>
+                        <KudosReactionItemInner onClick={() => sendKudosToParticipant(KudoTypes.STAR)} className='star'>
+                            <AiFillStar />
+                        </KudosReactionItemInner>
+                    </Tooltip>
                 </KudosReactionItem>
                 <KudosReactionItem>
-                    <KudosReactionItemInner onClick={closeKudosReactionPanel} className='close' data-tip='Close'>
-                        <IoMdClose />
-                    </KudosReactionItemInner>
+                    <Tooltip title={t(translations.general.close)}>
+                        <KudosReactionItemInner onClick={closeKudosReactionPanel} className='close'>
+                            <IoMdClose />
+                        </KudosReactionItemInner>
+                    </Tooltip>
                 </KudosReactionItem>
-                <ReactTooltip />
             </KudoContainer>
         }
     </>);

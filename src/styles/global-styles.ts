@@ -282,4 +282,8 @@ export const GlobalStyle = createGlobalStyle`
   .ant-menu-submenu-popup a {
     color: unset;
   }
+
+  .ant-tooltip {
+    z-index: 99999 !important;
+  }
 `;

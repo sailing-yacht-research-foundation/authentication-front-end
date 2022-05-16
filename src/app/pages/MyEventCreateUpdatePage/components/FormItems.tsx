@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Form, Select, Switch, Row, Col } from 'antd';
-import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfInputNumber } from 'app/components/SyrfForm';
+import { Form, Select, Switch, Row, Col, Tooltip } from 'antd';
+import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfInputNumber, SyrFieldDescription } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { certifications, EventState, EventTypes, MODE } from 'utils/constants';
 import { useLocation } from 'react-router-dom';
@@ -29,6 +29,8 @@ export const FormItems = (props) => {
 
     const [selectedEventType, setSelectedEventType] = React.useState<string>('');
 
+    const [isPaidEvent, setIsPaidEvent] = React.useState<boolean>(false);
+
     const eventTypes = [
         { name: 'One Design', value: 'ONE_DESIGN' },
         { name: 'Handicap Race', value: 'HANDICAP_RACE' },
@@ -46,11 +48,13 @@ export const FormItems = (props) => {
             setIsCrewed(false);
             setParticipatingFee(0);
             setSelectedOrganizerGroup(false);
+            setIsPaidEvent(false);
         } else {
-            setSelectedOrganizerGroup(!!event.organizerGroupId)
+            setSelectedOrganizerGroup(!!event.organizerGroupId && event.participatingFee > 0);
             setIsCrewed(!!event.isCrewed);
             setParticipatingFee(!!event.participatingFee ? event.participatingFee : 0);
             setSelectedEventType(event.eventTypes);
+            setIsPaidEvent(event.participatingFee > 0);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, event]);
@@ -86,19 +90,25 @@ export const FormItems = (props) => {
         getAllValidOrganizerGroups();
     }, []);
 
+    const handleSetIsPaidEvent = (value) => {
+        setIsPaidEvent(value);
+        setSelectedOrganizerGroup(value);
+    }
+
     return (
         <>
             <Row gutter={12}>
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.event_type)}</SyrfFieldLabel>}
-                        name="eventTypes"
-                        data-tip={t(translations.tip.event_types)}
-                    >
-                        <SyrfFormSelect onChange={value => setSelectedEventType(String(value))}>
-                            {renderEventTypesSelection()}
-                        </SyrfFormSelect>
-                    </Form.Item>
+                    <Tooltip title={t(translations.tip.event_types)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.event_type)}</SyrfFieldLabel>}
+                            name="eventTypes"
+                        >
+                            <SyrfFormSelect onChange={value => setSelectedEventType(String(value))}>
+                                {renderEventTypesSelection()}
+                            </SyrfFormSelect>
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Form.Item
@@ -112,30 +122,50 @@ export const FormItems = (props) => {
             </Row>
 
             <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.planning_organization)}</SyrfFieldLabel>}
-                name="organizerGroupId">
-                <SyrfFormSelect onChange={value => setSelectedOrganizerGroup(!!value)}>
-                    {renderValidOrganizerGroups()}
-                </SyrfFormSelect>
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.free_or_paid)}</SyrfFieldLabel>}
+                name="isPaidEvent"
+                valuePropName="checked">
+                <Switch
+                    onChange={handleSetIsPaidEvent}
+                    checkedChildren={t(translations.my_event_create_update_page.paid_event)}
+                    unCheckedChildren={t(translations.my_event_create_update_page.free_event)} />
+
             </Form.Item>
+
+            <Tooltip title={t(translations.tip.planning_organization_is_a_organization_has_connected_payout)}>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.planning_organization)}</SyrfFieldLabel>}
+                    name="organizerGroupId"
+                    rules={[{ required: isPaidEvent, message: t(translations.forms.please_fill_out_this_field) }]}>
+                    <SyrfFormSelect
+                        allowClear
+                        disabled={isPaidEvent && validGroups.length === 0}>
+                        {renderValidOrganizerGroups()}
+                    </SyrfFormSelect>
+                </Form.Item>
+                {isPaidEvent && validGroups.length === 0 ? <SyrFieldDescription style={{ position: 'relative', top: '-10px' }}>{t(translations.my_event_create_update_page.in_order_to_charge_for_your_events)}</SyrFieldDescription> : <></>}
+            </Tooltip>
 
             {selectedOrganizerGroup &&
                 <Row gutter={12}>
-                    <Col xs={24} sm={24} md={participantFeeValid ? 12 : 24} lg={participantFeeValid ? 12 : 24}>
+                    <Col xs={24} sm={24} md={12} lg={12}>
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee)}</SyrfFieldLabel>}
-                            name="participatingFee">
+                            name="participatingFee"
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
+                            help={t(translations.my_event_create_update_page.fee_paid_per_captain)}>
                             <SyrfInputNumber
                                 onChange={(value) => setParticipatingFee(Number(value))}
                                 defaultValue={0}
-                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '')}
                             />
                         </Form.Item>
                     </Col>
 
                     {
-                        participantFeeValid && <Col xs={24} sm={24} md={12} lg={12}><Form.Item
+                        <Col xs={24} sm={24} md={12} lg={12}><Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee_type)}</SyrfFieldLabel>}
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                             name="participatingFeeType">
                             <SyrfFormSelect>
                                 {renderParticipatingType()}
@@ -211,25 +241,26 @@ export const FormItems = (props) => {
                 </Form.Item>
             }
 
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
-                name="externalUrl"
-                className="event-external-website-step"
-                data-tip={t(translations.tip.event_website)}
-                rules={[{ type: 'url', message: t(translations.forms.external_url_is_not_a_valid_url) }]}
-            >
-                <SyrfInputField autoCorrect="off" />
-            </Form.Item>
+            <Tooltip title={t(translations.tip.event_website)}>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
+                    name="externalUrl"
+                    className="event-external-website-step"
+                    rules={[{ type: 'url', message: t(translations.forms.external_url_is_not_a_valid_url) }]}
+                >
+                    <SyrfInputField autoCorrect="off" />
+                </Form.Item>
+            </Tooltip>
 
-
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}
-                name="isOpen"
-                data-tip={t(translations.tip.regatta)}
-                valuePropName="checked"
-            >
-                <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} />
-            </Form.Item>
+            <Tooltip title={t(translations.tip.regatta)}>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.open_regatta)}</SyrfFieldLabel>}
+                    name="isOpen"
+                    valuePropName="checked"
+                >
+                    <Switch disabled={event.status !== EventState.DRAFT && mode !== MODE.CREATE} unCheckedChildren={'Invite Only'} />
+                </Form.Item>
+            </Tooltip>
         </>
     )
 }

@@ -5,7 +5,7 @@ import { DownOutlined, LockOutlined } from '@ant-design/icons';
 
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { getProfilePicture } from 'utils/user-utils';
+import { getProfilePicture, getUserName } from 'utils/user-utils';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
@@ -30,7 +30,7 @@ export const UserDropdown = (props) => {
                     <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
                 </AvatarWrapper>
                 <UserNameWrapper>
-                    <UserName className="ant-dropdown-link">{authUser.firstName} {authUser.lastName}</UserName>
+                    <UserName className="ant-dropdown-link">{getUserName(authUser)}</UserName>
                     <DownOutlined />
                 </UserNameWrapper>
             </UserDropdownWrapper>

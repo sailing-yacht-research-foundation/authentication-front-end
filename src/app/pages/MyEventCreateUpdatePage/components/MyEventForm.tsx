@@ -16,7 +16,6 @@ import { AdminType, EventParticipatingTypes, EventState, MAP_DEFAULT_VALUE, MODE
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
-import ReactTooltip from 'react-tooltip';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
@@ -60,15 +59,14 @@ export const MyEventForm = () => {
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
     const [event, setEvent] = React.useState<Partial<CalendarEvent>>({});
-    const [error, setError] = React.useState<any>({
-        startTime: '',
-    });
     const [address, setAddress] = React.useState<string>('');
     const [endAddress, setEndAddress] = React.useState<string>('');
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
     const [showImportEventModal, setShowImportEventModal] = React.useState<boolean>(false);
 
     const raceListRef = React.useRef<any>();
+
+    const pdfListRef = React.useRef<any>();
 
     const onFinish = async (values) => {
         const { startDate, isOpen, lon, lat, endDate, endTime, startTime, endLat, endLon, admins, requiredCertifications, requireCovidCertificate, isCrewed } = values;
@@ -77,14 +75,6 @@ export const MyEventForm = () => {
         let currentTime = moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
         const certifications = requiredCertifications || [];
-
-        const startTimeValidation = handleCheckIsStartTimeValid();
-        const endTimeValidation = handleCheckIsEndDateTimeValid();
-
-        if (!startTimeValidation.isValid || !endTimeValidation.isValid) {
-            setError({ ...startTimeValidation.errors, ...endTimeValidation.errors })
-            return;
-        }
 
         if (endDate) {
             currentDate = endDate;
@@ -121,7 +111,8 @@ export const MyEventForm = () => {
                 isIndividualAssignment: item.isIndividualAssignment
             })),
             participatingFee: (values.participatingFee && values.participatingFee !== 0) ? values.participatingFee : undefined,
-            requiredCertifications: certifications
+            requiredCertifications: certifications,
+            organizerGroupId: values.organizerGroupId || null
         };
 
         setIsSavingEvent(true);
@@ -160,7 +151,7 @@ export const MyEventForm = () => {
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
         }
 
-        if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
+        pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
     const reloadParent = () => {
@@ -182,7 +173,7 @@ export const MyEventForm = () => {
         setMode(MODE.UPDATE);
         history.push(`/events/${event.id}/update`);
         setIsSavingEvent(false);
-        if (raceListRef) raceListRef.current?.scrollIntoView({ behavior: 'smooth' });
+        pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
     const createDefaultVesselParticipantGroup = async (event) => {
@@ -208,6 +199,7 @@ export const MyEventForm = () => {
     }
 
     const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
+        if (lat === null || lon === null) return;
 
         if (selector === 'start') {
             form.setFieldsValue({
@@ -362,123 +354,6 @@ export const MyEventForm = () => {
         form.resetFields();
     }
 
-    const handleFieldChange = (field, value) => {
-        const currentError = { ...error };
-        currentError[field] = '';
-
-        let accumulatedError = {};
-
-        if (field === 'startDate') {
-            // Check start date
-            const checkStartTimeResult = handleCheckIsStartTimeValid();
-            accumulatedError = { ...checkStartTimeResult.errors };
-
-            // Check end date only
-            const checkEndDateResult = handleCheckIsEndDateValid();
-            accumulatedError = { ...accumulatedError, ...checkEndDateResult.errors }
-
-            if (checkEndDateResult.isValid) {
-                // If date valid, compare (start and end) date-time
-                const checkEndDateTimeResult = handleCheckIsEndDateTimeValid();
-                accumulatedError = { ...accumulatedError, ...checkEndDateTimeResult.errors }
-            }
-        }
-
-        if (field === 'startTime') {
-            // Check start date
-            const checkStartTimeResult = handleCheckIsStartTimeValid();
-            accumulatedError = { ...checkStartTimeResult.errors };
-
-            // Compare (start and end) date-time
-            const checkEndDateTimeResult = handleCheckIsEndDateTimeValid();
-            accumulatedError = { ...accumulatedError, ...checkEndDateTimeResult.errors }
-        }
-
-        if (field === 'endDate' || field === 'endTime') {
-            const checkEndDateTimeResult = handleCheckIsEndDateTimeValid();
-            accumulatedError = { ...accumulatedError, ...checkEndDateTimeResult.errors }
-        }
-
-        setError({ ...error, ...accumulatedError });
-    };
-
-    // Check if endDate > startDate and reset if false
-    const handleCheckIsEndDateValid = () => {
-        const { startDate, endDate } = form.getFieldsValue();
-        if (!endDate) {
-            form.setFieldsValue({ endTime: null });
-            return {
-                isValid: true,
-                errors: { endDate: null, endTime: null }
-            };
-        }
-
-        const startDt = startDate._d.getTime();
-        const endDt = endDate._d.getTime();
-
-        if (startDt < endDt) return {
-            isValid: true,
-            errors: { endDate: null, endTime: null }
-        };
-
-        form.setFieldsValue({ endTime: null });
-        return {
-            isValid: false,
-            errors: { endDate: t(translations.my_event_create_update_page.error_enddate_should_greater_than_startdate) }
-        };
-    }
-
-    const handleCheckIsEndDateTimeValid = () => {
-        const { startDate, endDate, startTime, endTime } = form.getFieldsValue();
-        setError({ ...error, endDate: null, endTime: null });
-
-        if (!endDate && !endTime) {
-            return {
-                isValid: true,
-                errors: { endDate: null, endTime: null }
-            };
-        }
-
-        if (!endDate) {
-            form.setFieldsValue({ endTime: null });
-            return {
-                isValid: false,
-                errors: { endDate: t(translations.my_event_create_update_page.error_enddate_should_selected) }
-            };
-        };
-
-        if (!endTime) {
-            return {
-                isValid: false,
-                errors: { endTime: t(translations.my_event_create_update_page.error_endtime_should_selected) }
-            };
-        }
-
-        const selectedStartDate = (startDate || moment())?.toObject();
-        const selectedStartTime = (startTime || moment())?.toObject();
-        const selectedStartDateTime = new Date(selectedStartDate.years, selectedStartDate.months, selectedStartDate.date, selectedStartTime.hours, selectedStartTime.minutes, selectedStartTime.seconds);
-
-
-        const selectedEndDate = (endDate || moment())?.toObject();
-        const selectedEndTime = (endTime || moment())?.toObject();
-        const selectedEndDateTime = new Date(selectedEndDate.years, selectedEndDate.months, selectedEndDate.date, selectedEndTime.hours, selectedEndTime.minutes, selectedEndTime.seconds);
-
-        form.setFieldsValue({ endTime: endTime || moment() })
-
-        if (selectedEndDateTime.getTime() + 5000 > selectedStartDateTime.getTime())
-            return {
-                isValid: true,
-                errors: { endDate: null, endTime: null }
-            };
-
-        return {
-            isValid: false,
-            errors: {
-                endTime: t(translations.my_event_create_update_page.error_endtime_shouldgreater_starttime)
-            }
-        }
-    }
-
     const handleAddressChange = (addr) => {
         setAddress(addr);
     }
@@ -522,41 +397,6 @@ export const MyEventForm = () => {
             .then(results => getLatLng(results[0]))
             .then(coordinate => onChoosedLocation(coordinate.lat, coordinate.lng, false, true, 'end'))
             .catch(error => console.log('Geocode map err', error))
-    }
-
-    const handleCheckIsStartTimeValid = () => {
-        const values = form.getFieldsValue();
-        setError({ ...error, startDate: null, startTime: null });
-
-        if (mode === MODE.UPDATE) {
-            return {
-                isValid: true,
-                errors: { startDate: null, endDate: null }
-            }
-        };
-
-        const { startDate, startTime } = values;
-        const currentDate = new Date();
-
-        const selectedDate = (startDate || moment())?.toObject();
-        const selectedTime = (startTime || moment())?.toObject();
-        const selectedDateTime = new Date(selectedDate.years, selectedDate.months, selectedDate.date, selectedTime.hours, selectedTime.minutes, selectedTime.seconds);
-
-        if (selectedDateTime.getTime() + 3000 > currentDate.getTime()) {
-            return {
-                isValid: true,
-                errors: { startDate: null, startTime: null }
-            }
-        };
-
-        return {
-            isValid: false,
-            errors: { startTime: t(translations.my_event_create_update_page.error_starttime_shouldgreater_currenttime) }
-        }
-    }
-
-    const renderErrorField = (error, field) => {
-        return error?.[field] || false;
     }
 
     const initUserLocation = () => {
@@ -672,11 +512,11 @@ export const MyEventForm = () => {
 
                         <FormItemStartLocationAddress address={address} handleAddressChange={handleAddressChange} handleSelectAddress={handleSelectAddress} />
 
-                        <FormItemStartDate dateLimiter={dateLimiter} error={error} handleFieldChange={handleFieldChange} renderErrorField={renderErrorField} renderTimezoneDropdownList={renderTimezoneDropdownList} />
+                        <FormItemStartDate dateLimiter={dateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
                         <FormItemEndLocationAddress address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
-                        <FormItemEndDate renderErrorField={renderErrorField} error={error} handleFieldChange={handleFieldChange} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
+                        <FormItemEndDate endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
                         <FormItems event={event} mode={mode} />
 
@@ -688,8 +528,7 @@ export const MyEventForm = () => {
                     </Form>
                 </Spin>
             </SyrfFormWrapper>
-            <EventChildLists reloadParent={reloadParent} setEvent={setEvent} eventId={eventId} event={event} mode={mode} raceListRef={raceListRef} />
-            <ReactTooltip />
+            <EventChildLists reloadParent={reloadParent} setEvent={setEvent} eventId={eventId} event={event} mode={mode} pdfListRef={pdfListRef} raceListRef={raceListRef} />
         </Wrapper>
     )
 }

@@ -4,11 +4,10 @@ import { ProfileTabs } from './../../ProfilePage/components/ProfileTabs';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { BorderedButton, DeleteButton, LottieMessage, LottieWrapper, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, TableWrapper } from 'app/components/SyrfGeneral';
-import { Table, Spin, Space } from 'antd';
+import { Table, Spin, Space, Tooltip } from 'antd';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-credentials.json';
 import { getCredentialByPage, removeCredential } from 'services/live-data-server/external-platform';
-import ReactTooltip from 'react-tooltip';
 import { CreateButton } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { LinkNewCredentialModal } from './modals/LinkNewCredentialModal';
@@ -157,11 +156,14 @@ export const CredentialList = () => {
                         <PageHeading>{t(translations.credentail_manager_page.credentials)}</PageHeading>
                         <PageDescription>{t(translations.credentail_manager_page.this_is_where_you_can_manage_your_credential_you_linked)}</PageDescription>
                     </PageInfoContainer>
-                    <CreateButton
-                        data-tip={t(translations.tip.link_a_new_credential_to_your_account)}
-                        onClick={showCreateCredentialModal} icon={<AiFillPlusCircle
-                            style={{ marginRight: '5px' }}
-                            size={18} />}>{t(translations.credentail_manager_page.link_new_credential)}</CreateButton>
+                    <Tooltip title={t(translations.tip.link_a_new_credential_to_your_account)}>
+                        <CreateButton
+                            onClick={showCreateCredentialModal} icon={<AiFillPlusCircle
+                                style={{ marginRight: '5px' }}
+                                size={18} />}>
+                            {t(translations.credentail_manager_page.link_new_credential)}
+                        </CreateButton>
+                    </Tooltip>
                 </PageHeaderContainerResponsive>
                 {pagination.rows.length > 0 ? (
                     <Spin spinning={isChangingPage}>
@@ -184,7 +186,6 @@ export const CredentialList = () => {
                             width={400} />
                         <LottieMessage>{t(translations.credentail_manager_page.you_havent_linked_any_credentials)}</LottieMessage>
                     </LottieWrapper>)}
-                <ReactTooltip />
             </>
         </Wrapper>
     );

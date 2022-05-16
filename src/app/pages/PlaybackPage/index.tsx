@@ -20,8 +20,9 @@ import { FullScreen } from './components/FullScreen';
 import { Link } from "react-router-dom";
 import { StyleConstants } from "styles/StyleConstants";
 import { handleGoBack } from "utils/helpers";
+import { SimulateRaceButton } from "./components/SimulateRaceButton";
 
-export const PlaybackPage = (props) => {
+export const PlaybackPage = () => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
   const location = useLocation();
   const parsedQueryString: any = queryString.parse(
@@ -147,6 +148,7 @@ export const PlaybackPage = (props) => {
                   && playbackType !== PlaybackTypes.RACENOTFOUND
                   && (
                     <>
+                      <SimulateRaceButton />
                       {!competitionUnitDetail?.calendarEvent?.isPrivate && <Share />}
                       <FullScreen container={playbackContainerRef} />
                     </>

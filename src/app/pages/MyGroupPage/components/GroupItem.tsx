@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Spin, Tag, Space } from 'antd';
+import { Button, Spin, Tag, Space, Tooltip } from 'antd';
 import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGroupSlice } from '../slice';
 import { selectGroupCurrentPage, selectGroupPageSize, selectRequestedGroupCurrentPage } from '../slice/selectors';
 import { renderAvatar } from 'utils/user-utils';
-import ReactTooltip from 'react-tooltip';
 
 export const GroupItemRow = (props) => {
 
@@ -80,12 +79,14 @@ export const GroupItemRow = (props) => {
         if (members && Array.isArray(members)) {
             return (<>
                 {members.map((member, index) =>
-                    <GroupMemberItem key={index} onClick={e => {
-                        e.stopPropagation();
-                        history.push(`/profile/${member.userId}`)
-                    }} data-tip={member.name}>
-                        <img src={renderAvatar(member.avatar)} alt={member.name} />
-                    </GroupMemberItem>
+                    <Tooltip title={member.name}>
+                        <GroupMemberItem key={index} onClick={e => {
+                            e.stopPropagation();
+                            history.push(`/profile/${member.userId}`)
+                        }}>
+                            <img src={renderAvatar(member.avatar)} alt={member.name} />
+                        </GroupMemberItem>
+                    </Tooltip>
                 )}
             </>)
         }
@@ -114,7 +115,6 @@ export const GroupItemRow = (props) => {
                     {renderButtonByStatus()}
                 </Spin>
             </GroupItemAction>
-            <ReactTooltip />
         </GroupItem>
     )
 }

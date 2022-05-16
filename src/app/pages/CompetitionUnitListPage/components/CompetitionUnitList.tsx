@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Space, Spin } from 'antd';
+import { Table, Space, Spin, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
@@ -11,7 +11,6 @@ import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { getAllCompetitionUnits } from 'services/live-data-server/competition-units';
 import { Link } from 'react-router-dom';
 import { TIME_FORMAT } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 
 const defaultOptions = {
@@ -37,14 +36,19 @@ export const CompetitionUnitList = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link data-tip={t(translations.tip.view_this_race_in_the_playback)} to={`/playback/?raceId=${record.id}`}>{text}</Link>;
+                return (<Tooltip title={t(translations.tip.view_this_race_in_the_playback)}>
+                    <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>
+                </Tooltip>);
             }
         },
         {
             title: t(translations.general.event_name),
             dataIndex: 'eventName',
             key: 'eventName',
-            render: (text, record) => <Link data-tip={t(translations.tip.view_this_race_event)} to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>,
+            render: (text, record) =>
+                <Tooltip title={t(translations.tip.view_this_race_event)}>
+                    <Link to={`/events/${record.calendarEvent?.id}`}>{record.calendarEvent?.name}</Link>
+                </Tooltip>,
         },
         {
             title: t(translations.general.created_date),
@@ -60,11 +64,14 @@ export const CompetitionUnitList = () => {
                 const userId = localStorage.getItem('user_id');
                 if ((userId && userId === record.createdById) || (uuid === record.createdById))
                     return <Space size="middle">
-                        <BorderedButton data-tip={t(translations.tip.update_race)} onClick={() => {
-                            history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
-                        }} type="primary">{t(translations.general.update)}</BorderedButton>
-                        <BorderedButton data-tip={t(translations.tip.delete_race)} danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>
-                        <ReactTooltip />
+                        <Tooltip title={t(translations.tip.update_race)}>
+                            <BorderedButton onClick={() => {
+                                history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
+                            }} type="primary">{t(translations.general.update)}</BorderedButton>
+                        </Tooltip>
+                        <Tooltip title={t(translations.tip.delete_race)}>
+                            <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>
+                        </Tooltip>
                     </Space>;
 
                 return <></>;
@@ -170,7 +177,6 @@ export const CompetitionUnitList = () => {
                         width={400} />
                     <LottieMessage>{t(translations.competition_unit_list_page.you_dont_have_any_competition_unit)}</LottieMessage>
                 </LottieWrapper>)}
-            <ReactTooltip />
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { Button, message, Space } from 'antd';
+import { Button, message, Space, Tooltip } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BiSave, BiTrash } from 'react-icons/bi';
@@ -6,7 +6,6 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { MapContainer } from 'react-leaflet';
 import { useHistory, useLocation, useParams } from 'react-router';
 import styled from 'styled-components';
-import ReactTooltip from 'react-tooltip';
 
 import { StyleConstants } from 'styles/StyleConstants';
 import { MODE } from 'utils/constants';
@@ -118,23 +117,22 @@ export const MapViewTab = () => {
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
-                    <Button data-tip={t(translations.tip.save_course)} style={{ borderRadius: '5px' }} onClick={() => mapViewRef.current.saveCourse()} type="primary" icon={<BiSave style={{ marginRight: '5px' }} />}>
-                        {t(translations.course_create_update_page.save)}
-                    </Button>
+                    <Tooltip title={t(translations.tip.save_course)}>
+                        <Button style={{ borderRadius: '5px' }} onClick={() => mapViewRef.current.saveCourse()} type="primary" icon={<BiSave style={{ marginRight: '5px' }} />}>
+                            {t(translations.course_create_update_page.save)}
+                        </Button>
+                    </Tooltip>
                     {mode === MODE.UPDATE &&
-                        <>
-                            <DeleteButton data-tip={t(translations.tip.delete_course)} onClick={() => mapViewRef.current?.deleteCourse()} danger icon={<BiTrash
+                        <Tooltip title={t(translations.tip.delete_course)}>
+                            <DeleteButton onClick={() => mapViewRef.current?.deleteCourse()} danger icon={<BiTrash
                                 style={{ marginRight: '5px' }}
                                 size={18} />}>{t(translations.general.delete)}</DeleteButton>
-                            <ReactTooltip />
-                        </>}
-
+                        </Tooltip>}
                 </Space>
             </PageHeaderContainerResponsive>
             <MapContainer whenCreated={(mapInstance: any) => (mapContainerRef.current = mapInstance)} style={{ height: `calc(100vh - ${StyleConstants.NAV_BAR_HEIGHT} - ${NAV_HEIGHT})`, width: 'calc(100%)', zIndex: 1 }} center={mapCenter} zoom={MAP_DEFAULT_VALUE.ZOOM}>
                 <MapView ref={mapViewRef} />
             </MapContainer>
-            <ReactTooltip />
         </Wrapper>
     );
 }

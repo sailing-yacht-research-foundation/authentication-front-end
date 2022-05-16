@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Menu } from 'antd';
+import { Form, Menu, Tooltip } from 'antd';
 import { SyrfFieldLabel, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -11,12 +11,11 @@ export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddre
     const { t } = useTranslation();
 
     return (
-        <>
+        <Tooltip title={t(translations.tip.event_location_end)}>
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_location)}</SyrfFieldLabel>}
                 name="endLocation"
                 className="event-location-step"
-                data-tip={t(translations.tip.event_location_end)}
             >
                 <PlacesAutocomplete
                     value={address}
@@ -62,6 +61,6 @@ export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddre
                     }}
                 </PlacesAutocomplete>
             </Form.Item>
-        </>
+        </Tooltip>
     );
 }

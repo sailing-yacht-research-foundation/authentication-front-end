@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, Space, Spin, Table, Menu } from 'antd';
+import { Dropdown, Space, Spin, Table, Menu, Tooltip } from 'antd';
 import { CreateButton, DeleteButton, FilterWrapper, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
@@ -8,7 +8,6 @@ import { translations } from 'locales/translations';
 import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
 import styled from 'styled-components';
 import { DownOutlined } from '@ant-design/icons';
-import ReactTooltip from 'react-tooltip';
 import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
 import { renderEmptyValue } from 'utils/helpers';
 import { EventState, ParticipantInvitationStatus } from 'utils/constants';
@@ -67,6 +66,13 @@ export const ParticipantList = (props) => {
             render: (text, record) => {
                 return renderEmptyValue(record?.vesselParticipants[0]?.group?.name);
             },
+            ellipsis: true,
+        },
+        {
+            title: t(translations.participant_list.is_paid),
+            dataIndex: 'isPaid',
+            key: 'isPaid',
+            render: (text, record) => String(text),
             ellipsis: true,
         },
         {
@@ -199,9 +205,13 @@ export const ParticipantList = (props) => {
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
                     {
-                        ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!) && <CreateButton data-tip={t(translations.tip.create_competitor)} onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
-                            style={{ marginRight: '5px' }}
-                            size={18} />}>{t(translations.participant_list.invite)}</CreateButton>
+                        ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!) && <Tooltip title={t(translations.tip.create_competitor)}>
+                            <CreateButton onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
+                                style={{ marginRight: '5px' }}
+                                size={18} />}>
+                                {t(translations.participant_list.invite)}
+                            </CreateButton>
+                        </Tooltip>
                     }
                 </PageHeaderContainer>
                 <FilterWrapper>
@@ -222,7 +232,6 @@ export const ParticipantList = (props) => {
                         }} />
                 </TableWrapper>
             </Spin>
-            <ReactTooltip />
         </>
     )
 }

@@ -56,8 +56,12 @@ export const renderAvatar = (picture) => {
 export const getUserInterestsAsArray = (user) => {
     return !!user.interests ? Object.entries(user.interests).reduce((acc: any[], [key, value]) => {
         if (value) {
-          acc.push(key);
+            acc.push(key);
         }
         return acc;
-      }, []) : [];
+    }, []) : [];
+}
+
+export const getUserName = (user) => {
+    return [user.firstName, user.lastName].filter(Boolean).join(' ');
 }

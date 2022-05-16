@@ -14,7 +14,7 @@ import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { requestJoinGroup, leaveGroup } from 'services/live-data-server/groups';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
-import { selectAdminCurrentPage, selectMemberCurrentPage } from '../slice/selectors';
+import { selectAdminCurrentPage, selectMemberCurrentPage, selectMemberPageSize } from '../slice/selectors';
 import { handleGoBack, showToastMessageOnRequestError } from 'utils/helpers';
 
 export const Nav = (props) => {
@@ -32,6 +32,8 @@ export const Nav = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [joinStatus, setJoinStatus] = React.useState<any>();
+
+    const memberPageSize = useSelector(selectMemberPageSize);
 
     const dispatch = useDispatch();
 
@@ -59,10 +61,10 @@ export const Nav = (props) => {
         if (!response.success) {
             showToastMessageOnRequestError(response.error);
         } else {
-            dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
             if (response.data.status === GroupMemberStatus.ACCEPTED) {
                 dispatch(actions.getGroup(group.id));
                 dispatch(actions.getAdmins({ groupId: group.id, page: adminsCurrentPage }));
+                dispatch(actions.getMembers({ page: membersCurrentPage, groupId: group.id, status: GroupMemberStatus.ACCEPTED, size: memberPageSize }))
             } else {
                 setJoinStatus(GroupMemberStatus.REQUESTED);
             }
@@ -78,7 +80,7 @@ export const Nav = (props) => {
             showToastMessageOnRequestError(response.error);
         } else {
             setJoinStatus(null);
-            dispatch(actions.getMembers({ groupId: group.id, page: membersCurrentPage }));
+            dispatch(actions.getMembers({ page: membersCurrentPage, groupId: group.id, status: GroupMemberStatus.ACCEPTED, size: memberPageSize }))
         }
     }
 

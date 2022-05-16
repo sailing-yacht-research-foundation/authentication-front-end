@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Select, Col, Row, Form, DatePicker, Menu, Switch } from 'antd';
+import { Select, Col, Row, Form, DatePicker, Menu, Switch, Tooltip } from 'antd';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import moment from 'moment';
 import styled from 'styled-components';
@@ -16,7 +16,6 @@ import { languagesList } from 'utils/languages-util';
 import { translations } from 'locales/translations';
 import { checkForVerifiedField, getUserAttribute } from 'utils/user-utils';
 import { FIELD_VALIDATE } from 'utils/constants';
-import ReactTooltip from 'react-tooltip';
 import { FilterWorldSailingNumber } from 'utils/world-sailing-number';
 import countryCodeSource from '../../assets/world-sailing-number-countrycode.json';
 import { sendPhoneVerification, verifyPhoneNumber } from 'services/live-data-server/user';
@@ -155,173 +154,179 @@ export const PrivateUserInformation = (props) => {
         <Wrapper>
             <VerifyPhoneModal verifyPhone={verifyPhone} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showPhoneVerifyModal} setShowPhoneVerifyModal={setShowPhoneVerifyModal} />
             <SyrfFormTitle>{t(translations.profile_page.update_profile.private_user_details)}</SyrfFormTitle>
-            <Form.Item
-                label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
-                name="email"
-                rules={[{ required: true, type: 'email' }]}
-                data-tip={t(translations.tip.email)}
-            >
-                <SyrfInputField disabled />
-            </Form.Item>
+            <Tooltip title={t(translations.tip.email)}>
+                <Form.Item
+                    label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
+                    name="email"
+                    rules={[{ required: true, type: 'email' }]}
+                >
+                    <SyrfInputField disabled />
+                </Form.Item>
+            </Tooltip>
             {renderVerifiedStatus(FIELD_VALIDATE.email)}
 
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.address)}</SyrfFieldLabel>}
-                name="address"
-                data-tip={t(translations.tip.address)}
-            >
-                <PlacesAutocomplete
-                    value={address}
-                    onChange={(address) => { setAddress(address) }}
+            <Tooltip title={t(translations.tip.address)}>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.address)}</SyrfFieldLabel>}
+                    name="address"
                 >
-                    {({ getInputProps, suggestions, getSuggestionItemProps }) => {
-                        return (
-                            <>
-                                <SyrfInputField
-                                    {...getInputProps({
-                                        placeholder: t(translations.profile_page.update_profile.search_places),
-                                        className: 'location-search-input',
-                                    })}
-                                    value={address}
-                                    autoCorrect="off"
-                                    allowClear
-                                />
-                                {suggestions.length > 0 && <StyledPLaceDropdown>
-                                    {suggestions.map((suggestion) => {
-                                        const className = suggestion.active
-                                            ? 'suggestion-item--active'
-                                            : 'suggestion-item';
-                                        // inline style for demonstration purpose
-                                        const style = suggestion.active
-                                            ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                            : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                        return (
-                                            <Menu.Item
-                                                {...getSuggestionItemProps(suggestion, {
-                                                    className,
-                                                    style,
-                                                })}
-                                                key={suggestion.index}
-                                            >
-                                                <span>{suggestion.description}</span>
-                                            </Menu.Item>
-                                        );
-                                    })}
-                                </StyledPLaceDropdown>}
-                            </>
-                        )
-                    }}
-                </PlacesAutocomplete>
-            </Form.Item>
+                    <PlacesAutocomplete
+                        value={address}
+                        onChange={(address) => { setAddress(address) }}
+                    >
+                        {({ getInputProps, suggestions, getSuggestionItemProps }) => {
+                            return (
+                                <>
+                                    <SyrfInputField
+                                        {...getInputProps({
+                                            placeholder: t(translations.profile_page.update_profile.search_places),
+                                            className: 'location-search-input',
+                                        })}
+                                        value={address}
+                                        autoCorrect="off"
+                                        allowClear
+                                    />
+                                    {suggestions.length > 0 && <StyledPLaceDropdown>
+                                        {suggestions.map((suggestion) => {
+                                            const className = suggestion.active
+                                                ? 'suggestion-item--active'
+                                                : 'suggestion-item';
+                                            // inline style for demonstration purpose
+                                            const style = suggestion.active
+                                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                            return (
+                                                <Menu.Item
+                                                    {...getSuggestionItemProps(suggestion, {
+                                                        className,
+                                                        style,
+                                                    })}
+                                                    key={suggestion.index}
+                                                >
+                                                    <span>{suggestion.description}</span>
+                                                </Menu.Item>
+                                            );
+                                        })}
+                                    </StyledPLaceDropdown>}
+                                </>
+                            )
+                        }}
+                    </PlacesAutocomplete>
+                </Form.Item>
+            </Tooltip>
 
             <Row gutter={24}>
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.date_of_birth)}</SyrfFieldLabel>}
-                        name="birthdate"
-                        data-tip={t(translations.tip.date_of_birth)}
-                        rules={[{ type: 'date' }, {
-                            required: true,
-                            message: t(translations.forms.birth_date_is_required)
-                        }]}
-                    >
-                        <DatePicker
-                            style={{ width: '100%' }}
-                            className="syrf-datepicker"
-                            showToday={false}
-                            disabledDate={current => {
-                                return disabledDates.some(date =>
-                                    current.isBetween(
-                                        moment(date["start"], format),
-                                        moment(date["end"], format)
-                                    )
-                                );
-                            }}
-                            dateRender={current => {
-                                return (
-                                    <div className="ant-picker-cell-inner">
-                                        {current.date()}
-                                    </div>
-                                );
-                            }}
-                        />
-                    </Form.Item>
+                    <Tooltip title={t(translations.tip.date_of_birth)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.date_of_birth)}</SyrfFieldLabel>}
+                            name="birthdate"
+                            rules={[{ type: 'date' }, {
+                                required: true,
+                                message: t(translations.forms.birth_date_is_required)
+                            }]}
+                        >
+                            <DatePicker
+                                style={{ width: '100%' }}
+                                className="syrf-datepicker"
+                                showToday={false}
+                                disabledDate={current => {
+                                    return disabledDates.some(date =>
+                                        current.isBetween(
+                                            moment(date["start"], format),
+                                            moment(date["end"], format)
+                                        )
+                                    );
+                                }}
+                                dateRender={current => {
+                                    return (
+                                        <div className="ant-picker-cell-inner">
+                                            {current.date()}
+                                        </div>
+                                    );
+                                }}
+                            />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
 
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.world_sailing_number)}</SyrfFieldLabel>}
-                        name="sailing_number"
-                        data-tip={t(translations.tip.world_sailing_number)}
-                        style={{ position: 'relative' }}
-                    >
-                        <SyrfInputField value={worldSailingNumber} onChange={handleWorldSailingNumberChange} autoCorrect="off" onFocus={handleSuggestionVisible} onBlur={handleSuggestionBlur} />
-                        <SailingNumberSuggestionContainer style={{ display: isSuggestionVisible ? 'block' : 'none' }}>
-                            <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
-                                {countryCodeList.length > 0 ?
-                                    renderCountryCodeList(countryCodeList) :
-                                    <SailingNumberSuggestionEmpty>No data found</SailingNumberSuggestionEmpty>
-                                }
-                            </div>
-                        </SailingNumberSuggestionContainer>
-                    </Form.Item>
+                    <Tooltip title={t(translations.tip.world_sailing_number)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.world_sailing_number)}</SyrfFieldLabel>}
+                            name="sailing_number"
+                            style={{ position: 'relative' }}
+                        >
+                            <SyrfInputField value={worldSailingNumber} onChange={handleWorldSailingNumberChange} autoCorrect="off" onFocus={handleSuggestionVisible} onBlur={handleSuggestionBlur} />
+                            <SailingNumberSuggestionContainer style={{ display: isSuggestionVisible ? 'block' : 'none' }}>
+                                <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
+                                    {countryCodeList.length > 0 ?
+                                        renderCountryCodeList(countryCodeList) :
+                                        <SailingNumberSuggestionEmpty>No data found</SailingNumberSuggestionEmpty>
+                                    }
+                                </div>
+                            </SailingNumberSuggestionContainer>
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
             </Row>
 
             <Row gutter={24}>
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.phone_number)}</SyrfFieldLabel>}
-                        name="phone_number"
-                        data-tip={t(translations.tip.phone_number)}
-                        rules={[{ type: 'string' }]}
-                    >
-                        <SyrfPhoneInput
-                            inputProps={{ autoComplete: 'none' }}
-                            inputClass="syrf-phone-number-input"
-                            buttonClass="syrf-flag-dropdown"
-                            placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
-                    </Form.Item>
+                    <Tooltip title={t(translations.tip.phone_number)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.phone_number)}</SyrfFieldLabel>}
+                            name="phone_number"
+                            rules={[{ type: 'string' }]}
+                        >
+                            <SyrfPhoneInput
+                                inputProps={{ autoComplete: 'none' }}
+                                inputClass="syrf-phone-number-input"
+                                buttonClass="syrf-flag-dropdown"
+                                placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                        </Form.Item>
+                    </Tooltip>
                     {renderVerifiedStatus(FIELD_VALIDATE.phone)}
                 </Col>
 
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.language)}</SyrfFieldLabel>}
-                        name="language"
-                        data-tip={t(translations.tip.language)}
-                        rules={[{ required: true }]}
-                    >
-                        <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_language)}
-                            showSearch
-                            filterOption={(input, option) => {
-                                if (option) {
-                                    return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-
-                                return false;
-                            }}
+                    <Tooltip title={t(translations.tip.language)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.language)}</SyrfFieldLabel>}
+                            name="language"
+                            rules={[{ required: true }]}
                         >
-                            {
-                                renderLanguegesDropdownList()
-                            }
-                        </SyrfFormSelect>
-                    </Form.Item>
+                            <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_language)}
+                                showSearch
+                                filterOption={(input, option) => {
+                                    if (option) {
+                                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    }
+
+                                    return false;
+                                }}
+                            >
+                                {
+                                    renderLanguegesDropdownList()
+                                }
+                            </SyrfFormSelect>
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
 
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.profile_mode)}</SyrfFieldLabel>}
-                        name="isPrivate"
-                        data-tip={t(translations.tip.profile_mode)}
-                        valuePropName="checked"
-                    >
-                        <Switch checkedChildren={'Private'} unCheckedChildren={'Public'} />
-                    </Form.Item>
+                    <Tooltip title={t(translations.tip.profile_mode)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.profile_mode)}</SyrfFieldLabel>}
+                            name="isPrivate"
+                            valuePropName="checked"
+                        >
+                            <Switch checkedChildren={'Private'} unCheckedChildren={'Public'} />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
             </Row>
-            <ReactTooltip />
         </Wrapper>
     )
 }

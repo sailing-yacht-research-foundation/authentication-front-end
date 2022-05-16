@@ -18,8 +18,12 @@ export const DeleteParticipantModal = (props) => {
         onParticipantDeleted
     } = props;
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
     const performDeleteCompetitionUnit = async () => {
+        setIsLoading(true);
         const response = await deleteParticipant(participant.id);
+        setIsLoading(false);
 
         setShowDeleteModal(false);
 
@@ -33,6 +37,7 @@ export const DeleteParticipantModal = (props) => {
 
     return (
         <Modal
+            confirmLoading={isLoading}
             title={t(translations.delete_participant_modal.are_you_sure_you_want_to_delete)}
             visible={showDeleteModal}
             onOk={() => {

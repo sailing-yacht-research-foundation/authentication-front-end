@@ -66,5 +66,7 @@ export interface CalendarEvent {
     groups: Group[];
     isEditor: boolean;
     isParticipant: boolean;
-    organizerGroupDetail: Group
+    organizerGroupDetail: Group;
+    isPaidEvent: boolean;
+    isPaid: boolean;
 }

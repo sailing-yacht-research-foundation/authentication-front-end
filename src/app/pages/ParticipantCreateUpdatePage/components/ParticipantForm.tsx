@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, Space } from 'antd';
+import { Spin, Form, Divider, Space, Tooltip } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormWrapper, SyrfInputField } from 'app/components/SyrfForm';
 import { DeleteButton, GobackButton, PageDescription, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import styled from 'styled-components';
@@ -15,7 +15,6 @@ import { DeleteParticipantModal } from './DeleteParticipantForm';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';
 import { VesselParticipantList } from './VesselParticipantList';
-import ReactTooltip from 'react-tooltip';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 
 export const ParticipantForm = () => {
@@ -133,14 +132,12 @@ export const ParticipantForm = () => {
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
-                    {mode === MODE.UPDATE && <>
+                    {mode === MODE.UPDATE && <Tooltip title={t(translations.tip.delete_competitor)}>
                         <DeleteButton
-                            data-tip={t(translations.tip.delete_competitor)}
                             onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                                 style={{ marginRight: '5px' }}
                                 size={18} />}>{t(translations.general.delete)}</DeleteButton>
-                        <ReactTooltip />
-                    </>}
+                    </Tooltip>}
 
                 </Space>
             </PageHeaderContainerResponsive>
@@ -153,17 +150,18 @@ export const ParticipantForm = () => {
                         onFinish={onFinish}
                         onValuesChange={() => setFormChanged(true)}
                     >
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.general.public_name)}</SyrfFieldLabel>}
-                            name="publicName"
-                            data-tip={t(translations.tip.competitor_name)}
-                            rules={[
-                                { required: true, message: t(translations.forms.competitor_name_is_required) },
-                                { max: 50, message: t(translations.forms.competitor_name_must_not_longer_than_50_character) }
-                            ]}
-                        >
-                            <SyrfInputField autoCorrect="off" />
-                        </Form.Item>
+                        <Tooltip title={t(translations.tip.competitor_name)}>
+                            <Form.Item
+                                label={<SyrfFieldLabel>{t(translations.general.public_name)}</SyrfFieldLabel>}
+                                name="publicName"
+                                rules={[
+                                    { required: true, message: t(translations.forms.competitor_name_is_required) },
+                                    { max: 50, message: t(translations.forms.competitor_name_must_not_longer_than_50_character) }
+                                ]}
+                            >
+                                <SyrfInputField autoCorrect="off" />
+                            </Form.Item>
+                        </Tooltip>
 
                         <Divider />
 
@@ -181,7 +179,6 @@ export const ParticipantForm = () => {
                     <VesselParticipantList participant={participant} eventId={eventId} />
                 </SyrfFormWrapper>
             }
-            <ReactTooltip />
         </Wrapper >
     )
 }

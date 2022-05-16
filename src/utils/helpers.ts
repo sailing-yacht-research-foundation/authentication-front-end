@@ -290,7 +290,14 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
     }
 
     if (error?.response) {
-        const errorCode = error?.response.status;
+        const errorCode = error.response?.status;
+        const errorMessage = error.response?.data?.message || error.response?.data?.errorMessage;
+
+        if (errorMessage && errorCode !== 401) {
+            toast.error(errorMessage);
+            return;
+        }
+
         if (errorCode === 500) {
             toast.error(i18next.t(translations.general.oops_it_our_fault));
         } else if (errorCode === 404) {
@@ -332,6 +339,9 @@ export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
 export const parseKeyword = (keyword) => {
     // eslint-disable-next-line
     keyword = keyword.replace(/([\!\*\+\=\<\>\&\|\(\)\[\]\{\}\^\~\?\\/"])/g, "\\$1"); // escape special characters that will make the elastic search crash.
+    keyword = keyword.replace(/(\bAND\b|\bOR\b|\bNOT\b)/g, function (match) {
+        return match.toLowerCase();
+    });
     // eslint-disable-next-line
     const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     const { expression, processedKeyword } = addMultipleFieldCriteriaIfSearchByAllFields(keyword);
@@ -452,11 +462,14 @@ export const canStreamToExpedition = (id: string | undefined, source: string, st
     return id && source === RaceSource.SYRF && status === RaceStatus.ON_GOING && !isPrivate;
 }
 
-
 export const handleGoBack = (history) => {
     if (history.action !== "POP") {
         history.goBack();
     } else {
         history.push('/');
     }
+}
+
+export const getBoatNameFromVesselParticipantObject = (vesselparticipant) => {
+    return vesselparticipant?.vessel?.publicName || '';
 }
