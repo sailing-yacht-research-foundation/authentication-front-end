@@ -3,7 +3,7 @@ import { Spin, Table } from 'antd';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { RaceStatus, TIME_FORMAT } from 'utils/constants';
+import { TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { checkForUserRelationWithCompetitionUnits, getAllByCalendarEventId } from 'services/live-data-server/competition-units';
@@ -13,7 +13,7 @@ import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { RaceManageButtons } from './RaceManageButtons';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
-import { renderEmptyValue } from 'utils/helpers';
+import { renderRaceStartTime } from 'utils/helpers';
 
 export const RaceList = (props) => {
 
@@ -35,13 +35,7 @@ export const RaceList = (props) => {
             dataIndex: 'approximateStart',
             key: 'approximateStart',
             render: (value, record) => {
-                if (moment(value).isValid()) {
-                    return moment(value).format(TIME_FORMAT.date_text);
-                } else if (RaceStatus.POSTPONED === record.status) {
-                    return t(translations.event_detail_page.this_race_is_postponed_therefore_its_start_time_is_not_available);
-                }
-
-                return renderEmptyValue(null);
+              return renderRaceStartTime(record, value, t);
             },
         },
         {
