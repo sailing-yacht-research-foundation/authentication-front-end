@@ -62,7 +62,7 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
                 loading={false}
                 dataSource={list}
                 renderItem={item => (
-                    <PDFItem item={item} event={event} reloadParent={reloadParent} />
+                    <PDFItem item={item} event={event} reloadParent={reloadParent}  />
                 )}
             />
         </SyrfFormWrapper>

@@ -229,9 +229,6 @@ export const EventDetail = () => {
 
             {event.id &&
                 <>
-                    <iframe src="https://docs.google.com/viewerng/viewer?url=https://syrfstorage154055-dev.s3.amazonaws.com/calendar-events/noticeOfRacePDF/0b2a61fb-2ae4-4364-a81d-882c71823fc9_noticeOfRacePDF_1652622395710.pdf&embedded=true" height="100%" width="100%">
-</iframe>
-
                     <EventSection>
                         <EventAdmins event={event} />
                     </EventSection>
