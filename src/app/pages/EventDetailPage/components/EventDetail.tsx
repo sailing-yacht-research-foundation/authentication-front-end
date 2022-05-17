@@ -25,6 +25,9 @@ import { PDFUploadForm } from 'app/pages/MyEventCreateUpdatePage/components/PDFU
 import { OrganizationGroup } from './OrganizationGroup';
 import { AnnouncementModal } from './AnnouncementModal';
 import { ParticipantNotPaidSection } from './ParticipantNotPaidSection';
+import { FcPaid } from 'react-icons/fc';
+import { MdPaid } from 'react-icons/md';
+import { BsBagCheckFill } from 'react-icons/bs';
 
 export const EventDetail = () => {
 
@@ -191,7 +194,7 @@ export const EventDetail = () => {
                         <EventTitle>{event.name}</EventTitle>
                         {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={() => navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
                         <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
-                        { event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee></EventEntranceFeeWrapper> }
+                        { event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee> { event.isPaid && <PaidStatusContainer> - <BsBagCheckFill/> Paid</PaidStatusContainer> }</EventEntranceFeeWrapper> }
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 {renderEventActions()}
@@ -312,4 +315,8 @@ const EventEntranceFee = styled.span`
     color: red;
 
     font-weight: bold;
+`;
+
+const PaidStatusContainer = styled.span`
+    color: green;
 `;
