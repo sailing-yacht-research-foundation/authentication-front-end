@@ -35,18 +35,32 @@ export const DeleteVesselModal = (props) => {
         }
     }
 
-    return (
-        <Modal
-            confirmLoading={isLoading}
-            title={t(translations.delete_vessel_modal.are_you_sure_you_want_to_delete)}
-            visible={showDeleteModal}
-            onOk={performDeleteCompetitionUnit}
-            onCancel={() => {
-                setShowDeleteModal(false);
-            }}>
-            <ModalMessage>{t(translations.delete_vessel_modal.you_will_delete)}</ModalMessage>
-        </Modal>
-    )
+    if (!vessel.isDefaultVessel)
+        return (
+            <Modal
+                confirmLoading={isLoading}
+                title={t(translations.delete_vessel_modal.are_you_sure_you_want_to_delete)}
+                visible={showDeleteModal}
+                onOk={performDeleteCompetitionUnit}
+                onCancel={() => {
+                    setShowDeleteModal(false);
+                }}>
+                <ModalMessage>{t(translations.delete_vessel_modal.you_will_delete)}</ModalMessage>
+            </Modal>
+        );
+
+    return (<Modal
+        title={t(translations.delete_vessel_modal.cannot_delete_default_boat)}
+        visible={showDeleteModal}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        onOk={() => {
+            setShowDeleteModal(false);
+        }}
+        onCancel={() => {
+            setShowDeleteModal(false);
+        }}>
+        <ModalMessage>{t(translations.delete_vessel_modal.you_cannot_not_delete_your_default_boat)}</ModalMessage>
+    </Modal>);
 }
 
 const ModalMessage = styled.div`
