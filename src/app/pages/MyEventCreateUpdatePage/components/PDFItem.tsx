@@ -23,8 +23,6 @@ export const PDFItem = (props) => {
 
     const { t } = useTranslation();
 
-    const iframeRef = React.useRef<any>();
-
     const checkIfPdfExist = (pdfKey) => {
         return event.hasOwnProperty(pdfKey) && !!event[pdfKey];
     }
