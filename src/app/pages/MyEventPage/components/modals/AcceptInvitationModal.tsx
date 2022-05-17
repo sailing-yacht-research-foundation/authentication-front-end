@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Spin, Form, Select, Button, Space, Checkbox } from 'antd';
+import { Modal, Spin, Form, Select, Button, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { acceptInvitation } from 'services/live-data-server/participants';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
+import { InformationSharing } from 'app/components/RegisterRaceModal/InformationSharing';
 
 export const AcceptInvitationModal = (props) => {
 
@@ -103,7 +104,6 @@ export const AcceptInvitationModal = (props) => {
                 onFinish={onFinish}
                 style={{ width: '100%' }}
             >
-                {boats.length <= 1 && classes.length > 0 && <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>}
                 <Form.Item
                     style={{ display: boats.length > 1 ? 'block' : 'none' }}
                     label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
@@ -134,12 +134,9 @@ export const AcceptInvitationModal = (props) => {
                     </SyrfFormSelect>
                 </Form.Item>
 
-                <Form.Item
-                    name="allowShareInformation"
-                    valuePropName="checked"
-                >
-                    <Checkbox>{t(translations.my_event_list_page.agree_to_share_information)}</Checkbox>
-                </Form.Item>
+                <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>
+
+                <InformationSharing event={request.event} t={t} />
 
                 {boats.length <= 1 && classes.length > 0 ?
                     (<Space style={{ justifyContent: 'flex-end', width: '100%' }} size={10}>
@@ -155,7 +152,6 @@ export const AcceptInvitationModal = (props) => {
                             {t(translations.my_event_list_page.register_as_a_competitor)}
                         </SyrfFormButton>
                     </Form.Item>)}
-
             </Form>
         </Spin>
     </Modal >);

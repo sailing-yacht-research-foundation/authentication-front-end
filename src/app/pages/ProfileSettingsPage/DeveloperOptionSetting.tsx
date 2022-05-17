@@ -43,7 +43,7 @@ export const DeveloperOptionSetting = () => {
         } else {
             showToastMessageOnRequestError(response.error);
         }
-        
+
     }
 
     React.useEffect(() => {
@@ -52,6 +52,7 @@ export const DeveloperOptionSetting = () => {
                 isDeveloper: true
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authUser]);
 
     return (<StyledSyrfFormWrapper>
@@ -61,7 +62,7 @@ export const DeveloperOptionSetting = () => {
                 onValuesChange={() => setFormHasBeenChanged(true)}
                 onFinish={onFinish}>
                 <Form.Item
-                    // label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.are_you_a_developer)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.enable_developer_feature)}</SyrfFieldLabel>}
                     name={'isDeveloper'}
                     valuePropName="checked">
                     <Switch />

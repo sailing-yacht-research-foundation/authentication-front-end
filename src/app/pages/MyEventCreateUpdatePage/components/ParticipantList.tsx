@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown, Space, Spin, Table, Menu, Tooltip } from 'antd';
-import { BorderedButton, CreateButton, DeleteButton, FilterWrapper, IconWrapper, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { CreateButton, DeleteButton, FilterWrapper, IconWrapper, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ import { getDetailedEventParticipantsInfo } from 'services/live-data-server/even
 import { CSVLink } from "react-csv";
 import { FaFileCsv } from 'react-icons/fa';
 import moment from 'moment';
+import { ParticipantDetailList } from './ParticipantDetailList';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -92,7 +93,10 @@ export const ParticipantList = (props) => {
                 </Space>
             ),
         },
-    ];
+    ].filter(column => {
+        if (!event.isPaidEvent) return column.dataIndex !== 'isPaid';
+        return true;
+    });
 
     const menu = (
         <Menu>
@@ -196,10 +200,22 @@ export const ParticipantList = (props) => {
 
         if (response.success) {
             const participantsData: any = [];
-            response.data?.data.map((participant) => participantsData.push(flat(participant, {})));
+            response.data?.data.map((participant) => participantsData.push(flat({
+                ...participant,
+                waiverAgreements: participant.waiverAgreements?.map(waiver => waiver.waiverType)
+            }, {})));
             setCSVData(participantsData);
         }
     }
+
+
+  const renderExpandedRowRender = (record) => {
+    return (
+      <div>
+        <ParticipantDetailList eventId={eventId} participant={record} />
+      </div>
+    );
+  }
 
     React.useEffect(() => {
         if (!showInviteModal) {
@@ -255,7 +271,10 @@ export const ParticipantList = (props) => {
                             current: pagination.page,
                             total: pagination.total,
                             onChange: onPaginationChanged
-                        }} />
+                        }}
+                        expandable={{
+                            expandedRowRender: record => renderExpandedRowRender(record)
+                          }} />
                 </TableWrapper>
             </Spin>
         </>

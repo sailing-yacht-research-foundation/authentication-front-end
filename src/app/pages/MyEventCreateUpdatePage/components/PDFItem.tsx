@@ -3,12 +3,11 @@ import { List, Upload, Spin, Button, Modal, Form, Checkbox } from 'antd';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { uploadPdfs } from 'services/live-data-server/event-calendars';
+import { agreeToWaiver, uploadPdfs } from 'services/live-data-server/event-calendars';
 import { CalendarEvent } from 'types/CalendarEvent';
-import styled from 'styled-components';
-import { media } from 'styles/media';
 import { useForm } from 'antd/lib/form/Form';
 import { SyrfInputField } from 'app/components/SyrfForm';
+import { toast } from 'react-toastify';
 
 export const PDFItem = (props) => {
 
@@ -41,8 +40,7 @@ export const PDFItem = (props) => {
 
         if (response.success) {
             onSuccess();
-            if (reloadParent)
-                reloadParent();
+            reloadEvent();
         } else {
             onError();
             showToastMessageOnRequestError(response.error);
@@ -62,8 +60,40 @@ export const PDFItem = (props) => {
         setWaiverType(type);
     }
 
-    const signWaiver = (values) => {
+    const reloadEvent = () => {
+        if (reloadParent)
+            reloadParent();
+    }
 
+    const signWaiver = () => {
+        form
+            .validateFields()
+            .then(async () => {
+                setIsLoading(true);
+                const response = await agreeToWaiver(event.id!, waiverType);
+                setIsLoading(false);
+
+                if (response.success) {
+                    toast.success(t(translations.event_detail_page.successfully_signed_waiver));
+                    reloadEvent();
+                } else {
+                    showToastMessageOnRequestError(response.error);
+                }
+
+                setShowSignModal(false);
+            })
+            .catch(() => {
+                // no UI/UX throw here so leave this blank for now, just need the validation.
+            });
+    }
+
+    const canSignWaiver = () => {
+        return checkIfPdfExist(item.formFieldName)
+            && event.isParticipant
+            && !event.isEditor
+            && event.agreedWaivers?.filter(waiver => {
+                return waiver.waiverType === item.formFieldName
+            }).length === 0;
     }
 
     return (<>
@@ -72,13 +102,14 @@ export const PDFItem = (props) => {
             onCancel={() => setShowSignModal(false)}
             onOk={signWaiver}
             title={t(translations.event_detail_page.sign_waiver)}
+            okText={t(translations.event_detail_page.sign_waiver)}
             width={1000}
         >
-            <iframe src={`https://docs.google.com/viewerng/viewer?url=${getFileDownloadURLUsingPdfKey(item.formFieldName)}&embedded=true`} height="700px" width="100%">
+            <iframe title='sign' src={`https://docs.google.com/viewerng/viewer?url=${getFileDownloadURLUsingPdfKey(item.formFieldName)}&embedded=true`} height="700px" width="100%">
             </iframe>
             <Form
                 form={form}
-                style={{ marginTop:'10px' }}
+                style={{ marginTop: '10px' }}
                 layout="vertical"
                 name="basic"
                 onFinish={signWaiver}
@@ -88,7 +119,7 @@ export const PDFItem = (props) => {
                     valuePropName="checked"
                     rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                 >
-                    <SyrfInputField placeholder={t(translations.forms.please_input_your_name)}/>
+                    <SyrfInputField placeholder={t(translations.forms.please_input_your_name)} />
                 </Form.Item>
 
                 <Form.Item
@@ -112,16 +143,10 @@ export const PDFItem = (props) => {
                     </Upload>}
                 </Spin>),
                 (checkIfPdfExist(item.formFieldName) ? <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a> : <span>N/A</span>),
-                checkIfPdfExist(item.formFieldName) && event.isParticipant && <Button type='link' onClick={e => showSignWaiverModal(item.formFieldName)}>Sign</Button>
+                canSignWaiver() && <Button type='link' onClick={e => showSignWaiverModal(item.formFieldName)}>Sign</Button>
             ]}
         >
             <span>{item.name}</span>
         </List.Item>
     </>)
 }
-
-const IframeContainer = styled.div`
-    ${media.medium`
-        width: 600px;
-    `}
-`;

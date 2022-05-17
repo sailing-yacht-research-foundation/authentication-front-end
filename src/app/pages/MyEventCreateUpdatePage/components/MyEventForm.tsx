@@ -527,7 +527,7 @@ export const MyEventForm = () => {
 
                         <FormItemEndDate endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItems event={event} mode={mode} />
+                        <FormItems event={event} mode={mode} form={form} />
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">

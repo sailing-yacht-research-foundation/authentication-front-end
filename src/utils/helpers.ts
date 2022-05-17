@@ -480,7 +480,7 @@ export const flat = (obj, out) => {
             if (typeof obj[key] == 'object' && obj[key]?.constructor !== Array) {
                 out = flat(obj[key], out) //recursively call for nesteds
             } else {
-                if (obj[key])
+                if (obj[key] !== undefined)
                     out[key] = obj[key] //direct assign for values
             }
         });
@@ -498,4 +498,19 @@ export const renderRaceStartTime = (record, value, t) => {
     }
 
     return renderEmptyValue(null);
+}
+
+export const renderRequirementBasedOnEventKey = (t, key) => {
+    switch (key) {
+        case 'requireEmergencyContact':
+            return t(translations.my_event_list_page.emergency_contact);
+        case 'requireCovidCertificate':
+            return t(translations.my_event_list_page.covid_vaccination);
+        case 'requireMedicalProblems':
+            return t(translations.my_event_list_page.medical_problems);
+        case 'requireFoodAllergies':
+            return t(translations.my_event_list_page.food_allergies);
+        case 'requireImmigrationInfo':
+            return t(translations.my_event_list_page.immigration_info);
+    }
 }

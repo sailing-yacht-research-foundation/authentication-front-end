@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Form, Select, Switch, Row, Col, Tooltip } from 'antd';
 import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfInputNumber, SyrFieldDescription } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
-import { certifications, EventState, EventTypes, MODE } from 'utils/constants';
+import { certifications, EventState, EventTypes, MODE, requiredCompetitorsInformation } from 'utils/constants';
 import { useLocation } from 'react-router-dom';
 import { getValidOrganizableGroup } from 'services/live-data-server/groups';
 import { ItemAvatar } from 'app/components/SyrfGeneral';
@@ -11,19 +11,15 @@ import { renderAvatar } from 'utils/user-utils';
 
 export const FormItems = (props) => {
 
-    const { event, mode } = props;
+    const { event, mode, form } = props;
 
     const { t } = useTranslation();
 
     const location = useLocation();
 
-    const [participatingFee, setParticipatingFee] = React.useState<number>(0);
-
-    const [isCrewed, setIsCrewed] = React.useState<boolean>(false);
+    const [, setIsCrewed] = React.useState<boolean>(false);
 
     const [selectedOrganizerGroup, setSelectedOrganizerGroup] = React.useState<boolean>(false);
-
-    const participantFeeValid = participatingFee !== 0;
 
     const [validGroups, setValidGroups] = React.useState<any[]>([]);
 
@@ -69,18 +65,33 @@ export const FormItems = (props) => {
     React.useEffect(() => {
         if (location.pathname.includes(MODE.CREATE)) {
             setIsCrewed(false);
-            setParticipatingFee(0);
             setSelectedOrganizerGroup(false);
             setIsPaidEvent(false);
+            form.setFieldsValue({
+                requiredFields: []
+            })
         } else {
             setSelectedOrganizerGroup(!!event.organizerGroupId && event.participatingFee > 0);
             setIsCrewed(!!event.isCrewed);
-            setParticipatingFee(!!event.participatingFee ? event.participatingFee : 0);
             setSelectedEventType(event.eventTypes);
             setIsPaidEvent(event.participatingFee > 0);
+            setRequiredFields();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, event]);
+
+    const setRequiredFields = () => {
+        const requiredFields: string[] = [];
+        Object.keys(event).forEach(key => {
+            if (requiredCompetitorsInformation.includes(key) && event[key] === true) {
+                requiredFields.push(key);
+            }
+        });
+
+        form.setFieldsValue({
+            requiredFields
+        })
+    }
 
     const renderValidOrganizerGroups = () => {
         return validGroups.map((group, index) => <Select.Option key={index} value={group.id}>
@@ -191,7 +202,6 @@ export const FormItems = (props) => {
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                             help={t(translations.my_event_create_update_page.fee_paid_per_captain)}>
                             <SyrfInputNumber
-                                onChange={(value) => setParticipatingFee(Number(value))}
                                 defaultValue={0}
                                 formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '')}
                             />
