@@ -84,7 +84,7 @@ export const EventDetail = () => {
         },
         {
             name: t(translations.my_event_create_update_page.send_an_announcement),
-            show: ![EventState.DRAFT, EventState.CANCELED, EventState.COMPLETED].includes(event.status!) && !event.isSimulation,
+            show: [EventState.SCHEDULED, EventState.ON_GOING].includes(event.status!) && !event.isSimulation,
             handler: () => setShowAnnouncementModal(true),
             icon: <AiFillNotification />,
             isDelete: false,
