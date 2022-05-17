@@ -41,23 +41,23 @@ export const FormItems = (props) => {
 
     const requiredFields = [
         {
-            name: 'Emergency Contact',
+            name: t(translations.my_event_list_page.emergency_contact),
             value: 'requireEmergencyContact',
         },
         {
-            name: 'Covid Certificate',
+            name: t(translations.my_event_list_page.covid_vaccination),
             value: 'requireCovidCertificate',
         },
         {
-            name: 'Medical Problems',
+            name: t(translations.my_event_list_page.medical_problems),
             value: 'requireMedicalProblems'
         },
         {
-            name: 'Food Allergies',
+            name: t(translations.my_event_list_page.food_allergies),
             value: 'requireFoodAllergies'
         },
         {
-            name: 'Passport Info',
+            name: t(translations.my_event_list_page.immigration_info),
             value: 'requireImmigrationInfo'
         }
     ]
