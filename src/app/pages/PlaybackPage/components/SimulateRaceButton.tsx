@@ -78,7 +78,7 @@ export const SimulateRaceButton = () => {
                     visible={showRaceIsSimulatedModal}
                     title={t(translations.playback_page.simulate_success)}>
                     <h3>{t(translations.playback_page.the_simulation_for_this_race_has_been_running)}</h3>
-                    <span><Trans key={translations.playback_page.simulate_link}>You can <Link to={`/playback?raceId=${simulatedRaceDetail?.competitionUnit?.id}`}>view it</Link> on the playback or check out the event <Link to={`/events/${simulatedRaceDetail?.event?.id}`}>here</Link>.</Trans></span>
+                    <span><Trans key={translations.playback_page.simulate_link}>You can <Link target={'_blank'} to={`/playback?raceId=${simulatedRaceDetail?.competitionUnit?.id}`}>view it</Link> on the playback or check out the event <Link to={`/events/${simulatedRaceDetail?.event?.id}`}>here</Link>.</Trans></span>
                 </Modal>
                 <StyledSimulateRaceButton
 
