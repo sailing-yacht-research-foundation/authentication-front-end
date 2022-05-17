@@ -163,7 +163,7 @@ export const FormItems = (props) => {
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_competitor_info)}</SyrfFieldLabel>}
                 name="requiredFields"
             >
-                <SyrfFormSelect mode="multiple">
+                <SyrfFormSelect maxTagCount={'responsive'} mode="multiple">
                     {renderRequiredFields()}
                 </SyrfFormSelect>
             </Form.Item>

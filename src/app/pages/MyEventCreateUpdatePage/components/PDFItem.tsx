@@ -23,6 +23,8 @@ export const PDFItem = (props) => {
 
     const { t } = useTranslation();
 
+    const iframeRef = React.useRef<any>();
+
     const checkIfPdfExist = (pdfKey) => {
         return event.hasOwnProperty(pdfKey) && !!event[pdfKey];
     }
@@ -105,8 +107,10 @@ export const PDFItem = (props) => {
             okText={t(translations.event_detail_page.sign_waiver)}
             width={1000}
         >
-            <iframe title='sign' src={`https://docs.google.com/viewerng/viewer?url=${getFileDownloadURLUsingPdfKey(item.formFieldName)}&embedded=true`} height="700px" width="100%">
-            </iframe>
+            <object width="100%" height="700" data={getFileDownloadURLUsingPdfKey(item.formFieldName)} type="application/pdf">
+                <a href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>test.pdf</a>
+            </object>
+
             <Form
                 form={form}
                 style={{ marginTop: '10px' }}
@@ -115,8 +119,7 @@ export const PDFItem = (props) => {
                 onFinish={signWaiver}
             >
                 <Form.Item
-                    name="agreeTermAndCondition"
-                    valuePropName="checked"
+                    name="name"
                     rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                 >
                     <SyrfInputField placeholder={t(translations.forms.please_input_your_name)} />

@@ -32,7 +32,11 @@ export const ParticipantDetailList = (props) => {
             title: t(translations.participant_list.birth_date),
             dataIndex: 'birthdate',
             key: 'birthdate',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text),
+            render: (value) => {
+                if (value && moment(value).isValid())
+                    return moment(value).format(TIME_FORMAT.date_text);
+                return renderEmptyValue(null);
+            },
         },
         {
             title: t(translations.participant_list.address),
@@ -50,13 +54,13 @@ export const ParticipantDetailList = (props) => {
             title: t(translations.participant_list.allow_to_share_information),
             dataIndex: 'allowShareInformation',
             key: 'allowShareInformation',
-            render: (value) => String(value),
+            render: (value) => value ? String(value) : renderEmptyValue(null),
         },
         {
             title: t(translations.participant_list.has_covid_vaccination_card),
             dataIndex: 'hasCovidVaccinationCard',
             key: 'hasCovidVaccinationCard',
-            render: (value) => String(value),
+            render: (value) => value ? String(value) : renderEmptyValue(null),
         },
         {
             title: t(translations.participant_list.passportNumber),
@@ -128,7 +132,7 @@ export const ParticipantDetailList = (props) => {
         setIsLoading(false);
 
         if (response.success) {
-            setParticipantData(response.data.data);
+            setParticipantData(response.data?.data || {});
         }
     }
 

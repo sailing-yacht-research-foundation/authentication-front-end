@@ -208,14 +208,13 @@ export const ParticipantList = (props) => {
         }
     }
 
-
-  const renderExpandedRowRender = (record) => {
-    return (
-      <div>
-        <ParticipantDetailList eventId={eventId} participant={record} />
-      </div>
-    );
-  }
+    const renderExpandedRowRender = (record) => {
+        return (
+            <div>
+                <ParticipantDetailList eventId={eventId} participant={record} />
+            </div>
+        );
+    }
 
     React.useEffect(() => {
         if (!showInviteModal) {
@@ -274,7 +273,7 @@ export const ParticipantList = (props) => {
                         }}
                         expandable={{
                             expandedRowRender: record => renderExpandedRowRender(record)
-                          }} />
+                        }} />
                 </TableWrapper>
             </Spin>
         </>
