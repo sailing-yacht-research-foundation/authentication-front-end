@@ -6,7 +6,6 @@ import { translations } from 'locales/translations';
 import { CreateButton, LottieMessage, LottieWrapper } from 'app/components/SyrfGeneral';
 import Lottie from 'react-lottie';
 import Mailbox from './assets/mailbox.json';
-import { requestSendVerifyEmail } from 'services/live-data-server/user';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { VerifyAccountForm } from '../VerifyAccountPage/components/VerifyAccountForm';
 import { Link, useHistory, useLocation } from 'react-router-dom';
@@ -29,7 +28,7 @@ export function EmailNotVefiedPage() {
 
   const location = useLocation();
 
-  const [sentVerifyEmail, setSentVerifyEmail] = React.useState<boolean>(true);
+  const [sentVerifyEmail, setSentVerifyEmail] = React.useState<boolean>(false);
 
   const email = (new URLSearchParams(location.search).get('email'));
 
@@ -63,7 +62,7 @@ export function EmailNotVefiedPage() {
           <CreateButton loading={isLoading} onClick={sendVerifyEmail}>{t(translations.verify_account_page.verify_your_account)}</CreateButton>
           <p style={{ marginTop: '15px' }}><Link to={process.env.PUBLIC_URL + '/'}>{t(translations.not_found_page.return_to_homepage)}</Link></p>
         </LottieWrapper>) : (
-          <VerifyAccountForm  email={email} />
+          <VerifyAccountForm email={email} />
         )}
       </Wrapper>
     </>
