@@ -5,6 +5,7 @@ import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { getEventMessages } from 'services/live-data-server/event-calendars';
+import { StyleConstants } from 'styles/StyleConstants';
 import { TIME_FORMAT } from 'utils/constants';
 
 export const EventAnnouncement = React.forwardRef<any, any>((props, ref) => {
@@ -50,7 +51,7 @@ export const EventAnnouncement = React.forwardRef<any, any>((props, ref) => {
             renderItem={item => (
                 <List.Item>
                     <List.Item.Meta
-                        avatar={<Avatar >Admin</Avatar>}
+                        avatar={<Avatar style={{ backgroundColor: StyleConstants.SECONDARY_COLOR }} size="large">Admin</Avatar>}
                         description={moment(item.sentAt).format(TIME_FORMAT.date_text_with_time)}
                     />
                     <div>{item.messageContent}</div>
