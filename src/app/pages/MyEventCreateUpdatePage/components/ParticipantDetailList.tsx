@@ -11,16 +11,30 @@ export const ParticipantDetailList = (props) => {
 
     const { t } = useTranslation();
 
+    const waiverKey = {
+        noticeOfRacePDF: t(translations.my_event_create_update_page.notice_of_race),
+        mediaWaiverPDF: t(translations.my_event_create_update_page.media_waiver),
+        disclaimerPDF: t(translations.my_event_create_update_page.disclaimer)
+    }
+
     const { eventId, participant } = props;
 
     const [participantData, setParticipantData] = React.useState({});
+
+    const waiverKeyToText = (key) => {
+        return waiverKey[key] || key;
+    }
+
+    const renderAgreedWaivers = (value) => {
+        return Array.isArray(value) ? value.map(waiver => waiverKeyToText(waiver.waiverType)).join(', ') : ''
+    }
 
     const columns = [
         {
             title: t(translations.participant_list.agreed_to_waivers),
             dataIndex: 'waiverAgreements',
             key: 'waiverAgreements',
-            render: (value) => renderEmptyValue(Array.isArray(value) ? value.map(waiver => waiver.waiverType).join(', ') : ''),
+            render: (value) => renderEmptyValue(renderAgreedWaivers(value)),
         },
         {
             title: t(translations.participant_list.email),

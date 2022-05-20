@@ -36,6 +36,8 @@ export const ParticipantList = (props) => {
 
     const [csvData, setCSVData] = React.useState<any[]>([]);
 
+    const [mappedResults, setMappedResults] = React.useState<any[]>([]);
+
     const columns = [
         {
             title: t(translations.general.public_name),
@@ -223,6 +225,11 @@ export const ParticipantList = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showInviteModal]);
 
+    React.useEffect(() => {
+        const resultsWithKey = pagination.rows.map((result) => ({ ...result, key: result.id }))
+        setMappedResults(resultsWithKey);
+    }, [pagination.rows]);
+
     return (
         <>
             <CompetitorInviteModal eventId={eventId} showModal={showInviteModal} setShowModal={setShowInviteModal} />
@@ -263,17 +270,21 @@ export const ParticipantList = (props) => {
                     </Dropdown>
                 </FilterWrapper>
                 <TableWrapper>
-                    <Table columns={columns}
+                    <Table
                         scroll={{ x: "max-content" }}
-                        dataSource={pagination.rows} pagination={{
+                        columns={columns}
+                        dataSource={mappedResults}
+                        pagination={{
                             defaultPageSize: 10,
+                            pageSize: pagination.size,
                             current: pagination.page,
                             total: pagination.total,
-                            onChange: onPaginationChanged
+                            onChange: onPaginationChanged,
                         }}
                         expandable={{
                             expandedRowRender: record => renderExpandedRowRender(record)
-                        }} />
+                        }}
+                    />
                 </TableWrapper>
             </Spin>
         </>

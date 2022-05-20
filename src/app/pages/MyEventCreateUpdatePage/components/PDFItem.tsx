@@ -106,7 +106,7 @@ export const PDFItem = (props) => {
             width={1000}
         >
             <object width="100%" height="700" data={getFileDownloadURLUsingPdfKey(item.formFieldName)} type="application/pdf">
-                <a href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>test.pdf</a>
+                <a href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>Download</a>
             </object>
 
             <Form
