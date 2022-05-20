@@ -182,7 +182,7 @@ export const EventDetail = () => {
     return (
         <Spin spinning={isFetchingEvent}>
             <AnnouncementModal
-                reloadParent={() => announcementRef.current?.getEventAnnoucement()}
+                reloadParent={() => announcementRef.current?.getEventAnnoucements()}
                 event={event}
                 showModal={showAnnouncementModal}
                 setShowModal={setShowAnnouncementModal} />

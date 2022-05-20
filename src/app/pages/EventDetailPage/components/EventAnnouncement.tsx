@@ -16,38 +16,38 @@ export const EventAnnouncement = React.forwardRef<any, any>((props, ref) => {
 
     const { t } = useTranslation();
 
-    const [announcement, setAnnouncement] = React.useState<any[]>([]);
+    const [announcements, setAnnouncements] = React.useState<any[]>([]);
 
-    const getEventAnnoucement = async () => {
+    const getEventAnnoucements = async () => {
         setIsLoading(true);
         const response = await getEventMessages(event.id!);
         setIsLoading(false);
 
         if (response.success) {
             console.log(response.data?.data);
-            setAnnouncement(response.data?.data || []);
+            setAnnouncements(response.data?.data || []);
         }
     }
 
     React.useImperativeHandle(ref, () => ({
-        getEventAnnoucement() {
-            getEventAnnoucement();
+        getEventAnnoucements() {
+            getEventAnnoucements();
         }
     }));
 
     React.useEffect(() => {
-        getEventAnnoucement();
+        getEventAnnoucements();
     }, []);
 
     return (<>
         <PageHeaderContainer>
-            <PageHeaderTextSmall>{t(translations.event_detail_page.announcement)}</PageHeaderTextSmall>
+            <PageHeaderTextSmall>{t(translations.event_detail_page.announcements)}</PageHeaderTextSmall>
         </PageHeaderContainer>
         <List
             style={{ maxHeight: '500px', overflowY: 'auto' }}
             loading={isLoading}
             itemLayout="vertical"
-            dataSource={announcement}
+            dataSource={announcements}
             renderItem={item => (
                 <List.Item>
                     <List.Item.Meta
