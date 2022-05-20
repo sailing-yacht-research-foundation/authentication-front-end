@@ -71,7 +71,7 @@ import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
 import { selectIsSimplifiedPlayback } from './pages/PlaybackPage/components/slice/selectors';
-import { EmailNotVefiedPage } from './pages/EmailNotVerifiedPage/Loadable';
+import { EmailNotVerifiedPage } from './pages/EmailNotVerifiedPage/Loadable';
 
 
 const { Sider, Content } = Layout;
@@ -238,7 +238,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/settings'} component={ProfileSettingsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/subscription'} component={SubscriptionPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/payment-success'} component={PaymentSucessPage} />
-              <PublicRoute exact path={process.env.PUBLIC_URL + '/account-not-verified'} component={EmailNotVefiedPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account-not-verified'} component={EmailNotVerifiedPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

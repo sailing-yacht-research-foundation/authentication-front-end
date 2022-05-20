@@ -42,19 +42,17 @@ export const LoginForm = (props) => {
     setIsSigningIn(false);
 
     if (response.success) {
-      if (response.user?.email_verified) {
-        dispatch(actions.setSessionToken(response.token));
-        dispatch(actions.setRefreshToken(response.user.refresh_token));
-        dispatch(actions.getUser());
-        dispatch(actions.setIsAuthenticated(true));
-        localStorage.removeItem('is_guest');
-        localStorage.setItem('user_id', response.user.id);
-        history.push('/');
-        subscribeUser();
-      } else {
-        dispatch(actions.setSessionToken(response.token));
+      dispatch(actions.setSessionToken(response.token));
+      dispatch(actions.setRefreshToken(response.user.refresh_token));
+      dispatch(actions.getUser());
+      dispatch(actions.setIsAuthenticated(true));
+      localStorage.removeItem('is_guest');
+      localStorage.setItem('user_id', response.user.id);
+      history.push('/');
+      subscribeUser();
+      if (!response.user?.email_verified) {
         toast.info(t(translations.login_page.please_verify_your_account));
-        history.push('/account-not-verified?email='+ email);
+        history.push('/account-not-verified?email=' + email);
       }
     } else {
       switch (response.error?.response.data.errorCode) {

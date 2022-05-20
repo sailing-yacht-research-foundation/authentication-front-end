@@ -7,9 +7,9 @@ import { CreateButton, LottieMessage, LottieWrapper } from 'app/components/SyrfG
 import Lottie from 'react-lottie';
 import Mailbox from './assets/mailbox.json';
 import { showToastMessageOnRequestError } from 'utils/helpers';
-import { VerifyAccountForm } from '../VerifyAccountPage/components/VerifyAccountForm';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { sendRequestVerifyEmail } from 'services/live-data-server/auth';
+import { toast } from 'react-toastify';
 
 const defaultOptions = {
   loop: true,
@@ -20,15 +20,13 @@ const defaultOptions = {
   }
 };
 
-export function EmailNotVefiedPage() {
+export function EmailNotVerifiedPage() {
 
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const location = useLocation();
-
-  const [sentVerifyEmail, setSentVerifyEmail] = React.useState<boolean>(false);
 
   const email = (new URLSearchParams(location.search).get('email'));
 
@@ -40,7 +38,7 @@ export function EmailNotVefiedPage() {
     setIsLoading(false);
 
     if (response.success) {
-      setSentVerifyEmail(true);
+      toast.success(t(translations.verify_account_page.successfully_sent_verification_link_to, { email: email }))
     } else {
       showToastMessageOnRequestError(response.error);
     }
@@ -53,7 +51,7 @@ export function EmailNotVefiedPage() {
   return (
     <>
       <Wrapper>
-        {!sentVerifyEmail ? (<LottieWrapper>
+        <LottieWrapper>
           <Lottie
             options={defaultOptions}
             height={400}
@@ -61,9 +59,7 @@ export function EmailNotVefiedPage() {
           <LottieMessage>{t(translations.verify_account_page.your_email_has_not_been_verified)}</LottieMessage>
           <CreateButton loading={isLoading} onClick={sendVerifyEmail}>{t(translations.verify_account_page.verify_your_account)}</CreateButton>
           <p style={{ marginTop: '15px' }}><Link to={process.env.PUBLIC_URL + '/'}>{t(translations.not_found_page.return_to_homepage)}</Link></p>
-        </LottieWrapper>) : (
-          <VerifyAccountForm email={email} />
-        )}
+        </LottieWrapper>
       </Wrapper>
     </>
   );

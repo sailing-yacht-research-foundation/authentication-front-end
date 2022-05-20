@@ -1,14 +1,14 @@
 /**
- * Asynchronously loads the component for EmailNotVefiedPage
+ * Asynchronously loads the component for EmailNotVerifiedPage
  */
 
 import * as React from 'react';
 import { lazyLoad } from 'utils/loadable';
 import { LoadingIndicator } from 'app/components/LoadingIndicator';
 
-export const EmailNotVefiedPage = lazyLoad(
+export const EmailNotVerifiedPage = lazyLoad(
   () => import('./index'),
-  module => module.EmailNotVefiedPage,
+  module => module.EmailNotVerifiedPage,
   {
     fallback: <LoadingIndicator />,
   },

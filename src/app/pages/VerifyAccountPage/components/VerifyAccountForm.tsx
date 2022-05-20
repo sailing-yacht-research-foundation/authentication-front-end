@@ -43,8 +43,7 @@ export const VerifyAccountForm = (props) => {
             <LottieMessage>{t(translations.verify_account_page.please_check_your_email)} <br />
                 <Trans
                     i18nKey={translations.verify_account_page.if_you_havent_receive_any_email}
-                    defaults="If you haven't received any email at all please click <0>here</0> to resend the verification or click <1>here</1> to return to the login page." // optional defaultValue
-                    values={{ what: 'world' }}
+                    defaults="If you haven't received any email at all please click <0>here</0> to resend the verification or click <1>here</1> to return to the login page to log in." // optional defaultValue
                     components={[<a href='/' onClick={(e) => {
                         e.preventDefault();
                         sendVerifyEmail();
