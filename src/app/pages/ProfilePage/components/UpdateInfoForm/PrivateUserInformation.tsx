@@ -25,6 +25,7 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { ItemVerifyMessage } from 'app/components/SyrfGeneral';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
+import { Link } from 'react-router-dom';
 
 const format = "DD.MM.YYYY HH:mm";
 
@@ -85,7 +86,9 @@ export const PrivateUserInformation = (props) => {
         const userPhoneNumberExists = !!getUserAttribute(authUser, 'phone_number');
 
         if (type === FIELD_VALIDATE.email)
-            return <ItemVerifyMessage className={verified ? 'verified' : ''}>{t(translations.profile_page.update_profile.your_email_is, { verify_status: (verified ? 'verified' : 'not verified') })}</ItemVerifyMessage>;
+            return <ItemVerifyMessage className={verified ? 'verified' : ''}>{t(translations.profile_page.update_profile.your_email_is, { verify_status: (verified ? 'verified' : 'not verified') })}
+                { !verified && <Link to="/account-not-verified"> {t(translations.profile_page.update_profile.verify)}</Link>}
+            </ItemVerifyMessage>;
 
         if (userPhoneNumberExists) {
             return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.update_profile.your_phone_is_verified)}</ItemVerifyMessage>) :
