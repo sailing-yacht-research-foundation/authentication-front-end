@@ -124,9 +124,14 @@ export const PDFItem = (props) => {
                 </Form.Item>
 
                 <Form.Item
-                    name="agreeTermAndCondition"
                     valuePropName="checked"
-                    rules={[{ required: true, message: t(translations.event_detail_page.please_agree_to_the_terms_and_conditions_of_the_event) }]}
+                    name="agreeTermAndCondition"
+                    rules={[
+                        {
+                            validator: (_, value) =>
+                                value ? Promise.resolve() : Promise.reject(new Error(t(translations.event_detail_page.please_agree_to_the_terms_and_conditions_of_the_event))),
+                        },
+                    ]}
                 >
                     <Checkbox>{t(translations.event_detail_page.i_agree)}</Checkbox>
                 </Form.Item>

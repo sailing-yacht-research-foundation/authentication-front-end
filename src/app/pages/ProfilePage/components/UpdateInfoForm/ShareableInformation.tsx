@@ -9,6 +9,7 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { FormPhotoHeaderContainer, FormPhotoWrapper } from 'app/components/SyrfGeneral';
 import { certifications } from 'utils/constants';
+import { localesList as countryList } from 'utils/languages-util';
 
 export const ShareableInformation = (props) => {
 
@@ -80,6 +81,14 @@ export const ShareableInformation = (props) => {
             object[fieldName] = ['none'];
             form.setFieldsValue(object);
         }
+    }
+
+    const renderCountryDropdownList = () => {
+        const objectArray = Object.entries(countryList);
+
+        return objectArray.map(([key, value]) => {
+            return <Select.Option key={key} value={value}>{value}</Select.Option>
+        });
     }
 
     return (
@@ -225,16 +234,23 @@ export const ShareableInformation = (props) => {
                 </Col>
 
                 <Col xs={24} sm={24} md={8} lg={8}>
-                    <Tooltip title={t(translations.profile_page.update_profile.food_allergies)}>
+                    <Tooltip title={t(translations.profile_page.update_profile.passport_issuing_country)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.food_allergies)}</SyrfFieldLabel>}
-                            name="foodAllergies"
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.passport_issuing_country)}</SyrfFieldLabel>}
+                            name="passportIssueCountry"
                         >
-                            <SyrfFormSelect
-                                maxTagCount={'responsive'}
-                                onChange={values => handleTagsFieldChange(values, 'foodAllergies')}
-                                mode="tags">
-                                {renderTagsDropdownList()}
+                            <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_country)}
+                                showSearch
+                                filterOption={(input, option) => {
+                                    if (option) {
+                                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    }
+
+                                    return false;
+                                }}
+                            >
+                                {renderCountryDropdownList()}
                             </SyrfFormSelect>
                         </Form.Item>
                     </Tooltip>
@@ -287,7 +303,24 @@ export const ShareableInformation = (props) => {
             </Row>
 
             <Row gutter={12}>
-                <Col xs={24} sm={24} md={12} lg={12}>
+
+                <Col xs={24} sm={24} md={8} lg={8}>
+                    <Tooltip title={t(translations.profile_page.update_profile.food_allergies)}>
+                        <Form.Item
+                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.food_allergies)}</SyrfFieldLabel>}
+                            name="foodAllergies"
+                        >
+                            <SyrfFormSelect
+                                maxTagCount={'responsive'}
+                                onChange={values => handleTagsFieldChange(values, 'foodAllergies')}
+                                mode="tags">
+                                {renderTagsDropdownList()}
+                            </SyrfFormSelect>
+                        </Form.Item>
+                    </Tooltip>
+                </Col>
+
+                <Col xs={24} sm={24} md={8} lg={8}>
                     <Tooltip title={t(translations.profile_page.update_profile.epirbBeaconHexId)}>
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.epirbBeaconHexId)}</SyrfFieldLabel>}
@@ -299,7 +332,7 @@ export const ShareableInformation = (props) => {
                     </Tooltip>
                 </Col>
 
-                <Col xs={24} sm={24} md={12} lg={12}>
+                <Col xs={24} sm={24} md={8} lg={8}>
                     <Tooltip title={t(translations.profile_page.update_profile.covid_vaccination_card)}>
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.covid_vaccination_card)}</SyrfFieldLabel>}
