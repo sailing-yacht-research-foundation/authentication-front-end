@@ -52,7 +52,7 @@ export const LoginForm = (props) => {
       subscribeUser();
       if (!response.user?.email_verified) {
         toast.info(t(translations.login_page.please_verify_your_account));
-        history.push('/account-not-verified?email=' + email);
+        history.push('/account-not-verified');
       }
     } else {
       switch (response.error?.response.data.errorCode) {

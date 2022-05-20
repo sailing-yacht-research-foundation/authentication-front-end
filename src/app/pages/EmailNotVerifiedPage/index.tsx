@@ -7,9 +7,11 @@ import { CreateButton, LottieMessage, LottieWrapper } from 'app/components/SyrfG
 import Lottie from 'react-lottie';
 import Mailbox from './assets/mailbox.json';
 import { showToastMessageOnRequestError } from 'utils/helpers';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { sendRequestVerifyEmail } from 'services/live-data-server/auth';
+import { Link, useHistory } from 'react-router-dom';
+import { requestSendVerifyEmail } from 'services/live-data-server/user';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../LoginPage/slice/selectors';
 
 const defaultOptions = {
   loop: true,
@@ -26,27 +28,29 @@ export function EmailNotVerifiedPage() {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const location = useLocation();
-
-  const email = (new URLSearchParams(location.search).get('email'));
+  const authUser = useSelector(selectUser);
 
   const history = useHistory();
 
   const sendVerifyEmail = async () => {
     setIsLoading(true);
-    const response = await sendRequestVerifyEmail(email);
+    const response = await requestSendVerifyEmail();
     setIsLoading(false);
 
     if (response.success) {
-      toast.success(t(translations.verify_account_page.successfully_sent_verification_link_to, { email: email }))
+      toast.success(t(translations.verify_account_page.successfully_sent_verification_link_to_your_email))
     } else {
       showToastMessageOnRequestError(response.error);
     }
   }
 
   React.useEffect(() => {
-    if (!email) history.push('/404');
-  }, []);
+    if (authUser.id) {
+      if (authUser.emailVerified) {
+        history.push('/');
+      }
+    }
+  }, [authUser]);
 
   return (
     <>
