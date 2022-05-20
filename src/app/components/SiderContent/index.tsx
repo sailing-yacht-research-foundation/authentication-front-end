@@ -170,12 +170,12 @@ export const SiderContent = (props) => {
       if (item.path) {
         if (matchPath(location.pathname, {
           path: item.path,
-          exact: true,
+          exact: false,
           strict: false
         })) {
           matchItem = item;
         }
-      } else {
+      } else { // nested routes.
         item.items.forEach(childRoute => {
           if (matchPath(location.pathname, {
             path: childRoute.path,
