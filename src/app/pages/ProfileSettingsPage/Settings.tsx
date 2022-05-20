@@ -17,19 +17,31 @@ export const Settings = () => {
         <Wrapper>
             <ProfileTabs />
             <StyledCollapsed>
-                <StyledCollapsedPanel header={t(translations.profile_page.update_profile.notifications)} key="1">
-                    <NotificationSettings/>
+                <StyledCollapsedPanel header={<>
+                    {t(translations.profile_page.update_profile.notifications)}
+                    <br /><CollapseDescription style={{ fontWeight: 'normal' }}>{t(translations.settings_page.notification_description)}</CollapseDescription>
+                </>} key="1">
+                    <NotificationSettings />
                 </StyledCollapsedPanel>
-                <StyledCollapsedPanel header={t(translations.profile_page.update_profile.developer_option)} key="2">
-                    <DeveloperOptionSetting/>
+                <StyledCollapsedPanel header={<>
+                    {t(translations.profile_page.update_profile.developer_option)}<br />
+                    <CollapseDescription style={{ fontWeight: 'normal' }}>{t(translations.settings_page.developer_description)}</CollapseDescription>
+                </>} key="2">
+                    <DeveloperOptionSetting />
                 </StyledCollapsedPanel>
-            </StyledCollapsed>
-        </Wrapper>
+            </StyledCollapsed >
+        </Wrapper >
     )
 }
 
 export const StyledSyrfFormWrapper = styled(SyrfFormWrapper)`
     width: 100% !important;
+`;
+
+const CollapseDescription = styled.span`
+    font-size: 13px;
+    margin-left: 25px;
+    color: #00000073;
 `;
 
 const StyledCollapsedPanel = styled(Collapse.Panel)`
@@ -56,10 +68,16 @@ const StyledCollapsed = styled(Collapse)`
         border: none;
     }
 
+
     ${media.medium`
-    width: 65%;
-    padding: 30px 56px;
-`}
+        width: 100%;
+        padding: 30px 56px;
+    `}
+
+    ${media.large`
+        width: 65%;
+        padding: 30px 56px;
+    `}
 `;
 
 const Wrapper = styled.div`
@@ -88,8 +106,8 @@ const Wrapper = styled.div`
             }
         }
     }
-
-    ${media.large`
+    
+    ${media.small`
         .ant-form-item-control-input {
             text-align: none;
         }
