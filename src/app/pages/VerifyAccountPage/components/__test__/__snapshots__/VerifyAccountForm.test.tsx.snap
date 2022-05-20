@@ -5392,11 +5392,27 @@ exports[`<VerifyAccountForm /> should render and matches the snaphshot 1`] = `
   />
   <styled.p>
     Hey, We're so excited to have you on SYRF and We've sent the verify account link to your email. Please check your email to verify your account.
+     
+    <br />
+    <Trans
+      components={
+        Array [
+          <a
+            href="/"
+            onClick={[Function]}
+          >
+            here
+          </a>,
+          <Link
+            to="/signin"
+          >
+            here
+          </Link>,
+        ]
+      }
+      defaults="If you haven't received any email at all please click <0>here</0> to resend the verification or click <1>here</1> to return to the login page to log in."
+      i18nKey="verify_account_page.if_you_havent_receive_any_email"
+    />
   </styled.p>
-  <Styled(Button)
-    onClick={[Function]}
-  >
-    Log In
-  </Styled(Button)>
 </styled.div>
 `;
