@@ -4,10 +4,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { LottieWrapper, LottieMessage } from 'app/components/SyrfGeneral';
 import Lottie from 'react-lottie';
 import EmailSent from '../assets/email-sent.json';
-import { Link } from 'react-router-dom';
 import { sendRequestVerifyEmail } from 'services/live-data-server/auth';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 
 const defaultLottieOptions = {
     loop: true,
@@ -18,10 +18,19 @@ const defaultLottieOptions = {
     }
 };
 
-export const VerifyAccountForm = (props) => {
+export const VerifyAccountForm = () => {
 
-    const { email } = props;
+    const history = useHistory();
 
+    const location = useLocation();
+  
+    const email = (new URLSearchParams(location.search).get('email'));
+  
+    React.useEffect(() => {
+      if (!email) history.push('/404');
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    
     const { t } = useTranslation();
 
     const sendVerifyEmail = async () => {
