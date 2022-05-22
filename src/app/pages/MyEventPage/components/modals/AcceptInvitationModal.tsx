@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Spin, Form, Select, Button, Space } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
@@ -88,6 +88,16 @@ export const AcceptInvitationModal = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [request]);
 
+    const handleOnBoatSelected = (boatId) => {
+        const boat = boats.find(boat => boat.id === boatId);
+        if (boat.sailNumber) {
+            form.setFieldsValue({
+                sailNumber: boat.sailNumber
+            });
+            // disable the field and enable the field if the sailNumber does not exist.
+        }
+    }
+
     return (<Modal
         title={t(translations.my_event_list_page.register_for, { raceName: request?.event?.name })}
         bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
@@ -104,19 +114,28 @@ export const AcceptInvitationModal = (props) => {
                 style={{ width: '100%' }}
             >
                 {boats.length <= 1 && classes.length > 0 && <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>}
-                <Form.Item
-                    style={{ display: boats.length > 1 ? 'block' : 'none' }}
-                    label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
-                    name="vesselId">
-                    <SyrfFormSelect
-                        showSearch
-                        allowClear
-                        placeholder={t(translations.my_event_list_page.select_a_boat)}
-                        optionFilterProp="children"
-                    >
-                        {renderBoatsList()}
-                    </SyrfFormSelect>
-                </Form.Item>
+
+                <div style={{ display: boats.length > 1 ? 'block' : 'none' }}>
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
+                        name="vesselId">
+                        <SyrfFormSelect
+                            showSearch
+                            allowClear
+                            placeholder={t(translations.my_event_list_page.select_a_boat)}
+                            optionFilterProp="children"
+                            onChange={handleOnBoatSelected}
+                        >
+                            {renderBoatsList()}
+                        </SyrfFormSelect>
+                    </Form.Item>
+
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.my_event_list_page.sail_number)}</SyrfFieldLabel>}
+                        name="sailNumber">
+                        <SyrfInputField />
+                    </Form.Item>
+                </div>
 
                 <Form.Item
                     style={{ display: classes.length > 1 ? 'block' : 'none' }}
