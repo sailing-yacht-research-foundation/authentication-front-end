@@ -157,6 +157,7 @@ export const FormItems = (props) => {
                             <SyrfInputNumber
                                 onChange={(value) => setParticipatingFee(Number(value))}
                                 defaultValue={0}
+                                min={0}
                                 formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '')}
                             />
                         </Form.Item>
