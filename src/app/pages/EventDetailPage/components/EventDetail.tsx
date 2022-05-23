@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, message, Space, Spin, Tag, Tooltip } from 'antd';
-import { BorderedButton, GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
@@ -28,6 +28,7 @@ import { ParticipantNotPaidSection } from './ParticipantNotPaidSection';
 import { BsBagCheckFill } from 'react-icons/bs';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { deleteParticipant } from 'services/live-data-server/participants';
+import { InformationNotShared } from './InformationNotSharedMessage';
 
 export const EventDetail = () => {
 
@@ -171,15 +172,15 @@ export const EventDetail = () => {
         setIsLeavingEvent(true);
         const response = await deleteParticipant(event.participantDetail?.participantId!);
         setIsLeavingEvent(false);
-    
+
         if (response.success) {
-          toast.success(t(translations.my_event_list_page.successfully_left_the_event));
-          setShowLeaveEventConfirmModal(false);
-          fetchEvent();
+            toast.success(t(translations.my_event_list_page.successfully_left_the_event));
+            setShowLeaveEventConfirmModal(false);
+            fetchEvent();
         } else {
-          showToastMessageOnRequestError(response.success);
+            showToastMessageOnRequestError(response.success);
         }
-      }
+    }
 
     const renderEventActions = () => {
         return <EventActions>
@@ -220,6 +221,9 @@ export const EventDetail = () => {
                 event={event}
                 showModal={showAnnouncementModal}
                 setShowModal={setShowAnnouncementModal} />
+
+            <InformationNotShared reloadParent={fetchEvent} event={event} />
+            
             <PageHeaderContainerResponsive>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => goBack()}>

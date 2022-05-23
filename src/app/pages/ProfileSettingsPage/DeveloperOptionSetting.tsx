@@ -83,8 +83,8 @@ export const DeveloperOptionSetting = () => {
                 <DeveloperIntroductionDescription>
                     <Trans
                         i18nKey={translations.profile_page.update_profile.developer_description} // optional -> fallbacks to defaults if not provided
-                        defaults="Don’t forget to get your developer token by following the instructions in the developer documentation. You should also join our <a target='_blank' href='https://discord.com/invite/EfvufEsDua'>Discord group for support!</a>"
-                        components={{ a: <a /> }}
+                        defaults="Don’t forget to get your developer token by following the instructions in the developer documentation. You should also join our <a target='_blank' href='https://discord.com/invite/EfvufEsDua'>Discord group for support!</a>" // eslint-disable-next-line
+                        components={{ a:  <a /> }}
                     />
                 </DeveloperIntroductionDescription>
             </DeveloperIntroductionSection>

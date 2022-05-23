@@ -102,3 +102,9 @@ export const inviteGroupsAsCompetitors = (groups, calendarEventId) => {
         calendarEventId,
     }));
 }
+
+export const shareInformationAfterJoinedEvent = (participantId: string, allowShareInformation: boolean) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${participantId}`, {
+        allowShareInformation
+    }));
+}
