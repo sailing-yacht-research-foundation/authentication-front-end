@@ -123,3 +123,7 @@ export const sendMessageToVesselParticipants = (calendarEventId, data) => {
 export const payForEvent = (calendarEventId) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/pay`));
 }
+
+export const getEventMessages = (calendarEventId) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/messages`));
+}

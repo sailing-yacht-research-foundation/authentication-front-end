@@ -25,6 +25,7 @@ import { PDFUploadForm } from 'app/pages/MyEventCreateUpdatePage/components/PDFU
 import { OrganizationGroup } from './OrganizationGroup';
 import { AnnouncementModal } from './AnnouncementModal';
 import { ParticipantNotPaidSection } from './ParticipantNotPaidSection';
+import { EventAnnouncement } from './EventAnnouncement';
 
 export const EventDetail = () => {
 
@@ -42,6 +43,8 @@ export const EventDetail = () => {
     const [isOpeningClosingRegistration, setIsOpeningClosingRegistration] = React.useState<boolean>(false);
 
     const history = useHistory();
+
+    const announcementRef = React.useRef<any>();
 
     const { t } = useTranslation();
 
@@ -179,6 +182,7 @@ export const EventDetail = () => {
     return (
         <Spin spinning={isFetchingEvent}>
             <AnnouncementModal
+                reloadParent={() => announcementRef.current?.getEventAnnoucements()}
                 event={event}
                 showModal={showAnnouncementModal}
                 setShowModal={setShowAnnouncementModal} />
@@ -191,7 +195,7 @@ export const EventDetail = () => {
                         <EventTitle>{event.name}</EventTitle>
                         {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={() => navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
                         <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
-                        { event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee></EventEntranceFeeWrapper> }
+                        {event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee></EventEntranceFeeWrapper>}
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 {renderEventActions()}
@@ -215,10 +219,10 @@ export const EventDetail = () => {
                             : (<Tooltip title={translate.only_owner_canview}>
                                 <StyledTag>{translate.status_private}</StyledTag>
                             </Tooltip>)}
-                        
+
                         {!event.isPaidEvent && <Tooltip title={t(translations.event_detail_page.this_event_is_free_and_has_entrance_price_zero)}>
-                                <StyledTag>{t(translations.event_detail_page.free)}</StyledTag>
-                            </Tooltip>}
+                            <StyledTag>{t(translations.event_detail_page.free)}</StyledTag>
+                        </Tooltip>}
                     </EventOpenRegistrationContainer>
                 </EventSection>
 
@@ -230,11 +234,15 @@ export const EventDetail = () => {
             {event.id &&
                 <>
                     <EventSection>
+                        <EventAnnouncement ref={announcementRef} event={event} />
+                    </EventSection>
+
+                    <EventSection>
                         <EventAdmins event={event} />
                     </EventSection>
 
                     <EventSection>
-                        <ParticipantNotPaidSection event={event}/>
+                        <ParticipantNotPaidSection event={event} />
                     </EventSection>
 
                     <EventSection>
