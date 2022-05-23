@@ -35,6 +35,10 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
               "message": "Please input a valid email.",
               "type": "email",
             },
+            Object {
+              "message": "Email must not contain blank space.",
+              "pattern": /\\^\\\\S\\+\\$/,
+            },
           ]
         }
       >

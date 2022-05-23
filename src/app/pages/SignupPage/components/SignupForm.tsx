@@ -57,7 +57,7 @@ export const SignupForm = () => {
         setIsSigningUp(false);
 
         if (response.success) {
-            history.push('/verify-account');
+            history.push('/verify-account?email='+ email);
             toast.info(t(translations.signup_page.register_success));
         } else {
             if (response.error?.response.data.errorCode === AuthCode.USER_ALREADY_EXISTS) { // E015 means the user already exists

@@ -203,6 +203,7 @@ export const FormItems = (props) => {
                             help={t(translations.my_event_create_update_page.fee_paid_per_captain)}>
                             <SyrfInputNumber
                                 defaultValue={0}
+                                min={0}
                                 formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '')}
                             />
                         </Form.Item>

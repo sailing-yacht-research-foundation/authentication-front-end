@@ -3,11 +3,5 @@
 exports[`<FilterTab /> should render and match the snapshot 1`] = `
 <styled.div>
   <FilterResult />
-  <styled.div>
-    <BsSearch
-      color="#4F61A5"
-      size={25}
-    />
-  </styled.div>
 </styled.div>
 `;
