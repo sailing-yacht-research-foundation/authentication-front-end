@@ -45,7 +45,7 @@ export const StyledSyrfFormWrapper = styled(SyrfFormWrapper)`
     width: 100% !important;
 `;
 
-const CollapseDescription = styled.span`
+const CollapseDescription = styled.div`
     font-size: 13px;
     margin-left: 25px;
     color: #00000073;
