@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, message, Space, Spin, Tag, Tooltip } from 'antd';
-import { GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
@@ -18,16 +18,16 @@ import { EventAdmins } from './EventAdmins';
 import { AiFillNotification, AiOutlineCalendar } from 'react-icons/ai';
 import { VesselList } from './VesselList';
 import { toast } from 'react-toastify';
-import { GiArchiveRegister } from 'react-icons/gi';
+import { GiArchiveRegister, GiExitDoor } from 'react-icons/gi';
 import { HiLockClosed } from 'react-icons/hi';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { PDFUploadForm } from 'app/pages/MyEventCreateUpdatePage/components/PDFUploadForm';
 import { OrganizationGroup } from './OrganizationGroup';
 import { AnnouncementModal } from './AnnouncementModal';
 import { ParticipantNotPaidSection } from './ParticipantNotPaidSection';
-import { FcPaid } from 'react-icons/fc';
-import { MdPaid } from 'react-icons/md';
 import { BsBagCheckFill } from 'react-icons/bs';
+import { ConfirmModal } from 'app/components/ConfirmModal';
+import { deleteParticipant } from 'services/live-data-server/participants';
 
 export const EventDetail = () => {
 
@@ -47,6 +47,10 @@ export const EventDetail = () => {
     const history = useHistory();
 
     const { t } = useTranslation();
+
+    const [isLeavingEvent, setIsLeavingEvent] = React.useState<boolean>(false);
+
+    const [showLeaveEventConfirmModal, setShowLeaveEventConfirmModal] = React.useState<boolean>(false);
 
     const toggleRegistration = async (allowRegistration: boolean) => {
         setIsOpeningClosingRegistration(true);
@@ -155,6 +159,28 @@ export const EventDetail = () => {
         history.push(`/profile/${profileId}`);
     }
 
+    const canLeaveEvent = () => {
+        return event.isParticipant && event.participantDetail?.participantId;
+    }
+
+    const showLeaveEventModal = () => {
+        setShowLeaveEventConfirmModal(true);
+    }
+
+    const leaveEvent = async () => {
+        setIsLeavingEvent(true);
+        const response = await deleteParticipant(event.participantDetail?.participantId!);
+        setIsLeavingEvent(false);
+    
+        if (response.success) {
+          toast.success(t(translations.my_event_list_page.successfully_left_the_event));
+          setShowLeaveEventConfirmModal(false);
+          fetchEvent();
+        } else {
+          showToastMessageOnRequestError(response.success);
+        }
+      }
+
     const renderEventActions = () => {
         return <EventActions>
             <Space wrap style={{ justifyContent: 'flex-end' }}>
@@ -167,6 +193,7 @@ export const EventDetail = () => {
                         })}
                         <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                     </>}
+                {canLeaveEvent() && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
                 <Tooltip title={t(translations.tip.download_icalendar_file)}>
                     <Button type="link" onClick={() => {
                         downloadIcalendarFile(event);
@@ -181,6 +208,14 @@ export const EventDetail = () => {
 
     return (
         <Spin spinning={isFetchingEvent}>
+            <ConfirmModal
+                loading={isLeavingEvent}
+                title={t(translations.my_event_list_page.leave_event, { eventName: event.name })}
+                content={t(translations.my_event_list_page.you_are_about_to_leave_this_event_are_you_sure_you_want_to_continue)}
+                onOk={leaveEvent}
+                showModal={showLeaveEventConfirmModal}
+                onCancel={() => setShowLeaveEventConfirmModal(false)}
+            />
             <AnnouncementModal
                 event={event}
                 showModal={showAnnouncementModal}
@@ -194,7 +229,7 @@ export const EventDetail = () => {
                         <EventTitle>{event.name}</EventTitle>
                         {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={() => navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
                         <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
-                        { event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee> { event.isPaid && <PaidStatusContainer> - <BsBagCheckFill/> Paid</PaidStatusContainer> }</EventEntranceFeeWrapper> }
+                        {event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee> {event.isPaid && <PaidStatusContainer> - <BsBagCheckFill /> Paid</PaidStatusContainer>}</EventEntranceFeeWrapper>}
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 {renderEventActions()}
@@ -218,10 +253,10 @@ export const EventDetail = () => {
                             : (<Tooltip title={translate.only_owner_canview}>
                                 <StyledTag>{translate.status_private}</StyledTag>
                             </Tooltip>)}
-                        
+
                         {!event.isPaidEvent && <Tooltip title={t(translations.event_detail_page.this_event_is_free_and_has_entrance_price_zero)}>
-                                <StyledTag>{t(translations.event_detail_page.free)}</StyledTag>
-                            </Tooltip>}
+                            <StyledTag>{t(translations.event_detail_page.free)}</StyledTag>
+                        </Tooltip>}
                     </EventOpenRegistrationContainer>
                 </EventSection>
 
@@ -237,7 +272,7 @@ export const EventDetail = () => {
                     </EventSection>
 
                     <EventSection>
-                        <ParticipantNotPaidSection event={event}/>
+                        <ParticipantNotPaidSection event={event} />
                     </EventSection>
 
                     <EventSection>

@@ -10,6 +10,8 @@ import { acceptInvitation } from 'services/live-data-server/participants';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { InformationSharing } from 'app/components/RegisterRaceModal/InformationSharing';
+import { useDispatch } from 'react-redux';
+import { useMyEventListSlice } from '../../slice';
 
 export const AcceptInvitationModal = (props) => {
 
@@ -24,6 +26,10 @@ export const AcceptInvitationModal = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [form] = Form.useForm();
+
+    const dispatch = useDispatch();
+
+    const { actions } = useMyEventListSlice();
 
     const hideModal = () => {
         setShowModal(false);
@@ -75,6 +81,7 @@ export const AcceptInvitationModal = (props) => {
 
         if (response.success) {
             hideModal();
+            dispatch(actions.getEvents({ page: 1, size: 10 }));
             toast.success(t(translations.my_event_list_page.accepted_the_request));
         } else {
             showToastMessageOnRequestError(response.error);

@@ -71,4 +71,6 @@ export interface CalendarEvent {
     isPaid: boolean;
     agreedWaivers?: any[];
     isSimulation: boolean;
+    participantId: string;
+    participantDetail: any;
 }
