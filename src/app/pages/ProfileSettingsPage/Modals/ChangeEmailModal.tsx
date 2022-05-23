@@ -6,13 +6,14 @@ import {
     SyrfFieldLabel,
     SyrfPasswordInputField,
     SyrfFormButton,
-    SyrfInputField
+    SyrfInputField,
 } from 'app/components/SyrfForm';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { changeEmail } from 'services/live-data-server/user';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import styled from 'styled-components';
 
 interface IChangeEmailModal {
     visible: boolean,
@@ -113,6 +114,8 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
                         </Form.Item>
                     </Tooltip>
 
+                    <SyrFieldDescription>{t(translations.settings_page.please_remember_that_once_the_email_changed_you_cannot_login_using_the_old_email)}</SyrFieldDescription>
+
                     <Form.Item>
                         <SyrfFormButton type="primary" htmlType="submit">
                             {t(translations.settings_page.change_email)}
@@ -123,3 +126,9 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
         </Modal>
     );
 }
+
+export const SyrFieldDescription = styled.span`
+    font-size: 13px;
+    color: #00000073;
+    margin-bottom: 15px;
+`;
