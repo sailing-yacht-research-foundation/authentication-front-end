@@ -14,6 +14,8 @@ import { translations } from 'locales/translations';
 import { changeEmail } from 'services/live-data-server/user';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import styled from 'styled-components';
+import { UseLoginSlice } from 'app/pages/LoginPage/slice';
+import { useDispatch } from 'react-redux';
 
 interface IChangeEmailModal {
     visible: boolean,
@@ -28,6 +30,10 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
 
     const [isChangingEmail, setIsChangingEmail] = useState<boolean>(false);
 
+    const { actions } = UseLoginSlice();
+
+    const dispatch = useDispatch();
+
     const onFinish = async (values) => {
         const { newEmail, currentPassword } = values;
 
@@ -39,6 +45,7 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
             toast.success(t(translations.settings_page.email_changed_successfully));
             form.resetFields();
             hideModal();
+            dispatch(actions.getUser());
         } else {
             showToastMessageOnRequestError(response.error);
         }
