@@ -127,7 +127,7 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
     );
 }
 
-export const SyrFieldDescription = styled.span`
+export const SyrFieldDescription = styled.div`
     font-size: 13px;
     color: #00000073;
     margin-bottom: 15px;
