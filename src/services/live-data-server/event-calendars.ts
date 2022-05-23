@@ -137,3 +137,7 @@ export const agreeToWaiver = (calendarEventId: string, waiverType: string) => {
 export const getDetailedEventParticipantInfoById = (calendarEventId: string, participantId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants/${participantId}/complete-data`));
 }
+
+export const getEventMessages = (calendarEventId) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/messages`));
+}

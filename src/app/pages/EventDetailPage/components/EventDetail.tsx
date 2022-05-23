@@ -29,6 +29,7 @@ import { BsBagCheckFill } from 'react-icons/bs';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { deleteParticipant } from 'services/live-data-server/participants';
 import { InformationNotShared } from './InformationNotSharedMessage';
+import { EventAnnouncement } from './EventAnnouncement';
 
 export const EventDetail = () => {
 
@@ -46,6 +47,8 @@ export const EventDetail = () => {
     const [isOpeningClosingRegistration, setIsOpeningClosingRegistration] = React.useState<boolean>(false);
 
     const history = useHistory();
+
+    const announcementRef = React.useRef<any>();
 
     const { t } = useTranslation();
 
@@ -218,6 +221,7 @@ export const EventDetail = () => {
                 onCancel={() => setShowLeaveEventConfirmModal(false)}
             />
             <AnnouncementModal
+                reloadParent={() => announcementRef.current?.getEventAnnoucements()}
                 event={event}
                 showModal={showAnnouncementModal}
                 setShowModal={setShowAnnouncementModal} />
@@ -271,6 +275,10 @@ export const EventDetail = () => {
 
             {event.id &&
                 <>
+                    <EventSection>
+                        <EventAnnouncement ref={announcementRef} event={event} />
+                    </EventSection>
+
                     <EventSection>
                         <EventAdmins event={event} />
                     </EventSection>
