@@ -484,3 +484,16 @@ export const renderRaceStartTime = (record, value, t) => {
 
     return renderEmptyValue(null);
 }
+
+export const handleOnBoatSelected = (boats, boatIdToFilter, formInstance) => {
+    const boat = boats.find(boat => boat.id === boatIdToFilter);
+    if (boat.sailNumber) {
+        formInstance.setFieldsValue({
+            sailNumber: boat.sailNumber
+        });
+    } else {
+        formInstance.setFieldsValue({
+            sailNumber: ''
+        });
+    }
+}

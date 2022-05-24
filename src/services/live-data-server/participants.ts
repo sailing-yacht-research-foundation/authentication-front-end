@@ -76,10 +76,11 @@ export const getMyInvitedEvents = (page: number, size: number = 10) => {
     }))
 }
 
-export const acceptInvitation = (requestId: string, vesselId: string, vesselParticipantGroupId: string) => {
+export const acceptInvitation = (requestId: string, vesselId: string, vesselParticipantGroupId: string, sailNumber: string) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${requestId}/accept-invitation`, {
         vesselId,
-        vesselParticipantGroupId
+        vesselParticipantGroupId,
+        sailNumber
     }))
 }
 

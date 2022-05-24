@@ -7,7 +7,7 @@ import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/v
 import { getMany } from 'services/live-data-server/vessels';
 import styled from 'styled-components';
 import { acceptInvitation } from 'services/live-data-server/participants';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { handleOnBoatSelected, showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 
 export const AcceptInvitationModal = (props) => {
@@ -38,8 +38,10 @@ export const AcceptInvitationModal = (props) => {
             setBoats(response.data?.rows);
             if (response.data?.count > 0) {
                 form.setFieldsValue({
-                    vesselId: response.data?.rows[0]?.id
+                    vesselId: response.data?.rows[0]?.id,
+                    sailNumber: response.data?.rows[0]?.sailNumber
                 });
+
             }
         }
     }
@@ -66,10 +68,10 @@ export const AcceptInvitationModal = (props) => {
     }
 
     const onFinish = async (values) => {
-        const { vesselId, vesselParticipantGroupId } = values;
+        const { vesselId, vesselParticipantGroupId, sailNumber } = values;
 
         setIsLoading(true);
-        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId);
+        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId, sailNumber);
         setIsLoading(false);
 
         if (response.success) {
@@ -87,16 +89,6 @@ export const AcceptInvitationModal = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [request]);
-
-    const handleOnBoatSelected = (boatId) => {
-        const boat = boats.find(boat => boat.id === boatId);
-        if (boat.sailNumber) {
-            form.setFieldsValue({
-                sailNumber: boat.sailNumber
-            });
-            // disable the field and enable the field if the sailNumber does not exist.
-        }
-    }
 
     return (<Modal
         title={t(translations.my_event_list_page.register_for, { raceName: request?.event?.name })}
@@ -124,7 +116,7 @@ export const AcceptInvitationModal = (props) => {
                             allowClear
                             placeholder={t(translations.my_event_list_page.select_a_boat)}
                             optionFilterProp="children"
-                            onChange={handleOnBoatSelected}
+                            onChange={(boatId) => handleOnBoatSelected(boats, boatId, form)}
                         >
                             {renderBoatsList()}
                         </SyrfFormSelect>
