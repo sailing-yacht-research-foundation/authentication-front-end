@@ -47,7 +47,11 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
             hideModal();
             dispatch(actions.getUser());
         } else {
-            showToastMessageOnRequestError(response.error);
+            if (response.error.response?.status === 401) {
+                toast.error(t(translations.settings_page.your_password_is_incorrect))
+            } else {
+                showToastMessageOnRequestError(response.error);
+            }
         }
     }
 
