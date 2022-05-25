@@ -134,7 +134,7 @@ export const ParticipantDetailList = (props) => {
             title: t(translations.participant_list.food_allergies),
             dataIndex: 'foodAllergies',
             key: 'foodAllergies',
-            render: (value, record) => record.foodAllergies?.join(', '),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.foodAllergies?.join(', '))),
         },
         {
             title: t(translations.participant_list.medical_problems),
