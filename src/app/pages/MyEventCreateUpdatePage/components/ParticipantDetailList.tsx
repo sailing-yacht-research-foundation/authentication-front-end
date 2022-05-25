@@ -34,13 +34,13 @@ export const ParticipantDetailList = (props) => {
             title: t(translations.participant_list.agreed_to_waivers),
             dataIndex: 'waiverAgreements',
             key: 'waiverAgreements',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(renderAgreedWaivers(value))),
+            render: (value, record) => renderEmptyValue(renderAgreedWaivers(value)),
         },
         {
             title: t(translations.participant_list.email),
             dataIndex: 'email',
             key: 'email',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(value)),
+            render: (value, record) => renderEmptyValue(value),
         },
         {
             title: t(translations.participant_list.birth_date),
@@ -48,7 +48,7 @@ export const ParticipantDetailList = (props) => {
             key: 'birthdate',
             render: (value, record) => {
                 if (value && moment(value).isValid())
-                    return renderParticipantPropertyValue(record, moment(value).format(TIME_FORMAT.date_text));
+                    return moment(value).format(TIME_FORMAT.date_text);
                 return renderEmptyValue(null);
             },
         },
@@ -56,13 +56,7 @@ export const ParticipantDetailList = (props) => {
             title: t(translations.participant_list.address),
             dataIndex: 'address',
             key: 'address',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(value)),
-        },
-        {
-            title: t(translations.participant_list.phone_number),
-            dataIndex: 'phoneNumber',
-            key: 'phoneNumber',
-            render: (value, record) => renderParticipantPropertyValue(record,renderEmptyValue(value)),
+            render: (value, record) => renderEmptyValue(value),
         },
         {
             title: t(translations.participant_list.allow_to_share_information),
@@ -125,7 +119,7 @@ export const ParticipantDetailList = (props) => {
             render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.relationship)),
         },
         {
-            title: t(translations.participant_list.emergency_contact_name),
+            title: t(translations.participant_list.emergency_contact_phone),
             dataIndex: 'emergencyContact.phone',
             key: 'emergencyContact.phone',
             render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.phone)),
@@ -156,6 +150,8 @@ export const ParticipantDetailList = (props) => {
         setIsLoading(true);
         const response = await getDetailedEventParticipantInfoById(eventId, participant.id);
         setIsLoading(false);
+
+        console.log(response.data?.data);
 
         if (response.success) {
             setParticipantData(response.data?.data || {});
