@@ -9,6 +9,9 @@ import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { joinCompetitionUnit } from 'services/live-data-server/open-competition';
 import { Vessel } from 'types/Vessel';
+import { get } from 'services/live-data-server/event-calendars';
+import { CalendarEvent } from 'types/CalendarEvent';
+import { InformationSharing } from './InformationSharing';
 
 interface IRegisterRaceModal {
     showModal: boolean
@@ -17,16 +20,19 @@ interface IRegisterRaceModal {
     raceId: string,
     lon: number,
     lat: number,
-    setRelation?: Function
+    setRelation?: Function,
+    eventId: string,
 }
 
-export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, lon, lat, setRelation } : IRegisterRaceModal) => {
+export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, lon, lat, setRelation, eventId }: IRegisterRaceModal) => {
 
     const { t } = useTranslation();
 
     const [boats, setBoats] = React.useState<Vessel[]>([]);
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+    const [event, setEvent] = React.useState<Partial<CalendarEvent>>({});
 
     const [form] = Form.useForm();
 
@@ -52,10 +58,10 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
     }
 
     const onFinish = async (values) => {
-        const { vesselId } = values;
+        const { vesselId, allowShareInformation } = values;
 
         setIsLoading(true);
-        const response = await joinCompetitionUnit(raceId, vesselId, lon, lat);
+        const response = await joinCompetitionUnit(raceId, vesselId, allowShareInformation, lon, lat);
         setIsLoading(false);
 
         if (response.success) {
@@ -70,10 +76,18 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
     }
 
     React.useEffect(() => {
-        if (showModal)
+        if (showModal) {
+            getAndSetCalendarEvent();
             getUserBoats();
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showModal]);
+
+    const getAndSetCalendarEvent = async () => {
+        const response = await get(eventId);
+        if (response.success) setEvent(response.data);
+    }
 
     return (<Modal
         title={t(translations.my_event_list_page.register_for, { raceName: raceName })}
@@ -90,7 +104,6 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
                 onFinish={onFinish}
                 style={{ width: '100%' }}
             >
-                {boats.length <= 1 && <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>}
                 <Form.Item
                     style={{ display: boats.length > 1 ? 'block' : 'none' }}
                     label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
@@ -104,6 +117,10 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
                         {renderBoatsList()}
                     </SyrfFormSelect>
                 </Form.Item>
+
+                <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>
+
+                <InformationSharing event={event} t={t}/>
 
                 {boats.length <= 1 ?
                     (<Space style={{ justifyContent: 'flex-end', width: '100%' }} size={10}>

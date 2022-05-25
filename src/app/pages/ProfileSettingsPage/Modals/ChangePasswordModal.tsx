@@ -7,7 +7,6 @@ import {
     SyrfPasswordInputField,
     SyrfFormButton
 } from 'app/components/SyrfForm';
-import styled from 'styled-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -122,11 +121,3 @@ export const ChangePasswordModal = ({ visible, hideModal }: IChangePasswordModal
         </Modal>
     );
 }
-
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 132px;
-    align-items: center;
-    width: 100%;
-`;

@@ -1,6 +1,4 @@
 import React from 'react';
-import { BorderedButton, IconWrapper } from 'app/components/SyrfGeneral';
-import { FaRobot } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { selectPlaybackType, selectCompetitionUnitDetail } from "./slice/selectors";
 import { simulateRace } from 'services/live-data-server/competition-units';

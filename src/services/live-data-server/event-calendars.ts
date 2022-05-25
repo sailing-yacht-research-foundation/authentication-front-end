@@ -116,12 +116,26 @@ export const uploadPdfs = (calendarEventId: string, formData: FormData) => {
     }));
 }
 
-export const sendMessageToVesselParticipants = (calendarEventId, data) => {
+export const sendMessageToVesselParticipants = (calendarEventId: string, data) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/send-messages`, data));
 }
 
-export const payForEvent = (calendarEventId) => {
+export const payForEvent = (calendarEventId: string) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/pay`));
+}
+
+export const getDetailedEventParticipantsInfo = (calendarEventId: string) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants/complete-data`));
+}
+
+export const agreeToWaiver = (calendarEventId: string, waiverType: string) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/agree-waiver`, {
+        waiverType
+    }));
+}
+
+export const getDetailedEventParticipantInfoById = (calendarEventId: string, participantId: string) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants/${participantId}/complete-data`));
 }
 
 export const getEventMessages = (calendarEventId) => {
