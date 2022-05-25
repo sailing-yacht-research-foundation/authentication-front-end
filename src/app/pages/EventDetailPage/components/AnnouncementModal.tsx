@@ -19,7 +19,14 @@ const radioValue = {
     SEND_TO_SOME: 2,
 }
 
-export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: Partial<CalendarEvent>, showModal: boolean, setShowModal: Function }) => {
+interface IAnnouncementModal {
+    event: Partial<CalendarEvent>,
+    showModal: boolean,
+    setShowModal: Function,
+    reloadParent: Function
+}
+
+export const AnnouncementModal = ({ event, showModal, setShowModal, reloadParent }: IAnnouncementModal) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -47,6 +54,7 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
         if (response.success) {
             toast.success(t(translations.event_detail_page.successfully_delivered_your_message_to_the_competitors));
             hideModal();
+            reloadParent();
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -162,14 +170,14 @@ export const AnnouncementModal = ({ event, showModal, setShowModal }: { event: P
 
     return (
         <Modal
-        title={t(translations.event_detail_page.send_announcement)}
-        bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
-        visible={showModal}
-        cancelButtonProps={{ style: { display: 'none' } }}
-        onOk={hideModal}
-        onCancel={hideModal}
-    >
-        <span>{t(translations.event_detail_page.please_invite_at_least_1_competitor_to_send_announcement)}</span>
-    </Modal>
+            title={t(translations.event_detail_page.send_announcement)}
+            bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
+            visible={showModal}
+            cancelButtonProps={{ style: { display: 'none' } }}
+            onOk={hideModal}
+            onCancel={hideModal}
+        >
+            <span>{t(translations.event_detail_page.please_invite_at_least_1_competitor_to_send_announcement)}</span>
+        </Modal>
     )
 }

@@ -12,7 +12,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, EventParticipatingTypes, EventState, MAP_DEFAULT_VALUE, MODE } from 'utils/constants';
+import { AdminType, EventParticipatingTypes, EventState, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -69,8 +69,13 @@ export const MyEventForm = () => {
     const pdfListRef = React.useRef<any>();
 
     const onFinish = async (values) => {
-        const { startDate, isOpen, lon, lat, endDate, endTime, startTime, endLat, endLon, admins, requiredCertifications, requireCovidCertificate, isCrewed } = values;
+        const { startDate, isOpen, lon, lat, endDate, requiredFields,
+            endTime, startTime, endLat, endLon, admins,
+            requiredCertifications, requireCovidCertificate,
+        } = values;
+
         let response;
+        let requiredCompetitorFields = requiredFields || [];
         let currentDate = moment();
         let currentTime = moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
@@ -101,7 +106,7 @@ export const MyEventForm = () => {
             ics: "ics",
             isPrivate: false,
             isOpen: !!isOpen,
-            isCrewed: !!isCrewed,
+            isCrewed: false,
             requireCovidCertificate: !!requireCovidCertificate,
             editors: editors.filter(item => item.type === AdminType.INDIVIDUAL).map(item => ({
                 id: item.id
@@ -112,8 +117,12 @@ export const MyEventForm = () => {
             })),
             participatingFee: (values.participatingFee && values.participatingFee !== 0) ? values.participatingFee : undefined,
             requiredCertifications: certifications,
-            organizerGroupId: values.organizerGroupId || null
+            organizerGroupId: values.organizerGroupId || null,
         };
+
+        requiredCompetitorsInformation.forEach((field) => {
+            data[field] = requiredCompetitorFields.includes(field);
+        });
 
         setIsSavingEvent(true);
 
@@ -518,7 +527,7 @@ export const MyEventForm = () => {
 
                         <FormItemEndDate endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItems event={event} mode={mode} />
+                        <FormItems event={event} mode={mode} form={form} />
 
                         <Form.Item>
                             <SyrfFormButton disabled={!formChanged} type="primary" htmlType="submit">

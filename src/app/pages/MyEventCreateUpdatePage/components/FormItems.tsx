@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Form, Select, Switch, Row, Col, Tooltip } from 'antd';
 import { SyrfFieldLabel, SyrfFormSelect, SyrfInputField, SyrfInputNumber, SyrFieldDescription } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
-import { certifications, EventState, EventTypes, MODE } from 'utils/constants';
+import { certifications, EventState, EventTypes, MODE, requiredCompetitorsInformation } from 'utils/constants';
 import { useLocation } from 'react-router-dom';
 import { getValidOrganizableGroup } from 'services/live-data-server/groups';
 import { ItemAvatar } from 'app/components/SyrfGeneral';
@@ -11,19 +11,15 @@ import { renderAvatar } from 'utils/user-utils';
 
 export const FormItems = (props) => {
 
-    const { event, mode } = props;
+    const { event, mode, form } = props;
 
     const { t } = useTranslation();
 
     const location = useLocation();
 
-    const [participatingFee, setParticipatingFee] = React.useState<number>(0);
-
-    const [isCrewed, setIsCrewed] = React.useState<boolean>(false);
+    const [, setIsCrewed] = React.useState<boolean>(false);
 
     const [selectedOrganizerGroup, setSelectedOrganizerGroup] = React.useState<boolean>(false);
-
-    const participantFeeValid = participatingFee !== 0;
 
     const [validGroups, setValidGroups] = React.useState<any[]>([]);
 
@@ -43,21 +39,59 @@ export const FormItems = (props) => {
         { name: 'Other', value: 'OTHER' },
     ];
 
+    const requiredFields = [
+        {
+            name: t(translations.my_event_list_page.emergency_contact),
+            value: 'requireEmergencyContact',
+        },
+        {
+            name: t(translations.my_event_list_page.covid_vaccination),
+            value: 'requireCovidCertificate',
+        },
+        {
+            name: t(translations.my_event_list_page.medical_problems),
+            value: 'requireMedicalProblems'
+        },
+        {
+            name: t(translations.my_event_list_page.food_allergies),
+            value: 'requireFoodAllergies'
+        },
+        {
+            name: t(translations.my_event_list_page.immigration_info),
+            value: 'requireImmigrationInfo'
+        }
+    ]
+
     React.useEffect(() => {
         if (location.pathname.includes(MODE.CREATE)) {
             setIsCrewed(false);
-            setParticipatingFee(0);
             setSelectedOrganizerGroup(false);
             setIsPaidEvent(false);
+            form.setFieldsValue({
+                requiredFields: []
+            })
         } else {
             setSelectedOrganizerGroup(!!event.organizerGroupId && event.participatingFee > 0);
             setIsCrewed(!!event.isCrewed);
-            setParticipatingFee(!!event.participatingFee ? event.participatingFee : 0);
             setSelectedEventType(event.eventTypes);
             setIsPaidEvent(event.participatingFee > 0);
+            setRequiredFields();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, event]);
+
+    const setRequiredFields = () => {
+        const requiredFields: string[] = [];
+        Object.keys(event).forEach(key => {
+            if (requiredCompetitorsInformation.includes(key) && event[key] === true) {
+                requiredFields.push(key);
+            }
+        });
+
+        form.setFieldsValue({
+            requiredFields
+        })
+    }
 
     const renderValidOrganizerGroups = () => {
         return validGroups.map((group, index) => <Select.Option key={index} value={group.id}>
@@ -95,6 +129,10 @@ export const FormItems = (props) => {
         setSelectedOrganizerGroup(value);
     }
 
+    const renderRequiredFields = () => {
+        return requiredFields.map((field, index) => <Select.Option key={index} value={field.value}>{field.name}</Select.Option>)
+    }
+
     return (
         <>
             <Row gutter={12}>
@@ -120,6 +158,15 @@ export const FormItems = (props) => {
                     </Form.Item>
                 </Col>
             </Row>
+
+            <Form.Item
+                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_competitor_info)}</SyrfFieldLabel>}
+                name="requiredFields"
+            >
+                <SyrfFormSelect maxTagCount={'responsive'} mode="multiple">
+                    {renderRequiredFields()}
+                </SyrfFormSelect>
+            </Form.Item>
 
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.free_or_paid)}</SyrfFieldLabel>}
@@ -155,7 +202,6 @@ export const FormItems = (props) => {
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                             help={t(translations.my_event_create_update_page.fee_paid_per_captain)}>
                             <SyrfInputNumber
-                                onChange={(value) => setParticipatingFee(Number(value))}
                                 defaultValue={0}
                                 min={0}
                                 formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '')}
@@ -175,61 +221,6 @@ export const FormItems = (props) => {
                     }
                 </Row>
             }
-
-            <Row gutter={12}>
-                <Col xs={12} sm={12} md={!isCrewed ? 8 : 4} lg={!isCrewed ? 8 : 4}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_proof_of_covid_vaccination)}</SyrfFieldLabel>}
-                        name="requireCovidCertificate"
-                        valuePropName="checked"
-                    >
-                        <Switch />
-                    </Form.Item>
-                </Col>
-                <Col xs={12} sm={12} md={!isCrewed ? 8 : 4} lg={!isCrewed ? 8 : 4}>
-                    <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.is_crewed)}</SyrfFieldLabel>}
-                        name="isCrewed"
-                        valuePropName="checked"
-                    >
-                        <Switch onChange={value => setIsCrewed(value)} />
-                    </Form.Item>
-                </Col>
-                {isCrewed && <>
-                    <Col xs={24} sm={24} md={8} lg={8}>
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.min_crew)}</SyrfFieldLabel>}
-                            name="crewedMinValue"
-                            rules={[({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (value && Number(value) < getFieldValue('crewedMaxValue')) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error(t(translations.forms.min_crews_must_be_less_than_max_crews)));
-                                },
-                            })]}
-                        >
-                            <SyrfInputNumber />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={24} md={8} lg={8}>
-                        <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.max_crew)}</SyrfFieldLabel>}
-                            name="crewedMaxValue"
-                            rules={[({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (value && Number(value) > getFieldValue('crewedMinValue')) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error(t(translations.forms.max_crews_must_be_greater_than_min_crews)));
-                                },
-                            })]}
-                        >
-                            <SyrfInputNumber />
-                        </Form.Item>
-                    </Col>
-                </>}
-            </Row>
 
             {
                 EventTypes.HANDICAP_RACE === selectedEventType && <Form.Item
