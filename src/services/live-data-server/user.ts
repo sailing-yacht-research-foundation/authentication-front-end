@@ -123,3 +123,10 @@ export const switchDeveloperOption = (status: boolean) => {
 export const requestSendVerifyEmail = () => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/send-verify-email`))
 }
+
+export const changeEmail = (currentPassword, email) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/change-email`, {
+        currentPassword,
+        email
+    }))
+}
