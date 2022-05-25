@@ -131,7 +131,7 @@ export const EventList = () => {
               }} type="primary">{t(translations.general.update)}</BorderedButton>
               {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>}
             </>}
-            {record.isParticipant && record.participantId && <BorderedButton onClick={() => showLeaveEventModal(record)} danger>{t(translations.my_event_list_page.leave_event_button)}</BorderedButton>}
+            {canLeaveEvent(record) && <BorderedButton onClick={() => showLeaveEventModal(record)} danger>{t(translations.my_event_list_page.leave_event_button)}</BorderedButton>}
           </Space>
         );
       }
@@ -166,6 +166,10 @@ export const EventList = () => {
     dispatch(actions.getEvents({ page: 1, size: 10 }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const canLeaveEvent = (record) => {
+    return record.isParticipant && record.participantId && [EventState.ON_GOING, EventState.SCHEDULED].includes(record.status);
+  }
 
   React.useEffect(() => {
     const resultsWithKey = results.map((result) => ({ ...result, key: result.id }))

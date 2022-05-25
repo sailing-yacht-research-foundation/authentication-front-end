@@ -164,7 +164,9 @@ export const EventDetail = () => {
     }
 
     const canLeaveEvent = () => {
-        return event.isParticipant && event.participantDetail?.participantId;
+        return event.isParticipant
+            && event.participantDetail?.participantId
+            && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status!);
     }
 
     const showLeaveEventModal = () => {
@@ -227,7 +229,7 @@ export const EventDetail = () => {
                 setShowModal={setShowAnnouncementModal} />
 
             <InformationNotShared reloadParent={fetchEvent} event={event} />
-            
+
             <PageHeaderContainerResponsive>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => goBack()}>
