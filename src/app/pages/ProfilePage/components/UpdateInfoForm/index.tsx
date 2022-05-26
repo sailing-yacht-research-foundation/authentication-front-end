@@ -48,6 +48,7 @@ export const UpdateInfo = (props) => {
             first_name,
             last_name,
             isPrivate,
+            interests
         } = values;
 
         setIsUpdatingProfile(true);
@@ -66,6 +67,7 @@ export const UpdateInfo = (props) => {
                 picture: getUserAttribute(authUser, 'picture'),
                 showed_tour: getUserAttribute(authUser, 'showed_tour'),
             },
+            interests: interestsArrayToObject(interests),
             isPrivate: !!isPrivate
         });
 
@@ -77,13 +79,12 @@ export const UpdateInfo = (props) => {
         }
     }
 
-    const onUpdateProfileSuccess = (values) => {
-        setIsUpdatingProfile(false);
-        toast.success(t(translations.profile_page.update_profile.your_profile_has_been_successfully_updated));
-        props.cancelUpdateProfile();
+    const onUpdateProfileSuccess = async (values) => {
         setFormHasBeenChanged(false);
-        updateUserInterests(values);
-        updateUserShareableInformation(values);
+        toast.success(t(translations.profile_page.update_profile.your_profile_has_been_successfully_updated));
+        await updateUserShareableInformation(values);
+        setIsUpdatingProfile(false);
+        props.cancelUpdateProfile();
     }
 
     const updateUserShareableInformation = async (values) => {
@@ -118,15 +119,7 @@ export const UpdateInfo = (props) => {
             showToastMessageOnRequestError(response.error);
         }
     }
-
-    const updateUserInterests = async (values) => {
-        const { interests } = values;
-        const interestResponse = await updateInterests(interestsArrayToObject(interests));
-        if (!interestResponse.success) {
-            showToastMessageOnRequestError(interestResponse.error);
-        }
-    }
-
+    
     const interestsArrayToObject = (interestsArray) => {
         return WATERSPORTS.reduce((acc, w) => {
             acc[w] = interestsArray.includes(w);
