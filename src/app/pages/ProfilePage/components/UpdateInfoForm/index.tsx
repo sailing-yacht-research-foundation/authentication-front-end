@@ -89,7 +89,7 @@ export const UpdateInfo = (props) => {
     const updateUserShareableInformation = async (values) => {
         const fieldsToUpdate = ['emergencyContactName', 'emergencyContactPhone', 'emergencyContactEmail', 'emergencyContactRelationship',
             'passportPhoto', 'passportNumber', 'passportIssueDate', 'passportExpirationDate', 'foodAllergies', 'certifications',
-            'medicalProblems', 'tShirtSize', 'epirbBeaconHexId', 'covidVaccinationCard'];
+            'medicalProblems', 'tShirtSize', 'epirbBeaconHexId', 'covidVaccinationCard', 'passportIssueCountry'];
 
         const form = new FormData();
         Object.entries(values).forEach(([key, value]: any) => {

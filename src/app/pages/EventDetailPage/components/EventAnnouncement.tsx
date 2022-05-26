@@ -1,4 +1,4 @@
-import { Avatar, List, Skeleton } from 'antd';
+import { Avatar, List } from 'antd';
 import { PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import moment from 'moment';
@@ -6,7 +6,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { getEventMessages } from 'services/live-data-server/event-calendars';
-import { StyleConstants } from 'styles/StyleConstants';
 import { TIME_FORMAT } from 'utils/constants';
 import { renderAvatar } from 'utils/user-utils';
 
@@ -39,6 +38,7 @@ export const EventAnnouncement = React.forwardRef<any, any>((props, ref) => {
 
     React.useEffect(() => {
         getEventAnnoucements();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (<>

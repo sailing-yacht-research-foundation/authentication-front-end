@@ -9,6 +9,9 @@ import styled from 'styled-components';
 import { acceptInvitation } from 'services/live-data-server/participants';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
+import { InformationSharing } from 'app/components/RegisterRaceModal/InformationSharing';
+import { useDispatch } from 'react-redux';
+import { useMyEventListSlice } from '../../slice';
 
 export const AcceptInvitationModal = (props) => {
 
@@ -23,6 +26,10 @@ export const AcceptInvitationModal = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [form] = Form.useForm();
+
+    const dispatch = useDispatch();
+
+    const { actions } = useMyEventListSlice();
 
     const hideModal = () => {
         setShowModal(false);
@@ -66,14 +73,15 @@ export const AcceptInvitationModal = (props) => {
     }
 
     const onFinish = async (values) => {
-        const { vesselId, vesselParticipantGroupId } = values;
+        const { vesselId, vesselParticipantGroupId, allowShareInformation } = values;
 
         setIsLoading(true);
-        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId);
+        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId, allowShareInformation);
         setIsLoading(false);
 
         if (response.success) {
             hideModal();
+            dispatch(actions.getEvents({ page: 1, size: 10 }));
             toast.success(t(translations.my_event_list_page.accepted_the_request));
         } else {
             showToastMessageOnRequestError(response.error);
@@ -103,7 +111,6 @@ export const AcceptInvitationModal = (props) => {
                 onFinish={onFinish}
                 style={{ width: '100%' }}
             >
-                {boats.length <= 1 && classes.length > 0 && <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>}
                 <Form.Item
                     style={{ display: boats.length > 1 ? 'block' : 'none' }}
                     label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
@@ -134,6 +141,9 @@ export const AcceptInvitationModal = (props) => {
                     </SyrfFormSelect>
                 </Form.Item>
 
+                <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>
+
+                <InformationSharing event={request.event} t={t} />
 
                 {boats.length <= 1 && classes.length > 0 ?
                     (<Space style={{ justifyContent: 'flex-end', width: '100%' }} size={10}>
@@ -149,7 +159,6 @@ export const AcceptInvitationModal = (props) => {
                             {t(translations.my_event_list_page.register_as_a_competitor)}
                         </SyrfFormButton>
                     </Form.Item>)}
-
             </Form>
         </Spin>
     </Modal >);

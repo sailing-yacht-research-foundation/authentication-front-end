@@ -3,7 +3,6 @@ import { Menu } from 'antd';
 import { ReactComponent as Logo } from './assets/logo-light.svg';
 import {
   UserOutlined,
-  LockOutlined,
   ProfileOutlined,
   SearchOutlined,
   CalendarOutlined
@@ -114,12 +113,6 @@ export const SiderContent = (props) => {
           subMenuKey: 'account',
           title: t(translations.side_menu.profile.name),
           icon: <ProfileOutlined />,
-        },
-        {
-          key: routeKey.CHANGE_PASSWORD,
-          path: '/account/change-password',
-          icon: <LockOutlined />,
-          title: t(translations.side_menu.profile.change_password),
         },
         {
           key: routeKey.SETTINGS,

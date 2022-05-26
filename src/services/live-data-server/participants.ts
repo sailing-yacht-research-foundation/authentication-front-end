@@ -76,10 +76,11 @@ export const getMyInvitedEvents = (page: number, size: number = 10) => {
     }))
 }
 
-export const acceptInvitation = (requestId: string, vesselId: string, vesselParticipantGroupId: string) => {
+export const acceptInvitation = (requestId: string, vesselId: string, vesselParticipantGroupId: string, allowShareInformation: boolean) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${requestId}/accept-invitation`, {
         vesselId,
-        vesselParticipantGroupId
+        vesselParticipantGroupId,
+        allowShareInformation
     }))
 }
 
@@ -99,5 +100,11 @@ export const inviteGroupsAsCompetitors = (groups, calendarEventId) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/invite-from-groups`, {
         groupId: groups,
         calendarEventId,
+    }));
+}
+
+export const shareInformationAfterJoinedEvent = (participantId: string, allowShareInformation: boolean) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${participantId}`, {
+        allowShareInformation
     }));
 }

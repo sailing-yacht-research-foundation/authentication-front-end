@@ -203,6 +203,7 @@ export const ResultItem = (props) => {
                 raceName={race._source?.name}
                 lon={race._source?.approx_start_point?.coordinates[0]}
                 lat={race._source?.approx_start_point?.coordinates[1]}
+                eventId={race._source.event}
                 raceId={race._source?.id} />
             <Wrapper key={props.index}>
                 <HeadDescriptionWrapper>

@@ -6,7 +6,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 
-export const ProfileTabs = (props) => {
+export const ProfileTabs = () => {
 
     const { t } = useTranslation();
 
@@ -14,7 +14,6 @@ export const ProfileTabs = (props) => {
 
     const tabs = [
         { path: '/account', name: t(translations.profile_page.update_profile.account_information) },
-        { path: '/account/change-password', name: t(translations.profile_page.update_profile.password_security) },
         { path: '/account/integrations', name: t(translations.profile_page.update_profile.integrations) },
         { path: '/account/settings', name: t(translations.profile_page.update_profile.account_settings) },
         { path: '/account/subscription', name: t(translations.profile_page.update_profile.subscription) },
