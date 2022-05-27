@@ -132,8 +132,6 @@ export const MyEventForm = () => {
             response = await update(eventId, data);
         }
 
-        setIsSavingEvent(false);
-
         if (response.success) {
             onEventSaved(response, { lat, lon }, { lat: endLat || lat, lon: endLon || lon });
         } else {
@@ -141,11 +139,11 @@ export const MyEventForm = () => {
         }
     }
 
-    const onEventSaved = (response, startLocation, endLocation) => {
+    const onEventSaved = async (response, startLocation, endLocation) => {
         if (mode === MODE.CREATE) {
             toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
             setEvent(response.data);
-            createDefaultVesselParticipantGroup(response.data);
+            await createDefaultVesselParticipantGroup(response.data);
             setCoordinates({
                 lat: startLocation.lat,
                 lng: startLocation.lon
@@ -156,10 +154,11 @@ export const MyEventForm = () => {
                 lng: endLocation.lon
             })
         } else {
-            initData();
+            await initData();
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
         }
 
+        setIsSavingEvent(false);
         pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -181,7 +180,6 @@ export const MyEventForm = () => {
         await createCompetitionUnit(event.id, data);
         setMode(MODE.UPDATE);
         history.push(`/events/${event.id}/update`);
-        setIsSavingEvent(false);
         pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -195,7 +193,7 @@ export const MyEventForm = () => {
 
         if (response.success) {
             const couseId = await createDefaultCourse(event);
-            createANewDefaultCompetitionUnit(event, response.data.id, couseId);
+            await createANewDefaultCompetitionUnit(event, response.data.id, couseId);
         }
     }
 
