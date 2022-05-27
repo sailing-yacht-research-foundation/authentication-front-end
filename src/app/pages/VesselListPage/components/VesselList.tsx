@@ -56,6 +56,18 @@ export const VesselList = () => {
             render: (value) => renderEmptyValue(value),
         },
         {
+            title: t(translations.vessel_create_update_page.sail_number),
+            dataIndex: 'sailNumber',
+            key: 'sailNumber',
+            render: (value) => renderEmptyValue(value),
+        },
+        {
+            title: t(translations.vessel_create_update_page.model),
+            dataIndex: 'model',
+            key: 'model',
+            render: (value) => renderEmptyValue(value),
+        },
+        {
             title: t(translations.vessel_list_page.role),
             dataIndex: 'role',
             key: 'role',
