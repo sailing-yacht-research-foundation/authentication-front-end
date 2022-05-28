@@ -96,7 +96,7 @@ export const ArbitraryDocumentUploadForm = ({ event, showModal, setShowModal, re
                                                     validator(_, value) {
                                                         if (fields.length === 1) return Promise.resolve();
                                                         for (let i = 0; i < fields.length; i++) {
-                                                            if (i !== index && getFieldValue(['fields', i, 'documentName']) !== value) {
+                                                            if (i !== index && getFieldValue(['fields', i, 'documentName']) !== value || !value) {
                                                                 return Promise.resolve();
                                                             }
                                                         }
