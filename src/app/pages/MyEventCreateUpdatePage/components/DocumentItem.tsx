@@ -1,18 +1,19 @@
 import React from 'react';
-import { List, Upload, Spin, Button, Modal, Form, Checkbox } from 'antd';
+import { List, Button, Modal, Form, Checkbox } from 'antd';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { agreeToWaiver, uploadPdfs } from 'services/live-data-server/event-calendars';
+import { agreeToDocument, deleteDocument } from 'services/live-data-server/event-calendars';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { useForm } from 'antd/lib/form/Form';
 import { SyrfInputField } from 'app/components/SyrfForm';
 import { toast } from 'react-toastify';
+import { ConfirmModal } from 'app/components/ConfirmModal';
 import { getUserName } from 'utils/user-utils';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 
-export const PDFItem = (props) => {
+export const DocumentItem = (props) => {
 
     const authUser = useSelector(selectUser);
 
@@ -22,60 +23,29 @@ export const PDFItem = (props) => {
 
     const [showSignModal, setShowSignModal] = React.useState<boolean>(false);
 
-    const [waiverType, setWaiverType] = React.useState<string>('');
+    const [isDeletingDocument, setIsDeletingDocument] = React.useState<boolean>(false);
+
+    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = React.useState<boolean>(false);
 
     const [form] = useForm();
 
     const { t } = useTranslation();
-
-    const checkIfPdfExist = (pdfKey) => {
-        return event.hasOwnProperty(pdfKey) && !!event[pdfKey];
-    }
-
-    const uploadPDF = async (options, pdfKey) => {
-
-        const { onSuccess, onError, file } = options;
-
-        const fmData = new FormData();
-        fmData.append(pdfKey, file);
-
-        setIsLoading(true);
-        const response = await uploadPdfs(event.id!, fmData);
-        setIsLoading(false);
-
-        if (response.success) {
-            onSuccess();
-            reloadEvent();
-        } else {
-            onError();
-            showToastMessageOnRequestError(response.error);
-        }
-    }
-
-    const canUpload = () => {
-        return event.isEditor;
-    }
-
-    const getFileDownloadURLUsingPdfKey = (pdfKey) => {
-        return event[pdfKey];
-    }
-
-    const showSignWaiverModal = type => {
-        setShowSignModal(true);
-        setWaiverType(type);
-    }
 
     const reloadEvent = () => {
         if (reloadParent)
             reloadParent();
     }
 
-    const signWaiver = () => {
+    const canDeleteDocument = () => {
+        return event.isEditor;
+    }
+
+    const signDocument = () => {
         form
             .validateFields()
             .then(async () => {
                 setIsLoading(true);
-                const response = await agreeToWaiver(event.id!, waiverType);
+                const response = await agreeToDocument(event.id!, item.id);
                 setIsLoading(false);
 
                 if (response.success) {
@@ -92,25 +62,43 @@ export const PDFItem = (props) => {
             });
     }
 
-    const canSignWaiver = () => {
-        return checkIfPdfExist(item.formFieldName)
-            && event.isParticipant
-            && event.agreedWaivers?.filter(waiver => {
-                return waiver.waiverType === item.formFieldName
-            }).length === 0;
+    const canSignDocument = () => {
+        return event.isParticipant
+            && item.isRequired
+            && !item.signDate
+    }
+
+    const performDeleteDocument = async () => {
+        setIsDeletingDocument(true);
+        const response = await deleteDocument(event.id, item.id);
+        setIsDeletingDocument(false);
+
+        if (response.success) {
+            toast.success(t(translations.general.your_action_is_successful));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
     }
 
     return (<>
+        <ConfirmModal
+            title={t(translations.my_event_create_update_page.delete_document)}
+            content={t(translations.my_event_create_update_page.are_you_sure_you_want_to_delete_this_document)}
+            onOk={performDeleteDocument}
+            onCancel={() => setShowConfirmDeleteModal(false)}
+            loading={isDeletingDocument}
+            showModal={showConfirmDeleteModal}
+        />
         <Modal visible={showSignModal}
             confirmLoading={isLoading}
             onCancel={() => setShowSignModal(false)}
-            onOk={signWaiver}
-            title={t(translations.event_detail_page.sign_waiver)}
-            okText={t(translations.event_detail_page.sign_waiver)}
+            onOk={signDocument}
+            title={t(translations.event_detail_page.sign_document)}
+            okText={t(translations.event_detail_page.sign_document)}
             width={1000}
         >
-            <object width="100%" height="700" data={getFileDownloadURLUsingPdfKey(item.formFieldName)} type="application/pdf">
-                <a href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a>
+            <object width="100%" height="700" data={item.documentUrl} type="application/pdf">
+                <a href={item.documentUrl}>{t(translations.my_event_create_update_page.download)}</a>
             </object>
 
             <Form
@@ -118,7 +106,7 @@ export const PDFItem = (props) => {
                 style={{ marginTop: '10px' }}
                 layout="vertical"
                 name="basic"
-                onFinish={signWaiver}
+                onFinish={signDocument}
             >
                 <Form.Item
                     name="name"
@@ -146,20 +134,12 @@ export const PDFItem = (props) => {
         </Modal>
         <List.Item
             actions={[
-                (<Spin spinning={isLoading}>
-                    {canUpload() && <Upload
-                        accept=".pdf"
-                        showUploadList={false}
-                        customRequest={options => uploadPDF(options, item.formFieldName)}
-                    >
-                        <Button type="link">{t(translations.my_event_create_update_page.upload)}</Button>
-                    </Upload>}
-                </Spin>),
-                (checkIfPdfExist(item.formFieldName) ? <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a> : <span>N/A</span>),
-                canSignWaiver() && <Button type='link' onClick={e => showSignWaiverModal(item.formFieldName)}>Sign</Button>
+                (item.documentUrl ? <a rel="noreferrer" target='_blank' download href={item.documentUrl}>{t(translations.my_event_create_update_page.download)}</a> : <span>N/A</span>),
+                canSignDocument() && <Button onClick={()=> setShowSignModal(true)} type='link'>{t(translations.my_event_create_update_page.sign)}</Button>,
+                canDeleteDocument() && <Button danger onClick={() => setShowConfirmDeleteModal(true)} type='link'>{t(translations.general.delete)}</Button>,
             ]}
         >
-            <span>{item.name}</span>
+            <span>{item.documentName}</span>
         </List.Item>
     </>)
 }

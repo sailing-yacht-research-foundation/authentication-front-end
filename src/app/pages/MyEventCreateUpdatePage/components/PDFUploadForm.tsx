@@ -11,6 +11,9 @@ import styled from 'styled-components';
 import { getUserName } from 'utils/user-utils';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { ArbitraryDocumentUploadForm } from './ArbitraryDocumentUploadForm';
+import { getArbitraryDocumentsUsingEventId } from 'services/live-data-server/event-calendars';
+import { DocumentItem } from './DocumentItem';
 
 interface IPDFUploadForm {
     event: Partial<CalendarEvent>,
@@ -22,9 +25,18 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
 
     const { event, reloadParent, fullWidth } = props;
 
+    const [showArbitraryDocumentUploadModal, setShowArbitraryDocumentUploadModal] = React.useState<boolean>(false);
+
     const { t } = useTranslation();
 
     const authUser = useSelector(selectUser);
+
+    const [arbitraryPagination, setArbitraryPagination] = React.useState<any>({
+        page: 1,
+        total: 0,
+        rows: [],
+        size: 10
+    });
 
     const list = [
         {
@@ -67,15 +79,34 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
         return event.isParticipant && !event.isEditor && event.agreedWaivers?.length! < waiverCount;
     }
 
+    const getArbitraryDocuments = async (page, size) => {
+        const response = await getArbitraryDocumentsUsingEventId(event.id, page, size);
+
+        if (response.success) {
+            setArbitraryPagination({
+                ...arbitraryPagination,
+                rows: response.data.rows,
+                page,
+                size,
+                total: response.data.count
+            });
+        }
+    }
+
+    React.useEffect(() => {
+        if (event.id) getArbitraryDocuments(arbitraryPagination.page, arbitraryPagination.size);
+    }, [event]);
+
     return (
         <SyrfFormWrapper style={fullWidth ? { width: '100%', padding: '30px 15px' } : {}}>
+            <ArbitraryDocumentUploadForm reloadParent={() => getArbitraryDocuments(arbitraryPagination.page, arbitraryPagination.size)} event={event} showModal={showArbitraryDocumentUploadModal} setShowModal={setShowArbitraryDocumentUploadModal} />
             <PageHeaderContainer>
                 <PageHeaderTextSmall>{t(translations.my_event_create_update_page.pdf_documents)}</PageHeaderTextSmall>
                 {(!!event.noticeOfRacePDF || !!event.mediaWaiverPDF || !!event.disclaimerPDF) && <CreateButton onClick={downloadAllPdfs} icon={<DownloadOutlined />}>{t(translations.my_event_create_update_page.download_all)}</CreateButton>}
             </PageHeaderContainer>
 
             <List
-                className="demo-loadmore-list"
+                header={<DocumentTitle>{t(translations.my_event_create_update_page.waiver_documents)}</DocumentTitle>}
                 itemLayout="horizontal"
                 loading={false}
                 dataSource={list}
@@ -84,7 +115,27 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
                 )}
             />
 
+            <List
+                style={{ marginTop: '10px' }}
+                itemLayout="horizontal"
+                header={<DocumentTitle>{t(translations.my_event_create_update_page.additional_documents)}</DocumentTitle>}
+                loading={false}
+                dataSource={arbitraryPagination.rows}
+                pagination={{
+                    onChange: (page, size) => {
+                      getArbitraryDocuments(page, size)
+                    },
+                    current: arbitraryPagination.page,
+                    defaultCurrent: arbitraryPagination.page,
+                    pageSize: arbitraryPagination.size,
+                  }}
+                renderItem={item => (
+                    <DocumentItem item={item} event={event} reloadParent={reloadParent} />
+                )}
+            />
+
             {canShowSignWaiverAlert() && <ParticipantSignWaiverMessage>{t(translations.event_detail_page.hey_competitor_you_havent_signed_all_the_waivers, { competitorName: getUserName(authUser) })}</ParticipantSignWaiverMessage>}
+
 
         </SyrfFormWrapper>
     );
@@ -93,4 +144,8 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
 const ParticipantSignWaiverMessage = styled.div`
     color: #00000073;
     text-align: center;
+`;
+
+const DocumentTitle = styled.h4`
+
 `;
