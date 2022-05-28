@@ -37,6 +37,12 @@ export const ParticipantDetailList = (props) => {
             render: (value, record) => renderEmptyValue(renderAgreedWaivers(value)),
         },
         {
+            title: t(translations.participant_list.agreed_to_documents),
+            dataIndex: 'documentAgreements',
+            key: 'documentAgreements',
+            render: (value, record) => renderEmptyValue(record.documentAgreements?.map(doc => doc.documentName)?.join(', ')),
+        },
+        {
             title: t(translations.participant_list.email),
             dataIndex: 'email',
             key: 'email',
@@ -67,7 +73,7 @@ export const ParticipantDetailList = (props) => {
                     return String(value);
                 }
                 return renderEmptyValue(value);
-            } ,
+            },
         },
         {
             title: t(translations.participant_list.has_covid_vaccination_card),

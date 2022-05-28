@@ -29,6 +29,8 @@ export const DocumentItem = (props) => {
 
     const [form] = useForm();
 
+    const [documentActions, setDocumentActions] = React.useState<any>([]);
+
     const { t } = useTranslation();
 
     const reloadEvent = () => {
@@ -75,10 +77,21 @@ export const DocumentItem = (props) => {
 
         if (response.success) {
             toast.success(t(translations.general.your_action_is_successful));
+            reloadParent();
         } else {
             showToastMessageOnRequestError(response.error);
         }
+
+        setShowConfirmDeleteModal(false);
     }
+
+    React.useEffect(() => {
+        const actions: any = [];
+        if (item.documentUrl) actions.push(<a rel="noreferrer" target='_blank' download href={item.documentUrl}>{t(translations.my_event_create_update_page.download)}</a>);
+        if (canSignDocument()) actions.push(<Button onClick={()=> setShowSignModal(true)} type='link'>{t(translations.my_event_create_update_page.sign)}</Button>);
+        if (canDeleteDocument()) actions.push(<Button danger onClick={() => setShowConfirmDeleteModal(true)} type='link'>{t(translations.general.delete)}</Button>);
+        setDocumentActions(actions);
+    }, []);
 
     return (<>
         <ConfirmModal
@@ -133,11 +146,7 @@ export const DocumentItem = (props) => {
             </Form>
         </Modal>
         <List.Item
-            actions={[
-                (item.documentUrl ? <a rel="noreferrer" target='_blank' download href={item.documentUrl}>{t(translations.my_event_create_update_page.download)}</a> : <span>N/A</span>),
-                canSignDocument() && <Button onClick={()=> setShowSignModal(true)} type='link'>{t(translations.my_event_create_update_page.sign)}</Button>,
-                canDeleteDocument() && <Button danger onClick={() => setShowConfirmDeleteModal(true)} type='link'>{t(translations.general.delete)}</Button>,
-            ]}
+            actions={documentActions}
         >
             <span>{item.documentName}</span>
         </List.Item>

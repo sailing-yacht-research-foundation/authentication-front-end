@@ -1,7 +1,7 @@
 import React from 'react';
-import { List } from 'antd';
+import { List, Space, Spin } from 'antd';
 import { SyrfFormWrapper } from 'app/components/SyrfForm';
-import { CreateButton, PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
+import { CreateButton, IconWrapper, PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { PDFItem } from './PDFItem';
@@ -14,6 +14,7 @@ import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { ArbitraryDocumentUploadForm } from './ArbitraryDocumentUploadForm';
 import { getArbitraryDocumentsUsingEventId } from 'services/live-data-server/event-calendars';
 import { DocumentItem } from './DocumentItem';
+import { FaUpload } from 'react-icons/fa';
 
 interface IPDFUploadForm {
     event: Partial<CalendarEvent>,
@@ -24,6 +25,8 @@ interface IPDFUploadForm {
 export const PDFUploadForm = (props: IPDFUploadForm) => {
 
     const { event, reloadParent, fullWidth } = props;
+
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [showArbitraryDocumentUploadModal, setShowArbitraryDocumentUploadModal] = React.useState<boolean>(false);
 
@@ -53,18 +56,28 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
         }
     ];
 
-    const downloadAllPdfs = () => {
+    const downloadAllWaivers = () => {
         list.forEach(pdf => {
             if (!!event[pdf.formFieldName]) {
-                const link = document.createElement('a');
-                link.target = '_blank';
-                link.href = String(event[pdf.formFieldName]);
-                link.setAttribute('download', `${pdf.formFieldName}.pdf`); //or any other extension
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                generateDownLoadLink(pdf.formFieldName, String(event[pdf.formFieldName]));
             }
         })
+    }
+
+    const downloadAllDocuments = () => {
+        arbitraryPagination.rows.forEach(item => {
+            generateDownLoadLink(item.documentName, item.documentUrl);
+        })
+    }
+
+    const generateDownLoadLink = (name, url) => {
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = url;
+        link.setAttribute('download', `${name}.pdf`); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     const canShowSignWaiverAlert = () => {
@@ -76,11 +89,17 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
             }
         });
 
-        return event.isParticipant && !event.isEditor && event.agreedWaivers?.length! < waiverCount;
+        const hasUnsignedDocuments = arbitraryPagination.rows.filter(item => !item.signDate && item.isRequired).length > 0;
+
+        return event.isParticipant
+            && (event.agreedWaivers?.length! < waiverCount
+                || hasUnsignedDocuments);
     }
 
     const getArbitraryDocuments = async (page, size) => {
+        setIsLoading(true);
         const response = await getArbitraryDocumentsUsingEventId(event.id, page, size);
+        setIsLoading(false);
 
         if (response.success) {
             setArbitraryPagination({
@@ -102,11 +121,13 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
             <ArbitraryDocumentUploadForm reloadParent={() => getArbitraryDocuments(arbitraryPagination.page, arbitraryPagination.size)} event={event} showModal={showArbitraryDocumentUploadModal} setShowModal={setShowArbitraryDocumentUploadModal} />
             <PageHeaderContainer>
                 <PageHeaderTextSmall>{t(translations.my_event_create_update_page.pdf_documents)}</PageHeaderTextSmall>
-                {(!!event.noticeOfRacePDF || !!event.mediaWaiverPDF || !!event.disclaimerPDF) && <CreateButton onClick={downloadAllPdfs} icon={<DownloadOutlined />}>{t(translations.my_event_create_update_page.download_all)}</CreateButton>}
             </PageHeaderContainer>
 
             <List
-                header={<DocumentTitle>{t(translations.my_event_create_update_page.waiver_documents)}</DocumentTitle>}
+                header={<DocumentTitleWrapper>
+                    <DocumentTitle>{t(translations.my_event_create_update_page.waiver_documents)}</DocumentTitle>
+                    {(!!event.noticeOfRacePDF || !!event.mediaWaiverPDF || !!event.disclaimerPDF) && <CreateButton onClick={downloadAllWaivers} icon={<DownloadOutlined />}>{t(translations.my_event_create_update_page.download_all)}</CreateButton>}
+                </DocumentTitleWrapper>}
                 itemLayout="horizontal"
                 loading={false}
                 dataSource={list}
@@ -115,24 +136,35 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
                 )}
             />
 
-            <List
-                style={{ marginTop: '10px' }}
-                itemLayout="horizontal"
-                header={<DocumentTitle>{t(translations.my_event_create_update_page.additional_documents)}</DocumentTitle>}
-                loading={false}
-                dataSource={arbitraryPagination.rows}
-                pagination={{
-                    onChange: (page, size) => {
-                      getArbitraryDocuments(page, size)
-                    },
-                    current: arbitraryPagination.page,
-                    defaultCurrent: arbitraryPagination.page,
-                    pageSize: arbitraryPagination.size,
-                  }}
-                renderItem={item => (
-                    <DocumentItem item={item} event={event} reloadParent={reloadParent} />
-                )}
-            />
+            <Spin spinning={isLoading}>
+                <List
+                    style={{ marginTop: '10px' }}
+                    itemLayout="horizontal"
+                    header={<DocumentTitleWrapper>
+                        <DocumentTitle>{t(translations.my_event_create_update_page.additional_documents)}</DocumentTitle>
+                        <Space size={5}>
+                            {event.isEditor && <CreateButton
+                                onClick={() => setShowArbitraryDocumentUploadModal(true)}
+                                icon={<IconWrapper><FaUpload /></IconWrapper>}>{t(translations.my_event_create_update_page.upload)}</CreateButton>}
+                            {arbitraryPagination.rows.length > 0 && <CreateButton onClick={downloadAllDocuments} icon={<DownloadOutlined />}>{t(translations.my_event_create_update_page.download_all)}</CreateButton>}
+                        </Space>
+
+                    </DocumentTitleWrapper>}
+                    loading={false}
+                    dataSource={arbitraryPagination.rows}
+                    pagination={{
+                        onChange: (page, size) => {
+                            getArbitraryDocuments(page, size)
+                        },
+                        current: arbitraryPagination.page,
+                        defaultCurrent: arbitraryPagination.page,
+                        pageSize: arbitraryPagination.size,
+                    }}
+                    renderItem={item => (
+                        <DocumentItem item={item} event={event} reloadParent={reloadParent} />
+                    )}
+                />
+            </Spin>
 
             {canShowSignWaiverAlert() && <ParticipantSignWaiverMessage>{t(translations.event_detail_page.hey_competitor_you_havent_signed_all_the_waivers, { competitorName: getUserName(authUser) })}</ParticipantSignWaiverMessage>}
 
@@ -142,10 +174,15 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
 }
 
 const ParticipantSignWaiverMessage = styled.div`
+    margin-top: 30px;
     color: #00000073;
     text-align: center;
 `;
 
-const DocumentTitle = styled.h4`
+const DocumentTitle = styled.h4``;
 
+const DocumentTitleWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;

@@ -160,11 +160,11 @@ export const getArbitraryDocumentsUsingEventId = (calendarEventId, page, size) =
 }
 
 export const agreeToDocument = (calendarEventId, documentId) => {
-    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/agree-documents/${documentId}`, {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/agree-document/${documentId}`, {
         documentId
     }));
 }
 
 export const deleteDocument = (calendarEventId, documentId) => {
-    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/agree-documents/${documentId}`));
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/remove-document/${documentId}`));
 }

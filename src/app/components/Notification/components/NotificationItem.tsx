@@ -29,6 +29,7 @@ import { IoIosWarning } from 'react-icons/io';
 import { Button } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { HiDocumentAdd } from 'react-icons/hi';
 
 const notificationColor = {
     DELETE: '#DC6E1E',
@@ -137,6 +138,10 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
             case NotificationTypes.SIMULATION_DELETION:
                 icon = <FaRobot />
                 color = notificationColor.WARNING
+                break;
+            case NotificationTypes.NEW_EVENT_DOCUMENT_UPLOADED:
+                icon = <HiDocumentAdd/>
+                color = notificationColor.ANNOUNCEMENT
                 break;
             default:
                 icon = <AiOutlineGlobal />;

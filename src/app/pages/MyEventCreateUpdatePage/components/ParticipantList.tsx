@@ -204,7 +204,8 @@ export const ParticipantList = (props) => {
             const participantsData: any = [];
             response.data?.data.map((participant) => participantsData.push(flat({
                 ...participant,
-                waiverAgreements: participant.waiverAgreements?.map(waiver => waiver.waiverType)
+                waiverAgreements: participant.waiverAgreements?.map(waiver => waiver.waiverType),
+                documentAgreements: participant.documentAgreements?.map(doc => doc.documentName),
             }, {})));
             setCSVData(participantsData);
         }
