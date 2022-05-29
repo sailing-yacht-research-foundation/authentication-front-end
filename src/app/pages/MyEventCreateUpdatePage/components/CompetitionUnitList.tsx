@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
-import { renderRaceStartTime } from 'utils/helpers';
+import { renderRaceStartTime, truncateName } from 'utils/helpers';
 
 export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: CalendarEvent }) => {
 
@@ -30,7 +30,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             render: (text, record) => {
                 return (
                     <Tooltip title={t(translations.tip.view_this_race_in_the_playback)}>
-                        <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>
+                        <Link to={`/playback/?raceId=${record.id}`}>{truncateName(text)}</Link>
                     </Tooltip>
                 );
             },

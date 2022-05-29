@@ -514,3 +514,8 @@ export const renderRequirementBasedOnEventKey = (t, key) => {
             return t(translations.my_event_list_page.immigration_info);
     }
 }
+
+export const truncateName = (text, size = 100) => {
+    if (!text) return '';
+    return text.length > size ? `${text.substring(0, 50)}...` : text;
+}
