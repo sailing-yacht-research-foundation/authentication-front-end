@@ -109,7 +109,7 @@ export const PDFItem = (props) => {
             okText={t(translations.event_detail_page.sign_waiver)}
             width={1000}
         >
-            <object width="100%" height="700" data={getFileDownloadURLUsingPdfKey(item.formFieldName)} type="application/pdf">
+            <object width="100%" height="500" data={getFileDownloadURLUsingPdfKey(item.formFieldName)} type="application/pdf">
                 <a href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a>
             </object>
 

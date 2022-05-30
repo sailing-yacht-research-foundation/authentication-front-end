@@ -110,7 +110,7 @@ export const DocumentItem = (props) => {
             okText={t(translations.event_detail_page.sign_document)}
             width={1000}
         >
-            <object width="100%" height="700" data={item.documentUrl} type="application/pdf">
+            <object width="100%" height="500" data={item.documentUrl} type="application/pdf">
                 <a href={item.documentUrl}>{t(translations.my_event_create_update_page.download)}</a>
             </object>
 

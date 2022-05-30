@@ -209,6 +209,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
             case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
             case NotificationTypes.EVENT_INACTIVITY_WARNING:
             case NotificationTypes.EVENT_MESSAGES_RECEIVED:
+            case NotificationTypes.NEW_EVENT_DOCUMENT_UPLOADED:
                 history.push(`/events/${notification.metadata?.calendarEventId}`);
                 break;
             case NotificationTypes.USER_NEW_FOLLOWER:
