@@ -177,7 +177,14 @@ export const MyEventForm = () => {
             courseId: courseId
         };
 
-        await createCompetitionUnit(event.id, data);
+        const response = await createCompetitionUnit(event.id, data);
+
+        if (response.success) {
+            toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data.name }));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
         setMode(MODE.UPDATE);
         history.push(`/events/${event.id}/update`);
         pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
@@ -192,15 +199,22 @@ export const MyEventForm = () => {
         const response = await createVesselParticipantGroup(data);
 
         if (response.success) {
+            toast.success(t(translations.vessel_participant_group_create_update_page.created_a_new_group, { name: response.data?.name }))
             const couseId = await createDefaultCourse(event);
             await createANewDefaultCompetitionUnit(event, response.data.id, couseId);
+        } else {
+            showToastMessageOnRequestError(response.error);
         }
     }
 
     const createDefaultCourse = async (event) => {
         const response = await createCourse(event.id, 'Default Course', []);
 
-        if (response.success) return response.data.id;
+        if (response.success) {
+            toast.success(t(translations.my_event_create_update_page.successfully_created_a_new_default_course_for_this_event));
+            return response.data.id;
+        }
+        else showToastMessageOnRequestError(response.error);
 
         return undefined;
     }
