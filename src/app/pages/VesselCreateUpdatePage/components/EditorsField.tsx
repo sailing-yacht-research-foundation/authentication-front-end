@@ -35,9 +35,22 @@ export const EditorsField = (props) => {
         history.push(`/${item.type === AdminType.GROUP ? 'groups' : 'profile'}/${item.id}`);
     }
 
+    const handleSwitchChange = (checked, e, item) => {
+        e.stopPropagation();
+
+        setItems(items.map(i => {
+            if (i.id === item.id) {
+                i.isIndividualAssignment = checked
+            }
+
+            return i;
+        }))
+    }
+
     const renderItemResults = () => {
         return items.map(item => <Select.Option style={{ padding: '5px' }} value={JSON.stringify(item)}>
             <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name}
+            {item.type === AdminType.GROUP && <Switch checked={item.isIndividualAssignment} style={{ marginLeft: '10px' }} checkedChildren={t(translations.my_event_create_update_page.group_members_assignment)} unCheckedChildren={t(translations.my_event_create_update_page.group_assignment)} onChange={(checked, e) => handleSwitchChange(checked, e, item)} />}
         </Select.Option>)
     }
 

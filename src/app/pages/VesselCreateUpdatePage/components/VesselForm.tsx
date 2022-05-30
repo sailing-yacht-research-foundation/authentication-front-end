@@ -75,6 +75,7 @@ export const VesselForm = () => {
         if (editors && Array.isArray(editors)) {
             editors.filter(item => item.type === AdminType.GROUP).forEach((item, index) => {
                 form.append(`groupEditors[${index}]`, item.id);
+                form.append(`groupEditors[${index}][isIndividualAssignment]`, String(!!item.isIndividualAssignment));
             });
             editors.filter(item => item.type === AdminType.INDIVIDUAL).forEach((item, index) => {
                 form.append(`editors[${index}]`, item.id);
@@ -125,6 +126,7 @@ export const VesselForm = () => {
                         id: editor.id,
                         avatar: editor.groupImage,
                         name: editor.groupName,
+                        isIndividualAssignment: false
                     }))],
                 });
             } else {
