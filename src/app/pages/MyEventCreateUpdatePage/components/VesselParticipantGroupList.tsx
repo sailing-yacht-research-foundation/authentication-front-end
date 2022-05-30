@@ -10,6 +10,7 @@ import { translations } from 'locales/translations';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { TIME_FORMAT } from 'utils/constants';
 import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
+import { truncateName } from 'utils/helpers';
 
 export const VesselParticipantGroupList = (props) => {
 
@@ -22,7 +23,9 @@ export const VesselParticipantGroupList = (props) => {
             title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
-            render: (value) => value
+            render: (value) => <Tooltip title={value}>
+                {truncateName(value, 50)}
+            </Tooltip>
         },
         {
             title: t(translations.general.created_date),

@@ -19,7 +19,7 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { renderEmptyValue, showToastMessageOnRequestError } from 'utils/helpers';
+import { renderEmptyValue, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 
 const defaultOptions = {
@@ -58,7 +58,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                                 </NoImageContainer>
                             }
                             <Tooltip title={t(translations.my_tracks_page.watch_this_track, { trackName: trackName })}>
-                                <Link to={() => renderTrackParamIfExists(record)}>{trackName}</Link>
+                                <Link to={() => renderTrackParamIfExists(record)}>{truncateName(trackName, 50)}</Link>
                             </Tooltip>
                         </FlexWrapper>
                     );
@@ -67,7 +67,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                         <NoImageContainer>
                             <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                         </NoImageContainer>
-                        <div>{record.event?.name}</div>
+                        <div>{truncateName(record.event?.name, 50)}</div>
                     </FlexWrapper>
                 );
             }

@@ -19,7 +19,7 @@ import { Share } from "./components/Share";
 import { FullScreen } from './components/FullScreen';
 import { Link } from "react-router-dom";
 import { StyleConstants } from "styles/StyleConstants";
-import { handleGoBack } from "utils/helpers";
+import { handleGoBack, truncateName } from "utils/helpers";
 import { SimulateRaceButton } from "./components/SimulateRaceButton";
 
 export const PlaybackPage = () => {
@@ -138,9 +138,9 @@ export const PlaybackPage = () => {
           <PageInfoContainer>
             <PageHeadingContainer>
               <div>
-                <PageHeading>{raceIdentity.name}</PageHeading>
-                {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{raceIdentity.eventName}</Link></span>}
-                {raceIdentity.description && <PageDescription>{raceIdentity.description}</PageDescription>}
+                <PageHeading>{truncateName(raceIdentity.name)}</PageHeading>
+                {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{truncateName(raceIdentity.eventName) }</Link></span>}
+                {raceIdentity.description && <PageDescription>{truncateName(raceIdentity.description)}</PageDescription>}
               </div>
 
               <PageHeadingRightContainer>
