@@ -515,7 +515,7 @@ export const renderRequirementBasedOnEventKey = (t, key) => {
     }
 }
 
-export const truncateName = (text, size = 100) => {
+export const truncateName = (text, size = 50) => {
     if (!text) return '';
     return text.length > size ? `${text.substring(0, 50)}...` : text;
 }
