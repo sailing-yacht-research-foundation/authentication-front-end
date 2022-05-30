@@ -104,3 +104,9 @@ export const logout = (refresh_token: string) => {
         refresh_token
     }));
 }
+
+export const sendRequestVerifyEmail = (email) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/users/verify-email`, {
+        email: email
+    }));
+}

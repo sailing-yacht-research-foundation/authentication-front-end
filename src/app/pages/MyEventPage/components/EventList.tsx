@@ -14,13 +14,16 @@ import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { RaceList } from './RaceList';
 import { EventAdmins } from 'app/pages/EventDetailPage/components/EventAdmins';
 import { CalendarEvent } from 'types/CalendarEvent';
+import { ConfirmModal } from 'app/components/ConfirmModal';
+import { deleteParticipant } from 'services/live-data-server/participants';
+import { toast } from 'react-toastify';
 
 const defaultOptions = {
   loop: true,
@@ -34,6 +37,8 @@ const defaultOptions = {
 export const EventList = () => {
 
   const { t } = useTranslation();
+
+  const [showLeaveEventConfirmModal, setShowLeaveEventConfirmModal] = React.useState<boolean>(false);
 
   const translate = {
     status_open_regis: t(translations.my_event_list_page.status_openregistration),
@@ -126,6 +131,7 @@ export const EventList = () => {
               }} type="primary">{t(translations.general.update)}</BorderedButton>
               {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>}
             </>}
+            {canLeaveEvent(record) && <BorderedButton onClick={() => showLeaveEventModal(record)} danger>{t(translations.my_event_list_page.leave_event_button)}</BorderedButton>}
           </Space>
         );
       }
@@ -154,10 +160,16 @@ export const EventList = () => {
 
   const isChangingPage = useSelector(selectIsChangingPage);
 
+  const [isLeavingEvent, setIsLeavingEvent] = React.useState<boolean>(false);
+
   React.useEffect(() => {
     dispatch(actions.getEvents({ page: 1, size: 10 }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const canLeaveEvent = (record) => {
+    return record.isParticipant && record.participantId && [EventState.ON_GOING, EventState.SCHEDULED].includes(record.status);
+  }
 
   React.useEffect(() => {
     const resultsWithKey = results.map((result) => ({ ...result, key: result.id }))
@@ -185,6 +197,25 @@ export const EventList = () => {
     );
   }
 
+  const showLeaveEventModal = (event) => {
+    setEvent(event);
+    setShowLeaveEventConfirmModal(true);
+  }
+
+  const leaveEvent = async () => {
+    setIsLeavingEvent(true);
+    const response = await deleteParticipant(event.participantId!);
+    setIsLeavingEvent(false);
+
+    if (response.success) {
+      toast.success(t(translations.my_event_list_page.successfully_left_the_event));
+      setShowLeaveEventConfirmModal(false);
+      dispatch(actions.getEvents({ page, size }));
+    } else {
+      showToastMessageOnRequestError(response.success);
+    }
+  }
+
   return (
     <>
       <DeleteEventModal
@@ -192,6 +223,14 @@ export const EventList = () => {
         onRaceDeleted={onRaceDeleted}
         showDeleteModal={showDeleteModal}
         setShowDeleteModal={setShowDeleteModal}
+      />
+      <ConfirmModal
+        loading={isLeavingEvent}
+        title={t(translations.my_event_list_page.leave_event, { eventName: event.name })}
+        content={t(translations.my_event_list_page.you_are_about_to_leave_this_event_are_you_sure_you_want_to_continue)}
+        onOk={leaveEvent}
+        showModal={showLeaveEventConfirmModal}
+        onCancel={() => setShowLeaveEventConfirmModal(false)}
       />
       {mappedResults.length > 0 ? (
         <Spin spinning={isChangingPage}>

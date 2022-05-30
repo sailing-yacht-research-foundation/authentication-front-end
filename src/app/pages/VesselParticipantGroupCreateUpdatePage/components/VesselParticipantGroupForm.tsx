@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { VesselList } from './VesselList';
 import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import { MODE } from 'utils/constants';

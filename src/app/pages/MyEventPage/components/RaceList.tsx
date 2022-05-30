@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { BorderedButton } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
+import { renderRaceStartTime } from 'utils/helpers';
 
 export const RaceList = (props) => {
 
@@ -26,21 +27,24 @@ export const RaceList = (props) => {
             render: (text, record) => {
                 return <Link to={`/playback/?raceId=${record.id}`}>{text}</Link>;
             },
-            width: '25%'
         },
         {
             title: t(translations.competition_unit_list_page.start_date),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
-            render: (value) => moment(value).format(TIME_FORMAT.date_text),
-            width: '25%'
+            render: (value, record) => renderRaceStartTime(record, value, t),
+        },
+        {
+            title: t(translations.general.status),
+            dataIndex: 'status',
+            key: 'status',
+            render: (value) => value,
         },
         {
             title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
-            width: '25%'
         },
         {
             title: 'Action',

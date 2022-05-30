@@ -23,7 +23,6 @@ import { SignupPage } from './pages/SignupPage/Loadable';
 import { HomePage } from './pages/HomePage/Loadable';
 import { VerifyAccountPage } from './pages/VerifyAccountPage/Loadable';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
-import { ChangePasswordPage } from './pages/ChangePasswordPage/Loadable';
 import { ProfilePage } from './pages/ProfilePage/Loadable';
 import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
 import { EULAPage } from './pages/EULAPage/Loadable';
@@ -71,6 +70,7 @@ import { steps } from 'utils/tour-steps';
 import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
 import { selectIsSimplifiedPlayback } from './pages/PlaybackPage/components/slice/selectors';
+import { EmailNotVerifiedPage } from './pages/EmailNotVerifiedPage/Loadable';
 
 
 const { Sider, Content } = Layout;
@@ -196,7 +196,6 @@ export function App(props) {
               <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
               <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/change-password'} component={ChangePasswordPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account'} component={ProfilePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/integrations'} component={ExternalCredentialsManagePage} />
               <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
@@ -237,6 +236,7 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/settings'} component={ProfileSettingsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/subscription'} component={SubscriptionPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/payment-success'} component={PaymentSucessPage} />
+              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account-not-verified'} component={EmailNotVerifiedPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ToastContainer />

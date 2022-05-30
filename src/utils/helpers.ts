@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
-import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria } from 'utils/constants';
+import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TIME_FORMAT } from 'utils/constants';
 
 /**
  * Check if is mobile
@@ -472,4 +472,45 @@ export const handleGoBack = (history) => {
 
 export const getBoatNameFromVesselParticipantObject = (vesselparticipant) => {
     return vesselparticipant?.vessel?.publicName || '';
+}
+
+export const flat = (obj, out) => {
+    if (obj) {
+        Object.keys(obj).forEach(key => {
+            if (typeof obj[key] == 'object' && obj[key]?.constructor !== Array) {
+                out = flat(obj[key], out) //recursively call for nesteds
+            } else {
+                if (obj[key] !== undefined)
+                    out[key] = obj[key] //direct assign for values
+            }
+        });
+    }
+
+    return out;
+}
+
+export const renderRaceStartTime = (record, value, t) => {
+    const valueAsMomentObject = moment(value);
+    if (valueAsMomentObject.isValid()) {
+        return valueAsMomentObject.format(TIME_FORMAT.date_text);
+    } else if (RaceStatus.POSTPONED === record.status) {
+        return t(translations.event_detail_page.this_race_is_postponed_therefore_its_start_time_is_not_available);
+    }
+
+    return renderEmptyValue(null);
+}
+
+export const renderRequirementBasedOnEventKey = (t, key) => {
+    switch (key) {
+        case 'requireEmergencyContact':
+            return t(translations.my_event_list_page.emergency_contact);
+        case 'requireCovidCertificate':
+            return t(translations.my_event_list_page.covid_vaccination);
+        case 'requireMedicalProblems':
+            return t(translations.my_event_list_page.medical_problems);
+        case 'requireFoodAllergies':
+            return t(translations.my_event_list_page.food_allergies);
+        case 'requireImmigrationInfo':
+            return t(translations.my_event_list_page.immigration_info);
+    }
 }

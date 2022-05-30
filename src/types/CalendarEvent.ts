@@ -69,4 +69,8 @@ export interface CalendarEvent {
     organizerGroupDetail: Group;
     isPaidEvent: boolean;
     isPaid: boolean;
+    agreedWaivers?: any[];
+    isSimulation: boolean;
+    participantId: string;
+    participantDetail: any;
 }

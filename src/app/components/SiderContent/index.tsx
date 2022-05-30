@@ -3,7 +3,6 @@ import { Menu } from 'antd';
 import { ReactComponent as Logo } from './assets/logo-light.svg';
 import {
   UserOutlined,
-  LockOutlined,
   ProfileOutlined,
   SearchOutlined,
   CalendarOutlined
@@ -116,12 +115,6 @@ export const SiderContent = (props) => {
           icon: <ProfileOutlined />,
         },
         {
-          key: routeKey.CHANGE_PASSWORD,
-          path: '/account/change-password',
-          icon: <LockOutlined />,
-          title: t(translations.side_menu.profile.change_password),
-        },
-        {
           key: routeKey.SETTINGS,
           path: '/account/settings',
           icon: <AiOutlineSetting />,
@@ -170,12 +163,12 @@ export const SiderContent = (props) => {
       if (item.path) {
         if (matchPath(location.pathname, {
           path: item.path,
-          exact: true,
+          exact: false,
           strict: false
         })) {
           matchItem = item;
         }
-      } else {
+      } else { // nested routes.
         item.items.forEach(childRoute => {
           if (matchPath(location.pathname, {
             path: childRoute.path,

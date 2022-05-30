@@ -8,6 +8,7 @@ import { media } from 'styles/media';
 import { NotificationSettings } from './NotificationSettings';
 import { DeveloperOptionSetting } from './DeveloperOptionSetting';
 import { SyrfFormWrapper } from 'app/components/SyrfForm';
+import { EmailSetting } from './EmailSetting';
 
 export const Settings = () => {
 
@@ -17,19 +18,38 @@ export const Settings = () => {
         <Wrapper>
             <ProfileTabs />
             <StyledCollapsed>
-                <StyledCollapsedPanel header={t(translations.profile_page.update_profile.notifications)} key="1">
-                    <NotificationSettings/>
+            <StyledCollapsedPanel header={<>
+                    {t(translations.settings_page.email_and_password)}<br />
+                    <CollapseDescription>{t(translations.settings_page.control_you_email_and_password)}</CollapseDescription>
+                </>} key="1">
+                    <EmailSetting />
                 </StyledCollapsedPanel>
-                <StyledCollapsedPanel header={t(translations.profile_page.update_profile.developer_option)} key="2">
-                    <DeveloperOptionSetting/>
+                <StyledCollapsedPanel header={<>
+                    {t(translations.settings_page.notifications)}
+                    <br /><CollapseDescription>{t(translations.settings_page.notification_description)}</CollapseDescription>
+                </>} key="2">
+                    <NotificationSettings />
                 </StyledCollapsedPanel>
-            </StyledCollapsed>
-        </Wrapper>
+                <StyledCollapsedPanel header={<>
+                    {t(translations.profile_page.update_profile.developer_option)}<br />
+                    <CollapseDescription>{t(translations.settings_page.developer_description)}</CollapseDescription>
+                </>} key="3">
+                    <DeveloperOptionSetting />
+                </StyledCollapsedPanel>
+            </StyledCollapsed >
+        </Wrapper >
     )
 }
 
 export const StyledSyrfFormWrapper = styled(SyrfFormWrapper)`
     width: 100% !important;
+`;
+
+const CollapseDescription = styled.div`
+    font-size: 13px;
+    margin-left: 25px;
+    color: #00000073;
+    font-weight: normal;
 `;
 
 const StyledCollapsedPanel = styled(Collapse.Panel)`
@@ -56,10 +76,16 @@ const StyledCollapsed = styled(Collapse)`
         border: none;
     }
 
+
     ${media.medium`
-    width: 65%;
-    padding: 30px 56px;
-`}
+        width: 100%;
+        padding: 30px 56px;
+    `}
+
+    ${media.large`
+        width: 65%;
+        padding: 30px 56px;
+    `}
 `;
 
 const Wrapper = styled.div`
@@ -88,8 +114,8 @@ const Wrapper = styled.div`
             }
         }
     }
-
-    ${media.large`
+    
+    ${media.small`
         .ant-form-item-control-input {
             text-align: none;
         }
