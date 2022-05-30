@@ -1,13 +1,13 @@
 import React from 'react';
 import { Modal, Spin, Form, Select, Button, Space } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
 import { getMany } from 'services/live-data-server/vessels';
 import styled from 'styled-components';
 import { acceptInvitation } from 'services/live-data-server/participants';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { handleOnBoatSelected, showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { InformationSharing } from 'app/components/RegisterRaceModal/InformationSharing';
 import { useDispatch } from 'react-redux';
@@ -45,8 +45,10 @@ export const AcceptInvitationModal = (props) => {
             setBoats(response.data?.rows);
             if (response.data?.count > 0) {
                 form.setFieldsValue({
-                    vesselId: response.data?.rows[0]?.id
+                    vesselId: response.data?.rows[0]?.id,
+                    sailNumber: response.data?.rows[0]?.sailNumber
                 });
+
             }
         }
     }
@@ -73,10 +75,10 @@ export const AcceptInvitationModal = (props) => {
     }
 
     const onFinish = async (values) => {
-        const { vesselId, vesselParticipantGroupId, allowShareInformation } = values;
+        const { vesselId, vesselParticipantGroupId, sailNumber, allowShareInformation } = values;
 
         setIsLoading(true);
-        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId, allowShareInformation);
+        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId, sailNumber, allowShareInformation);
         setIsLoading(false);
 
         if (response.success) {
@@ -111,19 +113,28 @@ export const AcceptInvitationModal = (props) => {
                 onFinish={onFinish}
                 style={{ width: '100%' }}
             >
-                <Form.Item
-                    style={{ display: boats.length > 1 ? 'block' : 'none' }}
-                    label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
-                    name="vesselId">
-                    <SyrfFormSelect
-                        showSearch
-                        allowClear
-                        placeholder={t(translations.my_event_list_page.select_a_boat)}
-                        optionFilterProp="children"
-                    >
-                        {renderBoatsList()}
-                    </SyrfFormSelect>
-                </Form.Item>
+        
+                <div style={{ display: boats.length > 1 ? 'block' : 'none' }}>
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
+                        name="vesselId">
+                        <SyrfFormSelect
+                            showSearch
+                            allowClear
+                            placeholder={t(translations.my_event_list_page.select_a_boat)}
+                            optionFilterProp="children"
+                            onChange={(boatId) => handleOnBoatSelected(boats, boatId, form)}
+                        >
+                            {renderBoatsList()}
+                        </SyrfFormSelect>
+                    </Form.Item>
+
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.my_event_list_page.sail_number)}</SyrfFieldLabel>}
+                        name="sailNumber">
+                        <SyrfInputField />
+                    </Form.Item>
+                </div>
 
                 <Form.Item
                     style={{ display: classes.length > 1 ? 'block' : 'none' }}
