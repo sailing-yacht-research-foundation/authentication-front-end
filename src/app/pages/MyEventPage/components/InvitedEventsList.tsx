@@ -8,7 +8,7 @@ import { translations } from 'locales/translations';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue, renderTimezoneInUTCOffset } from 'utils/helpers';
+import { renderEmptyValue, renderTimezoneInUTCOffset, truncateName } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
@@ -46,7 +46,9 @@ export const InvitedEventLists = (props) => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
-                return <Link to={`/events/${record?.event.id}`}>{record?.event.name}</Link>;
+                return <Tooltip title={record?.event.name}>
+                    <Link to={`/events/${record?.event.id}`}>{truncateName(record?.event.name)}</Link>
+                </Tooltip>;
             },
         },
         {
