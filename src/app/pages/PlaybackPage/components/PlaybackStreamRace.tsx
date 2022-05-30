@@ -291,13 +291,17 @@ export const PlaybackStreamRace = () => {
           }
           break;
         case WSMessageDataType.TRACKING_STATE_UPDATE:
-          switch(data?.type) {
+          const boatName = getBoatNameFromVesselParticipantObject(groupedPosition.current[data?.vesselParticipantId]);
+          switch (data?.type) {
             case WSTrackingStateUpdate.PARTICIPANT_START_TRACKING:
-              message.info(t(translations.playback_page.boat_started_tracking, { boat_name: getBoatNameFromVesselParticipantObject(groupedPosition.current[data?.vesselParticipantId]) }));
+              message.info(t(translations.playback_page.boat_started_tracking, { boat_name: boatName }));
               break;
             case WSTrackingStateUpdate.PARTICIPANT_STOP_TRACKING:
-              message.info(t(translations.playback_page.boat_stopped_tracking, { boat_name: getBoatNameFromVesselParticipantObject(groupedPosition.current[data?.vesselParticipantId]) }));
+              message.info(t(translations.playback_page.boat_stopped_tracking, { boat_name: boatName }));
               eventEmitter.emit(RaceEmitterEvent.CHANGE_BOAT_COLOR_TO_GRAY, data?.vesselParticipantId);
+              break;
+            case WSTrackingStateUpdate.DISCONNECTED:
+              message.info(t(translations.playback_page.boat_disconnected, { boat_name: boatName }));
               break;
           }
           break;
