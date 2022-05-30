@@ -1,11 +1,11 @@
 import React from 'react';
 import { Modal, Spin, Form, Select, Button, Space } from 'antd';
-import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect } from 'app/components/SyrfForm';
+import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { getMany } from 'services/live-data-server/vessels';
 import styled from 'styled-components';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { handleOnBoatSelected, showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { joinCompetitionUnit } from 'services/live-data-server/open-competition';
 import { Vessel } from 'types/Vessel';
@@ -47,7 +47,8 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
             setBoats(response.data?.rows);
             if (response.data?.count > 0) {
                 form.setFieldsValue({
-                    vesselId: response.data?.rows[0]?.id
+                    vesselId: response.data?.rows[0]?.id,
+                    sailNumber: response.data?.rows[0]?.sailNumber
                 });
             }
         }
@@ -58,10 +59,10 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
     }
 
     const onFinish = async (values) => {
-        const { vesselId, allowShareInformation } = values;
+        const { vesselId, allowShareInformation, sailNumber } = values;
 
         setIsLoading(true);
-        const response = await joinCompetitionUnit(raceId, vesselId, allowShareInformation, lon, lat);
+        const response = await joinCompetitionUnit(raceId, vesselId, sailNumber, allowShareInformation, lon, lat);
         setIsLoading(false);
 
         if (response.success) {
@@ -104,41 +105,51 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
                 onFinish={onFinish}
                 style={{ width: '100%' }}
             >
-                <Form.Item
-                    style={{ display: boats.length > 1 ? 'block' : 'none' }}
-                    label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
-                    name="vesselId">
-                    <SyrfFormSelect
-                        showSearch
-                        allowClear
-                        placeholder={t(translations.my_event_list_page.select_a_boat)}
-                        optionFilterProp="children"
-                    >
-                        {renderBoatsList()}
-                    </SyrfFormSelect>
-                </Form.Item>
+                <div style={{ display: boats.length > 1 ? 'block' : 'none' }}>
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}
+                        name="vesselId">
+                        <SyrfFormSelect
+                            showSearch
+                            allowClear
+                            placeholder={t(translations.my_event_list_page.select_a_boat)}
+                            optionFilterProp="children"
+                            onChange={(boatId) => handleOnBoatSelected(boats, boatId, form)}
+                        >
+                            {renderBoatsList()}
+                        </SyrfFormSelect>
+                    </Form.Item>
+
+                    <Form.Item
+                        label={<SyrfFieldLabel>{t(translations.my_event_list_page.sail_number)}</SyrfFieldLabel>}
+                        name="sailNumber">
+                        <SyrfInputField />
+                    </Form.Item>
+                </div>
 
                 <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>
 
-                <InformationSharing event={event} t={t}/>
+                <InformationSharing event={event} t={t} />
 
-                {boats.length <= 1 ?
-                    (<Space style={{ justifyContent: 'flex-end', width: '100%' }} size={10}>
-                        <Button type='primary' onClick={() => form.submit()}>
-                            {t(translations.my_event_list_page.yes)}
-                        </Button>
-                        <Button onClick={() => setShowModal(false)}>
-                            {t(translations.my_event_list_page.no)}
-                        </Button>
+                {
+                    boats.length <= 1 ?
+                        (<Space style={{ justifyContent: 'flex-end', width: '100%' }} size={10}>
+                            <Button type='primary' onClick={() => form.submit()}>
+                                {t(translations.my_event_list_page.yes)}
+                            </Button>
+                            <Button onClick={() => setShowModal(false)}>
+                                {t(translations.my_event_list_page.no)}
+                            </Button>
 
-                    </Space>) : (<Form.Item>
-                        <SyrfFormButton type="primary" htmlType="submit">
-                            {t(translations.my_event_list_page.register_as_a_competitor)}
-                        </SyrfFormButton>
-                    </Form.Item>)}
+                        </Space>) : (<Form.Item>
+                            <SyrfFormButton type="primary" htmlType="submit">
+                                {t(translations.my_event_list_page.register_as_a_competitor)}
+                            </SyrfFormButton>
+                        </Form.Item>)
+                }
 
-            </Form>
-        </Spin>
+            </Form >
+        </Spin >
     </Modal >);
 }
 
