@@ -111,7 +111,7 @@ export const getEventRegisteredVessels = (calendarEventId: string, page: number)
 }
 
 export const uploadPdfs = (calendarEventId: string, formData: FormData) => {
-    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/upload-pdfs`, formData,  {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/upload-pdfs`, formData, {
         headers: { "content-type": "multipart/form-data" }
     }));
 }
@@ -140,6 +140,33 @@ export const getDetailedEventParticipantInfoById = (calendarEventId: string, par
 
 export const getEventMessages = (calendarEventId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/messages`));
+}
+
+export const uploadDocuments = (calendarEventId, formData) => {
+    return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/upload-document`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+}
+
+export const getArbitraryDocumentsUsingEventId = (calendarEventId, page, size) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/documents`, {
+        params: {
+            page,
+            size
+        }
+    }));
+}
+
+export const agreeToDocument = (calendarEventId, documentId) => {
+    return formatServicePromiseResponse(syrfRequest.patch(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/agree-document/${documentId}`, {
+        documentId
+    }));
+}
+
+export const deleteDocument = (calendarEventId, documentId) => {
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/remove-document/${documentId}`));
 }
 
 export const getPrivateImages = (calendarEventId: string, participantId: string) => {
