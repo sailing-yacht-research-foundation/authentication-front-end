@@ -1,11 +1,11 @@
 import React from 'react';
-import { Spin, Table } from 'antd';
+import { Image, Spin, Table } from 'antd';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
 import { renderEmptyValue } from 'utils/helpers';
-import { getDetailedEventParticipantInfoById } from 'services/live-data-server/event-calendars';
+import { getDetailedEventParticipantInfoById, getPrivateImages } from 'services/live-data-server/event-calendars';
 
 export const ParticipantDetailList = (props) => {
 
@@ -20,6 +20,11 @@ export const ParticipantDetailList = (props) => {
     const { eventId, participant } = props;
 
     const [participantData, setParticipantData] = React.useState({});
+
+    const [privateImage, setPrivateImage] = React.useState({
+        covidVaccinationCard: '',
+        passportPhoto: ''
+    })
 
     const waiverKeyToText = (key) => {
         return waiverKey[key] || key;
@@ -67,7 +72,7 @@ export const ParticipantDetailList = (props) => {
                     return String(value);
                 }
                 return renderEmptyValue(value);
-            } ,
+            },
         },
         {
             title: t(translations.participant_list.has_covid_vaccination_card),
@@ -105,6 +110,19 @@ export const ParticipantDetailList = (props) => {
             dataIndex: 'immigrationInformation.issueCountry',
             key: 'immigrationInformation.issueCountry',
             render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.issueCountry)),
+        },
+
+        {
+            title: t(translations.participant_list.covid_card),
+            dataIndex: 'covidCard',
+            key: 'covidCard',
+            render: (value, record) => renderPrivateImageIfExists(record, privateImage.covidVaccinationCard),
+        },
+        {
+            title: t(translations.participant_list.passport_photo),
+            dataIndex: 'passportImage',
+            key: 'passportImage',
+            render: (value, record) => renderPrivateImageIfExists(record, privateImage.passportPhoto),
         },
         {
             title: t(translations.participant_list.emergency_contact_name),
@@ -155,6 +173,7 @@ export const ParticipantDetailList = (props) => {
 
         if (response.success) {
             setParticipantData(response.data?.data || {});
+            getParticipantPrivateImages();
         }
     }
 
@@ -164,6 +183,23 @@ export const ParticipantDetailList = (props) => {
         }
 
         return finalValue;
+    }
+
+    const getParticipantPrivateImages = async () => {
+        const response = await getPrivateImages(eventId, participant.id);
+
+        if (response.success) {
+            setPrivateImage({
+                covidVaccinationCard: response.data?.covidVaccinationCard || '',
+                passportPhoto: response.data?.passportPhoto || ''
+            })
+        }
+    }
+
+    const renderPrivateImageIfExists = (record, imageSource) => {
+        return imageSource
+            ? <Image width={100} height={100} src={`data:image/jpeg;base64,${imageSource}`} />
+            : !record.allowShareInformation ? t(translations.participant_list.not_shared) : t(translations.misc.not_available)
     }
 
     React.useEffect(() => {

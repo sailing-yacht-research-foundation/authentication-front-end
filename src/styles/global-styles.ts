@@ -286,4 +286,8 @@ export const GlobalStyle = createGlobalStyle`
   .ant-tooltip {
     z-index: 99999 !important;
   }
+
+  .ant-image-preview-wrap, .ant-image-preview-mask {
+    z-index: 99999 !important;
+  }
 `;

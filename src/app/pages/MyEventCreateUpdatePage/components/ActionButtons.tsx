@@ -108,8 +108,8 @@ export const ActionButtons = ({
 
     const menu = (
         <Menu>
-            {menus.map((menu, index) => menu.show && <Spin spinning={menu.spinning}>
-                <Menu.Item key={index} onClick={menu.handler} icon={menu.icon}>
+            {menus.map((menu, index) => menu.show && <Spin spinning={menu.spinning} key={index}>
+                <Menu.Item onClick={menu.handler} icon={menu.icon}>
                     {menu.name}
                 </Menu.Item>
             </Spin>)}
