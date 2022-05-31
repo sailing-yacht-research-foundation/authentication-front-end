@@ -47,11 +47,12 @@ export const ArbitraryDocumentUploadForm = ({ event, showModal, setShowModal, re
 
             if (!response.success) {
                 showToastMessageOnRequestError(response.error);
+            } else {
+                toast.success(t(translations.my_event_create_update_page.document_uploaded, { fileName: field.documentName }));
             }
         }
 
         form.resetFields();
-        toast.success(t(translations.my_event_create_update_page.successfully_uploaded_your_documents));
         setIsLoading(false);
         setShowModal(false);
         reloadParent();
