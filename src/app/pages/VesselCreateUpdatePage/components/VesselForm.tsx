@@ -85,7 +85,7 @@ export const VesselForm = () => {
 
                 return false;
             })) {
-                form.append(`groupEditorsJson`, String(JSON.stringify(groupEditors)));
+                form.append(`groupEditorsJson`, JSON.stringify(groupEditors));
             }
             editors.filter(item => item.type === AdminType.INDIVIDUAL).forEach((item, index) => {
                 form.append(`editors[${index}]`, item.id);
