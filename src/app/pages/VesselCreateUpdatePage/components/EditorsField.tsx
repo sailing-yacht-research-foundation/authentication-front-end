@@ -35,9 +35,22 @@ export const EditorsField = (props) => {
         history.push(`/${item.type === AdminType.GROUP ? 'groups' : 'profile'}/${item.id}`);
     }
 
+    const handleSwitchChange = (checked, e, item) => {
+        e.stopPropagation();
+
+        setItems(items.map(i => {
+            if (i.id === item.id) {
+                i.isIndividualAssignment = checked
+            }
+
+            return i;
+        }))
+    }
+
     const renderItemResults = () => {
         return items.map(item => <Select.Option style={{ padding: '5px' }} value={JSON.stringify(item)}>
-            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name} - {item.type === AdminType.GROUP ? 'group' : 'individual'}
+            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name}
+            {item.type === AdminType.GROUP && <Switch checked={item.isIndividualAssignment} style={{ marginLeft: '10px' }} checkedChildren={t(translations.my_event_create_update_page.group_members_assignment)} unCheckedChildren={t(translations.my_event_create_update_page.group_assignment)} onChange={(checked, e) => handleSwitchChange(checked, e, item)} />}
         </Select.Option>)
     }
 
@@ -55,6 +68,7 @@ export const EditorsField = (props) => {
                     id: group.id,
                     avatar: group.groupImage,
                     name: group.groupName,
+                    isIndividualAssignment: false
                 }
             });
         }
@@ -92,6 +106,7 @@ export const EditorsField = (props) => {
                     id: group.id,
                     avatar: group.groupImage,
                     name: group.groupName,
+                    isIndividualAssignment: false
                 }
             });
         }
@@ -99,11 +114,6 @@ export const EditorsField = (props) => {
         setItems([...peopleRows, ...groupRows]);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [vessel]);
-
-    const handleOnChange = (items) => {
-        const editors = items ? items.map(item => JSON.parse(item)) : [];
-        setShowIndividualField(editors.filter(editor => editor.type === AdminType.GROUP).length > 0);
-    }
 
     return (
         <>
@@ -115,7 +125,6 @@ export const EditorsField = (props) => {
                         style={{ width: '100%' }}
                         placeholder={t(translations.tip.set_admins_for_this_boat)}
                         onSearch={debounceSearch}
-                        onChange={handleOnChange}
                         filterOption={false}
                         allowClear
                         maxTagCount={'responsive' as const}
@@ -124,14 +133,6 @@ export const EditorsField = (props) => {
                     </SyrfFormSelect>
                 </Form.Item>
             </Tooltip>
-
-            {showIndividualField && <Form.Item
-                label={<SyrfFieldLabel>{t(translations.vessel_create_update_page.assign_for_all_group_member)}</SyrfFieldLabel>}
-                name="isIndividualAssignment"
-                valuePropName="checked"
-            >
-                <Switch />
-            </Form.Item>}
         </>
     )
 }

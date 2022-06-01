@@ -31,7 +31,11 @@ export const DeleteVesselModal = (props) => {
             toast.success(t(translations.delete_vessel_modal.successfully_deleted, { name: vessel.publicName }));
             onVesselDeleted();
         } else {
-            showToastMessageOnRequestError(response.error);
+            if (response.error?.response.status === 401) {
+                toast.error(t(translations.general.your_action_is_unauthorized));
+            } else {
+                showToastMessageOnRequestError(response.error);
+            }
         }
     }
 
