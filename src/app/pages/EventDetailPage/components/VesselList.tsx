@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { getEventRegisteredVessels } from 'services/live-data-server/event-calendars';
-import { renderEmptyValue } from 'utils/helpers';
+import { renderEmptyValue, truncateName } from 'utils/helpers';
 import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
 import { useHistory } from 'react-router-dom';
@@ -29,6 +29,7 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             title: t(translations.general.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
+            render: (text) => renderEmptyValue(truncateName(text)),
         },
         {
             title: t(translations.vessel_list_page.length_in_meters),
@@ -36,13 +37,20 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             key: 'lengthInMeters',
             render: (text) => renderEmptyValue(text),
         },
-
         {
             title: t(translations.participant_list.class_name),
             dataIndex: 'class',
             key: 'class',
             render: (text, record) => {
-                return renderEmptyValue(record?.vesselParticipants[0]?.group?.name);
+                return renderEmptyValue(record.vesselParticipants[0]?.group?.name);
+            },
+        },
+        {
+            title: t(translations.participant_list.sail_number),
+            dataIndex: 'sailNumber',
+            key: 'sailNumber',
+            render: (text, record) => {
+                return renderEmptyValue(record.sailNumber);
             },
         },
         {

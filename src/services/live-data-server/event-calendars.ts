@@ -138,6 +138,10 @@ export const getDetailedEventParticipantInfoById = (calendarEventId: string, par
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants/${participantId}/complete-data`));
 }
 
-export const getEventMessages = (calendarEventId) => {
+export const getEventMessages = (calendarEventId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/messages`));
+}
+
+export const getPrivateImages = (calendarEventId: string, participantId: string) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants/${participantId}/private-images`))
 }

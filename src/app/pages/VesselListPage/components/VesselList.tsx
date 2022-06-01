@@ -21,7 +21,7 @@ import moment from 'moment';
 import { DeleteVesselModal } from './DeleteVesselModal';
 import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue } from 'utils/helpers';
+import { renderEmptyValue, truncateName } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { Vessel } from 'types/Vessel';
 
@@ -44,8 +44,8 @@ export const VesselList = () => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
-                return <Tooltip title={t(translations.tip.update_this_boat)}>
-                    <Link to={`/boats/${record.id}/update`}>{text}</Link>
+                return <Tooltip title={text}>
+                    <Link to={`/boats/${record.id}/update`}>{truncateName(text)}</Link>
                 </Tooltip>;
             },
         },

@@ -156,7 +156,8 @@ export enum WSMessageDataType {
 
 export enum WSTrackingStateUpdate {
     PARTICIPANT_START_TRACKING = 'start_tracking',
-    PARTICIPANT_STOP_TRACKING = 'stop_tracking'
+    PARTICIPANT_STOP_TRACKING = 'stop_tracking',
+    DISCONNECTED = 'disconnected'
 }
 
 export enum FollowStatus {
