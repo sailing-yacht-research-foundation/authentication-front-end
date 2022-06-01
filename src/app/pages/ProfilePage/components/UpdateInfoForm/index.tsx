@@ -13,7 +13,7 @@ import { PublicUserInformation } from './PublicUserInformation';
 import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { getShareableInformation, updateInterests, updateProfile, updateShareableInformation } from 'services/live-data-server/user';
+import { getShareableInformation, updateProfile, updateShareableInformation } from 'services/live-data-server/user';
 import { TIME_FORMAT, WATERSPORTS } from 'utils/constants';
 import { ShareableInformation } from './ShareableInformation';
 
@@ -51,9 +51,7 @@ export const UpdateInfo = (props) => {
             interests
         } = values;
 
-        setIsUpdatingProfile(true);
-
-        const response: any = await updateProfile({
+        const updateProfilePromise = updateProfile({
             firstName: first_name,
             lastName: last_name,
             attributes: {
@@ -71,19 +69,26 @@ export const UpdateInfo = (props) => {
             isPrivate: !!isPrivate
         });
 
-        if (response.success) {
-            onUpdateProfileSuccess(values);
-        } else {
-            showToastMessageOnRequestError(response.error);
-            setIsUpdatingProfile(false);
+        const updateShareablePromise = updateUserShareableInformation(values);
+
+        setIsUpdatingProfile(true);
+        const responses: any[] = await Promise.all([updateProfilePromise, updateShareablePromise]);
+        setIsUpdatingProfile(false);
+
+        if (!responses.some(response => {
+            if (response.error) {
+                showToastMessageOnRequestError(response.error);
+                return true;
+            }
+            return false;
+        })) {
+            onUpdateProfileSuccess();            
         }
     }
 
-    const onUpdateProfileSuccess = async (values) => {
+    const onUpdateProfileSuccess = async () => {
         setFormHasBeenChanged(false);
         toast.success(t(translations.profile_page.update_profile.your_profile_has_been_successfully_updated));
-        await updateUserShareableInformation(values);
-        setIsUpdatingProfile(false);
         props.cancelUpdateProfile();
     }
 
@@ -112,12 +117,7 @@ export const UpdateInfo = (props) => {
             }
         });
 
-        const response = await updateShareableInformation(form);
-        if (response.success) {
-            getUserShareableInformation();
-        } else {
-            showToastMessageOnRequestError(response.error);
-        }
+        return await updateShareableInformation(form);
     }
     
     const interestsArrayToObject = (interestsArray) => {
