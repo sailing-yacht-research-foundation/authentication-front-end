@@ -86,7 +86,7 @@ export const UpdateInfo = (props) => {
         }
     }
 
-    const onUpdateProfileSuccess = async () => {
+    const onUpdateProfileSuccess = () => {
         setFormHasBeenChanged(false);
         toast.success(t(translations.profile_page.update_profile.your_profile_has_been_successfully_updated));
         props.cancelUpdateProfile();
