@@ -73,10 +73,20 @@ export const VesselForm = () => {
         });
 
         if (editors && Array.isArray(editors)) {
-            editors.filter(item => item.type === AdminType.GROUP).forEach((item, index) => {
-                form.append(`groupEditors[${index}]`, item.id);
-                form.append(`groupEditors[${index}][isIndividualAssignment]`, String(!!item.isIndividualAssignment));
-            });
+            const groupEditors: any = []
+            if (editors.some(item => {
+                if (item.type === AdminType.GROUP) {
+                    groupEditors.push({
+                        groupId: item.id,
+                        isIndividualAssignment: item.isIndividualAssignment
+                    })
+                    return true;
+                }
+
+                return false;
+            })) {
+                form.append(`groupEditorsJson`, String(JSON.stringify(groupEditors)));
+            }
             editors.filter(item => item.type === AdminType.INDIVIDUAL).forEach((item, index) => {
                 form.append(`editors[${index}]`, item.id);
             });
