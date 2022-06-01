@@ -91,10 +91,10 @@ export const MyEventForm = () => {
 
         const data = {
             ...values,
-            endLocation: {
-                lon: endLon || lon,
-                lat: endLat || lat
-            },
+            endLocation: endLon && endLat ? {
+                lon: endLon,
+                lat: endLat
+            } : null,
             approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
             approximateEndTime: moment(currentDate.format('YYYY-MM-DD') + ' ' + currentTime.format("HH:mm:ss")).utc(),
             startDay: startDate.utc().format('DD'),
@@ -228,13 +228,7 @@ export const MyEventForm = () => {
                 lon: lon
             });
 
-            // end location is null
-            if (!form.getFieldValue('endLat') && !form.getFieldValue('endLon')) {
-                form.setFieldsValue({
-                    endLat: lat,
-                    endLon: lon
-                });
-            }
+            // // end location is null
         } else {
             form.setFieldsValue({
                 endLat: lat,
@@ -261,9 +255,6 @@ export const MyEventForm = () => {
                         form.setFieldsValue({ location: address });
                         setAddress(address);
                         // end location is null, set address to end address 
-                        if (!form.getFieldValue('endLocation')) {
-                            setEndAddress(address);
-                        }
                     } else {
                         form.setFieldsValue({ endLocation: address });
                         setEndAddress(address);
