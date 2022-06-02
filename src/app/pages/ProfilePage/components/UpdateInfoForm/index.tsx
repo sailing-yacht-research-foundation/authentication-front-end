@@ -82,7 +82,7 @@ export const UpdateInfo = (props) => {
             }
             return false;
         })) {
-            onUpdateProfileSuccess();            
+            onUpdateProfileSuccess();
         }
     }
 
@@ -119,7 +119,7 @@ export const UpdateInfo = (props) => {
 
         return await updateShareableInformation(form);
     }
-    
+
     const interestsArrayToObject = (interestsArray) => {
         return WATERSPORTS.reduce((acc, w) => {
             acc[w] = interestsArray.includes(w);
@@ -137,7 +137,8 @@ export const UpdateInfo = (props) => {
                 passportIssueDate: info.passportIssueDate ? moment(info.passportIssueDate) : '',
                 passportExpirationDate: info.passportExpirationDate ? moment(info.passportExpirationDate) : '',
                 foodAllergies: info.foodAllergies ? info.foodAllergies : [],
-                medicalProblems: info.medicalProblems ? info.medicalProblems.split(',') : [] 
+                medicalProblems: info.medicalProblems ? info.medicalProblems.split(',') : [],
+                certifications: info.certifications ? info.certifications : []
             });
             setShareableInformation(info);
         }

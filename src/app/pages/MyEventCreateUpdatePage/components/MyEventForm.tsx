@@ -133,7 +133,7 @@ export const MyEventForm = () => {
         }
 
         if (response.success) {
-            onEventSaved(response, { lat, lon }, { lat: endLat || lat, lon: endLon || lon });
+            onEventSaved(response, { lat, lon }, endLat ? { lat: endLat, lon: endLon } : null);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -149,10 +149,12 @@ export const MyEventForm = () => {
                 lng: startLocation.lon
             });
 
-            setEndCoordinates({
-                lat: endLocation.lat,
-                lng: endLocation.lon
-            })
+            if (endLocation) {
+                setEndCoordinates({
+                    lat: endLocation.lat,
+                    lng: endLocation.lon
+                })
+            }
         } else {
             await initData();
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
@@ -227,8 +229,6 @@ export const MyEventForm = () => {
                 lat: lat,
                 lon: lon
             });
-
-            // // end location is null
         } else {
             form.setFieldsValue({
                 endLat: lat,
@@ -254,7 +254,6 @@ export const MyEventForm = () => {
                     if (selector === 'start') {
                         form.setFieldsValue({ location: address });
                         setAddress(address);
-                        // end location is null, set address to end address 
                     } else {
                         form.setFieldsValue({ endLocation: address });
                         setEndAddress(address);

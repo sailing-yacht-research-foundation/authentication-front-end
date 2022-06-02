@@ -28,7 +28,8 @@ interface Route {
   title: string,
   icon: JSX.Element,
   items?: any,
-  subMenuKey?: string
+  subMenuKey?: string,
+  exactPath?: string
 }
 
 const routeKey = {
@@ -90,7 +91,8 @@ export const SiderContent = (props) => {
     },
     {
       key: routeKey.DISCOVER_FRIENDS,
-      path: '/profile/search',
+      exactPath: '/profile/search',
+      path: '/profile/:id',
       title: t(translations.side_menu.profile.discover_friends),
       icon: <FaUserFriends />,
     },
@@ -162,7 +164,7 @@ export const SiderContent = (props) => {
     items.forEach(item => {
       if (item.path) {
         if (matchPath(location.pathname, {
-          path: item.path,
+          path: item.path || item.exactPath,
           exact: false,
           strict: false
         })) {
@@ -208,7 +210,7 @@ export const SiderContent = (props) => {
         {items.map(route => {
           if (route.path) {
             return <SyrfMenuItem title={route.title} key={route.key} icon={route.icon}>
-              <StyledLink to={route.path}>{route.title}</StyledLink>
+              <StyledLink to={route.exactPath || route.path}>{route.title}</StyledLink>
             </SyrfMenuItem>;
           }
 
