@@ -30,7 +30,6 @@ export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddre
                                         placeholder: t(translations.profile_page.update_profile.search_places),
                                         className: 'location-search-input',
                                     })}
-                                    allowClear
                                     value={endAddress}
                                     autoCorrect="off"
                                 />
