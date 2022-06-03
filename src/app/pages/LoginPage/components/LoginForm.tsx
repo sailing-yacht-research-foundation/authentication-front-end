@@ -44,6 +44,8 @@ export const LoginForm = (props) => {
     if (response.success) {
       dispatch(actions.setSessionToken(response.token));
       dispatch(actions.setRefreshToken(response.user.refresh_token));
+      dispatch(actions.setTokenExpiredDate(response.user.expiredAt));
+      dispatch(actions.setRefreshTokenExpiredDate(response.user.refreshExpiredAt));
       dispatch(actions.getUser());
       dispatch(actions.setIsAuthenticated(true));
       localStorage.removeItem('is_guest');

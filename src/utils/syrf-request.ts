@@ -7,8 +7,10 @@ import i18next from 'i18next';
 import { translations } from 'locales/translations';
 import { subscribeUser } from 'subscription';
 import { unregisterPushSubscription } from './helpers';
+import moment from 'moment';
 
 let isCallingRefresh = false;
+let isRefreshing = false;
 
 /**
  * Class Request
@@ -30,10 +32,54 @@ class Request {
         this.client.interceptors.response.use(this.onRequestSuccess, this.onRequestFailure);
     }
 
+    performClearDataForAuthUser() {
+        unregisterPushSubscription();
+        subscribeUser();
+        store.dispatch(loginActions.setLogout());
+    }
+
     async beforeRequest(request) {
+
+        if (isRefreshing) {
+            return request;
+        }
+
+        isRefreshing = true;
+        const tokenExpiredDate = localStorage.getItem('token_expired_date');
+        const refreshTokenExpiredDate = localStorage.getItem('refresh_token_expired_date');
+        const tokenExpiredDateAsMoment = moment(tokenExpiredDate);
+        const refreshTokenExpiredDateAsMoment = moment(refreshTokenExpiredDate);
+        const refreshToken = localStorage.getItem('refresh_token');
         let token = localStorage.getItem('session_token');
+
+        if (!refreshToken || !refreshTokenExpiredDate || moment().isAfter(refreshTokenExpiredDateAsMoment)) { // the refresh token is expired, gotta refresh it by login again.
+            this.performClearDataForAuthUser();
+            let responseData: any = await anonymousLogin();
+            if (responseData.data) {
+                localStorage.setItem('session_token', responseData.data.token);
+                localStorage.setItem('refresh_token', responseData.data.refresh_token);
+                token = responseData.data.token;
+            }
+        }
+
+        if (refreshToken && moment().isAfter(tokenExpiredDateAsMoment)
+            && moment().isBefore(refreshTokenExpiredDateAsMoment)) {
+            const response = await renewToken(refreshToken!);
+
+            if (response.data) {
+                localStorage.setItem('session_token', response.data.newtoken);
+                localStorage.setItem('refresh_token', response.data.refresh_token);
+                token = response.data.newtoken;
+            } else { // in case the renew failed, we clear the data and push the user to login again.
+                this.performClearDataForAuthUser();
+            }
+        }
+
         if (token)
             request.headers['Authorization'] = "Bearer " + token;
+
+        isRefreshing = false;
+
         return request;
     }
 
