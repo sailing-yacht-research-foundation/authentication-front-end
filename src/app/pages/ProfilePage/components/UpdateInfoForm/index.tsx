@@ -128,7 +128,9 @@ export const UpdateInfo = (props) => {
     }
 
     const getUserShareableInformation = async () => {
+        setIsUpdatingProfile(true);
         const response = await getShareableInformation();
+        setIsUpdatingProfile(false);
 
         if (response.success) {
             const info = response.data;
