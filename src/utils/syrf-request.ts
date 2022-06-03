@@ -9,7 +9,6 @@ import { subscribeUser } from 'subscription';
 import { unregisterPushSubscription } from './helpers';
 import moment from 'moment';
 
-let isCallingRefresh = false;
 let isRefreshing = false;
 
 /**
@@ -17,12 +16,10 @@ let isRefreshing = false;
  * For interacting with SYRF relative APIs
  */
 class Request {
-    isRefreshing: boolean;
     failedRequests: any[];
     client;
 
     constructor() {
-        this.isRefreshing = false;
         this.failedRequests = [];
         this.client = axios.create();
         this.beforeRequest = this.beforeRequest.bind(this);
@@ -56,22 +53,22 @@ class Request {
             this.performClearDataForAuthUser();
             let responseData: any = await anonymousLogin();
             if (responseData.data) {
-                localStorage.setItem('session_token', responseData.data.token);
-                localStorage.setItem('refresh_token', responseData.data.refresh_token);
+                localStorage.setItem('is_guest', '1');
+                this.setLocalStorageData(responseData.data.token, responseData.data.refresh_token, responseData.data.expiredAt, responseData.data.refreshExpiredAt);
                 token = responseData.data.token;
             }
         }
 
         if (refreshToken && moment().isAfter(tokenExpiredDateAsMoment)
             && moment().isBefore(refreshTokenExpiredDateAsMoment)) {
-            const response = await renewToken(refreshToken!);
+            const response = await renewToken(refreshToken);
 
             if (response.data) {
-                localStorage.setItem('session_token', response.data.newtoken);
-                localStorage.setItem('refresh_token', response.data.refresh_token);
+                this.setLocalStorageData(response.data.newtoken, response.data.refresh_token, response.data.expiredAt, response.data.refreshExpiredAt);
                 token = response.data.newtoken;
             } else { // in case the renew failed, we clear the data and push the user to login again.
                 this.performClearDataForAuthUser();
+                message.info(i18next.t(translations.general.your_session_is_expired));
             }
         }
 
@@ -83,49 +80,22 @@ class Request {
         return request;
     }
 
-    async onRequestSuccess(response) {
-        let retried = localStorage.getItem('tried_getting_token');
-        if (retried) localStorage.removeItem('tried_getting_token');
+    setLocalStorageData(token, refreshToken, tokenExpireDate, refreshExpireDate) {
+        localStorage.setItem('session_token', token);
+        localStorage.setItem('refresh_token', refreshToken);
+        localStorage.setItem('token_expired_date', tokenExpireDate);
+        localStorage.setItem('refresh_token_expired_date', refreshExpireDate);
+    }
 
+    async onRequestSuccess(response) {
         return response;
     }
 
     async onRequestFailure(err) {
-        if (err.response) {
-            if (err.response?.status === 401) {
-                const refreshToken = localStorage.getItem('refresh_token');
-                if (refreshToken && !isCallingRefresh) {
-                    isCallingRefresh = true;
-                    let response = await renewToken(refreshToken);
-                    isCallingRefresh = false;
-                    if (response.success) {
-                        localStorage.setItem('session_token', response?.data?.newtoken);
-                        localStorage.setItem('refresh_token', response?.data?.refresh_token);
-                        if (!localStorage.getItem('is_guest')) { // this user is a real user, we subscribe the notification.
-                            unregisterPushSubscription();
-                            subscribeUser();
-                        }
-                    } else {
-                        store.dispatch(loginActions.setLogout());
-                        message.info(i18next.t(translations.general.your_session_is_expired));
-                    }
-                }
-            } else if (err.response?.status === 400
-                && err.response?.data?.errorCode === 'E003') {
-                let retried = localStorage.getItem('tried_getting_token');
-                if (!retried) {
-                    let responseData: any = await anonymousLogin();
-                    if (responseData.data) {
-                        localStorage.setItem('session_token', responseData.data?.token);
-                        localStorage.setItem('refresh_token', responseData.data?.refresh_token);
-                        localStorage.setItem('is_guest', '1');
-                    }
-                    localStorage.setItem('tried_getting_token', '1');
-                    window.location.reload();
-                } else {
-                    message.info(i18next.t(translations.general.our_service_is_temporary_unavailable_at_the_moment));
-                }
-            }
+        const errorResponseData = err.response?.data;
+        if (errorResponseData?.errorCode === 'E001' && errorResponseData.message === 'token expired') {
+            this.performClearDataForAuthUser();
+            message.info(i18next.t(translations.general.your_session_is_expired));
         }
         throw err;
     }
