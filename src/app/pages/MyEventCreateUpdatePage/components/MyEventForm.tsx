@@ -525,7 +525,7 @@ export const MyEventForm = () => {
 
                         <FormItemStartDate dateLimiter={dateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItemEndLocationAddress address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
+                        <FormItemEndLocationAddress form={form} address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
                         <FormItemEndDate endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 

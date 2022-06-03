@@ -6,9 +6,18 @@ import { useTranslation } from 'react-i18next';
 import { StyledPLaceDropdown } from 'app/components/SyrfGeneral';
 import PlacesAutocomplete from 'react-places-autocomplete';
 
-export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddressChange, handleSelectEndAddress }) => {
+export const FormItemEndLocationAddress = ({ form, address, endAddress, handleEndAddressChange, handleSelectEndAddress }) => {
 
     const { t } = useTranslation();
+
+    React.useEffect(() => {
+        if (!endAddress) {
+            form.setFieldsValue({
+                endLat: null,
+                endLon: null
+            })
+        }
+    }, [endAddress]);
 
     return (
         <Tooltip title={t(translations.tip.event_location_end)}>
@@ -26,6 +35,7 @@ export const FormItemEndLocationAddress = ({ address, endAddress, handleEndAddre
                         return (
                             <>
                                 <SyrfInputField
+                                    allowClear
                                     {...getInputProps({
                                         placeholder: t(translations.profile_page.update_profile.search_places),
                                         className: 'location-search-input',
