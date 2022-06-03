@@ -95,7 +95,6 @@ class Request {
         const errorResponseData = err.response?.data;
         if (errorResponseData?.errorCode === 'E001' && errorResponseData.message === 'token expired') {
             this.performClearDataForAuthUser();
-            message.info(i18next.t(translations.general.your_session_is_expired));
         }
         throw err;
     }
