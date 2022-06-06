@@ -16,7 +16,8 @@ export const TIME_FORMAT = {
     number: 'YYYY-MM-DD',
     date_text_with_time: 'MMM. D, YYYY [at] h:mm A z',
     date_text: 'MMM. D, YYYY',
-    time: 'HH:mm:ss'
+    time: 'HH:mm:ss',
+    time_text: 'h:mm:ss A z'
 }
 
 export const MODE = {
