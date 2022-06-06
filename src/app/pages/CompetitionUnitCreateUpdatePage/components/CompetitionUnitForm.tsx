@@ -509,7 +509,7 @@ export const CompetitionUnitForm = () => {
                                         rules={[{ required: true }]}
                                     >
 
-                                        <SyrfFormSelect placeholder={t(translations.competition_unit_create_update_page.timezone)}
+                                        <SyrfFormSelect disabled placeholder={t(translations.competition_unit_create_update_page.timezone)}
                                             showSearch
                                             filterOption={(input, option) => {
                                                 if (option) {

@@ -88,6 +88,7 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter }) =
                     >
                         <SyrfFormSelect placeholder={t(translations.my_event_create_update_page.timezone)}
                             showSearch
+                            disabled
                             filterOption={(input, option) => {
                                 if (option) {
                                     return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0

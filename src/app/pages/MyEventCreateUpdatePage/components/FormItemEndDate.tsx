@@ -79,7 +79,7 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList }) 
                         name="approximateEndTime_zone"
                         className="event-time-zone-step"
                     >
-                        <SyrfFormSelect placeholder={t(translations.my_event_create_update_page.timezone)}
+                        <SyrfFormSelect disabled placeholder={t(translations.my_event_create_update_page.timezone)}
                             showSearch
                             filterOption={(input, option) => {
                                 if (option) {
