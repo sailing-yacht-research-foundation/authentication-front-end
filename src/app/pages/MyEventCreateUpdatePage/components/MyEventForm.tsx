@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, Select } from 'antd';
+import { Spin, Form, Divider, Select, Button } from 'antd';
 import { PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -523,11 +523,11 @@ export const MyEventForm = () => {
 
                         <FormItemStartLocationAddress address={address} handleAddressChange={handleAddressChange} handleSelectAddress={handleSelectAddress} />
 
-                        <FormItemStartDate dateLimiter={dateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
+                        <FormItemStartDate form={form} dateLimiter={dateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
                         <FormItemEndLocationAddress form={form} address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
-                        <FormItemEndDate endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
+                        <FormItemEndDate form={form} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
                         <FormItems event={event} mode={mode} form={form} />
 
@@ -551,4 +551,9 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 100%;
     margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
+`;
+
+export const NowButton = styled(Button)`
+    position: absolute;
+    bottom: 8px;
 `;
