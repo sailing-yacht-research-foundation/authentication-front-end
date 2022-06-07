@@ -40,7 +40,7 @@ class Request {
         if (Request.promiseRefresh) {
             const response = await Request.promiseRefresh;
             if (response?.data?.newtoken) {
-              request.headers['Authorization'] = "Bearer " + response.data.newtoken;
+                request.headers['Authorization'] = "Bearer " + response.data.newtoken;
             }
             return request;
         }
@@ -118,6 +118,6 @@ class Request {
 
 const request = new Request();
 
-retryWrapper(request.client, {retry_time: 5})
+retryWrapper(request.client, { retry_time: 2 })
 
 export default request.client;
