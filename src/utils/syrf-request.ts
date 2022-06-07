@@ -9,7 +9,6 @@ import { subscribeUser } from 'subscription';
 import { retryWrapper, unregisterPushSubscription } from './helpers';
 import moment from 'moment';
 
-let isRefreshing = false;
 
 /**
  * Class Request
@@ -18,6 +17,7 @@ let isRefreshing = false;
 class Request {
     failedRequests: any[];
     client;
+    static promiseRefresh;
 
     constructor() {
         this.failedRequests = [];
@@ -37,11 +37,14 @@ class Request {
 
     async beforeRequest(request) {
 
-        if (isRefreshing) {
+        if (Request.promiseRefresh) {
+            const response = await Request.promiseRefresh;
+            if (response?.data?.newtoken) {
+              request.headers['Authorization'] = "Bearer " + response.data.newtoken;
+            }
             return request;
         }
 
-        isRefreshing = true;
         const tokenExpiredDate = localStorage.getItem('token_expired_date');
         const refreshTokenExpiredDate = localStorage.getItem('refresh_token_expired_date');
         const tokenExpiredDateAsMoment = moment(tokenExpiredDate);
@@ -51,7 +54,8 @@ class Request {
 
         if (!refreshToken || !refreshTokenExpiredDate || moment().isAfter(refreshTokenExpiredDateAsMoment)) { // the refresh token is expired, gotta refresh it by login again.
             this.performClearDataForAuthUser();
-            let responseData: any = await anonymousLogin();
+            Request.promiseRefresh = anonymousLogin()
+            let responseData: any = await Request.promiseRefresh;
             if (responseData.data) {
                 localStorage.setItem('is_guest', '1');
                 this.setLocalStorageData(responseData.data.token, responseData.data.refresh_token, responseData.data.expiredAt, responseData.data.refreshExpiredAt);
@@ -61,7 +65,8 @@ class Request {
 
         if (refreshToken && moment().isAfter(tokenExpiredDateAsMoment)
             && moment().isBefore(refreshTokenExpiredDateAsMoment)) {
-            const response = await renewToken(refreshToken);
+            Request.promiseRefresh = renewToken(refreshToken);
+            const response = await Request.promiseRefresh;
 
             if (response.data) {
                 this.setLocalStorageData(response.data.newtoken, response.data.refresh_token, response.data.expiredAt, response.data.refreshExpiredAt);
@@ -72,10 +77,9 @@ class Request {
             }
         }
 
-        if (token)
+        if (token) {
             request.headers['Authorization'] = "Bearer " + token;
-
-        isRefreshing = false;
+        }
 
         return request;
     }
