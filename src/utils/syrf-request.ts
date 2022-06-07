@@ -47,8 +47,8 @@ class Request {
 
         const tokenExpiredDate = localStorage.getItem('token_expired_date');
         const refreshTokenExpiredDate = localStorage.getItem('refresh_token_expired_date');
-        const tokenExpiredDateAsMoment = moment(tokenExpiredDate);
-        const refreshTokenExpiredDateAsMoment = moment(refreshTokenExpiredDate);
+        const tokenExpiredDateAsMoment = moment(tokenExpiredDate).subtract(5, 'hours');
+        const refreshTokenExpiredDateAsMoment = moment(refreshTokenExpiredDate).subtract(1, 'days');
         const refreshToken = localStorage.getItem('refresh_token');
         let token = localStorage.getItem('session_token');
 
