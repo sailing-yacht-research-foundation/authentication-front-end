@@ -39,7 +39,7 @@ class Request {
 
         if (Request.promiseRefresh) {
             const response = await Request.promiseRefresh;
-            let newToken = response?.data?.token || response?.data?.newtoken;
+            const newToken = response?.data?.token || response?.data?.newtoken;
             if (newToken) {
                 request.headers['Authorization'] = "Bearer " + newToken;
             }
