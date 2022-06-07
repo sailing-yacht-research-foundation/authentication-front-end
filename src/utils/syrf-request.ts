@@ -6,7 +6,7 @@ import { message } from 'antd';
 import i18next from 'i18next';
 import { translations } from 'locales/translations';
 import { subscribeUser } from 'subscription';
-import { unregisterPushSubscription } from './helpers';
+import { retryWrapper, unregisterPushSubscription } from './helpers';
 import moment from 'moment';
 
 let isRefreshing = false;
@@ -113,5 +113,7 @@ class Request {
 }
 
 const request = new Request();
+
+retryWrapper(request.client, {retry_time: 5})
 
 export default request.client;
