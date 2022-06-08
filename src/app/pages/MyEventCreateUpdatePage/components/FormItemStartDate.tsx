@@ -2,13 +2,20 @@ import React from 'react';
 import { SyrfFieldLabel, SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { Row, Col, Form, DatePicker, TimePicker, Tooltip } from 'antd';
+import { Row, Col, Form, DatePicker, TimePicker, Tooltip, Button } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from 'utils/constants';
+import { NowButton } from './MyEventForm';
 
-export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter }) => {
+export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter, form }) => {
 
     const { t } = useTranslation();
+
+    const setTimeToCurrentTimeOfTimezone = () => {
+        form.setFieldsValue({
+            startTime: moment().tz(form.getFieldValue('approximateStartTime_zone'))
+        })
+    }
 
     return (
         <Row gutter={12}>
@@ -70,6 +77,9 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter }) =
                         })]}
                     >
                         <TimePicker
+                            showNow={false}
+                            style={{position: 'relative'}}
+                            renderExtraFooter={() => <NowButton onClick={setTimeToCurrentTimeOfTimezone} type='link'>Now</NowButton>}
                             allowClear={false}
                             className="syrf-datepicker"
                             defaultOpenValue={moment('00:00:00', TIME_FORMAT.time)}
