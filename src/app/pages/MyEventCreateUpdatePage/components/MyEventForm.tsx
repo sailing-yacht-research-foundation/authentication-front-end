@@ -322,8 +322,8 @@ export const MyEventForm = () => {
                 startTime: moment(response.data?.approximateStartTime),
                 endDate: moment(response.data?.approximateEndTime),
                 endTime: moment(response.data?.approximateEndTime),
-                endLat: response.data?.endLocation?.coordinates[1] || response.data?.lat,
-                endLon: response.data?.endLocation?.coordinates[0] || response.data?.lon,
+                endLat: response.data?.endLocation?.coordinates[1] || null,
+                endLon: response.data?.endLocation?.coordinates[0] || null,
                 admins: [...response.data?.editors.map(editor => JSON.stringify({
                     type: AdminType.INDIVIDUAL,
                     id: editor.id,
