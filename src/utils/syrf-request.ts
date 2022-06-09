@@ -31,7 +31,6 @@ class Request {
 
     performClearDataForAuthUser() {
         unregisterPushSubscription();
-        subscribeUser();
         store.dispatch(loginActions.setLogout());
     }
 
@@ -78,6 +77,8 @@ class Request {
             }
         }
 
+        Request.promiseRefresh = null;
+
         if (token) {
             request.headers['Authorization'] = "Bearer " + token;
         }
@@ -97,10 +98,43 @@ class Request {
     }
 
     async onRequestFailure(err) {
-        const errorResponseData = err.response?.data;
-        if (errorResponseData?.errorCode === 'E001' && errorResponseData.message === 'token expired') {
-            this.performClearDataForAuthUser();
+        if (Request.promiseRefresh) {
+            throw err;
         }
+
+        const errorResponseData = err.response?.data;
+        const isGuest = localStorage.getItem('is_guest');
+        if ((errorResponseData?.errorCode === 'E001'
+            || errorResponseData?.errorCode === 'E003')
+            && err.response?.status === 401) {
+            const refreshToken = localStorage.getItem('refresh_token');
+            if (refreshToken) {
+                Request.promiseRefresh = renewToken(refreshToken);
+                let response = await Request.promiseRefresh; // try to renew the token if possible
+                if (response.success) {
+                    this.setLocalStorageData(response.data.newtoken, response.data.refresh_token, response.data.expiredAt, response.data.refreshExpiredAt);
+                    if (!isGuest) { // this user is a real user, we re-subscribe the notification.
+                        unregisterPushSubscription();
+                        subscribeUser();
+                    }
+                } else {
+                    if (!isGuest) { // is an authorized user but cannot renew token somehow, and become a guest.
+                        this.performClearDataForAuthUser();
+                        message.info(i18next.t(translations.general.your_session_is_expired));
+                        localStorage.setItem('is_guest', '1');
+                    } 
+                    // perform anonymous login
+                    Request.promiseRefresh = anonymousLogin();
+                    let responseData: any = await Request.promiseRefresh;
+                    if (responseData.data) {
+                        this.setLocalStorageData(responseData.data.token, responseData.data.refresh_token, responseData.data.expiredAt, responseData.data.refreshExpiredAt);
+                    }
+
+                }
+                Request.promiseRefresh = null;
+            }
+        }
+
         throw err;
     }
 
