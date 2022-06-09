@@ -30,6 +30,7 @@ import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { KudosReaction } from "./KudosReaction";
 import { ModalRacePostponed } from "./ModalRacePostponed";
+import moment from "moment";
 
 export const PlaybackStreamRace = () => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -305,8 +306,25 @@ export const PlaybackStreamRace = () => {
               break;
           }
           break;
+        case WSMessageDataType.START_TIME_UPDATE:
+          if (data.competitionUnitId === competitionUnitId) {
+            adjustCompetitionUnitStartTime((new Date(data.startTime)).toISOString());
+          }
+          break;
+        case WSMessageDataType.RACE_DATA_UPDATE:
+          if (data.detail?.id === competitionUnitId) {
+            adjustCompetitionUnitStartTime(data.detail?.approximateStart);
+          }
+          break;
       }
     }
+  }
+
+  const adjustCompetitionUnitStartTime = (time) => {
+    dispatch(actions.setCompetitionUnitDetail({
+      ...competitionUnitDetail,
+      startTime: time
+    }));
   }
 
   const handleRenderCourseDetail = (course) => {

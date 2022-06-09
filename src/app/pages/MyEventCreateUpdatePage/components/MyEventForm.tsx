@@ -460,7 +460,6 @@ export const MyEventForm = () => {
     }
 
     const dateLimiter = (current) => {
-        if (mode === MODE.UPDATE) return false;
         return current && current < moment().startOf('day');
     };
 

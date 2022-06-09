@@ -152,7 +152,9 @@ export enum WSMessageDataType {
     MARK_TRACK = 'mark-track',
     COURSE_UPDATED = 'course-updated',
     EVENT = 'event',
-    TRACKING_STATE_UPDATE = 'tracking-state-update'
+    TRACKING_STATE_UPDATE = 'tracking-state-update',
+    START_TIME_UPDATE = 'start-time-updated',
+    RACE_DATA_UPDATE = 'race-data-update'
 }
 
 export enum WSTrackingStateUpdate {
