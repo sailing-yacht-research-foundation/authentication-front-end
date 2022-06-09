@@ -55,7 +55,7 @@ class Request {
         if (!refreshToken || !refreshTokenExpiredDate || moment().isAfter(refreshTokenExpiredDateAsMoment)) { // the refresh token is expired, gotta refresh it by login again.
             this.performClearDataForAuthUser();
             Request.promiseRefresh = anonymousLogin()
-            let responseData: any = await Request.promiseRefresh;
+            const responseData: any = await Request.promiseRefresh;
             if (responseData.data) {
                 localStorage.setItem('is_guest', '1');
                 this.setLocalStorageData(responseData.data.token, responseData.data.refresh_token, responseData.data.expiredAt, responseData.data.refreshExpiredAt);
@@ -110,7 +110,7 @@ class Request {
             const refreshToken = localStorage.getItem('refresh_token');
             if (refreshToken) {
                 Request.promiseRefresh = renewToken(refreshToken);
-                let response = await Request.promiseRefresh; // try to renew the token if possible
+                const response = await Request.promiseRefresh; // try to renew the token if possible
                 if (response.success) {
                     this.setLocalStorageData(response.data.newtoken, response.data.refresh_token, response.data.expiredAt, response.data.refreshExpiredAt);
                     if (!isGuest) { // this user is a real user, we re-subscribe the notification.
@@ -125,7 +125,7 @@ class Request {
                     } 
                     // perform anonymous login
                     Request.promiseRefresh = anonymousLogin();
-                    let responseData: any = await Request.promiseRefresh;
+                    const responseData: any = await Request.promiseRefresh;
                     if (responseData.data) {
                         this.setLocalStorageData(responseData.data.token, responseData.data.refresh_token, responseData.data.expiredAt, responseData.data.refreshExpiredAt);
                     }
