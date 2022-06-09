@@ -532,3 +532,9 @@ export const truncateName = (text, size = 50) => {
     if (!text) return '';
     return text.length > size ? `${text.substring(0, 50)}...` : text;
 }
+
+export const navigateToProfile = (e, item, history) => {
+    e.stopPropagation();
+    if (item.profile)
+        history.push(`/profile/${item.profile.id}`);
+}

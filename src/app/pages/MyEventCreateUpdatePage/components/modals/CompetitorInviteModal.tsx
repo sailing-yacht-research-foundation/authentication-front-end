@@ -3,7 +3,7 @@ import { Modal, Spin, Select, Form, Tooltip } from 'antd';
 import { toast } from 'react-toastify';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { debounce, showToastMessageOnRequestError } from 'utils/helpers';
+import { debounce, navigateToProfile, showToastMessageOnRequestError } from 'utils/helpers';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { getUserAttribute, renderAvatar } from 'utils/user-utils';
@@ -86,7 +86,7 @@ export const CompetitorInviteModal = (props) => {
 
     const renderItemResults = () => {
         return items.map(item => <Select.Option style={{ padding: '5px' }} value={JSON.stringify(item)}>
-            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name}
+            <ItemAvatar onClick={(e) => navigateToProfile(e, item, history)} src={renderAvatar(item.avatar)} /> {item.name}
         </Select.Option>)
     }
 
@@ -124,11 +124,6 @@ export const CompetitorInviteModal = (props) => {
         setIsLoading(false);
         setShowModal(false);
         form.resetFields();
-    }
-
-    const navigateToProfile = (e, item) => {
-        e.stopPropagation();
-        history.push(`/${item.type === CompetitorType.GROUP ? 'groups' : 'profile'}/${item.id}`);
     }
 
     return (
