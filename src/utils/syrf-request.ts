@@ -1,13 +1,15 @@
 import axios from 'axios';
-import { anonymousLogin, renewToken } from 'services/live-data-server/auth';
+import { anonymousLogin, logout, renewToken } from 'services/live-data-server/auth';
 import { store } from 'store/configureStore';
 import { loginActions } from 'app/pages/LoginPage/slice';
+import { myEventListActions } from 'app/pages/MyEventPage/slice';
 import { message } from 'antd';
 import i18next from 'i18next';
 import { translations } from 'locales/translations';
 import { subscribeUser } from 'subscription';
 import { retryWrapper, unregisterPushSubscription } from './helpers';
 import moment from 'moment';
+import { AuthCode } from './constants';
 
 
 /**
@@ -29,9 +31,14 @@ class Request {
         this.client.interceptors.response.use(this.onRequestSuccess, this.onRequestFailure);
     }
 
-    performClearDataForAuthUser() {
-        unregisterPushSubscription();
+    performClearDataForAuthUser(refreshToken) {
+        if (refreshToken) {
+            logout(refreshToken);
+        }
+
         store.dispatch(loginActions.setLogout());
+        store.dispatch(myEventListActions.clearEventsListData());
+        unregisterPushSubscription();
     }
 
     async beforeRequest(request) {
@@ -50,10 +57,11 @@ class Request {
         const tokenExpiredDateAsMoment = moment(tokenExpiredDate).subtract(5, 'hours');
         const refreshTokenExpiredDateAsMoment = moment(refreshTokenExpiredDate).subtract(1, 'days');
         const refreshToken = localStorage.getItem('refresh_token');
+        const isGuest = localStorage.getItem('is_guest');
         let token = localStorage.getItem('session_token');
 
         if (!refreshToken || !refreshTokenExpiredDate || moment().isAfter(refreshTokenExpiredDateAsMoment)) { // the refresh token is expired, gotta refresh it by login again.
-            this.performClearDataForAuthUser();
+            this.performClearDataForAuthUser(refreshToken);
             Request.promiseRefresh = anonymousLogin()
             const responseData: any = await Request.promiseRefresh;
             if (responseData.data) {
@@ -69,11 +77,10 @@ class Request {
             const response = await Request.promiseRefresh;
 
             if (response.data) {
-                this.setLocalStorageData(response.data.newtoken, response.data.refresh_token, response.data.expiredAt, response.data.refreshExpiredAt);
                 token = response.data.newtoken;
+                this.storeTokensAndResubscribeUser(isGuest, response);
             } else { // in case the renew failed, we clear the data and push the user to login again.
-                this.performClearDataForAuthUser();
-                message.info(i18next.t(translations.general.your_session_is_expired));
+                this.eraseUserDataAndShowTokenExpired(refreshToken);
             }
         }
 
@@ -104,32 +111,23 @@ class Request {
 
         const errorResponseData = err.response?.data;
         const isGuest = localStorage.getItem('is_guest');
-        if ((errorResponseData?.errorCode === 'E001'
-            || errorResponseData?.errorCode === 'E003')
-            && err.response?.status === 401) {
+        if ([AuthCode.EXPIRED_SESSION_TOKEN, AuthCode.INVALID_SESSION_TOKEN].includes(errorResponseData?.errorCode)) {
             const refreshToken = localStorage.getItem('refresh_token');
             if (refreshToken) {
                 Request.promiseRefresh = renewToken(refreshToken);
                 const response = await Request.promiseRefresh; // try to renew the token if possible
                 if (response.success) {
-                    this.setLocalStorageData(response.data.newtoken, response.data.refresh_token, response.data.expiredAt, response.data.refreshExpiredAt);
-                    if (!isGuest) { // this user is a real user, we re-subscribe the notification.
-                        unregisterPushSubscription();
-                        subscribeUser();
-                    }
+                    this.storeTokensAndResubscribeUser(isGuest, response);
                 } else {
                     if (!isGuest) { // is an authorized user but cannot renew token somehow, and become a guest.
-                        this.performClearDataForAuthUser();
-                        message.info(i18next.t(translations.general.your_session_is_expired));
-                        localStorage.setItem('is_guest', '1');
-                    } 
+                        this.eraseUserDataAndShowTokenExpired(refreshToken);
+                    }
                     // perform anonymous login
                     Request.promiseRefresh = anonymousLogin();
                     const responseData: any = await Request.promiseRefresh;
                     if (responseData.data) {
                         this.setLocalStorageData(responseData.data.token, responseData.data.refresh_token, responseData.data.expiredAt, responseData.data.refreshExpiredAt);
                     }
-
                 }
                 Request.promiseRefresh = null;
             }
@@ -149,6 +147,19 @@ class Request {
         this.failedRequests = [];
     }
 
+    storeTokensAndResubscribeUser(isGuest, response) {
+        this.setLocalStorageData(response.data.newtoken, response.data.refresh_token, response.data.expiredAt, response.data.refreshExpiredAt);
+        if (!isGuest) { // this user is a real user, we re-subscribe the notification.
+            unregisterPushSubscription();
+            subscribeUser();
+        }
+    }
+
+    eraseUserDataAndShowTokenExpired(refreshToken) {
+        this.performClearDataForAuthUser(refreshToken);
+        message.info(i18next.t(translations.general.your_session_is_expired));
+        localStorage.setItem('is_guest', '1');
+    }
 }
 
 const request = new Request();

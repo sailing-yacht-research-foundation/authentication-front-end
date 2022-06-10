@@ -269,7 +269,9 @@ export const DEFAULT_PAGE_SIZE = 10;
 
 export enum AuthCode {
     WRONG_CREDENTIALS = 'E012',
-    USER_ALREADY_EXISTS = 'E015'
+    USER_ALREADY_EXISTS = 'E015',
+    EXPIRED_SESSION_TOKEN = 'E001',
+    INVALID_SESSION_TOKEN = 'E003'
 }
 
 export enum WebsocketRaceEvent {
