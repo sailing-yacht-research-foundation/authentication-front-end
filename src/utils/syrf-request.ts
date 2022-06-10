@@ -111,7 +111,8 @@ class Request {
 
         const errorResponseData = err.response?.data;
         const isGuest = localStorage.getItem('is_guest');
-        if ([AuthCode.EXPIRED_SESSION_TOKEN, AuthCode.INVALID_SESSION_TOKEN].includes(errorResponseData?.errorCode)) {
+        if ([AuthCode.EXPIRED_SESSION_TOKEN, AuthCode.INVALID_SESSION_TOKEN].includes(errorResponseData?.errorCode)
+            && err.response?.status === 401) {
             const refreshToken = localStorage.getItem('refresh_token');
             if (refreshToken) {
                 Request.promiseRefresh = renewToken(refreshToken);
