@@ -13,8 +13,7 @@ import { translations } from 'locales/translations';
 
 const radioValue = {
     USE_DEFAULT_BOATS: 1,
-    CREATE_NEW_BOAT: 2,
-    USE_DEFAULT_NAME: 3
+    CREATE_NEW_BOAT: 2
 }
 
 export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: { onTrackImported: Function, showModal: boolean, setShowModal: Function, type: ImportTrackType }) => {
@@ -169,7 +168,6 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
                         <Radio.Group onChange={onRadioChanged} value={selectedRadioValue}>
                             <Radio value={radioValue.USE_DEFAULT_BOATS}>{t(translations.my_tracks_page.select_existing_boats)}</Radio>
                             <Radio value={radioValue.CREATE_NEW_BOAT}>{t(translations.my_tracks_page.create_a_new_boat)}</Radio>
-                            <Radio value={radioValue.USE_DEFAULT_NAME}>{t(translations.my_tracks_page.use_default_track_name)}</Radio>
                         </Radio.Group>
                     </Form.Item>
 
