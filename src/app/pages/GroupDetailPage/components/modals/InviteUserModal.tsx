@@ -108,7 +108,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                     return;
                 }
 
-                invitees.forEach(invitee => {
+                invitees?.forEach(invitee => {
                     invitee = JSON.parse(invitee);
                     if (invitee.type === AdminType.GROUP) {
                         groupIds.push(invitee.id);
@@ -116,7 +116,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                         userIds.push(invitee.id);
                     }
                 });
-
+                
                 if (emailsAsArray.length > 0 && checkIfEmailArrayHasInvalidEmails(emailsAsArray)) {
                     toast.error(t(translations.group.your_inputted_emails_are_not_valid));
                 }
