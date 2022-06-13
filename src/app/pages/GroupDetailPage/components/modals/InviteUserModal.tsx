@@ -56,34 +56,33 @@ export const InviteUserModal = (props: IInviteUserModal) => {
 
     const onSearch = async (keyword) => {
         setItems([]);
-        const groupResponse = await searchGroupForAssigns(keyword);
-        const peopleResponse = await searchForProfiles(keyword, getUserAttribute(user, 'locale'));
+        const responses: any[] = await Promise.all([searchGroupForAssigns(keyword), searchForProfiles(keyword, getUserAttribute(user, 'locale'))]);
         let groupRows = [];
         let peopleRows = [];
 
-        if (groupResponse.success) {
-            groupRows = groupResponse.data.rows.filter(group => {
-                return group.id !== groupId // exclude current group from the invitees.
-            }).map(group => {
-                return {
-                    type: AdminType.GROUP,
-                    id: group.id,
-                    avatar: group.groupImage,
-                    name: group.groupName,
-                }
-            });
-        }
-
-        if (peopleResponse.success) {
-            peopleRows = peopleResponse.data.map(p => {
-                return {
-                    type: AdminType.INDIVIDUAL,
-                    id: p.id,
-                    avatar: p.avatar,
-                    name: p.name,
-                }
-            })
-        }
+        responses.forEach(response => {
+            if (response.data.rows) {
+                groupRows = response.data.rows.filter(group => {
+                    return group.id !== groupId // exclude current group from the invitees.
+                }).map(group => {
+                    return {
+                        type: AdminType.GROUP,
+                        id: group.id,
+                        avatar: group.groupImage,
+                        name: group.groupName,
+                    }
+                });
+            } else {
+                peopleRows = response.data.map(p => {
+                    return {
+                        type: AdminType.INDIVIDUAL,
+                        id: p.id,
+                        avatar: p.avatar,
+                        name: p.name,
+                    }
+                })
+            }
+        });
 
         setItems([...groupRows, ...peopleRows]);
     }
@@ -116,7 +115,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                         userIds.push(invitee.id);
                     }
                 });
-                
+
                 if (emailsAsArray.length > 0 && checkIfEmailArrayHasInvalidEmails(emailsAsArray)) {
                     toast.error(t(translations.group.your_inputted_emails_are_not_valid));
                 }
