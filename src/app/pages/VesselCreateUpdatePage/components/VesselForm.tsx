@@ -52,7 +52,7 @@ export const VesselForm = () => {
     const onFinish = async (values) => {
         let response;
         const { admins } = values;
-        const editors = admins?.forEach(item => JSON.parse(item)) || [];
+        const editors = admins?.map(item => JSON.parse(item)) || [];
         const form = new FormData();
 
         setIsSaving(true);
@@ -73,9 +73,20 @@ export const VesselForm = () => {
         });
 
         if (editors && Array.isArray(editors)) {
-            editors.filter(item => item.type === AdminType.GROUP).forEach((item, index) => {
-                form.append(`groupEditors[${index}]`, item.id);
-            });
+            const groupEditors: any = []
+            if (editors.some(item => {
+                if (item.type === AdminType.GROUP) {
+                    groupEditors.push({
+                        groupId: item.id,
+                        isIndividualAssignment: item.isIndividualAssignment
+                    })
+                    return true;
+                }
+
+                return false;
+            })) {
+                form.append(`groupEditorsJson`, JSON.stringify(groupEditors));
+            }
             editors.filter(item => item.type === AdminType.INDIVIDUAL).forEach((item, index) => {
                 form.append(`editors[${index}]`, item.id);
             });
@@ -125,6 +136,7 @@ export const VesselForm = () => {
                         id: editor.id,
                         avatar: editor.groupImage,
                         name: editor.groupName,
+                        isIndividualAssignment: false
                     }))],
                 });
             } else {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Form, Divider, Select } from 'antd';
+import { Spin, Form, Divider, Select, Button } from 'antd';
 import { PageDescription, GobackButton, PageHeaderContainerResponsive, PageHeading, PageInfoContainer, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import styled from 'styled-components';
@@ -91,10 +91,10 @@ export const MyEventForm = () => {
 
         const data = {
             ...values,
-            endLocation: {
-                lon: endLon || lon,
-                lat: endLat || lat
-            },
+            endLocation: endLon && endLat ? {
+                lon: endLon,
+                lat: endLat
+            } : null,
             approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
             approximateEndTime: moment(currentDate.format('YYYY-MM-DD') + ' ' + currentTime.format("HH:mm:ss")).utc(),
             startDay: startDate.utc().format('DD'),
@@ -132,34 +132,35 @@ export const MyEventForm = () => {
             response = await update(eventId, data);
         }
 
-        setIsSavingEvent(false);
-
         if (response.success) {
-            onEventSaved(response, { lat, lon }, { lat: endLat || lat, lon: endLon || lon });
+            onEventSaved(response, { lat, lon }, endLat ? { lat: endLat, lon: endLon } : null);
         } else {
             showToastMessageOnRequestError(response.error);
         }
     }
 
-    const onEventSaved = (response, startLocation, endLocation) => {
+    const onEventSaved = async (response, startLocation, endLocation) => {
         if (mode === MODE.CREATE) {
             toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
             setEvent(response.data);
-            createDefaultVesselParticipantGroup(response.data);
+            await createDefaultVesselParticipantGroup(response.data);
             setCoordinates({
                 lat: startLocation.lat,
                 lng: startLocation.lon
             });
 
-            setEndCoordinates({
-                lat: endLocation.lat,
-                lng: endLocation.lon
-            })
+            if (endLocation) {
+                setEndCoordinates({
+                    lat: endLocation.lat,
+                    lng: endLocation.lon
+                })
+            }
         } else {
-            initData();
+            await initData();
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
         }
 
+        setIsSavingEvent(false);
         pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -178,10 +179,16 @@ export const MyEventForm = () => {
             courseId: courseId
         };
 
-        await createCompetitionUnit(event.id, data);
+        const response = await createCompetitionUnit(event.id, data);
+
+        if (response.success) {
+            toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data.name }));
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+
         setMode(MODE.UPDATE);
         history.push(`/events/${event.id}/update`);
-        setIsSavingEvent(false);
         pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -194,15 +201,22 @@ export const MyEventForm = () => {
         const response = await createVesselParticipantGroup(data);
 
         if (response.success) {
+            toast.success(t(translations.vessel_participant_group_create_update_page.created_a_new_group, { name: response.data?.name }))
             const couseId = await createDefaultCourse(event);
-            createANewDefaultCompetitionUnit(event, response.data.id, couseId);
+            await createANewDefaultCompetitionUnit(event, response.data.id, couseId);
+        } else {
+            showToastMessageOnRequestError(response.error);
         }
     }
 
     const createDefaultCourse = async (event) => {
         const response = await createCourse(event.id, 'Default Course', []);
 
-        if (response.success) return response.data.id;
+        if (response.success) {
+            toast.success(t(translations.my_event_create_update_page.successfully_created_a_new_default_course_for_this_event));
+            return response.data.id;
+        }
+        else showToastMessageOnRequestError(response.error);
 
         return undefined;
     }
@@ -215,14 +229,6 @@ export const MyEventForm = () => {
                 lat: lat,
                 lon: lon
             });
-
-            // end location is null
-            if (!form.getFieldValue('endLat') && !form.getFieldValue('endLon')) {
-                form.setFieldsValue({
-                    endLat: lat,
-                    endLon: lon
-                });
-            }
         } else {
             form.setFieldsValue({
                 endLat: lat,
@@ -248,10 +254,6 @@ export const MyEventForm = () => {
                     if (selector === 'start') {
                         form.setFieldsValue({ location: address });
                         setAddress(address);
-                        // end location is null, set address to end address 
-                        if (!form.getFieldValue('endLocation')) {
-                            setEndAddress(address);
-                        }
                     } else {
                         form.setFieldsValue({ endLocation: address });
                         setEndAddress(address);
@@ -521,11 +523,11 @@ export const MyEventForm = () => {
 
                         <FormItemStartLocationAddress address={address} handleAddressChange={handleAddressChange} handleSelectAddress={handleSelectAddress} />
 
-                        <FormItemStartDate dateLimiter={dateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
+                        <FormItemStartDate form={form} dateLimiter={dateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
-                        <FormItemEndLocationAddress address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
+                        <FormItemEndLocationAddress form={form} address={address} endAddress={endAddress} handleEndAddressChange={handleEndAddressChange} handleSelectEndAddress={handleSelectEndAddress} />
 
-                        <FormItemEndDate endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
+                        <FormItemEndDate form={form} endDateLimiter={endDateLimiter} renderTimezoneDropdownList={renderTimezoneDropdownList} />
 
                         <FormItems event={event} mode={mode} form={form} />
 
@@ -549,4 +551,9 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 100%;
     margin-top: ${StyleConstants.NAV_BAR_HEIGHT};
+`;
+
+export const NowButton = styled(Button)`
+    position: absolute;
+    bottom: 8px;
 `;

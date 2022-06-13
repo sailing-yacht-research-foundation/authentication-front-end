@@ -14,7 +14,7 @@ import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
+import { renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
 import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -55,7 +55,9 @@ export const EventList = () => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => {
-        return <Link to={`/events/${record.id}`}>{text}</Link>;
+        return <Tooltip title={text}>
+          <Link to={`/events/${record.id}`}>{truncateName(text)}</Link>
+        </Tooltip>;
       },
     },
     {

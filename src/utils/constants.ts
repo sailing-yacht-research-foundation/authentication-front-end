@@ -16,7 +16,8 @@ export const TIME_FORMAT = {
     number: 'YYYY-MM-DD',
     date_text_with_time: 'MMM. D, YYYY [at] h:mm A z',
     date_text: 'MMM. D, YYYY',
-    time: 'HH:mm:ss'
+    time: 'HH:mm:ss',
+    time_text: 'h:mm:ss A z'
 }
 
 export const MODE = {
@@ -156,7 +157,8 @@ export enum WSMessageDataType {
 
 export enum WSTrackingStateUpdate {
     PARTICIPANT_START_TRACKING = 'start_tracking',
-    PARTICIPANT_STOP_TRACKING = 'stop_tracking'
+    PARTICIPANT_STOP_TRACKING = 'stop_tracking',
+    DISCONNECTED = 'disconnected'
 }
 
 export enum FollowStatus {
@@ -249,7 +251,8 @@ export enum NotificationTypes {
     KUDOS_RECEIVED = 'KUDOS_RECEIVED',
     EVENT_INACTIVITY_WARNING = 'EVENT_INACTIVITY_WARNING',
     EVENT_MESSAGES_RECEIVED = 'EVENT_MESSAGES_RECEIVED',
-    SIMULATION_DELETION = 'SIMULATION_DELETION'
+    SIMULATION_DELETION = 'SIMULATION_DELETION',
+    NEW_EVENT_DOCUMENT_UPLOADED = 'NEW_EVENT_DOCUMENT_UPLOADED'
 }
 
 export enum UserRole {

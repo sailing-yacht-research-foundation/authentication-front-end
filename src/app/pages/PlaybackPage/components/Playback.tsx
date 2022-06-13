@@ -13,8 +13,10 @@ import moment from 'moment';
 import { SpeedControl } from './SpeedControl';
 import { BiTargetLock } from 'react-icons/bi';
 import { RaceEmitterEvent, TIME_FORMAT } from 'utils/constants';
-import { Spin } from 'antd';
+import { Spin, Tooltip } from 'antd';
 import { LiveDot } from 'app/components/SyrfGeneral';
+import { translations } from 'locales/translations';
+import { useTranslation } from 'react-i18next';
 
 const buttonStyle = {
     fontSize: '25px',
@@ -42,6 +44,8 @@ export const Playback = (props) => {
 
     const dispatch = useDispatch();
 
+    const { t } = useTranslation();
+
     const { actions } = usePlaybackSlice();
 
     const progressBarContainerRef = React.createRef<HTMLDivElement>();
@@ -53,6 +57,7 @@ export const Playback = (props) => {
     const [endMarkerWidth, setEndMarkerWidth] = React.useState<number>(0);
     const [hoverWidthOffset, setHoverWidthOffset] = React.useState<string>('-999px');
     const [timeWhenMouseHover, setTimeWhenMouseHover] = React.useState<string>('');
+    const [isShowingLocalTimeFormat, setisShowingLocalTimeFormat] = React.useState<boolean>(false);
 
     const calculateRaceProgressBarWidth = (elapsedTime, raceLength) => {
         let percentage = 0;
@@ -135,7 +140,9 @@ export const Playback = (props) => {
     const renderRaceLengthBaseOnPlaybackType = () => {
         const isLive = raceLength === elapsedTime && raceLength !== 0;
         if (playbackType === PlaybackTypes.OLDRACE) {
-            return <>{milisecondsToMinutes(raceLength)}</>;
+            return <>{isShowingLocalTimeFormat ?
+                moment(raceTime.end).format(TIME_FORMAT.time_text)
+                : milisecondsToMinutes(raceLength)}</>;
         }
 
         return <>Live <LiveDot className={isLive ? 'live' : ''}></LiveDot></>;
@@ -180,8 +187,11 @@ export const Playback = (props) => {
 
         let clickedWidth = e.clientX - rect.left;
         let leftOffset = (clickedWidth / progressWidth) * 100;
-        setHoverWidthOffset(`calc(${leftOffset}% - 35px)`);
-        setTimeWhenMouseHover(milisecondsToMinutes(getMousePositionFromProgressBar(e)));
+        setHoverWidthOffset(`calc(${leftOffset}% - ${isShowingLocalTimeFormat ? '45px' : '35px'})`);
+        const timeOnLocalFormat = moment(raceTime.start + getMousePositionFromProgressBar(e)).format(TIME_FORMAT.time_text);
+        setTimeWhenMouseHover(isShowingLocalTimeFormat
+            ? timeOnLocalFormat
+            : milisecondsToMinutes(getMousePositionFromProgressBar(e)));
     }
 
     const hideTimeTooltip = (e) => {
@@ -211,6 +221,25 @@ export const Playback = (props) => {
         return <></>;
     }
 
+    const renderPlaybackStartTime = () => {
+        if (PlaybackTypes.OLDRACE !== playbackType) return;
+        const startTimeInLocalFormat = moment(raceTime.start + elapsedTime).format(TIME_FORMAT.time_text);
+        return isShowingLocalTimeFormat
+            ? startTimeInLocalFormat
+            : milisecondsToMinutes(elapsedTime);
+    }
+
+    const changePlaybackTimeFormat = () => {
+        setisShowingLocalTimeFormat(!isShowingLocalTimeFormat);
+    }
+
+    const renderStartAndEndMarkers = () => {
+        return playbackType === PlaybackTypes.OLDRACE && <>
+            {isRaceStartMarkWithinPlaybackRange && <StartMarker onMouseMove={(e) => hideTimeTooltip(e)} onClick={playAtStartMarker} style={{ left: `${startMarkerWith}%` }}></StartMarker>}
+            {isRaceEndMarkWithinPlaybackRange && <EndMarker onMouseMove={(e) => hideTimeTooltip(e)} onClick={playAtEndMarker} style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
+        </>;
+    }
+
     return (
         <PlaybackWrapper>
             <PlaybackTopRightItemsContainer>
@@ -224,18 +253,19 @@ export const Playback = (props) => {
             </PlaybackTopRightItemsContainer>
             <PlaybackLengthOutterContainer>
                 <PlaybackLengthContainer>
-                    <TimeText>{PlaybackTypes.OLDRACE === playbackType && milisecondsToMinutes(elapsedTime)}</TimeText>
+                    <Tooltip title={t(translations.playback_page.click_to_change_time_format)}>
+                        <TimeText onClick={changePlaybackTimeFormat}>{renderPlaybackStartTime()}</TimeText>
+                    </Tooltip>
                     <ProgressBarWrapper>
                         <ProgressBar ref={progressBarContainerRef} onMouseLeave={() => setHoverWidthOffset('-999px')} onMouseMove={getWidthOffsetBaseOnMouseHover} onClick={playAtClickedPosition}>
-                            {playbackType === PlaybackTypes.OLDRACE && <>
-                                {isRaceStartMarkWithinPlaybackRange && <StartMarker onMouseMove={(e) => hideTimeTooltip(e)} onClick={playAtStartMarker} style={{ left: `${startMarkerWith}%` }}></StartMarker>}
-                                {isRaceEndMarkWithinPlaybackRange && <EndMarker onMouseMove={(e) => hideTimeTooltip(e)} onClick={playAtEndMarker} style={{ left: `${endMarkerWidth}%` }}></EndMarker>}
-                            </>}
+                            {renderStartAndEndMarkers()}
                             <ProgressedBar style={{ width: `${calculateRaceProgressBarWidth(elapsedTime, raceLength)}%` }} />
                             <ProgressBarTime style={{ left: hoverWidthOffset }}>{timeWhenMouseHover}</ProgressBarTime>
                         </ProgressBar>
                     </ProgressBarWrapper>
-                    <TimeText style={{ justifyContent: 'flex-end' }}>{renderRaceLengthBaseOnPlaybackType()}</TimeText>
+                    <Tooltip title={t(translations.playback_page.click_to_change_time_format)}>
+                        <TimeText onClick={changePlaybackTimeFormat} style={{ justifyContent: 'flex-end' }}>{renderRaceLengthBaseOnPlaybackType()}</TimeText>
+                    </Tooltip>
                 </PlaybackLengthContainer>
             </PlaybackLengthOutterContainer>
             <PlayBackControlContainer>
@@ -385,6 +415,7 @@ const TimeText = styled.span`
     display: flex;
     align-items: center;
     flex: 1 1 auto;
+    cursor: pointer;
 `;
 
 const BackToRaceAreaButton = styled(BiTargetLock)`

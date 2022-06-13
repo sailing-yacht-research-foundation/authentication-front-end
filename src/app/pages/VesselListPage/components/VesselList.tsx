@@ -21,7 +21,7 @@ import moment from 'moment';
 import { DeleteVesselModal } from './DeleteVesselModal';
 import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue } from 'utils/helpers';
+import { renderEmptyValue, truncateName } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { Vessel } from 'types/Vessel';
 
@@ -44,8 +44,8 @@ export const VesselList = () => {
             dataIndex: 'publicName',
             key: 'publicName',
             render: (text, record) => {
-                return <Tooltip title={t(translations.tip.update_this_boat)}>
-                    <Link to={`/boats/${record.id}/update`}>{text}</Link>
+                return <Tooltip title={text}>
+                    <Link to={`/boats/${record.id}/update`}>{truncateName(text)}</Link>
                 </Tooltip>;
             },
         },
@@ -56,10 +56,28 @@ export const VesselList = () => {
             render: (value) => renderEmptyValue(value),
         },
         {
+            title: t(translations.vessel_create_update_page.sail_number),
+            dataIndex: 'sailNumber',
+            key: 'sailNumber',
+            render: (value) => renderEmptyValue(value),
+        },
+        {
+            title: t(translations.vessel_create_update_page.model),
+            dataIndex: 'model',
+            key: 'model',
+            render: (value) => renderEmptyValue(value),
+        },
+        {
             title: t(translations.vessel_list_page.role),
             dataIndex: 'role',
             key: 'role',
             render: (value, record) => record?.isOwner ? t(translations.vessel_list_page.owner) : t(translations.vessel_list_page.admin),
+        },
+        {
+            title: t(translations.vessel_list_page.is_default_boat),
+            dataIndex: 'isDefaultVessel',
+            key: 'isDefaultVessel',
+            render: (value, record) => String(value),
         },
         {
             title: t(translations.general.created_date),

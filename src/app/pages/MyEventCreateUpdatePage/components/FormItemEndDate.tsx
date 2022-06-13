@@ -5,9 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { Row, Col, Form, DatePicker, TimePicker, Tooltip } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from 'utils/constants';
+import { NowButton } from './MyEventForm';
 
-export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList }) => {
+export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList, form }) => {
     const { t } = useTranslation();
+
+    const setTimeToCurrentTimeOfTimezone = () => {
+        form.setFieldsValue({
+            endTime: moment().tz(form.getFieldValue('approximateEndTime_zone'))
+        })
+    }
 
     return (
         <Row gutter={12}>
@@ -65,6 +72,9 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList }) 
                         })]}
                     >
                         <TimePicker
+                            showNow={false}
+                            style={{ position: 'relative' }}
+                            renderExtraFooter={() => <NowButton onClick={setTimeToCurrentTimeOfTimezone} type='link'>Now</NowButton>}
                             className="syrf-datepicker"
                             defaultOpenValue={moment('00:00:00', TIME_FORMAT.time)}
                         />
@@ -79,7 +89,7 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList }) 
                         name="approximateEndTime_zone"
                         className="event-time-zone-step"
                     >
-                        <SyrfFormSelect placeholder={t(translations.my_event_create_update_page.timezone)}
+                        <SyrfFormSelect disabled placeholder={t(translations.my_event_create_update_page.timezone)}
                             showSearch
                             filterOption={(input, option) => {
                                 if (option) {
