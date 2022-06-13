@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { navigateToProfile, showToastMessageOnRequestError } from 'utils/helpers';
 import { Modal, Spin, Form, Select, Radio } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfTextArea } from 'app/components/SyrfForm';
@@ -74,15 +74,9 @@ export const AnnouncementModal = ({ event, showModal, setShowModal, reloadParent
         }
     }
 
-    const navigateToProfile = (e, item) => {
-        e.stopPropagation();
-        if (item.profile)
-            history.push(`/profile/${item.profile.id}`);
-    }
-
     const renderParticipantsList = () => {
         return participants.map(item => <Select.Option style={{ padding: '5px' }} value={item.id}>
-            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.profile?.avatar)} /> {item.publicName}
+            <ItemAvatar onClick={(e) => navigateToProfile(e, item, history)} src={renderAvatar(item.profile?.avatar)} /> {item.publicName}
         </Select.Option>)
     }
 
