@@ -175,6 +175,7 @@ export const PlaybackStreamRace = () => {
         action: 'subscribe',
         data: {
           competitionUnitId: competitionUnitId,
+          dataTypes :["-device-ping-meta"] // exclude ping meta to lower package size.
         },
       });
     }
