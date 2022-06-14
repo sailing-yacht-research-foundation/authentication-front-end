@@ -13,8 +13,7 @@ import { translations } from 'locales/translations';
 
 const radioValue = {
     USE_DEFAULT_BOATS: 1,
-    CREATE_NEW_BOAT: 2,
-    USE_DEFAULT_NAME: 3
+    CREATE_NEW_BOAT: 2
 }
 
 export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: { onTrackImported: Function, showModal: boolean, setShowModal: Function, type: ImportTrackType }) => {
@@ -29,6 +28,8 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
 
     const { t } = useTranslation();
 
+    const [isFetchingBoats, setIsFetchingBoats] = React.useState<boolean>(false);
+
     const normFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
@@ -37,24 +38,24 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
     }
 
     const onFinish = async (values) => {
-        const form = new FormData();
+        const formData = new FormData();
         let response;
         const { file, trackName, vesselId, vesselName } = values;
 
-        form.append('importFile', file);
-        form.append('trackName', trackName);
+        formData.append('importFile', file);
+        formData.append('trackName', trackName);
         if (selectedRadioValue === radioValue.USE_DEFAULT_BOATS) {
-            form.append('vesselId', vesselId);
+            formData.append('vesselId', vesselId);
         } else if (selectedRadioValue === radioValue.CREATE_NEW_BOAT) {
-            form.append('vesselName', vesselName);
+            formData.append('vesselName', vesselName);
         }
 
         setIsLoading(true);
 
         if (type === ImportTrackType.GPX)
-            response = await importGPXTrack(form);
+            response = await importGPXTrack(formData);
         else
-            response = await importExpeditionTrack(form);
+            response = await importExpeditionTrack(formData);
 
         setIsLoading(false);
 
@@ -62,6 +63,8 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
             toast.success(t(translations.my_tracks_page.import_track_successfully));
             onTrackImported();
             hideModal();
+            form.resetFields();
+            selectDefaultBoat(boats);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -69,18 +72,17 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
 
     const hideModal = () => {
         setShowModal(false);
-        form.resetFields();
     }
 
     const getUserBoats = async () => {
+        setIsFetchingBoats(true);
         const response = await getMany(1, 100);
+        setIsFetchingBoats(false);
 
         if (response.success) {
-            setBoats(response.data?.rows);
-            if (response.data?.count > 0) {
-                form.setFieldsValue({
-                    vesselId: response.data?.rows[0]?.id
-                });
+            setBoats(response.data.rows);
+            if (response.data.count > 0) {
+                selectDefaultBoat(response.data.rows);
             }
         }
     }
@@ -89,10 +91,25 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
         return boats.map(item => <Select.Option value={item.id}>{item.publicName}</Select.Option>)
     }
 
+    const selectDefaultBoat = (boats) => {
+        const defaultBoat = boats.find(b => b.isDefaultVessel);
+        if (defaultBoat) {
+            form.setFieldsValue({
+                vesselId: defaultBoat.id
+            });
+        } else {
+            form.setFieldsValue({
+                vesselId: boats[0]?.id
+            });
+        }
+    }
+
     React.useEffect(() => {
-        getUserBoats();
+        if (showModal) {
+            getUserBoats();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [showModal]);
 
     const onRadioChanged = (e) => {
         setSelectedRadioValue(e.target.value);
@@ -116,7 +133,7 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
                     name="vesselId"
                     rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                 >
-                    <SyrfFormSelect>
+                    <SyrfFormSelect notFoundContent={isFetchingBoats ? <Spin size="small" /> : null}>
                         {renderBoatsList()}
                     </SyrfFormSelect>
                 </Form.Item>
@@ -155,7 +172,6 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
                         <Radio.Group onChange={onRadioChanged} value={selectedRadioValue}>
                             <Radio value={radioValue.USE_DEFAULT_BOATS}>{t(translations.my_tracks_page.select_existing_boats)}</Radio>
                             <Radio value={radioValue.CREATE_NEW_BOAT}>{t(translations.my_tracks_page.create_a_new_boat)}</Radio>
-                            <Radio value={radioValue.USE_DEFAULT_NAME}>{t(translations.my_tracks_page.use_default_track_name)}</Radio>
                         </Radio.Group>
                     </Form.Item>
 
