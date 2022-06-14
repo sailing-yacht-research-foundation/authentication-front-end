@@ -551,3 +551,9 @@ export const retryWrapper = (axios, options) => {
         return Promise.reject(error)
     })
 }
+
+export const navigateToProfile = (e, item, history) => {
+    e.stopPropagation();
+    if (item.profile)
+        history.push(`/profile/${item.profile.id}`);
+}

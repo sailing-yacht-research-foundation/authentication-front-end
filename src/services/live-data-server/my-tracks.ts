@@ -15,7 +15,7 @@ export const getAllTracks = (page: number, size: number = 10) => {
 }
 
 export const downloadTrack = (track: Track, type: string) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/${track.id}/export-track/${type}`, { responseType: 'blob' })
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/${track.id}/export-track/${type}${track.trackJson?.id  ? `?trackJsonId=${track.trackJson?.id}` : ''}`, { responseType: 'blob' })
         .then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');

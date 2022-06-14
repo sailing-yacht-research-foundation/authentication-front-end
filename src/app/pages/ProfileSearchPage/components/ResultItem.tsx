@@ -9,12 +9,18 @@ import { UnfollowConfirmModal } from 'app/components/SocialProfile/UnfollowConfi
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
+import { useDispatch } from 'react-redux';
+import { useProfileSearchSlice } from '../slice';
 
-export const ResultItem = ({ profile }) => {
+export const ResultItem = ({ profile, results }) => {
 
     const [followStatus, setFollowStatus] = React.useState<any>(profile.followStatus);
 
     const currentUserId = localStorage.getItem('user_id');
+
+    const dispatch = useDispatch();
+
+    const { actions } = useProfileSearchSlice();
 
     const { t } = useTranslation();
 
@@ -25,7 +31,8 @@ export const ResultItem = ({ profile }) => {
     const follow = async () => {
         const response = await followProfile(profile.id);
         if (response.success) {
-            setFollowStatus(response?.data?.status);
+            setFollowStatus(response.data.status);
+            updateResultListWithNewFollowStatus(response.data.status);
         }
     }
 
@@ -35,8 +42,21 @@ export const ResultItem = ({ profile }) => {
         setIsLoading(false);
         setShowUnfollowModal(false);
         if (response.success) {
-            setFollowStatus(response?.data?.status);
+            setFollowStatus(response.data.status);
+            updateResultListWithNewFollowStatus(response.data.status);
         }
+    }
+
+    const updateResultListWithNewFollowStatus = (status) => {
+        const newResults = results.map(result => {
+            if (result.id  === profile.id) return ({
+                ...profile,
+                followStatus: status
+            });
+            return result;
+        });
+
+        dispatch(actions.setResults(newResults));
     }
 
     const renderFollowButton = () => {

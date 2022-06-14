@@ -103,10 +103,12 @@ export const removeAsAdmin = (groupId: string, invitationId: string) => {
     }))
 }
 
-export const inviteUsersViaEmails = (groupId: string, emails: string[]) => {
+export const inviteUsersToGroup = (groupId: string, emails: string[], userIds: string[], groupIds: string[]) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/invite`, {
-        groupId: groupId,
-        emails: emails
+        groupId,
+        emails,
+        userIds,
+        copyGroupIds: groupIds
     }))
 }
 

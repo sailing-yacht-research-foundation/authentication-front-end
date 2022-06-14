@@ -74,6 +74,12 @@ export const VesselList = () => {
             render: (value, record) => record?.isOwner ? t(translations.vessel_list_page.owner) : t(translations.vessel_list_page.admin),
         },
         {
+            title: t(translations.vessel_list_page.is_default_boat),
+            dataIndex: 'isDefaultVessel',
+            key: 'isDefaultVessel',
+            render: (value, record) => String(value),
+        },
+        {
             title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
