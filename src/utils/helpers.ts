@@ -291,7 +291,10 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
 
     if (error?.response) {
         const errorCode = error.response?.status;
+        const syrfErrorCode = error.response?.data?.errorCode;
         const errorMessage = error.response?.data?.message || error.response?.data?.errorMessage;
+
+        if (syrfErrorCode === 'E003' && errorMessage === 'Token Not Found') return;
 
         if (errorMessage && errorCode !== 401) {
             toast.error(errorMessage);
@@ -531,6 +534,22 @@ export const renderRequirementBasedOnEventKey = (t, key) => {
 export const truncateName = (text, size = 50) => {
     if (!text) return '';
     return text.length > size ? `${text.substring(0, 50)}...` : text;
+}
+
+export const retryWrapper = (axios, options) => {
+    const max_time = options.retry_time;
+    let counter = 0;
+    axios.interceptors.response.use(null, (error) => {
+        /** @type {import("axios").AxiosRequestConfig} */
+        const config = error.config
+        if (counter < max_time) {
+            counter++
+            return new Promise((resolve) => {
+                resolve(axios(config))
+            })
+        }
+        return Promise.reject(error)
+    })
 }
 
 export const navigateToProfile = (e, item, history) => {

@@ -19,6 +19,7 @@ import { logout as ldsLogout } from 'services/live-data-server/auth';
 import { UserNotification } from '../Notification';
 import { FollowRequestModal } from '../SocialProfile/FollowRequestModal';
 import { unregisterPushSubscription } from 'utils/helpers';
+import { useMyEventListSlice } from 'app/pages/MyEventPage/slice';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -31,6 +32,8 @@ export const Nav = () => {
 
   const loginActions = UseLoginSlice().actions;
 
+  const eventActions = useMyEventListSlice().actions;
+
   const history = useHistory();
 
   const { t } = useTranslation();
@@ -42,6 +45,7 @@ export const Nav = () => {
   const logout = () => {
     ldsLogout(refreshToken!);
     dispatch(loginActions.setLogout());
+    dispatch(eventActions.clearEventsListData());
     unregisterPushSubscription();
     history.push('/signin');
   }

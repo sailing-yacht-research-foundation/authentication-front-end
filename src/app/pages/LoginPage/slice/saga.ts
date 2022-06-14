@@ -46,6 +46,8 @@ export function* syrfServiceAnonymousLogin() {
         yield put(loginActions.setSYRFServiceAuthorized(true));
         yield put(loginActions.setSessionToken(response.token));
         yield put(loginActions.setRefreshToken(response.data.refresh_token));
+        yield put(loginActions.setTokenExpiredDate(response.data.expiredAt));
+        yield put(loginActions.setRefreshTokenExpiredDate(response.data.refreshExpiredAt));
     }
 }
 
