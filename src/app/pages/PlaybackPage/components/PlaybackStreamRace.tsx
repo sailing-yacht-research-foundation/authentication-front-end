@@ -312,7 +312,7 @@ export const PlaybackStreamRace = () => {
           }
           break;
         case WSMessageDataType.RACE_DATA_UPDATE:
-          if (data.detail?.id === competitionUnitId) {
+          if (data.detail?.id === competitionUnitId && data.detail?.approximateStart) {
             adjustCompetitionUnitStartTime(data.detail?.approximateStart);
           }
           break;
