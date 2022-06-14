@@ -28,6 +28,8 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
 
     const { t } = useTranslation();
 
+    const [isFetchingBoats, setIsFetchingBoats] = React.useState<boolean>(false);
+
     const normFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
@@ -73,7 +75,9 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
     }
 
     const getUserBoats = async () => {
+        setIsFetchingBoats(true);
         const response = await getMany(1, 100);
+        setIsFetchingBoats(false);
 
         if (response.success) {
             setBoats(response.data.rows);
@@ -129,7 +133,7 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
                     name="vesselId"
                     rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                 >
-                    <SyrfFormSelect>
+                    <SyrfFormSelect notFoundContent={isFetchingBoats ? <Spin size="small" /> : null}>
                         {renderBoatsList()}
                     </SyrfFormSelect>
                 </Form.Item>
