@@ -68,7 +68,7 @@ export const SimulateRaceButton = () => {
         </Menu>
     );
 
-    if (playbackType === PlaybackTypes.OLDRACE && authUser.developerAccountId)
+    if (playbackType === PlaybackTypes.OLDRACE && authUser.developerAccountId && !competitionUnitDetail.calendarEvent?.isPrivate)
         return (
             <>
                 <Modal

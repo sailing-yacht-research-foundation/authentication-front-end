@@ -175,6 +175,7 @@ export const PlaybackStreamRace = () => {
         action: 'subscribe',
         data: {
           competitionUnitId: competitionUnitId,
+          dataTypes :["-device-ping-meta"] // for excluding the data we don't need. Backend uses different data types to debug.
         },
       });
     }
