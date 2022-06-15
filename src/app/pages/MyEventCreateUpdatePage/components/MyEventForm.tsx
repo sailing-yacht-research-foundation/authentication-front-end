@@ -222,7 +222,9 @@ export const MyEventForm = () => {
     }
 
     const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
-        if (lat === null || lon === null) return;
+        if (!lat || !lon) return;
+
+        console.log(lat, lon);
 
         if (selector === 'start') {
             form.setFieldsValue({
