@@ -61,6 +61,8 @@ export function* getNewToken() {
     if (response.success) {
         yield put(loginActions.setSessionToken(response.data.newtoken));
         yield put(loginActions.setRefreshToken(response.data.refresh_token));
+        yield put(loginActions.setTokenExpiredDate(response.data.expiredAt));
+        yield put(loginActions.setRefreshTokenExpiredDate(response.data.refreshExpiredAt));
     } else {
         yield put(loginActions.setLogout());
         toast.info(i18next.t(translations.general.your_session_is_expired));
