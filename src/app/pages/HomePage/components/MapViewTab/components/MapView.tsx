@@ -13,7 +13,7 @@ import { selectResults, selectUpcomingRaces } from '../../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { renderEmptyValue } from 'utils/helpers';
+import { checkIfLocationIsValid, renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { getProfilePicture, getUserName, renderAvatar } from 'utils/user-utils';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
@@ -122,7 +122,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
             map.removeLayer(userMarker);
         }
         
-        if (user.firstName && isAuthenticated)
+        if (user.firstName && isAuthenticated && checkIfLocationIsValid(location.lon, location.lat))
             userMarker = L.marker(L.latLng(location.lat, location.lon), {
                 icon: L.divIcon({
                     html: ReactDOMServer.renderToString(<img src={getProfilePicture(user)} className='avatar-img' />),
