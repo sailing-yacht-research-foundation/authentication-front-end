@@ -7,6 +7,7 @@ import { Button, Radio } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { Map } from './Map';
+import { checkIfLocationIsValid } from 'utils/helpers';
 
 const DEFAULT_ZOOM = 1;
 const options = [
@@ -45,10 +46,7 @@ export const LocationPicker = (props) => {
         if (onRemoveEndLocation) onRemoveEndLocation();
     }
 
-    const canShowPicker = coordinates.lat !== null
-        && coordinates.lat !== undefined
-        && coordinates.lng !== undefined
-        && coordinates.lng !== null
+    const canShowPicker = checkIfLocationIsValid(coordinates.lng, coordinates.lat);
 
 
     if (canShowPicker)

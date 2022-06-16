@@ -144,7 +144,7 @@ const MyLocationWrapper = styled.div`
     align-items: center;
 
     ${media.large`
-        bottom: 20px;
+        bottom: 50px;
     `}
 `;
 

@@ -558,3 +558,7 @@ export const navigateToProfile = (e, item, history) => {
     if (item.profile)
         history.push(`/profile/${item.profile.id}`);
 }
+
+export const checkIfLocationIsValid = (lon, lat) => {
+    return lon !== null && lon !== undefined && lat !== null && lat !== undefined
+}
