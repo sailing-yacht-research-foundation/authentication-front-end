@@ -37,7 +37,7 @@ export const RaceList = (props) => {
             dataIndex: 'approximateStart',
             key: 'approximateStart',
             render: (value, record) => {
-              return renderRaceStartTime(record, value, t);
+              return renderRaceStartTime(value, t);
             },
         },
         {
