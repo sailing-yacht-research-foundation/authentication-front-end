@@ -50,8 +50,8 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
     const [location, setLocation] = React.useState({
-        lon: 0,
-        lat: 0
+        lon: null,
+        lat: null
     });
 
     useEffect(() => {
