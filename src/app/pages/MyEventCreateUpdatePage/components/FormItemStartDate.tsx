@@ -2,7 +2,7 @@ import React from 'react';
 import { SyrfFieldLabel, SyrfFormSelect } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { Row, Col, Form, DatePicker, TimePicker, Tooltip, Button } from 'antd';
+import { Row, Col, Form, DatePicker, TimePicker, Tooltip } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from 'utils/constants';
 import { NowButton } from './MyEventForm';

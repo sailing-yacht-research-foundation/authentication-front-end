@@ -45,10 +45,12 @@ export const ModalCountdownTimer = React.memo(() => {
 
   useEffect(() => {
     resetIntervalOnStartTimeChanged();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [competitionUnitDetail])
 
   useEffect(() => {
     setComposedTime(timeMillisToHours(timeBeforeRaceBegin));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeBeforeRaceBegin]);
 
   // If race started
