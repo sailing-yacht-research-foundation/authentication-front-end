@@ -16,10 +16,6 @@ export const ModalRaceCompleted = () => {
 
     const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
 
-React.useEffect(() => {
-    console.log(competitionUnitDetail);
-}, [competitionUnitDetail]);
-
     return (
         <div>
             <Modal visible={[RaceStatus.COMPLETED, RaceStatus.CANCELED].includes(competitionUnitDetail.status)} footer={null} closable={false}>
