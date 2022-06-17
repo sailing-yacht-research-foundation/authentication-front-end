@@ -188,6 +188,15 @@ export const SiderContent = (props) => {
       setSelectedKey(matchItem.key);
     }
 
+    if (window.location.pathname === '/playback/') {
+      const params = new URLSearchParams(location.search);
+      if (params.get('trackId')) {
+        setSelectedKey(routeKey.TRACKS);
+      } else {
+        setSelectedKey(routeKey.SEARCH);
+      }
+    }
+
     setRenderedDefaultActive(true);
   }
 

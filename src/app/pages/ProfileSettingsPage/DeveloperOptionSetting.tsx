@@ -41,6 +41,7 @@ export const DeveloperOptionSetting = () => {
         if (response.success) {
             toast.success(t(translations.general.your_action_is_successful));
             dispatch(actions.getUser());
+            dispatch(actions.getNewToken());
         } else {
             showToastMessageOnRequestError(response.error);
         }

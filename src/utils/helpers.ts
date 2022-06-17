@@ -4,6 +4,7 @@ import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
 import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TIME_FORMAT } from 'utils/constants';
+import { AuthCode } from './constants';
 
 /**
  * Check if is mobile
@@ -294,9 +295,9 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
         const syrfErrorCode = error.response?.data?.errorCode;
         const errorMessage = error.response?.data?.message || error.response?.data?.errorMessage;
 
-        if (syrfErrorCode === 'E003' && errorMessage === 'Token Not Found') return;
+        if ([AuthCode.INVALID_SESSION_TOKEN, AuthCode.EXPIRED_SESSION_TOKEN].includes(syrfErrorCode)) return;
 
-        if (errorMessage && errorCode !== 401) {
+        if (errorMessage) {
             toast.error(errorMessage);
             return;
         }
@@ -531,7 +532,7 @@ export const renderRequirementBasedOnEventKey = (t, key) => {
 }
 
 export const truncateName = (text, size = 50) => {
-    if (!text) return '';
+    if (!text) return renderEmptyValue(null);
     return text.length > size ? `${text.substring(0, 50)}...` : text;
 }
 
@@ -555,4 +556,8 @@ export const navigateToProfile = (e, item, history) => {
     e.stopPropagation();
     if (item.profile)
         history.push(`/profile/${item.profile.id}`);
+}
+
+export const checkIfLocationIsValid = (lon, lat) => {
+    return lon !== null && lon !== undefined && lat !== null && lat !== undefined
 }

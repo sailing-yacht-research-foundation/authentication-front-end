@@ -11,6 +11,8 @@ import { usePlaybackSlice } from "./slice";
 import { translations } from "locales/translations";
 import { useHistory } from "react-router";
 
+let intervalData;
+
 export const ModalCountdownTimer = React.memo(() => {
   const dispatch = useDispatch();
   const { actions } = usePlaybackSlice();
@@ -23,7 +25,7 @@ export const ModalCountdownTimer = React.memo(() => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    const intervalData = setInterval(() => {
+    intervalData = setInterval(() => {
       dispatch(actions.getTimeBeforeRaceBegin({ raceStartTime: competitionUnitDetail?.startTime }));
     }, 1000);
 
@@ -32,6 +34,17 @@ export const ModalCountdownTimer = React.memo(() => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const resetIntervalOnStartTimeChanged = () => {
+    clearInterval(intervalData);
+    intervalData = setInterval(() => {
+      dispatch(actions.getTimeBeforeRaceBegin({ raceStartTime: competitionUnitDetail?.startTime }));
+    }, 1000);
+  }
+
+  useEffect(() => {
+    resetIntervalOnStartTimeChanged();
+  }, [competitionUnitDetail])
 
   useEffect(() => {
     setComposedTime(timeMillisToHours(timeBeforeRaceBegin));

@@ -222,7 +222,10 @@ export const MyEventForm = () => {
     }
 
     const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
-        if (lat === null || lon === null) return;
+        if (lat === null
+            || lat === undefined
+            || lon === undefined
+            || lon === null) return;
 
         if (selector === 'start') {
             form.setFieldsValue({
@@ -460,7 +463,6 @@ export const MyEventForm = () => {
     }
 
     const dateLimiter = (current) => {
-        if (mode === MODE.UPDATE) return false;
         return current && current < moment().startOf('day');
     };
 
