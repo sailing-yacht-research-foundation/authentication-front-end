@@ -60,11 +60,11 @@ export const search = (params) => {
       sort: ["_score"],
     };
 
-    searchParams._source = [
-        "id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month",
-        "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration", "status",
-        "approx_end_time_ms"
-    ]; // only the fields we need
+    // searchParams._source = [
+    //     "id", "source", "name", "approx_start_point", "start_country", "start_city", "start_year", "start_month",
+    //     "approx_start_time_ms", "event_name", "event", "event_description", "isOpen", "allowRegistration", "status",
+    //     "approx_end_time_ms"
+    // ]; // only the fields we need
     searchParams.from = params.hasOwnProperty('page') ? ((Number(params.page) - 1) * Number(params?.size)) : 0;
     searchParams.size = params.size ?? 10;
 

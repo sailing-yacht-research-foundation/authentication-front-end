@@ -10,6 +10,7 @@ import { selectCompetitionUnitDetail, selectTimeBeforeRaceBegin } from "./slice/
 import { usePlaybackSlice } from "./slice";
 import { translations } from "locales/translations";
 import { useHistory } from "react-router";
+import { RaceStatus } from "utils/constants";
 
 let intervalData;
 
@@ -63,30 +64,51 @@ export const ModalCountdownTimer = React.memo(() => {
     }
   }
 
-  return (
-    <div>
-      <Container>
-        <span>{t(translations.playback_page.countdown_timer_racewillstart)}</span>
-        <span>
-          <strong>{composedTime}</strong>
-        </span>
-      </Container>
-
-      <Modal visible={isMoreThen5Minutes} footer={null} closable={false}>
-        <p style={{ fontSize: "16px", marginBottom: "0px", textAlign: "center" }}>
-          {t(translations.playback_page.countdown_timer_racewillstart)}
-          <br />
-          <span style={{ fontSize: "24px", fontWeight: 500 }}>{composedTime}</span>
-          <br />
-          <span style={{ color: "#999", fontSize: "14px", display: 'block' }}>
-            {t(translations.playback_page.countdown_timer_on)} {renderedDate}
+  if (isMoreThen5Minutes && competitionUnitDetail.startTime
+    && ![RaceStatus.COMPLETED, RaceStatus.CANCELED].includes(competitionUnitDetail.status))
+    return (
+      <div>
+        <Container>
+          <span>{t(translations.playback_page.countdown_timer_racewillstart)}</span>
+          <span>
+            <strong>{composedTime}</strong>
           </span>
-          <Button onClick={goBack} type="link">{t(translations.playback_page.go_back)}</Button>
-        </p>
-      </Modal>
-    </div>
-  );
+        </Container>
+
+        <Modal visible={true} footer={null} closable={false}>
+          <ModalContainer>
+            {t(translations.playback_page.countdown_timer_racewillstart)}
+            <br />
+            <TimerCountDown>{composedTime}</TimerCountDown>
+            <br />
+            <RaceStartAtText>
+              {t(translations.playback_page.countdown_timer_on)} {renderedDate}
+            </RaceStartAtText>
+            <Button onClick={goBack} type="link">{t(translations.playback_page.go_back)}</Button>
+          </ModalContainer>
+        </Modal>
+      </div>
+    );
+
+  return <></>;
 });
+
+const TimerCountDown = styled.span`
+  font-size: 24px;
+  font-weight: 500;
+`;
+
+const RaceStartAtText = styled.span`
+  color: #999;
+  font-size: 14px;
+  display: block;
+`;
+
+const ModalContainer = styled.div`
+  font-size: 16px;
+  margin-bottom: 0px;
+  text-align: center;
+`;
 
 const Container = styled.div`
   align-items: start;

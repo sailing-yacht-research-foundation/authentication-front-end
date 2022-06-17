@@ -88,7 +88,8 @@ export const enum RaceStatus {
     ON_GOING = 'ONGOING',
     SCHEDULED = 'SCHEDULED',
     COMPLETED = 'COMPLETED',
-    POSTPONED = 'POSTPONED'
+    POSTPONED = 'POSTPONED',
+    CANCELED = 'CANCELED'
 }
 
 export const enum WebsocketConnectionStatus {
@@ -296,3 +297,8 @@ export const sourcesPreventIframe = ['TACKTRACKER'];
 export const requiredCompetitorsInformation = [
     'requireEmergencyContact', 'requireCovidCertificate', 'requireMedicalProblems',
     'requireFoodAllergies', 'requireImmigrationInfo'];
+
+export enum RaceDataUpdate {
+    UPDATED = 'UPDATED',
+    STATUS_CHANGED = 'STATUS_CHANGED'
+} 
