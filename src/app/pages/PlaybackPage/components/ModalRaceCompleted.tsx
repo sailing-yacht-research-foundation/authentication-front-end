@@ -1,15 +1,12 @@
 import React from "react";
 import { Button, Modal } from "antd";
 import { translations } from "locales/translations";
-import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { selectCompetitionUnitDetail } from "./slice/selectors";
 import { RaceStatus } from "utils/constants";
 
 export const ModalRaceCompleted = () => {
-
-    const history = useHistory();
 
     const { t } = useTranslation();
 
