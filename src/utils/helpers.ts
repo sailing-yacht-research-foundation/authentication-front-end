@@ -494,7 +494,6 @@ export const flat = (obj, out) => {
 }
 
 export const renderRaceStartTime = (value, t) => {
-    console.log(value);
     const valueAsMomentObject = moment(value);
     if (valueAsMomentObject.isValid()) {
         return valueAsMomentObject.format(TIME_FORMAT.date_text);
