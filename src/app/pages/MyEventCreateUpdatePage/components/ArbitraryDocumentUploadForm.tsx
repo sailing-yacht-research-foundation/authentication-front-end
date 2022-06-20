@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Spin, Form, Checkbox, Divider, Button } from 'antd';
+import { Modal, Spin, Form, Checkbox, Divider } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { SyrfFieldLabel, SyrfFormButton, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
@@ -97,7 +97,7 @@ export const ArbitraryDocumentUploadForm = ({ event, showModal, setShowModal, re
                                                     validator(_, value) {
                                                         if (fields.length === 1) return Promise.resolve();
                                                         for (let i = 0; i < fields.length; i++) {
-                                                            if (i !== index && getFieldValue(['fields', i, 'documentName']) !== value || !value) {
+                                                            if (((i !== index) && (getFieldValue(['fields', i, 'documentName']) !== value)) || !value) {
                                                                 return Promise.resolve();
                                                             }
                                                         }

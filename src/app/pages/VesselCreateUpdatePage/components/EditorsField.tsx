@@ -24,8 +24,6 @@ export const EditorsField = (props) => {
     // eslint-disable-next-line
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
-    const [showIndividualField, setShowIndividualField] = React.useState<boolean>(false);
-
     const { t } = useTranslation();
 
     const [items, setItems] = React.useState<any[]>([]);

@@ -493,15 +493,13 @@ export const flat = (obj, out) => {
     return out;
 }
 
-export const renderRaceStartTime = (record, value, t) => {
+export const renderRaceStartTime = (value, t) => {
     const valueAsMomentObject = moment(value);
     if (valueAsMomentObject.isValid()) {
         return valueAsMomentObject.format(TIME_FORMAT.date_text);
-    } else if (RaceStatus.POSTPONED === record.status) {
-        return t(translations.event_detail_page.this_race_is_postponed_therefore_its_start_time_is_not_available);
     }
 
-    return renderEmptyValue(null);
+    return t(translations.event_detail_page.this_race_is_postponed_therefore_its_start_time_is_not_available);
 }
 
 export const handleOnBoatSelected = (boats, boatIdToFilter, formInstance) => {

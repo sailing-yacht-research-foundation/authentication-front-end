@@ -52,6 +52,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
 
     const history = useHistory();
 
+    // eslint-disable-next-line
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
     const onSearch = async (keyword) => {

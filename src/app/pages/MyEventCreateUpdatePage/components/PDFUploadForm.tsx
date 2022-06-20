@@ -114,6 +114,7 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
 
     React.useEffect(() => {
         if (event.id) getArbitraryDocuments(arbitraryPagination.page, arbitraryPagination.size);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event]);
 
     return (

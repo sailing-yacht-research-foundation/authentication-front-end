@@ -69,7 +69,7 @@ export const CompetitionUnitForm = () => {
 
     const [error, setError] = React.useState<any>({});
 
-    const isCompetitionUnitPostponed = competitionUnit.status === RaceStatus.POSTPONED;
+    const isCompetitionUnitPostponed = !moment(competitionUnit.startTime).isValid();
 
     const onFinish = async (values) => {
         let { name, startDate, startTime, isCompleted, calendarEventId, vesselParticipantGroupId, description, approximateStart_zone, courseId } = values;
@@ -133,7 +133,7 @@ export const CompetitionUnitForm = () => {
     }
 
     const showPostponedMessageToUserIfRaceIsPostponed = (race: CompetitionUnit) => {
-        if (race.status === RaceStatus.POSTPONED) {
+        if (!moment(race.startTime).isValid()) {
             toast.info(t(translations.competition_unit_create_update_page.this_race_is_postponed_and_you_can_only));
         }
     }
