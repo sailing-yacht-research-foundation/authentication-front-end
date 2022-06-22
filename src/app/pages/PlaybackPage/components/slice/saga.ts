@@ -95,7 +95,6 @@ export function* getRaceData({ type, payload }) {
     }
 
     // Streaming race
-    yield put(playbackActions.setRaceTime({ start: new Date(competitionUnitResult.data.approximateStart).getTime(), end: null }));
     return yield put(playbackActions.setPlaybackType(PlaybackTypes.STREAMINGRACE));
   }
 
