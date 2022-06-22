@@ -390,7 +390,7 @@ export const MyEventForm = () => {
         geocodeByAddress(addr)
             .then(results => getLatLng(results[0]))
             .then(coordinate => onChoosedLocation(coordinate.lat, coordinate.lng, false, true))
-            .catch(error => console.log('Geocode map err', error))
+            .catch(error => toast.error(t(translations.my_event_create_update_page.there_is_a_problem_with_your_inputted_address)));
     }
 
     const handleSelectEndAddress = (addr) => {
