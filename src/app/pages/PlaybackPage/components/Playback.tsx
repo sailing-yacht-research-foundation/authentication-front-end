@@ -209,7 +209,6 @@ export const Playback = (props) => {
         const firstPositionTime = new Date().getTime() - raceLength;
         const clickedWidthInPercentage = (clickedWidth / progressWidth) * 100;
         const overalRaceLength = lastPositionTime - firstPositionTime;
-        console.log(overalRaceLength);
         const newPlayTimeInMiliseconds = ((overalRaceLength * (100 - clickedWidthInPercentage)) / 100);
 
         return Math.round(lastPositionTime - newPlayTimeInMiliseconds);
