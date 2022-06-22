@@ -67,7 +67,8 @@ export const ModalCountdownTimer = React.memo(() => {
   }
 
   if (isMoreThen5Minutes && competitionUnitDetail.startTime
-    && ![RaceStatus.COMPLETED, RaceStatus.CANCELED].includes(competitionUnitDetail.status))
+    && ![RaceStatus.COMPLETED, RaceStatus.CANCELED].includes(competitionUnitDetail.status)
+    && !competitionUnitDetail.calendarEvent?.isSimulation)
     return (
       <div>
         <Container>
