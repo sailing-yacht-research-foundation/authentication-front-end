@@ -1,20 +1,20 @@
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { getGroupById } from 'services/live-data-server/groups';
+import { getAdmins, getGroupById, getMembers, searchMembers } from 'services/live-data-server/groups';
 import * as slice from '..';
 import { v4 as uuidv4 } from 'uuid';
 
 import groupDetailSaga, { getGroup, getGroupAdmins, getGroupMembers, searchAcceptedMembers } from '../saga';
 import { GroupMemberStatus } from 'utils/constants';
 
-describe('groups list Saga', () => {
+describe('groups detail Saga', () => {
     let getGroupIterator: ReturnType<typeof getGroup>;
     let getGroupAdminsIterator: ReturnType<typeof getGroupAdmins>;
     let getGroupMembersIterator: ReturnType<typeof getGroupMembers>;
     let searchAcceptedMembersIterator: ReturnType<typeof searchAcceptedMembers>;
     const getGroupParam = uuidv4();
-    const getAdminsParam = { page: 5, groupId: uuidv4(), status: GroupMemberStatus.ACCEPTED, size: 20 };
+    const getAdminsParam = { page: 5, groupId: uuidv4(), size: 20 };
     const getMembersParam = { page: 5, groupId: uuidv4(), status: GroupMemberStatus.ACCEPTED, size: 20 };
-    const searchAcceptedMembersParam = { page: 5, groupId: uuidv4(), status: GroupMemberStatus.ACCEPTED, size: 20 };
+    const searchAcceptedMembersParam = {  groupId: uuidv4(), status: GroupMemberStatus.ACCEPTED, keyword: 'Dat dang' };
 
     // We have to test twice, once for a successful load and once for an unsuccessful one
     // so we do all the stuff that happens beforehand automatically in the beforeEach
@@ -104,6 +104,129 @@ describe('groups list Saga', () => {
         );
 
         const iteration = getGroupIterator.next();
+        expect(iteration.done).toBe(true);
+    });
+
+    it('Should get groups admins', () => {
+        const response = {
+            success: true,
+            data: {
+                rows: [],
+                page: 1,
+                count: 100,
+                size: 10
+            }
+        };
+
+        const putSetIsGettingAdmins = getGroupAdminsIterator.next().value;
+        expect(putSetIsGettingAdmins).toEqual(
+            put(slice.groupDetailActions.setIsGettingAdmins(true)),
+        );
+
+        const callGetGroupDescriptor = getGroupAdminsIterator.next().value;
+        expect(callGetGroupDescriptor).toEqual(
+            call(getAdmins, getAdminsParam.groupId, getAdminsParam.page, getAdminsParam.size),
+        );
+
+        const putSetIsGettingAdminsFalse = getGroupAdminsIterator.next(response).value;
+        expect(putSetIsGettingAdminsFalse).toEqual(
+            put(slice.groupDetailActions.setIsGettingAdmins(false)),
+        );
+
+        let getGroupsSuccessPutDescriptor = getGroupAdminsIterator.next().value;
+        expect(getGroupsSuccessPutDescriptor).toEqual(
+            put(slice.groupDetailActions.setAdmins(response.data.rows)),
+        );
+
+        getGroupsSuccessPutDescriptor = getGroupAdminsIterator.next().value;
+        expect(getGroupsSuccessPutDescriptor).toEqual(
+            put(slice.groupDetailActions.setCurrentAdminPage(response.data.page)),
+        );
+
+        getGroupsSuccessPutDescriptor = getGroupAdminsIterator.next().value;
+        expect(getGroupsSuccessPutDescriptor).toEqual(
+            put(slice.groupDetailActions.setAdminTotal(response.data.count)),
+        );
+
+        getGroupsSuccessPutDescriptor = getGroupAdminsIterator.next().value;
+        expect(getGroupsSuccessPutDescriptor).toEqual(
+            put(slice.groupDetailActions.setAdminPageSize(response.data.size)),
+        );
+
+        const iteration = getGroupAdminsIterator.next();
+        expect(iteration.done).toBe(true);
+    });
+
+    it('Should get groups members', () => {
+        const response = {
+            success: true,
+            data: {
+                rows: [],
+                page: 1,
+                count: 100,
+                size: 10
+            }
+        };
+
+        let putSetIsGettingGroupMembers = getGroupMembersIterator.next().value;
+        expect(putSetIsGettingGroupMembers).toEqual(
+            put(slice.groupDetailActions.setIsGettingMembers(true)),
+        );
+
+        const callGetGroupDescriptor = getGroupMembersIterator.next().value;
+        expect(callGetGroupDescriptor).toEqual(
+            call(getMembers, getMembersParam.groupId, getMembersParam.page, getMembersParam.size, getMembersParam.status),
+        );
+
+        putSetIsGettingGroupMembers = getGroupMembersIterator.next(response).value;
+        expect(putSetIsGettingGroupMembers).toEqual(
+            put(slice.groupDetailActions.setIsGettingMembers(false)),
+        );
+
+        let getGroupsMembersSuccessPutDescriptor = getGroupMembersIterator.next().value;
+        expect(getGroupsMembersSuccessPutDescriptor).toEqual(
+            put(slice.groupDetailActions.setMembers(response.data.rows)),
+        );
+
+        getGroupsMembersSuccessPutDescriptor = getGroupMembersIterator.next().value;
+        expect(getGroupsMembersSuccessPutDescriptor).toEqual(
+            put(slice.groupDetailActions.setCurrentMemberPage(response.data.page)),
+        );
+
+        getGroupsMembersSuccessPutDescriptor = getGroupMembersIterator.next().value;
+        expect(getGroupsMembersSuccessPutDescriptor).toEqual(
+            put(slice.groupDetailActions.setMemberTotal(response.data.count)),
+        );
+
+        getGroupsMembersSuccessPutDescriptor = getGroupMembersIterator.next().value;
+        expect(getGroupsMembersSuccessPutDescriptor).toEqual(
+            put(slice.groupDetailActions.setMemberPageSize(response.data.size)),
+        );
+
+        const iteration = getGroupMembersIterator.next();
+        expect(iteration.done).toBe(true);
+    });
+
+    it('should handle searchAcceptedMembers', () => {
+
+        const response = {
+            success: true,
+            data: {
+                rows: []
+            }
+        }
+
+        let searchAcceptedMembersDescriptor = searchAcceptedMembersIterator.next().value;
+        expect(searchAcceptedMembersDescriptor).toEqual(
+            call(searchMembers, searchAcceptedMembersParam.groupId, searchAcceptedMembersParam.keyword, searchAcceptedMembersParam.status),
+        );
+
+        searchAcceptedMembersDescriptor = searchAcceptedMembersIterator.next(response).value;
+        expect(searchAcceptedMembersDescriptor).toEqual(
+            put(slice.groupDetailActions.setAcceptedMemberResults(response.data.rows)),
+        );
+
+        const iteration = searchAcceptedMembersIterator.next();
         expect(iteration.done).toBe(true);
     });
 });
