@@ -187,11 +187,32 @@ export const Playback = (props) => {
 
         let clickedWidth = e.clientX - rect.left;
         let leftOffset = (clickedWidth / progressWidth) * 100;
+        let timeOnLocalFormat;
+        const mousePositionFromProgressBar = getMousePositionFromProgressBar(e);
         setHoverWidthOffset(`calc(${leftOffset}% - ${isShowingLocalTimeFormat ? '45px' : '35px'})`);
-        const timeOnLocalFormat = moment(raceTime.start + getMousePositionFromProgressBar(e)).format(TIME_FORMAT.time_text);
+        if (playbackType === PlaybackTypes.STREAMINGRACE) {
+            timeOnLocalFormat = moment(getMousePositionFromProgressBarOnLiveRace(e)).format(TIME_FORMAT.time_text);
+        } else {
+            timeOnLocalFormat = moment(raceTime.start + mousePositionFromProgressBar).format(TIME_FORMAT.time_text);
+        }
+
         setTimeWhenMouseHover(isShowingLocalTimeFormat
             ? timeOnLocalFormat
-            : milisecondsToMinutes(getMousePositionFromProgressBar(e)));
+            : milisecondsToMinutes(mousePositionFromProgressBar));
+    }
+
+    const getMousePositionFromProgressBarOnLiveRace = (e) => {
+        const progressWidth = progressBarContainerRef.current?.offsetWidth || 0;
+        const rect = e.target.getBoundingClientRect();
+        const clickedWidth = e.clientX - rect.left;
+        const lastPositionTime = new Date().getTime();
+        const firstPositionTime = new Date().getTime() - raceLength;
+        const clickedWidthInPercentage = (clickedWidth / progressWidth) * 100;
+        const overalRaceLength = lastPositionTime - firstPositionTime;
+        console.log(overalRaceLength);
+        const newPlayTimeInMiliseconds = ((overalRaceLength * (100 - clickedWidthInPercentage)) / 100);
+
+        return Math.round(lastPositionTime - newPlayTimeInMiliseconds);
     }
 
     const hideTimeTooltip = (e) => {

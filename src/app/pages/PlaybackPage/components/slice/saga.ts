@@ -17,6 +17,7 @@ import { getVesselParticipantGroupById } from "services/live-data-server/vessel-
 import { PlaybackTypes } from "types/Playback";
 import { sourcesPreventIframe } from "utils/constants";
 import { playbackActions } from ".";
+
 export function* getCompetitionUnitDetail({ type, payload }) {
   const { id } = payload;
 
@@ -94,6 +95,7 @@ export function* getRaceData({ type, payload }) {
     }
 
     // Streaming race
+    yield put(playbackActions.setRaceTime({ start: new Date(competitionUnitResult.data.approximateStart).getTime(), end: null }));
     return yield put(playbackActions.setPlaybackType(PlaybackTypes.STREAMINGRACE));
   }
 
