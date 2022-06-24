@@ -157,6 +157,31 @@ describe('groups detail Saga', () => {
         expect(iteration.done).toBe(true);
     });
 
+    it('Should get groups admins and not set anything because the server error', () => {
+        const response = {
+            success: false,
+        };
+
+        const putSetIsGettingAdmins = getGroupAdminsIterator.next().value;
+        expect(putSetIsGettingAdmins).toEqual(
+            put(slice.groupDetailActions.setIsGettingAdmins(true)),
+        );
+
+        const callGetGroupDescriptor = getGroupAdminsIterator.next().value;
+        expect(callGetGroupDescriptor).toEqual(
+            call(getAdmins, getAdminsParam.groupId, getAdminsParam.page, getAdminsParam.size),
+        );
+
+        const putSetIsGettingAdminsFalse = getGroupAdminsIterator.next(response).value;
+        expect(putSetIsGettingAdminsFalse).toEqual(
+            put(slice.groupDetailActions.setIsGettingAdmins(false)),
+        );
+
+        const iteration = getGroupAdminsIterator.next();
+        expect(iteration.done).toBe(true);
+    });
+
+
     it('Should get groups members', () => {
         const response = {
             success: true,
@@ -207,6 +232,30 @@ describe('groups detail Saga', () => {
         expect(iteration.done).toBe(true);
     });
 
+    it('Should get groups members but does nothing because server error', () => {
+        const response = {
+            success: false
+        };
+
+        let putSetIsGettingGroupMembers = getGroupMembersIterator.next().value;
+        expect(putSetIsGettingGroupMembers).toEqual(
+            put(slice.groupDetailActions.setIsGettingMembers(true)),
+        );
+
+        const callGetGroupDescriptor = getGroupMembersIterator.next().value;
+        expect(callGetGroupDescriptor).toEqual(
+            call(getMembers, getMembersParam.groupId, getMembersParam.page, getMembersParam.size, getMembersParam.status),
+        );
+
+        putSetIsGettingGroupMembers = getGroupMembersIterator.next(response).value;
+        expect(putSetIsGettingGroupMembers).toEqual(
+            put(slice.groupDetailActions.setIsGettingMembers(false)),
+        );
+
+        const iteration = getGroupMembersIterator.next();
+        expect(iteration.done).toBe(true);
+    });
+
     it('should handle searchAcceptedMembers', () => {
 
         const response = {
@@ -227,6 +276,21 @@ describe('groups detail Saga', () => {
         );
 
         const iteration = searchAcceptedMembersIterator.next();
+        expect(iteration.done).toBe(true);
+    });
+
+    it('should handle searchAcceptedMembers but doesnt set data as the server is error', () => {
+        const response = {
+            success: false,
+
+        }
+
+        let searchAcceptedMembersDescriptor = searchAcceptedMembersIterator.next().value;
+        expect(searchAcceptedMembersDescriptor).toEqual(
+            call(searchMembers, searchAcceptedMembersParam.groupId, searchAcceptedMembersParam.keyword, searchAcceptedMembersParam.status),
+        );
+
+        const iteration = searchAcceptedMembersIterator.next(response);
         expect(iteration.done).toBe(true);
     });
 });
