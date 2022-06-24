@@ -10,7 +10,8 @@ export const initialState: MyEventListState = {
   results: [],
   total: 0,
   is_changing_page: false,
-  size: 10
+  size: 10,
+  keyword: '',
 };
 
 const slice = createSlice({
@@ -37,6 +38,9 @@ const slice = createSlice({
       state.results = [];
       state.page = 1;
       state.total = 0;
+    },
+    setKeyword(state, action: PayloadAction<string>) {
+      state.keyword = action.payload;
     }
   },
 });

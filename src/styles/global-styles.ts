@@ -290,4 +290,8 @@ export const GlobalStyle = createGlobalStyle`
   .ant-image-preview-wrap, .ant-image-preview-mask {
     z-index: 99999 !important;
   }
+
+  .ant-dropdown {
+    z-index: 99999 !important;
+  }
 `;

@@ -9,8 +9,8 @@ export const getAll = () => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`))
 }
 
-export const getMany = (page: string, size: number = 10) => {
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/my-events?isPrivate_eq=false`, {
+export const getMany = (keyword: string, page: string, size: number = 10) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/my-events?isPrivate_eq=false${keyword ? `&name_contains=${keyword}` : ''}`, {
         params: {
             page,
             size

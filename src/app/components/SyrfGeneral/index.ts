@@ -283,3 +283,8 @@ export const LiveDot = styled.span`
         background: #ff0000;
     }
 `;
+
+export const RightAligner = styled.div`
+    float: right;
+    margin: 10px 0;
+`;
