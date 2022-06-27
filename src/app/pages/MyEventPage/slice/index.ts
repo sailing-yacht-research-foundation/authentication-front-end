@@ -1,6 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { CalendarEvent } from 'types/CalendarEvent';
+import { TableFiltering } from 'types/TableFiltering';
 import { createSlice } from 'utils/@reduxjs/toolkit';
+import { TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import myEventListSaga from './saga';
 import { MyEventListState } from './types';
@@ -11,7 +13,7 @@ export const initialState: MyEventListState = {
   total: 0,
   is_changing_page: false,
   size: 10,
-  keyword: '',
+  filter: []
 };
 
 const slice = createSlice({
@@ -39,9 +41,10 @@ const slice = createSlice({
       state.page = 1;
       state.total = 0;
     },
-    setKeyword(state, action: PayloadAction<string>) {
-      state.keyword = action.payload;
-    }
+    setFilter(state, action: PayloadAction<TableFiltering>) {
+      const filter = state.filter;
+      state.filter = [...filter.filter(item => item.key !== action.payload?.key), action.payload];
+  }
   },
 });
 

@@ -5,7 +5,7 @@ export interface MyEventListState {
     total: number;
     is_changing_page: boolean;
     size: number;
-    keyword: string;
+    filter: any[];
   }
   
   export type ContainerState = MyEventListState

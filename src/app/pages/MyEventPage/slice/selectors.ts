@@ -31,7 +31,7 @@ export const selectPageSize = createSelector(
     myEventList => myEventList.size,
 );
 
-export const selectSearchKeyword = createSelector(
+export const selectFilter = createSelector(
     [selectDomain],
-    myEventList => myEventList.keyword
-)
+    myEventList => myEventList.filter
+);

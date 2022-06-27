@@ -3,7 +3,8 @@ import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
-import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TIME_FORMAT } from 'utils/constants';
+import { TableFiltering } from 'types/TableFiltering';
+import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { AuthCode } from './constants';
 
 /**
@@ -559,4 +560,17 @@ export const navigateToProfile = (e, item, history) => {
 
 export const checkIfLocationIsValid = (lon, lat) => {
     return lon !== null && lon !== undefined && lat !== null && lat !== undefined
+}
+
+export const parseFilterParams = (filter: TableFiltering[]) => {
+    let filterString = '';
+    filter.forEach(f => {
+        if (f.type === TableFilteringType.TEXT) {
+            filterString += `&${f.key}_contains=${f.value}`;
+        } else {
+            filterString += `&${f.key}_gte=${f.value[0]}&${f.key}_lte=${f.value[1]}`;
+        }
+    });
+
+    return filterString;
 }

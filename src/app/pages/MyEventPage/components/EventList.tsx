@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Table, Space, Spin, Tag, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsChangingPage, selectPageSize, selectResults, selectSearchKeyword } from '../slice/selectors';
+import { selectFilter, selectIsChangingPage, selectPageSize, selectResults } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
@@ -15,7 +15,7 @@ import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
 import { renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
-import { EventState, TIME_FORMAT } from 'utils/constants';
+import { EventState, TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { RaceList } from './RaceList';
@@ -24,7 +24,7 @@ import { CalendarEvent } from 'types/CalendarEvent';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { deleteParticipant } from 'services/live-data-server/participants';
 import { toast } from 'react-toastify';
-import { getColumnSearchProps } from 'app/components/TableFilter';
+import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 
 const defaultOptions = {
@@ -75,16 +75,28 @@ export const EventList = () => {
 
   const [isLeavingEvent, setIsLeavingEvent] = React.useState<boolean>(false);
 
-  const keyword = useSelector(selectSearchKeyword);
+  const filter = useSelector(selectFilter);
 
   const searchInput = React.useRef<any>(null);
+
+  const getFilterTypeBaseOnColumn = (column: string) => {
+    const fieldsWithDateFiltering = ['approximateStartTime', 'createdAt'];
+    if (fieldsWithDateFiltering.includes(column)) return TableFilteringType.DATE;
+    return TableFilteringType.TEXT;
+  }
 
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
     dataIndex: any,
   ) => {
+    let param: any = selectedKeys[0];
+    const filterType = getFilterTypeBaseOnColumn(dataIndex);
+    if (filterType === TableFilteringType.DATE) {
+      param = [param[0]?.format(TIME_FORMAT.number_with_time), param[1]?.format(TIME_FORMAT.number_with_time)]
+    }
     confirm();
+    dispatch(actions.setFilter({ key: dataIndex, value: param, type: filterType }));
   };
 
   const handleReset = (clearFilters: () => void) => {
@@ -124,17 +136,20 @@ export const EventList = () => {
       dataIndex: 'city',
       key: 'city',
       render: (text) => renderEmptyValue(text),
+      ...getColumnSearchProps('city', searchInput, handleSearch, handleReset)
     },
     {
       title: t(translations.my_event_list_page.country),
       dataIndex: 'country',
       key: 'country',
       render: (text) => renderEmptyValue(text),
+      ...getColumnSearchProps('country', searchInput, handleSearch, handleReset)
     },
     {
       title: t(translations.my_event_list_page.start_date),
       dataIndex: 'approximateStartTime',
       key: 'start_date',
+      ...getColumnTimeProps('approximateStartTime', handleSearch, handleReset),
       render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time)
         + ' ' + record.approximateStartTime_zone + ' '
         + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
@@ -155,6 +170,7 @@ export const EventList = () => {
       title: t(translations.my_event_list_page.created_date),
       dataIndex: 'createdAt',
       key: 'createdAt',
+      ...getColumnTimeProps('createdAt', handleSearch, handleReset),
       render: (value) => moment(value).format(TIME_FORMAT.date_text),
     },
     {
@@ -189,7 +205,7 @@ export const EventList = () => {
   }
 
   React.useEffect(() => {
-    dispatch(actions.getEvents({ page: 1, size: 10 }));
+    dispatch(actions.getEvents({ page: 1, size: 10, filter }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -203,11 +219,11 @@ export const EventList = () => {
   }, [results]);
 
   React.useEffect(() => {
-    dispatch(actions.getEvents({ keyword: keyword, page: page, size: size }));
-  }, [keyword]);
+    dispatch(actions.getEvents({ filter: filter, page: page, size: size }));
+  }, [filter]);
 
   const onPaginationChanged = (page, size) => {
-    dispatch(actions.getEvents({ page, size }));
+    dispatch(actions.getEvents({ page, size, filter }));
   }
 
   const showDeleteRaceModal = (event) => {
@@ -216,7 +232,7 @@ export const EventList = () => {
   }
 
   const onRaceDeleted = () => {
-    dispatch(actions.getEvents({ page, size }));
+    dispatch(actions.getEvents({ page, size, filter }));
   }
 
   const renderExpandedRowRender = (record) => {
@@ -240,7 +256,7 @@ export const EventList = () => {
     if (response.success) {
       toast.success(t(translations.my_event_list_page.successfully_left_the_event));
       setShowLeaveEventConfirmModal(false);
-      dispatch(actions.getEvents({ keyword, page, size }));
+      dispatch(actions.getEvents({ filter, page, size }));
     } else {
       showToastMessageOnRequestError(response.success);
     }

@@ -17,7 +17,8 @@ export const TIME_FORMAT = {
     date_text_with_time: 'MMM. D, YYYY [at] h:mm A z',
     date_text: 'MMM. D, YYYY',
     time: 'HH:mm:ss',
-    time_text: 'h:mm:ss A z'
+    time_text: 'h:mm:ss A z',
+    number_with_time: 'YYYY-MM-DD HH:mm:ss'
 }
 
 export const MODE = {
@@ -301,4 +302,9 @@ export const requiredCompetitorsInformation = [
 export enum RaceDataUpdate {
     UPDATED = 'UPDATED',
     STATUS_CHANGED = 'STATUS_CHANGED'
-} 
+}
+
+export enum TableFilteringType {
+    TEXT = 'TEXT',
+    DATE = 'DATE'    
+}
