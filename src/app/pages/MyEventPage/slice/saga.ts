@@ -9,11 +9,11 @@ import { myEventListActions } from ".";
 export function* getEvents(action) {
     yield put(myEventListActions.setIsChangingPage(true));
 
-    const { page, size, filter } = action.payload;
+    const { page, size, filter, sorter } = action.payload;
     yield put(myEventListActions.setPage(page));
     yield put(myEventListActions.setSize(size));
 
-    const response = yield call(getMany, page, size, filter);
+    const response = yield call(getMany, page, size, filter, sorter);
     yield put(myEventListActions.setIsChangingPage(false));
 
     if (response.success) {

@@ -1,7 +1,8 @@
 import { SYRF_SERVER } from 'services/service-constants';
 import { CalendarEvent } from 'types/CalendarEvent';
-import { EventState, TIME_FORMAT } from 'utils/constants';
-import { formatServicePromiseResponse, parseFilterParams } from 'utils/helpers';
+import { TableSorting } from 'types/TableSorting';
+import { EventState } from 'utils/constants';
+import { formatServicePromiseResponse, parseFilterSorterParams } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const getAll = () => {
@@ -9,9 +10,10 @@ export const getAll = () => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events${!!userId ? `?createdById_eq=${userId}` : ''}`))
 }
 
-export const getMany = (page: string, size: number = 10, filter: any[]) => {
-    const filterString = parseFilterParams(filter);
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/my-events?isPrivate_eq=false${filterString ?? filterString}`, {
+export const getMany = (page: string, size: number = 10, filter: any[], sorter: TableSorting) => {
+    const sortAndFilterString = parseFilterSorterParams(filter, sorter);
+
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/my-events?isPrivate_eq=false${sortAndFilterString ?? sortAndFilterString}`, {
         params: {
             page,
             size

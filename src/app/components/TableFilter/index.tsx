@@ -4,7 +4,7 @@ import { ColumnType } from 'antd/lib/table';
 import moment from 'moment';
 import React from 'react';
 
-export const getColumnSearchProps = (dataIndex: any, searchInput, handleSearch: Function, handleReset: Function): ColumnType<any> => ({
+export const getColumnSearchProps = (dataIndex: any, searchInput, handleSearch: Function, handleReset: Function, columnToReset: string): ColumnType<any> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
             <Input
@@ -25,7 +25,7 @@ export const getColumnSearchProps = (dataIndex: any, searchInput, handleSearch: 
                     Search
                 </Button>
                 <Button
-                    onClick={() => clearFilters && handleReset(clearFilters)}
+                    onClick={() => clearFilters && handleReset(clearFilters, columnToReset)}
                     size="small"
                     style={{ width: 90 }}
                 >

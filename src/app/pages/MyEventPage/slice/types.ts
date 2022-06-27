@@ -1,3 +1,6 @@
+import { TableFiltering } from "types/TableFiltering";
+import { TableSorting } from "types/TableSorting";
+
 /* --- STATE --- */
 export interface MyEventListState {
     results: any[];
@@ -5,7 +8,8 @@ export interface MyEventListState {
     total: number;
     is_changing_page: boolean;
     size: number;
-    filter: any[];
+    filter: TableFiltering[];
+    sorter: Partial<TableSorting>;
   }
   
   export type ContainerState = MyEventListState

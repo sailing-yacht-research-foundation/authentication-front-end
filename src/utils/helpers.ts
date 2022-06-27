@@ -4,6 +4,7 @@ import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
 import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
 import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { AuthCode } from './constants';
 
@@ -562,15 +563,19 @@ export const checkIfLocationIsValid = (lon, lat) => {
     return lon !== null && lon !== undefined && lat !== null && lat !== undefined
 }
 
-export const parseFilterParams = (filter: TableFiltering[]) => {
-    let filterString = '';
+export const parseFilterSorterParams = (filter: TableFiltering[], sorter: TableSorting) => {
+    let paramString = '';
     filter.forEach(f => {
         if (f.type === TableFilteringType.TEXT) {
-            filterString += `&${f.key}_contains=${f.value}`;
+            paramString += `&${f.key}_contains=${f.value}`;
         } else {
-            filterString += `&${f.key}_gte=${f.value[0]}&${f.key}_lte=${f.value[1]}`;
+            paramString += `&${f.key}_gte=${f.value[0]}&${f.key}_lte=${f.value[1]}`;
         }
     });
 
-    return filterString;
+    if (sorter && sorter.key) {
+        paramString += `&sort=${sorter.key}.${sorter.order}`;
+    }
+
+    return paramString;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Table, Space, Spin, Tag, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectFilter, selectIsChangingPage, selectPageSize, selectResults } from '../slice/selectors';
+import { selectFilter, selectIsChangingPage, selectPageSize, selectResults, selectSorter } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
@@ -77,6 +77,8 @@ export const EventList = () => {
 
   const filter = useSelector(selectFilter);
 
+  const sorter = useSelector(selectSorter);
+
   const searchInput = React.useRef<any>(null);
 
   const getFilterTypeBaseOnColumn = (column: string) => {
@@ -99,8 +101,9 @@ export const EventList = () => {
     dispatch(actions.setFilter({ key: dataIndex, value: param, type: filterType }));
   };
 
-  const handleReset = (clearFilters: () => void) => {
+  const handleReset = (clearFilters: () => void, columnToReset: string) => {
     clearFilters();
+    dispatch(actions.clearFilter(columnToReset));
   };
 
   const columns: any = [
@@ -108,17 +111,19 @@ export const EventList = () => {
       title: t(translations.general.name),
       dataIndex: 'name',
       key: 'name',
+      sorter: true,
       render: (text, record) => {
         return <Tooltip title={text}>
           <Link to={`/events/${record.id}`}>{truncateName(text)}</Link>
         </Tooltip>;
       },
-      ...getColumnSearchProps('name', searchInput, handleSearch, handleReset)
+      ...getColumnSearchProps('name', searchInput, handleSearch, handleReset, 'name')
     },
     {
       title: 'Status',
       dataIndex: 'isOpen',
       key: 'isOpen',
+      sorter: true,
       render: (isOpen, record) => {
         return (
           <StatusContainer>
@@ -136,19 +141,22 @@ export const EventList = () => {
       dataIndex: 'city',
       key: 'city',
       render: (text) => renderEmptyValue(text),
-      ...getColumnSearchProps('city', searchInput, handleSearch, handleReset)
+      sorter: true,
+      ...getColumnSearchProps('city', searchInput, handleSearch, handleReset, 'city')
     },
     {
       title: t(translations.my_event_list_page.country),
       dataIndex: 'country',
       key: 'country',
+      sorter: true,
       render: (text) => renderEmptyValue(text),
-      ...getColumnSearchProps('country', searchInput, handleSearch, handleReset)
+      ...getColumnSearchProps('country', searchInput, handleSearch, handleReset, 'country')
     },
     {
       title: t(translations.my_event_list_page.start_date),
       dataIndex: 'approximateStartTime',
       key: 'start_date',
+      sorter: true,
       ...getColumnTimeProps('approximateStartTime', handleSearch, handleReset),
       render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time)
         + ' ' + record.approximateStartTime_zone + ' '
@@ -164,12 +172,14 @@ export const EventList = () => {
       title: t(translations.my_event_list_page.status),
       dataIndex: 'status',
       key: 'status',
+      sorter: true,
       render: (value) => value,
     },
     {
       title: t(translations.my_event_list_page.created_date),
       dataIndex: 'createdAt',
       key: 'createdAt',
+      sorter: true,
       ...getColumnTimeProps('createdAt', handleSearch, handleReset),
       render: (value) => moment(value).format(TIME_FORMAT.date_text),
     },
@@ -205,7 +215,7 @@ export const EventList = () => {
   }
 
   React.useEffect(() => {
-    dispatch(actions.getEvents({ page: 1, size: 10, filter }));
+    dispatch(actions.getEvents({ page: 1, size: 10, filter, sorter }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -219,11 +229,11 @@ export const EventList = () => {
   }, [results]);
 
   React.useEffect(() => {
-    dispatch(actions.getEvents({ filter: filter, page: page, size: size }));
-  }, [filter]);
+    dispatch(actions.getEvents({ filter: filter, page: page, size: size, sorter }));
+  }, [filter, sorter]);
 
   const onPaginationChanged = (page, size) => {
-    dispatch(actions.getEvents({ page, size, filter }));
+    dispatch(actions.getEvents({ page, size, filter, sorter }));
   }
 
   const showDeleteRaceModal = (event) => {
@@ -232,7 +242,7 @@ export const EventList = () => {
   }
 
   const onRaceDeleted = () => {
-    dispatch(actions.getEvents({ page, size, filter }));
+    dispatch(actions.getEvents({ page, size, filter, sorter }));
   }
 
   const renderExpandedRowRender = (record) => {
@@ -256,9 +266,17 @@ export const EventList = () => {
     if (response.success) {
       toast.success(t(translations.my_event_list_page.successfully_left_the_event));
       setShowLeaveEventConfirmModal(false);
-      dispatch(actions.getEvents({ filter, page, size }));
+      dispatch(actions.getEvents({ filter, page, size, sorter }));
     } else {
       showToastMessageOnRequestError(response.success);
+    }
+  }
+
+  const onTableStateChanged = (_1, _2, sorter) => {
+    if (sorter.column) {
+      dispatch(actions.setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' }));
+    } else {
+      dispatch(actions.setSorter({}));
     }
   }
 
@@ -284,6 +302,13 @@ export const EventList = () => {
             scroll={{ x: "max-content" }}
             columns={columns}
             dataSource={mappedResults}
+            onChange={onTableStateChanged}
+            locale={{
+              emptyText: (<LottieWrapper>
+                <Lottie options={defaultOptions} height={400} width={400} />
+                <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_event)}</LottieMessage>
+              </LottieWrapper>)
+            }}
             pagination={{
               defaultPageSize: 10,
               pageSize: size,
