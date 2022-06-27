@@ -32,6 +32,11 @@ const slice = createSlice({
     },
     setIsChangingPage(state, action: PayloadAction<boolean>) {
       state.is_changing_page = action.payload;
+    },
+    clearEventsListData(state) {
+      state.results = [];
+      state.page = 1;
+      state.total = 0;
     }
   },
 });

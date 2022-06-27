@@ -88,9 +88,10 @@ export const DocumentItem = (props) => {
     React.useEffect(() => {
         const actions: any = [];
         if (item.documentUrl) actions.push(<a rel="noreferrer" target='_blank' download href={item.documentUrl}>{t(translations.my_event_create_update_page.download)}</a>);
-        if (canSignDocument()) actions.push(<Button onClick={()=> setShowSignModal(true)} type='link'>{t(translations.my_event_create_update_page.sign)}</Button>);
+        if (canSignDocument()) actions.push(<Button onClick={() => setShowSignModal(true)} type='link'>{t(translations.my_event_create_update_page.sign)}</Button>);
         if (canDeleteDocument()) actions.push(<Button danger onClick={() => setShowConfirmDeleteModal(true)} type='link'>{t(translations.general.delete)}</Button>);
         setDocumentActions(actions);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (<>
@@ -123,10 +124,12 @@ export const DocumentItem = (props) => {
             >
                 <Form.Item
                     name="name"
-                    rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {validator: (_, value) => {
-                        if (value === getUserName(authUser)) return Promise.resolve();
-                        return Promise.reject(new Error(t(translations.my_event_create_update_page.the_name_you_entered_does_not_match_your_registered_name)));
-                    }}]}
+                    rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
+                        validator: (_, value) => {
+                            if (value === getUserName(authUser)) return Promise.resolve();
+                            return Promise.reject(new Error(t(translations.my_event_create_update_page.the_name_you_entered_does_not_match_your_registered_name)));
+                        }
+                    }]}
                 >
                     <SyrfInputField placeholder={t(translations.forms.please_input_your_name)} />
                 </Form.Item>

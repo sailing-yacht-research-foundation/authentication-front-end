@@ -448,6 +448,7 @@ export const PlaybackOldRace = (props) => {
   }
 
   const getSimplifiedTracks = async () => {
+    dispatch(actions.setCanIncreaseDecreaseSpeed(true));
     const response = await getSimplifiedTracksByCompetitionUnit(String(competitionUnitId));
     if (response.success) {
       const simplifiedTracks = rawSimplifiedTracks.current = response.data; // the simplified tracks.

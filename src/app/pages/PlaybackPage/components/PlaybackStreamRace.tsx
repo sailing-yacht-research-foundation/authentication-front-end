@@ -20,7 +20,7 @@ import {
   selectVesselParticipants,
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
-import { MAP_DEFAULT_VALUE, RaceEmitterEvent, RaceSource, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType, WSTrackingStateUpdate } from "utils/constants";
+import { MAP_DEFAULT_VALUE, RaceDataUpdate, RaceEmitterEvent, RaceSource, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType, WSTrackingStateUpdate } from "utils/constants";
 import { canStreamToExpedition, getBoatNameFromVesselParticipantObject, stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { ModalCountdownTimer } from "./ModalCountdownTimer";
@@ -30,6 +30,7 @@ import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { KudosReaction } from "./KudosReaction";
 import { ModalRacePostponed } from "./ModalRacePostponed";
+import { ModalRaceCompleted } from "./ModalRaceCompleted";
 
 export const PlaybackStreamRace = () => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -175,6 +176,7 @@ export const PlaybackStreamRace = () => {
         action: 'subscribe',
         data: {
           competitionUnitId: competitionUnitId,
+          dataTypes: ["-device-ping-meta"] // for excluding the data we don't need. Backend uses different data types to debug.
         },
       });
     }
@@ -305,8 +307,35 @@ export const PlaybackStreamRace = () => {
               break;
           }
           break;
+        case WSMessageDataType.START_TIME_UPDATE:
+          if (data.competitionUnitId === competitionUnitId) {
+            adjustCompetitionUnitStartTime(data.startTime ? (new Date(data.startTime)).toISOString() : null);
+          }
+          break;
+        case WSMessageDataType.RACE_DATA_UPDATE:
+          const raceData = data.detail;
+          if (raceData?.id === competitionUnitId) {
+            if (data.type === RaceDataUpdate.UPDATED) {
+              adjustCompetitionUnitStartTime(raceData?.approximateStart ? raceData.approximateStart : null);
+            } else if (data.type === RaceDataUpdate.STATUS_CHANGED
+              && raceData?.status === RaceStatus.COMPLETED) {
+              dispatch(actions.setCompetitionUnitDetail({
+                ...competitionUnitDetail,
+                status: RaceStatus.COMPLETED
+              }));
+            }
+          }
+          break;
       }
     }
+  }
+
+  const adjustCompetitionUnitStartTime = (time) => {
+    if (competitionUnitDetail.startTime === time) return;
+    dispatch(actions.setCompetitionUnitDetail({
+      ...competitionUnitDetail,
+      startTime: time
+    }));
   }
 
   const handleRenderCourseDetail = (course) => {
@@ -510,7 +539,9 @@ export const PlaybackStreamRace = () => {
   return (
     <div style={{ height: "100%", position: "relative" }}>
       <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
-        {competitionUnitDetail.status === RaceStatus.POSTPONED ? <ModalRacePostponed /> : <ModalCountdownTimer />}
+        <ModalRacePostponed />
+        <ModalCountdownTimer />
+        <ModalRaceCompleted />
       </LeaderboardContainer>
       <MapContainer
         style={{

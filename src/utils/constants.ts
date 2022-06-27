@@ -88,7 +88,8 @@ export const enum RaceStatus {
     ON_GOING = 'ONGOING',
     SCHEDULED = 'SCHEDULED',
     COMPLETED = 'COMPLETED',
-    POSTPONED = 'POSTPONED'
+    POSTPONED = 'POSTPONED',
+    CANCELED = 'CANCELED'
 }
 
 export const enum WebsocketConnectionStatus {
@@ -152,7 +153,9 @@ export enum WSMessageDataType {
     MARK_TRACK = 'mark-track',
     COURSE_UPDATED = 'course-updated',
     EVENT = 'event',
-    TRACKING_STATE_UPDATE = 'tracking-state-update'
+    TRACKING_STATE_UPDATE = 'tracking-state-update',
+    START_TIME_UPDATE = 'start-time-updated',
+    RACE_DATA_UPDATE = 'race-data-update'
 }
 
 export enum WSTrackingStateUpdate {
@@ -270,7 +273,9 @@ export const DEFAULT_PAGE_SIZE = 10;
 
 export enum AuthCode {
     WRONG_CREDENTIALS = 'E012',
-    USER_ALREADY_EXISTS = 'E015'
+    USER_ALREADY_EXISTS = 'E015',
+    EXPIRED_SESSION_TOKEN = 'E001',
+    INVALID_SESSION_TOKEN = 'E003'
 }
 
 export enum WebsocketRaceEvent {
@@ -292,3 +297,8 @@ export const sourcesPreventIframe = ['TACKTRACKER'];
 export const requiredCompetitorsInformation = [
     'requireEmergencyContact', 'requireCovidCertificate', 'requireMedicalProblems',
     'requireFoodAllergies', 'requireImmigrationInfo'];
+
+export enum RaceDataUpdate {
+    UPDATED = 'UPDATED',
+    STATUS_CHANGED = 'STATUS_CHANGED'
+} 

@@ -13,12 +13,14 @@ import { selectResults, selectUpcomingRaces } from '../../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { renderEmptyValue } from 'utils/helpers';
+import { checkIfLocationIsValid, renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
+import { getProfilePicture, getUserName } from 'utils/user-utils';
+import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
 
 require('leaflet.markercluster');
 
-let markerCluster;
+let markerCluster, userMarker;
 
 let markers: any[] = [];
 
@@ -43,6 +45,15 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
 
     const { t } = useTranslation();
 
+    const user = useSelector(selectUser);
+
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+
+    const [location, setLocation] = React.useState({
+        lon: null,
+        lat: null
+    });
+
     useEffect(() => {
         initializeMapView();
         if (results.length === 0 || upcomingRaceResults.length === 0) // no results and focus on user location
@@ -54,6 +65,11 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
         attachRaceMarkersToMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [results, upcomingRaceResults]);
+
+    useEffect(() => {
+        addUserMarkerToMap();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user, isAuthenticated, location]);
 
     useImperativeHandle(ref, () => ({
         zoomToCurrentUserLocationIfAllowed() {
@@ -90,11 +106,33 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
                 lng: position.coords.longitude
             };
 
-            type === MAP_MOVE_TYPE.animation ? map.flyTo(params, zoom) : map.setView(params, zoom);
+            if (type === MAP_MOVE_TYPE.animation) {
+                map.flyTo(params, zoom);
+            } else {
+                map.setView(params, zoom);
+                setLocation({ lon: params.lng, lat: params.lat });
+            }
             geoLoc.clearWatch(watchID);
         }, error => {
             _handleLocationPermissionError(error, type);
         });
+    }
+
+    const addUserMarkerToMap = () => {
+        if (userMarker) {
+            map.removeLayer(userMarker);
+        }
+
+        if (user.firstName && isAuthenticated && checkIfLocationIsValid(location.lon, location.lat))
+            userMarker = L.marker(L.latLng(location.lat, location.lon), {
+                icon: L.divIcon({
+                    html: ReactDOMServer.renderToString(<img alt={getUserName(user)} src={getProfilePicture(user)} className='avatar-img' />),
+                    iconSize: [30, 30],
+                    iconAnchor: [18, 0],
+                })
+            })
+                .bindPopup(getUserName(user))
+                .addTo(map);
     }
 
     const _handleLocationPermissionError = (error, type: string) => {

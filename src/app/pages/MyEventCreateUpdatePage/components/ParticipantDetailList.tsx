@@ -175,8 +175,6 @@ export const ParticipantDetailList = (props) => {
         const response = await getDetailedEventParticipantInfoById(eventId, participant.id);
         setIsLoading(false);
 
-        console.log(response.data?.data);
-
         if (response.success) {
             setParticipantData(response.data?.data || {});
             getParticipantPrivateImages();

@@ -131,7 +131,7 @@ export const EventList = () => {
               <BorderedButton onClick={() => {
                 history.push(`/events/${record.id}/update`)
               }} type="primary">{t(translations.general.update)}</BorderedButton>
-              {record.status === EventState.DRAFT && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>}
+              {canDeleteEvent(record) && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>}
             </>}
             {canLeaveEvent(record) && <BorderedButton onClick={() => showLeaveEventModal(record)} danger>{t(translations.my_event_list_page.leave_event_button)}</BorderedButton>}
           </Space>
@@ -163,6 +163,11 @@ export const EventList = () => {
   const isChangingPage = useSelector(selectIsChangingPage);
 
   const [isLeavingEvent, setIsLeavingEvent] = React.useState<boolean>(false);
+
+  const canDeleteEvent = (record) => {
+    return record.status === EventState.DRAFT
+      && record.ownerId === localStorage.getItem('user_id');
+  }
 
   React.useEffect(() => {
     dispatch(actions.getEvents({ page: 1, size: 10 }));

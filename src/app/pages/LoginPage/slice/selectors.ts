@@ -40,3 +40,13 @@ export const selectGetProfileAttemptsCount = createSelector(
   [selectDomain],
   (loginState) => loginState.get_profile_attempts_count
 )
+
+export const selectTokenExpiredDate = createSelector(
+  [selectDomain],
+  (loginState) => loginState.token_expired_date
+)
+
+export const selectRefreshTokenExpiredDate = createSelector(
+  [selectDomain],
+  (loginState) => loginState.refresh_token_expired_date
+)

@@ -162,10 +162,13 @@ export const ResultItem = (props) => {
     );
 
     const renderLiveDot = () => {
-        if ([RaceStatus.ON_GOING].includes(race._source?.status))
+        if ([RaceStatus.ON_GOING].includes(race._source?.status)) {
+            if (!moment(race._source.approx_start_time_ms).isValid())
+                return <span>{t(translations.home_page.filter_tab.filter_result.postponed)}</span>; // showing race is postponed.
             return <LiveDotWrapper>
                 <span>{t(translations.general.live)} <LiveDot className='live'></LiveDot></span>
             </LiveDotWrapper>;
+        }
 
         return <></>;
     }

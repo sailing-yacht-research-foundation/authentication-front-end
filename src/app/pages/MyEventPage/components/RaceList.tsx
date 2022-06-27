@@ -34,7 +34,7 @@ export const RaceList = (props) => {
             title: t(translations.competition_unit_list_page.start_date),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
-            render: (value, record) => renderRaceStartTime(record, value, t),
+            render: (value, record) => renderRaceStartTime(value, t),
         },
         {
             title: t(translations.general.status),

@@ -11,7 +11,9 @@ export const initialState: LoginState = {
   syrf_authenticated: !!localStorage.getItem('session_token') && !!localStorage.getItem('is_guest'),
   user_coordinate: JSON.parse(localStorage.getItem('user_coordinate') || 'null'),
   refresh_token: !!localStorage.getItem('refresh_token') ? String(localStorage.getItem('refresh_token')) : '',
-  get_profile_attempts_count: 0
+  get_profile_attempts_count: 0,
+  token_expired_date: localStorage.getItem('token_expired_date'),
+  refresh_token_expired_date: localStorage.getItem('refresh_token_expired_date')
 };
 
 const slice = createSlice({
@@ -46,6 +48,7 @@ const slice = createSlice({
       localStorage.removeItem('user_id');
       localStorage.removeItem('user_coordinate');
       localStorage.removeItem('refresh_token');
+      localStorage.setItem('is_guest', '1');
     },
     getUser() {},
     getNewToken() {},
@@ -55,6 +58,14 @@ const slice = createSlice({
     },
     setFailedGetProfileAttemptsCount(state, action: PayloadAction<number>) {
       state.get_profile_attempts_count = action.payload;
+    },
+    setTokenExpiredDate(state, action: PayloadAction<any>) {
+      state.token_expired_date = action.payload;
+      localStorage.setItem('token_expired_date', action.payload);
+    },
+    setRefreshTokenExpiredDate(state, action: PayloadAction<any>) {
+      state.refresh_token_expired_date = action.payload;
+      localStorage.setItem('refresh_token_expired_date', action.payload);
     }
   },
 });

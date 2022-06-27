@@ -69,7 +69,7 @@ export const validateToken = (token: string) => {
 
 
 export const renewToken = (refreshToken: string) => {
-    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/renew-token`, {
+    return formatServicePromiseResponse(axios.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/auth/renew-token`, {
         refresh_token: refreshToken
     }));
 }

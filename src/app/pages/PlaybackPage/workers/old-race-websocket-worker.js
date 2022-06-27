@@ -41,6 +41,7 @@ const workercode = () => {
     let elapsedTimeHasBeenChanged = false;
     let coursePoints = {};
     let trackId = '';
+    let nextDataTime = 0;
 
     self.addEventListener('message', function (e) {
         const data = e.data;
@@ -60,7 +61,7 @@ const workercode = () => {
             retrievedTimestamps = data.data?.retrievedTimestamps ?? retrievedTimestamps;
             playbackSpeed = data.data?.playbackSpeed ?? playbackSpeed;
             coursePoints = data.data?.coursePoints ?? coursePoints;
-            trackId = data.data?.trackId?? trackId;
+            trackId = data.data?.trackId ?? trackId;
 
             let newElapsedTime = data.data?.elapsedTime ?? elapsedTime;
             if (newElapsedTime < elapsedTime) {
@@ -121,7 +122,8 @@ const workercode = () => {
                     })
                 }
             } else if (wsData?.type === 'command') {
-                hasMoreData = wsData?.data?.hasMoreData;
+                hasMoreData = wsData.data?.hasMoreData;
+                nextDataTime = wsData.data?.nextDataTime;
             }
         }
     }
@@ -228,11 +230,12 @@ const workercode = () => {
 
         if (seconds > 5) receivingData = false;
 
-        const canRequestMoreData = lastRetrievedTimestamp
-            && raceTime
+        const canRequestMoreData =
+            raceTime
             && playbackSpeed < 5
             && !receivingData
-            && hasMoreData;
+            && hasMoreData
+            && nextDataTime < (elapsedTime + raceTime.start);
 
         if (canRequestMoreData) {
             let timeToLoadAt = 0;

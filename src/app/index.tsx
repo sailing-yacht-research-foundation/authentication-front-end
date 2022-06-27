@@ -122,8 +122,6 @@ export function App(props) {
   React.useEffect(() => {
     if (isAuthenticated) {
       dispatch(loginActions.getUser());
-    } else {
-      dispatch(loginActions.syrfServiceAnonymousLogin());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

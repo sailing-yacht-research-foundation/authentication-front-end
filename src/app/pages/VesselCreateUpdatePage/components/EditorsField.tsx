@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { SyrfFieldLabel, SyrfFormSelect } from 'app/components/SyrfForm';
 import { renderAvatar, getUserAttribute } from 'utils/user-utils';
-import { debounce } from 'utils/helpers';
+import { debounce, navigateToProfile } from 'utils/helpers';
 import { searchGroupForAssigns } from 'services/live-data-server/groups';
 import { searchForProfiles } from 'services/live-data-server/profile';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
@@ -24,16 +24,9 @@ export const EditorsField = (props) => {
     // eslint-disable-next-line
     const debounceSearch = React.useCallback(debounce((keyword) => onSearch(keyword), 300), []);
 
-    const [showIndividualField, setShowIndividualField] = React.useState<boolean>(false);
-
     const { t } = useTranslation();
 
     const [items, setItems] = React.useState<any[]>([]);
-
-    const navigateToProfile = (e, item) => {
-        e.stopPropagation();
-        history.push(`/${item.type === AdminType.GROUP ? 'groups' : 'profile'}/${item.id}`);
-    }
 
     const handleSwitchChange = (checked, e, item) => {
         e.stopPropagation();
@@ -49,7 +42,7 @@ export const EditorsField = (props) => {
 
     const renderItemResults = () => {
         return items.map(item => <Select.Option style={{ padding: '5px' }} value={JSON.stringify(item)}>
-            <ItemAvatar onClick={(e) => navigateToProfile(e, item)} src={renderAvatar(item.avatar)} /> {item.name}
+            <ItemAvatar onClick={(e) => navigateToProfile(e, item, history)} src={renderAvatar(item.avatar)} /> {item.name}
             {item.type === AdminType.GROUP && <Switch checked={item.isIndividualAssignment} style={{ marginLeft: '10px' }} checkedChildren={t(translations.my_event_create_update_page.group_members_assignment)} unCheckedChildren={t(translations.my_event_create_update_page.group_assignment)} onChange={(checked, e) => handleSwitchChange(checked, e, item)} />}
         </Select.Option>)
     }

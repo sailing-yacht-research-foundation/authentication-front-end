@@ -4,6 +4,7 @@ import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
 import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TIME_FORMAT } from 'utils/constants';
+import { AuthCode } from './constants';
 
 /**
  * Check if is mobile
@@ -291,9 +292,12 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
 
     if (error?.response) {
         const errorCode = error.response?.status;
+        const syrfErrorCode = error.response?.data?.errorCode;
         const errorMessage = error.response?.data?.message || error.response?.data?.errorMessage;
 
-        if (errorMessage && errorCode !== 401) {
+        if ([AuthCode.INVALID_SESSION_TOKEN, AuthCode.EXPIRED_SESSION_TOKEN].includes(syrfErrorCode)) return;
+
+        if (errorMessage) {
             toast.error(errorMessage);
             return;
         }
@@ -489,15 +493,13 @@ export const flat = (obj, out) => {
     return out;
 }
 
-export const renderRaceStartTime = (record, value, t) => {
+export const renderRaceStartTime = (value, t) => {
     const valueAsMomentObject = moment(value);
     if (valueAsMomentObject.isValid()) {
         return valueAsMomentObject.format(TIME_FORMAT.date_text);
-    } else if (RaceStatus.POSTPONED === record.status) {
-        return t(translations.event_detail_page.this_race_is_postponed_therefore_its_start_time_is_not_available);
     }
 
-    return renderEmptyValue(null);
+    return t(translations.event_detail_page.this_race_is_postponed_therefore_its_start_time_is_not_available);
 }
 
 export const handleOnBoatSelected = (boats, boatIdToFilter, formInstance) => {
@@ -529,6 +531,32 @@ export const renderRequirementBasedOnEventKey = (t, key) => {
 }
 
 export const truncateName = (text, size = 50) => {
-    if (!text) return '';
+    if (!text) return renderEmptyValue(null);
     return text.length > size ? `${text.substring(0, 50)}...` : text;
+}
+
+export const retryWrapper = (axios, options) => {
+    const max_time = options.retry_time;
+    let counter = 0;
+    axios.interceptors.response.use(null, (error) => {
+        /** @type {import("axios").AxiosRequestConfig} */
+        const config = error.config
+        if (counter < max_time) {
+            counter++
+            return new Promise((resolve) => {
+                resolve(axios(config))
+            })
+        }
+        return Promise.reject(error)
+    })
+}
+
+export const navigateToProfile = (e, item, history) => {
+    e.stopPropagation();
+    if (item.profile)
+        history.push(`/profile/${item.profile.id}`);
+}
+
+export const checkIfLocationIsValid = (lon, lat) => {
+    return lon !== null && lon !== undefined && lat !== null && lat !== undefined
 }
