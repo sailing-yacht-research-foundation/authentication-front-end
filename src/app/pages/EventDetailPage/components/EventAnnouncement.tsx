@@ -25,7 +25,6 @@ export const EventAnnouncement = React.forwardRef<any, any>((props, ref) => {
         setIsLoading(false);
 
         if (response.success) {
-            console.log(response.data?.data);
             setAnnouncements(response.data?.data || []);
         }
     }
