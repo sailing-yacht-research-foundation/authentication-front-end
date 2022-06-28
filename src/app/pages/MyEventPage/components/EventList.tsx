@@ -14,7 +14,7 @@ import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { getFilterTypeBaseOnColumn, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
+import { getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
 import { EventState, TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -87,9 +87,7 @@ export const EventList = () => {
   ) => {
     let param: any = selectedKeys[0];
     const filterType = getFilterTypeBaseOnColumn(dataIndex, ['approximateStartTime', 'createdAt']);
-    if (filterType === TableFilteringType.DATE && param) {
-      param = [param[0]?.format(TIME_FORMAT.number_with_time), param[1]?.format(TIME_FORMAT.number_with_time)]
-    }
+    param = parseFilterParamBaseOnFilterType(param, filterType);
     confirm();
     dispatch(actions.setFilter({ key: dataIndex, value: param, type: filterType }));
   };
@@ -217,11 +215,6 @@ export const EventList = () => {
     return record.status === EventState.DRAFT
       && record.ownerId === localStorage.getItem('user_id');
   }
-
-  React.useEffect(() => {
-    dispatch(actions.getEvents({ page: 1, size: 10, filter, sorter }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const canLeaveEvent = (record) => {
     return record.isParticipant && record.participantId && [EventState.ON_GOING, EventState.SCHEDULED].includes(record.status);

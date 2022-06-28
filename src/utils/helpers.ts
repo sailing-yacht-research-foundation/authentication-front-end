@@ -584,3 +584,19 @@ export const getFilterTypeBaseOnColumn = (column: string, fieldsWithDateFilterin
     if (fieldsWithDateFiltering.includes(column)) return TableFilteringType.DATE;
     return TableFilteringType.TEXT;
 }
+
+export const handleOnTableStateChanged = (sorter, setSorter: Function) => {
+    if (sorter.column) {
+        setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' })
+    } else {
+        setSorter({})
+    }
+}
+
+export const parseFilterParamBaseOnFilterType = (param: any, filterType: string) => {
+    if (filterType === TableFilteringType.DATE && param) {
+        param = [param[0]?.format(TIME_FORMAT.number_with_time), param[1]?.format(TIME_FORMAT.number_with_time)]
+    }
+
+    return param;
+}

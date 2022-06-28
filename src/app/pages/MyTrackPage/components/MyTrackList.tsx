@@ -19,7 +19,7 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { renderEmptyValue, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
+import { handleOnTableStateChanged, renderEmptyValue, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 import { TableSorting } from 'types/TableSorting';
 
@@ -214,20 +214,6 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sorter]);
 
-    React.useEffect(() => {
-        getAll(pagination.page, pagination.size);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-
-    const onTableStateChanged = (_1, _2, sorter) => {
-        if (sorter.column) {
-            setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' })
-        } else {
-            setSorter({})
-        }
-    }
-
     const getAll = async (page, size) => {
         setIsChangingPage(true);
         const response = await getAllTracks(page, size, [], sorter);
@@ -288,7 +274,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                             <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
                         </LottieWrapper>)
                     }} scroll={{ x: "max-content" }}
-                        onChange={onTableStateChanged}
+                        onChange={(_1, _2, sorter)=> handleOnTableStateChanged(sorter, setSorter)}
                         columns={columns}
                         dataSource={pagination.rows} pagination={{
                             defaultPageSize: 10,

@@ -21,9 +21,14 @@ import moment from 'moment';
 import { DeleteVesselModal } from './DeleteVesselModal';
 import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue, truncateName } from 'utils/helpers';
-import { TIME_FORMAT } from 'utils/constants';
+import { getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, truncateName } from 'utils/helpers';
+import { TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { Vessel } from 'types/Vessel';
+import { TableSorting } from 'types/TableSorting';
+import { TableFiltering } from 'types/TableFiltering';
+import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const defaultOptions = {
     loop: true,
@@ -38,11 +43,35 @@ export const VesselList = () => {
 
     const { t } = useTranslation();
 
-    const columns = [
+    const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+
+    const [filter, setFilter] = React.useState<TableFiltering[]>([]);
+
+    const handleSearch = (
+        selectedKeys: string[],
+        confirm: (param?: FilterConfirmProps) => void,
+        dataIndex: any,
+    ) => {
+        let param: any = selectedKeys[0];
+        const filterType = getFilterTypeBaseOnColumn(dataIndex, ['approximateStartTime', 'createdAt']);
+        param = parseFilterParamBaseOnFilterType(param, filterType);
+        confirm();
+        setFilter([...filter.filter(f => f.key !== dataIndex), ...[{ key: dataIndex, value: param, type: filterType }]]);
+    };
+
+    const handleReset = (clearFilters: () => void, columnToReset: string) => {
+        clearFilters();
+        setFilter([...filter.filter(f => f.key !== columnToReset)]);
+    };
+
+    const columns: any = [
         {
             title: t(translations.general.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
+            sorter: true,
+            ...getColumnSearchProps('publicName', handleSearch, handleReset, 'publicName'),
+            fixed: 'left',
             render: (text, record) => {
                 return <Tooltip title={text}>
                     <Link to={`/boats/${record.id}/update`}>{truncateName(text)}</Link>
@@ -53,54 +82,60 @@ export const VesselList = () => {
             title: t(translations.vessel_list_page.length_in_meters),
             dataIndex: 'lengthInMeters',
             key: 'lengthInMeters',
+            sorter: true,
             render: (value) => renderEmptyValue(value),
         },
         {
             title: t(translations.vessel_create_update_page.sail_number),
             dataIndex: 'sailNumber',
             key: 'sailNumber',
+            ...getColumnSearchProps('sailNumber', handleSearch, handleReset, 'sailNumber'),
+            sorter: true,
             render: (value) => renderEmptyValue(value),
         },
         {
             title: t(translations.vessel_create_update_page.model),
             dataIndex: 'model',
             key: 'model',
+            sorter: true,
+            ...getColumnSearchProps('model', handleSearch, handleReset, 'model'),
             render: (value) => renderEmptyValue(value),
         },
         {
             title: t(translations.vessel_list_page.role),
             dataIndex: 'role',
             key: 'role',
+            sorter: true,
             render: (value, record) => record?.isOwner ? t(translations.vessel_list_page.owner) : t(translations.vessel_list_page.admin),
         },
         {
             title: t(translations.vessel_list_page.is_default_boat),
             dataIndex: 'isDefaultVessel',
             key: 'isDefaultVessel',
+            sorter: true,
             render: (value, record) => String(value),
         },
         {
             title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
+            sorter: true,
+            ...getColumnTimeProps('createdAt', handleSearch, handleReset, 'createdAt'),
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
             title: t(translations.general.action),
             key: 'action',
+            fixed: 'right',
             render: (text, record) => {
                 return <Space size="middle">
                     <Tooltip title={t(translations.tip.update_this_boat)}>
-                        <BorderedButton onClick={() => {
+                        <BorderedButton icon={<FaEdit />} onClick={() => {
                             history.push(`/boats/${record.id}/update`);
-                        }} type="primary">
-                            {t(translations.general.update)}
-                        </BorderedButton>
+                        }} type="primary" />
                     </Tooltip>
                     <Tooltip title={t(translations.tip.delete_boat)}>
-                        <BorderedButton danger onClick={() => showDeleteVesselModal(record)}>
-                            {t(translations.general.delete)}
-                        </BorderedButton>
+                        <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteVesselModal(record)} />
                     </Tooltip>
                 </Space>;
             },
@@ -124,13 +159,13 @@ export const VesselList = () => {
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        getAll(1, 10);
+        getAll(pagination.page, pagination.size);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [sorter]);
 
     const getAll = async (page, size) => {
         setIsChangingPage(true);
-        const response = await getMany(page, size);
+        const response = await getMany(page, size, filter, sorter);
         setIsChangingPage(false);
 
         if (response.success) {
@@ -179,27 +214,30 @@ export const VesselList = () => {
                     </CreateButton>
                 </Tooltip>
             </PageHeaderContainerResponsive>
-            {pagination.rows.length > 0 ? (
-                <Spin spinning={isChangingPage}>
-                    <TableWrapper>
-                        <Table scroll={{ x: "max-content" }} columns={columns}
-                            dataSource={pagination.rows} pagination={{
-                                defaultPageSize: 10,
-                                current: pagination.page,
-                                total: pagination.total,
-                                pageSize: pagination.pageSize,
-                                onChange: onPaginationChanged,
-                            }} />
-                    </TableWrapper>
-                </Spin>
-            )
-                : (<LottieWrapper>
-                    <Lottie
-                        options={defaultOptions}
-                        height={400}
-                        width={400} />
-                    <LottieMessage>{t(translations.vessel_list_page.you_dont_have_any_vessels)}</LottieMessage>
-                </LottieWrapper>)}
+            <Spin spinning={isChangingPage}>
+                <TableWrapper>
+                    <Table scroll={{ x: "max-content" }}
+                        onChange={(_1, _2, sorter) => handleOnTableStateChanged(sorter, setSorter)}
+                        columns={columns}
+                        locale={{
+                            emptyText: (<LottieWrapper>
+                                <Lottie
+                                    options={defaultOptions}
+                                    height={400}
+                                    width={400} />
+                                <LottieMessage>{t(translations.vessel_list_page.you_dont_have_any_vessels)}</LottieMessage>
+                            </LottieWrapper>)
+                        }}
+                        dataSource={pagination.rows} pagination={{
+                            defaultPageSize: 10,
+                            current: pagination.page,
+                            total: pagination.total,
+                            pageSize: pagination.pageSize,
+                            onChange: onPaginationChanged,
+                        }} />
+                </TableWrapper>
+            </Spin>
+
         </>
     )
 }

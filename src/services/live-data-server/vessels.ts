@@ -1,9 +1,12 @@
 import { SYRF_SERVER } from 'services/service-constants';
-import { formatServicePromiseResponse } from 'utils/helpers';
+import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
+import { formatServicePromiseResponse, parseFilterSorterParams } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
-export const getMany = (page: number, size: number = 10) => {
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels?bulkCreated_eq=false`, {
+export const getMany = (page: number, size: number = 10, filter: TableFiltering[] = [], sorter: Partial<TableSorting> | null = null) => {
+    const sortAndFilterString = parseFilterSorterParams(filter, sorter); 
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessels?bulkCreated_eq=false${sortAndFilterString ?? sortAndFilterString}`, {
         params: {
             page,
             size
