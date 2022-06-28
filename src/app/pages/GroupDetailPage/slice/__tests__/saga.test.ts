@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import groupDetailSaga, { getGroup, getGroupAdmins, getGroupMembers, searchAcceptedMembers } from '../saga';
 import { GroupMemberStatus } from 'utils/constants';
+import * as Helpers from 'utils/helpers';
 
 describe('groups detail Saga', () => {
     let getGroupIterator: ReturnType<typeof getGroup>;
@@ -14,28 +15,7 @@ describe('groups detail Saga', () => {
     const getGroupParam = uuidv4();
     const getAdminsParam = { page: 5, groupId: uuidv4(), size: 20 };
     const getMembersParam = { page: 5, groupId: uuidv4(), status: GroupMemberStatus.ACCEPTED, size: 20 };
-    const searchAcceptedMembersParam = {  groupId: uuidv4(), status: GroupMemberStatus.ACCEPTED, keyword: 'Dat dang' };
-
-    // We have to test twice, once for a successful load and once for an unsuccessful one
-    // so we do all the stuff that happens beforehand automatically in the beforeEach
-    beforeEach(() => {
-        getGroupIterator = getGroup({
-            type: slice.groupDetailActions.getGroup.type,
-            payload: getGroupParam
-        });
-        getGroupAdminsIterator = getGroupAdmins({
-            type: slice.groupDetailActions.getAdmins.type,
-            payload: getAdminsParam
-        });
-        getGroupMembersIterator = getGroupMembers({
-            type: slice.groupDetailActions.getMembers.type,
-            payload: getMembersParam
-        });
-        searchAcceptedMembersIterator = searchAcceptedMembers({
-            type: slice.groupDetailActions.searchAcceptedMembers.type,
-            payload: searchAcceptedMembersParam
-        })
-    });
+    const searchAcceptedMembersParam = { groupId: uuidv4(), status: GroupMemberStatus.ACCEPTED, keyword: 'Dat dang' };
 
     it('Should get group and set related data if the response is success', () => {
         const response = {
@@ -43,6 +23,11 @@ describe('groups detail Saga', () => {
             data: {
             }
         };
+
+        getGroupIterator = getGroup({
+            type: slice.groupDetailActions.getGroup.type,
+            payload: getGroupParam
+        });
 
         const putSetIsGettingGroupFailedDescriptor = getGroupIterator.next().value;
         expect(putSetIsGettingGroupFailedDescriptor).toEqual(
@@ -75,8 +60,18 @@ describe('groups detail Saga', () => {
 
     it('Should get group and set getting group failed if the response is error', () => {
         const response = {
-            success: false
+            success: false,
+            error: {
+                response: {
+                    status: 500
+                }
+            }
         };
+
+        getGroupIterator = getGroup({
+            type: slice.groupDetailActions.getGroup.type,
+            payload: getGroupParam
+        });
 
         let putSetIsGettingGroupFailedDescriptor = getGroupIterator.next().value;
         expect(putSetIsGettingGroupFailedDescriptor).toEqual(
@@ -103,6 +98,10 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setIsGetGroupFailed(true)),
         );
 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        Helpers.showToastMessageOnRequestError(response.error);
+        expect(showToastMessageOnRequestErrorSpy).toHaveBeenCalledWith(response.error);
+
         const iteration = getGroupIterator.next();
         expect(iteration.done).toBe(true);
     });
@@ -117,6 +116,11 @@ describe('groups detail Saga', () => {
                 size: 10
             }
         };
+
+        getGroupAdminsIterator = getGroupAdmins({
+            type: slice.groupDetailActions.getAdmins.type,
+            payload: getAdminsParam
+        });
 
         const putSetIsGettingAdmins = getGroupAdminsIterator.next().value;
         expect(putSetIsGettingAdmins).toEqual(
@@ -153,6 +157,9 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setAdminPageSize(response.data.size)),
         );
 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
+
         const iteration = getGroupAdminsIterator.next();
         expect(iteration.done).toBe(true);
     });
@@ -161,6 +168,11 @@ describe('groups detail Saga', () => {
         const response = {
             success: false,
         };
+
+        getGroupAdminsIterator = getGroupAdmins({
+            type: slice.groupDetailActions.getAdmins.type,
+            payload: getAdminsParam
+        });
 
         const putSetIsGettingAdmins = getGroupAdminsIterator.next().value;
         expect(putSetIsGettingAdmins).toEqual(
@@ -177,6 +189,9 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setIsGettingAdmins(false)),
         );
 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
+
         const iteration = getGroupAdminsIterator.next();
         expect(iteration.done).toBe(true);
     });
@@ -192,6 +207,11 @@ describe('groups detail Saga', () => {
                 size: 10
             }
         };
+
+        getGroupMembersIterator = getGroupMembers({
+            type: slice.groupDetailActions.getMembers.type,
+            payload: getMembersParam
+        });
 
         let putSetIsGettingGroupMembers = getGroupMembersIterator.next().value;
         expect(putSetIsGettingGroupMembers).toEqual(
@@ -228,6 +248,9 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setMemberPageSize(response.data.size)),
         );
 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
+
         const iteration = getGroupMembersIterator.next();
         expect(iteration.done).toBe(true);
     });
@@ -236,6 +259,11 @@ describe('groups detail Saga', () => {
         const response = {
             success: false
         };
+
+        getGroupMembersIterator = getGroupMembers({
+            type: slice.groupDetailActions.getMembers.type,
+            payload: getMembersParam
+        });
 
         let putSetIsGettingGroupMembers = getGroupMembersIterator.next().value;
         expect(putSetIsGettingGroupMembers).toEqual(
@@ -252,18 +280,25 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setIsGettingMembers(false)),
         );
 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
+
         const iteration = getGroupMembersIterator.next();
         expect(iteration.done).toBe(true);
     });
 
     it('should handle searchAcceptedMembers', () => {
-
         const response = {
             success: true,
             data: {
                 rows: []
             }
         }
+
+        searchAcceptedMembersIterator = searchAcceptedMembers({
+            type: slice.groupDetailActions.searchAcceptedMembers.type,
+            payload: searchAcceptedMembersParam
+        })
 
         let searchAcceptedMembersDescriptor = searchAcceptedMembersIterator.next().value;
         expect(searchAcceptedMembersDescriptor).toEqual(
@@ -285,10 +320,18 @@ describe('groups detail Saga', () => {
 
         }
 
+        searchAcceptedMembersIterator = searchAcceptedMembers({
+            type: slice.groupDetailActions.searchAcceptedMembers.type,
+            payload: searchAcceptedMembersParam
+        })
+
         let searchAcceptedMembersDescriptor = searchAcceptedMembersIterator.next().value;
         expect(searchAcceptedMembersDescriptor).toEqual(
             call(searchMembers, searchAcceptedMembersParam.groupId, searchAcceptedMembersParam.keyword, searchAcceptedMembersParam.status),
         );
+
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
 
         const iteration = searchAcceptedMembersIterator.next(response);
         expect(iteration.done).toBe(true);
