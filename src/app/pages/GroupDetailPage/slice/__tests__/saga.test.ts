@@ -54,6 +54,9 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setGroup(response.data)),
         );
 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
+
         const iteration = getGroupIterator.next();
         expect(iteration.done).toBe(true);
     });
@@ -157,9 +160,6 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setAdminPageSize(response.data.size)),
         );
 
-        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
-        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
-
         const iteration = getGroupAdminsIterator.next();
         expect(iteration.done).toBe(true);
     });
@@ -188,9 +188,6 @@ describe('groups detail Saga', () => {
         expect(putSetIsGettingAdminsFalse).toEqual(
             put(slice.groupDetailActions.setIsGettingAdmins(false)),
         );
-
-        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
-        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
 
         const iteration = getGroupAdminsIterator.next();
         expect(iteration.done).toBe(true);
@@ -248,9 +245,6 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setMemberPageSize(response.data.size)),
         );
 
-        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
-        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
-
         const iteration = getGroupMembersIterator.next();
         expect(iteration.done).toBe(true);
     });
@@ -279,9 +273,6 @@ describe('groups detail Saga', () => {
         expect(putSetIsGettingGroupMembers).toEqual(
             put(slice.groupDetailActions.setIsGettingMembers(false)),
         );
-
-        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
-        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
 
         const iteration = getGroupMembersIterator.next();
         expect(iteration.done).toBe(true);
@@ -329,9 +320,6 @@ describe('groups detail Saga', () => {
         expect(searchAcceptedMembersDescriptor).toEqual(
             call(searchMembers, searchAcceptedMembersParam.groupId, searchAcceptedMembersParam.keyword, searchAcceptedMembersParam.status),
         );
-
-        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
-        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
 
         const iteration = searchAcceptedMembersIterator.next(response);
         expect(iteration.done).toBe(true);
