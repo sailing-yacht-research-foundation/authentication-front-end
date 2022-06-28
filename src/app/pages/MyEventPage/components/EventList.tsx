@@ -8,13 +8,13 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
-import { BorderedButton, DownloadButton, LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, DownloadButton, IconWrapper, LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
+import { getFilterTypeBaseOnColumn, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
 import { EventState, TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -26,6 +26,7 @@ import { deleteParticipant } from 'services/live-data-server/participants';
 import { toast } from 'react-toastify';
 import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const defaultOptions = {
   loop: true,
@@ -79,22 +80,14 @@ export const EventList = () => {
 
   const sorter = useSelector(selectSorter);
 
-  const searchInput = React.useRef<any>(null);
-
-  const getFilterTypeBaseOnColumn = (column: string) => {
-    const fieldsWithDateFiltering = ['approximateStartTime', 'createdAt'];
-    if (fieldsWithDateFiltering.includes(column)) return TableFilteringType.DATE;
-    return TableFilteringType.TEXT;
-  }
-
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
     dataIndex: any,
   ) => {
     let param: any = selectedKeys[0];
-    const filterType = getFilterTypeBaseOnColumn(dataIndex);
-    if (filterType === TableFilteringType.DATE) {
+    const filterType = getFilterTypeBaseOnColumn(dataIndex, ['approximateStartTime', 'createdAt']);
+    if (filterType === TableFilteringType.DATE && param) {
       param = [param[0]?.format(TIME_FORMAT.number_with_time), param[1]?.format(TIME_FORMAT.number_with_time)]
     }
     confirm();
@@ -112,12 +105,13 @@ export const EventList = () => {
       dataIndex: 'name',
       key: 'name',
       sorter: true,
+      fixed: 'left',
       render: (text, record) => {
         return <Tooltip title={text}>
           <Link to={`/events/${record.id}`}>{truncateName(text)}</Link>
         </Tooltip>;
       },
-      ...getColumnSearchProps('name', searchInput, handleSearch, handleReset, 'name')
+      ...getColumnSearchProps('name', handleSearch, handleReset, 'name')
     },
     {
       title: 'Status',
@@ -142,7 +136,7 @@ export const EventList = () => {
       key: 'city',
       render: (text) => renderEmptyValue(text),
       sorter: true,
-      ...getColumnSearchProps('city', searchInput, handleSearch, handleReset, 'city')
+      ...getColumnSearchProps('city', handleSearch, handleReset, 'city')
     },
     {
       title: t(translations.my_event_list_page.country),
@@ -150,14 +144,14 @@ export const EventList = () => {
       key: 'country',
       sorter: true,
       render: (text) => renderEmptyValue(text),
-      ...getColumnSearchProps('country', searchInput, handleSearch, handleReset, 'country')
+      ...getColumnSearchProps('country', handleSearch, handleReset, 'country')
     },
     {
       title: t(translations.my_event_list_page.start_date),
       dataIndex: 'approximateStartTime',
       key: 'start_date',
       sorter: true,
-      ...getColumnTimeProps('approximateStartTime', handleSearch, handleReset),
+      ...getColumnTimeProps('approximateStartTime', handleSearch, handleReset, 'approximateStartTime'),
       render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time)
         + ' ' + record.approximateStartTime_zone + ' '
         + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
@@ -169,7 +163,7 @@ export const EventList = () => {
       render: (_, record) => <EventAdmins headless editors={record.editors || []} groups={record.groupEditors || []} event={record} />
     },
     {
-      title: t(translations.my_event_list_page.status),
+      title: t(translations.my_event_list_page.state),
       dataIndex: 'status',
       key: 'status',
       sorter: true,
@@ -180,34 +174,44 @@ export const EventList = () => {
       dataIndex: 'createdAt',
       key: 'createdAt',
       sorter: true,
-      ...getColumnTimeProps('createdAt', handleSearch, handleReset),
+      ...getColumnTimeProps('createdAt', handleSearch, handleReset, 'createdAt'),
       render: (value) => moment(value).format(TIME_FORMAT.date_text),
     },
     {
       title: 'Action',
       key: 'action',
+      fixed: 'right',
       render: (text, record) => {
         return (
           <Space size="middle">
             <Tooltip title={t(translations.tip.download_icalendar_file)}>
-              <DownloadButton onClick={() => {
+              <DownloadButton icon={<AiOutlineCalendar />} onClick={() => {
                 downloadIcalendarFile(record);
-              }} type="primary">
-                <AiOutlineCalendar />
-              </DownloadButton>
+              }} type="primary" />
             </Tooltip>
-            {record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status) && <>
-              <BorderedButton onClick={() => {
-                history.push(`/events/${record.id}/update`)
-              }} type="primary">{t(translations.general.update)}</BorderedButton>
-              {canDeleteEvent(record) && <BorderedButton danger onClick={() => showDeleteRaceModal(record)}>{t(translations.general.delete)}</BorderedButton>}
+            {canEditEvent(record) && <>
+              <Tooltip title={t(translations.general.update)}>
+                <BorderedButton icon={<FaEdit />} onClick={() => {
+                  history.push(`/events/${record.id}/update`)
+                }} type="primary"></BorderedButton>
+              </Tooltip>
+              {canDeleteEvent(record) && <Tooltip title={t(translations.general.delete)}>
+                <BorderedButton
+                  danger
+                  icon={<FaTrash />}
+                  onClick={() => showDeleteRaceModal(record)} />
+              </Tooltip>}
             </>}
             {canLeaveEvent(record) && <BorderedButton onClick={() => showLeaveEventModal(record)} danger>{t(translations.my_event_list_page.leave_event_button)}</BorderedButton>}
-          </Space>
+          </Space >
         );
       }
     },
   ];
+
+  const canEditEvent = (record) => {
+    return record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status);
+  }
 
   const canDeleteEvent = (record) => {
     return record.status === EventState.DRAFT

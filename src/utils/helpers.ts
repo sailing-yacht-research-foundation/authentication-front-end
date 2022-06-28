@@ -563,7 +563,7 @@ export const checkIfLocationIsValid = (lon, lat) => {
     return lon !== null && lon !== undefined && lat !== null && lat !== undefined
 }
 
-export const parseFilterSorterParams = (filter: TableFiltering[], sorter: TableSorting) => {
+export const parseFilterSorterParams = (filter: TableFiltering[], sorter: Partial<TableSorting> | null) => {
     let paramString = '';
     filter.forEach(f => {
         if (f.type === TableFilteringType.TEXT) {
@@ -578,4 +578,9 @@ export const parseFilterSorterParams = (filter: TableFiltering[], sorter: TableS
     }
 
     return paramString;
+}
+
+export const getFilterTypeBaseOnColumn = (column: string, fieldsWithDateFiltering: string[]) => {
+    if (fieldsWithDateFiltering.includes(column)) return TableFilteringType.DATE;
+    return TableFilteringType.TEXT;
 }

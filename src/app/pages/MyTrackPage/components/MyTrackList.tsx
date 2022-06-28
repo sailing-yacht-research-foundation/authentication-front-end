@@ -11,7 +11,7 @@ import { downloadTrack, getAllTracks } from 'services/live-data-server/my-tracks
 import NoResult from '../assets/no-results.json';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import { Link } from 'react-router-dom';
-import { TIME_FORMAT } from 'utils/constants';
+import { TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { timeMillisToHours } from 'utils/time';
 import KMLIcon from '../assets/kml.png';
 import GPXIcon from '../assets/gpx.png';
@@ -21,6 +21,7 @@ import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
 import { renderEmptyValue, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
+import { TableSorting } from 'types/TableSorting';
 
 const defaultOptions = {
     loop: true,
@@ -41,11 +42,14 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
 
     const [isDeletingTrack, setIsDeletingTrack] = React.useState<boolean>(false);
 
-    const columns = [
+    const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+
+    const columns: any = [
         {
             title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
+            fixed: 'left',
             render: (text, record) => {
                 const trackName = !record.event?.isPrivate ? [record.event.name, record.competitionUnit.name].filter(Boolean).join(' - ') : record.event?.name
                 if (record.competitionUnit)
@@ -76,6 +80,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             title: t(translations.my_tracks_page.type),
             dataIndex: 'type',
             key: 'type',
+            sorter: true,
             render: (text, record) => {
                 return record.event?.isPrivate ? t(translations.my_tracks_page.track_now) : t(translations.my_tracks_page.event_track)
             }
@@ -84,6 +89,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             title: t(translations.general.created_date),
             dataIndex: 'createdAt',
             key: 'createdAt',
+            sorter: true,
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
@@ -101,12 +107,14 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         {
             title: t(translations.my_tracks_page.phone_model),
             dataIndex: 'phoneModel',
+            sorter: true,
             key: 'phoneModel',
             render: (value,) => renderEmptyValue(value),
         },
         {
             title: t(translations.my_tracks_page.phone_os),
             dataIndex: 'phoneOS',
+            sorter: true,
             key: 'phoneOS',
             render: (value,) => renderEmptyValue(value),
         },
@@ -147,6 +155,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         {
             title: t(translations.general.action),
             key: 'action',
+            fixed: 'right',
             render: (text, record) => {
                 return <Space size={10}>
                     <Tooltip title={t(translations.my_tracks_page.download_as_kml)}>
@@ -203,11 +212,25 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
     React.useEffect(() => {
         getAll(pagination.page, pagination.size);
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sorter]);
+
+    React.useEffect(() => {
+        getAll(pagination.page, pagination.size);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
+    const onTableStateChanged = (_1, _2, sorter) => {
+        if (sorter.column) {
+            setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' })
+        } else {
+            setSorter({})
+        }
+    }
 
     const getAll = async (page, size) => {
         setIsChangingPage(true);
-        const response = await getAllTracks(page, size);
+        const response = await getAllTracks(page, size, [], sorter);
         setIsChangingPage(false);
 
         if (response.success) {
@@ -254,26 +277,27 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                 onOk={performDeleteTrack}
                 onCancel={() => setShowDeleteModal(false)}
             />
-            {pagination.rows.length > 0 ? (
-                <Spin spinning={isChangingPage}>
-                    <TableWrapper>
-                        <Table scroll={{ x: "max-content" }} columns={columns}
-                            dataSource={pagination.rows} pagination={{
-                                defaultPageSize: 10,
-                                current: pagination.page,
-                                total: pagination.total,
-                                onChange: onPaginationChanged
-                            }} />
-                    </TableWrapper>
-                </Spin>
-            )
-                : (<LottieWrapper>
-                    <Lottie
-                        options={defaultOptions}
-                        height={400}
-                        width={400} />
-                    <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
-                </LottieWrapper>)}
+            <Spin spinning={isChangingPage}>
+                <TableWrapper>
+                    <Table locale={{
+                        emptyText: (<LottieWrapper>
+                            <Lottie
+                                options={defaultOptions}
+                                height={400}
+                                width={400} />
+                            <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
+                        </LottieWrapper>)
+                    }} scroll={{ x: "max-content" }}
+                        onChange={onTableStateChanged}
+                        columns={columns}
+                        dataSource={pagination.rows} pagination={{
+                            defaultPageSize: 10,
+                            current: pagination.page,
+                            total: pagination.total,
+                            onChange: onPaginationChanged
+                        }} />
+                </TableWrapper>
+            </Spin>
         </>
     )
 });

@@ -4,7 +4,7 @@ import { ColumnType } from 'antd/lib/table';
 import moment from 'moment';
 import React from 'react';
 
-export const getColumnSearchProps = (dataIndex: any, searchInput, handleSearch: Function, handleReset: Function, columnToReset: string): ColumnType<any> => ({
+export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, handleReset: Function, columnToReset: string): ColumnType<any> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
             <Input
@@ -14,7 +14,7 @@ export const getColumnSearchProps = (dataIndex: any, searchInput, handleSearch: 
                 onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
                 style={{ marginBottom: 8, display: 'block' }}
             />
-            <Space>
+            <Space size={5}>
                 <Button
                     type="primary"
                     onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
@@ -37,16 +37,9 @@ export const getColumnSearchProps = (dataIndex: any, searchInput, handleSearch: 
     filterIcon: (filtered: boolean) => (
         <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
-    onFilter: (value, record) => true,
-    onFilterDropdownVisibleChange: visible => {
-        if (visible) {
-            setTimeout(() => searchInput.current?.select(), 100);
-        }
-    },
-    render: text => text
 });
 
-export const getColumnTimeProps = (dataIndex, handleSearch, handleReset) => ({
+export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleReset: Function, columnToReset: string) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8, textAlign: 'right' }}>
             <DatePicker.RangePicker
@@ -65,7 +58,7 @@ export const getColumnTimeProps = (dataIndex, handleSearch, handleReset) => ({
                     onClick={() => {
                         handleSearch(selectedKeys, confirm, dataIndex)
                     }}
-                    style={{ width: 90, marginRight: 8 }}
+                    style={{ width: 90 }}
                     icon={<SearchOutlined />}
                     size="small"
                 >
@@ -74,7 +67,7 @@ export const getColumnTimeProps = (dataIndex, handleSearch, handleReset) => ({
                 <Button
                     role="reset"
                     style={{ width: 90 }}
-                    onClick={() => handleReset(clearFilters)}
+                    onClick={() => handleReset(clearFilters, columnToReset)}
                     size="small"
                 >
                     Reset
@@ -86,5 +79,4 @@ export const getColumnTimeProps = (dataIndex, handleSearch, handleReset) => ({
         <FieldTimeOutlined type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
     onFilter: (value, record) => record[dataIndex] ? moment(record[dataIndex]).isBetween(moment(value[0]), moment(value[1])) : "",
-    render: text => text
 });
