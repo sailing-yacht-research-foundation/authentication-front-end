@@ -1,5 +1,7 @@
 import { SYRF_SERVER } from 'services/service-constants';
-import { formatServicePromiseResponse } from 'utils/helpers';
+import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
+import { formatServicePromiseResponse, parseFilterSorterParams, queryStringToJSON } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const getAllByCalendarEventId = (calendarEventId: string, page: number, size: number = 10) => {
@@ -20,7 +22,8 @@ export const getAcceptedAndSelfRegisteredParticipantByCalendarEventId = (calenda
     }))
 }
 
-export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page: number, size: number, assignMode: string) => {
+export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page: number, size: number, assignMode: string, filter: TableFiltering[] = [], sorter: Partial<TableSorting> | null = null) => {
+    const sortAndFilterString = parseFilterSorterParams(filter, sorter);
     let assign: any = null;
     if (assignMode === 'all') {
         assign = null;
@@ -30,7 +33,8 @@ export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page:
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants${assign !== null ? `?assigned=${assign}` : ''}`, {
         params: {
             page: page,
-            size
+            size,
+            ...queryStringToJSON(sortAndFilterString.substring(0))
         }
     }))
 }
@@ -67,11 +71,13 @@ export const unregisterParticipantFromVesselParticipant = (vesselParticipantId: 
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/vessel-participants/${vesselParticipantId}/participants/${participantId}`))
 }
 
-export const getMyInvitedEvents = (page: number, size: number = 10) => {
+export const getMyInvitedEvents = (page: number, size: number = 10, filter: TableFiltering[] = [], sorter: Partial<TableSorting> | null = null) => {
+    const sortAndFilterString = parseFilterSorterParams(filter, sorter);
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/my-invitation`, {
         params: {
             page,
-            size
+            size,
+            ...queryStringToJSON(sortAndFilterString.substring(1))
         }
     }))
 }

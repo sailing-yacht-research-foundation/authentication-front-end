@@ -1,7 +1,9 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
+import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
 import { EventState, KudoTypes } from 'utils/constants';
-import { formatServicePromiseResponse, parseKeyword } from 'utils/helpers';
+import { formatServicePromiseResponse, parseFilterSorterParams, parseKeyword, queryStringToJSON } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {
@@ -77,11 +79,13 @@ export const create = (calendarEventId: string, data) => {
     }))
 }
 
-export const getAllByCalendarEventId = (calendarEventId: string, page: number, size: number = 10) => {
+export const getAllByCalendarEventId = (calendarEventId: string, page: number, size: number = 10, filter: TableFiltering[] = [], sorter: Partial<TableSorting> | null = null) => {
+    const sortAndFilterString = parseFilterSorterParams(filter, sorter); 
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
         params: {
             page: page,
             size: size,
+            ...queryStringToJSON(sortAndFilterString.substring(1))
         }
     }));
 }

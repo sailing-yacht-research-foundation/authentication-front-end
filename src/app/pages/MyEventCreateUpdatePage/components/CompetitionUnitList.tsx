@@ -13,7 +13,11 @@ import { Link } from 'react-router-dom';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
-import { renderRaceStartTime, truncateName } from 'utils/helpers';
+import { getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderRaceStartTime, truncateName } from 'utils/helpers';
+import { TableSorting } from 'types/TableSorting';
+import { TableFiltering } from 'types/TableFiltering';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
+import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 
 export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: CalendarEvent }) => {
 
@@ -22,11 +26,34 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
 
     const [showStopRaceConfirmModal, setShowStopRaceConfirmModal] = React.useState<boolean>(false);
 
-    const columns = [
+    const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+
+    const [filter, setFilter] = React.useState<TableFiltering[]>([]);
+
+    const handleSearch = (
+        selectedKeys: string[],
+        confirm: (param?: FilterConfirmProps) => void,
+        dataIndex: any,
+    ) => {
+        let param: any = selectedKeys[0];
+        const filterType = getFilterTypeBaseOnColumn(dataIndex, ['approximateStart', 'createdAt']);
+        param = parseFilterParamBaseOnFilterType(param, filterType);
+        confirm();
+        setFilter([...filter.filter(f => f.key !== dataIndex), ...[{ key: dataIndex, value: param, type: filterType }]]);
+    };
+
+    const handleReset = (clearFilters: () => void, columnToReset: string) => {
+        clearFilters();
+        setFilter([...filter.filter(f => f.key !== columnToReset)]);
+    };
+
+    const columns: any = [
         {
             title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
+            ...getColumnSearchProps('name', handleSearch, handleReset, 'name'),
+            sorter: true,
             render: (text, record) => {
                 return (
                     <Tooltip title={t(translations.tip.view_this_race_in_the_playback)}>
@@ -42,13 +69,16 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             key: 'status',
             render: (value) => value,
             width: '20%',
+            sorter: true,
         },
         {
             title: t(translations.competition_unit_list_page.start_date),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
+            ...getColumnTimeProps('approximateStart', handleSearch, handleReset, 'approximateStart'),
             render: (value, record) => renderRaceStartTime(value, t),
-            width: '25%'
+            width: '25%',
+            sorter: true,
         },
         {
             title: t(translations.general.created_date),
@@ -56,6 +86,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             key: 'createdAt',
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
             width: '20%',
+            sorter: true,
         },
         {
             title: 'Action',
@@ -96,7 +127,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
 
     const getAll = async (page: number, size: number) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventId(eventId, page, size);
+        const response = await getAllByCalendarEventId(eventId, page, size, filter, sorter);
         setIsLoading(false);
 
         if (response.success) {
@@ -126,7 +157,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
     React.useEffect(() => {
         getAll(pagination.page, pagination.pageSize);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [sorter, filter]);
 
     const openStopRaceConfirmModal = (competitionUnit: CompetitionUnit) => {
         setCompetitionUnit(competitionUnit);
@@ -155,6 +186,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
                 </PageHeaderContainer>
                 <TableWrapper>
                     <Table columns={columns}
+                        onChange={(_1, _2, sorter) => handleOnTableStateChanged(sorter, setSorter)}
                         scroll={{ x: "max-content" }}
                         dataSource={pagination.rows} pagination={{
                             defaultPageSize: 10,

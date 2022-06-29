@@ -11,7 +11,7 @@ import { downloadTrack, getAllTracks } from 'services/live-data-server/my-tracks
 import NoResult from '../assets/no-results.json';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import { Link } from 'react-router-dom';
-import { TableFilteringType, TIME_FORMAT } from 'utils/constants';
+import { TIME_FORMAT } from 'utils/constants';
 import { timeMillisToHours } from 'utils/time';
 import KMLIcon from '../assets/kml.png';
 import GPXIcon from '../assets/gpx.png';
@@ -19,9 +19,12 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { handleOnTableStateChanged, renderEmptyValue, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
+import { getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 import { TableSorting } from 'types/TableSorting';
+import { TableFiltering } from 'types/TableFiltering';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
+import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 
 const defaultOptions = {
     loop: true,
@@ -43,6 +46,25 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
     const [isDeletingTrack, setIsDeletingTrack] = React.useState<boolean>(false);
 
     const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+
+    const [filter, setFilter] = React.useState<TableFiltering[]>([]);
+
+    const handleSearch = (
+        selectedKeys: string[],
+        confirm: (param?: FilterConfirmProps) => void,
+        dataIndex: any,
+    ) => {
+        let param: any = selectedKeys[0];
+        const filterType = getFilterTypeBaseOnColumn(dataIndex, ['createdAt']);
+        param = parseFilterParamBaseOnFilterType(param, filterType);
+        confirm();
+        setFilter([...filter.filter(f => f.key !== dataIndex), ...[{ key: dataIndex, value: param, type: filterType }]]);
+    };
+
+    const handleReset = (clearFilters: () => void, columnToReset: string) => {
+        clearFilters();
+        setFilter([...filter.filter(f => f.key !== columnToReset)]);
+    };
 
     const columns: any = [
         {
@@ -90,6 +112,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: true,
+            ...getColumnTimeProps('createdAt', handleSearch, handleReset, 'createdAt'),
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
@@ -109,6 +132,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'phoneModel',
             sorter: true,
             key: 'phoneModel',
+            ...getColumnSearchProps('phoneModel', handleSearch, handleReset, 'phoneModel'),
             render: (value,) => renderEmptyValue(value),
         },
         {
@@ -116,6 +140,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             dataIndex: 'phoneOS',
             sorter: true,
             key: 'phoneOS',
+            ...getColumnSearchProps('phoneOS', handleSearch, handleReset, 'phoneOS'),
             render: (value,) => renderEmptyValue(value),
         },
         {
@@ -212,11 +237,11 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
     React.useEffect(() => {
         getAll(pagination.page, pagination.size);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sorter]);
+    }, [sorter, filter]);
 
     const getAll = async (page, size) => {
         setIsChangingPage(true);
-        const response = await getAllTracks(page, size, [], sorter);
+        const response = await getAllTracks(page, size, filter, sorter);
         setIsChangingPage(false);
 
         if (response.success) {

@@ -22,7 +22,7 @@ import { DeleteVesselModal } from './DeleteVesselModal';
 import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
 import { getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, truncateName } from 'utils/helpers';
-import { TableFilteringType, TIME_FORMAT } from 'utils/constants';
+import { TIME_FORMAT } from 'utils/constants';
 import { Vessel } from 'types/Vessel';
 import { TableSorting } from 'types/TableSorting';
 import { TableFiltering } from 'types/TableFiltering';

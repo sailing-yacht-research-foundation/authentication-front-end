@@ -9,7 +9,7 @@ import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/co
 import styled from 'styled-components';
 import { DownOutlined } from '@ant-design/icons';
 import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
-import { flat, renderEmptyValue } from 'utils/helpers';
+import { flat, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue } from 'utils/helpers';
 import { EventState, ParticipantInvitationStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { renderAvatar } from 'utils/user-utils';
@@ -21,6 +21,10 @@ import { CSVLink } from "react-csv";
 import { FaFileCsv } from 'react-icons/fa';
 import moment from 'moment';
 import { ParticipantDetailList } from './ParticipantDetailList';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
+import { TableSorting } from 'types/TableSorting';
+import { TableFiltering } from 'types/TableFiltering';
+import { getColumnSearchProps } from 'app/components/TableFilter';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -38,11 +42,34 @@ export const ParticipantList = (props) => {
 
     const [mappedResults, setMappedResults] = React.useState<any[]>([]);
 
-    const columns = [
+    const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+
+    const [filter, setFilter] = React.useState<TableFiltering[]>([]);
+
+    const handleSearch = (
+        selectedKeys: string[],
+        confirm: (param?: FilterConfirmProps) => void,
+        dataIndex: any,
+    ) => {
+        let param: any = selectedKeys[0];
+        const filterType = getFilterTypeBaseOnColumn(dataIndex, ['approximateStartTime', 'createdAt']);
+        param = parseFilterParamBaseOnFilterType(param, filterType);
+        confirm();
+        setFilter([...filter.filter(f => f.key !== dataIndex), ...[{ key: dataIndex, value: param, type: filterType }]]);
+    };
+
+    const handleReset = (clearFilters: () => void, columnToReset: string) => {
+        clearFilters();
+        setFilter([...filter.filter(f => f.key !== columnToReset)]);
+    };
+
+    const columns: any = [
         {
             title: t(translations.general.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
+            sorter: true,
+            ...getColumnSearchProps('publicName', handleSearch, handleReset, 'publicName'),
             render: (text, record) => <UserWrapper>
                 <AvatarWrapper>
                     <img className="avatar-img" alt={text} src={renderAvatar(record?.profile?.avatar)} />
@@ -63,6 +90,7 @@ export const ParticipantList = (props) => {
             title: t(translations.participant_list.status),
             dataIndex: 'invitationStatus',
             key: 'invitationStatus',
+            sorter: true,
             render: (text, record) => {
                 return record?.invitationStatus;
             },
@@ -81,6 +109,7 @@ export const ParticipantList = (props) => {
             title: t(translations.participant_list.is_paid),
             dataIndex: 'isPaid',
             key: 'isPaid',
+            sorter: true,
             render: (text, record) => String(text),
             ellipsis: true,
         },
@@ -147,7 +176,7 @@ export const ParticipantList = (props) => {
 
     const getAllByFilter = async (page: number, size: number, mode: string) => {
         setIsLoading(true);
-        const response = await getAllByCalendarEventIdWithFilter(eventId, page, size, mode);
+        const response = await getAllByCalendarEventIdWithFilter(eventId, page, size, mode, filter, sorter);
         setIsLoading(false);
 
         if (response.success) {
@@ -224,7 +253,7 @@ export const ParticipantList = (props) => {
             getAllByFilter(pagination.page, pagination.pageSize, filterMode);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showInviteModal]);
+    }, [showInviteModal, filter, sorter]);
 
     React.useEffect(() => {
         const resultsWithKey = pagination.rows.map((result) => ({ ...result, key: result.id }))
@@ -275,6 +304,7 @@ export const ParticipantList = (props) => {
                         scroll={{ x: "max-content" }}
                         columns={columns}
                         dataSource={mappedResults}
+                        onChange={(_1, _2, sorter) => handleOnTableStateChanged(sorter, setSorter)}
                         pagination={{
                             defaultPageSize: 10,
                             pageSize: pagination.size,
