@@ -79,13 +79,11 @@ export const create = (calendarEventId: string, data) => {
     }))
 }
 
-export const getAllByCalendarEventId = (calendarEventId: string, page: number, size: number = 10, filter: TableFiltering[] = [], sorter: Partial<TableSorting> | null = null) => {
-    const sortAndFilterString = parseFilterSorterParams(filter, sorter); 
+export const getAllByCalendarEventId = (calendarEventId: string, page: number, size: number = 10) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/competition-units`, {
         params: {
             page: page,
             size: size,
-            ...queryStringToJSON(sortAndFilterString.substring(1))
         }
     }));
 }

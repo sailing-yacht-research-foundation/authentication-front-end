@@ -22,8 +22,7 @@ export const getAcceptedAndSelfRegisteredParticipantByCalendarEventId = (calenda
     }))
 }
 
-export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page: number, size: number, assignMode: string, filter: TableFiltering[] = [], sorter: Partial<TableSorting> | null = null) => {
-    const sortAndFilterString = parseFilterSorterParams(filter, sorter);
+export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page: number, size: number, assignMode: string) => {
     let assign: any = null;
     if (assignMode === 'all') {
         assign = null;
@@ -34,7 +33,6 @@ export const getAllByCalendarEventIdWithFilter = (calendarEventId: string, page:
         params: {
             page: page,
             size,
-            ...queryStringToJSON(sortAndFilterString.substring(0))
         }
     }))
 }
