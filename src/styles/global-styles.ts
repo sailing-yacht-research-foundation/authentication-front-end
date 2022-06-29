@@ -291,7 +291,7 @@ export const GlobalStyle = createGlobalStyle`
     z-index: 99999 !important;
   }
 
-  .ant-dropdown {
+  .ant-dropdown, .ant-select-dropdown {
     z-index: 99999 !important;
   }
 `;

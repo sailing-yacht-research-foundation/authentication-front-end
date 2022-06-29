@@ -568,8 +568,12 @@ export const parseFilterSorterParams = (filter: TableFiltering[], sorter: Partia
     filter.forEach(f => {
         if (f.type === TableFilteringType.TEXT) {
             paramString += `&${f.key}_contains=${f.value}`;
-        } else {
+        } else if (f.type === TableFilteringType.DATE) {
             paramString += `&${f.key}_gte=${f.value[0]}&${f.key}_lte=${f.value[1]}`;
+        } else if (f.type === TableFilteringType.CHECKBOX) {
+            f.value?.forEach(value => {
+                paramString += `&${f.key}_in=${value}`;
+            });
         }
     });
 
@@ -580,8 +584,9 @@ export const parseFilterSorterParams = (filter: TableFiltering[], sorter: Partia
     return paramString;
 }
 
-export const getFilterTypeBaseOnColumn = (column: string, fieldsWithDateFiltering: string[]) => {
+export const getFilterTypeBaseOnColumn = (column: string, fieldsWithDateFiltering: string[] = [], fieldsWithCheckboxFiltering: string[] = []) => {
     if (fieldsWithDateFiltering.includes(column)) return TableFilteringType.DATE;
+    if (fieldsWithCheckboxFiltering.includes(column)) return TableFilteringType.CHECKBOX;
     return TableFilteringType.TEXT;
 }
 

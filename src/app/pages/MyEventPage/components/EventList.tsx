@@ -8,14 +8,14 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
 import { translations } from 'locales/translations';
-import { BorderedButton, DownloadButton, IconWrapper, LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
+import { BorderedButton, DownloadButton, LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
 import { getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
-import { EventState, TableFilteringType, TIME_FORMAT } from 'utils/constants';
+import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { RaceList } from './RaceList';
@@ -24,7 +24,7 @@ import { CalendarEvent } from 'types/CalendarEvent';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { deleteParticipant } from 'services/live-data-server/participants';
 import { toast } from 'react-toastify';
-import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
+import { getColumnCheckboxProps, getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
@@ -86,7 +86,7 @@ export const EventList = () => {
     dataIndex: any,
   ) => {
     let param: any = selectedKeys[0];
-    const filterType = getFilterTypeBaseOnColumn(dataIndex, ['approximateStartTime', 'createdAt']);
+    const filterType = getFilterTypeBaseOnColumn(dataIndex, ['approximateStartTime', 'createdAt'], ['status']);
     param = parseFilterParamBaseOnFilterType(param, filterType);
     confirm();
     dispatch(actions.setFilter({ key: dataIndex, value: param, type: filterType }));
@@ -165,6 +165,7 @@ export const EventList = () => {
       dataIndex: 'status',
       key: 'status',
       sorter: true,
+      ...getColumnCheckboxProps('status', Object.values(EventState), handleSearch, handleReset, 'status'),
       render: (value) => value,
     },
     {

@@ -1,7 +1,6 @@
-import { FieldTimeOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Input, Space } from 'antd';
+import { FieldTimeOutlined, FilterFilled, SearchOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Input, Select, Space } from 'antd';
 import { ColumnType } from 'antd/lib/table';
-import moment from 'moment';
 import React from 'react';
 
 export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, handleReset: Function, columnToReset: string): ColumnType<any> => ({
@@ -50,8 +49,8 @@ export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleRese
                 value={selectedKeys[0]}
                 format="YYYY-MM-DD HH:mm:ss"
             />
-            <br/>
-            <Space size={5} style={{marginTop: '5px'}}>
+            <br />
+            <Space size={5} style={{ marginTop: '5px' }}>
                 <Button
                     type="primary"
                     role="search"
@@ -77,6 +76,41 @@ export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleRese
     ),
     filterIcon: filtered => (
         <FieldTimeOutlined type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    )
+});
+
+export const getColumnCheckboxProps = (dataIndex, filterCriteria, handleSearch: Function, handleReset: Function, columnToReset: string) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8, textAlign: 'right' }}>
+            <Select value={selectedKeys[0]} style={{ width: '100%' }} mode='multiple' maxTagCount={'responsive'} onChange={value => setSelectedKeys([value])}>
+                {filterCriteria.map((criteria, index) => <Select.Option key={index} value={criteria}>{criteria}</Select.Option>)}
+            </Select>
+            <br />
+            <Space size={5} style={{ marginTop: '5px', zIndex: 1 }}>
+                <Button
+                    type="primary"
+                    role="search"
+                    onClick={() => {
+                        handleSearch(selectedKeys, confirm, dataIndex)
+                    }}
+                    style={{ width: 90 }}
+                    icon={<SearchOutlined />}
+                    size="small"
+                >
+                    Search
+                </Button>
+                <Button
+                    role="reset"
+                    style={{ width: 90 }}
+                    onClick={() => handleReset(clearFilters, columnToReset)}
+                    size="small"
+                >
+                    Reset
+                </Button>
+            </Space>
+        </div>
     ),
-    onFilter: (value, record) => record[dataIndex] ? moment(record[dataIndex]).isBetween(moment(value[0]), moment(value[1])) : "",
+    filterIcon: filtered => (
+        <FilterFilled style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
 });

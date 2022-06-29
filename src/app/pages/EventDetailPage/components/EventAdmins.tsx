@@ -57,8 +57,8 @@ export const EventAdmins = (props: IEventAdmins) => {
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
         return editors.filter(Boolean).map((editor, index) => {
             if (editor.group) editor = editor.group;
-            return <Tooltip title={editor?.groupName}>
-                <EditorItem key={index} onClick={() => history.push(`/groups/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} >
+            return <Tooltip title={editor?.groupName} key={index}>
+                <EditorItem onClick={() => history.push(`/groups/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} >
                     <img alt={editor?.groupName} src={editor?.groupImage || DEFAULT_GROUP_AVATAR} />
                 </EditorItem>
             </Tooltip>
@@ -70,8 +70,8 @@ export const EventAdmins = (props: IEventAdmins) => {
         if (headless && editors.length > 5) editors = editors.slice(0, 5);
         return editors.filter(Boolean).map((editor, index) => {
             if (editor.user) editor = editor.user;
-            return <Tooltip title={editor?.name}>
-                <EditorItem key={index} onClick={() => history.push(`/profile/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}}>
+            return <Tooltip title={editor?.name} key={index}>
+                <EditorItem onClick={() => history.push(`/profile/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}}>
                     <img alt={editor?.name} src={renderAvatar(editor?.avatar)} />
                 </EditorItem>
             </Tooltip>

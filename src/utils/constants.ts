@@ -306,5 +306,6 @@ export enum RaceDataUpdate {
 
 export enum TableFilteringType {
     TEXT = 'TEXT',
-    DATE = 'DATE'    
+    DATE = 'DATE',
+    CHECKBOX = 'CHECKBOX',
 }
