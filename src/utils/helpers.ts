@@ -566,7 +566,7 @@ export const checkIfLocationIsValid = (lon, lat) => {
 
 export const parseFilterSorterParams = (filter: TableFiltering[], sorter: Partial<TableSorting> | null) => {
     let paramString = '';
-    filter.forEach(f => {
+    filter?.forEach(f => {
         if (f.type === TableFilteringType.TEXT) {
             paramString += `&${f.key}_contains=${f.value}`;
         } else if (f.type === TableFilteringType.DATE) {
