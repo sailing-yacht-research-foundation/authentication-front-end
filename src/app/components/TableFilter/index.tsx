@@ -2,6 +2,8 @@ import { FieldTimeOutlined, FilterFilled, SearchOutlined } from '@ant-design/ico
 import { Button, DatePicker, Input, Select, Space } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import React from 'react';
+import { BiSearch } from 'react-icons/bi';
+import { IconWrapper } from '../SyrfGeneral';
 
 export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, handleReset: Function, columnToReset: string): ColumnType<any> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -17,7 +19,7 @@ export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, han
                 <Button
                     type="primary"
                     onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-                    icon={<SearchOutlined />}
+                    icon={<IconWrapper><BiSearch /></IconWrapper>}
                     size="small"
                     style={{ width: 90 }}
                 >
@@ -58,7 +60,7 @@ export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleRese
                         handleSearch(selectedKeys, confirm, dataIndex)
                     }}
                     style={{ width: 90 }}
-                    icon={<SearchOutlined />}
+                    icon={<IconWrapper><BiSearch/></IconWrapper>}
                     size="small"
                 >
                     Search
@@ -94,7 +96,7 @@ export const getColumnCheckboxProps = (dataIndex, filterCriteria, handleSearch: 
                         handleSearch(selectedKeys, confirm, dataIndex)
                     }}
                     style={{ width: 90 }}
-                    icon={<SearchOutlined />}
+                    icon={<IconWrapper><BiSearch/></IconWrapper>}
                     size="small"
                 >
                     Search

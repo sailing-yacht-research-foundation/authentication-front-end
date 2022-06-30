@@ -26,10 +26,11 @@ import { deleteParticipant } from 'services/live-data-server/participants';
 import { toast } from 'react-toastify';
 import { getColumnCheckboxProps, getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 import { TableSorting } from 'types/TableSorting';
 import { TableFiltering } from 'types/TableFiltering';
 import { GiExitDoor } from 'react-icons/gi';
+import { EditFilled } from '@ant-design/icons';
 
 const defaultOptions = {
   loop: true,
@@ -193,7 +194,7 @@ export const EventList = () => {
             </Tooltip>
             {canEditEvent(record) && <>
               <Tooltip title={t(translations.general.update)}>
-                <BorderedButton icon={<FaEdit />} onClick={() => {
+                <BorderedButton icon={<EditFilled />} onClick={() => {
                   history.push(`/events/${record.id}/update`)
                 }} type="primary"></BorderedButton>
               </Tooltip>

@@ -192,7 +192,7 @@ export const MyTrackList = () => {
             key: 'action',
             fixed: 'right',
             render: (text, record) => {
-                return <Space size={10}>
+                return <Space size="middle">
                     <Tooltip title={t(translations.my_tracks_page.download_as_kml)}>
                         <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'kml')} src={KMLIcon} />
                     </Tooltip>

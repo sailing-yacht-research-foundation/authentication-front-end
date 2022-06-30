@@ -28,7 +28,8 @@ import { TableSorting } from 'types/TableSorting';
 import { TableFiltering } from 'types/TableFiltering';
 import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
+import { EditFilled } from '@ant-design/icons';
 
 const defaultOptions = {
     loop: true,
@@ -130,7 +131,7 @@ export const VesselList = () => {
             render: (text, record) => {
                 return <Space size="middle">
                     <Tooltip title={t(translations.tip.update_this_boat)}>
-                        <BorderedButton icon={<FaEdit />} onClick={() => {
+                        <BorderedButton icon={<EditFilled />} onClick={() => {
                             history.push(`/boats/${record.id}/update`);
                         }} type="primary" />
                     </Tooltip>
