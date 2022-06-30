@@ -24,6 +24,8 @@ describe('groups detail Saga', () => {
             }
         };
 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+
         getGroupIterator = getGroup({
             type: slice.groupDetailActions.getGroup.type,
             payload: getGroupParam
@@ -54,11 +56,10 @@ describe('groups detail Saga', () => {
             put(slice.groupDetailActions.setGroup(response.data)),
         );
 
-        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
-        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
-
         const iteration = getGroupIterator.next();
         expect(iteration.done).toBe(true);
+
+        expect(showToastMessageOnRequestErrorSpy).not.toBeCalled();
     });
 
     it('Should get group and set getting group failed if the response is error', () => {
