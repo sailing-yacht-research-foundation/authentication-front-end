@@ -641,9 +641,9 @@ export const usePrevious = <T extends unknown>(value: T): T | undefined => {
 export const checkIfLastFilterAndSortValueDifferentToCurrent = (previousFilter: TableFiltering[] | undefined, previousSorter: Partial<TableSorting> | undefined, filter: TableFiltering[] | undefined, sorter: Partial<TableSorting> | undefined) => {
     let different = false;
 
-    if (previousFilter?.length !== filter?.length) different = true;
+    if (previousFilter && previousFilter?.length !== filter?.length) different = true;
 
-    if ((
+    if (previousSorter && (
         previousSorter?.order !== sorter?.order
         || previousSorter?.key !== sorter?.key
     )) different = true;

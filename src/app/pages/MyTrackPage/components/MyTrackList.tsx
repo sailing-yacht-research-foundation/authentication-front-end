@@ -232,7 +232,8 @@ export const MyTrackList = () => {
 
     const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ sorter, filter });
 
-    React.useEffect(() => {        if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
+    React.useEffect(() => {
+        if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
             getAll(pagination.page, pagination.size);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
