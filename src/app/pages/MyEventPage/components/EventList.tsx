@@ -31,6 +31,7 @@ import { TableSorting } from 'types/TableSorting';
 import { TableFiltering } from 'types/TableFiltering';
 import { GiExitDoor } from 'react-icons/gi';
 import { EditFilled } from '@ant-design/icons';
+import { isMobile } from 'react-device-detect';
 
 const defaultOptions = {
   loop: true,
@@ -107,7 +108,7 @@ export const EventList = () => {
       dataIndex: 'name',
       key: 'name',
       sorter: true,
-      fixed: 'left',
+      fixed: !isMobile ? 'left' : false,
       render: (text, record) => {
         return <Tooltip title={text}>
           <Link to={`/events/${record.id}`}>{truncateName(text)}</Link>
@@ -183,7 +184,7 @@ export const EventList = () => {
     {
       title: 'Action',
       key: 'action',
-      fixed: 'right',
+      fixed: !isMobile ? 'right' : false,
       render: (text, record) => {
         return (
           <Space size="small">

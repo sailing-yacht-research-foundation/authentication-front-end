@@ -30,6 +30,7 @@ import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFi
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { FaTrash } from 'react-icons/fa';
 import { EditFilled } from '@ant-design/icons';
+import { isMobile } from 'react-device-detect';
 
 const defaultOptions = {
     loop: true,
@@ -72,7 +73,7 @@ export const VesselList = () => {
             key: 'publicName',
             sorter: true,
             ...getColumnSearchProps('publicName', handleSearch, handleReset, 'publicName'),
-            fixed: 'left',
+            fixed: !isMobile ? 'left' : false,
             render: (text, record) => {
                 return <Tooltip title={text}>
                     <Link to={`/boats/${record.id}/update`}>{truncateName(text)}</Link>
@@ -127,7 +128,7 @@ export const VesselList = () => {
         {
             title: t(translations.general.action),
             key: 'action',
-            fixed: 'right',
+            fixed: !isMobile ? 'right' : false,
             render: (text, record) => {
                 return <Space size="small">
                     <Tooltip title={t(translations.tip.update_this_boat)}>

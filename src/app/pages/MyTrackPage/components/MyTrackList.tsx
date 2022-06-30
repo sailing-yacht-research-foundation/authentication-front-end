@@ -28,6 +28,7 @@ import { selectFilter, selectIsLoading, selectPagination, selectSorter } from '.
 import { useMyTracksSlice } from '../slice';
 import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
+import { isMobile } from 'react-device-detect';
 
 const defaultOptions = {
     loop: true,
@@ -82,7 +83,7 @@ export const MyTrackList = () => {
             title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
-            fixed: 'left',
+            fixed: !isMobile ? 'right' : false,
             render: (text, record) => {
                 const trackName = !record.event?.isPrivate ? [record.event.name, record.competitionUnit.name].filter(Boolean).join(' - ') : record.event?.name
                 if (record.competitionUnit)
@@ -190,7 +191,7 @@ export const MyTrackList = () => {
         {
             title: t(translations.general.action),
             key: 'action',
-            fixed: 'right',
+            fixed: !isMobile ? 'right' : false,
             render: (text, record) => {
                 return <Space size="small">
                     <Tooltip title={t(translations.my_tracks_page.download_as_kml)}>

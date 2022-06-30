@@ -47,6 +47,7 @@ export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleRese
                 onChange={e => {
                     setSelectedKeys(e?.length ? [e] : [])
                 }}
+                style={{ width: 400 }}
                 placeholder={["Start", "End"]}
                 value={selectedKeys[0]}
                 format="YYYY-MM-DD HH:mm:ss"
