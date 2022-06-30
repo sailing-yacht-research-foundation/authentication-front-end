@@ -244,7 +244,7 @@ export const EventList = () => {
   }, [filter, sorter]);
 
   React.useEffect(() => {
-    dispatch(actions.getEvents({ filter: filter, page: page, size: size, sorter }));
+    dispatch(actions.getEvents({ page: page, size: size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
