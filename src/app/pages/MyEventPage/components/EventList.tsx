@@ -116,7 +116,7 @@ export const EventList = () => {
       ...getColumnSearchProps('name', handleSearch, handleReset, 'name')
     },
     {
-      title: 'Status',
+      title: t(translations.my_event_list_page.type),
       dataIndex: 'isOpen',
       key: 'isOpen',
       sorter: true,
@@ -165,7 +165,7 @@ export const EventList = () => {
       render: (_, record) => <EventAdmins headless editors={record.editors || []} groups={record.groupEditors || []} event={record} />
     },
     {
-      title: t(translations.my_event_list_page.state),
+      title: t(translations.my_event_list_page.status),
       dataIndex: 'status',
       key: 'status',
       sorter: true,
