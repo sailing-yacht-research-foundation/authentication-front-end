@@ -7,7 +7,7 @@ export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, han
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
             <Input
-                placeholder={`Search ${dataIndex}`}
+                placeholder={`Search...`}
                 value={selectedKeys[0]}
                 onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                 onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
