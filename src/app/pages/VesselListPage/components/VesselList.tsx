@@ -21,7 +21,7 @@ import moment from 'moment';
 import { DeleteVesselModal } from './DeleteVesselModal';
 import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
-import { getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, truncateName } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, truncateName, usePrevious } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { Vessel } from 'types/Vessel';
 import { TableSorting } from 'types/TableSorting';
@@ -158,10 +158,19 @@ export const VesselList = () => {
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
+    const previousValue = usePrevious<{ sorter: Partial<TableSorting> }>({ sorter });
+
+    React.useEffect(() => {
+        if (checkIfLastFilterAndSortValueDifferentToCurrent(undefined, previousValue?.sorter, undefined, sorter)) {
+            getAll(pagination.page, pagination.size);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sorter]);
+
     React.useEffect(() => {
         getAll(pagination.page, pagination.size);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sorter]);
+    }, []);
 
     const getAll = async (page, size) => {
         setIsChangingPage(true);

@@ -13,6 +13,9 @@ import { BiImport } from "react-icons/bi";
 import { ImportTrack } from "./ImportTrack";
 import { ImportTrackType } from "utils/constants";
 import { media } from "styles/media";
+import { useDispatch, useSelector } from "react-redux";
+import { useMyTracksSlice } from "../slice";
+import { selectFilter, selectPagination, selectSorter } from "../slice/selectors";
 
 const { TabPane } = Tabs;
 
@@ -29,9 +32,16 @@ export const MyTrack = () => {
   const [showImportGPXTrackModal, setShowImportGPXTrackModal] = React.useState<boolean>(false);
 
   const [showImportExpeditionTrackModal, setShowImportExpeditionTrackModal] = React.useState<boolean>(false);
+  
+  const dispatch = useDispatch();
 
-  const trackListRef = React.useRef<any>();
-  const mapViewRef = React.useRef<any>();
+  const { actions } = useMyTracksSlice();
+
+  const pagination = useSelector(selectPagination);
+
+  const sorter = useSelector(selectSorter);
+
+  const filter = useSelector(selectFilter);
 
   const { t } = useTranslation();
 
@@ -41,8 +51,7 @@ export const MyTrack = () => {
   }
 
   const onTrackImported = () => {
-    trackListRef?.current?.reload();
-    mapViewRef?.current?.reload();
+    dispatch(actions.getTracks({ page: pagination.page, size: pagination.size, filter, sorter }));
   }
 
   return (
@@ -69,11 +78,11 @@ export const MyTrack = () => {
       </PageHeaderContainerResponsive>
       <StyledTabs<React.ElementType> animated defaultActiveKey="1">
         <TabPane tab={renderIcon(BsListUl, translate.tracks)} key="1">
-          <MyTrackList ref={trackListRef} />
+          <MyTrackList />
         </TabPane>
 
         <TabPane tab={renderIcon(FiMap, translate.map)} key="2">
-          <MyTrackMapView ref={mapViewRef} />
+          <MyTrackMapView />
         </TabPane>
       </StyledTabs>
     </div>

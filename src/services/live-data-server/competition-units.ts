@@ -1,9 +1,7 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
-import { TableFiltering } from 'types/TableFiltering';
-import { TableSorting } from 'types/TableSorting';
 import { EventState, KudoTypes } from 'utils/constants';
-import { formatServicePromiseResponse, parseFilterSorterParams, parseKeyword, queryStringToJSON } from 'utils/helpers';
+import { formatServicePromiseResponse, parseKeyword } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {

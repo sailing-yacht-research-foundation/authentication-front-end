@@ -8,7 +8,7 @@ import { translations } from 'locales/translations';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, truncateName } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, truncateName, usePrevious } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
@@ -163,10 +163,19 @@ export const InvitedEventLists = (props) => {
         }
     }
 
+    const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ sorter, filter });
+
+    React.useEffect(() => {
+        if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
+            getInvitations(pagination.page, pagination.size);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filter, sorter]);
+
     React.useEffect(() => {
         getInvitations(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter, sorter]);
+    }, []);
 
     const onPaginationChanged = (page, size) => {
         getInvitations(page, size);

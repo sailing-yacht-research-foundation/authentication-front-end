@@ -7,7 +7,7 @@ import { translations } from 'locales/translations';
 import moment from 'moment';
 import { AiOutlineMinus } from 'react-icons/all'
 
-import { downloadTrack, getAllTracks } from 'services/live-data-server/my-tracks';
+import { downloadTrack } from 'services/live-data-server/my-tracks';
 import NoResult from '../assets/no-results.json';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import { Link } from 'react-router-dom';
@@ -19,12 +19,15 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
-import { TableSorting } from 'types/TableSorting';
-import { TableFiltering } from 'types/TableFiltering';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectFilter, selectIsLoading, selectPagination, selectSorter } from '../slice/selectors';
+import { useMyTracksSlice } from '../slice';
+import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
 
 const defaultOptions = {
     loop: true,
@@ -35,9 +38,13 @@ const defaultOptions = {
     }
 };
 
-export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
+export const MyTrackList = () => {
 
     const { t } = useTranslation();
+
+    const sorter = useSelector(selectSorter);
+
+    const filter = useSelector(selectFilter);
 
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
@@ -45,9 +52,13 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
 
     const [isDeletingTrack, setIsDeletingTrack] = React.useState<boolean>(false);
 
-    const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+    const pagination = useSelector(selectPagination);
 
-    const [filter, setFilter] = React.useState<TableFiltering[]>([]);
+    const dispatch = useDispatch();
+
+    const { actions } = useMyTracksSlice();
+
+    const isLoading = useSelector(selectIsLoading);
 
     const handleSearch = (
         selectedKeys: string[],
@@ -58,12 +69,12 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         const filterType = getFilterTypeBaseOnColumn(dataIndex, ['createdAt']);
         param = parseFilterParamBaseOnFilterType(param, filterType);
         confirm();
-        setFilter([...filter.filter(f => f.key !== dataIndex), ...[{ key: dataIndex, value: param, type: filterType }]]);
+        dispatch(actions.setFilter({ key: dataIndex, value: param, type: filterType }));
     };
 
     const handleReset = (clearFilters: () => void, columnToReset: string) => {
         clearFilters();
-        setFilter([...filter.filter(f => f.key !== columnToReset)]);
+        dispatch(actions.clearFilter(columnToReset));
     };
 
     const columns: any = [
@@ -102,7 +113,6 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             title: t(translations.my_tracks_page.type),
             dataIndex: 'type',
             key: 'type',
-            sorter: true,
             render: (text, record) => {
                 return record.event?.isPrivate ? t(translations.my_tracks_page.track_now) : t(translations.my_tracks_page.event_track)
             }
@@ -210,12 +220,6 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         return url;
     }
 
-    React.useImperativeHandle(ref, () => ({
-        reload() {
-            getAll(pagination.page, pagination.size);
-        }
-    }));
-
     const showTrackDeleteModal = (track) => {
         setTrack(track);
         setShowDeleteModal(true);
@@ -225,47 +229,34 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
         e.preventDefault();
         downloadTrack(track, type);
     }
-    const [pagination, setPagination] = React.useState<any>({
-        page: 1,
-        total: 0,
-        rows: [],
-        size: 10
-    });
 
-    const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
+    const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ sorter, filter });
+
+    React.useEffect(() => {        if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
+            getAll(pagination.page, pagination.size);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filter, sorter]);
 
     React.useEffect(() => {
         getAll(pagination.page, pagination.size);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sorter, filter]);
+    }, [])
 
     const getAll = async (page, size) => {
-        setIsChangingPage(true);
-        const response = await getAllTracks(page, size, filter, sorter);
-        setIsChangingPage(false);
-
-        if (response.success) {
-            setPagination({
-                ...pagination,
-                rows: response.data?.rows,
-                page: page,
-                total: response.data?.count,
-                size: response.data?.size
-            });
-        }
+        dispatch(actions.getTracks({ page, size, filter, sorter }));
     }
 
     const onPaginationChanged = (page, size) => {
-        getAll(page, size);
+        dispatch(actions.getTracks({ page, size, filter, sorter }));
     }
 
     const onTrackDeleted = () => {
-        getAll(pagination.page, pagination.size);
+        dispatch(actions.getTracks({ page: pagination.page, size: pagination.size, filter, sorter }));
     }
 
     const performDeleteTrack = async () => {
         setIsDeletingTrack(true);
-        const response = await deleteEvent(track?.event?.id!);
+        const response = await deleteEvent(track.event?.id!);
         setIsDeletingTrack(false);
 
         setShowDeleteModal(false);
@@ -275,6 +266,14 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             onTrackDeleted();
         } else {
             showToastMessageOnRequestError(response.error);
+        }
+    }
+
+    const onTableStateChanged = (sorter) => {
+        if (sorter.column) {
+            dispatch(actions.setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' }));
+        } else {
+            dispatch(actions.setSorter({}));
         }
     }
 
@@ -288,7 +287,7 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                 onOk={performDeleteTrack}
                 onCancel={() => setShowDeleteModal(false)}
             />
-            <Spin spinning={isChangingPage}>
+            <Spin spinning={isLoading}>
                 <TableWrapper>
                     <Table locale={{
                         emptyText: (<LottieWrapper>
@@ -299,19 +298,19 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
                             <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
                         </LottieWrapper>)
                     }} scroll={{ x: "max-content" }}
-                        onChange={(_1, _2, sorter)=> handleOnTableStateChanged(sorter, setSorter)}
+                        onChange={(_1, _2, sorter) => onTableStateChanged(sorter)}
                         columns={columns}
                         dataSource={pagination.rows} pagination={{
-                            defaultPageSize: 10,
                             current: pagination.page,
                             total: pagination.total,
+                            pageSize: pagination.size,
                             onChange: onPaginationChanged
                         }} />
                 </TableWrapper>
             </Spin>
         </>
     )
-});
+}
 
 const FlexWrapper = styled.div`
     display: flex;

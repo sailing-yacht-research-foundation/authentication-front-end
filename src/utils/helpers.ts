@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
+import React from 'react';
 import { toast } from 'react-toastify';
 import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
@@ -627,3 +628,25 @@ export const queryStringToJSON = (qs) => {
 
     return JSON.parse(JSON.stringify(result));
 };
+
+
+export const usePrevious = <T extends unknown>(value: T): T | undefined => {
+    const ref = React.useRef<T>();
+    React.useEffect(() => {
+        ref.current = value;
+    });
+    return ref.current;
+}
+
+export const checkIfLastFilterAndSortValueDifferentToCurrent = (previousFilter: TableFiltering[] | undefined, previousSorter: Partial<TableSorting> | undefined, filter: TableFiltering[] | undefined, sorter: Partial<TableSorting> | undefined) => {
+    let different = false;
+
+    if (previousFilter?.length !== filter?.length) different = true;
+
+    if ((
+        previousSorter?.order !== sorter?.order
+        || previousSorter?.key !== sorter?.key
+    )) different = true;
+
+    return different;
+}

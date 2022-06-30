@@ -14,7 +14,7 @@ import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
 import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -27,6 +27,9 @@ import { toast } from 'react-toastify';
 import { getColumnCheckboxProps, getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { TableSorting } from 'types/TableSorting';
+import { TableFiltering } from 'types/TableFiltering';
+import { GiExitDoor } from 'react-icons/gi';
 
 const defaultOptions = {
   loop: true,
@@ -201,7 +204,9 @@ export const EventList = () => {
                   onClick={() => showDeleteRaceModal(record)} />
               </Tooltip>}
             </>}
-            {canLeaveEvent(record) && <BorderedButton onClick={() => showLeaveEventModal(record)} danger>{t(translations.my_event_list_page.leave_event_button)}</BorderedButton>}
+            {canLeaveEvent(record) && <Tooltip title={t(translations.my_event_list_page.leave_event_button)}>
+              <BorderedButton icon={<GiExitDoor />} onClick={() => showLeaveEventModal(record)} danger />
+            </Tooltip>}
           </Space >
         );
       }
@@ -226,9 +231,17 @@ export const EventList = () => {
     setMappedResults(resultsWithKey);
   }, [results]);
 
+  const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ sorter, filter });
+
+  React.useEffect(() => {
+    if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
+      dispatch(actions.getEvents({ filter: filter, page: page, size: size, sorter }));
+    }
+  }, [filter, sorter]);
+
   React.useEffect(() => {
     dispatch(actions.getEvents({ filter: filter, page: page, size: size, sorter }));
-  }, [filter, sorter]);
+  }, []);
 
   const onPaginationChanged = (page, size) => {
     dispatch(actions.getEvents({ page, size, filter, sorter }));

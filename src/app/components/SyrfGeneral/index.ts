@@ -288,3 +288,20 @@ export const RightAligner = styled.div`
     float: right;
     margin: 10px 0;
 `;
+
+export const MapPaginationWrapper = styled.div`
+    position: absolute;
+    bottom: 110px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 570px;
+    max-width: 98%;
+    z-index: 11;
+    text-align: center;
+    z-index: 9999;
+
+    .ant-pagination-item:not(.ant-pagination-item-active) a {
+    color: rgba(0, 0, 0, 0.85) !important;
+    }
+`;
