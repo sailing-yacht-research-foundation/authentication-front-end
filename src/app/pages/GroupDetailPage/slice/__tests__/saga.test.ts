@@ -70,11 +70,7 @@ describe('groups detail Saga', () => {
                 }
             }
         };
-
-        const successResponse = {
-            success: true
-        }
-
+        
         const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
 
         getGroupIterator = getGroup({
@@ -111,8 +107,6 @@ describe('groups detail Saga', () => {
         expect(iteration.done).toBe(true);
 
         expect(showToastMessageOnRequestErrorSpy).toHaveBeenCalledWith(response.error);
-
-        expect(showToastMessageOnRequestErrorSpy).not.toHaveBeenCalledWith(successResponse);
     });
 
     it('Should get groups admins', () => {
