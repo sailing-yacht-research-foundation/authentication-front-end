@@ -129,7 +129,7 @@ export const VesselList = () => {
             key: 'action',
             fixed: 'right',
             render: (text, record) => {
-                return <Space size="middle">
+                return <Space size="small">
                     <Tooltip title={t(translations.tip.update_this_boat)}>
                         <BorderedButton icon={<EditFilled />} onClick={() => {
                             history.push(`/boats/${record.id}/update`);

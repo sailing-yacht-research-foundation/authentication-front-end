@@ -186,7 +186,7 @@ export const EventList = () => {
       fixed: 'right',
       render: (text, record) => {
         return (
-          <Space size="middle">
+          <Space size="small">
             <Tooltip title={t(translations.tip.download_icalendar_file)}>
               <DownloadButton icon={<AiOutlineCalendar />} onClick={() => {
                 downloadIcalendarFile(record);
@@ -230,6 +230,7 @@ export const EventList = () => {
   React.useEffect(() => {
     const resultsWithKey = results.map((result) => ({ ...result, key: result.id }))
     setMappedResults(resultsWithKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [results]);
 
   const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ sorter, filter });
@@ -238,10 +239,12 @@ export const EventList = () => {
     if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
       dispatch(actions.getEvents({ filter: filter, page: page, size: size, sorter }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, sorter]);
 
   React.useEffect(() => {
     dispatch(actions.getEvents({ filter: filter, page: page, size: size, sorter }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onPaginationChanged = (page, size) => {

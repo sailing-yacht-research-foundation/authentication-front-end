@@ -192,7 +192,7 @@ export const MyTrackList = () => {
             key: 'action',
             fixed: 'right',
             render: (text, record) => {
-                return <Space size="middle">
+                return <Space size="small">
                     <Tooltip title={t(translations.my_tracks_page.download_as_kml)}>
                         <DownloadButton onClick={(e) => performDownloadTrack(e, record, 'kml')} src={KMLIcon} />
                     </Tooltip>
@@ -241,6 +241,7 @@ export const MyTrackList = () => {
 
     React.useEffect(() => {
         getAll(pagination.page, pagination.size);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const getAll = async (page, size) => {
