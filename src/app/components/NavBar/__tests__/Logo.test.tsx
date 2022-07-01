@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { render } from '@testing-library/react';
 import { Logo } from '../Logo';
-import { MemoryRouter } from 'react-router-dom';
 import Provider from 'app/components/Provider/index';
 import { createRenderer } from 'react-test-renderer/shallow';
 
