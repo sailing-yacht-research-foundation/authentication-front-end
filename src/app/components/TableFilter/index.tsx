@@ -1,8 +1,11 @@
+import './styles/ant-time-range.css';
+
 import { FieldTimeOutlined, FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Input, Select, Space } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import React from 'react';
 import { BiSearch } from 'react-icons/bi';
+import styled from 'styled-components';
 import { IconWrapper } from '../SyrfGeneral';
 
 export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, handleReset: Function, columnToReset: string): ColumnType<any> => ({
@@ -42,7 +45,7 @@ export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, han
 
 export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleReset: Function, columnToReset: string) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-        <div style={{ padding: 8, textAlign: 'right' }}>
+        <TimeRangePickerWrapper style={{ padding: 8, textAlign: 'right' }}>
             <DatePicker.RangePicker
                 onChange={e => {
                     setSelectedKeys(e?.length ? [e] : [])
@@ -75,7 +78,7 @@ export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleRese
                     Reset
                 </Button>
             </Space>
-        </div>
+        </TimeRangePickerWrapper>
     ),
     filterIcon: filtered => (
         <FieldTimeOutlined type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
@@ -117,3 +120,8 @@ export const getColumnCheckboxProps = (dataIndex, filterCriteria, handleSearch: 
         <FilterFilled style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
 });
+
+const TimeRangePickerWrapper = styled.div`
+    padding: 8
+    text-align: right;
+`;
