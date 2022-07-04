@@ -354,7 +354,7 @@ export const RaceMap = (props) => {
     setIsClaimingTrack(false);
 
     if (response.success) {
-      message.success(t(translations.playback_page.success_fully_claimed_track, { participantName: participant?.competitor_name }));
+      message.success(t(translations.playback_page.successfully_claimed_track, { participantName: participant?.competitor_name }));
     } else {
       showToastMessageOnRequestError(response.error);
     }
