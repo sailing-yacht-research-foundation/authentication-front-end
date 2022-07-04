@@ -294,4 +294,8 @@ export const GlobalStyle = createGlobalStyle`
   .ant-dropdown, .ant-select-dropdown, .ant-picker-dropdown {
     z-index: 99999 !important;
   }
+
+  .ant-table-cell:not(.ant-table-row-expand-icon-cell) {
+    min-width: 150px;
+  }
 `;

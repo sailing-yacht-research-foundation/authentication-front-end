@@ -31,6 +31,7 @@ import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { FaTrash } from 'react-icons/fa';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
+import { StyleConstants } from 'styles/StyleConstants';
 
 const defaultOptions = {
     loop: true,
@@ -227,7 +228,7 @@ export const VesselList = () => {
             </PageHeaderContainerResponsive>
             <Spin spinning={isChangingPage}>
                 <TableWrapper>
-                    <Table scroll={{ x: "max-content" }}
+                    <Table scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
                         onChange={(_1, _2, sorter) => handleOnTableStateChanged(sorter, setSorter)}
                         columns={columns}
                         locale={{

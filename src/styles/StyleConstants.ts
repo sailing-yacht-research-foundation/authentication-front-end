@@ -5,5 +5,6 @@ export enum StyleConstants {
   FONT_ROBOTO = 'Roboto',
   MAIN_TONE_COLOR = '#4F61A5',
   TAB_BAR_HEIGHT = '76px',
-  SECONDARY_COLOR = '#40a9ff'
+  SECONDARY_COLOR = '#40a9ff',
+  TABLE_MAX_SCROLL_HEIGHT = '57vh',
 }

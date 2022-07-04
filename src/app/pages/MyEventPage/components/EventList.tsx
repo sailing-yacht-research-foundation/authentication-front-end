@@ -32,6 +32,7 @@ import { TableFiltering } from 'types/TableFiltering';
 import { GiExitDoor } from 'react-icons/gi';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
+import { StyleConstants } from 'styles/StyleConstants';
 
 const defaultOptions = {
   loop: true,
@@ -315,7 +316,7 @@ export const EventList = () => {
       <Spin spinning={isChangingPage}>
         <TableWrapper>
           <Table
-            scroll={{ x: "max-content" }}
+            scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
             columns={columns}
             dataSource={mappedResults}
             onChange={onTableStateChanged}

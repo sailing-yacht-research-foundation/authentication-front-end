@@ -29,6 +29,7 @@ import { useMyTracksSlice } from '../slice';
 import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
 import { isMobile } from 'react-device-detect';
+import { StyleConstants } from 'styles/StyleConstants';
 
 const defaultOptions = {
     loop: true,
@@ -300,7 +301,7 @@ export const MyTrackList = () => {
                                 width={400} />
                             <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
                         </LottieWrapper>)
-                    }} scroll={{ x: "max-content" }}
+                    }} scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
                         onChange={(_1, _2, sorter) => onTableStateChanged(sorter)}
                         columns={columns}
                         dataSource={pagination.rows} pagination={{
