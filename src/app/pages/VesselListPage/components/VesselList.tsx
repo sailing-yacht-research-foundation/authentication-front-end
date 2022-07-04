@@ -160,10 +160,10 @@ export const VesselList = () => {
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
-    const previousValue = usePrevious<{ sorter: Partial<TableSorting> }>({ sorter });
+    const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ filter, sorter });
 
     React.useEffect(() => {
-        if (checkIfLastFilterAndSortValueDifferentToCurrent(undefined, previousValue?.sorter, undefined, sorter)) {
+        if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter, previousValue?.sorter, filter, sorter)) {
             getAll(pagination.page, pagination.size);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
