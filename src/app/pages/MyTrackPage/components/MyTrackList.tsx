@@ -145,6 +145,12 @@ export const MyTrackList = React.forwardRef<any, any>((props, ref) => {
             }
         },
         {
+            title: t(translations.my_tracks_page.source),
+            dataIndex: 'source',
+            key: 'source',
+            render: (_value, record) => record.event?.source
+        },
+        {
             title: t(translations.general.action),
             key: 'action',
             render: (text, record) => {

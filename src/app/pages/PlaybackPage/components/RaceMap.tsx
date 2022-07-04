@@ -12,7 +12,7 @@ import MarkIcon from "../assets/mark.svg";
 import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
 import { MarkerInfo } from "./MarkerInfo";
-import { RaceEmitterEvent } from "utils/constants";
+import { RaceEmitterEvent, RaceSource } from "utils/constants";
 import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
@@ -21,6 +21,12 @@ import { selectCompetitionUnitDetail, selectPlaybackType } from "./slice/selecto
 import { PlaybackTypes } from "types/Playback";
 import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 import moment from "moment";
+import { ConfirmModal } from "app/components/ConfirmModal";
+import { claimTrack } from "services/live-data-server/my-tracks";
+import { showToastMessageOnRequestError } from "utils/helpers";
+import { FaRegHandPointer } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+import { translations } from "locales/translations";
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -58,6 +64,14 @@ export const RaceMap = (props) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
+
+  const [selectedVesselParticipant, setSelectedVesselParticipant] = React.useState<any>({});
+
+  const [showClaimTrackConfirModal, setShowClaimTrackConfirmModal] = React.useState<boolean>(false);
+
+  const [isClaimingTrack, setIsClaimingTrack] = React.useState<boolean>(false);
+
+  const { t } = useTranslation();
 
   const map = useMap();
 
@@ -333,11 +347,39 @@ export const RaceMap = (props) => {
     }
   }
 
+  const _claimTrack = async () => {
+    const { id, participant } = selectedVesselParticipant;
+    setIsClaimingTrack(true);
+    const response = await claimTrack(competitionUnitDetail.id, id!);
+    setIsClaimingTrack(false);
+
+    if (response.success) {
+      message.success(t(translations.playback_page.success_fully_claimed_track, { participantName: participant?.competitor_name }));
+    } else {
+      showToastMessageOnRequestError(response.error);
+    }
+
+    setShowClaimTrackConfirmModal(false);
+  }
+
   const _canSendKudos = () => {
     return !competitionUnitDetail.calendarEvent?.isPrivate // event is not a track now event
       && !competitionUnitDetail.calendarEvent?.isSimulation
       && playbackType === PlaybackTypes.STREAMINGRACE
       && isAuthenticated;
+  }
+
+  const _canClaimnTrack = () => {
+    return !competitionUnitDetail.calendarEvent?.isPrivate // event is not a track now event
+      && !competitionUnitDetail.calendarEvent?.isSimulation // is not simulation
+      && playbackType === PlaybackTypes.OLDRACE
+      && competitionUnitDetail.calendarEvent?.source !== RaceSource.SYRF // is not syrf event.
+      && isAuthenticated;
+  }
+
+  const _setVesselParticipantIdAndShowConfirmClaimTrackModal = (vesselParticipant) => {
+    setSelectedVesselParticipant(vesselParticipant);
+    setShowClaimTrackConfirmModal(true);
   }
 
   const _initializeBoatMarker = (participant, layer) => {
@@ -385,9 +427,12 @@ export const RaceMap = (props) => {
       const renderedBoatIcon = (
         <BoatIconWrapper style={styleSetup}>
           <BoatIcon style={svgStyle} />
-          {_canSendKudos() && <KudoReactionContainer className={'kudo-menu'}>
+          {_canSendKudos() && <BoatActionWrapper>
             <KudoReactionMenuButton />
-          </KudoReactionContainer>}
+          </BoatActionWrapper>}
+          {_canClaimnTrack() && <BoatActionWrapper>
+            <ClaimTrackButton />
+          </BoatActionWrapper>}
         </BoatIconWrapper>
       );
 
@@ -407,8 +452,14 @@ export const RaceMap = (props) => {
       marker.on("click", function (e) {
         marker.openPopup();
 
-        if (_canSendKudos())
+        if (_canSendKudos()) {
           _setVesselParticipantIdAndShowKudosMenu(participant);
+
+        }
+
+        if (_canClaimnTrack()) {
+          _setVesselParticipantIdAndShowConfirmClaimTrackModal(participant);
+        }
 
         const coordinate = {
           lat: e.latlng.lat,
@@ -689,10 +740,18 @@ export const RaceMap = (props) => {
     })
   };
 
-  return <></>;
+  return <>
+    <ConfirmModal 
+    title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name })}
+    content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name })}
+    onOk={_claimTrack}
+    loading={isClaimingTrack}
+    showModal={showClaimTrackConfirModal}
+    onCancel={() => setShowClaimTrackConfirmModal(false)}/>
+  </>;
 };
 
-const KudoReactionContainer = styled.div`
+const BoatActionWrapper = styled.div`
   position: absolute;
   display: none;
   transform: none !important;
@@ -700,15 +759,23 @@ const KudoReactionContainer = styled.div`
 
 const BoatIconWrapper = styled.div`
   position: relative;
-  &:hover ${KudoReactionContainer} {
+  &:hover ${BoatActionWrapper} {
     display: block;
   }
 `;
 
-const KudoReactionMenuButton = styled(VscReactions)`
+const boatActionStyles = `
   color: #000;
   background: #fff;
   border-radius: 10px;
   font-size: 27px;
   padding: 3px;
 `;
+
+const KudoReactionMenuButton = styled(VscReactions)`
+  ${boatActionStyles};
+`;
+
+const ClaimTrackButton = styled(FaRegHandPointer)`
+  ${boatActionStyles};
+`
