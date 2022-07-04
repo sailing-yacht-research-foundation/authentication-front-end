@@ -82,9 +82,11 @@ export const MyTrackList = () => {
     const columns: any = [
         {
             title: t(translations.general.name),
-            dataIndex: 'name',
+            dataIndex: 'event.name',
             key: 'name',
-            fixed: !isMobile ? 'right' : false,
+            ...getColumnSearchProps('event.name', handleSearch, handleReset, 'event.name'),
+            sorter: true,
+            fixed: !isMobile ? 'left' : false,
             render: (text, record) => {
                 const trackName = !record.event?.isPrivate ? [record.event.name, record.competitionUnit.name].filter(Boolean).join(' - ') : record.event?.name
                 if (record.competitionUnit)
@@ -113,8 +115,9 @@ export const MyTrackList = () => {
         },
         {
             title: t(translations.my_tracks_page.type),
-            dataIndex: 'type',
-            key: 'type',
+            dataIndex: 'event.isPrivate',
+            key: 'event.isPrivate',
+            sorter: true,
             render: (text, record) => {
                 return record.event?.isPrivate ? t(translations.my_tracks_page.track_now) : t(translations.my_tracks_page.event_track)
             }
@@ -129,14 +132,18 @@ export const MyTrackList = () => {
         },
         {
             title: t(translations.my_tracks_page.city),
-            dataIndex: 'competitionUnit',
-            key: 'competitionUnit.City',
+            dataIndex: 'competitionUnit.city',
+            key: 'competitionUnit.city',
+            sorter: true,
+            ...getColumnSearchProps('competitionUnit.city', handleSearch, handleReset, 'competitionUnit.city'),
             render: (value, source) => source.competitionUnit?.city || '-'
         },
         {
             title: t(translations.my_tracks_page.country),
-            dataIndex: 'competitionUnit',
-            key: 'competitionUnit.Country',
+            dataIndex: 'competitionUnit.country',
+            key: 'competitionUnit.country',
+            sorter: true,
+            ...getColumnSearchProps('competitionUnit.country', handleSearch, handleReset, 'competitionUnit.country'),
             render: (_value, source) => source.competitionUnit?.country || '-'
         },
         {
@@ -157,7 +164,8 @@ export const MyTrackList = () => {
         },
         {
             title: t(translations.my_tracks_page.location_update_count),
-            dataIndex: 'trackJson',
+            dataIndex: 'trackJson.locationUpdateCount',
+            sorter: true,
             key: 'trackJson.locationUpdateCount',
             render: (_value, source) => {
                 return renderEmptyValue(source.trackJson?.locationUpdateCount)
@@ -165,7 +173,8 @@ export const MyTrackList = () => {
         },
         {
             title: t(translations.my_tracks_page.traveled_overground_distance),
-            dataIndex: 'trackJson',
+            dataIndex: 'trackJson.totalTraveledDistance',
+            sorter: true,
             key: 'trackJson.totalTraveledDistance',
             render: (_value, source) => {
                 const totalTraveledDistance = source.trackJson?.totalTraveledDistance;
@@ -236,19 +245,15 @@ export const MyTrackList = () => {
 
     React.useEffect(() => {
         if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
-            getAll(pagination.page, pagination.size);
+            dispatch(actions.getTracks({ page: pagination.page, size: pagination.size, filter, sorter }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter, sorter]);
 
     React.useEffect(() => {
-        getAll(pagination.page, pagination.size);
+        dispatch(actions.getTracks({ page: pagination.page, size: pagination.size }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    const getAll = async (page, size) => {
-        dispatch(actions.getTracks({ page, size, filter, sorter }));
-    }
 
     const onPaginationChanged = (page, size) => {
         dispatch(actions.getTracks({ page, size, filter, sorter }));

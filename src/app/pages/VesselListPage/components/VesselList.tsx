@@ -106,9 +106,8 @@ export const VesselList = () => {
         },
         {
             title: t(translations.vessel_list_page.role),
-            dataIndex: 'role',
-            key: 'role',
-            sorter: true,
+            dataIndex: 'isOwner',
+            key: 'isOwner',
             render: (value, record) => record?.isOwner ? t(translations.vessel_list_page.owner) : t(translations.vessel_list_page.admin),
         },
         {
