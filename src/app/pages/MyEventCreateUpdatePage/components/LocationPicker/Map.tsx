@@ -100,14 +100,12 @@ export const Map = (props) => {
     }
 
     React.useEffect(() => {
-        map.setView(coordinates, 10);
         setMarker(coordinates);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coordinates]);
 
     React.useEffect(() => {
         if (endCoordinates) {
-            map.setView(endCoordinates, 10);
             setEndMarker(endCoordinates);
         } else {
             removeEndMarker();
@@ -117,8 +115,11 @@ export const Map = (props) => {
 
     React.useEffect(() => {
         initializeMapView();
-        if (!noMarkerInteraction)
+        if (!noMarkerInteraction) {
             initMapClickEvent();
+        }
+
+        map.setView(coordinates, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
