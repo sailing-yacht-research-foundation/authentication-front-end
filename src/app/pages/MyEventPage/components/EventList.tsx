@@ -14,7 +14,7 @@ import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
 import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -239,7 +239,7 @@ export const EventList = () => {
 
   React.useEffect(() => {
     if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
-      dispatch(actions.getEvents({ filter: filter, page: page, size: size, sorter }));
+      dispatch(actions.getEvents({ filter: filter, page: 1, size: size, sorter }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, sorter]);
@@ -248,12 +248,6 @@ export const EventList = () => {
     dispatch(actions.getEvents({ page: page, size: size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const onPaginationChanged = (newPage, newSize) => {
-    if (page !== newPage || size !== newSize) {
-      dispatch(actions.getEvents({ page: newPage, size: newSize, filter, sorter }));
-    }
-  }
 
   const showDeleteRaceModal = (event) => {
     setShowDeleteModal(true);
@@ -291,14 +285,6 @@ export const EventList = () => {
     }
   }
 
-  const onTableStateChanged = (_1, _2, sorter) => {
-    if (sorter.column) {
-      dispatch(actions.setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' }));
-    } else {
-      dispatch(actions.setSorter({}));
-    }
-  }
-
   return (
     <>
       <DeleteEventModal
@@ -321,7 +307,16 @@ export const EventList = () => {
             scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
             columns={columns}
             dataSource={mappedResults}
-            onChange={onTableStateChanged}
+            onChange={(antdPagination, antdFilters, antSorter) =>
+              handleOnTableStateChanged(antdPagination,
+                antdFilters,
+                antSorter,
+                (param) => dispatch(actions.setSorter(param))
+                , page, size,
+                () => dispatch(actions.getEvents({ page: antdPagination.current, size: antdPagination.pageSize, filter: filter, sorter: sorter })
+                )
+              )
+            }
             locale={{
               emptyText: (<LottieWrapper>
                 <Lottie options={defaultOptions} height={400} width={400} />
@@ -333,7 +328,6 @@ export const EventList = () => {
               pageSize: size,
               current: page,
               total: total,
-              onChange: onPaginationChanged,
             }}
             expandable={{
               expandedRowRender: record => renderExpandedRowRender(record)

@@ -167,7 +167,7 @@ export const InvitedEventLists = (props) => {
 
     React.useEffect(() => {
         if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
-            getInvitations(pagination.page, pagination.size);
+            getInvitations(1, pagination.size);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter, sorter]);
@@ -176,12 +176,6 @@ export const InvitedEventLists = (props) => {
         getInvitations(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const onPaginationChanged = (newPage, newSize) => {
-        if (pagination.page !== newPage || pagination.size !== newSize) {
-            getInvitations(newPage, newSize);
-        }
-    }
 
     const acceptInviteRequest = (request) => {
         setRequest(request);
@@ -213,7 +207,15 @@ export const InvitedEventLists = (props) => {
                                 </LottieWrapper>
                             )
                         }}
-                        onChange={(_1, _2, sorter) => handleOnTableStateChanged(sorter, setSorter)}
+                        onChange={(antdPagination, antdFilters, antSorter) =>
+                            handleOnTableStateChanged(antdPagination,
+                                antdFilters,
+                                antSorter,
+                                (param) => setSorter(param)
+                                , pagination.page, pagination.size,
+                                () => getInvitations(antdPagination.current, antdPagination.pageSize)
+                            )
+                        }
                         scroll={{ x: "max-content" }}
                         columns={columns}
                         dataSource={pagination.rows}
@@ -222,7 +224,6 @@ export const InvitedEventLists = (props) => {
                             current: pagination.page,
                             total: pagination.total,
                             pageSize: pagination.size,
-                            onChange: onPaginationChanged,
                         }}
                     />
                 </TableWrapper>

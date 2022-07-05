@@ -591,11 +591,28 @@ export const getFilterTypeBaseOnColumn = (column: string, fieldsWithDateFilterin
     return TableFilteringType.TEXT;
 }
 
-export const handleOnTableStateChanged = (sorter, setSorter: Function) => {
+export const handleOnTableStateChanged = (
+    pagination,
+    filters,
+    sorter,
+    setSorter: Function,
+    page: number,
+    size: number,
+    fetchDataCallback: Function
+) => {
+    let isHavingFilter = Object.values(filters).some((filterValue: any) => {
+        return filterValue?.length > 0;
+    });
+
     if (sorter.column) {
         setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' })
     } else {
         setSorter({})
+    }
+
+    if ((page !== pagination.current || size !== pagination.pageSize)) {
+        if (pagination.current === 1 && isHavingFilter) return;
+        fetchDataCallback();
     }
 }
 

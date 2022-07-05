@@ -190,12 +190,6 @@ export const VesselList = () => {
         }
     }
 
-    const onPaginationChanged = (newPage, newSize) => {
-        if (pagination.page !== newPage || pagination.pageSize !== newSize) {
-            getAll(newPage, newSize);
-        }
-    }
-
     const showDeleteVesselModal = (vessel) => {
         setShowDeleteModal(true);
         setVessel(vessel);
@@ -230,7 +224,15 @@ export const VesselList = () => {
             <Spin spinning={isChangingPage}>
                 <TableWrapper>
                     <Table scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
-                        onChange={(_1, _2, sorter) => handleOnTableStateChanged(sorter, setSorter)}
+                        onChange={(antdPagination, antdFilters, antSorter) =>
+                            handleOnTableStateChanged(antdPagination,
+                                antdFilters,
+                                antSorter,
+                                (param) => setSorter(param)
+                                , pagination.page, pagination.size,
+                                () => getAll(antdPagination.current, antdPagination.pageSize)
+                            )
+                        }
                         columns={columns}
                         locale={{
                             emptyText: (<LottieWrapper>
@@ -246,7 +248,6 @@ export const VesselList = () => {
                             current: pagination.page,
                             total: pagination.total,
                             pageSize: pagination.pageSize,
-                            onChange: onPaginationChanged,
                         }} />
                 </TableWrapper>
             </Spin>

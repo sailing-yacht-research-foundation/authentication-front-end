@@ -19,7 +19,7 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
@@ -245,7 +245,7 @@ export const MyTrackList = () => {
 
     React.useEffect(() => {
         if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
-            dispatch(actions.getTracks({ page: pagination.page, size: pagination.size, filter, sorter }));
+            dispatch(actions.getTracks({ page: 1, size: pagination.size, filter, sorter }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter, sorter]);
@@ -253,13 +253,7 @@ export const MyTrackList = () => {
     React.useEffect(() => {
         dispatch(actions.getTracks({ page: pagination.page, size: pagination.size }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const onPaginationChanged = (newPage, newSize) => {
-        if (pagination.page !== newPage || pagination.size !== newSize) {
-            dispatch(actions.getTracks({ page: newPage, size: newSize, filter, sorter }));
-        }
-    }
+    }, []);
 
     const onTrackDeleted = () => {
         dispatch(actions.getTracks({ page: pagination.page, size: pagination.size, filter, sorter }));
@@ -277,14 +271,6 @@ export const MyTrackList = () => {
             onTrackDeleted();
         } else {
             showToastMessageOnRequestError(response.error);
-        }
-    }
-
-    const onTableStateChanged = (sorter) => {
-        if (sorter.column) {
-            dispatch(actions.setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' }));
-        } else {
-            dispatch(actions.setSorter({}));
         }
     }
 
@@ -309,13 +295,21 @@ export const MyTrackList = () => {
                             <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
                         </LottieWrapper>)
                     }} scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
-                        onChange={(_1, _2, sorter) => onTableStateChanged(sorter)}
+                        onChange={(antdPagination, antdFilters, antSorter) =>
+                            handleOnTableStateChanged(antdPagination,
+                                antdFilters,
+                                antSorter,
+                                (param) => dispatch(actions.setSorter(param))
+                                , pagination.page, pagination.size,
+                                () => dispatch(actions.getTracks({ page: antdPagination.current, size: antdPagination.pageSize, filter: filter, sorter: sorter })
+                                )
+                            )
+                        }
                         columns={columns}
                         dataSource={pagination.rows} pagination={{
                             current: pagination.page,
                             total: pagination.total,
                             pageSize: pagination.size,
-                            onChange: onPaginationChanged
                         }} />
                 </TableWrapper>
             </Spin>
