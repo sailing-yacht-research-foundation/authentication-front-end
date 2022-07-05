@@ -113,7 +113,7 @@ export const InvitedEventLists = (props) => {
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: true,
-            ...getColumnTimeProps('createdAt', handleSearch, handleReset, 'createdAt'),
+            ...getColumnTimeProps('createdAt', handleSearch, handleReset),
             render: (value, record) => moment(record?.createdAt).format(TIME_FORMAT.date_text),
         },
         {
@@ -177,8 +177,10 @@ export const InvitedEventLists = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const onPaginationChanged = (page, size) => {
-        getInvitations(page, size);
+    const onPaginationChanged = (newPage, newSize) => {
+        if (pagination.page !== newPage || pagination.size !== newSize) {
+            getInvitations(newPage, newSize);
+        }
     }
 
     const acceptInviteRequest = (request) => {

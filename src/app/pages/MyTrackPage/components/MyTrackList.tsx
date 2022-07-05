@@ -82,9 +82,9 @@ export const MyTrackList = () => {
     const columns: any = [
         {
             title: t(translations.general.name),
-            dataIndex: 'event.name',
+            dataIndex: 'name',
             key: 'name',
-            ...getColumnSearchProps('event.name', handleSearch, handleReset, 'event.name'),
+            ...getColumnSearchProps('name', handleSearch, handleReset),
             sorter: true,
             fixed: !isMobile ? 'left' : false,
             render: (text, record) => {
@@ -127,7 +127,7 @@ export const MyTrackList = () => {
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: true,
-            ...getColumnTimeProps('createdAt', handleSearch, handleReset, 'createdAt'),
+            ...getColumnTimeProps('createdAt', handleSearch, handleReset),
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
@@ -135,7 +135,7 @@ export const MyTrackList = () => {
             dataIndex: 'competitionUnit.city',
             key: 'competitionUnit.city',
             sorter: true,
-            ...getColumnSearchProps('competitionUnit.city', handleSearch, handleReset, 'competitionUnit.city'),
+            ...getColumnSearchProps('competitionUnit.city', handleSearch, handleReset),
             render: (value, source) => source.competitionUnit?.city || '-'
         },
         {
@@ -143,7 +143,7 @@ export const MyTrackList = () => {
             dataIndex: 'competitionUnit.country',
             key: 'competitionUnit.country',
             sorter: true,
-            ...getColumnSearchProps('competitionUnit.country', handleSearch, handleReset, 'competitionUnit.country'),
+            ...getColumnSearchProps('competitionUnit.country', handleSearch, handleReset),
             render: (_value, source) => source.competitionUnit?.country || '-'
         },
         {
@@ -151,7 +151,7 @@ export const MyTrackList = () => {
             dataIndex: 'phoneModel',
             sorter: true,
             key: 'phoneModel',
-            ...getColumnSearchProps('phoneModel', handleSearch, handleReset, 'phoneModel'),
+            ...getColumnSearchProps('phoneModel', handleSearch, handleReset),
             render: (value,) => renderEmptyValue(value),
         },
         {
@@ -159,7 +159,7 @@ export const MyTrackList = () => {
             dataIndex: 'phoneOS',
             sorter: true,
             key: 'phoneOS',
-            ...getColumnSearchProps('phoneOS', handleSearch, handleReset, 'phoneOS'),
+            ...getColumnSearchProps('phoneOS', handleSearch, handleReset),
             render: (value,) => renderEmptyValue(value),
         },
         {
@@ -255,8 +255,10 @@ export const MyTrackList = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const onPaginationChanged = (page, size) => {
-        dispatch(actions.getTracks({ page, size, filter, sorter }));
+    const onPaginationChanged = (newPage, newSize) => {
+        if (pagination.page !== newPage || pagination.size !== newSize) {
+            dispatch(actions.getTracks({ page: newPage, size: newSize, filter, sorter }));
+        }
     }
 
     const onTrackDeleted = () => {

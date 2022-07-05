@@ -73,7 +73,7 @@ export const VesselList = () => {
             dataIndex: 'publicName',
             key: 'publicName',
             sorter: true,
-            ...getColumnSearchProps('publicName', handleSearch, handleReset, 'publicName'),
+            ...getColumnSearchProps('publicName', handleSearch, handleReset),
             fixed: !isMobile ? 'left' : false,
             render: (text, record) => {
                 return <Tooltip title={text}>
@@ -92,7 +92,7 @@ export const VesselList = () => {
             title: t(translations.vessel_create_update_page.sail_number),
             dataIndex: 'sailNumber',
             key: 'sailNumber',
-            ...getColumnSearchProps('sailNumber', handleSearch, handleReset, 'sailNumber'),
+            ...getColumnSearchProps('sailNumber', handleSearch, handleReset),
             sorter: true,
             render: (value) => renderEmptyValue(value),
         },
@@ -101,7 +101,7 @@ export const VesselList = () => {
             dataIndex: 'model',
             key: 'model',
             sorter: true,
-            ...getColumnSearchProps('model', handleSearch, handleReset, 'model'),
+            ...getColumnSearchProps('model', handleSearch, handleReset),
             render: (value) => renderEmptyValue(value),
         },
         {
@@ -122,7 +122,7 @@ export const VesselList = () => {
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: true,
-            ...getColumnTimeProps('createdAt', handleSearch, handleReset, 'createdAt'),
+            ...getColumnTimeProps('createdAt', handleSearch, handleReset),
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
@@ -167,7 +167,7 @@ export const VesselList = () => {
             getAll(pagination.page, pagination.size);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sorter]);
+    }, [filter, sorter]);
 
     React.useEffect(() => {
         getAll(pagination.page, pagination.size);
@@ -190,8 +190,10 @@ export const VesselList = () => {
         }
     }
 
-    const onPaginationChanged = (page, size) => {
-        getAll(page, size);
+    const onPaginationChanged = (newPage, newSize) => {
+        if (pagination.page !== newPage || pagination.pageSize !== newSize) {
+            getAll(newPage, newSize);
+        }
     }
 
     const showDeleteVesselModal = (vessel) => {

@@ -8,7 +8,7 @@ import { BiSearch } from 'react-icons/bi';
 import styled from 'styled-components';
 import { IconWrapper } from '../SyrfGeneral';
 
-export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, handleReset: Function, columnToReset: string): ColumnType<any> => ({
+export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, handleReset: Function): ColumnType<any> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
             <Input
@@ -29,7 +29,7 @@ export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, han
                     Search
                 </Button>
                 <Button
-                    onClick={() => clearFilters && handleReset(clearFilters, columnToReset)}
+                    onClick={() => clearFilters && handleReset(clearFilters, dataIndex)}
                     size="small"
                     style={{ width: 90 }}
                 >
@@ -43,7 +43,7 @@ export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, han
     ),
 });
 
-export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleReset: Function, columnToReset: string) => ({
+export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleReset: Function) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <TimeRangePickerWrapper style={{ padding: 8, textAlign: 'right' }}>
             <DatePicker.RangePicker
@@ -72,7 +72,7 @@ export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleRese
                 <Button
                     role="reset"
                     style={{ width: 90 }}
-                    onClick={() => handleReset(clearFilters, columnToReset)}
+                    onClick={() => handleReset(clearFilters, dataIndex)}
                     size="small"
                 >
                     Reset
@@ -85,7 +85,7 @@ export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleRese
     )
 });
 
-export const getColumnCheckboxProps = (dataIndex, filterCriteria, handleSearch: Function, handleReset: Function, columnToReset: string) => ({
+export const getColumnCheckboxProps = (dataIndex, filterCriteria, handleSearch: Function, handleReset: Function) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8, textAlign: 'right' }}>
             <Select value={selectedKeys[0]} style={{ width: '100%' }} mode='multiple' maxTagCount={'responsive'} onChange={value => setSelectedKeys([value])}>
@@ -108,7 +108,7 @@ export const getColumnCheckboxProps = (dataIndex, filterCriteria, handleSearch: 
                 <Button
                     role="reset"
                     style={{ width: 90 }}
-                    onClick={() => handleReset(clearFilters, columnToReset)}
+                    onClick={() => handleReset(clearFilters, dataIndex)}
                     size="small"
                 >
                     Reset

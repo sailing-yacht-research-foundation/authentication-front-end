@@ -115,7 +115,7 @@ export const EventList = () => {
           <Link to={`/events/${record.id}`}>{truncateName(text)}</Link>
         </Tooltip>;
       },
-      ...getColumnSearchProps('name', handleSearch, handleReset, 'name')
+      ...getColumnSearchProps('name', handleSearch, handleReset)
     },
     {
       title: t(translations.my_event_list_page.type),
@@ -140,7 +140,7 @@ export const EventList = () => {
       key: 'city',
       render: (text) => renderEmptyValue(text),
       sorter: true,
-      ...getColumnSearchProps('city', handleSearch, handleReset, 'city')
+      ...getColumnSearchProps('city', handleSearch, handleReset)
     },
     {
       title: t(translations.my_event_list_page.country),
@@ -148,14 +148,14 @@ export const EventList = () => {
       key: 'country',
       sorter: true,
       render: (text) => renderEmptyValue(text),
-      ...getColumnSearchProps('country', handleSearch, handleReset, 'country')
+      ...getColumnSearchProps('country', handleSearch, handleReset)
     },
     {
       title: t(translations.my_event_list_page.start_date),
       dataIndex: 'approximateStartTime',
       key: 'start_date',
       sorter: true,
-      ...getColumnTimeProps('approximateStartTime', handleSearch, handleReset, 'approximateStartTime'),
+      ...getColumnTimeProps('approximateStartTime', handleSearch, handleReset),
       render: (value, record) => moment(value).format(TIME_FORMAT.date_text_with_time)
         + ' ' + record.approximateStartTime_zone + ' '
         + renderTimezoneInUTCOffset(record.approximateStartTime_zone),
@@ -171,7 +171,7 @@ export const EventList = () => {
       dataIndex: 'status',
       key: 'status',
       sorter: true,
-      ...getColumnCheckboxProps('status', Object.values(EventState), handleSearch, handleReset, 'status'),
+      ...getColumnCheckboxProps('status', Object.values(EventState), handleSearch, handleReset),
       render: (value) => value,
     },
     {
@@ -179,7 +179,7 @@ export const EventList = () => {
       dataIndex: 'createdAt',
       key: 'createdAt',
       sorter: true,
-      ...getColumnTimeProps('createdAt', handleSearch, handleReset, 'createdAt'),
+      ...getColumnTimeProps('createdAt', handleSearch, handleReset),
       render: (value) => moment(value).format(TIME_FORMAT.date_text),
     },
     {
@@ -249,8 +249,10 @@ export const EventList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onPaginationChanged = (page, size) => {
-    dispatch(actions.getEvents({ page, size, filter, sorter }));
+  const onPaginationChanged = (newPage, newSize) => {
+    if (page !== newPage || size !== newSize) {
+      dispatch(actions.getEvents({ page: newPage, size: newSize, filter, sorter }));
+    }
   }
 
   const showDeleteRaceModal = (event) => {
