@@ -298,4 +298,8 @@ export const GlobalStyle = createGlobalStyle`
   .ant-table-cell:not(.ant-table-row-expand-icon-cell) {
     min-width: 150px;
   }
+
+  .ant-table-thead > tr > th {
+    padding: 12px 12px;
+  }
 `;
