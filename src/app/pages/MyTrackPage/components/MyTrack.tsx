@@ -32,7 +32,7 @@ export const MyTrack = () => {
   const [showImportGPXTrackModal, setShowImportGPXTrackModal] = React.useState<boolean>(false);
 
   const [showImportExpeditionTrackModal, setShowImportExpeditionTrackModal] = React.useState<boolean>(false);
-  
+
   const dispatch = useDispatch();
 
   const { actions } = useMyTracksSlice();
@@ -58,9 +58,9 @@ export const MyTrack = () => {
     <div>
       <ImportTrack onTrackImported={onTrackImported} showModal={showImportGPXTrackModal} setShowModal={setShowImportGPXTrackModal} type={ImportTrackType.GPX} />
       <ImportTrack onTrackImported={onTrackImported} showModal={showImportExpeditionTrackModal} setShowModal={setShowImportExpeditionTrackModal} type={ImportTrackType.EXPEDITION} />
-      <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%', padding: '0px 15px', paddingTop: '20px' }}>
+      <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%'}}>
         <PageInfoContainer style={{ paddingRight: '8px' }}>
-          <PageHeading style={{ padding: '0px', marginTop: '10px', marginBottom: '4px' }}>{t(translations.my_tracks_page.my_tracks)}</PageHeading>
+          <PageHeading style={{ padding: '0px' }}>{t(translations.my_tracks_page.my_tracks)}</PageHeading>
         </PageInfoContainer>
         <StyledSpace size={10} wrap>
           <CreateButton onClick={() => setShowImportGPXTrackModal(true)}

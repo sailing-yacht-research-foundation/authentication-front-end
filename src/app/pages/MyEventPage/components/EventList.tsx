@@ -304,7 +304,7 @@ export const EventList = () => {
       <Spin spinning={isChangingPage}>
         <TableWrapper>
           <Table
-            scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
+            scroll={{ x: "max-content", y: "calc(100vh - 360px)" }}
             columns={columns}
             dataSource={mappedResults}
             onChange={(antdPagination, antdFilters, antSorter) =>

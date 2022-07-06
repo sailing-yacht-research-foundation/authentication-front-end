@@ -87,6 +87,7 @@ export const VesselList = () => {
             key: 'lengthInMeters',
             sorter: true,
             render: (value) => renderEmptyValue(value),
+            minWidth: '85px'
         },
         {
             title: t(translations.vessel_create_update_page.sail_number),
@@ -141,7 +142,6 @@ export const VesselList = () => {
                     </Tooltip>
                 </Space>;
             },
-            width: '20%',
         },
     ];
 
@@ -209,8 +209,8 @@ export const VesselList = () => {
             />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoContainer>
-                    <PageHeading>{t(translations.vessel_list_page.vessels)}</PageHeading>
-                    <PageDescription>{t(translations.vessel_list_page.vessel_are_yatchs)}</PageDescription>
+                    <PageHeading style={{ padding: '0px' }}>{t(translations.vessel_list_page.vessels)}</PageHeading>
+                    <PageDescription style={{ padding: '0px' }}>{t(translations.vessel_list_page.vessel_are_yatchs)}</PageDescription>
                 </PageInfoContainer>
                 <Tooltip title={t(translations.tip.create_a_new_boat)}>
                     <CreateButton
@@ -223,7 +223,7 @@ export const VesselList = () => {
             </PageHeaderContainerResponsive>
             <Spin spinning={isChangingPage}>
                 <TableWrapper>
-                    <Table scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
+                    <Table scroll={{ x: "max-content", y: "calc(100vh - 320px)" }}
                         onChange={(antdPagination, antdFilters, antSorter) =>
                             handleOnTableStateChanged(antdPagination,
                                 antdFilters,

@@ -294,7 +294,7 @@ export const MyTrackList = () => {
                                 width={400} />
                             <LottieMessage>{t(translations.my_tracks_page.you_dont_have_any_tracks)}</LottieMessage>
                         </LottieWrapper>)
-                    }} scroll={{ x: "max-content", y: StyleConstants.TABLE_MAX_SCROLL_HEIGHT }}
+                    }} scroll={{ x: "max-content", y: "calc(100vh - 390px)" }}
                         onChange={(antdPagination, antdFilters, antSorter) =>
                             handleOnTableStateChanged(antdPagination,
                                 antdFilters,

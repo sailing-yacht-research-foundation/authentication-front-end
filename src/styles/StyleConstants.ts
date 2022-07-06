@@ -6,5 +6,4 @@ export enum StyleConstants {
   MAIN_TONE_COLOR = '#4F61A5',
   TAB_BAR_HEIGHT = '76px',
   SECONDARY_COLOR = '#40a9ff',
-  TABLE_MAX_SCROLL_HEIGHT = 'calc(100vh - 380px)',
 }
