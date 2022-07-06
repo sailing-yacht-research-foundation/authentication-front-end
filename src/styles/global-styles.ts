@@ -24,7 +24,7 @@ export const GlobalStyle = createGlobalStyle`
   body.fontLoaded {
     font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
-  
+
   p,
   label {
     line-height: 1.5em;
@@ -84,7 +84,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   @media screen and (max-width: 600px) {
-    .syrf-button-outline, .syrf-button { 
+    .syrf-button-outline, .syrf-button {
       width: auto;
       height: auto;
       padding: 15px 55px;
@@ -112,7 +112,7 @@ export const GlobalStyle = createGlobalStyle`
   .uppercase {
     text-transform: uppercase;
   }
-  
+
   .PhoneInputInput {
     border: none;
   }
@@ -142,7 +142,7 @@ export const GlobalStyle = createGlobalStyle`
     opacity: 50% !important;
     background: #1056DE;
   }
-  
+
   .carousel-dot li.slick-active {
     opacity: 1 !important;
     width: 71.75px !important;
@@ -154,7 +154,7 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 700 !important;
     line-hight: 47px !important;
   }
-  
+
   .syrf-datepicker {
     border-radius: 10px;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
@@ -245,7 +245,7 @@ export const GlobalStyle = createGlobalStyle`
     outline:none;
     cursor: auto;
     min-height:25px;
-  } 
+  }
 
   [contenteditable="true"].contenteditable-search * {
     color: rgba(0, 0, 0, 0.85);
@@ -289,5 +289,17 @@ export const GlobalStyle = createGlobalStyle`
 
   .ant-image-preview-wrap, .ant-image-preview-mask {
     z-index: 99999 !important;
+  }
+
+  .ant-dropdown, .ant-select-dropdown, .ant-picker-dropdown {
+    z-index: 99999 !important;
+  }
+
+  .ant-table-cell:not(.ant-table-row-expand-icon-cell) {
+    min-width: 85px;
+  }
+
+  .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+    padding: 12px 12px;
   }
 `;

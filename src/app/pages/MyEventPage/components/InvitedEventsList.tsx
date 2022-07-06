@@ -8,13 +8,17 @@ import { translations } from 'locales/translations';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { renderEmptyValue, renderTimezoneInUTCOffset, truncateName } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, truncateName, usePrevious } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
 import { AcceptInvitationModal } from 'app/pages/MyEventPage/components/modals/AcceptInvitationModal';
 import { getMyInvitedEvents } from 'services/live-data-server/participants';
 import { RejectInviteRequestModal } from './modals/RejectInviteRequestModal';
+import { TableSorting } from 'types/TableSorting';
+import { TableFiltering } from 'types/TableFiltering';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
+import { getColumnTimeProps } from 'app/components/TableFilter';
 
 const defaultOptions = {
     loop: true,
@@ -31,6 +35,27 @@ export const InvitedEventLists = (props) => {
 
     const { reloadInvitationCount } = props;
 
+    const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+
+    const [filter, setFilter] = React.useState<TableFiltering[]>([]);
+
+    const handleSearch = (
+        selectedKeys: string[],
+        confirm: (param?: FilterConfirmProps) => void,
+        dataIndex: any,
+    ) => {
+        let param: any = selectedKeys[0];
+        const filterType = getFilterTypeBaseOnColumn(dataIndex, ['createdAt']);
+        param = parseFilterParamBaseOnFilterType(param, filterType);
+        confirm();
+        setFilter([...filter.filter(f => f.key !== dataIndex), ...[{ key: dataIndex, value: param, type: filterType }]]);
+    };
+
+    const handleReset = (clearFilters: () => void, columnToReset: string) => {
+        clearFilters();
+        setFilter([...filter.filter(f => f.key !== columnToReset)]);
+    };
+
     const translate = {
         status_open_regis: t(translations.my_event_list_page.status_openregistration),
         status_public: t(translations.my_event_list_page.status_publicevent),
@@ -40,7 +65,7 @@ export const InvitedEventLists = (props) => {
         only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
     }
 
-    const columns = [
+    const columns: any = [
         {
             title: t(translations.general.name),
             dataIndex: 'name',
@@ -63,9 +88,9 @@ export const InvitedEventLists = (props) => {
                                 <StyledTag >{translate.status_open_regis}</StyledTag>
                             </Tooltip>
                         ) : (
-                        <Tooltip title={translate.only_owner_canview}>
-                            <StyledTag >{translate.status_private}</StyledTag>
-                        </Tooltip>
+                            <Tooltip title={translate.only_owner_canview}>
+                                <StyledTag >{translate.status_private}</StyledTag>
+                            </Tooltip>
                         )}
                     </StatusContainer>
                 );
@@ -74,7 +99,7 @@ export const InvitedEventLists = (props) => {
         {
             title: t(translations.my_event_list_page.start_date),
             dataIndex: 'approximateStartTime',
-            key: 'start_date',
+            key: 'approximateStartTime',
             render: (value, record) => {
                 if (record.event) {
                     return [moment(record.event.approximateStartTime).format(TIME_FORMAT.date_text_with_time), record.event.approximateStartTime_zone, renderTimezoneInUTCOffset(record?.event.approximateStartTime_zone)].filter(Boolean).join(' ')
@@ -87,6 +112,8 @@ export const InvitedEventLists = (props) => {
             title: t(translations.my_event_list_page.invited_at),
             dataIndex: 'createdAt',
             key: 'createdAt',
+            sorter: true,
+            ...getColumnTimeProps('createdAt', handleSearch, handleReset),
             render: (value, record) => moment(record?.createdAt).format(TIME_FORMAT.date_text),
         },
         {
@@ -122,7 +149,7 @@ export const InvitedEventLists = (props) => {
 
     const getInvitations = async (page, size) => {
         setIsLoading(true);
-        const response = await getMyInvitedEvents(page, size);
+        const response = await getMyInvitedEvents(page, size, filter, sorter);
         setIsLoading(false);
 
         if (response.success) {
@@ -136,14 +163,19 @@ export const InvitedEventLists = (props) => {
         }
     }
 
+    const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ sorter, filter });
+
+    React.useEffect(() => {
+        if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter!, previousValue?.sorter!, filter, sorter)) {
+            getInvitations(1, pagination.size);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filter, sorter]);
+
     React.useEffect(() => {
         getInvitations(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const onPaginationChanged = (page, size) => {
-        getInvitations(page, size);
-    }
 
     const acceptInviteRequest = (request) => {
         setRequest(request);
@@ -164,29 +196,39 @@ export const InvitedEventLists = (props) => {
         <>
             <AcceptInvitationModal reloadParent={reloadParent} request={request} showModal={showAcceptModal} setShowModal={setShowAcceptModal} />
             <RejectInviteRequestModal reloadParent={reloadParent} showModal={showRejectConfirmModal} setShowModal={setShowRejectConfirmModal} request={request} />
-            {pagination.rows.length > 0 ? (
-                <Spin spinning={isLoading}>
-                    <TableWrapper>
-                        <Table
-                            scroll={{ x: "max-content" }}
-                            columns={columns}
-                            dataSource={pagination.rows}
-                            pagination={{
-                                defaultPageSize: 10,
-                                current: pagination.page,
-                                total: pagination.total,
-                                pageSize: pagination.size,
-                                onChange: onPaginationChanged,
-                            }}
-                        />
-                    </TableWrapper>
-                </Spin>
-            ) : (
-                <LottieWrapper>
-                    <Lottie options={defaultOptions} height={400} width={400} />
-                    <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_invitation)}</LottieMessage>
-                </LottieWrapper>
-            )}
+            <Spin spinning={isLoading}>
+                <TableWrapper>
+                    <Table
+                        locale={{
+                            emptyText: (
+                                <LottieWrapper>
+                                    <Lottie options={defaultOptions} height={400} width={400} />
+                                    <LottieMessage>{t(translations.my_event_list_page.you_dont_have_any_invitation)}</LottieMessage>
+                                </LottieWrapper>
+                            )
+                        }}
+                        onChange={(antdPagination, antdFilters, antSorter) =>
+                            handleOnTableStateChanged(antdPagination,
+                                antdFilters,
+                                antSorter,
+                                (param) => setSorter(param)
+                                , pagination.page, pagination.size,
+                                () => getInvitations(antdPagination.current, antdPagination.pageSize)
+                            )
+                        }
+                        scroll={{ x: "max-content" }}
+                        columns={columns}
+                        dataSource={pagination.rows}
+                        pagination={{
+                            defaultPageSize: 10,
+                            current: pagination.page,
+                            total: pagination.total,
+                            pageSize: pagination.size,
+                        }}
+                    />
+                </TableWrapper>
+            </Spin>
+
         </>
     );
 };
