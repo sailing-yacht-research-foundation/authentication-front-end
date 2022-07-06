@@ -12,7 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
-import { getAllTracks } from 'services/live-data-server/my-tracks';
+import { useSelector } from 'react-redux';
+import { selectPagination } from '../slice/selectors';
 
 require('leaflet.markercluster');
 
@@ -35,11 +36,12 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
 
     const [results, setResults] = useState<any>([]);
 
+    const pagination = useSelector(selectPagination);
+
     const { t } = useTranslation();
 
     useEffect(() => {
         initializeMapView();
-        getAll();
         if (results.length === 0) // no results and focus on user location
             zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,23 +57,6 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
             zoomToCurrentUserLocation(MAP_MOVE_TYPE.animation);
         }
     }));
-
-    const getAll = async () => {
-        const response = await getAllTracks(1, 1000000);
-        if (response.success) {
-            const list = response?.data?.rows;
-            const listData = list.map((data) => {
-                const competitionUnit = data.competitionUnit;
-                return {
-                    ...competitionUnit,
-                    event: data.event,
-                    track: data?.trackJson
-                };
-            });
-
-            setResults(listData);
-        }
-    };
 
     const zoomToCurrentUserLocation = (type: string) => {
         if (!navigator.geolocation) return;
@@ -187,18 +172,26 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
         return marker;
     }
 
-    React.useImperativeHandle(ref, () => ({
-        reload() {
-            getAll();
-        }
-    }));
-
     React.useEffect(() => {
         if (isFocusingOnSearchInput && geoLoc && watchID) {
             geoLoc.clearWatch(watchID);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isFocusingOnSearchInput]);
+
+    React.useEffect(() => {
+        const list = pagination.rows;
+        const listData = list.map((data) => {
+            const competitionUnit = data.competitionUnit;
+            return {
+                ...competitionUnit,
+                event: data.event,
+                track: data?.trackJson
+            };
+        });
+
+        setResults(listData);
+    }, [pagination]);
 
     const renderRacePopup = (race) => {
         return (

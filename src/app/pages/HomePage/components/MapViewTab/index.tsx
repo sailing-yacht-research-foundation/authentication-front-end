@@ -17,6 +17,7 @@ import { selectUserCoordinate } from 'app/pages/LoginPage/slice/selectors';
 import { MAP_DEFAULT_VALUE } from "utils/constants";
 import { LiveAndHappeningRaceFilter } from 'app/components/HomePage/LiveAndHappeningRaceFilter';
 import { useHomeSlice } from '../../slice';
+import { MapPaginationWrapper } from 'app/components/SyrfGeneral';
 
 type MapViewProps = {
     zoomToCurrentUserLocationIfAllowed: () => void;
@@ -94,9 +95,9 @@ export const MapViewTab = (props) => {
     const renderUpcomingRacePagination = () => {
         if (upcomingRaceResults.length > 0 && results.length === 0)
             return (
-                <PaginationWrapper>
+                <MapPaginationWrapper>
                     <Pagination defaultCurrent={1} current={currentUpcomingRacePage} onChange={onUpcomingPageChanged} total={upcomingRacesCount} pageSize={upcomingRacePageSize} />
-                </PaginationWrapper>
+                </MapPaginationWrapper>
             );
 
         return <></>;
@@ -110,9 +111,9 @@ export const MapViewTab = (props) => {
                 <MapView isFocusingOnSearchInput={isFocusingOnSearchInput} ref={mapViewRef} zoom={ZOOM} />
             </MapContainer>
 
-            {results.length > 0 && <PaginationWrapper>
+            {results.length > 0 && <MapPaginationWrapper>
                 <Pagination defaultCurrent={1} current={page} onChange={onPaginationPageChanged} total={total} pageSize={pageSize} />
-            </PaginationWrapper>}
+            </MapPaginationWrapper>}
 
             {renderUpcomingRacePagination()}
 
@@ -160,16 +161,4 @@ const StyledMyLocationIcon = styled(BiTargetLock)`
 const MyLocationText = styled.span`
     color: #fff;
     font-size: 13px;
-`;
-
-const PaginationWrapper = styled.div`
-    position: absolute;
-    bottom: 110px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: 570px;
-    max-width: 98%;
-    z-index: 11;
-    text-align: center;
 `;

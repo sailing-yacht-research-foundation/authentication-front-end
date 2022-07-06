@@ -22,7 +22,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
 
     const [showStopRaceConfirmModal, setShowStopRaceConfirmModal] = React.useState<boolean>(false);
 
-    const columns = [
+    const columns: any = [
         {
             title: t(translations.general.name),
             dataIndex: 'name',
@@ -48,7 +48,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             dataIndex: 'approximateStart',
             key: 'approximateStart',
             render: (value, record) => renderRaceStartTime(value, t),
-            width: '25%'
+            width: '25%',
         },
         {
             title: t(translations.general.created_date),

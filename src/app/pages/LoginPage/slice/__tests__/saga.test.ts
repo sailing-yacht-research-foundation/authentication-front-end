@@ -1,4 +1,4 @@
-import { put, takeLatest, select } from 'redux-saga/effects';
+import { takeLatest, select } from 'redux-saga/effects';
 import * as slice from '..';
 
 import loginSaga, { getAuthUser } from '../saga';
