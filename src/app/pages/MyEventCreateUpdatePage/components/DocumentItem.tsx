@@ -33,11 +33,6 @@ export const DocumentItem = (props) => {
 
     const { t } = useTranslation();
 
-    const reloadEvent = () => {
-        if (reloadParent)
-            reloadParent();
-    }
-
     const canDeleteDocument = () => {
         return event.isEditor;
     }
@@ -51,8 +46,8 @@ export const DocumentItem = (props) => {
                 setIsLoading(false);
 
                 if (response.success) {
-                    toast.success(t(translations.event_detail_page.successfully_signed_waiver));
-                    reloadEvent();
+                    toast.success(t(translations.general.your_action_is_successful));
+                    reloadParent();
                 } else {
                     showToastMessageOnRequestError(response.error);
                 }
@@ -92,7 +87,7 @@ export const DocumentItem = (props) => {
         if (canDeleteDocument()) actions.push(<Button danger onClick={() => setShowConfirmDeleteModal(true)} type='link'>{t(translations.general.delete)}</Button>);
         setDocumentActions(actions);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [item]);
 
     return (<>
         <ConfirmModal
