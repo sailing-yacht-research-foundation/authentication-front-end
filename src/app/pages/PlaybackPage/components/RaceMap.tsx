@@ -430,7 +430,7 @@ export const RaceMap = (props) => {
           {_canSendKudos() && <BoatActionWrapper>
             <KudoReactionMenuButton />
           </BoatActionWrapper>}
-          {_canClaimnTrack() && <BoatActionWrapper>
+          {_canClaimTrack() && <BoatActionWrapper>
             <ClaimTrackButton />
           </BoatActionWrapper>}
         </BoatIconWrapper>
@@ -457,7 +457,7 @@ export const RaceMap = (props) => {
 
         }
 
-        if (_canClaimnTrack()) {
+        if (_canClaimTrack()) {
           _setVesselParticipantIdAndShowConfirmClaimTrackModal(participant);
         }
 
