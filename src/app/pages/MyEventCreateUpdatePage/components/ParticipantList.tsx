@@ -38,7 +38,7 @@ export const ParticipantList = (props) => {
 
     const [mappedResults, setMappedResults] = React.useState<any[]>([]);
 
-    const columns = [
+    const columns: any = [
         {
             title: t(translations.general.public_name),
             dataIndex: 'publicName',
@@ -87,7 +87,6 @@ export const ParticipantList = (props) => {
         {
             title: t(translations.participant_list.action),
             key: 'action',
-            fixed: true,
             render: (text, record) => (
                 <Space size={10}>
                     <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.participant_list.remove)}</DeleteButton>

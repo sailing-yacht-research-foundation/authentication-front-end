@@ -14,6 +14,7 @@ import { PublicProfileState } from 'app/pages/PublicProfilePage/slice/types';
 import { ProfileSearchState } from 'app/pages/ProfileSearchPage/slice/types';
 import { SocialProfileState } from 'app/components/SocialProfile/slice/types';
 import { NotificationState } from 'app/components/Notification/slice/types';
+import { TrackState } from 'app/pages/MyTrackPage/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -37,7 +38,8 @@ export interface RootState {
   competitionUnitManager?: competitionUnitManagerState;
   publicProfile?: PublicProfileState;
   profileSearch?: ProfileSearchState;
-  social?: SocialProfileState;
-  notification?: NotificationState;
+  social: SocialProfileState;
+  notification: NotificationState;
+  track?: TrackState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

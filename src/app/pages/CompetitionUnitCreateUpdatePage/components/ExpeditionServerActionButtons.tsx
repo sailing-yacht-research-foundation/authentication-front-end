@@ -28,7 +28,7 @@ import { selectSessionToken } from 'app/pages/LoginPage/slice/selectors';
 import 'whatwg-fetch';
 import useWebSocket from "react-use-websocket";
 import { message } from 'antd';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { showToastMessageOnRequestError, usePrevious } from 'utils/helpers';
 
 export const ExpeditionServerActionButtons = (props) => {
 
@@ -78,14 +78,6 @@ export const ExpeditionServerActionButtons = (props) => {
         },
         timestamp: Date.now()
     });
-
-    const usePrevious = <T extends unknown>(value: T): T | undefined => {
-        const ref = React.useRef<T>();
-        React.useEffect(() => {
-            ref.current = value;
-        });
-        return ref.current;
-    }
 
     const previousValue = usePrevious<{ lastSubscribedCompetitionUnitId: string }>({ lastSubscribedCompetitionUnitId });
 
