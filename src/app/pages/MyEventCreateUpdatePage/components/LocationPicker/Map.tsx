@@ -1,6 +1,6 @@
 import React from 'react';
 import * as L from 'leaflet';
-import { useMap } from 'react-leaflet';
+import { useMap, useMapEvents } from 'react-leaflet';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import ReactDOMServer from 'react-dom/server';
 import { translations } from 'locales/translations';
@@ -23,6 +23,14 @@ export const Map = (props) => {
     const map = useMap();
 
     const selectedOption = React.useRef("start");
+
+    const [zoomLevel, setZoomLevel] = React.useState<number>(10);
+
+    const mapEvents = useMapEvents({
+        zoomend: () => {
+            setZoomLevel(mapEvents.getZoom());
+        },
+    });
 
     const initMapClickEvent = () => {
         map.on('click', (e) => {
@@ -100,12 +108,14 @@ export const Map = (props) => {
     }
 
     React.useEffect(() => {
+        map.setView(coordinates, zoomLevel);
         setMarker(coordinates);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coordinates]);
 
     React.useEffect(() => {
         if (endCoordinates) {
+            map.setView(endCoordinates, zoomLevel);
             setEndMarker(endCoordinates);
         } else {
             removeEndMarker();
@@ -115,20 +125,17 @@ export const Map = (props) => {
 
     React.useEffect(() => {
         initializeMapView();
-        if (!noMarkerInteraction) {
+        if (!noMarkerInteraction)
             initMapClickEvent();
-        }
-
-        map.setView(coordinates, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
         selectedOption.current = option;
         if (option === options.START && coordinates) {
-            map.setView(coordinates, 10);
+            map.setView(coordinates, zoomLevel);
         } else if (option === options.END && endCoordinates) {
-            map.setView(endCoordinates, 10);
+            map.setView(endCoordinates, zoomLevel);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [option])
