@@ -369,7 +369,7 @@ export const RaceMap = (props) => {
       && isAuthenticated;
   }
 
-  const _canClaimnTrack = () => {
+  const _canClaimTrack = () => {
     return !competitionUnitDetail.calendarEvent?.isPrivate // event is not a track now event
       && !competitionUnitDetail.calendarEvent?.isSimulation // is not simulation
       && playbackType === PlaybackTypes.OLDRACE
