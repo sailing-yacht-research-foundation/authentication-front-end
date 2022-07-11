@@ -2,8 +2,11 @@ import i18next from 'i18next';
 import * as L from 'leaflet';
 import { translations } from 'locales/translations';
 import moment from 'moment-timezone';
+import React from 'react';
 import { toast } from 'react-toastify';
-import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TIME_FORMAT } from 'utils/constants';
+import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
+import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { AuthCode } from './constants';
 
 /**
@@ -559,4 +562,123 @@ export const navigateToProfile = (e, item, history) => {
 
 export const checkIfLocationIsValid = (lon, lat) => {
     return lon !== null && lon !== undefined && lat !== null && lat !== undefined
+}
+
+export const parseFilterSorterParams = (filter: TableFiltering[], sorter: Partial<TableSorting> | null) => {
+    let paramString = '';
+    filter?.forEach(f => {
+        if (f.type === TableFilteringType.TEXT) {
+            paramString += `&${f.key}_contains=${f.value}`;
+        } else if (f.type === TableFilteringType.DATE) {
+            paramString += `&${f.key}_gte=${f.value[0]}&${f.key}_lte=${f.value[1]}`;
+        } else if (f.type === TableFilteringType.CHECKBOX) {
+            f.value?.forEach(value => {
+                paramString += `&${f.key}_in=${value}`;
+            });
+        }
+    });
+
+    if (sorter && sorter.key) {
+        paramString += `&sort=${sorter.key}.${sorter.order}`;
+    }
+
+    return paramString;
+}
+
+export const getFilterTypeBaseOnColumn = (column: string, fieldsWithDateFiltering: string[] = [], fieldsWithCheckboxFiltering: string[] = []) => {
+    if (fieldsWithDateFiltering.includes(column)) return TableFilteringType.DATE;
+    if (fieldsWithCheckboxFiltering.includes(column)) return TableFilteringType.CHECKBOX;
+    return TableFilteringType.TEXT;
+}
+
+export const handleOnTableStateChanged = (
+    pagination,
+    filters,
+    sorter,
+    setSorter: Function,
+    page: number,
+    size: number,
+    fetchDataCallback: Function
+) => {
+    let isHavingFilter = Object.values(filters).some((filterValue: any) => {
+        return filterValue?.length > 0;
+    });
+
+    if (sorter.column) {
+        setSorter({ key: sorter.column?.dataIndex, order: sorter.order === 'ascend' ? 'asc' : 'desc' })
+    } else {
+        setSorter({})
+    }
+
+    if ((page !== pagination.current || size !== pagination.pageSize)) {
+        if (pagination.current === 1 && isHavingFilter) return;
+        fetchDataCallback();
+    }
+}
+
+export const parseFilterParamBaseOnFilterType = (param: any, filterType: string) => {
+    if (filterType === TableFilteringType.DATE && param) {
+        param = [param[0]?.format(TIME_FORMAT.number_with_time), param[1]?.format(TIME_FORMAT.number_with_time)]
+    }
+
+    return param;
+}
+
+export const queryStringToJSON = (qs) => {
+    const pairs = qs.split('&');
+    const result = {};
+    pairs.forEach(function (p) {
+        const pair = p.split('=');
+        const key = pair[0];
+        const value = decodeURIComponent(pair[1] || '');
+
+        if (result[key]) {
+            if (Object.prototype.toString.call(result[key]) === '[object Array]') {
+                result[key].push(value);
+            } else {
+                result[key] = [result[key], value];
+            }
+        } else {
+            result[key] = value;
+        }
+    });
+
+    return JSON.parse(JSON.stringify(result));
+};
+
+
+export const usePrevious = <T extends unknown>(value: T): T | undefined => {
+    const ref = React.useRef<T>();
+    React.useEffect(() => {
+        ref.current = value;
+    });
+    return ref.current;
+}
+
+export const checkIfLastFilterAndSortValueDifferentToCurrent = (previousFilter: TableFiltering[] | undefined, previousSorter: Partial<TableSorting> | undefined, filter: TableFiltering[] | undefined, sorter: Partial<TableSorting> | undefined) => {
+    let different = false;
+
+    if (previousFilter && (previousFilter?.length !== filter?.length
+        || !areTwoFiltersEqual(previousFilter, filter))) different = true;
+
+    if (previousSorter && (
+        previousSorter?.order !== sorter?.order
+        || previousSorter?.key !== sorter?.key
+    )) different = true;
+
+    return different;
+}
+
+const areTwoFiltersEqual = (filter1, filter2) => {
+    if (filter1.length === filter2.length) {
+        return filter1.every((element, index) => {
+            if (JSON.stringify(element) === JSON.stringify(filter2[index])) {
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    return false;
 }

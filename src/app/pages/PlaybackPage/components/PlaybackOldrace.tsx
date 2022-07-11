@@ -30,7 +30,7 @@ import {
 } from "./slice/selectors";
 import { usePlaybackSlice } from "./slice";
 import { MAP_DEFAULT_VALUE, PlaybackSpeed, RaceEmitterEvent, WebsocketConnectionStatus, WorkerEvent } from "utils/constants";
-import { stringToColour } from "utils/helpers";
+import { stringToColour, usePrevious } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { Playback } from "./Playback";
 import { RaceMap } from "./RaceMap";
@@ -92,15 +92,6 @@ export const PlaybackOldRace = (props) => {
   const [connectionStatus, setConnectionStatus] = React.useState(WebsocketConnectionStatus.UNINSTANTIATED);
 
   const { t } = useTranslation();
-
-
-  const usePrevious = <T extends unknown>(value: T): T | undefined => {
-    const ref = React.useRef<T>();
-    React.useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
-  }
 
   const previousValue = usePrevious<{ raceLength: number }>({ raceLength });
 

@@ -30,3 +30,13 @@ export const selectPageSize = createSelector(
     [selectDomain],
     myEventList => myEventList.size,
 );
+
+export const selectFilter = createSelector(
+    [selectDomain],
+    myEventList => myEventList.filter
+);
+
+export const selectSorter = createSelector(
+    [selectDomain],
+    myEventList => myEventList.sorter
+);

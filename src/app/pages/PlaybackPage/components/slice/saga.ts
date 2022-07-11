@@ -17,6 +17,7 @@ import { getVesselParticipantGroupById } from "services/live-data-server/vessel-
 import { PlaybackTypes } from "types/Playback";
 import { sourcesPreventIframe } from "utils/constants";
 import { playbackActions } from ".";
+
 export function* getCompetitionUnitDetail({ type, payload }) {
   const { id } = payload;
 

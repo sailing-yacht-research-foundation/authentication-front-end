@@ -162,7 +162,7 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
                         pageSize: arbitraryPagination.size,
                     }}
                     renderItem={item => (
-                        <DocumentItem item={item} event={event} reloadParent={reloadParent} />
+                        <DocumentItem item={item} event={event} reloadParent={() => getArbitraryDocuments(arbitraryPagination.page, arbitraryPagination.size)} />
                     )}
                 />
             </Spin>

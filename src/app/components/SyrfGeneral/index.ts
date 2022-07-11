@@ -15,7 +15,7 @@ export const PageHeaderContainer = styled.div`
 export const PageHeaderContainerResponsive = styled.div`
     display: flex;
     flex-direction: column-reverse;
-    padding: 30px 15px;
+    padding: 12px 12px 0;
 
     ${media.medium`
         display: flex;
@@ -35,7 +35,7 @@ export const PageHeaderContainerResponsive = styled.div`
             align-self: center;
         }
     `}
-   
+
     & > h2 {
         align-self: flex-start;
     }
@@ -43,7 +43,7 @@ export const PageHeaderContainerResponsive = styled.div`
     & .ant-space {
         align-self: flex-end;
     }
-    
+
     & button {
         align-self: flex-end;
     }
@@ -121,7 +121,7 @@ export const BorderedButton = styled(Button)`
 `;
 
 export const TableWrapper = styled.div`
-    margin: 15px;
+    margin: 0px 15px;
 `;
 
 export const PageInfoContainer = styled.div`
@@ -131,12 +131,14 @@ export const PageInfoContainer = styled.div`
 
 export const PageDescription = styled.p`
     padding: 0 15px;
+    margin-bottom: 8px;
 `;
 
 export const PageHeading = styled.h2`
     padding: 10px 15px;
     padding-bottom: 0px;
     text-transform: capitalize;
+    margin-bottom: 4px;
 `;
 
 export const PageInfoOutterWrapper = styled.div`
@@ -166,7 +168,7 @@ export const SuggestionCriteria = styled.div`
     padding-left: 20px;
     border-bottom: 1px solid #eee;
     cursor: pointer;
-    
+
     :hover, &.active {
         background: ${StyleConstants.MAIN_TONE_COLOR};
         color: #fff;
@@ -281,5 +283,27 @@ export const LiveDot = styled.span`
 
     &.live {
         background: #ff0000;
+    }
+`;
+
+export const RightAligner = styled.div`
+    float: right;
+    margin: 10px 0;
+`;
+
+export const MapPaginationWrapper = styled.div`
+    position: absolute;
+    bottom: 110px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 570px;
+    max-width: 98%;
+    z-index: 11;
+    text-align: center;
+    z-index: 9999;
+
+    .ant-pagination-item:not(.ant-pagination-item-active) a {
+    color: rgba(0, 0, 0, 0.85) !important;
     }
 `;

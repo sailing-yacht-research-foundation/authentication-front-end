@@ -34,10 +34,10 @@ export const MyEvents = () => {
 
     return (
         <Container>
-            <PageHeaderContainerSimple style={{ 'alignSelf': 'flex-start', width: '100%', padding: '0px 15px' }}>
+            <PageHeaderContainerSimple style={{ 'alignSelf': 'flex-start', width: '100%', padding: '0px 12px' }}>
                 <PageInfoContainer style={{ paddingRight: '8px' }}>
-                    <PageHeading style={{ padding: '0px', marginBottom: '4px' }}>{t(translations.my_event_list_page.my_events)}</PageHeading>
-                    <PageDescription style={{ padding: '0px', marginBottom: '8px' }}>{t(translations.my_event_list_page.events_are_regattas)}</PageDescription>
+                    <PageHeading style={{ padding: '0px' }}>{t(translations.my_event_list_page.my_events)}</PageHeading>
+                    <PageDescription style={{ padding: '0px' }}>{t(translations.my_event_list_page.events_are_regattas)}</PageDescription>
                 </PageInfoContainer>
                 <CreateButtonWrapper>
                     <CreateButton style={{ margin: '0px' }} onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
@@ -66,7 +66,7 @@ const CreateButtonWrapper = styled.div`
 `;
 
 const Container = styled.div`
-    padding: 24px 0px;
+    padding-top: 12px;
 `;
 
 const StyledTabs = styled(Tabs)`
