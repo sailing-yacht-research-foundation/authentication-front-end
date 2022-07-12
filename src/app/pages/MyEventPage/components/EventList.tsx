@@ -147,7 +147,8 @@ export const EventList = () => {
       key: 'country',
       sorter: true,
       render: (text) => renderEmptyValue(text),
-      ...getColumnSearchProps('country', handleSearch, handleReset)
+      ...getColumnSearchProps('country', handleSearch, handleReset),
+      width: '110px'
     },
     {
       title: t(translations.my_event_list_page.start_date),
@@ -180,6 +181,7 @@ export const EventList = () => {
       sorter: true,
       ...getColumnTimeProps('createdAt', handleSearch, handleReset),
       render: (value) => moment(value).format(TIME_FORMAT.date_text),
+      width: '110px'
     },
     {
       title: 'Action',
