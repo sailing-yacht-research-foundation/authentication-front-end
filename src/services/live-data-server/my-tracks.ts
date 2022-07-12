@@ -47,3 +47,9 @@ export const importExpeditionTrack = (formData) => {
     }));
 }
 
+export const claimTrack = (competitionUnitId: string, vesselParticipantId: string) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/claim-track`, {
+        competitionUnitId,
+        vesselParticipantId
+    }));
+}

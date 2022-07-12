@@ -31,7 +31,6 @@ import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { FaTrash } from 'react-icons/fa';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
-import { StyleConstants } from 'styles/StyleConstants';
 
 const defaultOptions = {
     loop: true,

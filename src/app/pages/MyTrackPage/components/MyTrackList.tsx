@@ -29,7 +29,6 @@ import { useMyTracksSlice } from '../slice';
 import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
 import { isMobile } from 'react-device-detect';
-import { StyleConstants } from 'styles/StyleConstants';
 
 const defaultOptions = {
     loop: true,
@@ -144,7 +143,8 @@ export const MyTrackList = () => {
             key: 'competitionUnit.country',
             sorter: true,
             ...getColumnSearchProps('competitionUnit.country', handleSearch, handleReset),
-            render: (_value, source) => source.competitionUnit?.country || '-'
+            render: (_value, source) => source.competitionUnit?.country || '-',
+            width: '110px'
         },
         {
             title: t(translations.my_tracks_page.phone_model),
@@ -179,7 +179,8 @@ export const MyTrackList = () => {
             render: (_value, source) => {
                 const totalTraveledDistance = source.trackJson?.totalTraveledDistance;
                 return totalTraveledDistance ? `${totalTraveledDistance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} NMi` : '-';
-            }
+            },
+            width: '100px'
         },
         {
             title: t(translations.my_tracks_page.elapsed_time),
@@ -197,6 +198,12 @@ export const MyTrackList = () => {
 
                 return timeMillisToHours(endTime - startTime);
             }
+        },
+        {
+            title: t(translations.my_tracks_page.source),
+            dataIndex: 'source',
+            key: 'source',
+            render: (_value, record) => record.event?.source
         },
         {
             title: t(translations.general.action),
