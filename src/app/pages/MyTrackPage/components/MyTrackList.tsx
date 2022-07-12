@@ -29,7 +29,6 @@ import { useMyTracksSlice } from '../slice';
 import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
 import { isMobile } from 'react-device-detect';
-import { StyleConstants } from 'styles/StyleConstants';
 
 const defaultOptions = {
     loop: true,

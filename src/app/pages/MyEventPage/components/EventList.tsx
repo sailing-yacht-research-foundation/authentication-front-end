@@ -32,7 +32,6 @@ import { TableFiltering } from 'types/TableFiltering';
 import { GiExitDoor } from 'react-icons/gi';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
-import { StyleConstants } from 'styles/StyleConstants';
 
 const defaultOptions = {
   loop: true,
