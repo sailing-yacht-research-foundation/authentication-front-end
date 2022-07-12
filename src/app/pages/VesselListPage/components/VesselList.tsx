@@ -222,7 +222,7 @@ export const VesselList = () => {
             </PageHeaderContainerResponsive>
             <Spin spinning={isChangingPage}>
                 <TableWrapper>
-                    <Table scroll={{ x: "max-content", y: "calc(100vh - 320px)" }}
+                    <Table scroll={{ x: "max-content", y: isMobile ? undefined : "calc(100vh - 320px)" }}
                         onChange={(antdPagination, antdFilters, antSorter) =>
                             handleOnTableStateChanged(antdPagination,
                                 antdFilters,
