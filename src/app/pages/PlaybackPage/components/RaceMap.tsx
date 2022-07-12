@@ -742,8 +742,8 @@ export const RaceMap = (props) => {
 
   return <>
     <ConfirmModal 
-    title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name })}
-    content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name })}
+    title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
+    content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
     onOk={_claimTrack}
     loading={isClaimingTrack}
     showModal={showClaimTrackConfirModal}
