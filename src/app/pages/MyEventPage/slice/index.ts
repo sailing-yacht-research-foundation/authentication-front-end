@@ -1,5 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { CalendarEvent } from 'types/CalendarEvent';
+import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import myEventListSaga from './saga';
@@ -10,7 +12,9 @@ export const initialState: MyEventListState = {
   results: [],
   total: 0,
   is_changing_page: false,
-  size: 10
+  size: 10,
+  filter: [],
+  sorter: {},
 };
 
 const slice = createSlice({
@@ -37,6 +41,17 @@ const slice = createSlice({
       state.results = [];
       state.page = 1;
       state.total = 0;
+    },
+    setFilter(state, action: PayloadAction<TableFiltering>) {
+      const filter = state.filter;
+      state.filter = [...filter.filter(item => item.key !== action.payload?.key), action.payload];
+    },
+    setSorter(state, action: PayloadAction<Partial<TableSorting>>) {
+      state.sorter = action.payload;
+    },
+    clearFilter(state, action: PayloadAction<string>) {
+      const filter = state.filter;
+      state.filter = filter.filter(item => item.key !== action.payload);
     }
   },
 });

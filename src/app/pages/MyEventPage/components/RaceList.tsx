@@ -10,6 +10,7 @@ import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUp
 import { BorderedButton } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import { renderRaceStartTime, truncateName } from 'utils/helpers';
+import { EditFilled } from '@ant-design/icons';
 
 export const RaceList = (props) => {
 
@@ -56,9 +57,10 @@ export const RaceList = (props) => {
                     {record?.id
                         && record?.status === RaceStatus.ON_GOING && <ExpeditionServerActionButtons competitionUnit={record} />}
                     {
-                        canEditRace() && <BorderedButton onClick={() => {
-                            history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
-                        }} type="primary">{t(translations.general.update)}</BorderedButton>
+                        canEditRace() && <Tooltip title={t(translations.general.update)}>
+                            <BorderedButton icon={<EditFilled />} onClick={() => {
+                                history.push(`/events/${record.calendarEventId}/races/${record.id}/update`);
+                            }} type="primary" /></Tooltip>
                     }
                 </Space>)
             }

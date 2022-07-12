@@ -1,12 +1,15 @@
 import { SYRF_SERVER } from 'services/service-constants';
+import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
 import { Track } from 'types/Track';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { parseFilterSorterParams, showToastMessageOnRequestError } from 'utils/helpers';
 import { formatServicePromiseResponse } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
-export const getAllTracks = (page: number, size: number = 10) => {
+export const getAllTracks = (page: number, size: number = 10, filter: TableFiltering[] = [], sorter: Partial<TableSorting> | null = null) => {
+    const sortAndFilterString = parseFilterSorterParams(filter, sorter);
     const userId: any = localStorage.getItem('user_id');
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/${!!userId ? `?createdById_eq=${userId}` : ''}`, {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/${!!userId ? `?createdById_eq=${userId}` : ''}${sortAndFilterString ?? sortAndFilterString}`, {
         params: {
             page: page,
             size: size
@@ -15,7 +18,7 @@ export const getAllTracks = (page: number, size: number = 10) => {
 }
 
 export const downloadTrack = (track: Track, type: string) => {
-    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/${track.id}/export-track/${type}${track.trackJson?.id  ? `?trackJsonId=${track.trackJson?.id}` : ''}`, { responseType: 'blob' })
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/my-tracks/${track.id}/export-track/${type}${track.trackJson?.id ? `?trackJsonId=${track.trackJson?.id}` : ''}`, { responseType: 'blob' })
         .then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');

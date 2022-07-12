@@ -47,6 +47,7 @@ export const UserApprovalModal = (props) => {
 
     React.useEffect(() => {
         getJoinRequests(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -57,12 +58,12 @@ export const UserApprovalModal = (props) => {
                     {t(translations.group.accept)}
                 </Button>
                 <Button icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
-                {t(translations.group.reject)}
+                    {t(translations.group.reject)}
                 </Button>
             </Space>
         );
     }
-    
+
     return (
         <Modal
             title={'Admin Manager'}
