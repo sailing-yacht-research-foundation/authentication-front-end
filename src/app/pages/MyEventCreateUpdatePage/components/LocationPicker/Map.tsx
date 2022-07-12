@@ -100,14 +100,14 @@ export const Map = (props) => {
     }
 
     React.useEffect(() => {
-        map.setView(coordinates, 10);
+        map.setView(coordinates, map.getZoom());
         setMarker(coordinates);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coordinates]);
 
     React.useEffect(() => {
         if (endCoordinates) {
-            map.setView(endCoordinates, 10);
+            map.setView(endCoordinates,  map.getZoom());
             setEndMarker(endCoordinates);
         } else {
             removeEndMarker();
@@ -125,9 +125,9 @@ export const Map = (props) => {
     React.useEffect(() => {
         selectedOption.current = option;
         if (option === options.START && coordinates) {
-            map.setView(coordinates, 10);
+            map.setView(coordinates,  map.getZoom());
         } else if (option === options.END && endCoordinates) {
-            map.setView(endCoordinates, 10);
+            map.setView(endCoordinates,  map.getZoom());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [option])
