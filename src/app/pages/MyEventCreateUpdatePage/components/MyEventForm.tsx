@@ -35,6 +35,10 @@ import { ImportEventDataModal } from './modals/ImportEventDataModal';
 import { create as createCourse } from 'services/live-data-server/courses';
 import { FormItems } from './FormItems';
 import { CalendarEvent } from 'types/CalendarEvent';
+import * as turf from "@turf/turf";
+import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
+
+require('@turf/destination');
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -210,7 +214,42 @@ export const MyEventForm = () => {
     }
 
     const createDefaultCourse = async (event) => {
-        const response = await createCourse(event.id, 'Default Course', []);
+        const point = turf.point([coordinates.lng, coordinates.lat]);
+        const distance = 50;
+        const bearing = 90;
+        const options: any = { units: 'meters' };
+        const destination = turf.destination(point, distance, bearing, options);
+        const couseGeometry = [
+            {
+                "geometryType": "Polyline",
+                "points": [
+                    {
+                        "position": [
+                            coordinates.lat,
+                            coordinates.lng
+                        ],
+                        "properties": {
+                            "side": "port"
+                        }
+                    },
+                    {
+
+                        "position": [
+                            destination.geometry.coordinates[1],
+                            destination.geometry.coordinates[0],
+                        ],
+                        "properties": {
+                            "side": "starboard"
+                        }
+                    }
+                ],
+                "properties": {
+                    "name": "Start/Finish"
+                }
+            }
+        ];
+        const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(couseGeometry, eventId);
+        const response = await createCourse(event.id, 'Default Course', modifiedCourseSequencedGeometries);
 
         if (response.success) {
             toast.success(t(translations.my_event_create_update_page.successfully_created_a_new_default_course_for_this_event));

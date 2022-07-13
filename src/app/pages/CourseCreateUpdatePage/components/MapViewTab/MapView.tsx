@@ -26,8 +26,7 @@ import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import BoatPinIcon from '../../assets/boat_pin.png';
 import StartPinIcon from '../../assets/start_pin.png';
-import { create as createMarkTracker } from 'services/live-data-server/mark-tracker';
-import { CourseSequencedGeometry } from 'types/Course';
+import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
 
 require('leaflet-draw');
 
@@ -518,32 +517,6 @@ export const MapView = React.forwardRef((props, ref) => {
         }
     }
 
-    const addTrackerIdForCourseIfNotExists = async () => {
-        const clonedcourseSequencedGeometries: CourseSequencedGeometry[] = JSON.parse(JSON.stringify(courseSequencedGeometries));
-
-        for(let geometry of clonedcourseSequencedGeometries) {
-            for (let point of geometry.points) {
-                if (!point.markTrackerId) {
-                    point.markTrackerId = await generateTracker();
-                }
-            }
-        }
-
-        return clonedcourseSequencedGeometries;
-    }
-
-    const generateTracker = async () => {
-        const response = await createMarkTracker({
-            "name": "Event Tracker",
-            "userProfileId": null,
-            "calendarEventId": eventId
-        });
-
-        if (response.success) return response.data?.id;
-
-        return null;
-    }
-
     const saveCourse = async (name) => {
         if (courseSequencedGeometries.length === 0) {
             toast.error(t(translations.course_create_update_page.you_cannot_create_course));
@@ -552,7 +525,7 @@ export const MapView = React.forwardRef((props, ref) => {
             let response;
             toast.info(t(translations.course_create_update_page.saving));
 
-            const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists();
+            const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(courseSequencedGeometries, eventId);
 
             if (mode === MODE.CREATE)
                 response = await create(eventId, name, modifiedCourseSequencedGeometries);
