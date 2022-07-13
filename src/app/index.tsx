@@ -215,8 +215,6 @@ export function App(props) {
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:id/update'} component={VesselCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/create'} component={ParticipantCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/create'} component={VesselParticipantGroupPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups'} component={MyGroupsPage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/create'} component={GroupCreateUpdatePage} />
               <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/update'} component={GroupCreateUpdatePage} />
