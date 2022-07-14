@@ -309,3 +309,14 @@ export enum TableFilteringType {
     DATE = 'DATE',
     CHECKBOX = 'CHECKBOX',
 }
+
+export enum GeometryType {
+    POLYLINE = 'Polyline',
+    POLYGON = 'Polygon',
+    POINT = 'Point',
+}
+
+export enum GeometrySide {
+    PORT = 'port',
+    STARBOARD = 'starboard'
+}

@@ -9,6 +9,7 @@
     "@reduxjs/toolkit": "1.4.0",
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.0.2",
+    "@turf/destination": "^6.5.0",
     "@turf/turf": "^6.5.0",
     "@types/fontfaceobserver": "0.0.6",
     "@types/jest": "25.1.4",
