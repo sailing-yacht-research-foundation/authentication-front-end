@@ -25,7 +25,6 @@ export const FormItemEndLocationAddress = ({ form, address, endAddress, handleEn
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_location)}</SyrfFieldLabel>}
                 name="endLocation"
-                className="event-location-step"
             >
                 <PlacesAutocomplete
                     value={address}

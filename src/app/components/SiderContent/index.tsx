@@ -29,7 +29,8 @@ interface Route {
   icon: JSX.Element,
   items?: any,
   subMenuKey?: string,
-  exactPath?: string
+  exactPath?: string,
+  className?: string,
 }
 
 const routeKey = {

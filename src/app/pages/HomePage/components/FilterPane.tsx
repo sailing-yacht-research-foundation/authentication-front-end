@@ -71,7 +71,7 @@ export const FilterPane = (props) => {
 
         const keywordIsPilledCriteria = name.includes('</span>');
         if (keywordIsPilledCriteria) return; // not searching if the keyword is not inputted when the pill inserted and user performs search.
-        
+
         dispatch(actions.setPage(1));
         dispatch(actions.setFromDate(params.from_date ?? ''));
         dispatch(actions.setToDate(params.to_date ?? ''));
@@ -110,7 +110,7 @@ export const FilterPane = (props) => {
     }
 
     return (
-        <Wrapper {...props}>
+        <Wrapper {...props} className="search-step">
             <FilterHeader>
                 <FilterTabTitle>{t(translations.home_page.filter_tab.advanced_search)}</FilterTabTitle>
                 {props.closable && document.body.clientWidth > 1024 && <AiFillCloseCircle

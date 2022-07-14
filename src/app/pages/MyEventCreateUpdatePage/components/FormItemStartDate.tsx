@@ -24,7 +24,6 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter, for
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_date)}</SyrfFieldLabel>}
                         name="startDate"
-                        className="event-start-date-step"
                         rules={[{ type: 'date' }, {
                             required: true,
                             message: t(translations.forms.start_date_is_required)
@@ -60,7 +59,6 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter, for
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_time)}</SyrfFieldLabel>}
                         name="startTime"
-                        className="event-start-time-step"
                         rules={[{ required: true, message: t(translations.forms.start_time_is_required) }, ({ getFieldValue }) => ({
                             validator(_, value) {
                                 const startTime = getFieldValue('startTime');
@@ -93,7 +91,6 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter, for
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.timezone)}</SyrfFieldLabel>}
                         name="approximateStartTime_zone"
-                        className="event-time-zone-step"
                         rules={[{ required: true }]}
                     >
                         <SyrfFormSelect placeholder={t(translations.my_event_create_update_page.timezone)}

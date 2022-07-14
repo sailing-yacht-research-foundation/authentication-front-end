@@ -17,7 +17,6 @@ export const FormItemEventNameDescription = (props) => {
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.general.name)}</SyrfFieldLabel>}
                     name="name"
-                    className="event-name-step"
                     rules={[{ required: true, message: t(translations.forms.event_name_is_required) },
                     {
                         max: 150, message: t(translations.forms.event_name_must_not_be_longer_than_150_chars)
@@ -32,7 +31,6 @@ export const FormItemEventNameDescription = (props) => {
                     rules={[{ max: 255, message: t(translations.forms.event_description_must_not_be_longer_than_255_chars) }]}
                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                     name="description"
-                    className="event-description-step"
                     data-multiline={true}
                 >
                     <SyrfTextArea autoCorrect="off" />

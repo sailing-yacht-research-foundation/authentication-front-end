@@ -23,7 +23,6 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList, fo
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_date)}</SyrfFieldLabel>}
                         name="endDate"
-                        className="event-start-date-step"
                         rules={[{ type: 'date' }, ({ getFieldValue }) => ({
                             validator(_, value) {
                                 if (!value || !getFieldValue('startDate') || moment(value.format(TIME_FORMAT.number)).isSameOrAfter(getFieldValue('startDate').format(TIME_FORMAT.number))) {
@@ -55,7 +54,6 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList, fo
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_time)}</SyrfFieldLabel>}
                         name="endTime"
-                        className="event-start-time-step"
                         rules={[{ required: true, message: t(translations.forms.start_time_is_required) }, ({ getFieldValue }) => ({
                             validator(_, value) {
                                 const startTime = getFieldValue('startTime');
@@ -87,7 +85,6 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList, fo
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.timezone)}</SyrfFieldLabel>}
                         name="approximateEndTime_zone"
-                        className="event-time-zone-step"
                     >
                         <SyrfFormSelect disabled placeholder={t(translations.my_event_create_update_page.timezone)}
                             showSearch
