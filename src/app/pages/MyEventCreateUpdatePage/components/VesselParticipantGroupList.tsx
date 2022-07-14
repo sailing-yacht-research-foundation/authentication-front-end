@@ -1,15 +1,11 @@
 import React from 'react';
-import { useHistory } from 'react-router';
-import { Space, Spin, Table, Tooltip } from 'antd';
-import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
+import { Spin, Table, Tooltip } from 'antd';
+import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
-import { AiFillPlusCircle } from 'react-icons/ai';
 import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { DeleteVesselParticipantGroupModal } from 'app/pages/VesselParticipantGroupListPage/components/DeleteVesselParticipantGroupModal';
 import { TIME_FORMAT } from 'utils/constants';
-import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 import { truncateName } from 'utils/helpers';
 
 export const VesselParticipantGroupList = (props) => {
@@ -42,13 +38,7 @@ export const VesselParticipantGroupList = (props) => {
         pageSize: 10
     });
 
-    const [group, setGroup] = React.useState<Partial<VesselParticipantGroup>>({});
-
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-    const history = useHistory();
-
-    const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
     const getAll = async (page, size) => {
         setIsLoading(true);
@@ -66,17 +56,8 @@ export const VesselParticipantGroupList = (props) => {
         }
     }
 
-    const showDeleteGroupModal = (group) => {
-        setShowDeleteModal(true);
-        setGroup(group);
-    }
-
     const onPaginationChanged = (page, size) => {
         getAll(page, size);
-    }
-
-    const onGroupDeleted = () => {
-        getAll(pagination.page, pagination.pageSize);
     }
 
     React.useEffect(() => {
@@ -86,12 +67,6 @@ export const VesselParticipantGroupList = (props) => {
 
     return (
         <>
-            <DeleteVesselParticipantGroupModal
-                group={group}
-                onGroupDeleted={onGroupDeleted}
-                showDeleteModal={showDeleteModal}
-                setShowDeleteModal={setShowDeleteModal}
-            />
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.my_event_create_update_page.Vessel_participant_groups)}</PageHeaderTextSmall>

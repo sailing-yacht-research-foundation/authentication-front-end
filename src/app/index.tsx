@@ -38,7 +38,6 @@ import { CompetitionUnitListPage } from './pages/CompetitionUnitListPage/Loadabl
 import { VesselListPage } from './pages/VesselListPage/Loadable';
 import { VesselCreateUpdatePage } from './pages/VesselCreateUpdatePage/Loadable';
 import { ParticipantCreateUpdatePage } from './pages/ParticipantCreateUpdatePage/Loadable';
-import { VesselParticipantGroupPage } from './pages/VesselParticipantGroupCreateUpdatePage/Loadable';
 import { EventDetailPage } from './pages/EventDetailPage/Loadable';
 import { MyTrackPage } from './pages/MyTrackPage/Loadable';
 import { MyGroupsPage } from './pages/MyGroupPage/Loadable';
