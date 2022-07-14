@@ -18,6 +18,7 @@ import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
 import { replaceFormattedCriteriaWithRawCriteria, replaceCriteriaWithPilledCriteria, removeWholeTextNodeOnBackSpace } from 'utils/helpers';
 import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router-dom';
+import { TourStepClassName } from 'utils/tour-steps';
 
 export const FilterPane = (props) => {
 
@@ -110,7 +111,7 @@ export const FilterPane = (props) => {
     }
 
     return (
-        <Wrapper {...props} className="search-step">
+        <Wrapper {...props} className={TourStepClassName.SEARCH}>
             <FilterHeader>
                 <FilterTabTitle>{t(translations.home_page.filter_tab.advanced_search)}</FilterTabTitle>
                 {props.closable && document.body.clientWidth > 1024 && <AiFillCloseCircle

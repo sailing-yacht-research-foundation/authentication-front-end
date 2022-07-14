@@ -20,6 +20,7 @@ import { UserNotification } from '../Notification';
 import { FollowRequestModal } from '../SocialProfile/FollowRequestModal';
 import { unregisterPushSubscription } from 'utils/helpers';
 import { useMyEventListSlice } from 'app/pages/MyEventPage/slice';
+import { TourStepClassName } from 'utils/tour-steps';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -80,7 +81,7 @@ export const Nav = () => {
               type="primary"
               shape="round"
               size="large"
-              className="event-step"
+              className={TourStepClassName.CREATE_EVENT_BUTTON}
               onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
                 style={{ marginRight: '5px' }}
                 size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>

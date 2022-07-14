@@ -12,6 +12,7 @@ import { media } from 'styles/media';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUnreadNotificationsCount } from './slice/selectors';
 import { useNotificationSlice } from './slice';
+import { TourStepClassName } from 'utils/tour-steps';
 
 export const UserNotification = () => {
 
@@ -66,13 +67,14 @@ export const UserNotification = () => {
 
     return (
         <>
-            {isMobile ? (<NotificationButtonWrapperMobile onClick={navigateToNotificationCenter}>
+            {isMobile ? (<NotificationButtonWrapperMobile className={TourStepClassName.NOTIFICATIONS} onClick={navigateToNotificationCenter}>
                 <NotificationIconWrapper>
                     <StyledNotificationButton />
                     {numberOfUnreadNotifications > 0 && <NumberOfNotifications>{numberOfUnreadNotifications}</NumberOfNotifications>}
                 </NotificationIconWrapper>
             </NotificationButtonWrapperMobile>) : (<NotificationButtonWrapper
                 placement="bottomCenter"
+                className={TourStepClassName.NOTIFICATIONS}
                 trigger={['hover']}
                 icon={
                     <NotificationIconWrapper>

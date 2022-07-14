@@ -21,6 +21,7 @@ import { FaUserFriends } from 'react-icons/fa';
 import { ImProfile } from 'react-icons/im';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { BsFillCreditCardFill } from 'react-icons/bs';
+import { TourStepClassName } from 'utils/tour-steps';
 
 interface Route {
   key: number,
@@ -68,6 +69,7 @@ export const SiderContent = (props) => {
       title: t(translations.side_menu.my_tracks),
       path: '/tracks',
       icon: <GiPathDistance />,
+      className: TourStepClassName.TRACKS_PAGE
 
     },
     {
@@ -75,12 +77,14 @@ export const SiderContent = (props) => {
       path: '/events',
       title: t(translations.side_menu.my_events),
       icon: <CalendarOutlined />,
+      className: TourStepClassName.MY_EVENTS_PAGE
     },
     {
       key: routeKey.GROUPS,
       path: '/groups',
       title: t(translations.side_menu.groups),
       icon: <MdGroups />,
+      className: TourStepClassName.GROUPS_PAGE
 
     },
     {
@@ -88,6 +92,7 @@ export const SiderContent = (props) => {
       path: '/boats',
       title: t(translations.side_menu.vessels),
       icon: <GiSailboat />,
+      className: TourStepClassName.BOATS_PAGE
 
     },
     {
@@ -96,12 +101,13 @@ export const SiderContent = (props) => {
       path: '/profile/:id',
       title: t(translations.side_menu.profile.discover_friends),
       icon: <FaUserFriends />,
+      className: TourStepClassName.DISCOVER_FRIENDS_PAGE
     },
     {
       key: routeKey.DATA,
       path: '/data',
       title: t(translations.side_menu.data),
-      icon: <GoDatabase />,
+      icon: <GoDatabase />
 
     },
     {
@@ -109,6 +115,7 @@ export const SiderContent = (props) => {
       subMenuKey: 'account',
       title: t(translations.side_menu.profile.name),
       icon: <UserOutlined />,
+      className: TourStepClassName.MY_ACCOUNT_PAGE,
       items: [
         {
           key: routeKey.ACCOUNT,
@@ -219,12 +226,12 @@ export const SiderContent = (props) => {
 
         {items.map(route => {
           if (route.path) {
-            return <SyrfMenuItem title={route.title} key={route.key} icon={route.icon}>
+            return <SyrfMenuItem className={route.className} title={route.title} key={route.key} icon={route.icon}>
               <StyledLink to={route.exactPath || route.path}>{route.title}</StyledLink>
             </SyrfMenuItem>;
           }
 
-          return <SyrfSubmenu key={route.subMenuKey} icon={route.icon} title={route.title}>
+          return <SyrfSubmenu className={route.className} key={route.subMenuKey} icon={route.icon} title={route.title}>
             {route.items.map(subRoute => {
               return <SyrfMenuItem title={subRoute.title} key={subRoute.key} icon={subRoute.icon}>
                 <StyledLink to={subRoute.path}>{subRoute.title}</StyledLink>
