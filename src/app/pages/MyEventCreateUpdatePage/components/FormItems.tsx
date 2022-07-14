@@ -142,7 +142,7 @@ export const FormItems = (props) => {
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.event_type)}</SyrfFieldLabel>}
                             name="eventTypes"
                         >
-                            <SyrfFormSelect onChange={value => setSelectedEventType(String(value))}>
+                            <SyrfFormSelect allowClear onChange={value => setSelectedEventType(String(value))}>
                                 {renderEventTypesSelection()}
                             </SyrfFormSelect>
                         </Form.Item>
