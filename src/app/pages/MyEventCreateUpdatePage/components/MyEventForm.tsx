@@ -12,7 +12,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, EventParticipatingTypes, EventState, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
+import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -215,13 +215,13 @@ export const MyEventForm = () => {
 
     const createDefaultCourse = async (event) => {
         const point = turf.point([coordinates.lng, coordinates.lat]);
-        const distance = 50;
-        const bearing = 90;
-        const options: any = { units: 'meters' };
-        const destination = turf.destination(point, distance, bearing, options);
-        const couseGeometry = [
+        const defaultStartLineDistance = 50;
+        const defaultStartLineBearing = 90;
+        const defaultStartLineoptions: any = { units: 'meters' };
+        const destination = turf.destination(point, defaultStartLineDistance, defaultStartLineBearing, defaultStartLineoptions);
+        const courseGeometry = [
             {
-                "geometryType": "Polyline",
+                "geometryType": GeometryType.POLYLINE,
                 "points": [
                     {
                         "position": [
@@ -229,7 +229,7 @@ export const MyEventForm = () => {
                             coordinates.lng
                         ],
                         "properties": {
-                            "side": "port"
+                            "side": GeometrySide.PORT
                         }
                     },
                     {
@@ -239,16 +239,17 @@ export const MyEventForm = () => {
                             destination.geometry.coordinates[0],
                         ],
                         "properties": {
-                            "side": "starboard"
+                            "side": GeometrySide.STARBOARD
                         }
                     }
                 ],
+                order: 0,
                 "properties": {
                     "name": "Start/Finish"
                 }
             }
         ];
-        const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(couseGeometry, eventId);
+        const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(courseGeometry, eventId);
         const response = await createCourse(event.id, 'Default Course', modifiedCourseSequencedGeometries);
 
         if (response.success) {

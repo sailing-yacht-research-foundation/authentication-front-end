@@ -21,7 +21,7 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { CourseDeleteModal } from '../CourseDeleteModal';
-import { MODE } from 'utils/constants';
+import { GeometrySide, GeometryType, MODE } from 'utils/constants';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import BoatPinIcon from '../../assets/boat_pin.png';
@@ -71,12 +71,6 @@ const LAYER_TYPE = {
     marker: 'marker',
     polygon: 'polygon',
     polyline: 'polyline'
-};
-
-const GEOMETRY_TYPE = {
-    point: 'Point',
-    line: 'Polyline',
-    polygon: 'Polygon'
 };
 
 L.drawLocal.draw.toolbar.buttons = {
@@ -218,15 +212,15 @@ export const MapView = React.forwardRef((props, ref) => {
             let geoJsonGroup;
 
             switch (geometry.geometryType) {
-                case GEOMETRY_TYPE.line:
+                case GeometryType.POLYLINE:
                     const coordinates = geometry.points.map(function (point) {
                         return point.position;
                     });
                     geoJsonGroup = L.polyline([...coordinates]).addTo(map);
-                    geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.line;
+                    geoJsonGroup.options._geometry_type = GeometryType.POLYLINE;
                     drawPointAndBoat(coordinates, geometry.id);
                     break;
-                case GEOMETRY_TYPE.point:
+                case GeometryType.POINT:
                     geoJsonGroup = L.marker(geometry.points[0].position, {
                         icon: L.divIcon({
                             html: ReactDOMServer.renderToString(<FaMapMarkerAlt style={{ color: '#fff', fontSize: '35px' }} />),
@@ -234,13 +228,13 @@ export const MapView = React.forwardRef((props, ref) => {
                             className: 'my-race'
                         })
                     }).addTo(map);
-                    geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.point;
+                    geoJsonGroup.options._geometry_type = GeometryType.POINT;
                     break;
-                case GEOMETRY_TYPE.polygon:
+                case GeometryType.POLYGON:
                     geoJsonGroup = L.polygon([geometry.points.map(function (point) {
                         return point.position;
                     })]).addTo(map);
-                    geoJsonGroup.options._geometry_type = GEOMETRY_TYPE.polygon;
+                    geoJsonGroup.options._geometry_type = GeometryType.POLYGON;
                     break;
             }
 
@@ -305,11 +299,11 @@ export const MapView = React.forwardRef((props, ref) => {
                     geometry = JSON.parse(JSON.stringify(geometry));
                     const geometryType = layer.options._geometry_type;
                     switch (geometryType) {
-                        case GEOMETRY_TYPE.point:
+                        case GeometryType.POINT:
                             geometry.points[0].position = [layer.getLatLng().lat, layer.getLatLng().lng]
                             break;
-                        case GEOMETRY_TYPE.polygon:
-                        case GEOMETRY_TYPE.line:
+                        case GeometryType.POLYGON:
+                        case GeometryType.POLYLINE:
                             layer.getLatLngs().forEach((points, pointIndex) => {
                                 if (points.forEach) {
                                     points.forEach((point, index) => {
@@ -325,7 +319,7 @@ export const MapView = React.forwardRef((props, ref) => {
                                     geometry.points[pointIndex].position = [point.lat, point.lng];
                                 }
                             });
-                            if (geometryType === GEOMETRY_TYPE.polygon) { // polygon only, making this polygon first position & last position the same as discussed with Aan.
+                            if (geometryType === GeometryType.POLYGON) { // polygon only, making this polygon first position & last position the same as discussed with Aan.
                                 enclosePolygonPoints(geometry);
                             }
                             drawPointAndBoat(layer.getLatLngs().map(point => [point.lat, point.lng]), geometry.id);
@@ -355,14 +349,14 @@ export const MapView = React.forwardRef((props, ref) => {
 
             switch (layerType) {
                 case LAYER_TYPE.marker:
-                    geometry.geometryType = GEOMETRY_TYPE.point;
+                    geometry.geometryType = GeometryType.POINT;
                     geometry.points.push({
                         position: [layer.getLatLng().lat, layer.getLatLng().lng]
                     })
-                    layer.options._geometry_type = GEOMETRY_TYPE.point;
+                    layer.options._geometry_type = GeometryType.POINT;
                     break;
                 case LAYER_TYPE.polygon:
-                    geometry.geometryType = GEOMETRY_TYPE.polygon;
+                    geometry.geometryType = GeometryType.POLYGON;
                     layer.getLatLngs().forEach(points => {
                         points.forEach(point => {
                             geometry.points.push({
@@ -371,15 +365,15 @@ export const MapView = React.forwardRef((props, ref) => {
                         });
                     });
                     enclosePolygonPoints(geometry);
-                    layer.options._geometry_type = GEOMETRY_TYPE.polygon;
+                    layer.options._geometry_type = GeometryType.POLYGON;
                     break;
                 case LAYER_TYPE.polyline:
-                    geometry.geometryType = GEOMETRY_TYPE.line;
+                    geometry.geometryType = GeometryType.POLYLINE;
                     layer.getLatLngs().forEach(function (point, index) {
                         geometry.points.push({
                             position: [point.lat, point.lng],
                             properties: {
-                                side: index === 0 ? "port" : "starboard"
+                                side: index === 0 ? GeometrySide.PORT : GeometrySide.STARBOARD
                                 // Port is for the start pin and it’s always on the left side of the start line,
                                 // Starboard is for the boat pin and it’s always on the right side of the start line
                                 // index == 0 means the pin, 1 means the boat.
@@ -388,7 +382,7 @@ export const MapView = React.forwardRef((props, ref) => {
                         });
                     });
                     drawPointAndBoat(layer.getLatLngs().map(point => [point.lat, point.lng]), layerId);
-                    layer.options._geometry_type = GEOMETRY_TYPE.line;
+                    layer.options._geometry_type = GeometryType.POLYLINE;
                     break;
             }
 
