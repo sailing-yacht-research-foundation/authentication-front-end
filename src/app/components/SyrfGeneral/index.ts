@@ -307,3 +307,9 @@ export const MapPaginationWrapper = styled.div`
     color: rgba(0, 0, 0, 0.85) !important;
     }
 `;
+
+export const RaceStatusModalWrapper = styled.p`
+    font-size: 16px;
+    margin-bottom: 0;
+    text-align: center;
+`;
