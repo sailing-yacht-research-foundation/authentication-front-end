@@ -97,13 +97,13 @@ export const TutorialModal = React.forwardRef<any, any>((props, ref) => {
     }, [currentStep]);
 
     React.useEffect(() => {
-        // if (user.attributes && isAuthenticated && (
-        //     !getUserAttribute(user, 'showed_tour') ||
-        //     getUserAttribute(user, 'showed_tour') === 'false'
-        // )) {
+        if (user.attributes && isAuthenticated && (
+            !getUserAttribute(user, 'showed_tour') ||
+            getUserAttribute(user, 'showed_tour') === 'false'
+        )) {
             history.push('/');
             setShowModal(true);
-        // }
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
