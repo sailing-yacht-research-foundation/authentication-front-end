@@ -81,13 +81,13 @@ export const TutorialModal = React.forwardRef<any, any>((props, ref) => {
 
     React.useEffect(() => {
         if (currentStep >= 1) {
-            if (currentStep == 1 && isMobile) {
+            if (currentStep === 1) { // is on search page and is mobile
                 history.push('/');
             } else {
                 history.push(tourStepNavigation[currentStep]);
             }
 
-            if (currentStep === 8 || currentStep == 0) { // notifications and search hide the sider.
+            if (currentStep === 8 || currentStep === 0) { // notifications and search hide the sider.
                 toggleSider(false);
             } else {
                 toggleSider(true);
