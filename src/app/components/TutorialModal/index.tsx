@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTour } from '@reactour/tour';
 import styled from 'styled-components';
-import {  getUserName } from 'utils/user-utils';
+import { getUserAttribute, getUserName } from 'utils/user-utils';
 import { updateUserSpecificAttributes } from 'services/live-data-server/user';
 import { UseLoginSlice } from 'app/pages/LoginPage/slice';
 import { useHistory } from 'react-router';
@@ -46,11 +46,13 @@ export const TutorialModal = React.forwardRef<any, any>((props, ref) => {
     const history = useHistory();
 
     const showTour = () => {
-        history.push('/');
         setIsOpen(true);
         setShowModal(false);
+    }
+
+    const toggleSider = (toggled) => {
         if (isMobile) {
-            dispatch(siderActions.setIsToggled(true));
+            dispatch(siderActions.setIsToggled(toggled));
         }
     }
 
@@ -78,8 +80,19 @@ export const TutorialModal = React.forwardRef<any, any>((props, ref) => {
     }));
 
     React.useEffect(() => {
-        if (currentStep >= 1)
-            history.push(tourStepNavigation[currentStep]);
+        if (currentStep >= 1) {
+            if (currentStep == 1 && isMobile) {
+                history.push('/');
+            } else {
+                history.push(tourStepNavigation[currentStep]);
+            }
+
+            if (currentStep === 8 || currentStep == 0) { // notifications and search hide the sider.
+                toggleSider(false);
+            } else {
+                toggleSider(true);
+            }
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentStep]);
 
@@ -88,7 +101,8 @@ export const TutorialModal = React.forwardRef<any, any>((props, ref) => {
         //     !getUserAttribute(user, 'showed_tour') ||
         //     getUserAttribute(user, 'showed_tour') === 'false'
         // )) {
-        setShowModal(true);
+            history.push('/');
+            setShowModal(true);
         // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);

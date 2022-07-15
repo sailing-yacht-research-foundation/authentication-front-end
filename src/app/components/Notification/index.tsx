@@ -67,18 +67,18 @@ export const UserNotification = () => {
 
     return (
         <>
-            {isMobile ? (<NotificationButtonWrapperMobile className={TourStepClassName.NOTIFICATIONS} onClick={navigateToNotificationCenter}>
+            {isMobile ? (<NotificationButtonWrapperMobile onClick={navigateToNotificationCenter}>
                 <NotificationIconWrapper>
-                    <StyledNotificationButton />
+                    <StyledNotificationButton className={TourStepClassName.NOTIFICATIONS} />
                     {numberOfUnreadNotifications > 0 && <NumberOfNotifications>{numberOfUnreadNotifications}</NumberOfNotifications>}
                 </NotificationIconWrapper>
             </NotificationButtonWrapperMobile>) : (<NotificationButtonWrapper
-                placement="bottomCenter"
                 className={TourStepClassName.NOTIFICATIONS}
+                placement="bottomCenter"
                 trigger={['hover']}
                 icon={
                     <NotificationIconWrapper>
-                        <StyledNotificationButton />
+                        <StyledNotificationButton/>
                         {numberOfUnreadNotifications > 0 && <NumberOfNotifications>{numberOfUnreadNotifications}</NumberOfNotifications>}
                     </NotificationIconWrapper>
                 }

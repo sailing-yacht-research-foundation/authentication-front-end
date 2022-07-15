@@ -40,7 +40,7 @@ export const FormItemEndLocationAddress = ({ form, address, endAddress, handleEn
                                         placeholder: t(translations.profile_page.update_profile.search_places),
                                         className: 'location-search-input',
                                     })}
-                                    value={endAddress}
+                                    value={endAddress || ''}
                                     autoCorrect="off"
                                 />
                                 {suggestions.length > 0 && <StyledPLaceDropdown>

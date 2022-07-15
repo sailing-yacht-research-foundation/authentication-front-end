@@ -74,7 +74,6 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList, fo
                             style={{ position: 'relative' }}
                             renderExtraFooter={() => <NowButton onClick={setTimeToCurrentTimeOfTimezone} type='link'>Now</NowButton>}
                             className="syrf-datepicker"
-                            defaultOpenValue={moment('00:00:00', TIME_FORMAT.time)}
                         />
                     </Form.Item>
                 </Tooltip>

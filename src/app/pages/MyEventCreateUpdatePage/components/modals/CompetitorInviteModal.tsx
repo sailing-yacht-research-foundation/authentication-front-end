@@ -85,7 +85,7 @@ export const CompetitorInviteModal = (props) => {
     }
 
     const renderItemResults = () => {
-        return items.map(item => <Select.Option style={{ padding: '5px' }} value={JSON.stringify(item)}>
+        return items.map((item, index) => <Select.Option key={index} style={{ padding: '5px' }} value={JSON.stringify(item)}>
             <ItemAvatar onClick={(e) => navigateToProfile(e, item, history)} src={renderAvatar(item.avatar)} /> {item.name}
         </Select.Option>)
     }

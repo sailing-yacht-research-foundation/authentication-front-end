@@ -138,8 +138,8 @@ export const FilterPane = (props) => {
                     }}>
                     <div style={{ position: 'relative' }}>
                         <Form.Item
-                            label={t(translations.home_page.filter_tab.race_name)}
                             name="name"
+                            label={t(translations.home_page.filter_tab.race_name)}
                             rules={[{ required: true, message: t(translations.forms.search_keyword_is_required) }]}
                         >
                             <Input ref={searchInputRef}
@@ -235,7 +235,7 @@ export const FilterPane = (props) => {
                     </Form.Item>
                 </Form>
             </Spin>
-            {searchKeyword.length > 0 && <StyledLiveAndHappeningRaceButton onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</StyledLiveAndHappeningRaceButton> }
+            {searchKeyword.length > 0 && <StyledLiveAndHappeningRaceButton onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</StyledLiveAndHappeningRaceButton>}
         </Wrapper >
     )
 }

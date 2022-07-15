@@ -235,7 +235,7 @@ export const CompetitionUnitForm = () => {
     const setDefaultNameForRace = async () => {
         const response = await getAllCompetitionUnitsByEventIdWithSort(eventId, 1);
         const races = response.data?.rows;
-        
+
         if (response.success) {
             if (response.data.rows?.length > 0) {
                 form.setFieldsValue({
@@ -494,7 +494,6 @@ export const CompetitionUnitForm = () => {
                                             allowClear={false}
                                             className="syrf-datepicker"
                                             onChange={(val) => handleFieldChange('startTime', val)}
-                                            defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
                                         />
 
                                     </Form.Item>
