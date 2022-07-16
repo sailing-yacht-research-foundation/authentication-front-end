@@ -10,6 +10,8 @@ import { PeopleYouMayKnowModal } from './PeopleYouMayKnowModal';
 import { usePublicProfileSlice } from 'app/pages/PublicProfilePage/slice';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { localesList } from 'utils/languages-util';
+import { FollowerType } from 'utils/constants';
 
 export const PeopleYouMayKnow = () => {
 
@@ -31,6 +33,8 @@ export const PeopleYouMayKnow = () => {
 
     const { actions } = usePublicProfileSlice();
 
+    const userCountry = localesList[user?.country?.toUpperCase()];
+
     const getRecommandedProfiles = async () => {
         const response = await getTopRecommandation({ locale: getUserAttribute(user, 'locale'), page: 1, size: 4 });
 
@@ -51,7 +55,7 @@ export const PeopleYouMayKnow = () => {
 
     const renderInfluencers = () => {
         return influencers.map(profile => {
-            return <UserFollowerFollowingRow key={profile.id} profile={profile} profileId={profile.id} />
+            return <UserFollowerFollowingRow type={FollowerType.INFLUENCER} key={profile.id} profile={profile} profileId={profile.id} />
         });
     }
 
@@ -83,7 +87,7 @@ export const PeopleYouMayKnow = () => {
             {recommendations.length > 0 &&
                 <>
                     <TitleWrapper>
-                        <Title>{t(translations.public_profile.people_you_may_know)}</Title>
+                        <Title>{t(translations.public_profile.most_popular_accounts_in_country, { country: userCountry })}</Title>
                         <SeeMore onClick={() => setShowPeopleYouMayKnowModal(true)}>{t(translations.public_profile.see_more)}</SeeMore>
                     </TitleWrapper>
                     <PeopleList>
@@ -95,7 +99,7 @@ export const PeopleYouMayKnow = () => {
             {influencers.length > 0 &&
                 <>
                     <TitleWrapper>
-                        <Title>{t(translations.public_profile.top_influencers)}</Title>
+                        <Title>{t(translations.public_profile.trending_accounts_in_country, { country: userCountry })}</Title>
                         <SeeMore onClick={() => setShowInfluencerModal(true)}>{t(translations.public_profile.see_more)}</SeeMore>
                     </TitleWrapper>
                     <PeopleList>

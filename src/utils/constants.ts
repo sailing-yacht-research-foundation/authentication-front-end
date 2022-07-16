@@ -320,3 +320,8 @@ export enum GeometrySide {
     PORT = 'port',
     STARBOARD = 'starboard'
 }
+
+export enum FollowerType {
+    INFLUENCER = 'INFLUENCER',
+    TOTAL = 'TOTAL'
+}
