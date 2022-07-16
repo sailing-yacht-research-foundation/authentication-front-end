@@ -156,7 +156,10 @@ const AboutLink = styled(LinkStyled)`
 `;
 
 const StyledButtonCreate = styled(Button)`
+  display: none;
+  ${media.medium`
     display: block;
     margin: 0 15px;
     margin-top: 13px;
+  `};
 `;
