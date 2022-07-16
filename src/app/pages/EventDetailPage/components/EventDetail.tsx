@@ -278,11 +278,11 @@ export const EventDetail = () => {
             {event.id &&
                 <>
                     <EventSection>
-                        <EventAnnouncement ref={announcementRef} event={event} />
+                        <EventAdmins event={event} />
                     </EventSection>
 
                     <EventSection>
-                        <EventAdmins event={event} />
+                        <EventAnnouncement ref={announcementRef} event={event} />
                     </EventSection>
 
                     <EventSection>
@@ -317,7 +317,7 @@ const EventHoldBy = styled.div`
 `;
 
 const EventHost = styled.a`
-    
+
 `;
 
 const EventHeaderInfoContainer = styled.div`
