@@ -105,7 +105,7 @@ export const ArbitraryDocumentUploadForm = ({ event, showModal, setShowModal, re
                                                     },
                                                 })]}
                                             >
-                                                <SyrfInputField />
+                                                <SyrfInputField autoComplete='off' autoCorrect='off' />
                                             </Form.Item>
 
                                             <Form.Item

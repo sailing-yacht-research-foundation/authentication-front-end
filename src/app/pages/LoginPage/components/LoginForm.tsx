@@ -79,6 +79,7 @@ export const LoginForm = (props) => {
           <Form
             {...layout}
             name="basic"
+            autoComplete='off'
             initialValues={{
               remember: true,
               email: '',
@@ -259,7 +260,7 @@ const SyrfSignupButton = styled(Button)`
     background: #DB6E1E;
     color: #fff;
     border-color: #DB6E1E;
-  } 
+  }
 `;
 
 const StyledLogo = styled(Logo)`

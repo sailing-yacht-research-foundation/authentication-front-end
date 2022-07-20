@@ -191,7 +191,7 @@ export const GroupForm = () => {
                                     { max: 100, message: t(translations.forms.group_name_must_not_be_longer_than_100_chars) }
                                 ]}
                             >
-                                <SyrfInputField autoCorrect="off" />
+                                <SyrfInputField autoComplete='off' autoCorrect="off" />
                             </Form.Item>
                         </Tooltip>
 
@@ -202,7 +202,7 @@ export const GroupForm = () => {
                                 name="description"
                                 data-multiline={true}
                             >
-                                <SyrfTextArea autoCorrect="off" />
+                                <SyrfTextArea autoCorrect="off" autoComplete='off' />
                             </Form.Item>
                         </Tooltip>
 

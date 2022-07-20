@@ -209,6 +209,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                         name="emails"
                     >
                         <SyrfInputField
+                            autoComplete='off'
                             autoCorrect="off"
                             placeholder={t(translations.group.please_input_emails_by_using_commas)}
                         />

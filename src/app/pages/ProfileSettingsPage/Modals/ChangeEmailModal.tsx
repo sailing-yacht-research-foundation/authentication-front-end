@@ -95,7 +95,7 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
                                 type: 'email', message: t(translations.forms.email_must_be_valid)
                             }]}
                         >
-                            <SyrfInputField autoCapitalize="none" autoComplete="off" />
+                            <SyrfInputField autoCapitalize="none" autoComplete="off" autoCorrect="off" />
                         </Form.Item>
                     </Tooltip>
 
@@ -121,7 +121,7 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
                                     type: 'email', message: t(translations.forms.email_must_be_valid)
                                 }]}
                         >
-                            <SyrfInputField autoCapitalize="none" autoComplete="off" />
+                            <SyrfInputField autoCapitalize="none" autoComplete="off" autoCorrect="off" />
                         </Form.Item>
                     </Tooltip>
 

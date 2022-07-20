@@ -623,6 +623,7 @@ export const MapView = React.forwardRef((props, ref) => {
                     >
                         <SyrfInputField
                             autoCorrect="off"
+                            autoComplete='off'
                             placeholder={t(translations.course_create_update_page.input_a_name_for_this_course)}
                         />
                     </Form.Item>
@@ -656,6 +657,7 @@ export const MapView = React.forwardRef((props, ref) => {
                     >
                         <SyrfInputField
                             autoCorrect="off"
+                            autoComplete='off'
                             placeholder={t(translations.course_create_update_page.input_a_name_for_this_geometry)}
                         />
                     </Form.Item>

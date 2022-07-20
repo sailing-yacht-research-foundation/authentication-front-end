@@ -77,7 +77,7 @@ export const VesselFormFields = (props) => {
                 rules={[{ required: true, message: t(translations.forms.boat_name_is_required) },
                 { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
             >
-                <SyrfInputField autoCorrect="off" />
+                <SyrfInputField autoCorrect="off" autoComplete='off' />
             </Form.Item>
 
 
@@ -98,7 +98,7 @@ export const VesselFormFields = (props) => {
                             },
                         }), { required: true, message: t(translations.vessel_create_update_page.length_in_meters_is_required) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoCorrect="off" autoComplete='off' />
                     </Form.Item>
                 </Col>
 
@@ -108,7 +108,7 @@ export const VesselFormFields = (props) => {
                         name="model"
                         rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoCorrect="off" autoComplete='off' />
                     </Form.Item>
                 </Col>
 
@@ -131,7 +131,7 @@ export const VesselFormFields = (props) => {
                         name="sailNumber"
                         rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoCorrect="off" autoComplete='off' />
                     </Form.Item>
                 </Col>
 
@@ -141,7 +141,7 @@ export const VesselFormFields = (props) => {
                         name="hullNumber"
                         rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoCorrect="off" autoComplete='off' />
                     </Form.Item>
                 </Col>
 
@@ -151,7 +151,7 @@ export const VesselFormFields = (props) => {
                         name="callSign"
                         rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoCorrect="off" autoComplete='off' />
                     </Form.Item>
                 </Col>
             </Row>
@@ -163,7 +163,7 @@ export const VesselFormFields = (props) => {
                         name="hullColorAboveWaterline"
                         rules={[{ max: 15, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 }) }]}
                     >
-                        <SyrfInputField autoCorrect="off" />
+                        <SyrfInputField autoCorrect="off" autoComplete='off' />
                     </Form.Item>
 
                 </Col>
@@ -316,7 +316,7 @@ export const VesselFormFields = (props) => {
                             valuePropName="fileList"
                             getValueFromEvent={normFile}
                         >
-                            <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
+                            <SyrfInputField type={'file'} accept="image/png, image/jpeg" />
                         </Form.Item>
                     </Tooltip>
                 </Col>
@@ -329,7 +329,7 @@ export const VesselFormFields = (props) => {
                             valuePropName="fileList"
                             getValueFromEvent={normFile}
                         >
-                            <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
+                            <SyrfInputField type={'file'} accept="image/png, image/jpeg" />
                         </Form.Item>
                     </Tooltip>
                 </Col>
@@ -342,7 +342,7 @@ export const VesselFormFields = (props) => {
                             valuePropName="fileList"
                             getValueFromEvent={normFile}
                         >
-                            <SyrfInputField autoComplete="off" type={'file'} accept="image/png, image/jpeg" />
+                            <SyrfInputField type={'file'} accept="image/png, image/jpeg" />
                         </Form.Item>
                     </Tooltip>
                 </Col>

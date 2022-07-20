@@ -159,7 +159,7 @@ export const ParticipantForm = () => {
                                     { max: 50, message: t(translations.forms.competitor_name_must_not_longer_than_50_character) }
                                 ]}
                             >
-                                <SyrfInputField autoCorrect="off" />
+                                <SyrfInputField autoComplete='off' autoCorrect="off" />
                             </Form.Item>
                         </Tooltip>
 

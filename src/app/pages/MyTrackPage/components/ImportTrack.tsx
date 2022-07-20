@@ -125,7 +125,7 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
                         max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 })
                     }]}
                 >
-                    <SyrfInputField />
+                    <SyrfInputField autoComplete='off' autoCorrect='off' />
                 </Form.Item>;
             case radioValue.USE_DEFAULT_BOATS:
                 return <Form.Item
@@ -163,7 +163,7 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
                             max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 })
                         }]}
                     >
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete='off' autoCorrect='off' />
                     </Form.Item>
 
                     <Form.Item

@@ -25,7 +25,7 @@ export const VerifyEmailModal = (props: IVerifyEmailModal) => {
         verifyCode
     } = props;
 
-    const [isVerifying, setIsVerifying] = React.useState<boolean>(false); 
+    const [isVerifying, setIsVerifying] = React.useState<boolean>(false);
 
     const [verifyForm] = Form.useForm();
 
@@ -68,6 +68,8 @@ export const VerifyEmailModal = (props: IVerifyEmailModal) => {
                     <SyrfInputField
                         placeholder={t(translations.general.enter_the_code_you_received)}
                         type="number"
+                        autoComplete='off'
+                        autoCorrect='off'
                     />
                 </Form.Item>
             </Form>

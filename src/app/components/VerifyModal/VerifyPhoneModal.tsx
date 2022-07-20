@@ -61,6 +61,8 @@ export const VerifyPhoneModal = (props) => {
                     <SyrfInputField
                         placeholder={t(translations.general.enter_the_code_you_received)}
                         type="number"
+                        autoComplete='off'
+                        autoCorrect='off'
                     />
                 </Form.Item>
             </Form>

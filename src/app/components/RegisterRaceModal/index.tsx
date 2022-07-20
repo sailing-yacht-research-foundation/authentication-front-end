@@ -123,7 +123,7 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_list_page.sail_number)}</SyrfFieldLabel>}
                         name="sailNumber">
-                        <SyrfInputField />
+                        <SyrfInputField autoComplete='off' autoCorrect='off' />
                     </Form.Item>
                 </div>
 
