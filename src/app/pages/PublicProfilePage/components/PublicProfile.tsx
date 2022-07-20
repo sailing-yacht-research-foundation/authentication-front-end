@@ -149,7 +149,7 @@ export const PublicProfile = () => {
                 {interests.length > 0 && <SectionWrapper>
                     <SectionTitle>{t(translations.public_profile.interests)}</SectionTitle>
                     <InterestWrapper>
-                        {interests.map(interest => <Interest>
+                        {interests.map((interest, index) => <Interest key={index}>
                             {EventTypes.CRUISING === interest ? <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.png`} />
                                 : <ItemAvatar src={`/sport-logos/${String(interest).toLowerCase()}.svg`} />} {interest.toLowerCase()}</Interest>)}
                     </InterestWrapper>
@@ -159,8 +159,8 @@ export const PublicProfile = () => {
                     <SectionWrapper>
                         <SectionTitle>{t(translations.public_profile.groups_and_organizations)}</SectionTitle>
                         <Avatar.Group>
-                            {profile.groups?.map(group => {
-                                return <Tooltip title={group.group?.groupName} placement="top">
+                            {profile.groups?.map((group, index) => {
+                                return <Tooltip title={group.group?.groupName} key={index} placement="top">
                                     <Link to={`/groups/${group.group?.id}`}>
                                         <Avatar src={group.group?.groupImage || DEFAULT_GROUP_AVATAR} />
                                     </Link>

@@ -44,9 +44,9 @@ export const Leaderboard = ({ participantsData = [], emitter }) => {
                 {!participantsData.length && <div style={{ marginTop: "8px", color: "#AAAAAA" }}>{t(translations.playback_page.no_participant)}</div>}
                 {!!participantsData.length && (
                     <div>
-                        {sortedParticipantsByLeaderboard.map((participant: any) => {
+                        {sortedParticipantsByLeaderboard.map((participant: any, index) => {
                             return (
-                                <Tooltip title={t(translations.tip.click_to_move_to_participant_name, { participantName: participant?.participant?.competitor_name })}>
+                                <Tooltip key={index} title={t(translations.tip.click_to_move_to_participant_name, { participantName: participant?.participant?.competitor_name })}>
                                     <div onClick={() => zoomToParticipant(participant)} key={participant.id} style={{ margin: "8px 0px", cursor: 'pointer' }}>
                                         <div style={{ borderBottom: `2px solid ${participant?.color}` }}>
                                             <p style={{ marginBottom: "0px" }}>

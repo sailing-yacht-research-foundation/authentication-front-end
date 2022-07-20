@@ -174,4 +174,4 @@ const StyledRow = styled(Row)`
 const FooterDeveloperBenefitList = styled.ul`
     margin-top: 15px;
     text-align: left;
-`; 
+`;

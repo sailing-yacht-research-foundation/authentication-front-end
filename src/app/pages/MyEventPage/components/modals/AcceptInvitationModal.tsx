@@ -113,7 +113,7 @@ export const AcceptInvitationModal = (props) => {
                 onFinish={onFinish}
                 style={{ width: '100%' }}
             >
-        
+
                 <div style={{ display: boats.length > 1 ? 'block' : 'none' }}>
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_boat)}</SyrfFieldLabel>}

@@ -1,46 +1,50 @@
+export enum TourStepClassName {
+    SEARCH = 'search-step',
+    CREATE_EVENT_BUTTON = 'create-event-button',
+    TRACKS_PAGE = 'my-track-page',
+    MY_EVENTS_PAGE = 'my-events-page',
+    GROUPS_PAGE = 'groups-page',
+    BOATS_PAGE = 'boats-page',
+    DISCOVER_FRIENDS_PAGE = 'discover-friends-page',
+    MY_ACCOUNT_PAGE = 'my-account-page',
+    NOTIFICATIONS =  'notifications-icon'
+}
+
 export const steps = [
     {
-        selector: '.search-step',
-        content: 'Here you can search for races in the past or races will happen, or people\'s races'
+        selector: `.${TourStepClassName.SEARCH}`,
+        content: 'Find races and events in the discovery area.'
     },
     {
-        selector: '.select-list-view-tap-step',
-        content: 'List view is for searching detailed retults'
+        selector: `.${TourStepClassName.CREATE_EVENT_BUTTON}`,
+        content: 'Create a new event at any time by clicking this button.',
     },
     {
-        selector: '.select-map-view-tap-step',
-        content: 'Map view is for getting intuitive results'
+        selector: `.${TourStepClassName.TRACKS_PAGE}`,
+        content: 'Re-watch all of your LivePing tracks here.'
     },
     {
-        selector: '.event-step',
-        content: 'Event is for hosting races, click create button here to create a new event.',
+        selector: `.${TourStepClassName.MY_EVENTS_PAGE}`,
+        content: 'Quickly find your events in the My Events section.'
     },
     {
-        selector: '.event-name-step',
-        content: 'Event name is the name you want for an event, for example: 2021 mid summer Italy race event',
+        selector: `.${TourStepClassName.GROUPS_PAGE}`,
+        content: 'Use groups to conveniently manage invitations and permissions, or collect payment for your organization.'
     },
     {
-        selector: '.event-description-step',
-        content: 'Event description is the description about the event.',
+        selector: `.${TourStepClassName.BOATS_PAGE}`,
+        content: 'Enter your boat details once so you never have to do it again.'
     },
     {
-        selector: '.event-location-step',
-        content: 'Click on the map or write something down to select a location the event is held.',
+        selector: `.${TourStepClassName.DISCOVER_FRIENDS_PAGE}`,
+        content: 'Find the people you sail with.'
     },
     {
-        selector: '.event-start-date-step',
-        content: 'Start date is the day the event happens',
+        selector: `.${TourStepClassName.MY_ACCOUNT_PAGE}`,
+        content: 'Manage your account and profile settings.'
     },
     {
-        selector: '.event-start-time-step',
-        content: 'Start time is the time the event happens',
-    },
-    {
-        selector: '.event-time-zone-step',
-        content: 'Time zone is where the timezone event will be held',
-    },
-    {
-        selector: '.event-external-website-step',
-        content: 'You may need to add a event website for people to get more details, once eveything is done, click save button to create your first event.',
+        selector: `.${TourStepClassName.NOTIFICATIONS}`,
+        content: 'View or clear recent notifications.'
     }
 ]

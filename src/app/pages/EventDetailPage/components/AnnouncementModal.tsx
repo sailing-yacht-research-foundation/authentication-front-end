@@ -75,7 +75,7 @@ export const AnnouncementModal = ({ event, showModal, setShowModal, reloadParent
     }
 
     const renderParticipantsList = () => {
-        return participants.map(item => <Select.Option style={{ padding: '5px' }} value={item.id}>
+        return participants.map((item, index) => <Select.Option key={index} style={{ padding: '5px' }} value={item.id}>
             <ItemAvatar onClick={(e) => navigateToProfile(e, item, history)} src={renderAvatar(item.profile?.avatar)} /> {item.publicName}
         </Select.Option>)
     }

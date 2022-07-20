@@ -34,7 +34,7 @@ export const FollowRequestModal = () => {
 
     const renderFollowRequests = () => {
         if (pagination.rows.length > 0)
-            return pagination.rows.map(request => <RequestItem key={request.id} hideModal={hideRequestModal} reloadParentList={reload} request={request} />);
+            return pagination.rows.map((request) => <RequestItem key={request.id} hideModal={hideRequestModal} reloadParentList={reload} request={request} />);
         return <span>{t(translations.public_profile.you_dont_have_any_follow_requests)}</span>
     }
 

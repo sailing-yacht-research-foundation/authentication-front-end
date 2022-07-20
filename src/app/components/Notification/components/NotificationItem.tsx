@@ -170,6 +170,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
             case NotificationTypes.OPEN_EVENT_NEARBY_CREATED:
             case NotificationTypes.EVENT_INACTIVITY_WARNING:
             case NotificationTypes.EVENT_MESSAGES_RECEIVED:
+            case NotificationTypes.NEW_EVENT_DOCUMENT_UPLOADED:
                 return Event;
             case NotificationTypes.SIMULATION_DELETION:
                 return Sail;
@@ -296,7 +297,7 @@ const NotificationItemDetail = styled.div`
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: pre-wrap;
-    word-wrap: break-word; 
+    word-wrap: break-word;
 `;
 
 const NotificationItemTime = styled.span`
