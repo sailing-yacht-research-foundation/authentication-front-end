@@ -54,10 +54,11 @@ export const searchForProfiles = (keyword: string, locale: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/search?name=${keyword}&locale=${locale}`))
 }
 
-export const getRequestedFollowRequests = (page: number) => {
+export const getRequestedFollowRequests = (page: number, size: number = 10) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/follower/?status=REQUESTED`, {
         params: {
-            page: page
+            page,
+            size
         }
     }))
 }
