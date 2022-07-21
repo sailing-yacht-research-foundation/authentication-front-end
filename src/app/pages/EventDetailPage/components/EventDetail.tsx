@@ -30,6 +30,7 @@ import { ConfirmModal } from 'app/components/ConfirmModal';
 import { deleteParticipant } from 'services/live-data-server/participants';
 import { InformationNotShared } from './InformationNotSharedMessage';
 import { EventAnnouncement } from './EventAnnouncement';
+import { ParticipantList } from 'app/pages/MyEventCreateUpdatePage/components/ParticipantList';
 
 export const EventDetail = () => {
 
@@ -295,6 +296,10 @@ export const EventDetail = () => {
 
                     <EventSection>
                         <VesselList event={event} />
+                    </EventSection>
+
+                    <EventSection>
+                        <ParticipantList eventId={eventId} event={event} canManageEvent={canManageEvent} />
                     </EventSection>
 
                     <PDFUploadForm reloadParent={fetchEvent} fullWidth event={event} />
