@@ -213,7 +213,7 @@ export const ParticipantDetailList = (props) => {
     const renderPrivateImageIfExists = (record, imageSource) => {
         return imageSource
             ? <Image width={100} height={100} src={`data:image/jpeg;base64,${imageSource}`} />
-            : !record.allowShareInformation ? t(translations.participant_list.not_shared) : t(translations.misc.not_available)
+            : !record.allowShareInformation ? t(translations.participant_list.not_shared) : t(translations.misc.not_set)
     }
 
     React.useEffect(() => {
