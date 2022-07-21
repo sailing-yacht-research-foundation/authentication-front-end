@@ -36,7 +36,7 @@ export const RequestedModal = (props) => {
 
     const renderInvitationItem = () => {
         if (requested.length > 0)
-            return requested.map(request => <GroupInvitationItemRow hideButtons key={request.id} setIsLoading={setIsLoading} request={request} />);
+            return requested.map((request) => <GroupInvitationItemRow hideButtons key={request.id} setIsLoading={setIsLoading} request={request} />);
         return <EmptyInvitationMessage>{t(translations.group.you_have_not_requested_to_join_any_groups)}</EmptyInvitationMessage>
     }
 

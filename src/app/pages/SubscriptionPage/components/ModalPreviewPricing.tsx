@@ -66,8 +66,8 @@ export const ModalPreviewPricing = (props: IModalPreviewPricing) => {
             visible={showModal}>
             <Spin spinning={isLoading}>
                 <PricingItemWrapper>
-                    {pricingDetail.items?.map(item => <>
-                        <PricingItem>
+                    {pricingDetail.items?.map((item, index) => <>
+                        <PricingItem key={index}>
                             <PricingItemTitle>{item.description}</PricingItemTitle>
                             <PricingItemPrice>${item.amount}</PricingItemPrice>
                         </PricingItem>

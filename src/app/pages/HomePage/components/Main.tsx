@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { FiMap } from 'react-icons/fi';
 import { BsListUl, BsSearch } from 'react-icons/bs';
-import { isMobile, screenWidthIsGreaterThan1024 } from 'utils/helpers';
+import {  screenWidthIsGreaterThan1024 } from 'utils/helpers';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { translations } from 'locales/translations';
@@ -17,6 +17,7 @@ import { selectFromDate, selectSearchKeyword, selectShowAdvancedSearch, selectSo
 import { media } from 'styles/media';
 import { FilterPane } from './FilterPane';
 import { StyleConstants } from 'styles/StyleConstants';
+import { TourStepClassName } from 'utils/tour-steps';
 
 const { TabPane } = Tabs;
 
@@ -115,17 +116,18 @@ export const Main = () => {
                 onChange={onTabChanged}
                 animated
                 defaultActiveKey={getDefaultActiveTabs()}>
-                <TabPane tab={<BsListUl className="select-list-view-tap-step" />} key="2">
+                <TabPane tab={<BsListUl/>} key="2">
                     <FilterTab onPaginationPageChanged={onPaginationPageChanged} />
                 </TabPane>
-                <TabPane tab={<FiMap className="select-map-view-tap-step"/>} key="1">
+                <TabPane tab={<FiMap/>} key="1">
                     <MapViewTab onPaginationPageChanged={onPaginationPageChanged} />
                 </TabPane>
                 {
-                    (isMobile() && isAuthenticated) && <ButtonCreateContainer>
+                    (isAuthenticated) && <ButtonCreateContainer>
                         <Button
                             shape="round"
                             size={'large'}
+                            className={TourStepClassName.CREATE_EVENT_BUTTON}
                             onClick={() => history.push("/events/create")}
                             icon={<AiFillPlusCircle
                                 style={{ marginRight: '5px' }}
@@ -137,7 +139,7 @@ export const Main = () => {
                 }
             </StyledTabs>
             {(showAdvancedSearch || screenWidthIsGreaterThan1024()) && <FilterPane defaultFocus close={() => dispatch(actions.setShowAdvancedSearch(false))} />}
-            <ToggleFilterPane onClick={() => {
+            <ToggleFilterPane className={TourStepClassName.SEARCH} onClick={() => {
                 dispatch(actions.setShowAdvancedSearch(true));
                 window.scroll(0, 0);
             }} >
@@ -172,6 +174,11 @@ const ButtonCreateContainer = styled.div`
     position: absolute;
     right: 20px;
     top: 10px;
+    display: block;
+
+    ${media.medium`
+        display:none;
+    `}
 `;
 
 const ToggleFilterPane = styled.div`

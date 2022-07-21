@@ -565,16 +565,16 @@ export const MapView = React.forwardRef((props, ref) => {
     const renderDrawModeNamePicker = () => {
         switch (drawMode) {
             case LAYER_TYPE.polygon:
-                return defaultPolygonNames.map(name => {
-                    return <Tag onClick={() => onNamePicked(name)}>{name}</Tag>
+                return defaultPolygonNames.map((name, index) => {
+                    return <Tag key={index} onClick={() => onNamePicked(name)}>{name}</Tag>
                 });
             case LAYER_TYPE.polyline:
-                return defaultPolylineNames.map(name => {
-                    return <Tag onClick={() => onNamePicked(name)}>{name}</Tag>
+                return defaultPolylineNames.map((name, index) => {
+                    return <Tag key={index} onClick={() => onNamePicked(name)}>{name}</Tag>
                 });
             case LAYER_TYPE.marker:
-                return defaultMarkerNames.map(name => {
-                    return <Tag onClick={() => onNamePicked(name)}>{name}</Tag>
+                return defaultMarkerNames.map((name, index) => {
+                    return <Tag key={index} onClick={() => onNamePicked(name)}>{name}</Tag>
                 });
         }
     }

@@ -22,7 +22,6 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import tzLookup from 'tz-lookup';
-import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/modals/AssignEventAsGroupAdminModal';
 import { ActionButtons } from './ActionButtons';
 import { EventChildLists } from './EventChildLists';
 import { FormItemEventNameDescription } from './FormItemEventNameDescription';
@@ -58,7 +57,6 @@ export const MyEventForm = () => {
 
     const [isSavingEvent, setIsSavingEvent] = React.useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-    const [showAssignModal, setShowAssignModal] = React.useState<boolean>(false);
     const [mode, setMode] = React.useState<string>('');
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
@@ -521,7 +519,6 @@ export const MyEventForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <ImportEventDataModal calendarEventId={event.id} showModal={showImportEventModal} setShowModal={setShowImportEventModal} />
-            <AssignEventAsGroupAdminModal showModal={showAssignModal} event={event} setShowModal={setShowAssignModal} />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => history.push("/events")}>

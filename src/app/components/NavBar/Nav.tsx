@@ -20,6 +20,8 @@ import { UserNotification } from '../Notification';
 import { FollowRequestModal } from '../SocialProfile/FollowRequestModal';
 import { unregisterPushSubscription } from 'utils/helpers';
 import { useMyEventListSlice } from 'app/pages/MyEventPage/slice';
+import { TourStepClassName } from 'utils/tour-steps';
+import { isMobile } from 'react-device-detect';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -76,14 +78,14 @@ export const Nav = () => {
           <FollowRequestModal />
           {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
           <Tooltip title={t(translations.tip.host_a_new_event_with_races)}>
-            <StyledButtonCreate
+            {!isMobile && <StyledButtonCreate
               type="primary"
               shape="round"
               size="large"
-              className="event-step"
+              className={TourStepClassName.CREATE_EVENT_BUTTON}
               onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
                 style={{ marginRight: '5px' }}
-                size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>
+                size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>}
           </Tooltip>
           <DropDownWrapper>
             <UserDropdown logout={logout} />
@@ -159,5 +161,5 @@ const StyledButtonCreate = styled(Button)`
     display: block;
     margin: 0 15px;
     margin-top: 13px;
-  `}
+  `};
 `;

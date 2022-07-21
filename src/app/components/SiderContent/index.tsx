@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectPagination } from '../SocialProfile/slice/selector';
 import { useSocialSlice } from '../SocialProfile/slice';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { TourStepClassName } from 'utils/tour-steps';
 
 interface Route {
   key: number,
@@ -35,6 +36,7 @@ interface Route {
   subMenuKey?: string,
   exactPath?: string,
   itemCount?: number;
+  className?: string,
 }
 
 const routeKey = {
@@ -78,18 +80,21 @@ export const SiderContent = (props) => {
       title: t(translations.side_menu.my_tracks),
       path: '/tracks',
       icon: <GiPathDistance />,
+      className: TourStepClassName.TRACKS_PAGE
     },
     {
       key: routeKey.EVENTS,
       path: '/events',
       title: t(translations.side_menu.my_events),
       icon: <CalendarOutlined />,
+      className: TourStepClassName.MY_EVENTS_PAGE
     },
     {
       key: routeKey.GROUPS,
       path: '/groups',
       title: t(translations.side_menu.groups),
       icon: <MdGroups />,
+      className: TourStepClassName.GROUPS_PAGE
 
     },
     {
@@ -97,7 +102,7 @@ export const SiderContent = (props) => {
       path: '/boats',
       title: t(translations.side_menu.vessels),
       icon: <GiSailboat />,
-
+      className: TourStepClassName.BOATS_PAGE
     },
     {
       key: routeKey.DISCOVER_FRIENDS,
@@ -105,13 +110,14 @@ export const SiderContent = (props) => {
       path: '/profile/:id',
       title: t(translations.side_menu.profile.discover_friends),
       icon: <FaUserFriends />,
-      itemCount: followRequestsPagination.total
+      itemCount: followRequestsPagination.total,
+      className: TourStepClassName.DISCOVER_FRIENDS_PAGE
     },
     {
       key: routeKey.DATA,
       path: '/data',
       title: t(translations.side_menu.data),
-      icon: <GoDatabase />,
+      icon: <GoDatabase />
 
     },
     {
@@ -119,6 +125,7 @@ export const SiderContent = (props) => {
       subMenuKey: 'account',
       title: t(translations.side_menu.profile.name),
       icon: <UserOutlined />,
+      className: TourStepClassName.MY_ACCOUNT_PAGE,
       items: [
         {
           key: routeKey.ACCOUNT,
@@ -238,13 +245,13 @@ export const SiderContent = (props) => {
 
         {items.map(route => {
           if (route.path) {
-            return <SyrfMenuItem title={route.title} key={route.key} icon={route.icon}>
+            return <SyrfMenuItem className={route.className} title={route.title} key={route.key} icon={route.icon}>
               <StyledLink to={route.exactPath || route.path}>{route.title}</StyledLink>
               {route.itemCount !== undefined && Number(route.itemCount) > 0 && <Badge>{route.itemCount}</Badge>}
             </SyrfMenuItem>;
           }
 
-          return <SyrfSubmenu key={route.subMenuKey} icon={route.icon} title={route.title}>
+          return <SyrfSubmenu className={route.className} key={route.subMenuKey} icon={route.icon} title={route.title}>
             {route.items.map(subRoute => {
               return <SyrfMenuItem title={subRoute.title} key={subRoute.key} icon={subRoute.icon}>
                 <StyledLink to={subRoute.path}>{subRoute.title}</StyledLink>

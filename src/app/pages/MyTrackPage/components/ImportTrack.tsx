@@ -88,7 +88,7 @@ export const ImportTrack = ({ onTrackImported, showModal, setShowModal, type }: 
     }
 
     const renderBoatsList = () => {
-        return boats.map(item => <Select.Option value={item.id}>{item.publicName}</Select.Option>)
+        return boats.map((item, index) => <Select.Option key={index} value={item.id}>{item.publicName}</Select.Option>)
     }
 
     const selectDefaultBoat = (boats) => {
