@@ -1,6 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import { useInjectReducer } from 'utils/redux-injectors';
+import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
+import socialSaga from './saga';
 import { SocialProfileState } from './types';
 
 export const initialState: SocialProfileState = {
@@ -32,5 +33,6 @@ export const { actions: socialActions, reducer } = slice;
 
 export const useSocialSlice = () => {
     useInjectReducer({ key: slice.name, reducer: slice.reducer });
+    useInjectSaga({ key: slice.name, saga: socialSaga });
     return { actions: slice.actions };
 };

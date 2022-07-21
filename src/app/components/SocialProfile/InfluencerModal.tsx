@@ -73,13 +73,13 @@ export const InfluencerModal = ({ showModal, setShowModal, reloadParentList }: I
     }, [location]);
 
     React.useEffect(() => {
-        if (user)
+        if (user && showModal)
             getInfluencers(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [user, showModal]);
 
     return (
-        <Modal visible={showModal} title={t(translations.public_profile.trending_accounts_in_country, { country: userCountry })} footer={null} onCancel={hideModal}>
+        <Modal visible={showModal} title={t(translations.public_profile.trending_accounts_in_country, { country: userCountry || '' })} footer={null} onCancel={hideModal}>
             <Spin spinning={isLoading}>
                 {renderProfiles()}
                 {

@@ -210,6 +210,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
             case NotificationTypes.EVENT_INACTIVITY_WARNING:
             case NotificationTypes.EVENT_MESSAGES_RECEIVED:
             case NotificationTypes.NEW_EVENT_DOCUMENT_UPLOADED:
+            case NotificationTypes.NEW_EVENT_WAIVER_UPLOADED:
                 history.push(`/events/${notification.metadata?.calendarEventId}`);
                 break;
             case NotificationTypes.USER_NEW_FOLLOWER:
@@ -296,7 +297,7 @@ const NotificationItemDetail = styled.div`
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: pre-wrap;
-    word-wrap: break-word; 
+    word-wrap: break-word;
 `;
 
 const NotificationItemTime = styled.span`

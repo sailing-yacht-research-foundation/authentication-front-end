@@ -76,13 +76,13 @@ export const PeopleYouMayKnowModal = (props: IPeopleYouMayKnowModal) => {
     }, [location]);
 
     React.useEffect(() => {
-        if (user)
+        if (user && showModal)
             getPeopleYouMayKnow(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [user, showModal]);
 
     return (
-        <Modal visible={showModal} title={t(translations.public_profile.most_popular_accounts_in_country, { country: userCountry })} footer={null} onCancel={hideModal}>
+        <Modal visible={showModal} title={t(translations.public_profile.most_popular_accounts_in_country, { country: userCountry || '' })} footer={null} onCancel={hideModal}>
             <Spin spinning={isLoading}>
                 {renderProfiles()}
                 {
