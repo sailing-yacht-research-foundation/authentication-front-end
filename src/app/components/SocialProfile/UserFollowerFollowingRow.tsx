@@ -76,7 +76,7 @@ export const UserFollowerFollowingRow = (props) => {
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id || profileId}`}>{profile.name}</PeopleName>
-                    {(profile.followerCount || profile.followerGained) && <PeopleAlsoFollow>{t(type === FollowerType.INFLUENCER ? translations.public_profile.followers_last_24h : translations.public_profile.number_followers, { numberOfFollowers: profile.followerCount || profile.followerGained })}</PeopleAlsoFollow>}
+                    {(profile.followerCount || profile.followerGained) && <PeopleAlsoFollow>{t(type === FollowerType.INFLUENCER ? translations.public_profile.trending_followers_text : translations.public_profile.number_followers, { numberOfFollowers: profile.followerCount || profile.followerGained })}</PeopleAlsoFollow>}
                 </PeopleInfo>
             </PeopleInnerWrapper>
             <FollowButtonOuter>
