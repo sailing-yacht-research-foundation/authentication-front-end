@@ -48,7 +48,7 @@ export const FollowRequestModal = () => {
             <Spin spinning={isLoading}>
                 {renderFollowRequests()}
                 {pagination.total > DEFAULT_PAGE_SIZE && <PaginationContainer>
-                    <Pagination current={pagination.page} total={pagination.total} pageSize={pagination.pageSize} onChange={(page, pageSize) => getFollowRequests(page, pageSize)} />
+                    <Pagination current={pagination.page} total={pagination.total} pageSize={pagination.size} onChange={(page, pageSize) => getFollowRequests(page, pageSize)} />
                 </PaginationContainer>}
             </Spin>
         </Modal>
