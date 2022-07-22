@@ -538,6 +538,10 @@ export const truncateName = (text, size = 50) => {
     return text.length > size ? `${text.substring(0, size)}...` : text;
 }
 
+export const truncateText = (text, size = 50) => {
+    return text && text.length > size ? `${text.substring(0, size)}...` : '';
+}
+
 export const retryWrapper = (axios, options) => {
     const max_time = options.retry_time;
     let counter = 0;
