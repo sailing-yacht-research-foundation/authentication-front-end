@@ -10,7 +10,7 @@ import { PeopleYouMayKnowModal } from './PeopleYouMayKnowModal';
 import { usePublicProfileSlice } from 'app/pages/PublicProfilePage/slice';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { localesList } from 'utils/languages-util';
+import { localesList  as countriesList } from 'utils/languages-util';
 import { FollowerType } from 'utils/constants';
 import { Title, TitleWrapper, PeopleList, SeeMore } from './social-style';
 
@@ -34,7 +34,7 @@ export const PeopleYouMayKnow = () => {
 
     const { actions } = usePublicProfileSlice();
 
-    const userCountry = localesList[user?.country?.toUpperCase()];
+    const userCountry = countriesList[user?.country?.toUpperCase()];
 
     const getRecommandedProfiles = async () => {
         const response = await getTopRecommandation({ locale: getUserAttribute(user, 'locale'), page: 1, size: 4 });

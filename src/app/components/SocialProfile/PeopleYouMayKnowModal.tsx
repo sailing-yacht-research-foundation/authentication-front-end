@@ -10,7 +10,7 @@ import { getUserAttribute } from 'utils/user-utils';
 import { PaginationContainer } from 'app/components/SyrfGeneral';
 import { useLocation } from 'react-router-dom';
 import { DEFAULT_PAGE_SIZE } from 'utils/constants';
-import { localesList } from 'utils/languages-util';
+import { localesList as countriesList } from 'utils/languages-util';
 
 interface IPeopleYouMayKnowModal {
     showModal: boolean,
@@ -32,7 +32,7 @@ export const PeopleYouMayKnowModal = (props: IPeopleYouMayKnowModal) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const userCountry = localesList[user?.country?.toUpperCase()];
+    const userCountry = countriesList[user?.country?.toUpperCase()];
 
     const renderProfiles = () => {
         return pagination.rows.map(profile => <UserFollowerFollowingRow key={profile.id} profile={profile} profileId={profile.id} />);

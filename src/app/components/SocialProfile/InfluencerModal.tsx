@@ -10,7 +10,7 @@ import { PaginationContainer } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import { useLocation } from 'react-router-dom';
 import { DEFAULT_PAGE_SIZE, FollowerType } from 'utils/constants';
-import { localesList } from 'utils/languages-util';
+import { localesList as countriesList } from 'utils/languages-util';
 
 interface IInfluencerModal {
     showModal: boolean,
@@ -30,7 +30,7 @@ export const InfluencerModal = ({ showModal, setShowModal, reloadParentList }: I
 
     const location = useLocation();
 
-    const userCountry = localesList[user?.country?.toUpperCase()];
+    const userCountry = countriesList[user?.country?.toUpperCase()];
 
     const renderProfiles = () => {
         return pagination.rows.map(profile => <UserFollowerFollowingRow type={FollowerType.INFLUENCER} key={profile.id} profile={profile} profileId={profile.id} />);
