@@ -539,7 +539,11 @@ export const truncateName = (text, size = 50) => {
 }
 
 export const truncateText = (text, size = 50) => {
-    return text && text.length > size ? `${text.substring(0, size)}...` : '';
+    if (text) {
+        return text.length > size ? `${text.substring(0, size)}...` : text;
+    }
+
+    return '';
 }
 
 export const retryWrapper = (axios, options) => {
