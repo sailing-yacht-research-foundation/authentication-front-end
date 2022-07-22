@@ -535,7 +535,7 @@ export const renderRequirementBasedOnEventKey = (t, key) => {
 
 export const truncateName = (text, size = 50) => {
     if (!text) return renderEmptyValue(null);
-    return text.length > size ? `${text.substring(0, 50)}...` : text;
+    return text.length > size ? `${text.substring(0, size)}...` : text;
 }
 
 export const retryWrapper = (axios, options) => {

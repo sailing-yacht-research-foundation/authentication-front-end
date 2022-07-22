@@ -11,6 +11,7 @@ import { translations } from 'locales/translations';
 import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
 import { useDispatch } from 'react-redux';
 import { useProfileSearchSlice } from '../slice';
+import { truncateName } from 'utils/helpers';
 
 export const ResultItem = ({ profile, results }) => {
 
@@ -80,7 +81,7 @@ export const ResultItem = ({ profile, results }) => {
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id}`}>{profile.name}</PeopleName>
-                    <PeopleAlsoFollow>{profile.bio}</PeopleAlsoFollow>
+                    <PeopleAlsoFollow>{truncateName(profile.bio, 255)}</PeopleAlsoFollow>
                 </PeopleInfo>
             </PeopleInnerWrapper>
             {renderFollowButton()}
