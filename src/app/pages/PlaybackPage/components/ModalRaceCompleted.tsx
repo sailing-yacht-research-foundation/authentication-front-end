@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Modal } from "antd";
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
@@ -13,9 +13,17 @@ export const ModalRaceCompleted = () => {
 
     const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
 
+    const [showModal, setShowModal] = useState<boolean>(false);
+
+    React.useEffect(() => {
+        if ([RaceStatus.COMPLETED].includes(competitionUnitDetail.status)) {
+            setShowModal(true);
+        }
+    } ,[competitionUnitDetail.status]);
+
     return (
-        <div>
-            <Modal visible={[RaceStatus.COMPLETED].includes(competitionUnitDetail.status)} footer={null} closable={false}>
+        <div style={{ zIndex: 999}}>
+            <Modal visible={showModal} footer={null} closable={true} onCancel={()=> setShowModal(false)}>
                 <RaceStatusModalWrapper>
                     <h3>{t(translations.playback_page.race_is_completed)}</h3>
                     <span>{t(translations.playback_page.this_race_is_completed)}</span>
