@@ -20,6 +20,9 @@ const slice = createSlice({
             state.isSearching = action.payload;
         },
         searchProfiles(state, action: PayloadAction<any>) {},
+        clearStateData(state) {
+            state.results = [];
+        }
     },
 });
 

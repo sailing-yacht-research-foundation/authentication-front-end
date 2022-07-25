@@ -7,7 +7,7 @@ export const getProfileById = (profileId: string) => {
 }
 
 export const getTopRecommandation = ({ locale, page, size }: { locale: string, page: number, size: number }) => {
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/recommendations/top?locale=${locale}`, {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/recommendations/top?country=${locale}`, {
         params: {
             page: page,
             size: size || 10
@@ -16,7 +16,7 @@ export const getTopRecommandation = ({ locale, page, size }: { locale: string, p
 }
 
 export const getHotRecommandation = ({ locale, page, size }: { locale: string, page: number, size: number }) => {
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/recommendations/hot?locale=${locale}`, {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/recommendations/hot?country=${locale}`, {
         params: {
             page: page,
             size: size || 10
@@ -54,10 +54,11 @@ export const searchForProfiles = (keyword: string, locale: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/search?name=${keyword}&locale=${locale}`))
 }
 
-export const getRequestedFollowRequests = (page: number) => {
+export const getRequestedFollowRequests = (page: number, size: number = 10) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/social/follower/?status=REQUESTED`, {
         params: {
-            page: page
+            page,
+            size
         }
     }))
 }

@@ -9,7 +9,8 @@ import { getUserAttribute } from 'utils/user-utils';
 import { PaginationContainer } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import { useLocation } from 'react-router-dom';
-import { DEFAULT_PAGE_SIZE } from 'utils/constants';
+import { DEFAULT_PAGE_SIZE, FollowerType } from 'utils/constants';
+import { localesList as countriesList } from 'utils/languages-util';
 
 interface IInfluencerModal {
     showModal: boolean,
@@ -29,8 +30,10 @@ export const InfluencerModal = ({ showModal, setShowModal, reloadParentList }: I
 
     const location = useLocation();
 
+    const userCountry = countriesList[user?.country?.toUpperCase()];
+
     const renderProfiles = () => {
-        return pagination.rows.map(profile => <UserFollowerFollowingRow key={profile.id} profile={profile} profileId={profile.id} />);
+        return pagination.rows.map(profile => <UserFollowerFollowingRow type={FollowerType.INFLUENCER} key={profile.id} profile={profile} profileId={profile.id} />);
     }
 
     const [pagination, setPagination] = React.useState<any>({
@@ -70,21 +73,21 @@ export const InfluencerModal = ({ showModal, setShowModal, reloadParentList }: I
     }, [location]);
 
     React.useEffect(() => {
-        if (user)
+        if (user && showModal)
             getInfluencers(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [user, showModal]);
 
     return (
-        <Modal visible={showModal} title={t(translations.public_profile.top_influencers)} footer={null} onCancel={hideModal}>
+        <Modal visible={showModal} title={t(translations.public_profile.trending_accounts_in_country, { country: userCountry || '' })} footer={null} onCancel={hideModal}>
             <Spin spinning={isLoading}>
                 {renderProfiles()}
                 {
                     pagination.total > DEFAULT_PAGE_SIZE && <PaginationContainer>
-                        <Pagination 
-                            current={pagination.page} 
-                            pageSize={pagination.size} 
-                            onChange={(page, size) => getInfluencers(page, size)} 
+                        <Pagination
+                            current={pagination.page}
+                            pageSize={pagination.size}
+                            onChange={(page, size) => getInfluencers(page, size)}
                             total={pagination.total} />
                     </PaginationContainer>
                 }
