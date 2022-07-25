@@ -15,7 +15,6 @@ export const FormItemStartLocationAddress = ({ handleAddressChange, handleSelect
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_location)}</SyrfFieldLabel>}
                 name="location"
-                className="event-location-step"
                 rules={[{ required: true, message: t(translations.forms.location_is_required) }]}
             >
                 <PlacesAutocomplete

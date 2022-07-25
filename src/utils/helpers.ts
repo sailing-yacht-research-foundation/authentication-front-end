@@ -11,7 +11,7 @@ import { AuthCode } from './constants';
 
 /**
  * Check if is mobile
- * @returns 
+ * @returns
  */
 export const isMobile = () => {
     let mobile = false;
@@ -84,7 +84,7 @@ export const throttle = (callback, limit) => {
 
 /**
  * Remove all null properties to empty string
- * @param object 
+ * @param object
  * @return modified object
  */
 export const replaceObjectPropertiesFromNullToEmptyString = (object) => {
@@ -98,8 +98,8 @@ export const replaceObjectPropertiesFromNullToEmptyString = (object) => {
 
 /**
  * Convert base64 url to a JS File Object
- * @param dataurl 
- * @param filename 
+ * @param dataurl
+ * @param filename
  * @returns File file image
  */
 export const dataURLtoFile = (dataurl, filename) => {
@@ -129,8 +129,8 @@ export const removePlusFromPhoneNumber = (phoneNumber) => {
 
 /**
  * Add a layer to leaflet draw layer
- * @param sourceLayer 
- * @param targetGroup 
+ * @param sourceLayer
+ * @param targetGroup
  */
 export const addNonGroupLayers = (sourceLayer, targetGroup) => {
     if (sourceLayer instanceof L.LayerGroup) {
@@ -174,8 +174,8 @@ export const renderNumberWithCommas = (number) => {
 
 /**
  * Check if email is valid
- * @param email 
- * @returns 
+ * @param email
+ * @returns
  */
 export const checkIfEmailIsValid = (email: string) => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -200,8 +200,8 @@ export const extractTextFromHTML = (s) => {
 
 /**
  * Get caret at current position index from contenteditable string.
- * @param element 
- * @returns 
+ * @param element
+ * @returns
  */
 export const getCaretPosition = (element) => {
     let caretOffset = 0;
@@ -242,7 +242,7 @@ export const placeCaretAtEnd = (el) => {
 
 /**
  * Replace criteria with pilled criteria
- * @param string 
+ * @param string
  * @returns String pilled criteria.
  */
 export const replaceCriteriaWithPilledCriteria = (string) => {
@@ -257,8 +257,8 @@ export const replaceCriteriaWithPilledCriteria = (string) => {
 
 /**
  * Replace formatted criteria with raw criteria
- * @param string 
- * @returns 
+ * @param string
+ * @returns
  */
 export const replaceFormattedCriteriaWithRawCriteria = (string): string => {
     formattedSupportedSearchCriteria.forEach(criteria => {
@@ -285,7 +285,7 @@ export const removeWholeTextNodeOnBackSpace = (e) => {
 
 /**
  * Show toast message base on request's response.
- * @param error 
+ * @param error
  */
 export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '') => {
     if (priotizedMessageToShow) {
@@ -321,7 +321,7 @@ export const showToastMessageOnRequestError = (error, priotizedMessageToShow = '
 
 /**
  * Format request's response promise.
- * @param requestPromise 
+ * @param requestPromise
  * @returns Formatted promise response.
  */
 export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
@@ -340,7 +340,7 @@ export const formatServicePromiseResponse = (requestPromise): Promise<any> => {
 
 /**
  * Parse search keyword.
- * @param keyword 
+ * @param keyword
  * @returns parsed search keyword.
  */
 export const parseKeyword = (keyword) => {
@@ -400,8 +400,8 @@ export const parseKeyword = (keyword) => {
 
 /**
  * Change all_fields criteria to all criteria.
- * @param keyword 
- * @returns 
+ * @param keyword
+ * @returns
  */
 export const addMultipleFieldCriteriaIfSearchByAllFields = (keyword) => {
     if (keyword.includes('all_fields')) {
@@ -420,7 +420,7 @@ export const addMultipleFieldCriteriaIfSearchByAllFields = (keyword) => {
 
 /**
  * Priotize point for name criteria.
- * @param result 
+ * @param result
  * @returns search keyword.
  */
 export const priotizePointForNameFieldIfExists = (result, expression) => {
@@ -535,7 +535,15 @@ export const renderRequirementBasedOnEventKey = (t, key) => {
 
 export const truncateName = (text, size = 50) => {
     if (!text) return renderEmptyValue(null);
-    return text.length > size ? `${text.substring(0, 50)}...` : text;
+    return text.length > size ? `${text.substring(0, size)}...` : text;
+}
+
+export const truncateText = (text, size = 50) => {
+    if (text) {
+        return text.length > size ? `${text.substring(0, size)}...` : text;
+    }
+
+    return '';
 }
 
 export const retryWrapper = (axios, options) => {

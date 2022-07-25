@@ -131,8 +131,9 @@ export const NotificationSettings = () => {
                 return accumulator;
             }, []).map(fields => (
                 <Row gutter={50}>
-                    {fields.map(field => <Col xs={24} sm={24} md={12} lg={12}>
+                    {fields.map((field, index) => <Col xs={24} sm={24} md={12} lg={12}>
                         <Form.Item
+                            key={index}
                             label={<SyrfFieldLabel>{renderFormFieldTitle(field)}</SyrfFieldLabel>}
                             name={field}
                             valuePropName="checked">
@@ -147,7 +148,7 @@ export const NotificationSettings = () => {
     React.useEffect(() => {
         getSettings();
     }, []);
-    
+
     return <StyledSyrfFormWrapper>
         <Spin spinning={isLoading}>
             {settings.hasOwnProperty('emailNotificationSettings') && <Form

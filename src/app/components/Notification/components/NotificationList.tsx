@@ -48,7 +48,7 @@ export const NotificationList = (props: INotificationList) => {
 
     const renderNotificationItems = () => {
         if (notifications.length > 0)
-            return notifications.map(notification => <NotificationItem showFullNotificationContent={showFullNotificationContent} notification={notification} />);
+            return notifications.map((notification, index) => <NotificationItem key={index} showFullNotificationContent={showFullNotificationContent} notification={notification} />);
 
         return <LottieWrapper>
             <Lottie
@@ -97,7 +97,7 @@ export const NotificationList = (props: INotificationList) => {
     const NotificationListContent = () => <Spin spinning={isLoading}>
         <NotificationHeaderWrapper>
             <NotificationTitle>{t(translations.notifications.notifications)}</NotificationTitle>
-            <NotificationOptionWrapper overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />}>
+            <NotificationOptionWrapper trigger={'click'} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />}>
             </NotificationOptionWrapper>
         </NotificationHeaderWrapper>
 
@@ -118,7 +118,7 @@ export const NotificationList = (props: INotificationList) => {
     );
 }
 
-const NotificationOptionWrapper = styled(Dropdown.Button)`
+const NotificationOptionWrapper = styled<any>(Dropdown.Button)`
     button {
         border: none;
     }
@@ -160,7 +160,7 @@ const WrapperAsPage = styled.div`
 
     ${media.medium`
         width: 55%;
-    `}; 
+    `};
 `;
 
 const NotificationListWrapper = styled.div`

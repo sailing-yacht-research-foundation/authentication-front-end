@@ -31,6 +31,7 @@ import { useTranslation } from "react-i18next";
 import { KudosReaction } from "./KudosReaction";
 import { ModalRacePostponed } from "./ModalRacePostponed";
 import { ModalRaceCompleted } from "./ModalRaceCompleted";
+import { ModalRaceCanceled } from "./ModalRaceCanceled";
 
 export const PlaybackStreamRace = () => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -538,10 +539,11 @@ export const PlaybackStreamRace = () => {
 
   return (
     <div style={{ height: "100%", position: "relative" }}>
-      <LeaderboardContainer style={{ width: "220px", position: "absolute", zIndex: 500, top: "16px", right: "16px" }}>
+      <LeaderboardContainer>
         <ModalRacePostponed />
         <ModalCountdownTimer />
         <ModalRaceCompleted />
+        <ModalRaceCanceled />
       </LeaderboardContainer>
       <MapContainer
         style={{
@@ -581,6 +583,11 @@ export const PlaybackStreamRace = () => {
 
 const LeaderboardContainer = styled.div`
   transition: all 0.3s;
+  width: 220px;
+  position: absolute;
+  z-index: 500;
+  top: 16px;
+  right: 16px;
 `;
 
 const StreamToExpeditionContainer = styled.div`

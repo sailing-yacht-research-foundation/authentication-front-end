@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSiderSlice } from '../SiderContent/slice';
 import { useLocation } from 'react-router-dom';
 import { isMobile } from 'utils/helpers';
+import { useTour } from '@reactour/tour';
 
 export const SiderToggle = () => {
 
@@ -19,6 +20,8 @@ export const SiderToggle = () => {
     const dispatch = useDispatch();
 
     const isSiderToggled = useSelector(selectIsSiderToggled);
+
+    const { isOpen } = useTour();
 
     const toggleSider = () => {
         dispatch(actions.setIsToggled(!isSiderToggled));
@@ -32,7 +35,7 @@ export const SiderToggle = () => {
     }, []);
 
     React.useEffect(() => {
-        if (isMobile()) {
+        if (isMobile() && !isOpen) {
             dispatch(actions.setIsToggled(false));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
