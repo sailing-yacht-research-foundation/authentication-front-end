@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Space, Button, Spin } from 'antd';
+import { Space, Button, Spin, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { renderAvatar } from '../../../utils/user-utils';
 import { acceptFollowRequest, rejectFollowRequest } from '../../../services/live-data-server/profile';
 import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
+import { FaCheck, FaTimes } from 'react-icons/fa';
 
 interface IRequestItem {
     request: any,
-    hideModal: Function,
+    hideModal?: Function,
     reloadParentList?: Function
 }
 
@@ -50,7 +51,9 @@ export const RequestItem = (props: IRequestItem) => {
 
     const showFollowerProfile = () => {
         history.push(`/profile/${request.followerId}`);
-        hideModal();
+        if (hideModal) {
+            hideModal();
+        }
     }
 
     return (
@@ -65,9 +68,14 @@ export const RequestItem = (props: IRequestItem) => {
                         <span>{request.followerCount}</span>
                     </ItemInfoContainer>
                     <ItemButtonContainer>
-                        <Space size={5} wrap style={{ justifyContent: 'flex-end' }}>
-                            <Button onClick={acceptJoinRequest} type="primary">{t(translations.public_profile.accept)}</Button>
-                            <Button onClick={rejectJoinRequest}>{t(translations.public_profile.reject)}</Button>
+                        <Space size={10} wrap style={{ justifyContent: 'flex-end' }}>
+                            <Tooltip title={t(translations.public_profile.accept)}>
+                                <Button icon={<FaCheck/>} onClick={acceptJoinRequest} type="primary" />
+                            </Tooltip>
+
+                            <Tooltip title={t(translations.public_profile.reject)}>
+                                <Button icon={<FaTimes/>} onClick={rejectJoinRequest} />
+                            </Tooltip>
                         </Space>
                     </ItemButtonContainer>
                 </RightInfoContainer>

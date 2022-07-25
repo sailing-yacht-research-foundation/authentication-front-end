@@ -22,6 +22,7 @@ import { unregisterPushSubscription } from 'utils/helpers';
 import { useMyEventListSlice } from 'app/pages/MyEventPage/slice';
 import { TourStepClassName } from 'utils/tour-steps';
 import { isMobile } from 'react-device-detect';
+import { useProfileSearchSlice } from 'app/pages/ProfileSearchPage/slice';
 
 const analycticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY || '';
 
@@ -36,6 +37,8 @@ export const Nav = () => {
 
   const eventActions = useMyEventListSlice().actions;
 
+  const profileSearchActions = useProfileSearchSlice().actions;
+
   const history = useHistory();
 
   const { t } = useTranslation();
@@ -48,6 +51,7 @@ export const Nav = () => {
     ldsLogout(refreshToken!);
     dispatch(loginActions.setLogout());
     dispatch(eventActions.clearEventsListData());
+    dispatch(profileSearchActions.clearStateData());
     unregisterPushSubscription();
     history.push('/signin');
   }
