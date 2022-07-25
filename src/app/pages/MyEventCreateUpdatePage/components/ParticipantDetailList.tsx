@@ -34,40 +34,40 @@ export const ParticipantDetailList = (props) => {
         return Array.isArray(value) ? value.map(waiver => waiverKeyToText(waiver.waiverType)).join(', ') : ''
     }
 
+    const notSetText = t(translations.misc.not_set);
+
     const columns = [
         {
             title: t(translations.participant_list.agreed_to_waivers),
             dataIndex: 'waiverAgreements',
             key: 'waiverAgreements',
-            render: (value, record) => renderEmptyValue(renderAgreedWaivers(value)),
+            render: (value, record) => renderEmptyValue(renderAgreedWaivers(value), notSetText),
         },
         {
             title: t(translations.participant_list.agreed_to_documents),
             dataIndex: 'documentAgreements',
             key: 'documentAgreements',
-            render: (value, record) => renderEmptyValue(record.documentAgreements?.map(doc => doc.documentName)?.join(', ')),
+            render: (value, record) => renderEmptyValue(record.documentAgreements?.map(doc => doc.documentName)?.join(', '), notSetText),
         },
         {
             title: t(translations.participant_list.email),
             dataIndex: 'email',
             key: 'email',
-            render: (value, record) => renderEmptyValue(value),
+            render: (value, record) => renderParticipantDefaultData(value, record),
         },
         {
             title: t(translations.participant_list.birth_date),
             dataIndex: 'birthdate',
             key: 'birthdate',
             render: (value, record) => {
-                if (value && moment(value).isValid())
-                    return moment(value).format(TIME_FORMAT.date_text);
-                return renderEmptyValue(null);
+                return renderParticipantDefaultData(value && moment(value).isValid() ? moment(value).format(TIME_FORMAT.date_text) : null, record);
             },
         },
         {
             title: t(translations.participant_list.address),
             dataIndex: 'address',
             key: 'address',
-            render: (value, record) => renderEmptyValue(value),
+            render: (value, record) => renderParticipantDefaultData(value, record),
         },
         {
             title: t(translations.participant_list.allow_to_share_information),
@@ -77,7 +77,7 @@ export const ParticipantDetailList = (props) => {
                 if (typeof value === 'boolean') {
                     return String(value);
                 }
-                return renderEmptyValue(value);
+                return renderEmptyValue(value, notSetText);
             },
         },
         {
@@ -90,32 +90,32 @@ export const ParticipantDetailList = (props) => {
                 } else if (typeof value === 'boolean') {
                     return String(value);
                 }
-                return renderEmptyValue(null);
+                return renderEmptyValue(null, notSetText);
             },
         },
         {
             title: t(translations.participant_list.passportNumber),
             dataIndex: 'immigrationInformation.passportNumber',
             key: 'immigrationInformation.passportNumber',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.passportNumber)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.passportNumber, notSetText)),
         },
         {
             title: t(translations.participant_list.passport_issued_date),
             dataIndex: 'immigrationInformation.issueDate',
             key: 'immigrationInformation.issueDate',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.issueDate)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.issueDate, notSetText)),
         },
         {
             title: t(translations.participant_list.passport_expiration_date),
             dataIndex: 'immigrationInformation.expirationDate',
             key: 'immigrationInformation.expirationDate',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.expirationDate)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.expirationDate, notSetText)),
         },
         {
             title: t(translations.participant_list.passport_issued_country),
             dataIndex: 'immigrationInformation.issueCountry',
             key: 'immigrationInformation.issueCountry',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.issueCountry)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.immigrationInformation?.issueCountry, notSetText)),
         },
 
         {
@@ -134,39 +134,49 @@ export const ParticipantDetailList = (props) => {
             title: t(translations.participant_list.emergency_contact_name),
             dataIndex: 'emergencyContact.name',
             key: 'emergencyContact.name',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.name)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.name, notSetText)),
         },
         {
             title: t(translations.participant_list.emergency_contact_relationship),
             dataIndex: 'emergencyContact.relationship',
             key: 'emergencyContact.relationship',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.relationship)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.relationship, notSetText)),
         },
         {
             title: t(translations.participant_list.emergency_contact_phone),
             dataIndex: 'emergencyContact.phone',
             key: 'emergencyContact.phone',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.phone)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.phone, notSetText)),
         },
         {
             title: t(translations.participant_list.emergency_contact_email),
             dataIndex: 'emergencyContact.email',
             key: 'emergencyContact.email',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.email)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.emergencyContact?.email, notSetText)),
         },
         {
             title: t(translations.participant_list.food_allergies),
             dataIndex: 'foodAllergies',
             key: 'foodAllergies',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.foodAllergies?.join(', '))),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(record.foodAllergies?.join(', '), notSetText)),
         },
         {
             title: t(translations.participant_list.medical_problems),
             dataIndex: 'medicalProblems',
             key: 'medicalProblems',
-            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(value)),
+            render: (value, record) => renderParticipantPropertyValue(record, renderEmptyValue(value, notSetText)),
         },
     ];
+
+    const renderParticipantDefaultData = (value, record) => {
+        if (value) return value;
+
+        if (!record.allowShareInformation) {
+            return t(translations.participant_list.not_shared);
+        }
+
+        return notSetText;
+    }
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -203,7 +213,7 @@ export const ParticipantDetailList = (props) => {
     const renderPrivateImageIfExists = (record, imageSource) => {
         return imageSource
             ? <Image width={100} height={100} src={`data:image/jpeg;base64,${imageSource}`} />
-            : !record.allowShareInformation ? t(translations.participant_list.not_shared) : t(translations.misc.not_available)
+            : !record.allowShareInformation ? t(translations.participant_list.not_shared) : t(translations.misc.not_set)
     }
 
     React.useEffect(() => {

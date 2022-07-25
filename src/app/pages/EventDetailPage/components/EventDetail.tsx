@@ -6,7 +6,7 @@ import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
 import { EventState, MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useLocation } from 'react-router';
 import { downloadIcalendarFile, get, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +30,7 @@ import { ConfirmModal } from 'app/components/ConfirmModal';
 import { deleteParticipant } from 'services/live-data-server/participants';
 import { InformationNotShared } from './InformationNotSharedMessage';
 import { EventAnnouncement } from './EventAnnouncement';
+import { ParticipantList } from 'app/pages/MyEventCreateUpdatePage/components/ParticipantList';
 
 export const EventDetail = () => {
 
@@ -49,6 +50,8 @@ export const EventDetail = () => {
     const history = useHistory();
 
     const announcementRef = React.useRef<any>();
+
+    const location = useLocation();
 
     const { t } = useTranslation();
 
@@ -106,7 +109,7 @@ export const EventDetail = () => {
     React.useEffect(() => {
         fetchEvent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [eventId]);
+    }, [eventId, location]);
 
     const fetchEvent = async () => {
         setIsFetchingEvent(true);
@@ -278,11 +281,11 @@ export const EventDetail = () => {
             {event.id &&
                 <>
                     <EventSection>
-                        <EventAnnouncement ref={announcementRef} event={event} />
+                        <EventAdmins event={event} />
                     </EventSection>
 
                     <EventSection>
-                        <EventAdmins event={event} />
+                        <EventAnnouncement ref={announcementRef} event={event} />
                     </EventSection>
 
                     <EventSection>
@@ -295,6 +298,10 @@ export const EventDetail = () => {
 
                     <EventSection>
                         <VesselList event={event} />
+                    </EventSection>
+
+                    <EventSection>
+                        <ParticipantList eventId={eventId} event={event} canManageEvent={canManageEvent} />
                     </EventSection>
 
                     <PDFUploadForm reloadParent={fetchEvent} fullWidth event={event} />
@@ -317,7 +324,7 @@ const EventHoldBy = styled.div`
 `;
 
 const EventHost = styled.a`
-    
+
 `;
 
 const EventHeaderInfoContainer = styled.div`

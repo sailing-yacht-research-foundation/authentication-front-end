@@ -10,6 +10,7 @@ import { getUserAttribute } from 'utils/user-utils';
 import { PaginationContainer } from 'app/components/SyrfGeneral';
 import { useLocation } from 'react-router-dom';
 import { DEFAULT_PAGE_SIZE } from 'utils/constants';
+import { localesList as countriesList } from 'utils/languages-util';
 
 interface IPeopleYouMayKnowModal {
     showModal: boolean,
@@ -30,6 +31,8 @@ export const PeopleYouMayKnowModal = (props: IPeopleYouMayKnowModal) => {
     const user = useSelector(selectUser);
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+    const userCountry = countriesList[user?.country?.toUpperCase()];
 
     const renderProfiles = () => {
         return pagination.rows.map(profile => <UserFollowerFollowingRow key={profile.id} profile={profile} profileId={profile.id} />);
@@ -73,22 +76,22 @@ export const PeopleYouMayKnowModal = (props: IPeopleYouMayKnowModal) => {
     }, [location]);
 
     React.useEffect(() => {
-        if (user)
+        if (user && showModal)
             getPeopleYouMayKnow(1, 10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [user, showModal]);
 
     return (
-        <Modal visible={showModal} title={t(translations.public_profile.people_you_may_know)} footer={null} onCancel={hideModal}>
+        <Modal visible={showModal} title={t(translations.public_profile.most_popular_accounts_in_country, { country: userCountry || '' })} footer={null} onCancel={hideModal}>
             <Spin spinning={isLoading}>
                 {renderProfiles()}
                 {
                     pagination.total > DEFAULT_PAGE_SIZE && <PaginationContainer>
-                        <Pagination 
-                                                    showSizeChanger={true}
-                            pageSize={pagination.size} 
-                            current={pagination.page} 
-                            onChange={(page, size) => getPeopleYouMayKnow(page, size)} 
+                        <Pagination
+                            showSizeChanger={true}
+                            pageSize={pagination.size}
+                            current={pagination.page}
+                            onChange={(page, size) => getPeopleYouMayKnow(page, size)}
                             total={pagination.total} />
                     </PaginationContainer>
                 }
