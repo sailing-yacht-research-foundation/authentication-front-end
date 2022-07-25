@@ -174,18 +174,18 @@ export const Main = () => {
 
     const renderPlans = () => {
         if (plans.length > 0)
-            return plans.map((p) => (<PlanItem className={isPlanActive(p.productId) ? 'active' : ''}>
-                <PlanItemHeader>
-                    <PlanItemTitle>
-                        <PlanTitle>{p.tierName}</PlanTitle>
-                        <PlanSubTitle>{p.description}</PlanSubTitle>
-                        {isPlanActive(p.productId) && currentActivePlan.cancelAt && <div>{t(translations.subscription_page.expire_at)} {moment(currentActivePlan.cancelAt).format(TIME_FORMAT.date_text_with_time)}</div>}
-                    </PlanItemTitle>
-                    <PlanItemPriceWrapper>
-                        {
-                            p.pricings.length > 0 && p.pricings.map((pricing) =>
-                                <>
-                                    <PlanItemPrice>
+            return plans.map((p, index) => (
+                <PlanItem key={index} className={isPlanActive(p.productId) ? 'active' : ''}>
+                    <PlanItemHeader>
+                        <PlanItemTitle>
+                            <PlanTitle>{p.tierName}</PlanTitle>
+                            <PlanSubTitle>{p.description}</PlanSubTitle>
+                            {isPlanActive(p.productId) && currentActivePlan.cancelAt && <div>{t(translations.subscription_page.expire_at)} {moment(currentActivePlan.cancelAt).format(TIME_FORMAT.date_text_with_time)}</div>}
+                        </PlanItemTitle>
+                        <PlanItemPriceWrapper>
+                            {
+                                p.pricings.length > 0 && p.pricings.map((pricing, index) =>
+                                    <PlanItemPrice key={index}>
                                         <div>
                                             <PriceText>${pricing.amount}/</PriceText>
                                             <span>{pricing.recurring.intervalCount} {pricing.recurring.interval}</span>
@@ -193,12 +193,11 @@ export const Main = () => {
                                         <div>
                                             {renderPlanButton(p, pricing)}
                                         </div>
-                                    </PlanItemPrice>
-                                </>)
-                        }
-                    </PlanItemPriceWrapper>
-                </PlanItemHeader>
-            </PlanItem>));
+                                    </PlanItemPrice>)
+                            }
+                        </PlanItemPriceWrapper>
+                    </PlanItemHeader>
+                </PlanItem>));
 
         return <NoPlanText>{t(translations.subscription_page.we_dont_have_any_plans_right_now)}</NoPlanText>
     }
@@ -273,7 +272,7 @@ const Wrapper = styled.div`
     ${media.large`
         padding: 30px 25px;
         width: 75%;
-    `}; 
+    `};
 `;
 
 const PlanWrapper = styled.div`
@@ -292,7 +291,7 @@ const PlanItem = styled.div`
     border-radius: 5px;
     margin: 0 5px;
     border: 1px solid rgba(52, 152, 219, 1);
-    
+
     &:not(:first-child) {
         margin-top: 10px;
     }

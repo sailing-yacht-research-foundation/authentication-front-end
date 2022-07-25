@@ -19,28 +19,28 @@ export interface Course {
 }
 
 export interface CourseSequencedGeometry {
-    id: string;
-    validFrom: any;
-    validTo: any;
-    courseId: string;
-    geometryType: string;
-    order: number;
+    id?: string;
+    validFrom?: any;
+    validTo?: any;
+    courseId?: string;
+    geometryType?: string;
+    order?: number;
     properties: CourseSequencedGeometryProperties;
-    createdAt: Date;
-    updatedAt: Date;
-    createdById: string;
-    updatedById: string;
-    developerId: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    createdById?: string;
+    updatedById?: string;
+    developerId?: string;
     points: Point[];
 }
 
 export interface Point {
-    id: string;
+    id?: string;
     position: number[];
-    order: number;
+    order?: number;
     properties: PointProperties;
     markTrackerId: string;
-    tracker: any;
+    tracker?: any;
 }
 
 export interface PointProperties {

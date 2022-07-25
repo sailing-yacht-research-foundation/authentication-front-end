@@ -142,7 +142,7 @@ export const FormItems = (props) => {
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.event_type)}</SyrfFieldLabel>}
                             name="eventTypes"
                         >
-                            <SyrfFormSelect onChange={value => setSelectedEventType(String(value))}>
+                            <SyrfFormSelect allowClear onChange={value => setSelectedEventType(String(value))}>
                                 {renderEventTypesSelection()}
                             </SyrfFormSelect>
                         </Form.Item>
@@ -237,7 +237,6 @@ export const FormItems = (props) => {
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.external_url)}</SyrfFieldLabel>}
                     name="externalUrl"
-                    className="event-external-website-step"
                     rules={[{ type: 'url', message: t(translations.forms.external_url_is_not_a_valid_url) }]}
                 >
                     <SyrfInputField autoCorrect="off" />

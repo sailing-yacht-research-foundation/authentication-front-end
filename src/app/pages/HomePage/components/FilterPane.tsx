@@ -18,6 +18,7 @@ import { ResultSuggestion } from './MapViewTab/components/ResultSuggestion';
 import { replaceFormattedCriteriaWithRawCriteria, replaceCriteriaWithPilledCriteria, removeWholeTextNodeOnBackSpace } from 'utils/helpers';
 import { ContentEditableTextRemover } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router-dom';
+import { TourStepClassName } from 'utils/tour-steps';
 
 export const FilterPane = (props) => {
 
@@ -71,7 +72,7 @@ export const FilterPane = (props) => {
 
         const keywordIsPilledCriteria = name.includes('</span>');
         if (keywordIsPilledCriteria) return; // not searching if the keyword is not inputted when the pill inserted and user performs search.
-        
+
         dispatch(actions.setPage(1));
         dispatch(actions.setFromDate(params.from_date ?? ''));
         dispatch(actions.setToDate(params.to_date ?? ''));
@@ -110,7 +111,7 @@ export const FilterPane = (props) => {
     }
 
     return (
-        <Wrapper {...props}>
+        <Wrapper {...props} className={TourStepClassName.SEARCH}>
             <FilterHeader>
                 <FilterTabTitle>{t(translations.home_page.filter_tab.advanced_search)}</FilterTabTitle>
                 {props.closable && document.body.clientWidth > 1024 && <AiFillCloseCircle
@@ -137,8 +138,8 @@ export const FilterPane = (props) => {
                     }}>
                     <div style={{ position: 'relative' }}>
                         <Form.Item
-                            label={t(translations.home_page.filter_tab.race_name)}
                             name="name"
+                            label={t(translations.home_page.filter_tab.race_name)}
                             rules={[{ required: true, message: t(translations.forms.search_keyword_is_required) }]}
                         >
                             <Input ref={searchInputRef}
@@ -234,7 +235,7 @@ export const FilterPane = (props) => {
                     </Form.Item>
                 </Form>
             </Spin>
-            {searchKeyword.length > 0 && <StyledLiveAndHappeningRaceButton onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</StyledLiveAndHappeningRaceButton> }
+            {searchKeyword.length > 0 && <StyledLiveAndHappeningRaceButton onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</StyledLiveAndHappeningRaceButton>}
         </Wrapper >
     )
 }

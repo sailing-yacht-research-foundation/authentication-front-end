@@ -32,7 +32,6 @@ import { TableFiltering } from 'types/TableFiltering';
 import { GiExitDoor } from 'react-icons/gi';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
-import { StyleConstants } from 'styles/StyleConstants';
 
 const defaultOptions = {
   loop: true,
@@ -148,7 +147,8 @@ export const EventList = () => {
       key: 'country',
       sorter: true,
       render: (text) => renderEmptyValue(text),
-      ...getColumnSearchProps('country', handleSearch, handleReset)
+      ...getColumnSearchProps('country', handleSearch, handleReset),
+      width: '110px'
     },
     {
       title: t(translations.my_event_list_page.start_date),
@@ -181,6 +181,7 @@ export const EventList = () => {
       sorter: true,
       ...getColumnTimeProps('createdAt', handleSearch, handleReset),
       render: (value) => moment(value).format(TIME_FORMAT.date_text),
+      width: '110px'
     },
     {
       title: 'Action',
@@ -304,7 +305,7 @@ export const EventList = () => {
       <Spin spinning={isChangingPage}>
         <TableWrapper>
           <Table
-            scroll={{ x: "max-content", y: "calc(100vh - 360px)" }}
+            scroll={{ x: "max-content", y: isMobile ? undefined : "calc(100vh - 360px)" }}
             columns={columns}
             dataSource={mappedResults}
             onChange={(antdPagination, antdFilters, antSorter) =>

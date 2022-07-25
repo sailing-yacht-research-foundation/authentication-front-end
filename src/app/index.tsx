@@ -139,7 +139,7 @@ export function App(props) {
   }
 
   React.useEffect(() => {
-    initUserLocation(handleInitUserLocationSuccess, () => {});
+    initUserLocation(handleInitUserLocationSuccess, () => { });
     window.addEventListener('resize', onWindowResize);
 
     return () => {
@@ -149,7 +149,7 @@ export function App(props) {
   }, []);
 
   const handleInitUserLocationSuccess = (position) => {
-    const {latitude, longitude } = position.coords;
+    const { latitude, longitude } = position.coords;
     if (latitude && longitude) {
       dispatch(loginActions.setUserCoordinate({ lat: latitude, lon: longitude }));
     }
@@ -182,73 +182,73 @@ export function App(props) {
 
   return (
     <BrowserRouter>
-      <Layout style={{ minHeight: '100vh' }}>
-        { !isSimplifiedPlayback && <Header /> }
-        <AgreementModal />
-        {renderSider()}
-        <Layout className="site-layout">
-          <Content>
-            <Switch>
-              <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
-              <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
-              <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
-              <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
-              <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account'} component={ProfilePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/integrations'} component={ExternalCredentialsManagePage} />
-              <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage} />
-              <Route exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/create'} component={CourseCreatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/:courseId/update'} component={CourseCreatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/create'} component={CompetitionUnitCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/races'} component={CompetitionUnitListPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/'} component={VesselListPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/create'} component={VesselCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:id/update'} component={VesselCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/create'} component={ParticipantCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/create'} component={VesselParticipantGroupPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups'} component={MyGroupsPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/create'} component={GroupCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/update'} component={GroupCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/organization-connect'} component={GroupDetailPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId'} component={GroupDetailPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
-              <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/search'} component={ProfileSearchPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={PublicProfilePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/:profileId'} component={PublicProfilePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:boatId/liferafts/create'} component={LiveraftCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:boatId/liferafts/:id/update'} component={LiveraftCreateUpdatePage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/notifications'} component={NotificationCenterPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/settings'} component={ProfileSettingsPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/subscription'} component={SubscriptionPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/payment-success'} component={PaymentSucessPage} />
-              <PrivateRoute exact path={process.env.PUBLIC_URL + '/account-not-verified'} component={EmailNotVerifiedPage} />
-              <Route component={NotFoundPage} />
-            </Switch>
-            <ToastContainer />
-            <TourProvider beforeClose={() => {
-              if (tourRef.current) {
-                tourRef.current.dismissTour();
-              }
-            }} steps={steps}>
+      <TourProvider beforeClose={() => {
+        if (tourRef.current) {
+          tourRef.current.dismissTour();
+        }
+      }} steps={steps}>
+        <Layout style={{ minHeight: '100vh' }}>
+          {!isSimplifiedPlayback && <Header />}
+          <AgreementModal />
+          {renderSider()}
+          <Layout className="site-layout">
+            <Content>
+              <Switch>
+                <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+                <PublicRoute exact path={process.env.PUBLIC_URL + '/signin'} component={LoginPage} />
+                <PublicRoute exact path={process.env.PUBLIC_URL + '/signup'} component={SignupPage} />
+                <PublicRoute exact path={process.env.PUBLIC_URL + '/verify-account'} component={VerifyAccountPage} />
+                <PublicRoute exact path={process.env.PUBLIC_URL + '/forgot-password'} component={ForgotPasswordPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/account'} component={ProfilePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/integrations'} component={ExternalCredentialsManagePage} />
+                <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
+                <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage} />
+                <Route exact path={process.env.PUBLIC_URL + '/events/:eventId'} component={EventDetailPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/update/'} component={MyEventCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/create'} component={CompetitionUnitCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/create'} component={CourseCreatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/:courseId/update'} component={CourseCreatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/create'} component={CompetitionUnitCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/races'} component={CompetitionUnitListPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/'} component={VesselListPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/create'} component={VesselCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:id/update'} component={VesselCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/create'} component={ParticipantCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/create'} component={VesselParticipantGroupPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/classes/:id/update'} component={VesselParticipantGroupPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups'} component={MyGroupsPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/create'} component={GroupCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/update'} component={GroupCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/organization-connect'} component={GroupDetailPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId'} component={GroupDetailPage} />
+                <Route exact path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
+                <Route exact path={process.env.PUBLIC_URL + '/playback'} component={PlaybackPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/tracks'} component={MyTrackPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/search'} component={ProfileSearchPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile'} component={PublicProfilePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/profile/:profileId'} component={PublicProfilePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:boatId/liferafts/create'} component={LiveraftCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:boatId/liferafts/:id/update'} component={LiveraftCreateUpdatePage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/notifications'} component={NotificationCenterPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/settings'} component={ProfileSettingsPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/subscription'} component={SubscriptionPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/payment-success'} component={PaymentSucessPage} />
+                <PrivateRoute exact path={process.env.PUBLIC_URL + '/account-not-verified'} component={EmailNotVerifiedPage} />
+                <Route component={NotFoundPage} />
+              </Switch>
+              <ToastContainer />
               <TutorialModal ref={tourRef} />
-            </TourProvider>
-          </Content>
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
-      <GlobalStyle />
+        <GlobalStyle />
+      </TourProvider>
     </BrowserRouter>
   );
 }

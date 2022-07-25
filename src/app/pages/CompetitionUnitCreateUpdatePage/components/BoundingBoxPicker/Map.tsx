@@ -16,7 +16,7 @@ export const Map = (props) => {
     const [inititalizedPolygon, setInitializedPolygon] = React.useState<boolean>(false);
 
     const map = useMap();
-
+    
     React.useEffect(() => {
         initPolygonShapeOnCompetitionUnitUpdate();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -24,7 +24,7 @@ export const Map = (props) => {
 
     React.useEffect(() => {
         if (!coordinates || coordinates.length === 0) {
-            map.setView(userCoordinates);
+            map.setView(userCoordinates, map.getZoom());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userCoordinates]);
@@ -37,7 +37,7 @@ export const Map = (props) => {
             map.setView({
                 lat: coordinates[0][0][0],
                 lng: coordinates[0][0][1]
-            }, 10);
+            }, map.getZoom());
             drawControlEditOnly.addTo(map);
             drawControlFull.remove(map);
         }

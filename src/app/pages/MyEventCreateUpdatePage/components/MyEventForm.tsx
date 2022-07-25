@@ -12,7 +12,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, EventParticipatingTypes, EventState, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
+import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -22,7 +22,6 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import tzLookup from 'tz-lookup';
-import { AssignEventAsGroupAdminModal } from 'app/pages/MyEventPage/components/modals/AssignEventAsGroupAdminModal';
 import { ActionButtons } from './ActionButtons';
 import { EventChildLists } from './EventChildLists';
 import { FormItemEventNameDescription } from './FormItemEventNameDescription';
@@ -35,6 +34,10 @@ import { ImportEventDataModal } from './modals/ImportEventDataModal';
 import { create as createCourse } from 'services/live-data-server/courses';
 import { FormItems } from './FormItems';
 import { CalendarEvent } from 'types/CalendarEvent';
+import * as turf from "@turf/turf";
+import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
+
+require('@turf/destination');
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -54,7 +57,6 @@ export const MyEventForm = () => {
 
     const [isSavingEvent, setIsSavingEvent] = React.useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-    const [showAssignModal, setShowAssignModal] = React.useState<boolean>(false);
     const [mode, setMode] = React.useState<string>('');
     const [coordinates, setCoordinates] = React.useState<any>(MAP_DEFAULT_VALUE.CENTER);
     const [endCoordinates, setEndCoordinates] = React.useState<any>(null);
@@ -210,7 +212,43 @@ export const MyEventForm = () => {
     }
 
     const createDefaultCourse = async (event) => {
-        const response = await createCourse(event.id, 'Default Course', []);
+        const point = turf.point([coordinates.lng, coordinates.lat]);
+        const defaultStartLineDistance = 50;
+        const defaultStartLineBearing = 90;
+        const defaultStartLineoptions: any = { units: 'meters' };
+        const destination = turf.destination(point, defaultStartLineDistance, defaultStartLineBearing, defaultStartLineoptions);
+        const courseGeometry = [
+            {
+                "geometryType": GeometryType.POLYLINE,
+                "points": [
+                    {
+                        "position": [
+                            coordinates.lat,
+                            coordinates.lng
+                        ],
+                        "properties": {
+                            "side": GeometrySide.PORT
+                        }
+                    },
+                    {
+
+                        "position": [
+                            destination.geometry.coordinates[1],
+                            destination.geometry.coordinates[0],
+                        ],
+                        "properties": {
+                            "side": GeometrySide.STARBOARD
+                        }
+                    }
+                ],
+                order: 0,
+                "properties": {
+                    "name": "Start/Finish"
+                }
+            }
+        ];
+        const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(courseGeometry, eventId);
+        const response = await createCourse(event.id, 'Default Course', modifiedCourseSequencedGeometries);
 
         if (response.success) {
             toast.success(t(translations.my_event_create_update_page.successfully_created_a_new_default_course_for_this_event));
@@ -481,7 +519,6 @@ export const MyEventForm = () => {
                 setShowDeleteModal={setShowDeleteModal}
             />
             <ImportEventDataModal calendarEventId={event.id} showModal={showImportEventModal} setShowModal={setShowImportEventModal} />
-            <AssignEventAsGroupAdminModal showModal={showAssignModal} event={event} setShowModal={setShowAssignModal} />
             <PageHeaderContainerResponsive style={{ 'alignSelf': 'flex-start', width: '100%' }}>
                 <PageInfoOutterWrapper>
                     <GobackButton onClick={() => history.push("/events")}>

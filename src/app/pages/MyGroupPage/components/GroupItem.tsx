@@ -79,8 +79,8 @@ export const GroupItemRow = (props) => {
         if (members && Array.isArray(members)) {
             return (<>
                 {members.map((member, index) =>
-                    <Tooltip title={member.name}>
-                        <GroupMemberItem key={index} onClick={e => {
+                    <Tooltip title={member.name} key={index}>
+                        <GroupMemberItem onClick={e => {
                             e.stopPropagation();
                             history.push(`/profile/${member.userId}`)
                         }}>

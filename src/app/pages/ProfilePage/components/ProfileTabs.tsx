@@ -21,13 +21,13 @@ export const ProfileTabs = () => {
 
     return (
         <Tabs>
-            {tabs.map(tab => <TabItem className={location.pathname === tab.path ? 'active' : ''} to={tab.path}>{tab.name}</TabItem>)}
+            {tabs.map((tab, index) => <TabItem key={index} className={location.pathname === tab.path ? 'active' : ''} to={tab.path}>{tab.name}</TabItem>)}
         </Tabs>
     )
 }
 
 const Tabs = styled.div`
-    display: flex;  
+    display: flex;
     flex-direction: column;
     align-self: flex-start;
     margin-left: 35px;
