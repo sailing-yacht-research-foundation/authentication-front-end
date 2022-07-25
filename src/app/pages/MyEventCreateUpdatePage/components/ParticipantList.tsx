@@ -32,7 +32,7 @@ export const ParticipantList = (props) => {
 
     const { t } = useTranslation();
 
-    const { eventId, event }: { eventId: string, event: CalendarEvent } = props;
+    const { eventId, event, canManageEvent }: { eventId: string, event: CalendarEvent, canManageEvent?: Function } = props;
 
     const [csvData, setCSVData] = React.useState<any[]>([]);
 
@@ -88,10 +88,12 @@ export const ParticipantList = (props) => {
             title: t(translations.participant_list.action),
             key: 'action',
             render: (text, record) => (
-                <Space size={10}>
-                    <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.participant_list.remove)}</DeleteButton>
-                    {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.participant_list.block)}</DeleteButton>}
-                </Space>
+                <>
+                    {!canManageEvent || canManageEvent() ? (<Space size={10}>
+                        <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.participant_list.remove)}</DeleteButton>
+                        {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.participant_list.block)}</DeleteButton>}
+                    </Space>) : <></>}
+                </>
             ),
         },
     ].filter(column => {
@@ -243,7 +245,7 @@ export const ParticipantList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
-                    <Space size={10}>
+                    {(!canManageEvent || canManageEvent()) && <Space size={10}>
                         {
                             ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!) && <Tooltip title={t(translations.tip.create_competitor)}>
                                 <CreateButton onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
@@ -260,7 +262,7 @@ export const ParticipantList = (props) => {
                                 <CSVLink filename={`${event.name}-competitors-${moment().format(TIME_FORMAT.date_text_with_time)}.csv`} data={csvData}>{t(translations.participant_list.export)}</CSVLink>
                             </CreateButton>
                         </Tooltip>}
-                    </Space>
+                    </Space>}
                 </PageHeaderContainer>
                 <FilterWrapper>
                     <Dropdown trigger={['click']} overlay={menu}>
