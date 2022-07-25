@@ -6,7 +6,7 @@ import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
 import { EventState, MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useLocation } from 'react-router';
 import { downloadIcalendarFile, get, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +49,8 @@ export const EventDetail = () => {
     const history = useHistory();
 
     const announcementRef = React.useRef<any>();
+
+    const location = useLocation();
 
     const { t } = useTranslation();
 
@@ -106,7 +108,7 @@ export const EventDetail = () => {
     React.useEffect(() => {
         fetchEvent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [eventId]);
+    }, [eventId, location]);
 
     const fetchEvent = async () => {
         setIsFetchingEvent(true);
@@ -317,7 +319,7 @@ const EventHoldBy = styled.div`
 `;
 
 const EventHost = styled.a`
-    
+
 `;
 
 const EventHeaderInfoContainer = styled.div`

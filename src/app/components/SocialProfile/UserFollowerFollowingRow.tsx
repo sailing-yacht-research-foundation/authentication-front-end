@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
 import styled from 'styled-components';
-import { FollowStatus } from 'utils/constants';
+import { FollowerType, FollowStatus } from 'utils/constants';
 import { renderAvatar } from 'utils/user-utils';
 import { Button, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ import { UnfollowConfirmModal } from './UnfollowConfirmModal';
 
 export const UserFollowerFollowingRow = (props) => {
 
-    const { profile, profileId, reloadParentList, setPerformedAction } = props;
+    const { profile, profileId, reloadParentList, setPerformedAction, type } = props;
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -76,7 +76,7 @@ export const UserFollowerFollowingRow = (props) => {
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id || profileId}`}>{profile.name}</PeopleName>
-                    {(profile.followerCount || profile.followerGained) && <PeopleAlsoFollow>{t(translations.public_profile.number_followers, { numberOfFollowers: profile.followerCount || profile.followerGained })}</PeopleAlsoFollow>}
+                    {(profile.followerCount || profile.followerGained) && <PeopleAlsoFollow>{t(type === FollowerType.INFLUENCER ? translations.public_profile.trending_followers_text : translations.public_profile.number_followers, { numberOfFollowers: profile.followerCount || profile.followerGained })}</PeopleAlsoFollow>}
                 </PeopleInfo>
             </PeopleInnerWrapper>
             <FollowButtonOuter>
