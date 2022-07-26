@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCompetitionUnitDetail } from "./slice/selectors";
 import { RaceStatus } from "utils/constants";
 import { RaceStatusModalWrapper } from "app/components/SyrfGeneral";
+import { usePlaybackSlice } from "./slice";
+import { PlaybackTypes } from "types/Playback";
 
 export const ModalRaceCompleted = () => {
 
@@ -15,9 +17,14 @@ export const ModalRaceCompleted = () => {
 
     const [showModal, setShowModal] = useState<boolean>(false);
 
+    const dispatch = useDispatch();
+
+    const { actions } = usePlaybackSlice();
+
     React.useEffect(() => {
         if ([RaceStatus.COMPLETED].includes(competitionUnitDetail.status)) {
             setShowModal(true);
+            dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
         }
     } ,[competitionUnitDetail.status]);
 
@@ -27,8 +34,6 @@ export const ModalRaceCompleted = () => {
                 <RaceStatusModalWrapper>
                     <h3>{t(translations.playback_page.race_is_completed)}</h3>
                     <span>{t(translations.playback_page.this_race_is_completed)}</span>
-                    <br />
-                    <Button onClick={() => window.location.reload()} type="link">{t(translations.playback_page.click_here_for_replay)}</Button>
                 </RaceStatusModalWrapper>
             </Modal>
         </div>
