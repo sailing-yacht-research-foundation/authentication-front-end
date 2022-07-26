@@ -442,7 +442,7 @@ export const CompetitionUnitForm = () => {
                                 name="description"
                             >
 
-                                <SyrfTextArea autoCorrect="off" autoComplete='off' />
+                                <SyrfTextArea autoCorrect="off" autoComplete="off" autoCapitalize="off" />
                             </Form.Item>
                         </Tooltip>
 
