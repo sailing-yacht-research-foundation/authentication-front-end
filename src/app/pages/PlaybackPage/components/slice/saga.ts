@@ -18,6 +18,10 @@ import { PlaybackTypes } from "types/Playback";
 import { sourcesPreventIframe } from "utils/constants";
 import { playbackActions } from ".";
 
+const params = new URLSearchParams(window.location.search); // this is for when playing a track, the endTime is passed, we show the plackback not live race.
+const trackId = params.get('trackId');
+const isTrackPlayback = !!trackId;
+
 export function* getCompetitionUnitDetail({ type, payload }) {
   const { id } = payload;
 
@@ -71,7 +75,6 @@ export function* getRaceData({ type, payload }) {
     yield put(playbackActions.setCompetitionUnitId(raceId));
     yield put(playbackActions.setCompetitionUnitDetail(competitionUnitResult.data));
 
-    const params = new URLSearchParams(window.location.search); // this is for when playing a track, the endTime is passed, we show the plackback not live race.
     const endTime = params.get('endTime');
     const startTime = params.get('startTime');
     if (endTime && startTime) { // from this point we use the time from the trackJson of the track
@@ -195,8 +198,11 @@ export function* getOldRaceData({ type, payload }) {
   if (!raceId) return;
 
   yield put(playbackActions.getRaceStartTimeAndEndTime({ raceId }));
-  yield put(playbackActions.getRaceLegs({ raceId }));
-  yield put(playbackActions.getRaceCourseDetail({ raceId }));
+
+  if (!isTrackPlayback) {
+    yield put(playbackActions.getRaceLegs({ raceId }));
+    yield put(playbackActions.getRaceCourseDetail({ raceId }));
+  }
 }
 
 export function* getTimeBeforeRaceBegin({ type, payload }) {

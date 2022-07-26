@@ -61,14 +61,16 @@ export const SimulateRaceButton = () => {
                         e.preventDefault();
                         performSimulateRace(true);
                     }}>
-                       {t(translations.playback_page.simulate_as_open_regatta)}
+                        {t(translations.playback_page.simulate_as_open_regatta)}
                     </a>
                 </Menu.Item>
             </Spin>
         </Menu>
     );
 
-    if (playbackType === PlaybackTypes.OLDRACE && authUser.developerAccountId && !competitionUnitDetail.calendarEvent?.isPrivate)
+    if (playbackType === PlaybackTypes.OLDRACE
+        && authUser.developerAccountId
+        && !competitionUnitDetail.calendarEvent?.isPrivate)
         return (
             <>
                 <Modal

@@ -147,8 +147,8 @@ export const getAllCompetitionUnitsByEventIdWithSort = (calendarEventId: string,
     }))
 }
 
-export const getSimplifiedTracksByCompetitionUnit = (id: string) => {
-    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/simplified-tracks`))
+export const getSimplifiedTracksByCompetitionUnit = (id: string, trackId: string | null = '') => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${id}/simplified-tracks${trackId ? `?trackId=${trackId}` : ''}`))
 }
 
 export const getLegsByCompetitionUnit = (id: string) => {
@@ -198,10 +198,10 @@ export const startRace = (competitionUnitId: string) => {
  * Get live and happening soon races.
  * @param duration // in months
  * @param distance in mile
- * @param page 
- * @param size 
+ * @param page
+ * @param size
  * @param coordinate { lat, lon }
- * @returns 
+ * @returns
  */
 export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number = 1000, page: number = 1, size: number = 10, coordinate) => {
     const query: any = {
@@ -224,7 +224,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
         })
     }
 
-    query.bool.must.bool = {  // WHERE (END_TIME > NOW() AND START_TIME LESS THAN RANGE) OR (END_TIME DOES NOT EXISTS AND START_TIME IN RANGE OR STATUS IN ('ONGOING', 'SCHEDULED'))  
+    query.bool.must.bool = {  // WHERE (END_TIME > NOW() AND START_TIME LESS THAN RANGE) OR (END_TIME DOES NOT EXISTS AND START_TIME IN RANGE OR STATUS IN ('ONGOING', 'SCHEDULED'))
         should: [             // OR START_TIME LESS THAN RANGE AND STATUS IN ('ONGOING', 'SCHEDULED')
             {
                 bool: {
@@ -287,7 +287,7 @@ export const getLiveAndUpcomingRaces = (duration: number = 1, distance: number =
             },
             {
                 bool: {
-                    must: [ // start_time is less than range 
+                    must: [ // start_time is less than range
                         {
                             "range": {
                                 "approx_start_time_ms": {
