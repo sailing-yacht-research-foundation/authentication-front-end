@@ -79,7 +79,8 @@ export const DeleteGroupModal = (props) => {
                 >
                     <SyrfInputField
                         autoCorrect="off"
-                        autoComplete='off'
+                        autoComplete="off"
+                        autoCapitalize="none"
                         placeholder={t(translations.group.please_input_group_name_to_continue)}
                     />
                 </Form.Item>

@@ -121,7 +121,7 @@ export const SignupForm = () => {
                                     { required: true, message: t(translations.forms.first_name_is_required) },
                                     { max: 15, message: t(translations.forms.first_name_cannot_be_longer) }]}
                             >
-                                <Input autoComplete="new-password" autoCorrect="off" />
+                                <Input autoComplete="off" autoCorrect="off" />
                             </Form.Item>
                         </Col>
 

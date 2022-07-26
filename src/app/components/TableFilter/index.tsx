@@ -17,6 +17,9 @@ export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, han
                 onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                 onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
                 style={{ marginBottom: 8, display: 'block' }}
+                autoCorrect="off"
+                autoComplete="off"
+                autoCapitalize="none"
             />
             <Space size={5}>
                 <Button

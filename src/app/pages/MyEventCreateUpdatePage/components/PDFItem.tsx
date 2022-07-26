@@ -127,7 +127,7 @@ export const PDFItem = (props) => {
                         return Promise.reject(new Error(t(translations.my_event_create_update_page.the_name_you_entered_does_not_match_your_registered_name)));
                     }}]}
                 >
-                    <SyrfInputField autoComplete='off' autoCorrect='off' placeholder={t(translations.forms.please_input_your_name)} />
+                    <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" placeholder={t(translations.forms.please_input_your_name)} />
                 </Form.Item>
 
                 <Form.Item

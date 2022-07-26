@@ -431,7 +431,7 @@ export const CompetitionUnitForm = () => {
                                     max: 150, message: t(translations.forms.race_name_must_not_be_longer_than_150_chars)
                                 }]}
                             >
-                                <SyrfInputField autoCorrect="off" autoComplete='off' />
+                                <SyrfInputField autoCorrect="off" autoComplete="off" autoCapitalize="none" />
                             </Form.Item>
                         </Tooltip>
 

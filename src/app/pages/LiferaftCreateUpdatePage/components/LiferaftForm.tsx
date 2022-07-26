@@ -166,7 +166,7 @@ export const LiferaftForm = () => {
                                             { max: 20, message: t(translations.forms.serial_number_must_not_be_greater_than_20_chars) }
                                         ]}
                                     >
-                                        <SyrfInputField autoCorrect="off" autoComplete='off' />
+                                        <SyrfInputField autoCorrect="off" autoComplete="off" autoCapitalize="none" />
                                     </Form.Item>
                                 </Tooltip>
                             </Col>
@@ -178,7 +178,7 @@ export const LiferaftForm = () => {
                                         name="manufacturer"
                                         rules={[{ max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
                                     >
-                                        <SyrfInputField autoCorrect="off" autoComplete='off' />
+                                        <SyrfInputField autoCorrect="off" autoComplete="off" autoCapitalize="none" />
                                     </Form.Item>
                                 </Tooltip>
                             </Col>
@@ -197,7 +197,7 @@ export const LiferaftForm = () => {
                                             },
                                         })]}
                                     >
-                                        <SyrfInputField autoCorrect="off" autoComplete='off' />
+                                        <SyrfInputField autoCorrect="off" autoComplete="off" autoCapitalize="none" />
                                     </Form.Item>
                                 </Tooltip>
                             </Col>
@@ -211,7 +211,7 @@ export const LiferaftForm = () => {
                                         name="model"
                                         rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                                     >
-                                        <SyrfInputField autoCorrect="off" autoComplete='off' />
+                                        <SyrfInputField autoCorrect="off" autoComplete="off" autoCapitalize="none" />
                                     </Form.Item>
                                 </Tooltip>
                             </Col>
@@ -223,7 +223,7 @@ export const LiferaftForm = () => {
                                         name="container"
                                         rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                                     >
-                                        <SyrfInputField autoCorrect="off" autoComplete='off' />
+                                        <SyrfInputField autoCorrect="off" autoComplete="off" autoCapitalize="none" />
                                     </Form.Item>
                                 </Tooltip>
                             </Col>

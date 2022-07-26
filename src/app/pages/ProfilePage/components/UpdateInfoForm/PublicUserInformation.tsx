@@ -56,7 +56,7 @@ export const PublicUserInformation = (props) => {
                                 message: t(translations.forms.first_name_cannot_be_longer)
                             }]}
                         >
-                            <SyrfInputField autoComplete="off" autoCorrect="off" />
+                            <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
                         </Form.Item>
                     </Tooltip>
                 </Col>
@@ -71,7 +71,7 @@ export const PublicUserInformation = (props) => {
                                 message: t(translations.forms.last_name_cannot_be_longer)
                             }]}
                         >
-                            <SyrfInputField autoComplete="off" autoCorrect="off" />
+                            <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
                         </Form.Item>
                     </Tooltip>
                 </Col>

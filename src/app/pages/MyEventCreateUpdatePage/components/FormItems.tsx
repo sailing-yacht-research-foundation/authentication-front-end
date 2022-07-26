@@ -154,7 +154,7 @@ export const FormItems = (props) => {
                         name="hashtag"
                         rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_255_characters) }]}
                     >
-                        <SyrfInputField autoComplete='off' autoCorrect="off" />
+                        <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -239,7 +239,7 @@ export const FormItems = (props) => {
                     name="externalUrl"
                     rules={[{ type: 'url', message: t(translations.forms.external_url_is_not_a_valid_url) }]}
                 >
-                    <SyrfInputField autoComplete='off' autoCorrect="off" />
+                    <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
                 </Form.Item>
             </Tooltip>
 

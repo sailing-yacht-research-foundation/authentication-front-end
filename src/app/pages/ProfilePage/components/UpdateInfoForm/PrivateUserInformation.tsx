@@ -186,8 +186,7 @@ export const PrivateUserInformation = (props) => {
                                             className: 'location-search-input',
                                         })}
                                         value={address}
-                                        autoCorrect="off"
-                                        autoComplete='off'
+                                        autoComplete="off" autoCorrect="off" autoCapitalize="off"
                                         allowClear
                                     />
                                     {suggestions.length > 0 && <StyledPLaceDropdown>
@@ -261,7 +260,7 @@ export const PrivateUserInformation = (props) => {
                             name="sailing_number"
                             style={{ position: 'relative' }}
                         >
-                            <SyrfInputField value={worldSailingNumber} onChange={handleWorldSailingNumberChange} autoCorrect="off" autoComplete='off' onFocus={handleSuggestionVisible} onBlur={handleSuggestionBlur} />
+                            <SyrfInputField value={worldSailingNumber} onChange={handleWorldSailingNumberChange} autoComplete="off" autoCorrect="off" autoCapitalize="off" onFocus={handleSuggestionVisible} onBlur={handleSuggestionBlur} />
                             <SailingNumberSuggestionContainer style={{ display: isSuggestionVisible ? 'block' : 'none' }}>
                                 <div style={{ overflowY: 'auto', maxHeight: '200px' }}>
                                     {countryCodeList.length > 0 ?
