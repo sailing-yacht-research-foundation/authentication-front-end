@@ -18,7 +18,7 @@ import { PlaybackTypes } from "types/Playback";
 import { sourcesPreventIframe } from "utils/constants";
 import { playbackActions } from ".";
 
-const params = new URLSearchParams(window.location.search); // this is for when playing a track, the endTime is passed, we show the plackback not live race.
+const params = new URLSearchParams(window.location.search);
 const trackId = params.get('trackId');
 const isTrackPlayback = !!trackId;
 
@@ -75,6 +75,7 @@ export function* getRaceData({ type, payload }) {
     yield put(playbackActions.setCompetitionUnitId(raceId));
     yield put(playbackActions.setCompetitionUnitDetail(competitionUnitResult.data));
 
+    // this is for when playing a track, the endTime is passed, we show the placyback not live race.
     const endTime = params.get('endTime');
     const startTime = params.get('startTime');
     if (endTime && startTime) { // from this point we use the time from the trackJson of the track
