@@ -9,6 +9,7 @@ import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { GroupSearchAutoComplete } from './GroupSearchAutoComplete';
+import { ignoreBrowserSupportAttributes } from 'utils/constants';
 
 export const SearchGroup = () => {
 
@@ -66,7 +67,7 @@ const SearchBarWrapper = styled.div`
     margin-top: 30px;
 `;
 
-const StyledSearchBar = styled(Input.Search)`
+const StyledSearchBar = styled(Input.Search).attrs(() => ({...ignoreBrowserSupportAttributes}))`
 
     border-radius: 5px;
 `;

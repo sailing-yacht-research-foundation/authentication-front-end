@@ -78,7 +78,6 @@ export const DeleteGroupModal = (props) => {
                     rules={[{ required: true, message: t(translations.group.group_name_is_required) }]}
                 >
                     <SyrfInputField
-                        autoCorrect="off"
                         placeholder={t(translations.group.please_input_group_name_to_continue)}
                     />
                 </Form.Item>

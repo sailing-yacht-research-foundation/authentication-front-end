@@ -25,7 +25,7 @@ export const VerifyEmailModal = (props: IVerifyEmailModal) => {
         verifyCode
     } = props;
 
-    const [isVerifying, setIsVerifying] = React.useState<boolean>(false); 
+    const [isVerifying, setIsVerifying] = React.useState<boolean>(false);
 
     const [verifyForm] = Form.useForm();
 

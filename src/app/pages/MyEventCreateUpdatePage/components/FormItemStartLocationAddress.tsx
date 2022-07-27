@@ -32,7 +32,6 @@ export const FormItemStartLocationAddress = ({ handleAddressChange, handleSelect
                                     })}
                                     value={address}
                                     allowClear
-                                    autoCorrect="off"
                                 />
                                 {suggestions.length > 0 && <StyledPLaceDropdown>
                                     {suggestions.map((suggestion) => {
