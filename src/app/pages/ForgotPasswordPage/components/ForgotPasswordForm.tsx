@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Form, Row, Spin } from 'antd';
+import { Form, Row, Spin } from 'antd';
 import { toast } from 'react-toastify';
 import { SyrfFormButton } from 'app/components/SyrfForm';
 import { useTranslation } from 'react-i18next';

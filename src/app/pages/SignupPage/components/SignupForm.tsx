@@ -1,7 +1,7 @@
 import 'react-phone-input-2/lib/style.css';
 
 import React, { useState } from 'react';
-import { Input, Form, Select, Divider, Checkbox, Spin, Row, Col } from 'antd';
+import { Form, Select, Divider, Checkbox, Spin, Row, Col } from 'antd';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';

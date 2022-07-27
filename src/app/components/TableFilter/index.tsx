@@ -1,7 +1,7 @@
 import './styles/ant-time-range.css';
 
 import { FieldTimeOutlined, FilterFilled, SearchOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Input, Select, Space } from 'antd';
+import { Button, DatePicker, Select, Space } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import React from 'react';
 import { BiSearch } from 'react-icons/bi';
