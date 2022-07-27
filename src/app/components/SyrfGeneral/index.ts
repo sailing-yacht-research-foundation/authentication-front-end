@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import { media } from 'styles/media';
-import { Button, Menu } from 'antd';
+import { Button, Input, Menu } from 'antd';
 import { RiCloseCircleFill } from 'react-icons/ri';
+import { ignoreBrowserSupportAttributes } from 'utils/constants';
 
 export const PageHeaderContainer = styled.div`
     display: flex;
@@ -313,3 +314,11 @@ export const RaceStatusModalWrapper = styled.p`
     margin-bottom: 0;
     text-align: center;
 `;
+
+export const InputWithNoBrowserSupportAttributes = styled(Input).attrs(() => ({
+    ...ignoreBrowserSupportAttributes
+}))``;
+
+export const InputPasswordWithNoBrowserSupportAttributes = styled(Input.Password).attrs(() => ({
+    ...ignoreBrowserSupportAttributes
+}))``;

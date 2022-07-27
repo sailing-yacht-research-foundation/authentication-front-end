@@ -622,7 +622,6 @@ export const MapView = React.forwardRef((props, ref) => {
                         rules={[{ required: true, message: t(translations.forms.please_input_a_course_name) }]}
                     >
                         <SyrfInputField
-                            autoCorrect="off"
                             placeholder={t(translations.course_create_update_page.input_a_name_for_this_course)}
                         />
                     </Form.Item>
@@ -655,7 +654,6 @@ export const MapView = React.forwardRef((props, ref) => {
                         rules={[{ required: true, message: t(translations.forms.please_input_a_name_for_this_geometry) }]}
                     >
                         <SyrfInputField
-                            autoCorrect="off"
                             placeholder={t(translations.course_create_update_page.input_a_name_for_this_geometry)}
                         />
                     </Form.Item>

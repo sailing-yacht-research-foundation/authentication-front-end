@@ -15,7 +15,7 @@ import { translations } from 'locales/translations';
 import { ReactComponent as Logo } from '../assets/logo-dark.svg';
 import { login } from 'services/live-data-server/auth';
 import { subscribeUser } from 'subscription';
-import { AuthCode } from 'utils/constants';
+import { AuthCode, ignoreBrowserSupportAttributes } from 'utils/constants';
 
 const layout = {
   wrapperCol: { sm: 24, md: 24, lg: 24 }
@@ -79,6 +79,7 @@ export const LoginForm = (props) => {
           <Form
             {...layout}
             name="basic"
+            autoComplete='off'
             initialValues={{
               remember: true,
               email: '',
@@ -97,10 +98,7 @@ export const LoginForm = (props) => {
                 { type: 'email', message: t(translations.forms.email_must_be_valid) }]}
             >
               <SyrfInput
-                placeholder={t(translations.login_page.email.label)}
-                autoCorrect="off"
-                autoCapitalize="none"
-                autoComplete="off" />
+                placeholder={t(translations.login_page.email.label)} />
             </Form.Item>
 
             <Form.Item
@@ -116,7 +114,7 @@ export const LoginForm = (props) => {
                 },
               ]}
             >
-              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} autoCorrect="off" autoCapitalize="none" autoComplete="off" />
+              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} />
             </Form.Item>
 
             <Form.Item
@@ -194,7 +192,9 @@ const FormTitle = styled.h3`
   padding-top: 70px;
 `
 
-const SyrfInput = styled(Input)`
+const SyrfInput = styled(Input).attrs(props => ({
+  ...ignoreBrowserSupportAttributes
+}))`
   background: #F8F8F8 !important;
   border-radius: 4px;
   border: none;
@@ -259,7 +259,7 @@ const SyrfSignupButton = styled(Button)`
     background: #DB6E1E;
     color: #fff;
     border-color: #DB6E1E;
-  } 
+  }
 `;
 
 const StyledLogo = styled(Logo)`
