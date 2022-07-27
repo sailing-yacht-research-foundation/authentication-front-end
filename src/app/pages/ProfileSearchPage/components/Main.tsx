@@ -16,6 +16,7 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { SearchProfilesAutoComplete } from 'app/components/SocialProfile/SearchProfilesAutoComplete';
 import { FollowRequests } from 'app/components/SocialProfile/FollowRequests';
+import { ignoreBrowserSupportAttributes } from 'utils/constants';
 
 const defaultLottieOptions = {
     loop: true,
@@ -93,7 +94,7 @@ const SearchResultWrapper = styled.div`
 
 `;
 
-const SearchBar = styled(Input.Search)`
+const SearchBar = styled(Input.Search).attrs(() => ({...ignoreBrowserSupportAttributes}))`
     input {
         ::placeholder {
             white-space: nowrap;
