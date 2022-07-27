@@ -58,7 +58,7 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             dataIndex: 'class',
             key: 'class',
             render: (text, record) => {
-                return record?.vesselParticipants[0]?.crews?.map(crew => <Space key={crew.id} size={10}>
+                return record?.vesselParticipants[0]?.crews?.map((crew) => <Space key={crew.id} size={10}>
                     <Tooltip title={crew.publicName}>
                         <CrewItem onClick={() => navigateToProfile(crew)} alt={crew.publicName} src={renderAvatar(crew.profile?.avatar)} />
                     </Tooltip>

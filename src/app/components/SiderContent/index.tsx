@@ -21,6 +21,11 @@ import { FaUserFriends } from 'react-icons/fa';
 import { ImProfile } from 'react-icons/im';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { BsFillCreditCardFill } from 'react-icons/bs';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPagination } from '../SocialProfile/slice/selector';
+import { useSocialSlice } from '../SocialProfile/slice';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { TourStepClassName } from 'utils/tour-steps';
 
 interface Route {
   key: number,
@@ -29,7 +34,9 @@ interface Route {
   icon: JSX.Element,
   items?: any,
   subMenuKey?: string,
-  exactPath?: string
+  exactPath?: string,
+  itemCount?: number;
+  className?: string,
 }
 
 const routeKey = {
@@ -55,6 +62,12 @@ export const SiderContent = (props) => {
 
   const { t } = useTranslation();
 
+  const followRequestsPagination = useSelector(selectPagination);
+
+  const dispatch = useDispatch();
+
+  const { actions } = useSocialSlice();
+
   const items: Route[] = [
     {
       key: routeKey.SEARCH,
@@ -67,19 +80,21 @@ export const SiderContent = (props) => {
       title: t(translations.side_menu.my_tracks),
       path: '/tracks',
       icon: <GiPathDistance />,
-
+      className: TourStepClassName.TRACKS_PAGE
     },
     {
       key: routeKey.EVENTS,
       path: '/events',
       title: t(translations.side_menu.my_events),
       icon: <CalendarOutlined />,
+      className: TourStepClassName.MY_EVENTS_PAGE
     },
     {
       key: routeKey.GROUPS,
       path: '/groups',
       title: t(translations.side_menu.groups),
       icon: <MdGroups />,
+      className: TourStepClassName.GROUPS_PAGE
 
     },
     {
@@ -87,7 +102,7 @@ export const SiderContent = (props) => {
       path: '/boats',
       title: t(translations.side_menu.vessels),
       icon: <GiSailboat />,
-
+      className: TourStepClassName.BOATS_PAGE
     },
     {
       key: routeKey.DISCOVER_FRIENDS,
@@ -95,12 +110,14 @@ export const SiderContent = (props) => {
       path: '/profile/:id',
       title: t(translations.side_menu.profile.discover_friends),
       icon: <FaUserFriends />,
+      itemCount: followRequestsPagination.total,
+      className: TourStepClassName.DISCOVER_FRIENDS_PAGE
     },
     {
       key: routeKey.DATA,
       path: '/data',
       title: t(translations.side_menu.data),
-      icon: <GoDatabase />,
+      icon: <GoDatabase />
 
     },
     {
@@ -108,6 +125,7 @@ export const SiderContent = (props) => {
       subMenuKey: 'account',
       title: t(translations.side_menu.profile.name),
       icon: <UserOutlined />,
+      className: TourStepClassName.MY_ACCOUNT_PAGE,
       items: [
         {
           key: routeKey.ACCOUNT,
@@ -153,6 +171,8 @@ export const SiderContent = (props) => {
   const [openKey, setOpenKey] = React.useState<string>('');
 
   const [renderedDefaultActive, setRenderedDefaultActive] = React.useState<boolean>(false);
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   React.useEffect(() => {
     renderDefaultSelectedRoute();
@@ -205,6 +225,13 @@ export const SiderContent = (props) => {
     setSelectedKey(routeKey.SEARCH);
   }
 
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(actions.getFollowRequests({ page: 1, size: 10 }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
+
   return (
     <SiderWrapper style={{ width: 'auto' }}>
       {renderedDefaultActive && <SyrfMenu
@@ -218,12 +245,13 @@ export const SiderContent = (props) => {
 
         {items.map(route => {
           if (route.path) {
-            return <SyrfMenuItem title={route.title} key={route.key} icon={route.icon}>
+            return <SyrfMenuItem className={route.className} title={route.title} key={route.key} icon={route.icon}>
               <StyledLink to={route.exactPath || route.path}>{route.title}</StyledLink>
+              {route.itemCount !== undefined && Number(route.itemCount) > 0 && <Badge>{route.itemCount}</Badge>}
             </SyrfMenuItem>;
           }
 
-          return <SyrfSubmenu key={route.subMenuKey} icon={route.icon} title={route.title}>
+          return <SyrfSubmenu className={route.className} key={route.subMenuKey} icon={route.icon} title={route.title}>
             {route.items.map(subRoute => {
               return <SyrfMenuItem title={subRoute.title} key={subRoute.key} icon={subRoute.icon}>
                 <StyledLink to={subRoute.path}>{subRoute.title}</StyledLink>
@@ -297,4 +325,19 @@ const SyrfMenuItem = styled(Menu.Item)`
 
 const StyledLink = styled(Link)`
     text-decoration: none !important;
-`
+`;
+
+const Badge = styled.div`
+    position: absolute;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background: #DC6E1E;
+    color: #fff;
+    right: 15px;
+    top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+`;

@@ -66,8 +66,8 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
     }
 
     const renderGroupEditors = () => {
-        return groupEditors.map(editor => {
-            return <Tooltip title={editor?.group?.groupName}>
+        return groupEditors.map((editor, index) => {
+            return <Tooltip key={index} title={editor?.group?.groupName}>
                 <EditorItem>
                     <EditorItemAvatarContainer>
                         <img alt={editor?.group?.groupName} src={editor?.group?.groupImage || DEFAULT_GROUP_AVATAR} />
@@ -86,8 +86,8 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
 
     const renderIndividualEditors = () => {
         const userId: any = localStorage.getItem('user_id');
-        return individualEditors.map(editor => {
-            return <Tooltip title={editor?.user?.name}>
+        return individualEditors.map((editor, index) => {
+            return <Tooltip key={index} title={editor?.user?.name}>
                 <EditorItem key={editor.id}>
                     <EditorItemAvatarContainer>
                         <img alt={editor?.user?.name} src={renderAvatar(editor?.user?.avatar)} />
@@ -141,7 +141,7 @@ const EditorWrapper = styled.div`
 const EditorItem = styled.div`
     padding: 5px;
     display: flex;
-    
+
     &:not(:last-child) {
         border-bottom: 1px solid #eee;
         margin-bottom: 10px;

@@ -55,7 +55,7 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
     }
 
     const renderBoatsList = () => {
-        return boats.map(item => <Select.Option value={item.id}>{item.publicName}</Select.Option>)
+        return boats.map((item, index) => <Select.Option key={index} value={item.id}>{item.publicName}</Select.Option>)
     }
 
     const onFinish = async (values) => {
