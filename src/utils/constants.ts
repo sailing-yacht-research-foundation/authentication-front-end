@@ -326,3 +326,9 @@ export enum FollowerType {
     INFLUENCER = 'INFLUENCER',
     TOTAL = 'TOTAL'
 }
+
+export const ignoreBrowserSupportAttributes = {
+    autoComplete: "off",
+    autoCorrect: "off",
+    autoCapitalize: "none"
+}

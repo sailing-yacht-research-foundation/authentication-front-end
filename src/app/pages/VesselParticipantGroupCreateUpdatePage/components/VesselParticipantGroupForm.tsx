@@ -147,7 +147,7 @@ export const VesselParticipantGroupForm = () => {
                                     { max: 100, message: t(translations.forms.class_name_must_not_be_longer_than_100_chars) }
                                 ]}
                             >
-                                <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
+                                <SyrfInputField  />
                             </Form.Item>
                         </Tooltip>
                         <Divider />

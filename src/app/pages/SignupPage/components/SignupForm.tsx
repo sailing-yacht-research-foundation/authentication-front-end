@@ -19,6 +19,7 @@ import { PrivacyPolicyInterface } from 'types/PrivacyPolicy';
 import { privacypolicyVersionsFilter } from 'utils/privacy-policy';
 import styled from 'styled-components';
 import { AuthCode } from 'utils/constants';
+import { InputPasswordWithNoBrowserSupportAttributes, InputWithNoBrowserSupportAttributes } from 'app/components/SyrfGeneral';
 
 const { Option } = Select;
 
@@ -109,7 +110,7 @@ export const SignupForm = () => {
                             message: t(translations.misc.email_must_not_contain_blank)
                         },]}
                     >
-                        <Input autoComplete="off" autoCapitalize="none" autoCorrect="off" />
+                        <InputWithNoBrowserSupportAttributes />
                     </Form.Item>
 
                     <Row gutter={24}>
@@ -121,7 +122,7 @@ export const SignupForm = () => {
                                     { required: true, message: t(translations.forms.first_name_is_required) },
                                     { max: 15, message: t(translations.forms.first_name_cannot_be_longer) }]}
                             >
-                                <Input autoComplete="off" autoCorrect="off" />
+                                <InputWithNoBrowserSupportAttributes />
                             </Form.Item>
                         </Col>
 
@@ -133,7 +134,7 @@ export const SignupForm = () => {
                                     { required: true, message: t(translations.forms.last_name_is_required) },
                                     { max: 15, message: t(translations.forms.last_name_cannot_be_longer) }]}
                             >
-                                <Input autoComplete="off" autoCorrect="off" />
+                                <InputWithNoBrowserSupportAttributes />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -148,7 +149,7 @@ export const SignupForm = () => {
                             max: 16, min: 8, message: t(translations.forms.password_must_be_between)
                         }]}
                     >
-                        <Input.Password autoComplete="off" autoCapitalize="none" autoCorrect="off" />
+                        <InputPasswordWithNoBrowserSupportAttributes />
                     </Form.Item>
 
                     <Form.Item
@@ -169,7 +170,7 @@ export const SignupForm = () => {
                             }),
                         ]}
                     >
-                        <Input.Password autoComplete="off" autoCapitalize="none" autoCorrect="off" />
+                        <InputPasswordWithNoBrowserSupportAttributes />
                     </Form.Item>
 
                     <Divider />

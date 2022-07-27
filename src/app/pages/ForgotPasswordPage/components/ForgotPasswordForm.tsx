@@ -9,6 +9,7 @@ import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { media } from 'styles/media';
 import EmailSent from '../assets/email-sent.json';
+import { InputWithNoBrowserSupportAttributes } from 'app/components/SyrfGeneral';
 
 const defaultLottieOptions = {
   loop: true,
@@ -66,7 +67,7 @@ export function ForgotPasswordForm() {
                 message: t(translations.misc.email_must_not_contain_blank)
               },]}
             >
-              <Input autoCorrect="off" autoComplete="off" autoCapitalize="none" />
+              <InputWithNoBrowserSupportAttributes  />
             </Form.Item>
 
             <Form.Item>

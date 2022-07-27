@@ -116,7 +116,7 @@ export const ShareableInformation = (props) => {
                             name="emergencyContactName"
                             rules={[{ max: 25, message: t(translations.forms.emergency_name_must_not_be_greater_than_25_chars) }]}
                         >
-                            <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
+                            <SyrfInputField  />
                         </Form.Item>
                     </Tooltip>
                 </Col>
@@ -143,7 +143,7 @@ export const ShareableInformation = (props) => {
                                 type: 'email', message: t(translations.forms.email_must_be_valid)
                             }, { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
                         >
-                            <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
+                            <SyrfInputField  />
                         </Form.Item>
                     </Tooltip>
                 </Col>
@@ -157,7 +157,7 @@ export const ShareableInformation = (props) => {
                             name="emergencyContactRelationship"
                             rules={[{ max: 25, message: t(translations.forms.emergency_relationship_must_not_be_greater_than_25_chars) }]}
                         >
-                            <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
+                            <SyrfInputField  />
                         </Form.Item>
                     </Tooltip>
                 </Col>
@@ -182,7 +182,7 @@ export const ShareableInformation = (props) => {
                             name="passportNumber"
                             rules={[{ min: 5, message: t(translations.forms.please_input_at_least_characters, { numberOfChars: 5 }) }, { max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
                         >
-                            <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
+                            <SyrfInputField  />
                         </Form.Item>
                     </Tooltip>
                 </Col>
@@ -296,7 +296,7 @@ export const ShareableInformation = (props) => {
                             name="tShirtSize"
                             rules={[{ max: 10, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 10 }) }]}
                         >
-                            <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
+                            <SyrfInputField  />
                         </Form.Item>
                     </Tooltip>
                 </Col>
@@ -327,7 +327,7 @@ export const ShareableInformation = (props) => {
                             name="epirbBeaconHexId"
                             rules={[{ max: 30, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 30 }) }]}
                         >
-                            <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
+                            <SyrfInputField  />
                         </Form.Item>
                     </Tooltip>
                 </Col>

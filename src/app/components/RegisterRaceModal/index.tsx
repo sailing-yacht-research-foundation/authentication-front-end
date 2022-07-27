@@ -124,7 +124,7 @@ export const RegisterRaceModal = ({ showModal, setShowModal, raceName, raceId, l
                         label={<SyrfFieldLabel>{t(translations.my_event_list_page.sail_number)}</SyrfFieldLabel>}
                         rules={[{ max: 50, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 50 }) }]}
                         name="sailNumber">
-                        <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="none" />
+                        <SyrfInputField  />
                     </Form.Item>
                 </div>
 

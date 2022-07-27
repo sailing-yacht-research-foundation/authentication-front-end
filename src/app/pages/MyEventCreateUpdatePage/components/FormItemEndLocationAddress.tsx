@@ -41,8 +41,6 @@ export const FormItemEndLocationAddress = ({ form, address, endAddress, handleEn
                                         className: 'location-search-input',
                                     })}
                                     value={endAddress || ''}
-                                    autoCorrect="off"
-                                    autoComplete="off"
                                 />
                                 {suggestions.length > 0 && <StyledPLaceDropdown>
                                     {suggestions.map((suggestion) => {

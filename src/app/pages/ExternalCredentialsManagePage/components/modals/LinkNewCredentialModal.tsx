@@ -83,7 +83,7 @@ export const LinkNewCredentialModal = (props: ILinkNewCredentialModal) => {
                         name="username"
                         rules={[{ required: true, message: t(translations.credentail_manager_page.username_is_required) }]}
                     >
-                        <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="none" />
+                        <SyrfInputField  />
                     </Form.Item>
 
                     <Form.Item

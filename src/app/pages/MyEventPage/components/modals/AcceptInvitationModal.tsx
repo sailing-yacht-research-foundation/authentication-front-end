@@ -132,7 +132,7 @@ export const AcceptInvitationModal = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_list_page.sail_number)}</SyrfFieldLabel>}
                         name="sailNumber">
-                        <SyrfInputField autoComplete="off" autoCorrect="off" autoCapitalize="off" />
+                        <SyrfInputField  />
                     </Form.Item>
                 </div>
 

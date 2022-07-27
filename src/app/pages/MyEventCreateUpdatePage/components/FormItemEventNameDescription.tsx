@@ -22,7 +22,7 @@ export const FormItemEventNameDescription = (props) => {
                         max: 150, message: t(translations.forms.event_name_must_not_be_longer_than_150_chars)
                     }]}
                 >
-                    <SyrfInputField autoCorrect="off" autoComplete="off" autoCapitalize="off" />
+                    <SyrfInputField />
                 </Form.Item>
             </Tooltip>
 
@@ -33,7 +33,7 @@ export const FormItemEventNameDescription = (props) => {
                     name="description"
                     data-multiline={true}
                 >
-                    <SyrfTextArea autoCorrect="off" autoComplete="off" autoCapitalize="off" />
+                    <SyrfTextArea />
                 </Form.Item>
             </Tooltip>
 
