@@ -16,13 +16,11 @@ import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/co
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
 import { EventState, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import { CalendarEvent } from 'types/CalendarEvent';
-import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 import { Course } from 'types/Course';
 
@@ -60,8 +58,6 @@ export const CompetitionUnitForm = () => {
     const [formChanged, setFormChanged] = React.useState<boolean>(true);
 
     const [eventData, setEventData] = React.useState<Partial<CalendarEvent>>({});
-
-    const [groups, setGroups] = React.useState<VesselParticipantGroup[]>([]);
 
     const [, setLastCreatedRace] = React.useState<Partial<CompetitionUnit>>({});
 
