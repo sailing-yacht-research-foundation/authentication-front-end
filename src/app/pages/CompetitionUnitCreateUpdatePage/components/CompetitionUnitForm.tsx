@@ -16,13 +16,11 @@ import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/co
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { getVesselParticipantGroupsByEventIdWithSort } from 'services/live-data-server/vessel-participant-group';
 import { IoIosArrowBack } from 'react-icons/io';
 import { EventState, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import { CalendarEvent } from 'types/CalendarEvent';
-import { VesselParticipantGroup } from 'types/VesselParticipantGroup';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 import { Course } from 'types/Course';
 
@@ -61,8 +59,6 @@ export const CompetitionUnitForm = () => {
 
     const [eventData, setEventData] = React.useState<Partial<CalendarEvent>>({});
 
-    const [groups, setGroups] = React.useState<VesselParticipantGroup[]>([]);
-
     const [, setLastCreatedRace] = React.useState<Partial<CompetitionUnit>>({});
 
     const [courses, setCourses] = React.useState<Course[]>([]);
@@ -72,7 +68,7 @@ export const CompetitionUnitForm = () => {
     const isCompetitionUnitPostponed = !moment(competitionUnit.startTime).isValid();
 
     const onFinish = async (values) => {
-        let { name, startDate, startTime, isCompleted, calendarEventId, vesselParticipantGroupId, description, approximateStart_zone, courseId } = values;
+        let { name, startDate, startTime, isCompleted, calendarEventId, description, approximateStart_zone, courseId } = values;
         let response;
         calendarEventId = eventId || calendarEventId;
 
@@ -88,7 +84,6 @@ export const CompetitionUnitForm = () => {
         const data: any = {
             name: name,
             isCompleted: isCompleted,
-            vesselParticipantGroupId: vesselParticipantGroupId,
             description: description,
             boundingBox: boundingBoxCoordinates.length > 0 ?
                 {
@@ -198,34 +193,9 @@ export const CompetitionUnitForm = () => {
         return false;
     }
 
-    const setDefaultClassForRace = (vesselGroups: VesselParticipantGroup[]) => {
-        if (location.pathname.includes(MODE.UPDATE)) return;
-
-        const defaultVesselGroup = vesselGroups[0];
-
-        if (defaultVesselGroup)
-            form.setFieldsValue({ vesselParticipantGroupId: defaultVesselGroup.id });
-    }
-
-    const getAllUserVesselGroups = async () => {
-        const response = await getVesselParticipantGroupsByEventIdWithSort(eventId, 1);
-
-        if (response.success) {
-            const vesselGroups = response.data?.rows;
-            setGroups(vesselGroups);
-            setDefaultClassForRace(vesselGroups);
-        }
-    }
-
     const onCoordinatesRecevied = (coordinates) => {
         setBoundingBoxCoordinates(coordinates);
         setFormChanged(true);
-    }
-
-    const renderVesselParticipantGroupList = () => {
-        return groups.map((group) => {
-            return <Select.Option key={group.id} value={group.id}>{group.name}</Select.Option>
-        });
     }
 
     const onCompetitionUnitDeleted = () => {
@@ -316,7 +286,6 @@ export const CompetitionUnitForm = () => {
     React.useEffect(() => {
         initUserLocation();
         initModeAndData();
-        getAllUserVesselGroups();
         getAllEventCourses();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -431,7 +400,7 @@ export const CompetitionUnitForm = () => {
                                     max: 150, message: t(translations.forms.race_name_must_not_be_longer_than_150_chars)
                                 }]}
                             >
-                                <SyrfInputField autoCorrect="off" />
+                                <SyrfInputField />
                             </Form.Item>
                         </Tooltip>
 
@@ -442,7 +411,7 @@ export const CompetitionUnitForm = () => {
                                 name="description"
                             >
 
-                                <SyrfTextArea autoCorrect="off" />
+                                <SyrfTextArea />
                             </Form.Item>
                         </Tooltip>
 
@@ -527,20 +496,6 @@ export const CompetitionUnitForm = () => {
                         </Row>}
 
                         <BoundingBoxPicker userCoordinates={coordinates} coordinates={boundingBoxCoordinates} onCoordinatesRecevied={onCoordinatesRecevied} />
-
-                        <Tooltip title={t(translations.tip.race_class)}>
-                            <Form.Item
-                                style={{ marginBottom: '10px' }}
-                                label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.vessel_group)}</SyrfFieldLabel>}
-                                name="vesselParticipantGroupId"
-                                help={<SyrFieldDescription>{t(translations.competition_unit_create_update_page.vessel_participant_group_is_a_set)}</SyrFieldDescription>}
-                            >
-                                <SyrfFormSelect placeholder={t(translations.competition_unit_create_update_page.select_a_group)}>
-                                    {renderVesselParticipantGroupList()}
-                                </SyrfFormSelect>
-
-                            </Form.Item>
-                        </Tooltip>
 
                         <Form.Item
                             style={{ marginBottom: '10px' }}

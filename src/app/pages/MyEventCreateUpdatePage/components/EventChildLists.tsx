@@ -3,7 +3,6 @@ import { EventState, MODE } from 'utils/constants';
 import { SyrfFormButton, SyrfFormWrapper } from 'app/components/SyrfForm';
 import { CompetitionUnitList } from './CompetitionUnitList';
 import { ParticipantList } from './ParticipantList';
-import { VesselParticipantGroupList } from './VesselParticipantGroupList';
 import { CoursesList } from './CoursesList';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -40,10 +39,6 @@ export const EventChildLists = ({ mode, eventId, event, raceListRef, pdfListRef,
 
                     <SyrfFormWrapper ref={raceListRef}>
                         <CompetitionUnitList event={event} eventId={eventId || event.id} />
-                    </SyrfFormWrapper>
-
-                    <SyrfFormWrapper>
-                        <VesselParticipantGroupList eventId={eventId || event.id} />
                     </SyrfFormWrapper>
 
                     <SyrfFormWrapper>

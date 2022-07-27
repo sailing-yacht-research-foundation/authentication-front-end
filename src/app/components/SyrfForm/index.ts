@@ -3,6 +3,7 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { Input, Button, Select, InputNumber } from 'antd';
 import PhoneInput from 'react-phone-input-2';
 import { media } from 'styles/media';
+import { ignoreBrowserSupportAttributes } from 'utils/constants';
 
 const inputStyle = `
     border-radius: 10px;
@@ -19,7 +20,7 @@ export const SyrfFormWrapper = styled.div`
     &.danger-zone {
         margin-top: 30px;
     }
-    
+
     &.no-background {
         background: none;
         padding: 0;
@@ -51,11 +52,15 @@ export const SyrfSubmitButton = styled(Button)`
     text-transform: capitalize;
 `
 
-export const SyrfInputField = styled(Input)`
+export const SyrfInputField = styled(Input).attrs(() => ({
+    ...ignoreBrowserSupportAttributes
+  }))`
     ${inputStyle}
 `
 
-export const SyrfPasswordInputField = styled(Input.Password)`
+export const SyrfPasswordInputField = styled(Input.Password).attrs(() => ({
+    ...ignoreBrowserSupportAttributes
+  }))`
     border-radius: 10px;
     border: 1px solid ${StyleConstants.MAIN_TONE_COLOR};
 `;
@@ -137,7 +142,9 @@ export const SyrfButtonDescription = styled.span`
     color: #000000d9;
 `;
 
-export const SyrfTextArea = styled(Input.TextArea)`
+export const SyrfTextArea = styled(Input.TextArea).attrs(() => ({
+    ...ignoreBrowserSupportAttributes
+  }))`
     ${inputStyle}
 `;
 

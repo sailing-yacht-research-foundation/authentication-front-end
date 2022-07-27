@@ -110,9 +110,12 @@ export const EventList = () => {
       sorter: true,
       fixed: !isMobile ? 'left' : false,
       render: (text, record) => {
-        return <Tooltip title={text}>
+        return <>
+        <Tooltip title={text}>
           <Link to={`/events/${record.id}`}>{truncateName(text)}</Link>
-        </Tooltip>;
+        </Tooltip>
+          { record.isSimulation && <><br/><span>{t(translations.general.simulation)}</span></> }
+        </>;
       },
       ...getColumnSearchProps('name', handleSearch, handleReset)
     },
