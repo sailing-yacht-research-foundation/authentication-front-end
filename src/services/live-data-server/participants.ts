@@ -80,10 +80,9 @@ export const getMyInvitedEvents = (page: number, size: number = 10, filter: Tabl
     }))
 }
 
-export const acceptInvitation = (requestId: string, vesselId: string, vesselParticipantGroupId: string, sailNumber: string, allowShareInformation: boolean) => {
+export const acceptInvitation = (requestId: string, vesselId: string, sailNumber: string, allowShareInformation: boolean) => {
     return formatServicePromiseResponse(syrfRequest.put(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/participants/${requestId}/accept-invitation`, {
         vesselId,
-        vesselParticipantGroupId,
         sailNumber,
         allowShareInformation
     }))

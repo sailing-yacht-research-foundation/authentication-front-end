@@ -1,17 +1,17 @@
 import './styles/ant-time-range.css';
 
 import { FieldTimeOutlined, FilterFilled, SearchOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Input, Select, Space } from 'antd';
+import { Button, DatePicker, Select, Space } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import React from 'react';
 import { BiSearch } from 'react-icons/bi';
 import styled from 'styled-components';
-import { IconWrapper } from '../SyrfGeneral';
+import { IconWrapper, InputWithNoBrowserSupportAttributes } from '../SyrfGeneral';
 
 export const getColumnSearchProps = (dataIndex: any, handleSearch: Function, handleReset: Function): ColumnType<any> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
-            <Input
+            <InputWithNoBrowserSupportAttributes
                 placeholder={`Search...`}
                 value={selectedKeys[0]}
                 onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
@@ -64,7 +64,7 @@ export const getColumnTimeProps = (dataIndex, handleSearch: Function, handleRese
                         handleSearch(selectedKeys, confirm, dataIndex)
                     }}
                     style={{ width: 90 }}
-                    icon={<IconWrapper><BiSearch/></IconWrapper>}
+                    icon={<IconWrapper><BiSearch /></IconWrapper>}
                     size="small"
                 >
                     Search
@@ -100,7 +100,7 @@ export const getColumnCheckboxProps = (dataIndex, filterCriteria, handleSearch: 
                         handleSearch(selectedKeys, confirm, dataIndex)
                     }}
                     style={{ width: 90 }}
-                    icon={<IconWrapper><BiSearch/></IconWrapper>}
+                    icon={<IconWrapper><BiSearch /></IconWrapper>}
                     size="small"
                 >
                     Search

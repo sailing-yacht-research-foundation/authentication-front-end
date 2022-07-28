@@ -97,7 +97,7 @@ export const NotificationList = (props: INotificationList) => {
     const NotificationListContent = () => <Spin spinning={isLoading}>
         <NotificationHeaderWrapper>
             <NotificationTitle>{t(translations.notifications.notifications)}</NotificationTitle>
-            <NotificationOptionWrapper overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />}>
+            <NotificationOptionWrapper trigger={'click'} overlay={menu} placement="bottomCenter" icon={<StyledOptionsButton />}>
             </NotificationOptionWrapper>
         </NotificationHeaderWrapper>
 
@@ -118,7 +118,7 @@ export const NotificationList = (props: INotificationList) => {
     );
 }
 
-const NotificationOptionWrapper = styled(Dropdown.Button)`
+const NotificationOptionWrapper = styled<any>(Dropdown.Button)`
     button {
         border: none;
     }

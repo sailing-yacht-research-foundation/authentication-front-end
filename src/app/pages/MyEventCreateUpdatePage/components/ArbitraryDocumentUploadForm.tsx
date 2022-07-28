@@ -105,7 +105,7 @@ export const ArbitraryDocumentUploadForm = ({ event, showModal, setShowModal, re
                                                     },
                                                 })]}
                                             >
-                                                <SyrfInputField />
+                                                <SyrfInputField  />
                                             </Form.Item>
 
                                             <Form.Item

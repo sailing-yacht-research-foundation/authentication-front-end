@@ -69,7 +69,7 @@ export const ChangePasswordForm = () => {
                                     message: t(translations.misc.password_must_not_contain_blank)
                                 }, { max: 16, min: 8, message: t(translations.forms.password_must_be_between) }]}
                             >
-                                <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
+                                <SyrfPasswordInputField />
                             </Form.Item>
                         </Tooltip>
 
@@ -82,7 +82,7 @@ export const ChangePasswordForm = () => {
                                     message: t(translations.misc.password_must_not_contain_blank)
                                 }, { max: 16, min: 8, message: t(translations.forms.new_password_must_be_between) }]}
                             >
-                                <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
+                                <SyrfPasswordInputField />
                             </Form.Item>
                         </Tooltip>
 
@@ -106,7 +106,7 @@ export const ChangePasswordForm = () => {
                                     }),
                                 ]}
                             >
-                                <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
+                                <SyrfPasswordInputField />
                             </Form.Item>
                         </Tooltip>
 
