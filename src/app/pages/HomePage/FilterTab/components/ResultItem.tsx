@@ -244,7 +244,7 @@ export const ResultItem = (props) => {
                     {canRegister() && <CreateButton
                         icon={<FiEdit
                             style={{ marginRight: '10px' }} />}
-                        onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
+                        onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_captain)}</CreateButton>
                     }
                 </Space>
             </Wrapper>

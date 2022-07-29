@@ -89,7 +89,7 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
             raceId={race.id}
             eventId={race.calendarEventId}
         />
-        {canRegisterToRace() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegisterModalOrRedirect(race)}>{t(translations.home_page.register_as_competitor)}</CreateButton>}
+        {canRegisterToRace() && <CreateButton icon={<FiEdit style={{ marginRight: '10px' }} />} onClick={() => showRegisterModalOrRedirect(race)}>{t(translations.home_page.register_as_captain)}</CreateButton>}
         {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
         {canManageEvent() && <>
             <Tooltip title={t(translations.tip.update_race)}>
