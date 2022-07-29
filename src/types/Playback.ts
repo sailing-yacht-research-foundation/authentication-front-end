@@ -6,4 +6,5 @@ export enum PlaybackTypes {
   RACENOTFOUND = 'raceNotFound',
   RACELOADING = 'raceLoading',
   MOBILEISSUE = 'playbackIssue',
+  NO_STATE = 'nostate'
 }

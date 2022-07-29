@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import { StyleConstants } from "styles/StyleConstants";
 import { handleGoBack, truncateName } from "utils/helpers";
 import { SimulateRaceButton } from "./components/SimulateRaceButton";
+import { ModalDataIsBeingProcessed } from "./components/ModalDataIsBeingProcessed";
 
 export const PlaybackPage = () => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
@@ -161,6 +162,7 @@ export const PlaybackPage = () => {
       </PageHeadContainer>
 
       <div ref={contentContainerRef}>
+        <ModalDataIsBeingProcessed/>
         {playbackType === PlaybackTypes.SCRAPEDRACE && <PlaybackScrapedRace />}
         {playbackType === PlaybackTypes.INSECURESCRAPEDRACE && <PlaybackInsecureScrapedRace />}
         {playbackType === PlaybackTypes.STREAMINGRACE && <PlaybackStreamRace />}
