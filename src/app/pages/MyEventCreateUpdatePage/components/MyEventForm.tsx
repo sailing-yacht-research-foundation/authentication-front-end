@@ -230,7 +230,7 @@ export const MyEventForm = () => {
                 }
             }
         ];
-        const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(courseGeometry, eventId);
+        const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(courseGeometry, event.id);
         const response = await createCourse(event.id, 'Default Course', modifiedCourseSequencedGeometries);
 
         if (response.success) {
