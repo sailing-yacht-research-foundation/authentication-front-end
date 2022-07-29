@@ -238,9 +238,9 @@ export const ResultItem = (props) => {
                     {race._source?.event_name && <DescriptionItem>
                         {t(translations.home_page.filter_tab.filter_result.event_name)} {eventElement}
                     </DescriptionItem>}
-                    <DescriptionItem>
+                    {race._source?.source && <DescriptionItem>
                         {t(translations.my_tracks_page.source)}: {race._source?.source}
-                    </DescriptionItem>
+                    </DescriptionItem>}
                 </DescriptionWrapper>
                 <Space size={10}>
                     {isAuthenticated && canStreamToExpedition(race._source?.id, race._source?.source, race._source?.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
