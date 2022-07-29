@@ -33,8 +33,8 @@ export const ResultItem = (props) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    const eventId = race._source?.event;
-    const eventText = renderEmptyValue(race._source?.event_name, ' ');
+    const eventId = race._source.event;
+    const eventText = renderEmptyValue(race._source.event_name, ' ');
     const eventElement = eventId && race._source.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText;
     const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
     const [showMarkAsHiddenConfirmModal, setShowMarkAsHiddenConfirmModal] = React.useState<boolean>(false);
@@ -46,7 +46,7 @@ export const ResultItem = (props) => {
     const authUser = useSelector(selectUser);
 
     const canManageRace = () => {
-        return authUser.role === UserRole.SUPER_ADMIN && race._source?.source !== RaceSource.SYRF;
+        return authUser.role === UserRole.SUPER_ADMIN && race._source.source !== RaceSource.SYRF;
     };
 
     const dispatch = useDispatch();
@@ -69,8 +69,8 @@ export const ResultItem = (props) => {
 
     const canRegister = () => {
         return relation && !relation?.isAdmin && !relation?.isParticipating
-            && race._source?.isOpen && race._source?.allowRegistration
-            && [RaceStatus.SCHEDULED].includes(race._source?.status);
+            && race._source.isOpen && race._source.allowRegistration
+            && [RaceStatus.SCHEDULED].includes(race._source.status);
     };
 
     React.useEffect(() => {
@@ -162,7 +162,7 @@ export const ResultItem = (props) => {
     );
 
     const renderLiveDot = () => {
-        if ([RaceStatus.ON_GOING].includes(race._source?.status)) {
+        if ([RaceStatus.ON_GOING].includes(race._source.status)) {
             if (!moment(race._source.approx_start_time_ms).isValid())
                 return <span>{t(translations.home_page.filter_tab.filter_result.postponed)}</span>; // showing race is postponed.
             return <LiveDotWrapper>
@@ -203,18 +203,18 @@ export const ResultItem = (props) => {
                 setRelation={setRelation}
                 showModal={showRegisterModal}
                 setShowModal={setShowRegisterModal}
-                raceName={race._source?.name}
-                lon={race._source?.approx_start_point?.coordinates[0]}
-                lat={race._source?.approx_start_point?.coordinates[1]}
+                raceName={race._source.name}
+                lon={race._source.approx_start_point?.coordinates[0]}
+                lat={race._source.approx_start_point?.coordinates[1]}
                 eventId={race._source.event}
-                raceId={race._source?.id} />
+                raceId={race._source.id} />
             <Wrapper key={props.index}>
                 <HeadDescriptionWrapper>
                     <Space size={5}>
-                        {race._source?.start_country ?
+                        {race._source.start_country ?
                             <>
                                 <GiPositionMarker />
-                                {[race._source?.start_city, race._source?.start_country].filter(Boolean).join(', ')}
+                                {[race._source.start_city, race._source.start_country].filter(Boolean).join(', ')}
                             </> : <div></div>
                         }
                     </Space>
@@ -226,21 +226,24 @@ export const ResultItem = (props) => {
                     </RightResultWrapper>
                 </HeadDescriptionWrapper>
                 <Name>
-                    <Tooltip title={t(translations.home_page.filter_tab.filter_result.watch_this_race, { raceName: race._source?.name })}>
-                        <Link to={`/playback?raceId=${race._id}`}>{race._source?.name}</Link>
+                    <Tooltip title={t(translations.home_page.filter_tab.filter_result.watch_this_race, { raceName: race._source.name })}>
+                        <Link to={`/playback?raceId=${race._id}`}>{race._source.name}</Link>
                     </Tooltip>
                 </Name>
-                {race._source?.event_description && <Description>{race._source?.event_description}</Description>}
+                {race._source.event_description && <Description>{race._source.event_description}</Description>}
                 <DescriptionWrapper>
                     <DescriptionItem>
-                        {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source?.approx_start_time_ms).format(TIME_FORMAT.date_text)}
+                        {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}
                     </DescriptionItem>
-                    {race._source?.event_name && <DescriptionItem>
+                    {race._source.event_name && <DescriptionItem>
                         {t(translations.home_page.filter_tab.filter_result.event_name)} {eventElement}
+                    </DescriptionItem>}
+                    {race._source.source && <DescriptionItem>
+                        {t(translations.my_tracks_page.source)}: {race._source.source}
                     </DescriptionItem>}
                 </DescriptionWrapper>
                 <Space size={10}>
-                    {isAuthenticated && canStreamToExpedition(race._source?.id, race._source?.source, race._source?.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
+                    {isAuthenticated && canStreamToExpedition(race._source.id, race._source.source, race._source.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
                     {canRegister() && <CreateButton
                         icon={<FiEdit
                             style={{ marginRight: '10px' }} />}
