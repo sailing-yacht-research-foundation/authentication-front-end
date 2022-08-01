@@ -28,6 +28,7 @@ export const ModalRaceCompleted = () => {
     } ,[competitionUnitDetail.status]);
 
     const hideModal = () => {
+        dispatch(actions.getCompetitionUnitDetail({ id: competitionUnitDetail.id })); // renew the state to see if the data is ready to play.
         dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
         setShowModal(false);
     }
