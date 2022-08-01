@@ -72,7 +72,7 @@ export const PlaybackOldRace = (props) => {
   const vesselParticipantsPreviousHeading = useRef<any>({});
   const courseGeometries = useRef<any[]>([]);
   const rawSimplifiedTracks = useRef<any>([]);
-  const trackIdRef =useRef<string>();
+  const trackIdRef = useRef<string>();
 
   const competitionUnitId = useSelector(selectCompetitionUnitId);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
@@ -451,7 +451,7 @@ export const PlaybackOldRace = (props) => {
       dispatch(actions.setRaceLength(raceLength));
 
       if (raceLength > 0) {
-        dispatch(actions.setRaceTime({ start:startTimeInMilliseconds, end: endTimeInMilliseconds }));
+        dispatch(actions.setRaceTime({ start: startTimeInMilliseconds, end: endTimeInMilliseconds }));
         socketWorker?.postMessage({
           action: WorkerEvent.SEND_DATA_TO_WORKER,
           data: {
@@ -520,7 +520,7 @@ export const PlaybackOldRace = (props) => {
     const vesselParticipants = vesselParticipantsRef.current;
 
     // If no retrieved timestamps
-    if ( !isPlaying || (!trackIdRef.current && (!retrievedTimestamps.length || !Object.keys(vesselParticipants)?.length))) {
+    if (!isPlaying || (!trackIdRef.current && (!retrievedTimestamps.length || !Object.keys(vesselParticipants)?.length))) {
       return;
     }
 
