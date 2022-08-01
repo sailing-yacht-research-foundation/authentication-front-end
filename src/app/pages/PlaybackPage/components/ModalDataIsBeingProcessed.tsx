@@ -3,15 +3,13 @@ import { Modal } from "antd";
 import { translations } from "locales/translations";
 import { RaceStatusModalWrapper } from "app/components/SyrfGeneral";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCompetitionUnitDetail } from "./slice/selectors";
+import { selectCompetitionUnitDetail, selectPlaybackType } from "./slice/selectors";
 import { RaceSource, RaceStatus } from "utils/constants";
 import { useTranslation } from "react-i18next";
 import { usePlaybackSlice } from "./slice";
 import { PlaybackTypes } from "types/Playback";
-
 let reloadInterval;
 const reloadEvery = 30000; // ms
-const showPlaybackEvery = 3000; // ms
 
 export const ModalDataIsBeingProcessed = () => {
 
@@ -25,20 +23,24 @@ export const ModalDataIsBeingProcessed = () => {
 
     const { t } = useTranslation();
 
+    const playbackType = useSelector(selectPlaybackType);
+
     React.useEffect(() => {
-        if (competitionUnitDetail.source === RaceSource.SYRF
+        if (competitionUnitDetail.calendarEvent?.source === RaceSource.SYRF
             && competitionUnitDetail.status === RaceStatus.COMPLETED) {
             if (!competitionUnitDetail.isSavedByEngine) {
+                dispatch(actions.setPlaybackType(PlaybackTypes.RACELOADING));
                 setShowModal(true);
                 clearIntervalIfNecessary();
                 reloadInterval = setInterval(() => {
-                    dispatch(actions.setPlaybackType(PlaybackTypes.NO_STATE));
-                    dispatch(actions.getRaceData({ raceId: competitionUnitDetail.id }));
-                    setTimeout(() => {
-                        dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
-                    }, showPlaybackEvery);
+                    dispatch(actions.setPlaybackType(PlaybackTypes.RACELOADING));
+                    dispatch(actions.getCompetitionUnitDetail({ id: competitionUnitDetail.id }));
                 }, reloadEvery);
             } else {
+                if (playbackType !== PlaybackTypes.OLDRACE) {
+                    dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
+                }
+
                 clearIntervalIfNecessary();
                 setShowModal(false);
             }
