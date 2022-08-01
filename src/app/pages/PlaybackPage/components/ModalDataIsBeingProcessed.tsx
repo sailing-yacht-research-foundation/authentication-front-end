@@ -29,10 +29,10 @@ export const ModalDataIsBeingProcessed = () => {
     React.useEffect(() => {
         if (competitionUnitDetail.calendarEvent?.source === RaceSource.SYRF
             && competitionUnitDetail.status === RaceStatus.COMPLETED) {
+            clearIntervalIfNecessary();
             if (!competitionUnitDetail.isSavedByEngine) {
                 dispatch(actions.setPlaybackType(PlaybackTypes.RACELOADING));
                 setShowModal(true);
-                clearIntervalIfNecessary();
                 reloadInterval = setInterval(() => {
                     dispatch(actions.setPlaybackType(PlaybackTypes.RACELOADING));
                     dispatch(actions.getCompetitionUnitDetail({ id: competitionUnitDetail.id }));
@@ -42,7 +42,6 @@ export const ModalDataIsBeingProcessed = () => {
                     dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
                 }
 
-                clearIntervalIfNecessary();
                 setShowModal(false);
             }
         }
