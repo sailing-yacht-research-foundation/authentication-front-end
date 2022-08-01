@@ -8,6 +8,7 @@ import { RaceSource, RaceStatus } from "utils/constants";
 import { useTranslation } from "react-i18next";
 import { usePlaybackSlice } from "./slice";
 import { PlaybackTypes } from "types/Playback";
+
 let reloadInterval;
 const reloadEvery = 30000; // ms
 
