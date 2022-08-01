@@ -30,9 +30,7 @@ export const ModalDataIsBeingProcessed = () => {
             && competitionUnitDetail.status === RaceStatus.COMPLETED) {
             if (!competitionUnitDetail.isSavedByEngine) {
                 setShowModal(true);
-                if (reloadInterval) {
-                    clearInterval(reloadInterval);
-                }
+                clearIntervalIfNecessary();
                 reloadInterval = setInterval(() => {
                     dispatch(actions.setPlaybackType(PlaybackTypes.NO_STATE));
                     dispatch(actions.getRaceData({ raceId: competitionUnitDetail.id }));
@@ -41,11 +39,18 @@ export const ModalDataIsBeingProcessed = () => {
                     }, showPlaybackEvery);
                 }, reloadEvery);
             } else {
+                clearIntervalIfNecessary();
                 setShowModal(false);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [competitionUnitDetail.source, competitionUnitDetail.isSavedByEngine]);
+
+    const clearIntervalIfNecessary = () => {
+        if (reloadInterval) {
+            clearInterval(reloadInterval);
+        }
+    }
 
     return (
         <div style={{ zIndex: 999 }}>
