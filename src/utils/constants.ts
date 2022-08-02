@@ -291,7 +291,8 @@ export enum GroupTypes {
 }
 
 export enum RaceSource {
-    SYRF = 'SYRF'
+    SYRF = 'SYRF',
+    IMPORT = 'IMPORT'
 }
 
 export const sourcesPreventIframe = ['TACKTRACKER'];
