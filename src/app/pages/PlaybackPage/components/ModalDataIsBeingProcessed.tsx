@@ -27,7 +27,7 @@ export const ModalDataIsBeingProcessed = () => {
     const playbackType = useSelector(selectPlaybackType);
 
     React.useEffect(() => {
-        if (competitionUnitDetail.calendarEvent?.source === RaceSource.SYRF
+        if ([RaceSource.SYRF, RaceSource.IMPORT].includes(competitionUnitDetail.calendarEvent?.source)
             && competitionUnitDetail.status === RaceStatus.COMPLETED) {
             clearIntervalIfNecessary();
             if (!competitionUnitDetail.isSavedByEngine) {
