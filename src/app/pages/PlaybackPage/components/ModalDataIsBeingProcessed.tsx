@@ -38,15 +38,19 @@ export const ModalDataIsBeingProcessed = () => {
                     dispatch(actions.getCompetitionUnitDetail({ id: competitionUnitDetail.id }));
                 }, reloadEvery);
             } else {
-                if (playbackType !== PlaybackTypes.OLDRACE) {
-                    dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
-                }
-
-                setShowModal(false);
+                hideModalAndShowPlaybackOldRace();
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [competitionUnitDetail.source, competitionUnitDetail.isSavedByEngine]);
+
+    const hideModalAndShowPlaybackOldRace = () => {
+        if (playbackType !== PlaybackTypes.OLDRACE) {
+            dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
+        }
+
+        setShowModal(false);
+    }
 
     const clearIntervalIfNecessary = () => {
         if (reloadInterval) {
