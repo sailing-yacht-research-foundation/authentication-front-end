@@ -31,6 +31,8 @@ import { deleteParticipant } from 'services/live-data-server/participants';
 import { InformationNotShared } from './InformationNotSharedMessage';
 import { EventAnnouncement } from './EventAnnouncement';
 import { ParticipantList } from 'app/pages/MyEventCreateUpdatePage/components/ParticipantList';
+import { FiEdit } from 'react-icons/fi';
+import { RegisterEventModal } from 'app/components/RegisterRaceModal/RegisterEventModal';
 
 export const EventDetail = () => {
 
@@ -58,6 +60,8 @@ export const EventDetail = () => {
     const [isLeavingEvent, setIsLeavingEvent] = React.useState<boolean>(false);
 
     const [showLeaveEventConfirmModal, setShowLeaveEventConfirmModal] = React.useState<boolean>(false);
+
+    const [showRegisterEventModal, setShowRegisterEventModal] = React.useState<boolean>(false);
 
     const toggleRegistration = async (allowRegistration: boolean) => {
         setIsOpeningClosingRegistration(true);
@@ -190,6 +194,14 @@ export const EventDetail = () => {
         }
     }
 
+    const canRegisterEvent = () => {
+        const eventIsRegattaAndOngoingOrScheduled = event.isOpen && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status!);
+        const isNotEventEditorOrParticipant = !event.isEditor && !event.isParticipant;
+
+        return eventIsRegattaAndOngoingOrScheduled && isNotEventEditorOrParticipant;
+    }
+
+
     const renderEventActions = () => {
         return <EventActions>
             <Space wrap style={{ justifyContent: 'flex-end' }}>
@@ -203,6 +215,7 @@ export const EventDetail = () => {
                         <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                     </>}
                 {canLeaveEvent() && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
+                {canRegisterEvent() && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={() => setShowRegisterEventModal(true)}>{t(translations.home_page.register_as_captain)}</Button>}
                 <Tooltip title={t(translations.tip.download_icalendar_file)}>
                     <Button type="link" onClick={() => {
                         downloadIcalendarFile(event);
@@ -212,7 +225,7 @@ export const EventDetail = () => {
                 </Tooltip>
                 <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
             </Space>
-        </EventActions>;
+        </EventActions >;
     }
 
     return (
@@ -230,6 +243,7 @@ export const EventDetail = () => {
                 event={event}
                 showModal={showAnnouncementModal}
                 setShowModal={setShowAnnouncementModal} />
+            <RegisterEventModal event={event} reloadParent={fetchEvent} setShowModal={setShowRegisterEventModal} showModal={showRegisterEventModal} />
 
             <InformationNotShared reloadParent={fetchEvent} event={event} />
 
