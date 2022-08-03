@@ -99,6 +99,7 @@ export const PlaybackPage = () => {
       window.removeEventListener("resize", handleResize);
       dispatch(actions.setCompetitionUnitDetail({} as CompetitionUnit)); // clean competition unit data.
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -142,7 +143,7 @@ export const PlaybackPage = () => {
             <PageHeadingContainer>
               <div>
                 <PageHeading>{truncateName(raceIdentity.name)}</PageHeading>
-                {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{truncateName(raceIdentity.eventName) }</Link></span>}
+                {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{truncateName(raceIdentity.eventName)}</Link></span>}
                 {raceIdentity.description && <PageDescription>{truncateName(raceIdentity.description)}</PageDescription>}
               </div>
 
@@ -164,7 +165,7 @@ export const PlaybackPage = () => {
       </PageHeadContainer>
 
       <div ref={contentContainerRef}>
-        <ModalDataIsBeingProcessed/>
+        <ModalDataIsBeingProcessed />
         {playbackType === PlaybackTypes.SCRAPEDRACE && <PlaybackScrapedRace />}
         {playbackType === PlaybackTypes.INSECURESCRAPEDRACE && <PlaybackInsecureScrapedRace />}
         {playbackType === PlaybackTypes.STREAMINGRACE && <PlaybackStreamRace />}
