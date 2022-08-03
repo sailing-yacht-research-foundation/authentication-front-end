@@ -33,6 +33,8 @@ import { EventAnnouncement } from './EventAnnouncement';
 import { ParticipantList } from 'app/pages/MyEventCreateUpdatePage/components/ParticipantList';
 import { FiEdit } from 'react-icons/fi';
 import { RegisterEventModal } from 'app/components/RegisterRaceModal/RegisterEventModal';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 
 export const EventDetail = () => {
 
@@ -62,6 +64,8 @@ export const EventDetail = () => {
     const [showLeaveEventConfirmModal, setShowLeaveEventConfirmModal] = React.useState<boolean>(false);
 
     const [showRegisterEventModal, setShowRegisterEventModal] = React.useState<boolean>(false);
+
+    const isAuthenticated = useSelector(selectIsAuthenticated);
 
     const toggleRegistration = async (allowRegistration: boolean) => {
         setIsOpeningClosingRegistration(true);
@@ -201,6 +205,13 @@ export const EventDetail = () => {
         return eventIsRegattaAndOngoingOrScheduled && isNotEventEditorOrParticipant;
     }
 
+    const showRegisterEventModalOrRedirectToLogin = () => {
+        if (isAuthenticated) {
+            setShowRegisterEventModal(true);
+        } else {
+            history.push('/signin');
+        }
+    }
 
     const renderEventActions = () => {
         return <EventActions>
@@ -215,7 +226,7 @@ export const EventDetail = () => {
                         <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                     </>}
                 {canLeaveEvent() && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
-                {canRegisterEvent() && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={() => setShowRegisterEventModal(true)}>{t(translations.home_page.register_as_captain)}</Button>}
+                {canRegisterEvent() && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
                 <Tooltip title={t(translations.tip.download_icalendar_file)}>
                     <Button type="link" onClick={() => {
                         downloadIcalendarFile(event);
