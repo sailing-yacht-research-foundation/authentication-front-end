@@ -27,7 +27,7 @@ export const ModalDataIsBeingProcessed = () => {
     const playbackType = useSelector(selectPlaybackType);
 
     React.useEffect(() => {
-        if ([RaceSource.SYRF, RaceSource.IMPORT].includes(competitionUnitDetail.calendarEvent?.source)
+        if ([RaceSource.SYRF].includes(competitionUnitDetail.calendarEvent?.source)
             && competitionUnitDetail.status === RaceStatus.COMPLETED) {
             clearIntervalIfNecessary();
             if (!competitionUnitDetail.isSavedByEngine) {
@@ -43,6 +43,13 @@ export const ModalDataIsBeingProcessed = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [competitionUnitDetail.source, competitionUnitDetail.isSavedByEngine]);
+
+    React.useEffect(() => {
+        return () => {
+            setShowModal(false);
+            clearIntervalIfNecessary();
+        }
+    }, []);
 
     const hideModalAndShowPlaybackOldRace = () => {
         if (playbackType !== PlaybackTypes.OLDRACE) {
