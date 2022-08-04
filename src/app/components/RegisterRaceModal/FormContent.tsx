@@ -29,7 +29,7 @@ export const FormContent = ({ form, isLoading, onFinish, setShowModal, t, eventI
                 const selectedBoat = response.data?.rows.find((b) => b.isDefaultVessel) || response.data?.rows[0];
                 form.setFieldsValue({
                     vesselId: selectedBoat?.id,
-                    sailNumber: response.data?.rows[0]?.sailNumber
+                    sailNumber: selectedBoat?.sailNumber
                 });
             }
         }
