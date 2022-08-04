@@ -26,8 +26,9 @@ export const FormContent = ({ form, isLoading, onFinish, setShowModal, t, eventI
         if (response.success) {
             setBoats(response.data?.rows);
             if (response.data?.count > 0) {
+                const selectedBoat = response.data?.rows.find((b) => b.isDefaultVessel) || response.data?.rows[0];
                 form.setFieldsValue({
-                    vesselId: response.data?.rows[0]?.id,
+                    vesselId: selectedBoat?.id,
                     sailNumber: response.data?.rows[0]?.sailNumber
                 });
             }
