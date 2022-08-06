@@ -12,6 +12,7 @@ import { selectIsGetGroupFailed, selectGroupDetail, selectIsGettingGroup } from 
 import { OrganizationStripeNotSetupAlert } from './OrganizationStripeNotSetupAlert';
 import { useLocation } from 'react-router-dom';
 import { GroupOrganizationConnect } from './GroupOrganizationConnect';
+import { GroupTypes } from 'utils/constants';
 
 export const Main = () => {
     const group = useSelector(selectGroupDetail);
@@ -52,11 +53,13 @@ export const Main = () => {
 
     const isOrganizationConnectRoute = location.pathname.includes('organization-connect');
 
+    const isOrganizationAndConnectedToPayout = group.stripePayoutsEnabled && group.isAdmin && group.groupType === GroupTypes.ORGANIZATION;
+
     return (
         <Wrapper>
             <Spin spinning={isLoading}>
                 <Nav group={group} />
-                <OrganizationStripeNotSetupAlert group={group} />
+                <OrganizationStripeNotSetupAlert enabled={isOrganizationAndConnectedToPayout} group={group} />
                 <Container>
                     <LeftPane group={group} />
                     {isOrganizationConnectRoute ? <GroupOrganizationConnect group={group} /> : <Members group={group} />}

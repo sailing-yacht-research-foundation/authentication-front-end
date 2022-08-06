@@ -6,7 +6,7 @@ import { DeleteGroupModal } from './modals/DeleteGroupModal';
 import { LeaveGroupModal } from './modals/LeaveGroupModal';
 import { CreateButton, GobackButton } from 'app/components/SyrfGeneral';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation, matchPath } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { GroupMemberStatus } from 'utils/constants';
@@ -29,6 +29,8 @@ export const Nav = (props) => {
 
     const history = useHistory();
 
+    const location = useLocation();
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [joinStatus, setJoinStatus] = React.useState<any>();
@@ -42,6 +44,18 @@ export const Nav = (props) => {
     const membersCurrentPage = useSelector(selectMemberCurrentPage);
 
     const adminsCurrentPage = useSelector(selectAdminCurrentPage);
+
+    const navPages = [
+        {
+            name: t(translations.group.members_nav),
+            url: '/groups/:id',
+            populatedPath: `/groups/${group.id}`
+        }, {
+            name: t(translations.group.payout_nav),
+            url: '/groups/:id/organization-connect',
+            populatedPath: `/groups/${group.id}/organization-connect`
+        }
+    ]
 
     const showDeleteGroupModal = (e) => {
         e.preventDefault();
@@ -143,7 +157,13 @@ export const Nav = (props) => {
                         {renderButtonByStatus()}
                     </Spin>
                     <InnerWrapper>
-                        <NavItem className="active">{t(translations.group.members_nav)}</NavItem>
+                        {navPages.map((page, index) => {
+                            return <NavItem onClick={() => history.push(page.populatedPath)} key={index} className={matchPath(location.pathname, {
+                                path: page.url,
+                                exact: true,
+                                strict: false
+                              }) ? 'active' : ''}>{page.name}</NavItem>
+                        })}
                         {group?.groupMemberId && group.status === GroupMemberStatus.ACCEPTED &&
                             <NavItem>{renderActionButton()}</NavItem>}
                     </InnerWrapper>
@@ -167,7 +187,7 @@ const InnerWrapper = styled.div`
     flex-direction: row;
 `;
 
-const NavItem = styled.div`
+const NavItem = styled.a`
     border-radius: 15px;
     padding: 10px 15px;
     margin: 0 10px;

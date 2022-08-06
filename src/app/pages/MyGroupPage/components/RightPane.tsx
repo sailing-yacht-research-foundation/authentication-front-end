@@ -6,7 +6,7 @@ import { GroupRequestedList } from './GroupRequestedList';
 
 export const RightPane = () => {
     return (
-        <Wrapper>
+        <Wrapper className='caidmmm'>
             <GroupInvitationList/>
             <GroupRequestedList/>
         </Wrapper>
@@ -19,6 +19,6 @@ const Wrapper = styled.div`
         display: block;
     `}
 
-    display: none;
+    display: block;
     padding-top: 30px;
 `;
