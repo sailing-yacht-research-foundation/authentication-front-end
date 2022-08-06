@@ -53,13 +53,11 @@ export const Main = () => {
 
     const isOrganizationConnectRoute = location.pathname.includes('organization-connect');
 
-    const isOrganizationAndConnectedToPayout = group.stripePayoutsEnabled && group.isAdmin && group.groupType === GroupTypes.ORGANIZATION;
-
     return (
         <Wrapper>
             <Spin spinning={isLoading}>
                 <Nav group={group} />
-                <OrganizationStripeNotSetupAlert enabled={isOrganizationAndConnectedToPayout} group={group} />
+                <OrganizationStripeNotSetupAlert group={group} />
                 <Container>
                     <LeftPane group={group} />
                     {isOrganizationConnectRoute ? <GroupOrganizationConnect group={group} /> : <Members group={group} />}

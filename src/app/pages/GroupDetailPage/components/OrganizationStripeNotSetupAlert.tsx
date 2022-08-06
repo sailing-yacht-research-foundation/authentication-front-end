@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom';
 import { Group } from 'types/Group';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
+import { GroupTypes } from 'utils/constants';
 
-export const OrganizationStripeNotSetupAlert = ({ group, enabled }: { group: Partial<Group>, enabled: boolean }) => {
+export const OrganizationStripeNotSetupAlert = ({ group }: { group: Partial<Group> }) => {
 
     const { t } = useTranslation();
 
-    if (!enabled)
+    if (!group.stripePayoutsEnabled && group.isAdmin && group.groupType === GroupTypes.ORGANIZATION)
         return (
             <Wrapper>
                 <Alert
