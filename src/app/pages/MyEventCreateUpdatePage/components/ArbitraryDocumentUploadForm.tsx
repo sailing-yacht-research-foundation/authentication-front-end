@@ -83,7 +83,7 @@ export const ArbitraryDocumentUploadForm = ({ event, showModal, setShowModal, re
                     style={{ width: '100%' }}
                 >
                     <Form.List name="fields">
-                        {(fields, { add, remove }) => {
+                        {(fields) => {
                             return (
                                 <div>
                                     {fields.map((field, index) => (
@@ -124,32 +124,9 @@ export const ArbitraryDocumentUploadForm = ({ event, showModal, setShowModal, re
                                             >
                                                 <Checkbox>{t(translations.my_event_create_update_page.require_competitor_signature)}</Checkbox>
                                             </Form.Item>
-
-                                            {fields.length > 1 ? (
-                                                <BorderedButton
-                                                    danger
-                                                    style={{ width: "100%" }}
-                                                    className="dynamic-delete-button"
-                                                    onClick={() => remove(field.name)}
-                                                    icon={<MinusCircleFilled />}
-                                                >
-                                                    {t(translations.my_event_create_update_page.remove_above_field)}
-                                                </BorderedButton>
-                                            )
-                                                : null}
-
                                             <Divider />
                                         </div>
                                     ))}
-                                    <Form.Item>
-                                        <BorderedButton
-                                            type="dashed"
-                                            onClick={() => add()}
-                                            style={{ width: "100%" }}
-                                        >
-                                            <PlusOutlined /> {t(translations.my_event_create_update_page.add_field)}
-                                        </BorderedButton>
-                                    </Form.Item>
                                 </div>
                             );
                         }}

@@ -81,6 +81,7 @@ export const MyEventForm = () => {
         let currentTime = moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
         const certifications = requiredCertifications || [];
+        const hasPositiveParticipatingFee = (values.participatingFee && values.participatingFee !== 0);
 
         if (endDate) {
             currentDate = endDate;
@@ -116,7 +117,8 @@ export const MyEventForm = () => {
                 id: item.id,
                 isIndividualAssignment: item.isIndividualAssignment
             })),
-            participatingFee: (values.participatingFee && values.participatingFee !== 0) ? values.participatingFee : undefined,
+            participatingFee: hasPositiveParticipatingFee ? values.participatingFee : undefined,
+            participatingFeeType: values.organizerGroupId && hasPositiveParticipatingFee ? EventParticipatingTypes.VESSEL : undefined,
             requiredCertifications: certifications,
             organizerGroupId: values.organizerGroupId || null,
         };
@@ -183,9 +185,7 @@ export const MyEventForm = () => {
 
         const response = await createCompetitionUnit(event.id, data);
 
-        if (response.success) {
-            toast.success(t(translations.competition_unit_create_update_page.created_a_new_competition_unit, { name: response.data.name }));
-        } else {
+        if (!response.success) {
             showToastMessageOnRequestError(response.error);
         }
 
@@ -233,11 +233,10 @@ export const MyEventForm = () => {
         const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(courseGeometry, event.id);
         const response = await createCourse(event.id, 'Default Course', modifiedCourseSequencedGeometries);
 
-        if (response.success) {
-            toast.success(t(translations.my_event_create_update_page.successfully_created_a_new_default_course_for_this_event));
+        if (!response.success) {
+            showToastMessageOnRequestError(response.error);
             return response.data.id;
         }
-        else showToastMessageOnRequestError(response.error);
 
         return undefined;
     }
@@ -532,7 +531,7 @@ export const MyEventForm = () => {
                             endDate: moment().add(2, 'days'),
                             endTime: moment({ hour: 0, minute: 0, second: 0 }),
                             isOpen: true,
-                            participatingFeeType: EventParticipatingTypes.PERSON
+                            participatingFeeType: EventParticipatingTypes.VESSEL
                         }}
                     >
                         <FormItemEventNameDescription event={event} />
