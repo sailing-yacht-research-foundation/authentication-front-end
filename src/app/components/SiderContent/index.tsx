@@ -289,10 +289,14 @@ const SyrfMenu = styled(Menu)`
     background: ${StyleConstants.MAIN_TONE_COLOR};
     color: #fff;
     font-weight: 500;
-    height: calc(100vh - 50px);
+    height: 80vh;
     border-right: none;
     overflow-y: auto;
     overflow-x: hidden;
+
+    ${media.medium`
+      height: calc(100vh - 50px);
+    `};
 `;
 
 const SyrfSubmenu = styled(Menu.SubMenu)`
