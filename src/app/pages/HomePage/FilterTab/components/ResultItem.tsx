@@ -143,7 +143,7 @@ export const ResultItem = (props) => {
     }
 
     const isNotCompleted = () => {
-        return [RaceStatus.ON_GOING].includes(raceData.status) && moment(raceData.approx_start_time_ms).isValid();
+        return [RaceStatus.ON_GOING].includes(raceData.status);
     }
 
     const menu = (
