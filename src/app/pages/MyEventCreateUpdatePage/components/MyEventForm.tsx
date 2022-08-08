@@ -140,6 +140,8 @@ export const MyEventForm = () => {
         } else {
             showToastMessageOnRequestError(response.error);
         }
+
+        setIsSavingEvent(false);
     }
 
     const onEventSaved = async (response, startLocation, endLocation) => {
@@ -165,7 +167,6 @@ export const MyEventForm = () => {
             toast.success(t(translations.my_event_create_update_page.successfully_update_event, { name: response.data?.name }));
         }
 
-        setIsSavingEvent(false);
         pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
 
