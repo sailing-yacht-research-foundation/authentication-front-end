@@ -277,7 +277,8 @@ export enum AuthCode {
     WRONG_CREDENTIALS = 'E012',
     USER_ALREADY_EXISTS = 'E015',
     EXPIRED_SESSION_TOKEN = 'E001',
-    INVALID_SESSION_TOKEN = 'E003'
+    INVALID_SESSION_TOKEN = 'E003',
+    TOKEN_SERVICE_RESET = 'E004',
 }
 
 export enum WebsocketRaceEvent {
