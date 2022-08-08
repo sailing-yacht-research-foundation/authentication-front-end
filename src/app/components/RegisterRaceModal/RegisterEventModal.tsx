@@ -1,24 +1,21 @@
 import React from 'react';
-import { Modal, Form} from 'antd';
+import { Modal, Form, } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
-import { joinCompetitionUnit } from 'services/live-data-server/open-competition';
+import { joinEvent } from 'services/live-data-server/event-calendars';
 import { FormContent } from './FormContent';
+import { CalendarEvent } from 'types/CalendarEvent';
 
-interface IRegisterRaceModal {
+interface IRegisterEventModal {
     showModal: boolean
     setShowModal: Function,
-    eventName: string,
-    raceId: string,
-    lon: number,
-    lat: number,
-    setRelation?: Function,
-    eventId: string,
+    event: Partial<CalendarEvent>,
+    reloadParent: Function
 }
 
-export const RegisterRaceModal = ({ showModal, setShowModal, eventName, raceId, lon, lat, setRelation, eventId }: IRegisterRaceModal) => {
+export const RegisterEventModal = ({ showModal, setShowModal, event, reloadParent }: IRegisterEventModal) => {
 
     const { t } = useTranslation();
 
@@ -34,27 +31,25 @@ export const RegisterRaceModal = ({ showModal, setShowModal, eventName, raceId, 
         const { vesselId, allowShareInformation, sailNumber } = values;
 
         setIsLoading(true);
-        const response = await joinCompetitionUnit(raceId, vesselId, sailNumber, allowShareInformation, lon, lat);
+        const response = await joinEvent(event.id!, vesselId, sailNumber, allowShareInformation);
         setIsLoading(false);
 
         if (response.success) {
             hideModal();
-            toast.success(t(translations.home_page.successfully_registered_to_join_this_competition));
-            if (setRelation) setRelation({
-                isParticipating: true
-            });
+            reloadParent();
+            toast.success(t(translations.general.your_action_is_successful));
         } else {
             showToastMessageOnRequestError(response.error);
         }
     }
 
     return (<Modal
-        title={t(translations.my_event_list_page.register_for, { name: eventName })}
+        title={t(translations.my_event_list_page.register_for, { name: event.name })}
         bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', flexDirection: 'column' }}
         visible={showModal}
         footer={null}
         onCancel={hideModal}
     >
-        <FormContent eventId={eventId} form={form} isLoading={isLoading} onFinish={onFinish} setShowModal={setShowModal} showModal={showModal} t={t} />
+        <FormContent eventId={event.id} form={form} isLoading={isLoading} onFinish={onFinish} setShowModal={setShowModal} showModal={setShowModal} t={t} />
     </Modal >);
 }
