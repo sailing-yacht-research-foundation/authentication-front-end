@@ -12,7 +12,7 @@ import MarkIcon from "../assets/mark.svg";
 import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
 import { MarkerInfo } from "./MarkerInfo";
-import { RaceEmitterEvent, RaceSource } from "utils/constants";
+import { GeometrySide, RaceEmitterEvent, RaceSource } from "utils/constants";
 import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
@@ -27,6 +27,8 @@ import { showToastMessageOnRequestError } from "utils/helpers";
 import { FaRegHandPointer } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
+import BoatPinIcon from '../assets/boat_pin.png';
+import StartPinIcon from '../assets/start_pin.png';
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -238,6 +240,7 @@ export const RaceMap = (props) => {
           weight: 3,
           name: sequencedCourse?.properties?.name,
           id: sequencedCourse.id,
+          points: sequencedCourse.points
         });
       }
 
@@ -294,7 +297,7 @@ export const RaceMap = (props) => {
     _removeOrphanedBoatsIfExist(current.boats, participants);
 
     if (!current.zoomedToRaceLocation) {
-      current.zoomedToRaceLocation = _zoomToRaceLocation(current);
+      current.zoomedToRaceLocation = _zoomToStartLocation(current);
     }
 
     // Map the boat markers
@@ -591,7 +594,7 @@ export const RaceMap = (props) => {
       .addTo(map);
   };
 
-  const _initPolyline = ({ coordinates, color, weight = 1, id, name }) => {
+  const _initPolyline = ({ coordinates, color, weight = 1, id, name, points }) => {
     const popupContent = ReactDOMServer.renderToString(<MarkerInfo name={name} identifier={id} />);
     const marker = L.polyline(coordinates)
       .setStyle({
@@ -613,7 +616,36 @@ export const RaceMap = (props) => {
       marker.closePopup();
     });
 
-    return marker;
+    const layers: any = [];
+    layers.push(marker);
+
+    if (points) {
+      points.forEach(point => {
+        if (GeometrySide.STARBOARD === point.properties?.side) {
+          const starBoardMarker = L.marker(point.position, {
+            icon: new L.icon({
+              iconUrl: BoatPinIcon,
+              iconSize: [25, 25],
+              iconAnchor: [14, 10],
+              popupAnchor: [5, -15]
+            })
+          });
+          layers.push(starBoardMarker)
+        } else if (GeometrySide.PORT === point.properties?.side) {
+          const portMaker  = L.marker(point.position, {
+            icon: new L.icon({
+                iconUrl: StartPinIcon,
+                iconSize: [25, 25],
+                iconAnchor: [14, 10],
+                popupAnchor: [5, -15]
+            })
+        });
+          layers.push(portMaker);
+        }
+      })
+    }
+
+    return L.layerGroup(layers);;
   };
 
   const _initPolygon = ({ coordinates, color, weight = 1, id, name }) => {
@@ -680,6 +712,30 @@ export const RaceMap = (props) => {
     return marker;
   };
 
+  const _zoomToStartLocation = (current) => {
+    const courses = current.courseData;
+    let coordinates;
+
+    courses?.forEach(courseGeometry => {
+      if ([objectType.lineString, objectType.line, objectType.polyline].includes(String(courseGeometry.geometryType).toLowerCase())) {
+        const points = courseGeometry.points;
+        points?.forEach(point => { // in case this geometry has points property and geometry side => it's a startline
+          if ([GeometrySide.STARBOARD, GeometrySide.PORT].includes(point.properties?.side)) {
+            coordinates = courseGeometry.coordinates[0];
+          }
+        });
+      }
+    });
+
+    if (!coordinates) { // no line is marked as startline, so we use the start location?
+      coordinates = competitionUnitDetail.approximateStartLocation?.coordinates;
+    }
+
+    map.setView(coordinates, 18);
+
+    return true;
+  };
+
   const _zoomToRaceLocation = (current) => {
     // first we get all markers on the map
     const boatLayers = Object.keys(current.boats).map((key) => {
@@ -741,13 +797,13 @@ export const RaceMap = (props) => {
   };
 
   return <>
-    <ConfirmModal 
-    title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
-    content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
-    onOk={_claimTrack}
-    loading={isClaimingTrack}
-    showModal={showClaimTrackConfirModal}
-    onCancel={() => setShowClaimTrackConfirmModal(false)}/>
+    <ConfirmModal
+      title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
+      content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
+      onOk={_claimTrack}
+      loading={isClaimingTrack}
+      showModal={showClaimTrackConfirModal}
+      onCancel={() => setShowClaimTrackConfirmModal(false)} />
   </>;
 };
 
