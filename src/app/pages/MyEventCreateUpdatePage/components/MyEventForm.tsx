@@ -136,7 +136,7 @@ export const MyEventForm = () => {
         }
 
         if (response.success) {
-            onEventSaved(response, { lat, lon }, endLat ? { lat: endLat, lon: endLon } : null);
+            await onEventSaved(response, { lat, lon }, endLat ? { lat: endLat, lon: endLon } : null);
         } else {
             showToastMessageOnRequestError(response.error);
         }
