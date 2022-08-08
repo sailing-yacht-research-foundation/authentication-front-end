@@ -34,8 +34,9 @@ export const ResultItem = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const eventId = race._source.event;
-    const eventText = renderEmptyValue(race._source.event_name, ' ');
-    const eventElement = eventId && race._source.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText;
+    const raceData= race._source;
+    const eventText = renderEmptyValue(raceData.event_name, ' ');
+    const eventElement = eventId && raceData.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText;
     const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
     const [showMarkAsHiddenConfirmModal, setShowMarkAsHiddenConfirmModal] = React.useState<boolean>(false);
     const [showMarkAsCompletedConfirmModal, setShowMarkAsCompletedConfirmModal] = React.useState<boolean>(false);
@@ -46,7 +47,7 @@ export const ResultItem = (props) => {
     const authUser = useSelector(selectUser);
 
     const canManageRace = () => {
-        return authUser.role === UserRole.SUPER_ADMIN && race._source.source !== RaceSource.SYRF;
+        return authUser.role === UserRole.SUPER_ADMIN && raceData.source !== RaceSource.SYRF;
     };
 
     const dispatch = useDispatch();
@@ -69,13 +70,13 @@ export const ResultItem = (props) => {
 
     const canRegister = () => {
         return relation && !relation?.isAdmin && !relation?.isParticipating
-            && race._source.isOpen && race._source.allowRegistration
-            && [RaceStatus.SCHEDULED].includes(race._source.status);
+            && raceData.isOpen && raceData.allowRegistration
+            && [RaceStatus.SCHEDULED].includes(raceData.status);
     };
 
     React.useEffect(() => {
         if (relations.length > 0) {
-            setRelation(relations.find(r => r.id === race._source.id));
+            setRelation(relations.find(r => r.id === raceData.id));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [relations]);
@@ -94,13 +95,13 @@ export const ResultItem = (props) => {
 
     const markAsHidden = async () => {
         setIsLoading(true);
-        const response = await markCompetitionUnitAsHidden(race._source.id);
+        const response = await markCompetitionUnitAsHidden(raceData.id);
         setIsLoading(false);
 
         if (response.success) {
             setShowMarkAsHiddenConfirmModal(false);
             toast.success(t(translations.general.your_action_is_successful));
-            updateResults(race._source.id);
+            updateResults(raceData.id);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -108,13 +109,13 @@ export const ResultItem = (props) => {
 
     const markAsCompleted = async () => {
         setIsLoading(true);
-        const response = await markCompetitionUnitAsCompleted(race._source.id);
+        const response = await markCompetitionUnitAsCompleted(raceData.id);
         setIsLoading(false);
 
         if (response.success) {
             setShowMarkAsCompletedConfirmModal(false);
             toast.success(t(translations.general.your_action_is_successful));
-            updateResults(race._source.id);
+            updateResults(raceData.id);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -122,13 +123,13 @@ export const ResultItem = (props) => {
 
     const forceDeleteRace = async () => {
         setIsLoading(true);
-        const response = await forceDeleteCompetitionUnit(race._source.id);
+        const response = await forceDeleteCompetitionUnit(raceData.id);
         setIsLoading(false);
 
         if (response.success) {
             setShowDeleteRaceConfirmModal(false);
             toast.success(t(translations.general.your_action_is_successful));
-            updateResults(race._source.id);
+            updateResults(raceData.id);
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -142,7 +143,7 @@ export const ResultItem = (props) => {
     }
 
     const isNotCompleted = () => {
-        return [RaceStatus.ON_GOING].includes(race._source.status) && moment(race._source.approx_start_time_ms).isValid();
+        return [RaceStatus.ON_GOING].includes(raceData.status) && moment(raceData.approx_start_time_ms).isValid();
     }
 
     const menu = (
@@ -162,8 +163,8 @@ export const ResultItem = (props) => {
     );
 
     const renderLiveDot = () => {
-        if ([RaceStatus.ON_GOING].includes(race._source.status)) {
-            if (!moment(race._source.approx_start_time_ms).isValid())
+        if ([RaceStatus.ON_GOING].includes(raceData.status)) {
+            if (!moment(raceData.approx_start_time_ms).isValid())
                 return <span>{t(translations.home_page.filter_tab.filter_result.postponed)}</span>; // showing race is postponed.
             return <LiveDotWrapper>
                 <span>{t(translations.general.live)} <LiveDot className='live'></LiveDot></span>
@@ -203,18 +204,18 @@ export const ResultItem = (props) => {
                 setRelation={setRelation}
                 showModal={showRegisterModal}
                 setShowModal={setShowRegisterModal}
-                raceName={race._source.name}
-                lon={race._source.approx_start_point?.coordinates[0]}
-                lat={race._source.approx_start_point?.coordinates[1]}
-                eventId={race._source.event}
-                raceId={race._source.id} />
+                eventName={raceData.event_name}
+                lon={raceData.approx_start_point?.coordinates[0]}
+                lat={raceData.approx_start_point?.coordinates[1]}
+                eventId={raceData.event}
+                raceId={raceData.id} />
             <Wrapper key={props.index}>
                 <HeadDescriptionWrapper>
                     <Space size={5}>
-                        {race._source.start_country ?
+                        {raceData.start_country ?
                             <>
                                 <GiPositionMarker />
-                                {[race._source.start_city, race._source.start_country].filter(Boolean).join(', ')}
+                                {[raceData.start_city, raceData.start_country].filter(Boolean).join(', ')}
                             </> : <div></div>
                         }
                     </Space>
@@ -226,16 +227,16 @@ export const ResultItem = (props) => {
                     </RightResultWrapper>
                 </HeadDescriptionWrapper>
                 <Name>
-                    <Tooltip title={t(translations.home_page.filter_tab.filter_result.watch_this_race, { raceName: race._source.name })}>
-                        <Link to={`/playback?raceId=${race._id}`}>{race._source.name}</Link>
+                    <Tooltip title={t(translations.home_page.filter_tab.filter_result.watch_this_race, { raceName: raceData.name })}>
+                        <Link to={`/playback?raceId=${race._id}`}>{raceData.name}</Link>
                     </Tooltip>
                 </Name>
-                {race._source.event_description && <Description>{race._source.event_description}</Description>}
+                {raceData.event_description && <Description>{raceData.event_description}</Description>}
                 <DescriptionWrapper>
                     <DescriptionItem>
-                        {t(translations.home_page.filter_tab.filter_result.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}
+                        {t(translations.home_page.filter_tab.filter_result.date)} {moment(raceData.approx_start_time_ms).format(TIME_FORMAT.date_text)}
                     </DescriptionItem>
-                    {race._source.event_name && <DescriptionItem>
+                    {raceData.event_name && <DescriptionItem>
                         {t(translations.home_page.filter_tab.filter_result.event_name)} {eventElement}
                     </DescriptionItem>}
                     {race._source.source && <DescriptionItem>
@@ -243,11 +244,11 @@ export const ResultItem = (props) => {
                     </DescriptionItem>}
                 </DescriptionWrapper>
                 <Space size={10}>
-                    {isAuthenticated && canStreamToExpedition(race._source.id, race._source.source, race._source.status, false) && <ExpeditionServerActionButtons competitionUnit={race._source} />}
+                    {isAuthenticated && canStreamToExpedition(raceData.id, raceData.source, raceData.status, false) && <ExpeditionServerActionButtons competitionUnit={raceData} />}
                     {canRegister() && <CreateButton
                         icon={<FiEdit
                             style={{ marginRight: '10px' }} />}
-                        onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_competitor)}</CreateButton>
+                        onClick={showRegisterModalOrRedirect}>{t(translations.home_page.register_as_captain)}</CreateButton>
                     }
                 </Space>
             </Wrapper>
