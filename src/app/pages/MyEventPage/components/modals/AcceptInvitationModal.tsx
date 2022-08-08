@@ -3,7 +3,6 @@ import { Modal, Spin, Form, Select, Button, Space } from 'antd';
 import { SyrfFieldLabel, SyrfFormButton, SyrfFormSelect, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
 import { getMany } from 'services/live-data-server/vessels';
 import styled from 'styled-components';
 import { acceptInvitation } from 'services/live-data-server/participants';
@@ -18,8 +17,6 @@ export const AcceptInvitationModal = (props) => {
     const { t } = useTranslation();
 
     const { showModal, setShowModal, request, reloadParent } = props;
-
-    const [classes, setClasses] = React.useState<any[]>([]);
 
     const [boats, setBoats] = React.useState<any[]>([]);
 
@@ -53,32 +50,15 @@ export const AcceptInvitationModal = (props) => {
         }
     }
 
-    const getEventClasses = async () => {
-        const response = await getVesselParticipantGroupsByEventId(request?.event?.id, 1, 100);
-
-        if (response.success) {
-            setClasses(response.data?.rows);
-            if (response.data?.count > 0) {
-                form.setFieldsValue({
-                    vesselParticipantGroupId: response.data?.rows[0]?.id
-                });
-            }
-        }
-    }
-
     const renderBoatsList = () => {
         return boats.map(item => <Select.Option key={item.id} value={item.id}>{item.publicName}</Select.Option>)
     }
 
-    const renderClassesList = () => {
-        return classes.map(item => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)
-    }
-
     const onFinish = async (values) => {
-        const { vesselId, vesselParticipantGroupId, sailNumber, allowShareInformation } = values;
+        const { vesselId, sailNumber, allowShareInformation } = values;
 
         setIsLoading(true);
-        const response = await acceptInvitation(request?.id, vesselId, vesselParticipantGroupId, sailNumber, allowShareInformation);
+        const response = await acceptInvitation(request?.id, vesselId, sailNumber, allowShareInformation);
         setIsLoading(false);
 
         if (response.success) {
@@ -92,7 +72,6 @@ export const AcceptInvitationModal = (props) => {
 
     React.useEffect(() => {
         if (request?.event) {
-            getEventClasses();
             getUserBoats();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -132,31 +111,15 @@ export const AcceptInvitationModal = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_list_page.sail_number)}</SyrfFieldLabel>}
                         name="sailNumber">
-                        <SyrfInputField />
+                        <SyrfInputField  />
                     </Form.Item>
                 </div>
-
-                <Form.Item
-                    style={{ display: classes.length > 1 ? 'block' : 'none' }}
-                    label={<SyrfFieldLabel>{t(translations.my_event_list_page.select_a_class)}</SyrfFieldLabel>}
-                    name="vesselParticipantGroupId"
-                    rules={[{ required: true, message: t(translations.my_event_list_page.please_select_a_class_to_join_this_event) }]}
-                >
-                    <SyrfFormSelect
-                        showSearch
-                        allowClear
-                        placeholder={t(translations.my_event_list_page.select_a_class)}
-                        optionFilterProp="children"
-                    >
-                        {renderClassesList()}
-                    </SyrfFormSelect>
-                </Form.Item>
 
                 <Message>{t(translations.my_event_list_page.some_of_your_information_will_be_shared)}</Message>
 
                 <InformationSharing event={request.event} t={t} />
 
-                {boats.length <= 1 && classes.length > 0 ?
+                {boats.length <= 1 ?
                     (<Space style={{ justifyContent: 'flex-end', width: '100%' }} size={10}>
                         <Button type='primary' onClick={() => form.submit()}>
                             {t(translations.my_event_list_page.yes)}

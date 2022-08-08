@@ -7,7 +7,6 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { LocationPicker } from './LocationPicker';
 import { useForm } from 'antd/lib/form/Form';
 import { create, get, update } from 'services/live-data-server/event-calendars';
-import { create as createVesselParticipantGroup } from 'services/live-data-server/vessel-participant-group';
 import { create as createCompetitionUnit } from 'services/live-data-server/competition-units';
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -143,9 +142,11 @@ export const MyEventForm = () => {
 
     const onEventSaved = async (response, startLocation, endLocation) => {
         if (mode === MODE.CREATE) {
-            toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: response.data?.name }));
+            const eventData = response.data;
+            toast.success(t(translations.my_event_create_update_page.created_a_new_event, { name: eventData?.name }));
             setEvent(response.data);
-            await createDefaultVesselParticipantGroup(response.data);
+            const couseId = await createDefaultCourse(eventData);
+            await createANewDefaultCompetitionUnit(eventData, couseId);
             setCoordinates({
                 lat: startLocation.lat,
                 lng: startLocation.lon
@@ -170,12 +171,11 @@ export const MyEventForm = () => {
         initData();
     }
 
-    const createANewDefaultCompetitionUnit = async (event, vesselParticipantGroupId, courseId) => {
+    const createANewDefaultCompetitionUnit = async (event, courseId) => {
         const data = {
             name: 'R1',
             startTime: event.approximateStartTime,
             approximateStart: event.approximateStartTime,
-            vesselParticipantGroupId: vesselParticipantGroupId,
             calendarEventId: event.id,
             approximateStart_zone: event.approximateStartTime_zone,
             courseId: courseId
@@ -192,23 +192,6 @@ export const MyEventForm = () => {
         setMode(MODE.UPDATE);
         history.push(`/events/${event.id}/update`);
         pdfListRef?.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    const createDefaultVesselParticipantGroup = async (event) => {
-        const data = {
-            name: 'Default Class',
-            calendarEventId: event.id
-        };
-
-        const response = await createVesselParticipantGroup(data);
-
-        if (response.success) {
-            toast.success(t(translations.vessel_participant_group_create_update_page.created_a_new_group, { name: response.data?.name }))
-            const couseId = await createDefaultCourse(event);
-            await createANewDefaultCompetitionUnit(event, response.data.id, couseId);
-        } else {
-            showToastMessageOnRequestError(response.error);
-        }
     }
 
     const createDefaultCourse = async (event) => {
@@ -247,7 +230,7 @@ export const MyEventForm = () => {
                 }
             }
         ];
-        const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(courseGeometry, eventId);
+        const modifiedCourseSequencedGeometries = await addTrackerIdForCourseIfNotExists(courseGeometry, event.id);
         const response = await createCourse(event.id, 'Default Course', modifiedCourseSequencedGeometries);
 
         if (response.success) {

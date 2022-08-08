@@ -256,7 +256,8 @@ export enum NotificationTypes {
     EVENT_INACTIVITY_WARNING = 'EVENT_INACTIVITY_WARNING',
     EVENT_MESSAGES_RECEIVED = 'EVENT_MESSAGES_RECEIVED',
     SIMULATION_DELETION = 'SIMULATION_DELETION',
-    NEW_EVENT_DOCUMENT_UPLOADED = 'NEW_EVENT_DOCUMENT_UPLOADED'
+    NEW_EVENT_DOCUMENT_UPLOADED = 'NEW_EVENT_DOCUMENT_UPLOADED',
+    NEW_EVENT_WAIVER_UPLOADED = 'NEW_EVENT_WAIVER_UPLOADED'
 }
 
 export enum UserRole {
@@ -290,7 +291,8 @@ export enum GroupTypes {
 }
 
 export enum RaceSource {
-    SYRF = 'SYRF'
+    SYRF = 'SYRF',
+    IMPORT = 'IMPORT'
 }
 
 export const sourcesPreventIframe = ['TACKTRACKER'];
@@ -319,4 +321,15 @@ export enum GeometryType {
 export enum GeometrySide {
     PORT = 'port',
     STARBOARD = 'starboard'
+}
+
+export enum FollowerType {
+    INFLUENCER = 'INFLUENCER',
+    TOTAL = 'TOTAL'
+}
+
+export const ignoreBrowserSupportAttributes = {
+    autoComplete: "off",
+    autoCorrect: "off",
+    autoCapitalize: "none"
 }

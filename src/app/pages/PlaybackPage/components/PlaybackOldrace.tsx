@@ -72,7 +72,7 @@ export const PlaybackOldRace = (props) => {
   const vesselParticipantsPreviousHeading = useRef<any>({});
   const courseGeometries = useRef<any[]>([]);
   const rawSimplifiedTracks = useRef<any>([]);
-  const trackIdRef =useRef<string>();
+  const trackIdRef = useRef<string>();
 
   const competitionUnitId = useSelector(selectCompetitionUnitId);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
@@ -86,6 +86,7 @@ export const PlaybackOldRace = (props) => {
   const raceLength = useSelector(selectRaceLength);
   const userCoordinate = useSelector(selectUserCoordinate);
   const playbackSpeed = useSelector(selectPlaybackSpeed);
+  const params = new URLSearchParams(location.search);
 
   const { actions } = usePlaybackSlice();
 
@@ -368,7 +369,6 @@ export const PlaybackOldRace = (props) => {
   }
 
   const setTrackIdIfExists = () => {
-    const params = new URLSearchParams(location.search);
     if (params.get('trackId')) trackIdRef.current = params.get('trackId') || '';
   }
 
@@ -440,7 +440,7 @@ export const PlaybackOldRace = (props) => {
 
   const getSimplifiedTracks = async () => {
     dispatch(actions.setCanIncreaseDecreaseSpeed(true));
-    const response = await getSimplifiedTracksByCompetitionUnit(String(competitionUnitId));
+    const response = await getSimplifiedTracksByCompetitionUnit(String(competitionUnitId), params.get('trackId'));
     if (response.success) {
       const simplifiedTracks = rawSimplifiedTracks.current = response.data; // the simplified tracks.
       const firstPingTime = getFirstPingTimeFromSimplifiedTracks(simplifiedTracks) // first ping time of the whole race
@@ -451,7 +451,7 @@ export const PlaybackOldRace = (props) => {
       dispatch(actions.setRaceLength(raceLength));
 
       if (raceLength > 0) {
-        dispatch(actions.setRaceTime({ start:startTimeInMilliseconds, end: endTimeInMilliseconds }));
+        dispatch(actions.setRaceTime({ start: startTimeInMilliseconds, end: endTimeInMilliseconds }));
         socketWorker?.postMessage({
           action: WorkerEvent.SEND_DATA_TO_WORKER,
           data: {
@@ -520,7 +520,7 @@ export const PlaybackOldRace = (props) => {
     const vesselParticipants = vesselParticipantsRef.current;
 
     // If no retrieved timestamps
-    if ( !isPlaying || (!trackIdRef.current && (!retrievedTimestamps.length || !Object.keys(vesselParticipants)?.length))) {
+    if (!isPlaying || (!trackIdRef.current && (!retrievedTimestamps.length || !Object.keys(vesselParticipants)?.length))) {
       return;
     }
 

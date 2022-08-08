@@ -21,6 +21,8 @@ import { Link } from "react-router-dom";
 import { StyleConstants } from "styles/StyleConstants";
 import { handleGoBack, truncateName } from "utils/helpers";
 import { SimulateRaceButton } from "./components/SimulateRaceButton";
+import { ModalDataIsBeingProcessed } from "./components/ModalDataIsBeingProcessed";
+import { CompetitionUnit } from "types/CompetitionUnit";
 
 export const PlaybackPage = () => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
@@ -95,7 +97,9 @@ export const PlaybackPage = () => {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      dispatch(actions.setCompetitionUnitDetail({} as CompetitionUnit)); // clean competition unit data.
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -139,7 +143,7 @@ export const PlaybackPage = () => {
             <PageHeadingContainer>
               <div>
                 <PageHeading>{truncateName(raceIdentity.name)}</PageHeading>
-                {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{truncateName(raceIdentity.eventName) }</Link></span>}
+                {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{truncateName(raceIdentity.eventName)}</Link></span>}
                 {raceIdentity.description && <PageDescription>{truncateName(raceIdentity.description)}</PageDescription>}
               </div>
 
@@ -161,6 +165,7 @@ export const PlaybackPage = () => {
       </PageHeadContainer>
 
       <div ref={contentContainerRef}>
+        <ModalDataIsBeingProcessed />
         {playbackType === PlaybackTypes.SCRAPEDRACE && <PlaybackScrapedRace />}
         {playbackType === PlaybackTypes.INSECURESCRAPEDRACE && <PlaybackInsecureScrapedRace />}
         {playbackType === PlaybackTypes.STREAMINGRACE && <PlaybackStreamRace />}

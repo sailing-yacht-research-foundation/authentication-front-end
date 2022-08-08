@@ -15,6 +15,8 @@ import { media } from 'styles/media';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { SearchProfilesAutoComplete } from 'app/components/SocialProfile/SearchProfilesAutoComplete';
+import { FollowRequests } from 'app/components/SocialProfile/FollowRequests';
+import { ignoreBrowserSupportAttributes } from 'utils/constants';
 
 const defaultLottieOptions = {
     loop: true,
@@ -79,6 +81,7 @@ export const Main = () => {
                 </Spin>
             </SearchResultWrapper>
             <RightPaneWrapper>
+                <FollowRequests />
                 <PeopleYouMayKnow />
             </RightPaneWrapper>
         </Wrapper>
@@ -88,10 +91,10 @@ export const Main = () => {
 const SearchResultWrapper = styled.div`
     flex: .7;
     text-align: right;
-    
+
 `;
 
-const SearchBar = styled(Input.Search)`
+const SearchBar = styled(Input.Search).attrs(() => ({...ignoreBrowserSupportAttributes}))`
     input {
         ::placeholder {
             white-space: nowrap;
@@ -121,6 +124,7 @@ const RightPaneWrapper = styled.div`
         margin-left: 15px;
     `};
     padding: 15px;
+    padding-top: 0;
 `;
 
 const SearchBarWrapper = styled.div`

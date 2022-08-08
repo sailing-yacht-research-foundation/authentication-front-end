@@ -61,14 +61,16 @@ export const SimulateRaceButton = () => {
                         e.preventDefault();
                         performSimulateRace(true);
                     }}>
-                       {t(translations.playback_page.simulate_as_open_regatta)}
+                        {t(translations.playback_page.simulate_as_open_regatta)}
                     </a>
                 </Menu.Item>
             </Spin>
         </Menu>
     );
 
-    if (playbackType === PlaybackTypes.OLDRACE && authUser.developerAccountId && !competitionUnitDetail.calendarEvent?.isPrivate)
+    if (playbackType === PlaybackTypes.OLDRACE
+        && authUser.developerAccountId
+        && !competitionUnitDetail.calendarEvent?.isPrivate)
         return (
             <>
                 <Modal
@@ -77,7 +79,7 @@ export const SimulateRaceButton = () => {
                     onCancel={hideModal}
                     visible={showRaceIsSimulatedModal}
                     title={t(translations.playback_page.simulate_success)}>
-                    <h3>{t(translations.playback_page.the_simulation_for_this_race_has_been_running)}</h3>
+                    <h3>{t(translations.playback_page.the_simulation_is_running)}</h3>
                     <span><Trans key={translations.playback_page.simulate_link}>You can <Link target={'_blank'} to={`/playback?raceId=${simulatedRaceDetail?.competitionUnit?.id}`}>view it</Link> on the playback or check out the event <Link to={`/events/${simulatedRaceDetail?.event?.id}`}>here</Link>.</Trans></span>
                 </Modal>
                 <StyledSimulateRaceButton
