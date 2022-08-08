@@ -143,7 +143,7 @@ export const ResultItem = (props) => {
     }
 
     const isNotCompleted = () => {
-        return !raceData.approx_end_time_ms || (raceData.approx_end_time_ms && moment(raceData.approx_end_time_ms).isSameOrAfter(moment()));
+        return [RaceStatus.ON_GOING].includes(raceData.status);
     }
 
     const menu = (
