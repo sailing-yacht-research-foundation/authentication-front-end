@@ -5,8 +5,6 @@ import { useForm } from 'antd/lib/form/Form';
 import { SyrfFieldLabel, SyrfFormButton, SyrfInputField } from 'app/components/SyrfForm';
 import { translations } from 'locales/translations';
 import { CalendarEvent } from 'types/CalendarEvent';
-import { MinusCircleFilled, PlusOutlined } from '@ant-design/icons';
-import { BorderedButton } from 'app/components/SyrfGeneral';
 import { uploadDocuments } from 'services/live-data-server/event-calendars';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';

@@ -100,10 +100,6 @@ export const FormItems = (props) => {
         return eventTypes.map((type, index) => <Select.Option key={index} value={type.value}>{type.name}</Select.Option>)
     }
 
-    const renderParticipatingType = () => {
-        return ['PERSON', 'VESSEL'].map((type, index) => <Select.Option key={index} value={type}>{type.toLowerCase()}</Select.Option>)
-    }
-
     const getAllValidOrganizerGroups = async () => {
         const response = await getValidOrganizableGroup();
 
