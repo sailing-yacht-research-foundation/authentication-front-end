@@ -625,31 +625,42 @@ export const RaceMap = (props) => {
     const layers: any = [];
     layers.push(marker);
 
-    if (points) {
-      points.forEach(point => {
-        if (GeometrySide.STARBOARD === point.properties?.side) {
-          const starBoardMarker = L.marker(point.position, {
-            icon: new L.icon({
-              iconUrl: BoatPinIcon,
-              iconSize: [25, 25],
-              iconAnchor: [17, 13],
-              popupAnchor: [5, -15]
-            })
+    points?.forEach(point => {
+      let startLineMarker;
+      if (GeometrySide.STARBOARD === point.properties?.side) {
+        startLineMarker = L.marker(point.position, {
+          icon: new L.icon({
+            iconUrl: BoatPinIcon,
+            iconSize: [25, 25],
+            iconAnchor: [17, 13],
+            popupAnchor: [5, -15]
+          })
+        });
+      } else if (GeometrySide.PORT === point.properties?.side) {
+        startLineMarker = L.marker(point.position, {
+          icon: new L.icon({
+            iconUrl: StartPinIcon,
+            iconSize: [25, 25],
+            iconAnchor: [13, 13],
+            popupAnchor: [5, -15]
+          })
+        });
+      }
+
+      if (startLineMarker) {
+        if (point.properties?.name) {
+          startLineMarker.bindPopup(point.properties.name);
+          startLineMarker.on("mouseover", function (e) {
+            startLineMarker.openPopup();
           });
-          layers.push(starBoardMarker)
-        } else if (GeometrySide.PORT === point.properties?.side) {
-          const portMarker = L.marker(point.position, {
-            icon: new L.icon({
-              iconUrl: StartPinIcon,
-              iconSize: [25, 25],
-              iconAnchor: [13, 13],
-              popupAnchor: [5, -15]
-            })
+
+          startLineMarker.on("mouseout", function () {
+            startLineMarker.closePopup();
           });
-          layers.push(portMarker);
         }
-      })
-    }
+        layers.push(startLineMarker);
+      }
+    })
 
     return L.layerGroup(layers);;
   };
@@ -722,9 +733,9 @@ export const RaceMap = (props) => {
     const courses = current.courseData;
     let coordinates;
 
-    for(let courseGeometry of courses) {
+    for (let courseGeometry of courses) {
       if ([objectType.lineString, objectType.line, objectType.polyline].includes(String(courseGeometry.geometryType).toLowerCase())) {
-        const bounds = L.latLngBounds(courseGeometry.coordinates[0],  courseGeometry.coordinates[1]);
+        const bounds = L.latLngBounds(courseGeometry.coordinates[0], courseGeometry.coordinates[1]);
         map.fitBounds(bounds);
         return true;
       }
