@@ -175,3 +175,12 @@ export const deleteDocument = (calendarEventId, documentId) => {
 export const getPrivateImages = (calendarEventId: string, participantId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/participants/${participantId}/private-images`))
 }
+
+export const joinEvent = (calendarEventId: string, vesselId: string, sailNumber: string, allowShareInformation: boolean) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/join`, {
+        calendarEventId,
+        vesselId,
+        sailNumber,
+        allowShareInformation
+    }));
+}

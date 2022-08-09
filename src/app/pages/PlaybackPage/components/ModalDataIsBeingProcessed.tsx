@@ -27,7 +27,7 @@ export const ModalDataIsBeingProcessed = () => {
     const playbackType = useSelector(selectPlaybackType);
 
     React.useEffect(() => {
-        if (competitionUnitDetail.calendarEvent?.source === RaceSource.SYRF
+        if ([RaceSource.SYRF].includes(competitionUnitDetail.calendarEvent?.source)
             && competitionUnitDetail.status === RaceStatus.COMPLETED) {
             clearIntervalIfNecessary();
             if (!competitionUnitDetail.isSavedByEngine) {
@@ -38,15 +38,26 @@ export const ModalDataIsBeingProcessed = () => {
                     dispatch(actions.getCompetitionUnitDetail({ id: competitionUnitDetail.id }));
                 }, reloadEvery);
             } else {
-                if (playbackType !== PlaybackTypes.OLDRACE) {
-                    dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
-                }
-
-                setShowModal(false);
+                hideModalAndShowPlaybackOldRace();
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [competitionUnitDetail.source, competitionUnitDetail.isSavedByEngine]);
+
+    React.useEffect(() => {
+        return () => {
+            setShowModal(false);
+            clearIntervalIfNecessary();
+        }
+    }, []);
+
+    const hideModalAndShowPlaybackOldRace = () => {
+        if (playbackType !== PlaybackTypes.OLDRACE) {
+            dispatch(actions.setPlaybackType(PlaybackTypes.OLDRACE));
+        }
+
+        setShowModal(false);
+    }
 
     const clearIntervalIfNecessary = () => {
         if (reloadInterval) {

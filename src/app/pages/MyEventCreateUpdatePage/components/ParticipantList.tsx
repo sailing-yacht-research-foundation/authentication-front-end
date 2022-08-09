@@ -225,7 +225,7 @@ export const ParticipantList = (props) => {
             getAllByFilter(pagination.page, pagination.pageSize, filterMode);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showInviteModal]);
+    }, [showInviteModal, event]);
 
     React.useEffect(() => {
         const resultsWithKey = pagination.rows.map((result) => ({ ...result, key: result.id }))
