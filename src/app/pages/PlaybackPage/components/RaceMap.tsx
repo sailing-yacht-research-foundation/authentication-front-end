@@ -608,7 +608,7 @@ export const RaceMap = (props) => {
         weight,
         color,
       })
-      .bindPopup(popupContent)
+      .bindPopup(popup)
       .addTo(map);
 
     marker.on("click mouseover", function (e) {
@@ -731,7 +731,7 @@ export const RaceMap = (props) => {
     const courses = current.courseData;
     let coordinates;
 
-    for (let courseGeometry of courses) {
+    for (const courseGeometry of courses) {
       if ([objectType.lineString, objectType.line, objectType.polyline].includes(String(courseGeometry.geometryType).toLowerCase())) {
         const bounds = L.latLngBounds(courseGeometry.coordinates[0], courseGeometry.coordinates[1]);
         map.fitBounds(bounds);
