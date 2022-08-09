@@ -638,7 +638,7 @@ export const RaceMap = (props) => {
           });
           layers.push(starBoardMarker)
         } else if (GeometrySide.PORT === point.properties?.side) {
-          const portMaker = L.marker(point.position, {
+          const portMarker = L.marker(point.position, {
             icon: new L.icon({
               iconUrl: StartPinIcon,
               iconSize: [25, 25],
@@ -646,7 +646,7 @@ export const RaceMap = (props) => {
               popupAnchor: [5, -15]
             })
           });
-          layers.push(portMaker);
+          layers.push(portMarker);
         }
       })
     }
