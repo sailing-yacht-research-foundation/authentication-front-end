@@ -23,7 +23,7 @@ import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 import moment from "moment";
 import { ConfirmModal } from "app/components/ConfirmModal";
 import { claimTrack } from "services/live-data-server/my-tracks";
-import { showToastMessageOnRequestError } from "utils/helpers";
+import { getCenterPointOfMultipleCoordinatePoints, showToastMessageOnRequestError } from "utils/helpers";
 import { FaRegHandPointer } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
@@ -722,15 +722,12 @@ export const RaceMap = (props) => {
     const courses = current.courseData;
     let coordinates;
 
-    courses?.forEach(courseGeometry => {
+    for(let courseGeometry of courses) {
       if ([objectType.lineString, objectType.line, objectType.polyline].includes(String(courseGeometry.geometryType).toLowerCase())) {
-        const points = courseGeometry.points;
-        const startPoint = points?.find(point => [GeometrySide.STARBOARD, GeometrySide.PORT].includes(point.properties?.side))
-        if (startPoint) {
-          coordinates = courseGeometry.coordinates[0];
-        }
+        coordinates = getCenterPointOfMultipleCoordinatePoints([courseGeometry.coordinates[0], courseGeometry.coordinates[1]]);
+        break;
       }
-    });
+    }
 
     if (!coordinates) { // no line is marked as startline, so we use the start location?
       coordinates = competitionUnitDetail.approximateStartLocation?.coordinates;
