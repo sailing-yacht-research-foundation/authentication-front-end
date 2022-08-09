@@ -652,9 +652,7 @@ export const RaceMap = (props) => {
           startLineMarker.bindPopup(point.properties.name);
           startLineMarker.on("mouseover", function (e) {
             startLineMarker.openPopup();
-          });
-
-          startLineMarker.on("mouseout", function () {
+          }).on("mouseout", function () {
             startLineMarker.closePopup();
           });
         }
