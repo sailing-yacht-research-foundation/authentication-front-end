@@ -690,20 +690,3 @@ const areTwoFiltersEqual = (filter1, filter2) => {
 
     return false;
 }
-
-export const getCenterPointOfMultipleCoordinatePoints = (locations) => {
-    let latitude = 0,
-        longitude = 0;
-
-    for (let location of locations) {
-        latitude += location[0];
-        longitude += location[1];
-    }
-    latitude = latitude / locations.length;
-    longitude = longitude / locations.length;
-
-    return [
-        latitude,
-        longitude,
-    ];
-};

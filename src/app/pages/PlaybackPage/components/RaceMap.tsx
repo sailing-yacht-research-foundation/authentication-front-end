@@ -23,7 +23,7 @@ import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 import moment from "moment";
 import { ConfirmModal } from "app/components/ConfirmModal";
 import { claimTrack } from "services/live-data-server/my-tracks";
-import { getCenterPointOfMultipleCoordinatePoints, showToastMessageOnRequestError } from "utils/helpers";
+import { showToastMessageOnRequestError } from "utils/helpers";
 import { FaRegHandPointer } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
@@ -724,8 +724,9 @@ export const RaceMap = (props) => {
 
     for(let courseGeometry of courses) {
       if ([objectType.lineString, objectType.line, objectType.polyline].includes(String(courseGeometry.geometryType).toLowerCase())) {
-        coordinates = getCenterPointOfMultipleCoordinatePoints([courseGeometry.coordinates[0], courseGeometry.coordinates[1]]);
-        break;
+        const bounds = L.latLngBounds(courseGeometry.coordinates[0],  courseGeometry.coordinates[1]);
+        map.fitBounds(bounds);
+        return true;
       }
     }
 
