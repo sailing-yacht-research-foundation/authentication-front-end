@@ -602,6 +602,7 @@ export const RaceMap = (props) => {
 
   const _initPolyline = ({ coordinates, color, weight = 1, id, name, points }) => {
     const popupContent = ReactDOMServer.renderToString(<MarkerInfo name={name} identifier={id} />);
+    const popup = L.popup();
     const marker = L.polyline(coordinates)
       .setStyle({
         weight,
@@ -610,16 +611,15 @@ export const RaceMap = (props) => {
       .bindPopup(popupContent)
       .addTo(map);
 
-    marker.on("click", function (e) {
-      marker.openPopup();
+    marker.on("click mouseover", function (e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
     });
 
-    marker.on("mouseover", function (e) {
-      marker.openPopup();
-    });
-
-    marker.on("mouseout", function () {
-      marker.closePopup();
+    marker.on("mouseout", function (e) {
+      e.target.closePopup();
     });
 
     const layers: any = [];
@@ -665,24 +665,24 @@ export const RaceMap = (props) => {
 
   const _initPolygon = ({ coordinates, color, weight = 1, id, name }) => {
     const popupContent = ReactDOMServer.renderToString(<MarkerInfo name={name} identifier={id} />);
+    const popup = L.popup();
     const marker = L.polygon(coordinates)
       .setStyle({
         weight,
         color,
       })
-      .bindPopup(popupContent)
+      .bindPopup(popup)
       .addTo(map);
 
-    marker.on("click", function (e) {
-      marker.openPopup();
+    marker.on("click mouseover", function (e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
     });
 
-    marker.on("mouseover", function (e) {
-      marker.openPopup();
-    });
-
-    marker.on("mouseout", function () {
-      marker.closePopup();
+    marker.on("mouseout", function (e) {
+      e.target.closePopup();;
     });
 
     return marker;
