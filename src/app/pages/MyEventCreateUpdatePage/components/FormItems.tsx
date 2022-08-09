@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { getValidOrganizableGroup } from 'services/live-data-server/groups';
 import { ItemAvatar } from 'app/components/SyrfGeneral';
 import { renderAvatar } from 'utils/user-utils';
+import styled from 'styled-components';
 
 export const FormItems = (props) => {
 
@@ -151,14 +152,17 @@ export const FormItems = (props) => {
                 </Col>
             </Row>
 
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_competitor_info)}</SyrfFieldLabel>}
-                name="requiredFields"
-            >
-                <SyrfFormSelect maxTagCount={'responsive'} mode="multiple">
-                    {renderRequiredFields()}
-                </SyrfFormSelect>
-            </Form.Item>
+            <NoInputSelectWrapper>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_competitor_info)}</SyrfFieldLabel>}
+                    name="requiredFields"
+                >
+                    <SyrfFormSelect maxTagCount={'responsive'} mode="multiple"
+                    >
+                        {renderRequiredFields()}
+                    </SyrfFormSelect>
+                </Form.Item>
+            </NoInputSelectWrapper>
 
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.free_or_paid)}</SyrfFieldLabel>}
@@ -236,3 +240,9 @@ export const FormItems = (props) => {
         </>
     )
 }
+
+const NoInputSelectWrapper = styled.div`
+    .ant-select-selection-search-input {
+        display: none;
+    }
+`;
