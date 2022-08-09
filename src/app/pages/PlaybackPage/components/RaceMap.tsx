@@ -291,14 +291,18 @@ export const RaceMap = (props) => {
     });
   }
 
-  const _updateBoats = (participants, current) => {
-    if (!participants?.length) return; // no participants, no render.
-    // Zoom to race location, on first time update.
-    _removeOrphanedBoatsIfExist(current.boats, participants);
-
+  const _zoomToStartLocationIfHasNotZoomed = (current) => {
     if (!current.zoomedToRaceLocation) {
       current.zoomedToRaceLocation = _zoomToStartLocation(current);
     }
+  }
+
+  const _updateBoats = (participants, current) => {
+    _zoomToStartLocationIfHasNotZoomed(current);
+
+    if (!participants?.length) return; // no participants, no render.
+    // Zoom to race location, on first time update.
+    _removeOrphanedBoatsIfExist(current.boats, participants);
 
     // Map the boat markers
     if (!!participants?.length) {
@@ -555,6 +559,8 @@ export const RaceMap = (props) => {
     Object.keys(courses).forEach((k) => {
       courses[k].addTo(map);
     });
+
+    _zoomToStartLocationIfHasNotZoomed(raceStatus.current);
   };
 
   const _updateCourseMark = (courseMarkData) => {
@@ -626,20 +632,20 @@ export const RaceMap = (props) => {
             icon: new L.icon({
               iconUrl: BoatPinIcon,
               iconSize: [25, 25],
-              iconAnchor: [14, 10],
+              iconAnchor: [17, 13],
               popupAnchor: [5, -15]
             })
           });
           layers.push(starBoardMarker)
         } else if (GeometrySide.PORT === point.properties?.side) {
-          const portMaker  = L.marker(point.position, {
+          const portMaker = L.marker(point.position, {
             icon: new L.icon({
-                iconUrl: StartPinIcon,
-                iconSize: [25, 25],
-                iconAnchor: [14, 10],
-                popupAnchor: [5, -15]
+              iconUrl: StartPinIcon,
+              iconSize: [25, 25],
+              iconAnchor: [13, 13],
+              popupAnchor: [5, -15]
             })
-        });
+          });
           layers.push(portMaker);
         }
       })
@@ -719,11 +725,10 @@ export const RaceMap = (props) => {
     courses?.forEach(courseGeometry => {
       if ([objectType.lineString, objectType.line, objectType.polyline].includes(String(courseGeometry.geometryType).toLowerCase())) {
         const points = courseGeometry.points;
-        points?.forEach(point => { // in case this geometry has points property and geometry side => it's a startline
-          if ([GeometrySide.STARBOARD, GeometrySide.PORT].includes(point.properties?.side)) {
-            coordinates = courseGeometry.coordinates[0];
-          }
-        });
+        const startPoint = points?.find(point => [GeometrySide.STARBOARD, GeometrySide.PORT].includes(point.properties?.side))
+        if (startPoint) {
+          coordinates = courseGeometry.coordinates[0];
+        }
       }
     });
 
