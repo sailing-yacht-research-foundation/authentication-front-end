@@ -412,7 +412,7 @@ export const MapView = React.forwardRef((props, ref) => {
                     icon: new L.icon({
                         iconUrl: StartPinIcon,
                         iconSize: [25, 25],
-                        iconAnchor: [14, 10],
+                        iconAnchor: [13, 13],
                         popupAnchor: [5, -15]
                     })
                 });
@@ -421,7 +421,7 @@ export const MapView = React.forwardRef((props, ref) => {
                     icon: new L.icon({
                         iconUrl: BoatPinIcon,
                         iconSize: [25, 25],
-                        iconAnchor: [14, 10],
+                        iconAnchor: [17, 13],
                         popupAnchor: [5, -15]
                     })
                 });
