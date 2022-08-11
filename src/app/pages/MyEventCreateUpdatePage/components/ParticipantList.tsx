@@ -69,15 +69,6 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
-            title: t(translations.participant_list.class_name),
-            dataIndex: 'vesselName',
-            key: 'vesselName',
-            render: (text, record) => {
-                return renderEmptyValue(record?.vesselParticipants[0]?.group?.name);
-            },
-            ellipsis: true,
-        },
-        {
             title: t(translations.participant_list.is_paid),
             dataIndex: 'isPaid',
             key: 'isPaid',

@@ -38,14 +38,6 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             render: (text) => renderEmptyValue(text),
         },
         {
-            title: t(translations.participant_list.class_name),
-            dataIndex: 'class',
-            key: 'class',
-            render: (text, record) => {
-                return renderEmptyValue(record.vesselParticipants[0]?.group?.name);
-            },
-        },
-        {
             title: t(translations.participant_list.sail_number),
             dataIndex: 'sailNumber',
             key: 'sailNumber',
@@ -55,8 +47,8 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
         },
         {
             title: t(translations.participant_list.crew),
-            dataIndex: 'class',
-            key: 'class',
+            dataIndex: 'crew',
+            key: 'crew',
             render: (text, record) => {
                 return record?.vesselParticipants[0]?.crews?.map((crew) => <Space key={crew.id} size={10}>
                     <Tooltip title={crew.publicName}>
