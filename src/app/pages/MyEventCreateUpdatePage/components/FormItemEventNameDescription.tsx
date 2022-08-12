@@ -7,7 +7,7 @@ import { AssignAdminsFormItem } from './AssignAdminsFormItem';
 
 export const FormItemEventNameDescription = (props) => {
 
-    const { event } = props;
+    const { event, form } = props;
 
     const { t } = useTranslation();
 
@@ -37,7 +37,7 @@ export const FormItemEventNameDescription = (props) => {
                 </Form.Item>
             </Tooltip>
 
-            <AssignAdminsFormItem event={event} />
+            <AssignAdminsFormItem form={form} event={event} />
         </>
     )
 }
