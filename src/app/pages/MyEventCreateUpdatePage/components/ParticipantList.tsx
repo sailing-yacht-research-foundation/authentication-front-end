@@ -9,7 +9,7 @@ import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/co
 import styled from 'styled-components';
 import { DownOutlined } from '@ant-design/icons';
 import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
-import { flat, renderEmptyValue } from 'utils/helpers';
+import { flat } from 'utils/helpers';
 import { EventState, ParticipantInvitationStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { renderAvatar } from 'utils/user-utils';
