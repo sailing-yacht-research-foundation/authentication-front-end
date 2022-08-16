@@ -15,12 +15,13 @@ import { ProfileSearchState } from 'app/pages/ProfileSearchPage/slice/types';
 import { SocialProfileState } from 'app/components/SocialProfile/slice/types';
 import { NotificationState } from 'app/components/Notification/slice/types';
 import { TrackState } from 'app/pages/MyTrackPage/slice/types';
+import { VesselListState } from 'app/pages/VesselListPage/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
-/* 
+/*
   Because the redux-injectors injects your reducers asynchronously somewhere in your code
   You have to declare them here manually
-  Properties are optional because they are injected when the components are mounted sometime in your application's life. 
+  Properties are optional because they are injected when the components are mounted sometime in your application's life.
   So, not available always
 */
 export interface RootState {
@@ -41,5 +42,6 @@ export interface RootState {
   social: SocialProfileState;
   notification: NotificationState;
   track?: TrackState;
+  vesselList?: VesselListState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
