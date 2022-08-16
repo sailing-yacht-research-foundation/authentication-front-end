@@ -8,7 +8,6 @@ import { removeCovidCard, removePassportPhoto } from 'services/live-data-server/
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { FormPhotoHeaderContainer, FormPhotoWrapper } from 'app/components/SyrfGeneral';
-import { certifications } from 'utils/constants';
 import { localesList as countryList } from 'utils/languages-util';
 
 export const ShareableInformation = (props) => {
@@ -66,8 +65,7 @@ export const ShareableInformation = (props) => {
 
     const renderCertificationsDropdownList = () => {
         return <>
-            <Select.Option value={'none'}>{t(translations.forms.none)}</Select.Option>
-            {certifications.map((type, index) => <Select.Option key={index} value={type}>{type}</Select.Option>)}
+            {[].map((type, index) => <Select.Option key={index} value={type}>{type}</Select.Option>)}
         </>
     }
 
@@ -265,7 +263,6 @@ export const ShareableInformation = (props) => {
                             name="certifications"
                         >
                             <SyrfFormSelect mode="tags"
-                                onChange={values => handleTagsFieldChange(values, 'certifications')}
                                 maxTagCount={'responsive'}>
                                 {renderCertificationsDropdownList()}
                             </SyrfFormSelect>

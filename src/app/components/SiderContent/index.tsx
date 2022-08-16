@@ -233,7 +233,7 @@ export const SiderContent = (props) => {
   }, [isAuthenticated]);
 
   return (
-    <SiderWrapper style={{ width: 'auto' }}>
+    <SiderWrapper style={{ width: 'auto', height: '100%' }}>
       {renderedDefaultActive && <SyrfMenu
         defaultSelectedKeys={[String(selectedKey)]}
         mode="inline"
@@ -289,7 +289,7 @@ const SyrfMenu = styled(Menu)`
     background: ${StyleConstants.MAIN_TONE_COLOR};
     color: #fff;
     font-weight: 500;
-    height: calc(100vh - 50px);
+    height: calc(100% - 50px);
     border-right: none;
     overflow-y: auto;
     overflow-x: hidden;
