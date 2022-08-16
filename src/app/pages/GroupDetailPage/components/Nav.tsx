@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectAdminCurrentPage, selectMemberCurrentPage, selectMemberPageSize } from '../slice/selectors';
 import { handleGoBack, showToastMessageOnRequestError } from 'utils/helpers';
+import { media } from 'styles/media';
 
 export const Nav = (props) => {
 
@@ -191,9 +192,13 @@ const InnerWrapper = styled.div`
 
 const NavItem = styled.a`
     border-radius: 15px;
-    padding: 7px 15px;
+    padding: 5px 8px;
     margin: 0 10px;
     cursor: pointer;
+
+    ${media.medium`
+        padding: 7px 15px;
+    `};
 
     &.active {
         background: #fff;
