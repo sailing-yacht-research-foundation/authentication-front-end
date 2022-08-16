@@ -9,7 +9,7 @@ import { connectStripe, checkForStripePayout, disConnectStripe } from 'services/
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { OrganizationPayout } from 'types/OrganizationPayout';
 import { Group } from 'types/Group';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { Button, Descriptions } from 'antd';
 import { GroupTypes } from 'utils/constants';
 import { translations } from 'locales/translations';
@@ -17,6 +17,10 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) => {
+
+    const statusCheckEvery = 4000;
+
+    let statusCheckInterval;
 
     const [payoutConnected, setPayoutConnected] = React.useState<boolean>(false);
 
@@ -29,6 +33,8 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
         }
     };
 
+    const location = useLocation();
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const [organizationConnectInfo, setOrganizationConnectInfo] = React.useState<Partial<OrganizationPayout>>({});
@@ -40,7 +46,12 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
     const { t } = useTranslation();
 
     const connectOrganizationGroupToStripe = async () => {
-        const groupOrganizationConnectUrl = window.location.href;
+        let url = window.location.href;
+        if (!url.includes('waitForUpdate')) {
+            url = `${window.location.href}?waitForUpdate=true`;
+        }
+
+        const groupOrganizationConnectUrl = url;
         setIsLoading(true);
         const response = await connectStripe(group.id!, groupOrganizationConnectUrl);
         setIsLoading(false);
@@ -59,11 +70,30 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
 
         if (response.success) {
             setOrganizationConnectInfo(response.data);
+            if (response.data?.payoutsEnabled) {
+                clearStatusCheckIntervalIfNeeded();
+                setPayoutConnected(true);
+            }
         }
+    }
+
+    const clearStatusCheckIntervalIfNeeded = () => {
+        if (statusCheckInterval) clearInterval(statusCheckInterval);
+    }
+
+    const reCheckForOrganizationPayoutInformation = () => {
+        statusCheckInterval = setInterval(() => {
+            checkForOrganizationPayoutInformation();
+        }, statusCheckEvery);
     }
 
     React.useEffect(() => {
         checkForOrganizationPayoutInformation();
+
+        const params = new URLSearchParams(location.search);
+        if (params.get('waitForUpdate') === 'true') {
+            reCheckForOrganizationPayoutInformation();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -121,9 +151,9 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
                     height={400}
                     width={400} />
                 <LottieMessage>{t(translations.group.your_organization_has_not_set_up_payout)}</LottieMessage>
-                {<BorderedButton loading={isLoading} onClick={connectOrganizationGroupToStripe} type="primary">{t(translations.group.set_up_now)}</BorderedButton>}
+                <BorderedButton loading={isLoading} onClick={connectOrganizationGroupToStripe} type="primary">{t(translations.group.set_up_now)}</BorderedButton>
             </LottieWrapperNoMargin>
-        </Wrapper>
+        </Wrapper >
     );
 }
 
