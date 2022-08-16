@@ -57,7 +57,7 @@ export const Nav = (props) => {
             populatedPath: `/groups/${group.id}/organization-connect`,
             visible: GroupTypes.ORGANIZATION === group.groupType && group.isAdmin
         }
-    ]
+    ];
 
     const showDeleteGroupModal = (e) => {
         e.preventDefault();

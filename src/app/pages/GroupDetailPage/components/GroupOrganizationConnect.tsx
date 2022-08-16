@@ -5,22 +5,25 @@ import Payment from '../assets/payment.json';
 import Connected from '../assets/6900-connected.json';
 import styled from 'styled-components';
 import { media } from 'styles/media';
-import { connectStripe, checkForStripePayout } from 'services/live-data-server/groups';
+import { connectStripe, checkForStripePayout, disConnectStripe } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { OrganizationPayout } from 'types/OrganizationPayout';
 import { Group } from 'types/Group';
 import { useHistory, useParams } from 'react-router-dom';
-import { Descriptions } from 'antd';
+import { Button, Descriptions } from 'antd';
 import { GroupTypes } from 'utils/constants';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) => {
+
+    const [payoutConnected, setPayoutConnected] = React.useState<boolean>(false);
 
     const defaultOptions = {
         loop: true,
         autoplay: true,
-        animationData: group.stripePayoutsEnabled ? Connected : Payment,
+        animationData: payoutConnected ? Connected : Payment,
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }
@@ -68,11 +71,26 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
         if (group.id && (group.groupType !== GroupTypes.ORGANIZATION || !group.isAdmin)) {
             history.push(`/groups/${groupId}`);
         }
+
+        setPayoutConnected(group.stripePayoutsEnabled);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [group]);
 
+    const removePayout = async () => {
+        setIsLoading(true);
+        const response = await disConnectStripe(groupId);
+        setIsLoading(false);
+
+        if (response.success) {
+            toast.success(t(translations.group.successfully_disconnected_to_stripe));
+            setPayoutConnected(false);
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     if (group.id) {
-        if (group.stripePayoutsEnabled) {
+        if (payoutConnected) {
             return (
                 <Wrapper>
                     <LottieWrapperNoMargin>
@@ -80,14 +98,17 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
                             options={defaultOptions}
                             height={400}
                             width={400} />
-                        <LottieMessage>{t(translations.group.your_organization_payout_has_been_set_up)}</LottieMessage>
+                        <LottieMessage>
+                            {t(translations.group.your_organization_payout_has_been_set_up)}<br />
+                            <Button type="link" danger onClick={removePayout}>{t(translations.group.remove_payout_connection)}</Button>
+                        </LottieMessage>
                     </LottieWrapperNoMargin>
 
                     <Descriptions title={t(translations.group.connected_information)}>
                         <Descriptions.Item label={t(translations.group.charges_enabled)}>{String(organizationConnectInfo.chargesEnabled)}</Descriptions.Item>
                         <Descriptions.Item label={t(translations.group.payout_enabled)}> {String(organizationConnectInfo.payoutsEnabled)}</Descriptions.Item>
                     </Descriptions>
-                </Wrapper >
+                </Wrapper>
             );
         }
     }
