@@ -29,7 +29,8 @@ interface IInviteUserModal {
     groupId: string,
     showModal: boolean,
     setShowModal: Function,
-    onUsersInvited: Function
+    onUsersInvited: Function,
+    isAdmin?: boolean,
 }
 
 export const InviteUserModal = (props: IInviteUserModal) => {
@@ -42,7 +43,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
 
     const [showInvitationModal, setShowInvitationModal] = React.useState<boolean>(false);
 
-    const { groupId, showModal, setShowModal, onUsersInvited } = props;
+    const { groupId, showModal, setShowModal, onUsersInvited, isAdmin } = props;
 
     const [emails, setEmails] = React.useState<string[]>([]);
 
@@ -129,7 +130,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                 }).filter(Boolean);
 
                 setIsLoading(true);
-                const response = await inviteUsersToGroup(groupId, processedEmails, userIds, groupIds);
+                const response = await inviteUsersToGroup(groupId, processedEmails, userIds, groupIds, isAdmin);
                 setIsLoading(false);
 
                 hideInviteModal();

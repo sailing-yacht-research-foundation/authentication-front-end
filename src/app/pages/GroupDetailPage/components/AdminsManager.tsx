@@ -7,7 +7,6 @@ import { UserItemRow } from './UserItemRow';
 import { useParams } from 'react-router';
 import { CreateButton } from 'app/components/SyrfGeneral';
 import { RiAdminFill } from 'react-icons/ri';
-import { AddAdminModal } from './modals/AddAdminModal';
 import { RemoveMemberFromGroupModal } from './modals/RemoveUserFromGroupModal';
 import { RemoveAsAdminModal } from './modals/RemoveAsAdminModal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +23,7 @@ import { useGroupDetailSlice } from '../slice';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { DEFAULT_PAGE_SIZE } from 'utils/constants';
+import { InviteUserModal } from './modals/InviteUserModal';
 
 export const AdminsManager = (props) => {
 
@@ -130,7 +130,7 @@ export const AdminsManager = (props) => {
     return (
         <SectionContainer>
             <RemoveAsAdminModal groupId={groupId} member={member} onAdminRemoved={onAdminRemoved} showModal={showRemoveAsAdminModal} setShowModal={setShowRemoveAsAdminModal} />
-            <AddAdminModal groupId={groupId} onAdminAdded={onAdminAdded} showModal={showAssignModal} setShowModal={setShowAssignModal} />
+            <InviteUserModal onUsersInvited={onAdminAdded} groupId={groupId} showModal={showAssignModal} setShowModal={setShowAssignModal} isAdmin={true} />
             <RemoveMemberFromGroupModal groupId={groupId} onMemberRemoved={onMemberRemoved} member={member} showModal={showRemoveFromGroupModal} setShowModal={setShowRemoveFromGroupModal} />
             <SectionTitleWrapper>
                 <SectionTitle>{t(translations.group.admins, { adminsCount: totalAdmins })}</SectionTitle>

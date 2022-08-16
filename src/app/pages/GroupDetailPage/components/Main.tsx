@@ -12,7 +12,6 @@ import { selectIsGetGroupFailed, selectGroupDetail, selectIsGettingGroup } from 
 import { OrganizationStripeNotSetupAlert } from './OrganizationStripeNotSetupAlert';
 import { useLocation } from 'react-router-dom';
 import { GroupOrganizationConnect } from './GroupOrganizationConnect';
-import { GroupTypes } from 'utils/constants';
 
 export const Main = () => {
     const group = useSelector(selectGroupDetail);
