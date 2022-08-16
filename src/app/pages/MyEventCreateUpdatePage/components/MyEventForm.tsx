@@ -535,7 +535,7 @@ export const MyEventForm = () => {
                             participatingFeeType: EventParticipatingTypes.VESSEL
                         }}
                     >
-                        <FormItemEventNameDescription event={event} />
+                        <FormItemEventNameDescription event={event} form={form} />
 
                         <Divider />
 
