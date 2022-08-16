@@ -19,7 +19,6 @@ import {
 import { useHistory } from 'react-router';
 import moment from 'moment';
 import { DeleteVesselModal } from './DeleteVesselModal';
-import { getMany } from 'services/live-data-server/vessels';
 import { Link } from 'react-router-dom';
 import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, truncateName, usePrevious } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
@@ -31,6 +30,9 @@ import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { FaTrash } from 'react-icons/fa';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
+import { selectFilter, selectIsLoading, selectPagination, selectSorter } from '../slice/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { useVesselListSlice } from '../slice';
 
 const defaultOptions = {
     loop: true,
@@ -45,9 +47,13 @@ export const VesselList = () => {
 
     const { t } = useTranslation();
 
-    const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+    const sorter = useSelector(selectSorter);
 
-    const [filter, setFilter] = React.useState<TableFiltering[]>([]);
+    const filter = useSelector(selectFilter);
+
+    const dispatch = useDispatch();
+
+    const { actions } = useVesselListSlice();
 
     const handleSearch = (
         selectedKeys: string[],
@@ -58,12 +64,12 @@ export const VesselList = () => {
         const filterType = getFilterTypeBaseOnColumn(dataIndex, ['approximateStartTime', 'createdAt']);
         param = parseFilterParamBaseOnFilterType(param, filterType);
         confirm();
-        setFilter([...filter.filter(f => f.key !== dataIndex), ...[{ key: dataIndex, value: param, type: filterType }]]);
+        dispatch(actions.setFilter({ key: dataIndex, value: param, type: filterType }));
     };
 
     const handleReset = (clearFilters: () => void, columnToReset: string) => {
         clearFilters();
-        setFilter([...filter.filter(f => f.key !== columnToReset)]);
+        dispatch(actions.clearFilter(columnToReset));
     };
 
     const columns: any = [
@@ -144,12 +150,7 @@ export const VesselList = () => {
         },
     ];
 
-    const [pagination, setPagination] = React.useState<any>({
-        page: 1,
-        total: 0,
-        rows: [],
-        pageSize: 10
-    });
+    const pagination = useSelector(selectPagination);
 
     const history = useHistory();
 
@@ -157,37 +158,21 @@ export const VesselList = () => {
 
     const [vessel, setVessel] = React.useState<Partial<Vessel>>({});
 
-    const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
+    const isLoading = useSelector(selectIsLoading);
 
     const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ filter, sorter });
 
     React.useEffect(() => {
         if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter, previousValue?.sorter, filter, sorter)) {
-            getAll(pagination.page, pagination.size);
+            dispatch(actions.getVessels({ page: 1, size: pagination.size, filter, sorter }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter, sorter]);
 
     React.useEffect(() => {
-        getAll(pagination.page, pagination.size);
+        dispatch(actions.getVessels({ page: pagination.page, size: pagination.size }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const getAll = async (page, size) => {
-        setIsChangingPage(true);
-        const response = await getMany(page, size, filter, sorter);
-        setIsChangingPage(false);
-
-        if (response.success) {
-            setPagination({
-                ...pagination,
-                rows: response.data.rows,
-                page: page,
-                total: response.data.count,
-                pageSize: response.data.size
-            });
-        }
-    }
 
     const showDeleteVesselModal = (vessel) => {
         setShowDeleteModal(true);
@@ -195,7 +180,7 @@ export const VesselList = () => {
     }
 
     const onVesselDeleted = () => {
-        getAll(pagination.page, pagination.size);
+        dispatch(actions.getVessels({ page: pagination.page, size: pagination.size, filter, sorter }));
     }
 
     return (
@@ -220,16 +205,17 @@ export const VesselList = () => {
                     </CreateButton>
                 </Tooltip>
             </PageHeaderContainerResponsive>
-            <Spin spinning={isChangingPage}>
+            <Spin spinning={isLoading}>
                 <TableWrapper>
                     <Table scroll={{ x: "max-content", y: isMobile ? undefined : "calc(100vh - 320px)" }}
                         onChange={(antdPagination, antdFilters, antSorter) =>
                             handleOnTableStateChanged(antdPagination,
                                 antdFilters,
                                 antSorter,
-                                (param) => setSorter(param)
+                                (param) => dispatch(actions.setSorter(param))
                                 , pagination.page, pagination.size,
-                                () => getAll(antdPagination.current, antdPagination.pageSize)
+                                () => dispatch(actions.getVessels({ page: antdPagination.current, size: antdPagination.pageSize, filter: filter, sorter: sorter })
+                                )
                             )
                         }
                         columns={columns}
