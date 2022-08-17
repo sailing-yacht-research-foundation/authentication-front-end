@@ -5,7 +5,7 @@ import Payment from '../assets/payment.json';
 import Connected from '../assets/6900-connected.json';
 import styled from 'styled-components';
 import { media } from 'styles/media';
-import { connectStripe, checkForStripePayout, disConnectStripe } from 'services/live-data-server/groups';
+import { connectStripe, checkForStripePayout, disconnectStripe } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { OrganizationPayout } from 'types/OrganizationPayout';
 import { Group } from 'types/Group';
@@ -15,6 +15,7 @@ import { GroupTypes } from 'utils/constants';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { ConfirmModal } from 'app/components/ConfirmModal';
 
 export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) => {
 
@@ -40,6 +41,10 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
     const [organizationConnectInfo, setOrganizationConnectInfo] = React.useState<Partial<OrganizationPayout>>({});
 
     const { groupId } = useParams<{ groupId: string }>();
+
+    const [isDisconnectingStripe, setIsDisconnectingStripe] = React.useState<boolean>(false);
+
+    const [showConfirmDisconnectStripeModal, setShowConfirmDisconnectStripeModal] = React.useState<boolean>(false);
 
     const history = useHistory();
 
@@ -94,6 +99,10 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
         if (params.get('waitForUpdate') === 'true') {
             reCheckForOrganizationPayoutInformation();
         }
+
+        return () => {
+            clearStatusCheckIntervalIfNeeded();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -107,9 +116,9 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
     }, [group]);
 
     const removePayout = async () => {
-        setIsLoading(true);
-        const response = await disConnectStripe(groupId);
-        setIsLoading(false);
+        setIsDisconnectingStripe(true);
+        const response = await disconnectStripe(groupId);
+        setIsDisconnectingStripe(false);
 
         if (response.success) {
             toast.success(t(translations.group.successfully_disconnected_to_stripe));
@@ -123,6 +132,14 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
         if (payoutConnected) {
             return (
                 <Wrapper>
+                    <ConfirmModal
+                        content={t(translations.group.are_you_sure_you_want_to_disconnect_stripe_payout)}
+                        onCancel={()=> setShowConfirmDisconnectStripeModal(false)}
+                        onOk={removePayout}
+                        showModal={showConfirmDisconnectStripeModal}
+                        title={t(translations.group.disconnect_stripe_payout)}
+                        loading={isDisconnectingStripe}
+                    />
                     <LottieWrapperNoMargin>
                         <Lottie
                             options={defaultOptions}
@@ -130,7 +147,7 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
                             width={400} />
                         <LottieMessage>
                             {t(translations.group.your_organization_payout_has_been_set_up)}<br />
-                            <Button type="link" danger onClick={removePayout}>{t(translations.group.remove_payout_connection)}</Button>
+                            <Button type="link" danger onClick={()=> setShowConfirmDisconnectStripeModal(true)}>{t(translations.group.remove_payout_connection)}</Button>
                         </LottieMessage>
                     </LottieWrapperNoMargin>
 

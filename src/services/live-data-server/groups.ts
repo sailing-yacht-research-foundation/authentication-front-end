@@ -208,6 +208,6 @@ export const checkForStripePayout = (groupId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/connect-stripe`));
 }
 
-export const disConnectStripe = (groupId: string) => {
+export const disconnectStripe = (groupId: string) => {
     return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/disconnect-stripe`));
 }
