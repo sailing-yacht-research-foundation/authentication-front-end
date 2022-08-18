@@ -236,10 +236,10 @@ export const MyEventForm = () => {
 
         if (!response.success) {
             showToastMessageOnRequestError(response.error);
-            return response.data.id;
+            return undefined;
         }
 
-        return undefined;
+        return response.data.id;
     }
 
     const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
