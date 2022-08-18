@@ -7,9 +7,8 @@ import { RightPane } from './RightPane';
 export const Main = () => {
     return (
         <Wrapper>
-            <RightPane />
             <GroupList />
-
+            <RightPane />
         </Wrapper>
     )
 }
@@ -18,8 +17,8 @@ const Wrapper = styled.div`
     display: flex;
 
     ${media.medium`
-        flex-direction: row-reverse;
+        flex-direction: row;
     `};
 
-    flex-direction: column;
+    flex-direction: column-reverse;
 `;

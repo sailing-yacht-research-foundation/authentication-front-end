@@ -106,8 +106,7 @@ const ItemInfoContainer = styled.div`
 
 const ItemButtonContainer = styled.div`
     text-align: right;
-    display: block;
-    width: 40%;
+    display: flex;
 `;
 
 const GroupAvatarContainer = styled.div`
