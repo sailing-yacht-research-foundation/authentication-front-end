@@ -174,19 +174,16 @@ export const ParticipantList = (props) => {
 
     const renderAssignedVessels = (participant) => {
         const vesselParticipants = participant.vesselParticipants;
-        if (vesselParticipants
-            && vesselParticipants.length > 0) {
-            return vesselParticipants?.map((vp, index) => {
-                if (vp.vessel) {
-                    if (index !== (vesselParticipants.length - 1))
-                        return vp.vessel?.publicName + ', ';
-                    return vp.vessel?.publicName;
+        if (vesselParticipants?.length > 0) {
+            return vesselParticipants.reduce((acc, vp) => {
+                if (vp.vessel?.publicName && !acc.includes(vp.vessel?.publicName)) {
+                    acc.push(vp.vessel?.publicName);
                 }
-                return t(translations.misc.not_available);
-            });
+                return acc;
+            }, []).join(', ') || t(translations.misc.not_available);
         }
 
-        return t(translations.misc.not_available);
+        return participant.vessel?.publicName || t(translations.misc.not_available);
     }
 
     const getParticipantDetail = async () => {
