@@ -161,6 +161,7 @@ export const MyTrackList = () => {
             key: 'phoneOS',
             ...getColumnSearchProps('phoneOS', handleSearch, handleReset),
             render: (value,) => renderEmptyValue(value),
+            width: '95px'
         },
         {
             title: t(translations.my_tracks_page.location_update_count),
