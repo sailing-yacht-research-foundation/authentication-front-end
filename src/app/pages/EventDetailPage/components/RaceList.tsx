@@ -6,7 +6,7 @@ import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
-import { checkForUserRelationWithCompetitionUnits, getAllByCalendarEventId } from 'services/live-data-server/competition-units';
+import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
@@ -61,7 +61,6 @@ export const RaceList = (props) => {
                     canManageEvent={canManageEvent}
                     event={event}
                     reloadParent={reloadParent}
-                    relations={relations}
                     isAuthenticated={isAuthenticated}
                     showDeleteRaceModal={showDeleteRaceModal}
                     showRegisterModal={showRegisterModal}
@@ -88,8 +87,6 @@ export const RaceList = (props) => {
 
     const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
 
-    const [relations, setRelations] = React.useState<any[]>([]);
-
     const getAll = async (page, size) => {
         setIsLoading(true);
         const response = await getAllByCalendarEventId(event.id!, page, size);
@@ -103,15 +100,6 @@ export const RaceList = (props) => {
                 total: response.data.count,
                 pageSize: response.data.size,
             });
-            getRelations(response.data?.rows.map(c => c.id));
-        }
-    }
-
-    const getRelations = async (competitionUnits) => {
-        const response = await checkForUserRelationWithCompetitionUnits(competitionUnits);
-
-        if (response.success) {
-            setRelations(response.data);
         }
     }
 

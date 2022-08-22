@@ -9,7 +9,7 @@ import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/co
 import styled from 'styled-components';
 import { DownOutlined } from '@ant-design/icons';
 import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
-import { flat, renderEmptyValue } from 'utils/helpers';
+import { flat } from 'utils/helpers';
 import { EventState, ParticipantInvitationStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { renderAvatar } from 'utils/user-utils';
@@ -65,15 +65,6 @@ export const ParticipantList = (props) => {
             key: 'invitationStatus',
             render: (text, record) => {
                 return record?.invitationStatus;
-            },
-            ellipsis: true,
-        },
-        {
-            title: t(translations.participant_list.class_name),
-            dataIndex: 'vesselName',
-            key: 'vesselName',
-            render: (text, record) => {
-                return renderEmptyValue(record?.vesselParticipants[0]?.group?.name);
             },
             ellipsis: true,
         },
@@ -225,7 +216,7 @@ export const ParticipantList = (props) => {
             getAllByFilter(pagination.page, pagination.pageSize, filterMode);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showInviteModal]);
+    }, [showInviteModal, event]);
 
     React.useEffect(() => {
         const resultsWithKey = pagination.rows.map((result) => ({ ...result, key: result.id }))

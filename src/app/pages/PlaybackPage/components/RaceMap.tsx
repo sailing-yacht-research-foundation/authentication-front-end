@@ -12,7 +12,7 @@ import MarkIcon from "../assets/mark.svg";
 import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
 import { MarkerInfo } from "./MarkerInfo";
-import { RaceEmitterEvent, RaceSource } from "utils/constants";
+import { GeometrySide, RaceEmitterEvent, RaceSource } from "utils/constants";
 import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
@@ -27,6 +27,8 @@ import { showToastMessageOnRequestError } from "utils/helpers";
 import { FaRegHandPointer } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
+import BoatPinIcon from '../assets/boat_pin.png';
+import StartPinIcon from '../assets/start_pin.png';
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -238,6 +240,7 @@ export const RaceMap = (props) => {
           weight: 3,
           name: sequencedCourse?.properties?.name,
           id: sequencedCourse.id,
+          points: sequencedCourse.points
         });
       }
 
@@ -288,14 +291,18 @@ export const RaceMap = (props) => {
     });
   }
 
+  const _zoomToStartLocationIfHasNotZoomed = (current) => {
+    if (!current.zoomedToRaceLocation) {
+      current.zoomedToRaceLocation = _zoomToStartLocation(current);
+    }
+  }
+
   const _updateBoats = (participants, current) => {
+    _zoomToStartLocationIfHasNotZoomed(current);
+
     if (!participants?.length) return; // no participants, no render.
     // Zoom to race location, on first time update.
     _removeOrphanedBoatsIfExist(current.boats, participants);
-
-    if (!current.zoomedToRaceLocation) {
-      current.zoomedToRaceLocation = _zoomToRaceLocation(current);
-    }
 
     // Map the boat markers
     if (!!participants?.length) {
@@ -552,6 +559,8 @@ export const RaceMap = (props) => {
     Object.keys(courses).forEach((k) => {
       courses[k].addTo(map);
     });
+
+    _zoomToStartLocationIfHasNotZoomed(raceStatus.current);
   };
 
   const _updateCourseMark = (courseMarkData) => {
@@ -591,51 +600,89 @@ export const RaceMap = (props) => {
       .addTo(map);
   };
 
-  const _initPolyline = ({ coordinates, color, weight = 1, id, name }) => {
+  const _initPolyline = ({ coordinates, color, weight = 1, id, name, points }) => {
     const popupContent = ReactDOMServer.renderToString(<MarkerInfo name={name} identifier={id} />);
+    const popup = L.popup();
     const marker = L.polyline(coordinates)
       .setStyle({
         weight,
         color,
       })
-      .bindPopup(popupContent)
+      .bindPopup(popup)
       .addTo(map);
 
-    marker.on("click", function (e) {
-      marker.openPopup();
+    marker.on("click mouseover", function (e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
     });
 
-    marker.on("mouseover", function (e) {
-      marker.openPopup();
+    marker.on("mouseout", function (e) {
+      e.target.closePopup();
     });
 
-    marker.on("mouseout", function () {
-      marker.closePopup();
-    });
+    const layers: any = [];
+    layers.push(marker);
 
-    return marker;
+    points?.forEach(point => {
+      let startLineMarker;
+      if (GeometrySide.STARBOARD === point.properties?.side) {
+        startLineMarker = L.marker(point.position, {
+          icon: new L.icon({
+            iconUrl: BoatPinIcon,
+            iconSize: [25, 25],
+            iconAnchor: [17, 13],
+            popupAnchor: [5, -15]
+          })
+        });
+      } else if (GeometrySide.PORT === point.properties?.side) {
+        startLineMarker = L.marker(point.position, {
+          icon: new L.icon({
+            iconUrl: StartPinIcon,
+            iconSize: [25, 25],
+            iconAnchor: [13, 13],
+            popupAnchor: [5, -15]
+          })
+        });
+      }
+
+      if (startLineMarker) {
+        if (point.properties?.name) {
+          startLineMarker.bindPopup(point.properties.name);
+          startLineMarker.on("mouseover", function (e) {
+            startLineMarker.openPopup();
+          }).on("mouseout", function () {
+            startLineMarker.closePopup();
+          });
+        }
+        layers.push(startLineMarker);
+      }
+    })
+
+    return L.layerGroup(layers);;
   };
 
   const _initPolygon = ({ coordinates, color, weight = 1, id, name }) => {
     const popupContent = ReactDOMServer.renderToString(<MarkerInfo name={name} identifier={id} />);
+    const popup = L.popup();
     const marker = L.polygon(coordinates)
       .setStyle({
         weight,
         color,
       })
-      .bindPopup(popupContent)
+      .bindPopup(popup)
       .addTo(map);
 
-    marker.on("click", function (e) {
-      marker.openPopup();
+    marker.on("click mouseover", function (e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
     });
 
-    marker.on("mouseover", function (e) {
-      marker.openPopup();
-    });
-
-    marker.on("mouseout", function () {
-      marker.closePopup();
+    marker.on("mouseout", function (e) {
+      e.target.closePopup();;
     });
 
     return marker;
@@ -678,6 +725,27 @@ export const RaceMap = (props) => {
     });
 
     return marker;
+  };
+
+  const _zoomToStartLocation = (current) => {
+    const courses = current.courseData;
+    let coordinates;
+
+    for (const courseGeometry of courses) {
+      if ([objectType.lineString, objectType.line, objectType.polyline].includes(String(courseGeometry.geometryType).toLowerCase())) {
+        const bounds = L.latLngBounds(courseGeometry.coordinates[0], courseGeometry.coordinates[1]);
+        map.fitBounds(bounds);
+        return true;
+      }
+    }
+
+    if (!coordinates) { // no line is marked as startline, so we use the start location?
+      coordinates = competitionUnitDetail.approximateStartLocation?.coordinates;
+    }
+
+    map.setView(coordinates, 18);
+
+    return true;
   };
 
   const _zoomToRaceLocation = (current) => {
@@ -741,13 +809,13 @@ export const RaceMap = (props) => {
   };
 
   return <>
-    <ConfirmModal 
-    title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
-    content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
-    onOk={_claimTrack}
-    loading={isClaimingTrack}
-    showModal={showClaimTrackConfirModal}
-    onCancel={() => setShowClaimTrackConfirmModal(false)}/>
+    <ConfirmModal
+      title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
+      content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
+      onOk={_claimTrack}
+      loading={isClaimingTrack}
+      showModal={showClaimTrackConfirModal}
+      onCancel={() => setShowClaimTrackConfirmModal(false)} />
   </>;
 };
 

@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { getValidOrganizableGroup } from 'services/live-data-server/groups';
 import { ItemAvatar } from 'app/components/SyrfGeneral';
 import { renderAvatar } from 'utils/user-utils';
+import styled from 'styled-components';
 
 export const FormItems = (props) => {
 
@@ -16,8 +17,6 @@ export const FormItems = (props) => {
     const { t } = useTranslation();
 
     const location = useLocation();
-
-    const [, setIsCrewed] = React.useState<boolean>(false);
 
     const [selectedOrganizerGroup, setSelectedOrganizerGroup] = React.useState<boolean>(false);
 
@@ -64,7 +63,6 @@ export const FormItems = (props) => {
 
     React.useEffect(() => {
         if (location.pathname.includes(MODE.CREATE)) {
-            setIsCrewed(false);
             setSelectedOrganizerGroup(false);
             setIsPaidEvent(false);
             form.setFieldsValue({
@@ -72,7 +70,6 @@ export const FormItems = (props) => {
             })
         } else {
             setSelectedOrganizerGroup(!!event.organizerGroupId && event.participatingFee > 0);
-            setIsCrewed(!!event.isCrewed);
             setSelectedEventType(event.eventTypes);
             setIsPaidEvent(event.participatingFee > 0);
             setRequiredFields();
@@ -102,10 +99,6 @@ export const FormItems = (props) => {
 
     const renderEventTypesSelection = () => {
         return eventTypes.map((type, index) => <Select.Option key={index} value={type.value}>{type.name}</Select.Option>)
-    }
-
-    const renderParticipatingType = () => {
-        return ['PERSON', 'VESSEL'].map((type, index) => <Select.Option key={index} value={type}>{type.toLowerCase()}</Select.Option>)
     }
 
     const getAllValidOrganizerGroups = async () => {
@@ -154,19 +147,22 @@ export const FormItems = (props) => {
                         name="hashtag"
                         rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_255_characters) }]}
                     >
-                        <SyrfInputField  />
+                        <SyrfInputField />
                     </Form.Item>
                 </Col>
             </Row>
 
-            <Form.Item
-                label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_competitor_info)}</SyrfFieldLabel>}
-                name="requiredFields"
-            >
-                <SyrfFormSelect maxTagCount={'responsive'} mode="multiple">
-                    {renderRequiredFields()}
-                </SyrfFormSelect>
-            </Form.Item>
+            <NoInputSelectWrapper>
+                <Form.Item
+                    label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.require_competitor_info)}</SyrfFieldLabel>}
+                    name="requiredFields"
+                >
+                    <SyrfFormSelect maxTagCount={'responsive'} mode="multiple"
+                    >
+                        {renderRequiredFields()}
+                    </SyrfFormSelect>
+                </Form.Item>
+            </NoInputSelectWrapper>
 
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.free_or_paid)}</SyrfFieldLabel>}
@@ -195,7 +191,7 @@ export const FormItems = (props) => {
 
             {selectedOrganizerGroup &&
                 <Row gutter={12}>
-                    <Col xs={24} sm={24} md={12} lg={12}>
+                    <Col xs={24} sm={24} md={24} lg={24}>
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee)}</SyrfFieldLabel>}
                             name="participatingFee"
@@ -208,17 +204,6 @@ export const FormItems = (props) => {
                             />
                         </Form.Item>
                     </Col>
-
-                    {
-                        <Col xs={24} sm={24} md={12} lg={12}><Form.Item
-                            label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.participanting_fee_type)}</SyrfFieldLabel>}
-                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
-                            name="participatingFeeType">
-                            <SyrfFormSelect>
-                                {renderParticipatingType()}
-                            </SyrfFormSelect>
-                        </Form.Item></Col>
-                    }
                 </Row>
             }
 
@@ -239,7 +224,7 @@ export const FormItems = (props) => {
                     name="externalUrl"
                     rules={[{ type: 'url', message: t(translations.forms.external_url_is_not_a_valid_url) }]}
                 >
-                    <SyrfInputField  />
+                    <SyrfInputField />
                 </Form.Item>
             </Tooltip>
 
@@ -255,3 +240,9 @@ export const FormItems = (props) => {
         </>
     )
 }
+
+const NoInputSelectWrapper = styled.div`
+    .ant-select-selection-search-input {
+        display: none;
+    }
+`;
