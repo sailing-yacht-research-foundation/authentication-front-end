@@ -80,7 +80,6 @@ const Wrapper = styled.div`
     background: #fff;
     width: 100%;
     border: 1px solid #eee;
-    display: none;
 
     ${media.medium`
         display: block;

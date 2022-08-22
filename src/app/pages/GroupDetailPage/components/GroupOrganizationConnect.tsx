@@ -5,26 +5,36 @@ import Payment from '../assets/payment.json';
 import Connected from '../assets/6900-connected.json';
 import styled from 'styled-components';
 import { media } from 'styles/media';
-import { connectStripe, checkForStripePayout } from 'services/live-data-server/groups';
+import { connectStripe, checkForStripePayout, disconnectStripe } from 'services/live-data-server/groups';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { OrganizationPayout } from 'types/OrganizationPayout';
 import { Group } from 'types/Group';
-import { useHistory, useParams } from 'react-router-dom';
-import { Descriptions } from 'antd';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { Button, Descriptions } from 'antd';
 import { GroupTypes } from 'utils/constants';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { ConfirmModal } from 'app/components/ConfirmModal';
 
 export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) => {
+
+    const statusCheckEvery = 4000;
+
+    let statusCheckInterval;
+
+    const [payoutConnected, setPayoutConnected] = React.useState<boolean>(false);
 
     const defaultOptions = {
         loop: true,
         autoplay: true,
-        animationData: group.stripePayoutsEnabled ? Connected : Payment,
+        animationData: payoutConnected ? Connected : Payment,
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }
     };
+
+    const location = useLocation();
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -32,12 +42,21 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
 
     const { groupId } = useParams<{ groupId: string }>();
 
+    const [isDisconnectingStripe, setIsDisconnectingStripe] = React.useState<boolean>(false);
+
+    const [showConfirmDisconnectStripeModal, setShowConfirmDisconnectStripeModal] = React.useState<boolean>(false);
+
     const history = useHistory();
 
     const { t } = useTranslation();
 
     const connectOrganizationGroupToStripe = async () => {
-        const groupOrganizationConnectUrl = window.location.href;
+        let url = window.location.href;
+        if (!url.includes('waitForUpdate')) {
+            url = `${window.location.href}?waitForUpdate=true`;
+        }
+
+        const groupOrganizationConnectUrl = url;
         setIsLoading(true);
         const response = await connectStripe(group.id!, groupOrganizationConnectUrl);
         setIsLoading(false);
@@ -56,11 +75,34 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
 
         if (response.success) {
             setOrganizationConnectInfo(response.data);
+            if (response.data?.payoutsEnabled) {
+                clearStatusCheckIntervalIfNeeded();
+                setPayoutConnected(true);
+            }
         }
+    }
+
+    const clearStatusCheckIntervalIfNeeded = () => {
+        if (statusCheckInterval) clearInterval(statusCheckInterval);
+    }
+
+    const reCheckForOrganizationPayoutInformation = () => {
+        statusCheckInterval = setInterval(() => {
+            checkForOrganizationPayoutInformation();
+        }, statusCheckEvery);
     }
 
     React.useEffect(() => {
         checkForOrganizationPayoutInformation();
+
+        const params = new URLSearchParams(location.search);
+        if (params.get('waitForUpdate') === 'true') {
+            reCheckForOrganizationPayoutInformation();
+        }
+
+        return () => {
+            clearStatusCheckIntervalIfNeeded();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -68,26 +110,52 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
         if (group.id && (group.groupType !== GroupTypes.ORGANIZATION || !group.isAdmin)) {
             history.push(`/groups/${groupId}`);
         }
+
+        setPayoutConnected(group.stripePayoutsEnabled);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [group]);
 
+    const removePayout = async () => {
+        setIsDisconnectingStripe(true);
+        const response = await disconnectStripe(groupId);
+        setIsDisconnectingStripe(false);
+
+        if (response.success) {
+            toast.success(t(translations.group.successfully_disconnected_to_stripe));
+            setPayoutConnected(false);
+        } else {
+            showToastMessageOnRequestError(response.error);
+        }
+    }
+
     if (group.id) {
-        if (group.stripePayoutsEnabled) {
+        if (payoutConnected) {
             return (
                 <Wrapper>
+                    <ConfirmModal
+                        content={t(translations.group.are_you_sure_you_want_to_disconnect_stripe_payout)}
+                        onCancel={()=> setShowConfirmDisconnectStripeModal(false)}
+                        onOk={removePayout}
+                        showModal={showConfirmDisconnectStripeModal}
+                        title={t(translations.group.disconnect_stripe_payout)}
+                        loading={isDisconnectingStripe}
+                    />
                     <LottieWrapperNoMargin>
                         <Lottie
                             options={defaultOptions}
                             height={400}
                             width={400} />
-                        <LottieMessage>{t(translations.group.your_organization_payout_has_been_set_up)}</LottieMessage>
+                        <LottieMessage>
+                            {t(translations.group.your_organization_payout_has_been_set_up)}<br />
+                            <Button type="link" danger onClick={()=> setShowConfirmDisconnectStripeModal(true)}>{t(translations.group.remove_payout_connection)}</Button>
+                        </LottieMessage>
                     </LottieWrapperNoMargin>
 
                     <Descriptions title={t(translations.group.connected_information)}>
                         <Descriptions.Item label={t(translations.group.charges_enabled)}>{String(organizationConnectInfo.chargesEnabled)}</Descriptions.Item>
                         <Descriptions.Item label={t(translations.group.payout_enabled)}> {String(organizationConnectInfo.payoutsEnabled)}</Descriptions.Item>
                     </Descriptions>
-                </Wrapper >
+                </Wrapper>
             );
         }
     }
@@ -100,9 +168,9 @@ export const GroupOrganizationConnect = ({ group }: { group: Partial<Group> }) =
                     height={400}
                     width={400} />
                 <LottieMessage>{t(translations.group.your_organization_has_not_set_up_payout)}</LottieMessage>
-                {<BorderedButton loading={isLoading} onClick={connectOrganizationGroupToStripe} type="primary">{t(translations.group.set_up_now)}</BorderedButton>}
+                <BorderedButton loading={isLoading} onClick={connectOrganizationGroupToStripe} type="primary">{t(translations.group.set_up_now)}</BorderedButton>
             </LottieWrapperNoMargin>
-        </Wrapper>
+        </Wrapper >
     );
 }
 

@@ -6,16 +6,17 @@ import { DeleteGroupModal } from './modals/DeleteGroupModal';
 import { LeaveGroupModal } from './modals/LeaveGroupModal';
 import { CreateButton, GobackButton } from 'app/components/SyrfGeneral';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation, matchPath } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { GroupMemberStatus } from 'utils/constants';
+import { GroupMemberStatus, GroupTypes } from 'utils/constants';
 import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { requestJoinGroup, leaveGroup } from 'services/live-data-server/groups';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGroupDetailSlice } from '../slice';
 import { selectAdminCurrentPage, selectMemberCurrentPage, selectMemberPageSize } from '../slice/selectors';
 import { handleGoBack, showToastMessageOnRequestError } from 'utils/helpers';
+import { media } from 'styles/media';
 
 export const Nav = (props) => {
 
@@ -28,6 +29,8 @@ export const Nav = (props) => {
     const [showLeaveModal, setShowLeaveModal] = React.useState<boolean>(false);
 
     const history = useHistory();
+
+    const location = useLocation();
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -42,6 +45,20 @@ export const Nav = (props) => {
     const membersCurrentPage = useSelector(selectMemberCurrentPage);
 
     const adminsCurrentPage = useSelector(selectAdminCurrentPage);
+
+    const navPages = [
+        {
+            name: t(translations.group.members_nav),
+            url: '/groups/:id',
+            populatedPath: `/groups/${group.id}`,
+            visible: true
+        }, {
+            name: t(translations.group.payout_nav),
+            url: '/groups/:id/organization-connect',
+            populatedPath: `/groups/${group.id}/organization-connect`,
+            visible: GroupTypes.ORGANIZATION === group.groupType && group.isAdmin
+        }
+    ];
 
     const showDeleteGroupModal = (e) => {
         e.preventDefault();
@@ -143,7 +160,13 @@ export const Nav = (props) => {
                         {renderButtonByStatus()}
                     </Spin>
                     <InnerWrapper>
-                        <NavItem className="active">{t(translations.group.members_nav)}</NavItem>
+                        {navPages.map((page, index) => {
+                            return page.visible ? <NavItem onClick={() => history.push(page.populatedPath)} key={index} className={matchPath(location.pathname, {
+                                path: page.url,
+                                exact: true,
+                                strict: false
+                              }) ? 'active' : ''}>{page.name}</NavItem> : <></>
+                        })}
                         {group?.groupMemberId && group.status === GroupMemberStatus.ACCEPTED &&
                             <NavItem>{renderActionButton()}</NavItem>}
                     </InnerWrapper>
@@ -167,15 +190,19 @@ const InnerWrapper = styled.div`
     flex-direction: row;
 `;
 
-const NavItem = styled.div`
+const NavItem = styled.a`
     border-radius: 15px;
-    padding: 10px 15px;
+    padding: 5px 8px;
     margin: 0 10px;
     cursor: pointer;
 
+    ${media.medium`
+        padding: 7px 15px;
+    `};
+
     &.active {
         background: #fff;
-        border: 1px solid #eee;
+        border: 1px solid #1890ff;
     }
 `;
 

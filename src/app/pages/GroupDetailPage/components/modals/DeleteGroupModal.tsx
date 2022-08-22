@@ -70,7 +70,7 @@ export const DeleteGroupModal = (props) => {
                 }}
             >
                 <ModalMessage>
-                    {t(translations.group.hey_are_you_sure_you_want_to_delete_this_group)}
+                    {t(translations.group.hey_are_you_sure_you_want_to_delete_this_group, { groupName: group.groupName })}
                 </ModalMessage>
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.group.name_of_the_group)}</SyrfFieldLabel>}
