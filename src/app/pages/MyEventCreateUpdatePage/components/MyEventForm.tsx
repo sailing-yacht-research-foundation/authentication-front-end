@@ -11,7 +11,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
+import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation, UserRole } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -35,6 +35,8 @@ import { FormItems } from './FormItems';
 import { CalendarEvent } from 'types/CalendarEvent';
 import * as turf from "@turf/turf";
 import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 
 require('@turf/destination');
 
@@ -68,6 +70,8 @@ export const MyEventForm = () => {
     const raceListRef = React.useRef<any>();
 
     const pdfListRef = React.useRef<any>();
+
+    const authUser = useSelector(selectUser);
 
     const onFinish = async (values) => {
         const { startDate, isOpen, lon, lat, endDate, requiredFields,
@@ -316,19 +320,19 @@ export const MyEventForm = () => {
     }
 
     const canManageEvent = (event) => {
-        if (!event.isEditor) {
-            toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
-            history.push('/events');
-            return false;
-        }
+        if (authUser.id) {
+            if (authUser.role === UserRole.SUPER_ADMIN) return;
 
-        if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status)) {
-            toast.info(t(translations.my_event_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
-            history.push('/events');
-            return false;
-        }
+            if (!event.isEditor) {
+                toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
+                history.push('/events');
+            }
 
-        return true;
+            if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status)) {
+                toast.info(t(translations.my_event_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
+                history.push('/events');
+            }
+        }
     }
 
     const initData = async () => {
@@ -337,9 +341,6 @@ export const MyEventForm = () => {
         setIsSavingEvent(false);
 
         if (response.success) {
-
-            if (!canManageEvent(response.data)) return;
-
             form.setFieldsValue({
                 ...response.data,
                 startDate: moment(response.data?.approximateStartTime),
@@ -457,6 +458,10 @@ export const MyEventForm = () => {
         });
 
     }
+
+    React.useEffect(() => {
+        canManageEvent(event);
+    }, [authUser.role, event.name]);
 
     React.useEffect(() => {
         initMode();
