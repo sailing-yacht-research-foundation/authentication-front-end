@@ -17,7 +17,7 @@ import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { IoIosArrowBack } from 'react-icons/io';
-import { EventState, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT, UserRole } from 'utils/constants';
+import { MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import { CalendarEvent } from 'types/CalendarEvent';
@@ -25,6 +25,7 @@ import { CompetitionUnit } from 'types/CompetitionUnit';
 import { Course } from 'types/Course';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { canManageEvent } from 'utils/event-helpers';
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
@@ -169,23 +170,6 @@ export const CompetitionUnitForm = () => {
         }
     }
 
-    const canManageRace = (event: Partial<CalendarEvent>) => {
-
-        if (authUser.id) {
-            if (authUser.role === UserRole.SUPER_ADMIN) return;
-
-            if (!event.isEditor) {
-                toast.info(t(translations.competition_unit_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
-                history.push('/events');
-            }
-
-            if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status!)) {
-                toast.info(t(translations.competition_unit_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
-                history.push('/events');
-            }
-        }
-    }
-
     const getEventData = async () => {
         const response = await getEventById(eventId);
         if (response.success) {
@@ -296,7 +280,8 @@ export const CompetitionUnitForm = () => {
     }, []);
 
     React.useEffect(() => {
-        canManageRace(eventData);
+        canManageEvent(eventData, authUser, mode, history);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authUser.role, eventData.name]);
 
     const checkIfNoRaceIsOngoing = async () => {

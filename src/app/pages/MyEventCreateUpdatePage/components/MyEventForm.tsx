@@ -11,7 +11,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation, UserRole } from 'utils/constants';
+import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -37,6 +37,7 @@ import * as turf from "@turf/turf";
 import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { canManageEvent } from 'utils/event-helpers';
 
 require('@turf/destination');
 
@@ -246,7 +247,7 @@ export const MyEventForm = () => {
         return response.data.id;
     }
 
-    const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
+    const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start', shouldUpdateTimezone = true) => {
         if (lat === null
             || lat === undefined
             || lon === undefined
@@ -264,13 +265,15 @@ export const MyEventForm = () => {
             });
         }
 
-        // Select timezone
-        const currentTimezone = tzLookup(lat, lon);
+        if (shouldUpdateTimezone) {
+            // Select timezone
+            const currentTimezone = tzLookup(lat, lon);
 
-        if (selector === 'start') {
-            form.setFieldsValue({ approximateStartTime_zone: currentTimezone });
-        } else {
-            form.setFieldsValue({ approximateEndTime_zone: currentTimezone })
+            if (selector === 'start') {
+                form.setFieldsValue({ approximateStartTime_zone: currentTimezone });
+            } else {
+                form.setFieldsValue({ approximateEndTime_zone: currentTimezone });
+            }
         }
 
         // Get address
@@ -319,70 +322,80 @@ export const MyEventForm = () => {
         }
     }
 
-    const canManageEvent = (event) => {
-        if (authUser.id) {
-            if (authUser.role === UserRole.SUPER_ADMIN) return;
-
-            if (!event.isEditor) {
-                toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
-                history.push('/events');
-            }
-
-            if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status)) {
-                toast.info(t(translations.my_event_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
-                history.push('/events');
-            }
-        }
-    }
-
     const initData = async () => {
         setIsSavingEvent(true);
         const response = await get(eventId || event?.id!);
         setIsSavingEvent(false);
 
         if (response.success) {
+            const responseData = response.data;
             form.setFieldsValue({
                 ...response.data,
-                startDate: moment(response.data?.approximateStartTime),
-                startTime: moment(response.data?.approximateStartTime),
-                endDate: moment(response.data?.approximateEndTime),
-                endTime: moment(response.data?.approximateEndTime),
-                endLat: response.data?.endLocation?.coordinates[1] || response.data?.lat,
-                endLon: response.data?.endLocation?.coordinates[0] || response.data?.lon,
-                admins: [...response.data?.editors.map(editor => JSON.stringify({
+                approximateStartTime_zone: responseData?.approximateStartTime_zone,
+                approximateEndTime_zone: responseData?.approximateEndTime_zone,
+                endLat: responseData?.endLocation?.coordinates[1] || null,
+                endLon: responseData?.endLocation?.coordinates[0] || null,
+                admins: [...responseData?.editors.map(editor => JSON.stringify({
                     type: AdminType.INDIVIDUAL,
                     id: editor.id,
                     avatar: editor.avatar,
                     name: editor.name,
                     isIndividualAssignment: false
-                })), ...response.data?.groups.map(editor => JSON.stringify({
+                })), ...responseData?.groups.map(editor => JSON.stringify({
                     type: AdminType.GROUP,
                     id: editor.id,
                     avatar: editor.groupImage,
                     name: editor.groupName,
                     isIndividualAssignment: false
                 }))],
-                requiredCertifications: response.data?.requiredCertifications
+                requiredCertifications: responseData?.requiredCertifications
             });
-            setEvent(response.data);
-            setCoordinates({
-                lat: response.data?.lat,
-                lng: response.data?.lon
-            });
-            onChoosedLocation(response.data.lat, response.data.lon);
 
-            if (response.data?.endLocation) {
-                const endLat = response.data?.endLocation?.coordinates[1];
-                const endLon = response.data?.endLocation?.coordinates[0]
+            correctTimeIfIsAlreadyUTC(responseData);
+
+            setEvent(responseData);
+            setCoordinates({
+                lat: responseData?.lat,
+                lng: responseData?.lon
+            });
+            onChoosedLocation(responseData.lat, responseData.lon, true, true, 'start', false);
+
+            if (responseData?.endLocation) {
+                const endLat = responseData?.endLocation?.coordinates[1];
+                const endLon = responseData?.endLocation?.coordinates[0]
                 setEndCoordinates({
                     lat: endLat,
                     lng: endLon
                 });
-                onChoosedLocation(endLat, endLon, true, true, 'end');
+                onChoosedLocation(endLat, endLon, true, true, 'end', false);
             }
         } else {
             showToastMessageOnRequestError(response.error);
             history.push('/events');
+        }
+    }
+
+    const correctTimeIfIsAlreadyUTC = (event) => {
+        const startTime = event?.approximateStartTime;
+        const endTime = event?.approximateEndTime;
+        const startTimezone = event?.approximateStartTime_zone;
+        const endTimezone = event?.approximateEndTime_zone;
+        const etcUTCTimezone = 'Etc/UTC';
+
+        if (startTimezone === etcUTCTimezone) {
+            form.setFieldsValue({ startDate: moment(startTime).tz(startTimezone) });
+            form.setFieldsValue({ startTime: moment(startTime).tz(startTimezone) });
+        } else {
+            form.setFieldsValue({ startDate: moment(startTime) });
+            form.setFieldsValue({ startTime: moment(startTime) });
+        }
+
+        if (endTimezone === etcUTCTimezone) {
+            form.setFieldsValue({ endDate: moment(endTime).tz(endTimezone) });
+            form.setFieldsValue({ endTime: moment(endTime).tz(endTimezone) });
+        } else {
+            form.setFieldsValue({ endDate: moment(endTime) });
+            form.setFieldsValue({ endTime: moment(endTime) });
         }
     }
 
@@ -460,7 +473,8 @@ export const MyEventForm = () => {
     }
 
     React.useEffect(() => {
-        canManageEvent(event);
+        canManageEvent(event, authUser, mode, history);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authUser.role, event.name]);
 
     React.useEffect(() => {

@@ -9,7 +9,7 @@ import { translations } from 'locales/translations';
 import { Map } from './Map';
 import { checkIfLocationIsValid } from 'utils/helpers';
 
-const DEFAULT_ZOOM = 10;
+const DEFAULT_ZOOM = 3;
 const options = [
     { label: "Start Location", value: "start" },
     { label: "End Location", value: "end" }
