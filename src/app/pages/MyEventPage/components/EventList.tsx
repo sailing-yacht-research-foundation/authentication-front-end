@@ -228,8 +228,7 @@ export const EventList = () => {
   }
 
   const canDeleteEvent = (record) => {
-    return record.status === EventState.DRAFT
-      && record.ownerId === localStorage.getItem('user_id');
+    return record.status === EventState.DRAFT;
   }
 
   const canLeaveEvent = (record) => {

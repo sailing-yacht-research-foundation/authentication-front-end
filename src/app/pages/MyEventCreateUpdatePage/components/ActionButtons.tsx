@@ -98,7 +98,7 @@ export const ActionButtons = ({
         },
         {
             name: t(translations.general.delete),
-            show: event.status === EventState.DRAFT && event.ownerId === localStorage.getItem('user_id'),
+            show: event.status === EventState.DRAFT,
             handler: () => setShowDeleteModal(true),
             icon: <BiTrash />,
             spinning: false,

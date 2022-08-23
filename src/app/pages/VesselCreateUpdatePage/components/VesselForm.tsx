@@ -154,6 +154,10 @@ export const VesselForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const canDeleteVessel = () => {
+        return vessel.createdById === localStorage.getItem('user_id');
+    }
+
     const removePhoto = async () => {
         setIsLoading(true);
         const response = await removePhotos(vessel.id!, {
@@ -306,7 +310,7 @@ export const VesselForm = () => {
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
-                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                    {mode === MODE.UPDATE && canDeleteVessel() && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.general.delete)}</DeleteButton>}
 

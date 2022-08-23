@@ -14,7 +14,8 @@ import {
     PageHeaderContainerResponsive,
     TableWrapper,
     PageHeading,
-    PageDescription
+    PageDescription,
+    EditorItem
 } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import moment from 'moment';
@@ -33,6 +34,7 @@ import { isMobile } from 'react-device-detect';
 import { selectFilter, selectIsLoading, selectPagination, selectSorter } from '../slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useVesselListSlice } from '../slice';
+import { renderAvatar } from 'utils/user-utils';
 
 const defaultOptions = {
     loop: true,
@@ -119,6 +121,22 @@ export const VesselList = () => {
             render: (value, record) => record?.isOwner ? t(translations.vessel_list_page.owner) : t(translations.vessel_list_page.admin),
         },
         {
+            title: t(translations.vessel_list_page.owner),
+            dataIndex: 'owner',
+            key: 'owner',
+            render: (value, record) => {
+                const owner = record.editors?.find(e => e.id === record.createdById);
+                if (owner)
+                    return <Tooltip title={owner.name}>
+                        <EditorItem style={{ width: '25px', height: '25px' }} onClick={() => history.push(`/profile/${owner.id}`)}>
+                            <img alt={owner.name} src={renderAvatar(owner.avatar)} />
+                        </EditorItem>
+                    </Tooltip>;
+
+                return <></>;
+            },
+        },
+        {
             title: t(translations.vessel_list_page.is_default_boat),
             dataIndex: 'isDefaultVessel',
             key: 'isDefaultVessel',
@@ -144,13 +162,17 @@ export const VesselList = () => {
                             history.push(`/boats/${record.id}/update`);
                         }} type="primary" />
                     </Tooltip>
-                    <Tooltip title={t(translations.tip.delete_boat)}>
+                    {canDeleteVessel(record) && <Tooltip title={t(translations.tip.delete_boat)}>
                         <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteVesselModal(record)} />
-                    </Tooltip>
+                    </Tooltip>}
                 </Space>;
             },
         },
     ];
+
+    const canDeleteVessel = (vessel) => {
+        return vessel.createdById === localStorage.getItem('user_id');
+    }
 
     const pagination = useSelector(selectPagination);
 
