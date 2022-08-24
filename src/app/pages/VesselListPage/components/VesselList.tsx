@@ -125,7 +125,7 @@ export const VesselList = () => {
             dataIndex: 'owner',
             key: 'owner',
             render: (value, record) => {
-                const owner = record.editors?.find(e => e.id === record.createdById);
+                const owner = record.owner;
                 if (owner)
                     return <Tooltip title={owner.name}>
                         <EditorItem style={{ width: '25px', height: '25px' }} onClick={() => history.push(`/profile/${owner.id}`)}>
