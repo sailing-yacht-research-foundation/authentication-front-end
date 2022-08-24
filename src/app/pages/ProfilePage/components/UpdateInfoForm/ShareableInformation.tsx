@@ -112,7 +112,7 @@ export const ShareableInformation = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.emergency_contact_name)}</SyrfFieldLabel>}
                             name="emergencyContactName"
-                            rules={[{ max: 25, message: t(translations.forms.emergency_name_must_not_be_greater_than_25_chars) }]}
+                            rules={[{ max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
                         >
                             <SyrfInputField  />
                         </Form.Item>
@@ -153,7 +153,7 @@ export const ShareableInformation = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.emergency_contact_relationship)}</SyrfFieldLabel>}
                             name="emergencyContactRelationship"
-                            rules={[{ max: 25, message: t(translations.forms.emergency_relationship_must_not_be_greater_than_25_chars) }]}
+                            rules={[{ max: 25, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 25 }) }]}
                         >
                             <SyrfInputField  />
                         </Form.Item>

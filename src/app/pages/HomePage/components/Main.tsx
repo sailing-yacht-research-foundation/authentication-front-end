@@ -133,7 +133,7 @@ export const Main = () => {
                                 style={{ marginRight: '5px' }}
                                 size={18} />}
                             type="primary">
-                            {t(translations.home_page.nav.create)}
+                            {t(translations.general.create)}
                         </Button>
                     </ButtonCreateContainer>
                 }

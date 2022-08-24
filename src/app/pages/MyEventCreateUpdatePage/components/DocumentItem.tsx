@@ -126,7 +126,7 @@ export const DocumentItem = (props) => {
                         }
                     }]}
                 >
-                    <SyrfInputField  placeholder={t(translations.forms.please_input_your_name)} />
+                    <SyrfInputField  placeholder={t(translations.forms.please_fill_out_this_field)} />
                 </Form.Item>
 
                 <Form.Item

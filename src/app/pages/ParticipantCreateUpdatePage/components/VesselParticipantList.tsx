@@ -49,7 +49,7 @@ export const VesselParticipantList = (props) => {
             width: '33%',
         },
         {
-            title: t(translations.assign_vessel_participant_modal.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => {
                 if (checkIfParticipantExistsOnVesselParticipant(record.participants)) {

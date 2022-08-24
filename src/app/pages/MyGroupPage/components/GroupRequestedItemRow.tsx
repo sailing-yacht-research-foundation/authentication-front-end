@@ -52,7 +52,7 @@ export const GroupRequestedItemRow = (props) => {
                 </ItemInfoContainer>
                 <GroupItemAction>
                     <Spin spinning={isLoading}>
-                        <Button onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.cancel)}</Button>
+                        <Button onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.general.cancel)}</Button>
                     </Spin>
                 </GroupItemAction>
             </RightInfoContainer>

@@ -150,7 +150,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
                             <Form.Item label={<SyrfFieldLabel>{t(translations.group.add_current_group_members)}</SyrfFieldLabel>} name="isIndividualAssignment" valuePropName="checked"><Switch checked={checked} onChange={handleChecked} checkedChildren="Yes" unCheckedChildren="No" /> </Form.Item>
                             <Form.Item>
                                 <SyrfFormButton type="primary" htmlType="submit">
-                                    {t(translations.assign_vessel_participant_modal.save)}
+                                    {t(translations.general.save)}
                                 </SyrfFormButton>
                             </Form.Item>
                         </Form>
@@ -181,7 +181,7 @@ export const AssignEventAsGroupAdminModal = (props) => {
 
                             <Form.Item>
                                 <SyrfFormButton type="primary" htmlType="submit">
-                                    {t(translations.assign_vessel_participant_modal.save)}
+                                    {t(translations.general.save)}
                                 </SyrfFormButton>
                             </Form.Item>
                         </Form>

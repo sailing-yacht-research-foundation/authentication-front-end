@@ -51,9 +51,9 @@ export const PublicUserInformation = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.first_name)}</SyrfFieldLabel>}
                             name="first_name"
-                            rules={[{ required: true, message: t(translations.forms.first_name_is_required) }, {
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 max: 15,
-                                message: t(translations.forms.first_name_cannot_be_longer)
+                                message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 })
                             }]}
                         >
                             <SyrfInputField  />
@@ -66,9 +66,9 @@ export const PublicUserInformation = (props) => {
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.last_name)}</SyrfFieldLabel>}
                             name="last_name"
-                            rules={[{ required: true, message: t(translations.forms.last_name_is_required) }, {
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 max: 15,
-                                message: t(translations.forms.last_name_cannot_be_longer)
+                                message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 })
                             }]}
                         >
                             <SyrfInputField  />

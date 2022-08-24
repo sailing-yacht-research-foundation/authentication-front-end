@@ -24,7 +24,7 @@ export const EmailSetting = () => {
             <ChangeEmailModal visible={isShowingChangeEmailModal} hideModal={() => setIsShowingChangeEmailModal(false)} />
             <Row gutter={12}>
                 <Col span={8}>
-                    {t(translations.settings_page.email)}
+                    {t(translations.general.email)}
                 </Col>
                 <Col span={8}>
                     {authUser.email}
@@ -36,7 +36,7 @@ export const EmailSetting = () => {
 
             <Row gutter={12} style={{ marginTop: '15px' }}>
                 <Col span={8}>
-                    {t(translations.settings_page.password)}
+                    {t(translations.general.password)}
                 </Col>
                 <Col span={8}>
                     ●●●●●●●●●●●●●●

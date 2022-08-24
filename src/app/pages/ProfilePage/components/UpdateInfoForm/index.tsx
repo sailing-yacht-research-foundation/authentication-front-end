@@ -193,7 +193,7 @@ export const UpdateInfo = (props) => {
                         <Form.Item>
                             <StyledSyrfFormButtonWrapper>
                                 <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
-                                    {t(translations.profile_page.update_profile.save)}
+                                    {t(translations.general.save)}
                                 </SyrfFormButton>
                             </StyledSyrfFormButtonWrapper>
                         </Form.Item>

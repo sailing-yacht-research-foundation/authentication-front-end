@@ -155,8 +155,8 @@ export const ParticipantForm = () => {
                                 label={<SyrfFieldLabel>{t(translations.general.public_name)}</SyrfFieldLabel>}
                                 name="publicName"
                                 rules={[
-                                    { required: true, message: t(translations.forms.competitor_name_is_required) },
-                                    { max: 50, message: t(translations.forms.competitor_name_must_not_longer_than_50_character) }
+                                    { required: true, message: t(translations.forms.please_fill_out_this_field) },
+                                    { max: 50, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 50 }) }
                                 ]}
                             >
                                 <SyrfInputField  />

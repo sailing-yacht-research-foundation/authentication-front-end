@@ -139,7 +139,7 @@ export const CompetitorInviteModal = (props) => {
                     <Tooltip title={t(translations.my_event_create_update_page.invite_groups_or_individual_by_searching_them)}>
                         <Form.Item
                             name="competitors"
-                            rules={[{ required: true, message: t(translations.forms.competitors_are_required) }]}
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                         >
                             <SyrfFormSelect mode="multiple"
                                 style={{ width: '100%' }}

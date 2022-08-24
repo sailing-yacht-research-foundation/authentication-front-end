@@ -154,7 +154,7 @@ export const EventList = () => {
       width: '110px'
     },
     {
-      title: t(translations.my_event_list_page.start_date),
+      title: t(translations.general.start_date),
       dataIndex: 'approximateStartTime',
       key: 'start_date',
       sorter: true,
@@ -178,7 +178,7 @@ export const EventList = () => {
       render: (value) => value,
     },
     {
-      title: t(translations.my_event_list_page.created_date),
+      title: t(translations.general.created_date),
       dataIndex: 'createdAt',
       key: 'createdAt',
       sorter: true,

@@ -48,7 +48,7 @@ export const CredentialList = () => {
             }
         },
         {
-            title: t(translations.credentail_manager_page.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => {
                 return <Space size={10}>

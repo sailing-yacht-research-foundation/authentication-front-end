@@ -67,7 +67,7 @@ export const ChangePasswordForm = () => {
                                 rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                     pattern: /^\S+$/,
                                     message: t(translations.misc.password_must_not_contain_blank)
-                                }, { max: 16, min: 8, message: t(translations.forms.password_must_be_between) }]}
+                                }, { max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: 'Password' }) }]}
                             >
                                 <SyrfPasswordInputField />
                             </Form.Item>
@@ -77,10 +77,10 @@ export const ChangePasswordForm = () => {
                             <Form.Item
                                 label={<SyrfFieldLabel>{t(translations.change_password_page.new_password)}</SyrfFieldLabel>}
                                 name="newPassword"
-                                rules={[{ required: true, message: t(translations.forms.new_password_is_required) }, {
+                                rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                     pattern: /^\S+$/,
                                     message: t(translations.misc.password_must_not_contain_blank)
-                                }, { max: 16, min: 8, message: t(translations.forms.new_password_must_be_between) }]}
+                                }, { max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: 'New Password' }) }]}
                             >
                                 <SyrfPasswordInputField />
                             </Form.Item>

@@ -226,7 +226,7 @@ export const PrivateUserInformation = (props) => {
                             name="birthdate"
                             rules={[{ type: 'date' }, {
                                 required: true,
-                                message: t(translations.forms.birth_date_is_required)
+                                message: t(translations.forms.please_fill_out_this_field)
                             }]}
                         >
                             <DatePicker

@@ -55,10 +55,10 @@ export const UserApprovalModal = (props) => {
         return (
             <Space size={10}>
                 <Button type="primary" icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
-                    {t(translations.group.accept)}
+                    {t(translations.general.accept)}
                 </Button>
                 <Button icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
-                    {t(translations.group.reject)}
+                    {t(translations.general.reject)}
                 </Button>
             </Space>
         );

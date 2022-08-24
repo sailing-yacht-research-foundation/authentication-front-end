@@ -105,7 +105,7 @@ export const NotificationList = (props: INotificationList) => {
             {renderNotificationItems()}
         </NotificationListWrapper>
         {canLoadMore() && <NotificationLoadMoreWrapper>
-            <Button onClick={loadMoreNotifications} type="link">{t(translations.notifications.see_more)}</Button>
+            <Button onClick={loadMoreNotifications} type="link">{t(translations.general.see_more)}</Button>
         </NotificationLoadMoreWrapper>}
     </Spin>;
 

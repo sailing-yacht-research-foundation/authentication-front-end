@@ -208,7 +208,7 @@ export const NotificationSettings = () => {
 
                 <Form.Item>
                     <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
-                        {t(translations.profile_page.update_profile.save)}
+                        {t(translations.general.save)}
                     </SyrfFormButton>
                 </Form.Item>
             </Form>}

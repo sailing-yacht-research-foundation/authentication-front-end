@@ -130,7 +130,7 @@ export const Nav = (props) => {
     const renderButtonByStatus = () => {
         let button = <></>;
         if (joinStatus === GroupMemberStatus.REQUESTED)
-            button = <CreateButton onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.cancel)}</CreateButton>
+            button = <CreateButton onClick={undoJoin} shape="round" icon={<MdOutlineUndo style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.general.cancel)}</CreateButton>
         if (!joinStatus)
             button = <Button onClick={joinGroup} shape="round" icon={<MdOutlineGroupAdd style={{ marginRight: '10px', fontSize: '17px' }} />}>{t(translations.group.join)}</Button>
 

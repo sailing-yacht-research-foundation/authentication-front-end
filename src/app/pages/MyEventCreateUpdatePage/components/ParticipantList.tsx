@@ -76,7 +76,7 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
-            title: t(translations.participant_list.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => (
                 <>

@@ -90,7 +90,7 @@ export const LoginForm = (props) => {
             <Form.Item
               name="email"
               rules={[
-                { required: true, message: t(translations.forms.email_is_required) },
+                { required: true, message: t(translations.forms.please_fill_out_this_field) },
                 {
                   pattern: /^\S+$/,
                   message: t(translations.misc.email_must_not_contain_blank)
@@ -104,13 +104,13 @@ export const LoginForm = (props) => {
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: t(translations.forms.password_is_required) },
+                { required: true, message: t(translations.forms.please_fill_out_this_field) },
                 {
                   pattern: /^\S+$/,
                   message: t(translations.misc.password_must_not_contain_blank)
                 },
                 {
-                  max: 16, min: 8, message: t(translations.forms.password_must_be_between)
+                  max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: 'Password' })
                 },
               ]}
             >

@@ -70,7 +70,7 @@ export const LiferaftList = (props) => {
             render: (text, record) => renderEmptyValue(text),
         },
         {
-            title: t(translations.participant_list.action),
+            title: t(translations.general.action),
             key: 'action',
             fixed: true,
             render: (text, record) => (
@@ -79,7 +79,7 @@ export const LiferaftList = (props) => {
                         <BorderedButton onClick={() => {
                             history.push(`/boats/${vesselId}/liferafts/${record.id}/update`);
                         }} type="primary">
-                            {t(translations.liferaft_create_update_page.update)}
+                            {t(translations.general.update)}
                         </BorderedButton>
                     </Tooltip>
                     <Tooltip title={t(translations.tip.delete_this_liferaft)}>

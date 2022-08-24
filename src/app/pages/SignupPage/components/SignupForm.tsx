@@ -103,7 +103,7 @@ export const SignupForm = () => {
                     <Form.Item
                         label="Email"
                         name="email"
-                        rules={[{ required: true, message: t(translations.forms.email_is_required) }, {
+                        rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                             type: 'email', message: t(translations.forms.email_must_be_valid)
                         }, {
                             pattern: /^\S+$/,
@@ -119,8 +119,8 @@ export const SignupForm = () => {
                                 label={t(translations.signup_page.first_name)}
                                 name="first_name"
                                 rules={[
-                                    { required: true, message: t(translations.forms.first_name_is_required) },
-                                    { max: 15, message: t(translations.forms.first_name_cannot_be_longer) }]}
+                                    { required: true, message: t(translations.forms.please_fill_out_this_field) },
+                                    { max: 15, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 }) }]}
                             >
                                 <InputWithNoBrowserSupportAttributes />
                             </Form.Item>
@@ -131,8 +131,8 @@ export const SignupForm = () => {
                                 label={t(translations.signup_page.last_name)}
                                 name="last_name"
                                 rules={[
-                                    { required: true, message: t(translations.forms.last_name_is_required) },
-                                    { max: 15, message: t(translations.forms.last_name_cannot_be_longer) }]}
+                                    { required: true, message: t(translations.forms.please_fill_out_this_field) },
+                                    { max: 15, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 }) }]}
                             >
                                 <InputWithNoBrowserSupportAttributes />
                             </Form.Item>
@@ -140,13 +140,13 @@ export const SignupForm = () => {
                     </Row>
 
                     <Form.Item
-                        label={t(translations.signup_page.password)}
+                        label={t(translations.general.password)}
                         name="password"
-                        rules={[{ required: true, message: t(translations.forms.password_is_required) }, {
+                        rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                             pattern: /^\S+$/,
                             message: t(translations.misc.password_must_not_contain_blank)
                         }, {
-                            max: 16, min: 8, message: t(translations.forms.password_must_be_between)
+                            max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: 'Password' })
                         }]}
                     >
                         <InputPasswordWithNoBrowserSupportAttributes />

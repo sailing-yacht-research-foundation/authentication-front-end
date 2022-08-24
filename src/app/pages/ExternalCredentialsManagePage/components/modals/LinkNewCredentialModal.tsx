@@ -87,9 +87,9 @@ export const LinkNewCredentialModal = (props: ILinkNewCredentialModal) => {
                     </Form.Item>
 
                     <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.credentail_manager_page.password)}</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.general.password)}</SyrfFieldLabel>}
                         name="password"
-                        rules={[{ required: true, message: t(translations.credentail_manager_page.password_is_required) }]}
+                        rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                     >
                         <SyrfPasswordInputField />
                     </Form.Item>
