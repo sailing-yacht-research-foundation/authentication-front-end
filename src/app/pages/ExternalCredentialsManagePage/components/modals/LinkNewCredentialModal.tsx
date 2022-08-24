@@ -95,9 +95,9 @@ export const LinkNewCredentialModal = (props: ILinkNewCredentialModal) => {
                     </Form.Item>
 
                     <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.credentail_manager_page.source)}</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.general.source)}</SyrfFieldLabel>}
                         name="source"
-                        rules={[{ required: true, message: t(translations.credentail_manager_page.source) }]}
+                        rules={[{ required: true, message: t(translations.general.source) }]}
                     >
                         <SyrfFormSelect>
                             {renderSourcesList()}

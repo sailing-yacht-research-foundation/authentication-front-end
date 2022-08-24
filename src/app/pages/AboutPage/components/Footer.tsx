@@ -6,6 +6,7 @@ import { media } from 'styles/media';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { ReactComponent as Logo } from './assets/logo-light.svg';
+import moment from 'moment';
 
 export const Footer = (props) => {
 
@@ -74,7 +75,7 @@ export const Footer = (props) => {
 
                 <Divider />
 
-                <FooterTextCopyRight>{t(translations.about_page.footer.copyright)}</FooterTextCopyRight>
+                <FooterTextCopyRight>{t(translations.about_page.footer.copyright, { year: moment().format('YYYY') })}</FooterTextCopyRight>
             </SYRFFooterContainer>
         </Wrapper>
     )

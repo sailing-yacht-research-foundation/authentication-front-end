@@ -68,7 +68,7 @@ export const MembersManager = (props) => {
     const [filterMode, setFilterMode] = React.useState<string>('');
 
     const filterOptions = [
-        { title: t(translations.group.all), mode: '' },
+        { title: t(translations.general.all), mode: '' },
         { title: t(translations.group.invited), mode: filterModes.INVITED },
         { title: t(translations.group.accepted), mode: filterModes.ACCEPTED },
         { title: t(translations.group.declined), mode: filterModes.DECLINED },
@@ -237,7 +237,7 @@ export const MembersManager = (props) => {
             {group.isAdmin && <FilterWrapper>
                 <Dropdown trigger={['click']} overlay={menu}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
-                        {filterMode === '' ? t(translations.group.all) : filterMode.toLowerCase()} <DownOutlined />
+                        {filterMode === '' ? t(translations.general.all) : filterMode.toLowerCase()} <DownOutlined />
                     </a>
                 </Dropdown>
             </FilterWrapper>}

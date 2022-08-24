@@ -348,7 +348,7 @@ export const ShareableInformation = (props) => {
                     {shareableInformation.passportPhoto && <FormPhotoWrapper>
                         <FormPhotoHeaderContainer>
                             <h3>{t(translations.profile_page.update_profile.your_uploaded_passport)}</h3>
-                            <Button type="link" danger onClick={() => setShowRemovePassportConfirmModal(true)}>{t(translations.profile_page.update_profile.remove)}</Button>
+                            <Button type="link" danger onClick={() => setShowRemovePassportConfirmModal(true)}>{t(translations.general.remove)}</Button>
                         </FormPhotoHeaderContainer>
                         <Image src={`data:image/png;base64, ${shareableInformation.passportPhoto}`} />
 
@@ -359,7 +359,7 @@ export const ShareableInformation = (props) => {
                     {shareableInformation.covidVaccinationCard && <FormPhotoWrapper>
                         <FormPhotoHeaderContainer>
                             <h3>{t(translations.profile_page.update_profile.your_uploaded_vaccination_card)}</h3>
-                            <Button type="link" danger onClick={() => setShowRemoveCovidCardConfirmModal(true)}>{t(translations.profile_page.update_profile.remove)}</Button>
+                            <Button type="link" danger onClick={() => setShowRemoveCovidCardConfirmModal(true)}>{t(translations.general.remove)}</Button>
                         </FormPhotoHeaderContainer>
                         <Image src={`data:image/png;base64, ${shareableInformation.covidVaccinationCard}`} />
                     </FormPhotoWrapper>}

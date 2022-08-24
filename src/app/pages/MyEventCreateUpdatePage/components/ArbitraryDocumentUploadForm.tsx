@@ -131,7 +131,7 @@ export const ArbitraryDocumentUploadForm = ({ event, showModal, setShowModal, re
                     </Form.List>
 
                     <SyrfFormButton type="primary" htmlType="submit">
-                        {t(translations.my_event_create_update_page.upload)}
+                        {t(translations.general.upload)}
                     </SyrfFormButton>
                 </Form>
             </Spin>

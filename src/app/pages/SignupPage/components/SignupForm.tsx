@@ -116,7 +116,7 @@ export const SignupForm = () => {
                     <Row gutter={24}>
                         <Col xs={24} sm={24} md={12} lg={12}>
                             <Form.Item
-                                label={t(translations.signup_page.first_name)}
+                                label={t(translations.general.first_name)}
                                 name="first_name"
                                 rules={[
                                     { required: true, message: t(translations.forms.please_fill_out_this_field) },
@@ -128,7 +128,7 @@ export const SignupForm = () => {
 
                         <Col xs={24} sm={24} md={12} lg={12}>
                             <Form.Item
-                                label={t(translations.signup_page.last_name)}
+                                label={t(translations.general.last_name)}
                                 name="last_name"
                                 rules={[
                                     { required: true, message: t(translations.forms.please_fill_out_this_field) },
@@ -176,7 +176,7 @@ export const SignupForm = () => {
                     <Divider />
 
                     <Form.Item
-                        label={t(translations.signup_page.country)}
+                        label={t(translations.general.country)}
                         name="locale"
                         rules={[{ required: true }]}
                     >

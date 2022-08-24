@@ -75,7 +75,7 @@ export const PDFUploadForm = (props) => {
                     <PageHeaderTextSmall>{t(translations.vessel_create_update_page.equipment_manuals)}</PageHeaderTextSmall>
                     <PageHeaderDescription>{t(translations.vessel_create_update_page.upload_your_equipment_manuals_so_that_your_crews)}</PageHeaderDescription>
                 </div>
-                {vessel.equipmentManualPdfs && <CreateButton onClick={downloadAllPdfs} icon={<DownloadOutlined />}>{t(translations.vessel_create_update_page.download_all)}</CreateButton>}
+                {vessel.equipmentManualPdfs && <CreateButton onClick={downloadAllPdfs} icon={<DownloadOutlined />}>{t(translations.general.download_all)}</CreateButton>}
             </PageHeaderContainer>
 
             <List

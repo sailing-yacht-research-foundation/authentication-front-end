@@ -130,7 +130,7 @@ export const MyTrackList = () => {
             render: (value) => moment(value).format(TIME_FORMAT.date_text),
         },
         {
-            title: t(translations.my_tracks_page.city),
+            title: t(translations.general.city),
             dataIndex: 'competitionUnit.city',
             key: 'competitionUnit.city',
             sorter: true,
@@ -138,7 +138,7 @@ export const MyTrackList = () => {
             render: (value, source) => source.competitionUnit?.city || '-'
         },
         {
-            title: t(translations.my_tracks_page.country),
+            title: t(translations.general.country),
             dataIndex: 'competitionUnit.country',
             key: 'competitionUnit.country',
             sorter: true,
@@ -201,7 +201,7 @@ export const MyTrackList = () => {
             }
         },
         {
-            title: t(translations.my_tracks_page.source),
+            title: t(translations.general.source),
             dataIndex: 'source',
             key: 'source',
             render: (_value, record) => record.event?.source

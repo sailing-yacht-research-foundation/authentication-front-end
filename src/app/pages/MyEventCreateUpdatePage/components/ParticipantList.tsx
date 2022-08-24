@@ -60,7 +60,7 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
-            title: t(translations.participant_list.status),
+            title: t(translations.general.status),
             dataIndex: 'invitationStatus',
             key: 'invitationStatus',
             render: (text, record) => {
@@ -81,8 +81,8 @@ export const ParticipantList = (props) => {
             render: (text, record) => (
                 <>
                     {!canManageEvent || canManageEvent() ? (<Space size={10}>
-                        <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.participant_list.remove)}</DeleteButton>
-                        {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.participant_list.block)}</DeleteButton>}
+                        <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.general.remove)}</DeleteButton>
+                        {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.general.block)}</DeleteButton>}
                     </Space>) : <></>}
                 </>
             ),
@@ -96,7 +96,7 @@ export const ParticipantList = (props) => {
         <Menu>
             <Menu.Item>
                 <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.all)}>
-                    {t(translations.participant_list.all)}
+                    {t(translations.general.all)}
                 </a>
             </Menu.Item>
             <Menu.Item>
@@ -239,7 +239,7 @@ export const ParticipantList = (props) => {
                                 <CreateButton onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
                                     style={{ marginRight: '5px' }}
                                     size={18} />}>
-                                    {t(translations.participant_list.invite)}
+                                    {t(translations.general.invite)}
                                 </CreateButton>
                             </Tooltip>
                         }

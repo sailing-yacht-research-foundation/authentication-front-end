@@ -41,11 +41,11 @@ export const PrivacyPolicy = () => {
 
       <PrivacyPolicyContent />
 
-      { showAgreeButton && 
+      { showAgreeButton &&
           <ButtonParentContainer>
             <ButtonContainer>
               <Button onClick={() => handleAgree(privacyPolicy)} block size="large" type="primary">
-                {t(translations.privacy_page.agree)}
+                {t(translations.general.agree)}
               </Button>
             </ButtonContainer>
           </ButtonParentContainer>

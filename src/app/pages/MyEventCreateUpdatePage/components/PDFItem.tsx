@@ -110,7 +110,7 @@ export const PDFItem = (props) => {
             width={1000}
         >
             <object width="100%" height="500" data={getFileDownloadURLUsingPdfKey(item.formFieldName)} type="application/pdf">
-                <a href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a>
+                <a href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.general.download)}</a>
             </object>
 
             <Form
@@ -152,10 +152,10 @@ export const PDFItem = (props) => {
                         showUploadList={false}
                         customRequest={options => uploadPDF(options, item.formFieldName)}
                     >
-                        <Button type="link">{t(translations.my_event_create_update_page.upload)}</Button>
+                        <Button type="link">{t(translations.general.upload)}</Button>
                     </Upload>}
                 </Spin>),
-                (checkIfPdfExist(item.formFieldName) ? <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.my_event_create_update_page.download)}</a> : <span>N/A</span>),
+                (checkIfPdfExist(item.formFieldName) ? <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.general.download)}</a> : <span>N/A</span>),
                 canSignWaiver() && <Button type='link' onClick={e => showSignWaiverModal(item.formFieldName)}>Sign</Button>
             ]}
         >

@@ -137,7 +137,7 @@ export const EventList = () => {
       }
     },
     {
-      title: t(translations.my_event_list_page.city),
+      title: t(translations.general.city),
       dataIndex: 'city',
       key: 'city',
       render: (text) => renderEmptyValue(text),
@@ -145,7 +145,7 @@ export const EventList = () => {
       ...getColumnSearchProps('city', handleSearch, handleReset)
     },
     {
-      title: t(translations.my_event_list_page.country),
+      title: t(translations.general.country),
       dataIndex: 'country',
       key: 'country',
       sorter: true,
@@ -170,7 +170,7 @@ export const EventList = () => {
       render: (_, record) => <EventAdmins headless editors={record.editors || []} groups={record.groupEditors || []} event={record} />
     },
     {
-      title: t(translations.my_event_list_page.status),
+      title: t(translations.general.status),
       dataIndex: 'status',
       key: 'status',
       sorter: true,

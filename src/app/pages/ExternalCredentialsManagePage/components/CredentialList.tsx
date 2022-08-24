@@ -40,7 +40,7 @@ export const CredentialList = () => {
             }
         },
         {
-            title: t(translations.credentail_manager_page.source),
+            title: t(translations.general.source),
             dataIndex: 'source',
             key: 'source',
             render: (text, record) => {

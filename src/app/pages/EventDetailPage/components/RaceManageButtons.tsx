@@ -48,7 +48,7 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
 
     return (<Space size="middle">
         <StopRaceConfirmModal reloadParent={reloadParent} race={race} showModal={showStopRaceConfirmModal} setShowModal={setShowStopRaceConfirmModal} />
-        {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
+        {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.general.stop)}</CreateButton>}
         {canManageEvent() && <>
             <Tooltip title={t(translations.tip.update_race)}>
                 <BorderedButton onClick={() => {

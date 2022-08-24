@@ -62,7 +62,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    {record.status === RaceStatus.ON_GOING && <CreateButton onClick={() => openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
+                    {record.status === RaceStatus.ON_GOING && <CreateButton onClick={() => openStopRaceConfirmModal(record)}>{t(translations.general.stop)}</CreateButton>}
                     <Tooltip title={t(translations.tip.update_race)}>
                         <BorderedButton onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)

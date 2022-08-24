@@ -49,7 +49,7 @@ export const PublicUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.first_name)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.first_name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.general.first_name)}</SyrfFieldLabel>}
                             name="first_name"
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 max: 15,
@@ -64,7 +64,7 @@ export const PublicUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.last_name)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.last_name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.general.last_name)}</SyrfFieldLabel>}
                             name="last_name"
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 max: 15,
@@ -79,7 +79,7 @@ export const PublicUserInformation = (props) => {
 
             <Tooltip title={t(translations.tip.country)}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.country)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.general.country)}</SyrfFieldLabel>}
                     name="country"
                     rules={[{ required: true }]}
                 >

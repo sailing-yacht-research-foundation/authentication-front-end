@@ -240,7 +240,7 @@ export const ResultItem = (props) => {
                         {t(translations.home_page.filter_tab.filter_result.event_name)} {eventElement}
                     </DescriptionItem>}
                     {race._source.source && <DescriptionItem>
-                        {t(translations.my_tracks_page.source)}: {race._source.source}
+                        {t(translations.general.source)}: {race._source.source}
                     </DescriptionItem>}
                 </DescriptionWrapper>
                 <Space size={10}>
