@@ -11,7 +11,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
+import { AdminType, etcUTCTimezone, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, RaceSource, requiredCompetitorsInformation, TIME_FORMAT } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -96,20 +96,12 @@ export const MyEventForm = () => {
             currentTime = endTime;
         }
 
-        const data = {
+        let data = {
             ...values,
             endLocation: endLon && endLat ? {
                 lon: endLon,
                 lat: endLat
             } : null,
-            approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
-            approximateEndTime: moment(currentDate.format('YYYY-MM-DD') + ' ' + currentTime.format("HH:mm:ss")).utc(),
-            startDay: startDate.utc().format('DD'),
-            startMonth: startDate.utc().format('MM'),
-            startYear: startDate.utc().format('YYYY'),
-            endDay: currentDate.utc().format('DD'),
-            endMonth: currentDate.utc().format('MM'),
-            endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
             isPrivate: false,
             isOpen: !!isOpen,
@@ -127,6 +119,8 @@ export const MyEventForm = () => {
             requiredCertifications: certifications,
             organizerGroupId: values.organizerGroupId || null,
         };
+
+        data = adjustTimeForScrapedRace(data, startDate, startTime, currentDate, currentTime);
 
         requiredCompetitorsInformation.forEach((field) => {
             data[field] = requiredCompetitorFields.includes(field);
@@ -147,6 +141,71 @@ export const MyEventForm = () => {
         }
 
         setIsSavingEvent(false);
+    }
+
+    const adjustTimeForScrapedRace = (data, startDate, startTime, currentDate, currentTime) => {
+        let approximateStartTimeParam, approximateEndTimeParam;
+        let startDayParam, endDayParam;
+        let startMonthParam, endMonthParam;
+        let startYearParam, endYearParam;
+
+        if (event.approximateStartTime_zone === etcUTCTimezone) {
+            approximateStartTimeParam = startDate ? moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).format(TIME_FORMAT.number_with_time) : moment().format(TIME_FORMAT.number_with_time)
+            startDayParam = startDate.format('DD')
+            startMonthParam = startDate.format('MM')
+            startYearParam = startDate.format('YYYY')
+        } else {
+            approximateStartTimeParam = startDate ? moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc() : moment().utc().format(TIME_FORMAT.number_with_time)
+            startDayParam = startDate.utc().format('DD')
+            startMonthParam = startDate.utc().format('MM')
+            startYearParam = startDate.utc().format('YYYY')
+        }
+
+        if (event.approximateEndTime_zone === etcUTCTimezone) {
+            approximateEndTimeParam = moment(currentDate.format(TIME_FORMAT.number) + ' ' + currentTime.format(TIME_FORMAT.time)).format(TIME_FORMAT.number_with_time)
+            endDayParam = currentDate.format('DD')
+            endMonthParam = currentDate.format('MM')
+            endYearParam = currentDate.format('YYYY')
+        } else {
+            approximateEndTimeParam = moment(currentDate.format(TIME_FORMAT.number) + ' ' + currentTime.format(TIME_FORMAT.time)).utc()
+            endDayParam = currentDate.utc().format('DD')
+            endMonthParam = currentDate.utc().format('MM')
+            endYearParam = currentDate.utc().format('YYYY')
+        }
+
+        return {
+            ...data,
+            approximateStartTime: approximateStartTimeParam,
+            startDay: startDayParam,
+            startMonth: startMonthParam,
+            startYear: startYearParam,
+            approximateEndTime: approximateEndTimeParam,
+            endDay: endDayParam,
+            endMonth: endMonthParam,
+            endYear: endYearParam
+        };
+    }
+
+    const correctTimeIfIsAlreadyUTC = (event) => {
+        const startTime = event?.approximateStartTime;
+        const endTime = event?.approximateEndTime;
+        const startTimezone = event?.approximateStartTime_zone;
+        const endTimezone = event?.approximateEndTime_zone;
+
+        form.setFieldsValue({ startDate: moment({ month: Number(event.startMonth) - 1, day: event.startDay, year: event.startYear }) });
+        form.setFieldsValue({ endDate: moment({ month: Number(event.endMonth) - 1, day: event.endDay, year: event.endYear }) });
+
+        if (startTimezone === etcUTCTimezone) {
+            form.setFieldsValue({ startTime: moment(startTime).tz(startTimezone) });
+        } else {
+            form.setFieldsValue({ startTime: moment(startTime) });
+        }
+
+        if (endTimezone === etcUTCTimezone) {
+            form.setFieldsValue({ endTime: moment(endTime).tz(endTimezone) });
+        } else {
+            form.setFieldsValue({ endTime: moment(endTime) });
+        }
     }
 
     const onEventSaved = async (response, startLocation, endLocation) => {
@@ -375,30 +434,6 @@ export const MyEventForm = () => {
         }
     }
 
-    const correctTimeIfIsAlreadyUTC = (event) => {
-        const startTime = event?.approximateStartTime;
-        const endTime = event?.approximateEndTime;
-        const startTimezone = event?.approximateStartTime_zone;
-        const endTimezone = event?.approximateEndTime_zone;
-        const etcUTCTimezone = 'Etc/UTC';
-
-        if (startTimezone === etcUTCTimezone) {
-            form.setFieldsValue({ startDate: moment(startTime).tz(startTimezone) });
-            form.setFieldsValue({ startTime: moment(startTime).tz(startTimezone) });
-        } else {
-            form.setFieldsValue({ startDate: moment(startTime) });
-            form.setFieldsValue({ startTime: moment(startTime) });
-        }
-
-        if (endTimezone === etcUTCTimezone) {
-            form.setFieldsValue({ endDate: moment(endTime).tz(endTimezone) });
-            form.setFieldsValue({ endTime: moment(endTime).tz(endTimezone) });
-        } else {
-            form.setFieldsValue({ endDate: moment(endTime) });
-            form.setFieldsValue({ endTime: moment(endTime) });
-        }
-    }
-
     const resetData = () => {
         form.resetFields();
     }
@@ -560,7 +595,7 @@ export const MyEventForm = () => {
 
                         <FormItemHidden />
 
-                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoosedLocation={onChoosedLocation} />
+                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoosedLocation={(lat, lon, selector) => onChoosedLocation(lat, lon, true, true, selector, (mode === MODE.CREATE || (mode === MODE.UPDATE && event.source === RaceSource.SYRF)))} />
 
                         <FormItemStartLocationAddress address={address} handleAddressChange={handleAddressChange} handleSelectAddress={handleSelectAddress} />
 

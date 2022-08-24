@@ -35,7 +35,7 @@ export const LocationPicker = (props) => {
     const [selectedOpt, setSelectedOpt] = React.useState(options[0].value);
 
     const onMapClicked = (latitude, longitude, selector) => {
-        onChoosedLocation(latitude, longitude, true, true, selector);
+        onChoosedLocation(latitude, longitude, selector);
     }
 
     const handleChangeOption = (e) => {

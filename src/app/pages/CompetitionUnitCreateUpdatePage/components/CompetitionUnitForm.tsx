@@ -17,7 +17,7 @@ import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { IoIosArrowBack } from 'react-icons/io';
-import { MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
+import { etcUTCTimezone, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import { CalendarEvent } from 'types/CalendarEvent';
@@ -102,8 +102,15 @@ export const CompetitionUnitForm = () => {
         };
 
         if (!isCompetitionUnitPostponed) {
-            data.startTime = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
-            data.approximateStart = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
+            let time;
+            if (approximateStart_zone === etcUTCTimezone) {
+                time = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).format(TIME_FORMAT.number_with_time);
+            } else {
+                time = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
+            }
+
+            data.startTime = time;
+            data.approximateStart = time;
         }
 
         if (mode === MODE.CREATE)
@@ -154,9 +161,10 @@ export const CompetitionUnitForm = () => {
                 showPostponedMessageToUserIfRaceIsPostponed(response.data);
                 form.setFieldsValue({
                     ...response.data,
-                    startDate: moment(response.data?.approximateStart),
-                    startTime: moment(response.data?.approximateStart)
+                    startTime: moment(),
+                    startDate: moment()
                 });
+                correctTimeIfUTC(response.data);
                 if (response.data?.boundingBox?.coordinates)
                     setBoundingBoxCoordinates(response.data?.boundingBox?.coordinates);
             } else {
@@ -167,6 +175,20 @@ export const CompetitionUnitForm = () => {
             await setDefaultTimeForRace();
             await setDefaultNameForRace();
             checkIfNoRaceIsOngoing();
+        }
+    }
+
+    const correctTimeIfUTC = (competitionUnit: CompetitionUnit) => {
+        if (competitionUnit.approximateStart_zone === etcUTCTimezone) {
+            form.setFieldsValue({
+                startTime: moment(competitionUnit.approximateStart).tz(competitionUnit.approximateStart_zone),
+                startDate: moment(competitionUnit.approximateStart).tz(competitionUnit.approximateStart_zone)
+            });
+        } else {
+            form.setFieldsValue({
+                startDate: moment(competitionUnit.approximateStart),
+                startTime: moment(competitionUnit.approximateStart)
+            });
         }
     }
 
