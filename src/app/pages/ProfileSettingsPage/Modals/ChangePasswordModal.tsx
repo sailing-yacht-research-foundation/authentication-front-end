@@ -68,7 +68,7 @@ export const ChangePasswordModal = ({ visible, hideModal }: IChangePasswordModal
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 pattern: /^\S+$/,
                                 message: t(translations.misc.password_must_not_contain_blank)
-                            }, { max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: 'Current Password'}) }]}
+                            }, { max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.change_password_page.current_password)}) }]}
                         >
                             <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
                         </Form.Item>
@@ -81,7 +81,7 @@ export const ChangePasswordModal = ({ visible, hideModal }: IChangePasswordModal
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 pattern: /^\S+$/,
                                 message: t(translations.misc.password_must_not_contain_blank)
-                            }, { max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: 'New Password'}) }]}
+                            }, { max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.change_password_page.new_password) }]}
                         >
                             <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
                         </Form.Item>

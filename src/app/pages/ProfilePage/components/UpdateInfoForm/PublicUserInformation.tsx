@@ -103,7 +103,7 @@ export const PublicUserInformation = (props) => {
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.biography)}</SyrfFieldLabel>}
                     name="bio"
-                    rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 255 }) }]}
+                    rules={[{ max: 1000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 1000 }) }]}
                 >
                     <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
                 </Form.Item>

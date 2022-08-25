@@ -146,7 +146,7 @@ export const SignupForm = () => {
                             pattern: /^\S+$/,
                             message: t(translations.misc.password_must_not_contain_blank)
                         }, {
-                            max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: 'Password' })
+                            max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.general.password) })
                         }]}
                     >
                         <InputPasswordWithNoBrowserSupportAttributes />

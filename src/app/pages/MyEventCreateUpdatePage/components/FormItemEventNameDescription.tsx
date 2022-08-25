@@ -28,7 +28,7 @@ export const FormItemEventNameDescription = (props) => {
 
             <Tooltip title={t(translations.tip.event_description)}>
                 <Form.Item
-                    rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 255 }) }]}
+                    rules={[{ max: 1000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 1000 }) }]}
                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                     name="description"
                     data-multiline={true}

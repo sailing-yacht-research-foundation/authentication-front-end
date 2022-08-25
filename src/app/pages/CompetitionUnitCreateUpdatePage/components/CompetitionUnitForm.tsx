@@ -406,7 +406,7 @@ export const CompetitionUnitForm = () => {
 
                         <Tooltip title={t(translations.tip.race_description)}>
                             <Form.Item
-                                rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 255 }) }]}
+                                rules={[{ max: 1000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 1000 }) }]}
                                 label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                                 name="description"
                             >
