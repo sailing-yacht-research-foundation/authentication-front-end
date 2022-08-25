@@ -27,7 +27,7 @@ export const FormItemStartLocationAddress = ({ handleAddressChange, handleSelect
                             <>
                                 <SyrfInputField
                                     {...getInputProps({
-                                        placeholder: t(translations.profile_page.update_profile.search_places),
+                                        placeholder: t(translations.profile_page.search_places),
                                         className: 'location-search-input',
                                     })}
                                     value={address}

@@ -113,7 +113,7 @@ export const FilterPane = (props) => {
     return (
         <Wrapper {...props} className={TourStepClassName.SEARCH}>
             <FilterHeader>
-                <FilterTabTitle>{t(translations.home_page.filter_tab.advanced_search)}</FilterTabTitle>
+                <FilterTabTitle>{t(translations.home_page.advanced_search)}</FilterTabTitle>
                 {props.closable && document.body.clientWidth > 1024 && <AiFillCloseCircle
                     onClick={props.close}
                     style={{ cursor: 'pointer' }}
@@ -139,7 +139,7 @@ export const FilterPane = (props) => {
                     <div style={{ position: 'relative' }}>
                         <Form.Item
                             name="name"
-                            label={t(translations.home_page.filter_tab.race_name)}
+                            label={t(translations.home_page.search_keyword)}
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                         >
                             <Input ref={searchInputRef}
@@ -175,14 +175,14 @@ export const FilterPane = (props) => {
                     <Row gutter={24}>
                         <Col xs={12} sm={12} md={12} lg={12}>
                             <Form.Item
-                                label={t(translations.home_page.filter_tab.from_date)}
+                                label={t(translations.home_page.from_date)}
                                 name="from_date"
                                 rules={[{ type: 'date' }, ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         if (!value || !getFieldValue('to_date') || moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('to_date').format(TIME_FORMAT.number))) {
                                             return Promise.resolve();
                                         }
-                                        return Promise.reject(new Error(t(translations.home_page.filter_tab.from_date_must_be_smaller_than_to_date)));
+                                        return Promise.reject(new Error(t(translations.home_page.from_date_must_be_smaller_than_to_date)));
                                     },
                                 })]}
                             >
@@ -202,14 +202,14 @@ export const FilterPane = (props) => {
 
                         <Col xs={12} sm={12} md={12} lg={12}>
                             <Form.Item
-                                label={t(translations.home_page.filter_tab.to_date)}
+                                label={t(translations.home_page.to_date)}
                                 name="to_date"
                                 rules={[{ type: 'date' }, ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         if (!value || !getFieldValue('from_date') || moment(value.format(TIME_FORMAT.number)).isSameOrAfter(getFieldValue('from_date').format(TIME_FORMAT.number))) {
                                             return Promise.resolve();
                                         }
-                                        return Promise.reject(new Error(t(translations.home_page.filter_tab.to_date_must_bigger_than_from_date)));
+                                        return Promise.reject(new Error(t(translations.home_page.to_date_must_bigger_than_from_date)));
                                     },
                                 })]}
                             >
@@ -230,12 +230,12 @@ export const FilterPane = (props) => {
 
                     <Form.Item>
                         <SyrfFormButton type="primary" htmlType="submit">
-                            {t(translations.home_page.filter_tab.search)}
+                            {t(translations.home_page.search)}
                         </SyrfFormButton>
                     </Form.Item>
                 </Form>
             </Spin>
-            {searchKeyword.length > 0 && <StyledLiveAndHappeningRaceButton onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</StyledLiveAndHappeningRaceButton>}
+            {searchKeyword.length > 0 && <StyledLiveAndHappeningRaceButton onClick={resetSearch} type='link'>{t(translations.home_page.live_and_upcoming_events)}</StyledLiveAndHappeningRaceButton>}
         </Wrapper >
     )
 }

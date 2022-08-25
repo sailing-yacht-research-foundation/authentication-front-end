@@ -39,7 +39,7 @@ export const PublicUserInformation = (props) => {
 
     return (
         <Wrapper>
-            <SyrfFormTitle>{t(translations.profile_page.update_profile.public_user_details)}</SyrfFormTitle>
+            <SyrfFormTitle>{t(translations.profile_page.public_user_details)}</SyrfFormTitle>
 
             <ChangeAvatarWrapper>
                 <ChangeAvatar cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
@@ -83,7 +83,7 @@ export const PublicUserInformation = (props) => {
                     name="country"
                     rules={[{ required: true }]}
                 >
-                    <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_country)}
+                    <SyrfFormSelect placeholder={t(translations.profile_page.select_a_country)}
                         showSearch
                         filterOption={(input, option) => {
                             if (option) {
@@ -101,17 +101,17 @@ export const PublicUserInformation = (props) => {
 
             <Tooltip title={t(translations.tip.bio)}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.biography)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.profile_page.biography)}</SyrfFieldLabel>}
                     name="bio"
                     rules={[{ max: 1000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 1000 }) }]}
                 >
-                    <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
+                    <SyrfTextArea placeholder={t(translations.profile_page.biography_description)} />
                 </Form.Item>
             </Tooltip>
 
             <Tooltip title={t(translations.tip.your_interests)}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.interests)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.profile_page.interests)}</SyrfFieldLabel>}
                     name="interests"
                 >
                     <SyrfFormSelect mode="multiple" maxTagCount={'responsive'}>

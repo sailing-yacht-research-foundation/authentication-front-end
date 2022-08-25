@@ -149,15 +149,15 @@ export const ResultItem = (props) => {
     const menu = (
         <Menu>
             <Menu.Item onClick={showMarkAsHiddenModal}>
-                {t(translations.home_page.filter_tab.filter_result.mark_as_hidden)}
+                {t(translations.home_page.mark_as_hidden)}
             </Menu.Item>
             {
                 isNotCompleted() && <Menu.Item onClick={showMarkAsCompletedModal}>
-                    {t(translations.home_page.filter_tab.filter_result.mark_as_completed)}
+                    {t(translations.home_page.mark_as_completed)}
                 </Menu.Item>
             }
             <Menu.Item onClick={showDeleteRaceModal}>
-                {t(translations.home_page.filter_tab.filter_result.delete_this_race)}
+                {t(translations.home_page.delete_this_race)}
             </Menu.Item>
         </Menu>
     );
@@ -165,7 +165,7 @@ export const ResultItem = (props) => {
     const renderLiveDot = () => {
         if ([RaceStatus.ON_GOING].includes(raceData.status)) {
             if (!moment(raceData.approx_start_time_ms).isValid())
-                return <span>{t(translations.home_page.filter_tab.filter_result.postponed)}</span>; // showing race is postponed.
+                return <span>{t(translations.home_page.postponed)}</span>; // showing race is postponed.
             return <LiveDotWrapper>
                 <span>{t(translations.general.live)} <LiveDot className='live'></LiveDot></span>
             </LiveDotWrapper>;
@@ -179,24 +179,24 @@ export const ResultItem = (props) => {
             <ConfirmModal
                 loading={isLoading}
                 showModal={showMarkAsHiddenConfirmModal}
-                title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_mark_this_race_as_hidden)}
-                content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_hidden_are_you_sure_you_want_to_continue)}
+                title={t(translations.home_page.are_you_sure_you_want_to_mark_this_race_as_hidden)}
+                content={t(translations.home_page.this_race_will_be_hidden_are_you_sure_you_want_to_continue)}
                 onOk={markAsHidden}
                 onCancel={() => setShowMarkAsHiddenConfirmModal(false)}
             />
             <ConfirmModal
                 loading={isLoading}
                 showModal={showMarkAsCompletedConfirmModal}
-                title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_mark_this_race_as_completed)}
-                content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_marked_as_completed_are_you_sure_you_want_to_continue)}
+                title={t(translations.home_page.are_you_sure_you_want_to_mark_this_race_as_completed)}
+                content={t(translations.home_page.this_race_will_be_marked_as_completed_are_you_sure_you_want_to_continue)}
                 onOk={markAsCompleted}
                 onCancel={() => setShowMarkAsCompletedConfirmModal(false)}
             />
             <ConfirmModal
                 loading={isLoading}
                 showModal={showDeleteRaceConfirmModal}
-                title={t(translations.home_page.filter_tab.filter_result.are_you_sure_you_want_to_force_delete_this_race)}
-                content={t(translations.home_page.filter_tab.filter_result.this_race_will_be_deleted_are_you_sure_you_want_to_continue)}
+                title={t(translations.home_page.are_you_sure_you_want_to_force_delete_this_race)}
+                content={t(translations.home_page.this_race_will_be_deleted_are_you_sure_you_want_to_continue)}
                 onOk={forceDeleteRace}
                 onCancel={() => setShowDeleteRaceConfirmModal(false)}
             />
@@ -227,17 +227,17 @@ export const ResultItem = (props) => {
                     </RightResultWrapper>
                 </HeadDescriptionWrapper>
                 <Name>
-                    <Tooltip title={t(translations.home_page.filter_tab.filter_result.watch_this_race, { raceName: raceData.name })}>
+                    <Tooltip title={t(translations.home_page.watch_this_race, { raceName: raceData.name })}>
                         <Link to={`/playback?raceId=${race._id}`}>{raceData.name}</Link>
                     </Tooltip>
                 </Name>
                 {raceData.event_description && <Description>{raceData.event_description}</Description>}
                 <DescriptionWrapper>
                     <DescriptionItem>
-                        {t(translations.home_page.filter_tab.filter_result.date)} {moment(raceData.approx_start_time_ms).format(TIME_FORMAT.date_text)}
+                        {t(translations.home_page.date)} {moment(raceData.approx_start_time_ms).format(TIME_FORMAT.date_text)}
                     </DescriptionItem>
                     {raceData.event_name && <DescriptionItem>
-                        {t(translations.home_page.filter_tab.filter_result.event_name)} {eventElement}
+                        {t(translations.home_page.event_name)} {eventElement}
                     </DescriptionItem>}
                     {race._source.source && <DescriptionItem>
                         {t(translations.general.source)}: {race._source.source}

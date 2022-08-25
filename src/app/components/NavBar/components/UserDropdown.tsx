@@ -18,7 +18,7 @@ export const UserDropdown = (props) => {
     const menu = (
         <Menu>
             <Menu.Item onClick={() => props.logout()} key="2" icon={<LockOutlined />}>
-                {t(translations.home_page.nav.logout)}
+                {t(translations.nav.logout)}
             </Menu.Item>
         </Menu>
     );

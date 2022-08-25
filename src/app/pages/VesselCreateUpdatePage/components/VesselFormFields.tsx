@@ -253,7 +253,7 @@ export const VesselFormFields = (props) => {
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             inputProps={{ autoComplete: 'none' }}
-                            placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                            placeholder={t(translations.profile_page.enter_phone_number)} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -268,7 +268,7 @@ export const VesselFormFields = (props) => {
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             inputProps={{ autoComplete: 'none' }}
-                            placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                            placeholder={t(translations.profile_page.enter_phone_number)} />
                     </Form.Item>
                     {vessel?.satelliteNumber && renderVerifiedStatus('isVerifiedSatelliteNumber')}
                 </Col>
@@ -282,7 +282,7 @@ export const VesselFormFields = (props) => {
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             inputProps={{ autoComplete: 'none' }}
-                            placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                            placeholder={t(translations.profile_page.enter_phone_number)} />
                     </Form.Item>
                     {vessel?.onboardPhone && renderVerifiedStatus('isVerifiedOnboardPhone')}
                 </Col>

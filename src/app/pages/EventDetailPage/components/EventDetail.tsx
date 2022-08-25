@@ -279,7 +279,7 @@ export const EventDetail = () => {
                 <EventSection>
                     <EventSectionHeading>{t(translations.event_detail_page.about_this_event)}</EventSectionHeading>
                     <EventDescription>
-                        {event.description ? event.description : t(translations.home_page.filter_tab.filter_result.no_description)}
+                        {event.description ? event.description : t(translations.home_page.no_description)}
                     </EventDescription>
 
                     <EventOpenRegistrationContainer>

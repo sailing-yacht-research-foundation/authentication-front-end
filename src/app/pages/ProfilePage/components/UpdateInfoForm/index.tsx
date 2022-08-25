@@ -88,7 +88,7 @@ export const UpdateInfo = (props) => {
 
     const onUpdateProfileSuccess = () => {
         setFormHasBeenChanged(false);
-        toast.success(t(translations.profile_page.update_profile.your_profile_has_been_successfully_updated));
+        toast.success(t(translations.profile_page.your_profile_has_been_successfully_updated));
         props.cancelUpdateProfile();
     }
 
@@ -154,7 +154,7 @@ export const UpdateInfo = (props) => {
     return (
         <Wrapper>
             <SyrfFormWrapper className="no-background">
-                <Spin spinning={isUpdatingProfile} tip={t(translations.profile_page.update_profile.updating_your_profile)}>
+                <Spin spinning={isUpdatingProfile} tip={t(translations.profile_page.updating_your_profile)}>
                     <Form
                         onValuesChange={() => setFormHasBeenChanged(true)}
                         form={form}
@@ -198,7 +198,7 @@ export const UpdateInfo = (props) => {
                             </StyledSyrfFormButtonWrapper>
                         </Form.Item>
                     </Form>
-                    <DisclaimerText>{t(translations.profile_page.update_profile.your_personal_details_will_never_be_shared_with_3rd_party_app)}</DisclaimerText>
+                    <DisclaimerText>{t(translations.profile_page.your_personal_details_will_never_be_shared_with_3rd_party_app)}</DisclaimerText>
                 </Spin >
             </SyrfFormWrapper >
         </Wrapper >
