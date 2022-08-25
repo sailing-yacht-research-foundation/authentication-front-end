@@ -21,6 +21,7 @@ import { CSVLink } from "react-csv";
 import { FaFileCsv } from 'react-icons/fa';
 import moment from 'moment';
 import { ParticipantDetailList } from './ParticipantDetailList';
+import { canManageEvent } from 'utils/permission-helpers';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -32,7 +33,7 @@ export const ParticipantList = (props) => {
 
     const { t } = useTranslation();
 
-    const { eventId, event, canManageEvent }: { eventId: string, event: CalendarEvent, canManageEvent?: Function } = props;
+    const { eventId, event }: { eventId: string, event: CalendarEvent } = props;
 
     const [csvData, setCSVData] = React.useState<any[]>([]);
 
@@ -80,7 +81,7 @@ export const ParticipantList = (props) => {
             key: 'action',
             render: (text, record) => (
                 <>
-                    {!canManageEvent || canManageEvent() ? (<Space size={10}>
+                    {canManageEvent(event) ? (<Space size={10}>
                         <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.participant_list.remove)}</DeleteButton>
                         {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.participant_list.block)}</DeleteButton>}
                     </Space>) : <></>}
@@ -233,7 +234,7 @@ export const ParticipantList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
-                    {(!canManageEvent || canManageEvent()) && <Space size={10}>
+                    {(canManageEvent(event)) && <Space size={10}>
                         {
                             ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!) && <Tooltip title={t(translations.tip.create_competitor)}>
                                 <CreateButton onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle

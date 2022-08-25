@@ -32,6 +32,7 @@ import { TableFiltering } from 'types/TableFiltering';
 import { GiExitDoor } from 'react-icons/gi';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
+import { canDeleteEvent, canEditEvent, canLeaveEvent } from 'utils/permission-helpers';
 
 const defaultOptions = {
   loop: true,
@@ -222,18 +223,6 @@ export const EventList = () => {
       width: '2%'
     },
   ];
-
-  const canEditEvent = (record) => {
-    return record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status);
-  }
-
-  const canDeleteEvent = (record) => {
-    return record.status === EventState.DRAFT;
-  }
-
-  const canLeaveEvent = (record) => {
-    return record.isParticipant && record.participantId && [EventState.ON_GOING, EventState.SCHEDULED].includes(record.status);
-  }
 
   React.useEffect(() => {
     const resultsWithKey = results.map((result) => ({ ...result, key: result.id }))

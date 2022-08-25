@@ -35,6 +35,7 @@ import { selectFilter, selectIsLoading, selectPagination, selectSorter } from '.
 import { useDispatch, useSelector } from 'react-redux';
 import { useVesselListSlice } from '../slice';
 import { renderAvatar } from 'utils/user-utils';
+import { canDeleteVessel } from 'utils/permission-helpers';
 
 const defaultOptions = {
     loop: true,
@@ -169,10 +170,6 @@ export const VesselList = () => {
             },
         },
     ];
-
-    const canDeleteVessel = (vessel) => {
-        return vessel.createdById === localStorage.getItem('user_id');
-    }
 
     const pagination = useSelector(selectPagination);
 
