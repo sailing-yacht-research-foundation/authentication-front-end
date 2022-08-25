@@ -79,7 +79,7 @@ export const Profile = () => {
                         <DeleteAccountButtonWrapper>
                             <Tooltip title={t(translations.tip.delete_account)}>
                                 <Button danger onClick={() => setShowDeleteUserModal(true)}>
-                                    {t(translations.profile_page.permantly_delete_my_account)}
+                                    {t(translations.profile_page.permanently_delete_my_account)}
                                 </Button>
                             </Tooltip>
                         </DeleteAccountButtonWrapper>

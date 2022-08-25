@@ -93,12 +93,12 @@ export const LoginForm = (props) => {
                 { required: true, message: t(translations.forms.please_fill_out_this_field) },
                 {
                   pattern: /^\S+$/,
-                  message: t(translations.forms.email_must_not_contain_blank)
+                  message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.email) })
                 },
                 { type: 'email', message: t(translations.forms.email_must_be_valid) }]}
             >
               <SyrfInput
-                placeholder={t(translations.login_page.email.label)} />
+                placeholder={t(translations.general.email)} />
             </Form.Item>
 
             <Form.Item
@@ -107,14 +107,14 @@ export const LoginForm = (props) => {
                 { required: true, message: t(translations.forms.please_fill_out_this_field) },
                 {
                   pattern: /^\S+$/,
-                  message: t(translations.forms.password_must_not_contain_blank)
+                  message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.password) })
                 },
                 {
                   max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.general.password) })
                 },
               ]}
             >
-              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} />
+              <SyrfInputPassword placeholder={t(translations.general.password)} />
             </Form.Item>
 
             <Form.Item

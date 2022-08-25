@@ -7,7 +7,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
+import { DeleteCompetitionUnitModal } from 'app/pages/EventDetailPage/components/DeleteCompetitionUnitModal';
 import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';

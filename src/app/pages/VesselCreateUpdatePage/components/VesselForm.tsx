@@ -276,21 +276,21 @@ export const VesselForm = () => {
                 showModal={showRemovePhotoModal}
                 onCancel={() => setShowRemovePhotoModal(false)}
                 title={t(translations.vessel_create_update_page.remove_photo)}
-                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove_boat_photo)}
+                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove, { field: t(translations.vessel_create_update_page.photo) })}
                 onOk={removePhoto} />
             <ConfirmModal
                 loading={isLoading}
                 showModal={showRemoveDeckPlanModal}
                 onCancel={() => setShowRemoveDeckPlanModal(false)}
                 title={t(translations.vessel_create_update_page.remove_deck_plan)}
-                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove_deck_plan)}
+                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove, { field: t(translations.vessel_create_update_page.deck_plan_photo) })}
                 onOk={removeDeckPlan} />
             <ConfirmModal
                 loading={isLoading}
                 showModal={showRemoveHullDiagram}
                 onCancel={() => setShowRemoveHullDiagram(false)}
                 title={t(translations.vessel_create_update_page.remove_hull_diagram)}
-                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove_hull_diagram)}
+                content={t(translations.vessel_create_update_page.are_you_sure_you_want_to_remove, { field: t(translations.vessel_create_update_page.hull_diagram_photo) })}
                 onOk={removeHullDiagram} />
             <VerifyPhoneModal verifyPhone={(code) => verifyPhone('ONBOARD_PHONE', code)} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showVerifyOnboardPhoneModal} setShowPhoneVerifyModal={setShowVerifyOnboardPhoneModal} />
             <VerifyPhoneModal verifyPhone={(code) => verifyPhone('SATELLITE', code)} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showVerifySatellitePhoneModal} setShowPhoneVerifyModal={setShowVerifySatellitePhoneModal} />

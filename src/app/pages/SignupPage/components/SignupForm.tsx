@@ -107,7 +107,7 @@ export const SignupForm = () => {
                             type: 'email', message: t(translations.forms.email_must_be_valid)
                         }, {
                             pattern: /^\S+$/,
-                            message: t(translations.forms.email_must_not_contain_blank)
+                            message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.email) })
                         },]}
                     >
                         <InputWithNoBrowserSupportAttributes />
@@ -144,7 +144,7 @@ export const SignupForm = () => {
                         name="password"
                         rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                             pattern: /^\S+$/,
-                            message: t(translations.forms.password_must_not_contain_blank)
+                            message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.password) })
                         }, {
                             max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.general.password) })
                         }]}

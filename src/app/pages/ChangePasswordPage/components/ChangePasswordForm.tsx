@@ -66,7 +66,7 @@ export const ChangePasswordForm = () => {
                                 data-tip={t(translations.change_password_page.current_password)}
                                 rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                     pattern: /^\S+$/,
-                                    message: t(translations.forms.password_must_not_contain_blank)
+                                    message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.password) })
                                 }, { max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.change_password_page.current_password) }) }]}
                             >
                                 <SyrfPasswordInputField />
@@ -79,7 +79,7 @@ export const ChangePasswordForm = () => {
                                 name="newPassword"
                                 rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                     pattern: /^\S+$/,
-                                    message: t(translations.forms.password_must_not_contain_blank)
+                                    message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.password) })
                                 }, { max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.change_password_page.new_password) }) }]}
                             >
                                 <SyrfPasswordInputField />

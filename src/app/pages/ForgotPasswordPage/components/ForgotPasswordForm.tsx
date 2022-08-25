@@ -64,7 +64,7 @@ export function ForgotPasswordForm() {
                 type: 'email', message: t(translations.forms.email_must_be_valid)
               }, {
                 pattern: /^\S+$/,
-                message: t(translations.forms.email_must_not_contain_blank)
+                message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.email) })
               },]}
             >
               <InputWithNoBrowserSupportAttributes  />

@@ -77,7 +77,7 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
                             data-tip={t(translations.change_password_page.current_password)}
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 pattern: /^\S+$/,
-                                message: t(translations.forms.email_must_not_contain_blank)
+                                message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.email) })
                             }, { max: 16, min: 6, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.change_password_page.current_password) }) }]}
                         >
                             <SyrfPasswordInputField autoCapitalize="none" autoComplete="off" />
@@ -90,7 +90,7 @@ export const ChangeEmailModal = ({ visible, hideModal }: IChangeEmailModal) => {
                             name="newEmail"
                             rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 pattern: /^\S+$/,
-                                message: t(translations.forms.email_must_not_contain_blank)
+                                message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.email) })
                             }, { max: 80, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 80, field: t(translations.settings_page.new_email) }) }, {
                                 type: 'email', message: t(translations.forms.email_must_be_valid)
                             }]}
