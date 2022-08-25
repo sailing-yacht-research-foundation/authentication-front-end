@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Space, Spin, Tooltip } from 'antd';
+import { Table, Space, Spin, Tooltip, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
@@ -20,7 +20,7 @@ import { useHistory } from 'react-router';
 import moment from 'moment';
 import { DeleteVesselModal } from './DeleteVesselModal';
 import { Link } from 'react-router-dom';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, truncateName, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, usePrevious } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { Vessel } from 'types/Vessel';
 import { TableSorting } from 'types/TableSorting';
@@ -82,7 +82,9 @@ export const VesselList = () => {
             fixed: !isMobile ? 'left' : false,
             render: (text, record) => {
                 return <Tooltip title={text}>
-                    <Link to={`/boats/${record.id}/update`}>{truncateName(text)}</Link>
+                    <Typography.Text ellipsis={true} style={{ maxWidth: '25vw' }}>
+                        <Link to={`/boats/${record.id}/update`}>{renderEmptyValue(text)}</Link>
+                    </Typography.Text>
                 </Tooltip>;
             },
         },

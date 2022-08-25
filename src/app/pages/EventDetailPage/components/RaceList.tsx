@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Table, Tooltip } from 'antd';
+import { Spin, Table, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -13,7 +13,7 @@ import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { RaceManageButtons } from './RaceManageButtons';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
-import { renderRaceStartTime, truncateName } from 'utils/helpers';
+import { renderRaceStartTime, renderEmptyValue } from 'utils/helpers';
 
 export const RaceList = (props) => {
 
@@ -21,14 +21,16 @@ export const RaceList = (props) => {
 
     const { event, canManageEvent }: { event: CalendarEvent, canManageEvent: Function } = props;
 
-    const columns = [
+    const columns: any = [
         {
             title: t(translations.general.name),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => {
                 return <Tooltip title={text}>
-                    <Link to={`/playback/?raceId=${record.id}`}>{truncateName(text)}</Link>
+                    <Typography.Text ellipsis={true} style={{ maxWidth: '40vw' }}>
+                        <Link to={`/playback/?raceId=${record.id}`}>{renderEmptyValue(text)}</Link>
+                    </Typography.Text>
                 </Tooltip>;
             },
         },
@@ -66,7 +68,7 @@ export const RaceList = (props) => {
                     showRegisterModal={showRegisterModal}
                     setCompetitionUnit={setCompetitionUnit}
                     setShowRegisterModal={setShowRegisterModal} />;
-            }
+            },
         },
     ];
 

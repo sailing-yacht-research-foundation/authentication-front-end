@@ -19,10 +19,11 @@ import { Share } from "./components/Share";
 import { FullScreen } from './components/FullScreen';
 import { Link } from "react-router-dom";
 import { StyleConstants } from "styles/StyleConstants";
-import { handleGoBack, truncateName } from "utils/helpers";
+import { handleGoBack, renderEmptyValue } from "utils/helpers";
 import { SimulateRaceButton } from "./components/SimulateRaceButton";
 import { ModalDataIsBeingProcessed } from "./components/ModalDataIsBeingProcessed";
 import { CompetitionUnit } from "types/CompetitionUnit";
+import { Tooltip, Typography } from "antd";
 
 export const PlaybackPage = () => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
@@ -142,9 +143,13 @@ export const PlaybackPage = () => {
           <PageInfoContainer>
             <PageHeadingContainer>
               <div>
-                <PageHeading>{truncateName(raceIdentity.name)}</PageHeading>
-                {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{truncateName(raceIdentity.eventName)}</Link></span>}
-                {raceIdentity.description && <PageDescription>{truncateName(raceIdentity.description)}</PageDescription>}
+                <PageHeading>{renderEmptyValue(raceIdentity.name)}</PageHeading>
+                <Tooltip title={raceIdentity.eventName}>
+                  <Typography.Text ellipsis={true} style={{ maxWidth: '80vw' }}>
+                    {raceIdentity.eventName && !raceIdentity.isTrackNow && <span><Link to={`/events/${competitionUnitDetail?.calendarEvent?.id}`}>{raceIdentity.eventName}</Link></span>}
+                  </Typography.Text>
+                </Tooltip>
+                {raceIdentity.description && <PageDescription>{raceIdentity.description}</PageDescription>}
               </div>
 
               <PageHeadingRightContainer>

@@ -619,7 +619,8 @@ export const MapView = React.forwardRef((props, ref) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.course_create_update_page.course_name)}</SyrfFieldLabel>}
                         name="course_name"
-                        rules={[{ required: true, message: t(translations.forms.please_input_a_course_name) }]}
+                        rules={[{ required: true, message: t(translations.forms.please_input_a_course_name) },
+                          { max: 255, message: t(translations.forms.please_input_no_more_than_255_characters) }]}
                     >
                         <SyrfInputField
                             placeholder={t(translations.course_create_update_page.input_a_name_for_this_course)}

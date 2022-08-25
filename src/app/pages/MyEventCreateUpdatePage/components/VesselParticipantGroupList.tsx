@@ -1,12 +1,12 @@
 import React from 'react';
-import { Spin, Table, Tooltip } from 'antd';
+import { Spin, Table, Tooltip, Typography } from 'antd';
 import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { getVesselParticipantGroupsByEventId } from 'services/live-data-server/vessel-participant-group';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
-import { truncateName } from 'utils/helpers';
+import { renderEmptyValue } from 'utils/helpers';
 
 export const VesselParticipantGroupList = (props) => {
 
@@ -20,7 +20,9 @@ export const VesselParticipantGroupList = (props) => {
             dataIndex: 'name',
             key: 'name',
             render: (value) => <Tooltip title={value}>
-                {truncateName(value, 50)}
+                <Typography.Text ellipsis={true} style={{ maxWidth: '10vw' }}>
+                    {renderEmptyValue(value)}
+                </Typography.Text>
             </Tooltip>
         },
         {
