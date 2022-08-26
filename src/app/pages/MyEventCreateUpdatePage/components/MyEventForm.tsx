@@ -37,7 +37,7 @@ import * as turf from "@turf/turf";
 import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { canManageEvent } from 'utils/event-helpers';
+import { canManageEventAndRedirect } from 'utils/permission-helpers';
 
 require('@turf/destination');
 
@@ -508,7 +508,7 @@ export const MyEventForm = () => {
     }
 
     React.useEffect(() => {
-        canManageEvent(event, authUser, mode, history);
+        canManageEventAndRedirect(event, authUser, mode, history);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authUser.role, event.name]);
 

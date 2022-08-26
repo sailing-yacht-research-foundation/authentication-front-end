@@ -4,7 +4,7 @@ import { GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutte
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
 import { FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
-import { EventState, MAP_DEFAULT_VALUE, RaceSource, TIME_FORMAT, UserRole } from 'utils/constants';
+import { EventState, MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
 import { useHistory, useParams, useLocation } from 'react-router';
 import { downloadIcalendarFile, get, toggleOpenForRegistration } from 'services/live-data-server/event-calendars';
@@ -34,7 +34,7 @@ import { ParticipantList } from 'app/pages/MyEventCreateUpdatePage/components/Pa
 import { FiEdit } from 'react-icons/fi';
 import { RegisterEventModal } from 'app/components/RegisterRaceModal/RegisterEventModal';
 import { useSelector } from 'react-redux';
-import { canLeaveEvent, canManageEvent } from 'utils/permission-helpers';
+import { canLeaveEvent, canManageEvent, canRegisterEvent, isSuperAdminAndIsScraped } from 'utils/permission-helpers';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
 
 export const EventDetail = () => {
@@ -168,8 +168,6 @@ export const EventDetail = () => {
         only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
     }
 
-    const isSuperAdminAndIsScrapedEvent = () => authUser.role === UserRole.SUPER_ADMIN && event.source !== RaceSource.SYRF;
-
     const navigateToEventHostProfile = (profileId) => {
         if (!profileId) return;
         history.push(`/profile/${profileId}`);
@@ -193,13 +191,6 @@ export const EventDetail = () => {
         }
     }
 
-    const canRegisterEvent = () => {
-        const eventIsRegattaAndOngoingOrScheduled = event.isOpen && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status!);
-        const isNotEventEditorOrParticipant = !event.isEditor && !event.isParticipant;
-
-        return eventIsRegattaAndOngoingOrScheduled && isNotEventEditorOrParticipant;
-    }
-
     const showRegisterEventModalOrRedirectToLogin = () => {
         if (isAuthenticated) {
             setShowRegisterEventModal(true);
@@ -211,7 +202,7 @@ export const EventDetail = () => {
     const renderEventActions = () => {
         return <EventActions>
             <Space wrap style={{ justifyContent: 'flex-end' }}>
-                {canManageEvent(event) &&
+                { canManageEvent(event) &&
                     <>
                         {menus.map((item, index) => {
                             return item.show && <Spin key={index} spinning={item.spinning}>
@@ -220,9 +211,9 @@ export const EventDetail = () => {
                         })}
                     </>}
 
-                { (canManageEvent(event) || isSuperAdminAndIsScrapedEvent()) && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button> }
+                { (canManageEvent(event) || isSuperAdminAndIsScraped(event, authUser)) && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button> }
                 { canLeaveEvent(event) && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
-                { canRegisterEvent() && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
+                { canRegisterEvent(event) && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
                 <Tooltip title={t(translations.tip.download_icalendar_file)}>
                     <Button type="link" onClick={() => {
                         downloadIcalendarFile(event);

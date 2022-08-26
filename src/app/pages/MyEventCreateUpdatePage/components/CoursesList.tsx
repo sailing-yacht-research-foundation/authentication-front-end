@@ -11,6 +11,8 @@ import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
 import { Course } from 'types/Course';
 import { renderEmptyValue } from 'utils/helpers';
+import { EditFilled } from '@ant-design/icons';
+import { FaTrash } from 'react-icons/fa';
 
 export const CoursesList = (props) => {
 
@@ -49,10 +51,14 @@ export const CoursesList = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <BorderedButton onClick={() => {
-                        history.push(`/events/${eventId}/courses/${record.id}/update`)
-                    }} type="primary">{t(translations.general.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteModal(record)}>{t(translations.general.delete)}</BorderedButton>
+                    <Tooltip title={t(translations.general.update)}>
+                        <BorderedButton icon={<EditFilled />} onClick={() => {
+                            history.push(`/events/${eventId}/courses/${record.id}/update`)
+                        }} type="primary"/>
+                    </Tooltip>
+                    <Tooltip title={t(translations.general.delete)}>
+                        <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteModal(record)}/>
+                    </Tooltip>
                 </Space>
             ),
             width: '20%',

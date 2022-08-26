@@ -25,7 +25,7 @@ import { CompetitionUnit } from 'types/CompetitionUnit';
 import { Course } from 'types/Course';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
-import { canManageEvent } from 'utils/event-helpers';
+import { canManageEventAndRedirect } from 'utils/permission-helpers';
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
@@ -157,16 +157,17 @@ export const CompetitionUnitForm = () => {
             setIsSaving(false);
 
             if (response.success) {
-                setCompetitionUnit(response.data);
-                showPostponedMessageToUserIfRaceIsPostponed(response.data);
+                const competitionUnit = response.data;
+                setCompetitionUnit(competitionUnit);
+                showPostponedMessageToUserIfRaceIsPostponed(competitionUnit);
                 form.setFieldsValue({
-                    ...response.data,
+                    ...competitionUnit,
                     startTime: moment(),
                     startDate: moment()
                 });
-                correctTimeIfUTC(response.data);
-                if (response.data?.boundingBox?.coordinates)
-                    setBoundingBoxCoordinates(response.data?.boundingBox?.coordinates);
+                // correctTimeIfUTC(response.data);
+                if (competitionUnit?.boundingBox?.coordinates)
+                    setBoundingBoxCoordinates(competitionUnit?.boundingBox?.coordinates);
             } else {
                 history.push(`/events/${eventId}`);
                 message.error(t(translations.competition_unit_create_update_page.race_not_found));
@@ -302,7 +303,7 @@ export const CompetitionUnitForm = () => {
     }, []);
 
     React.useEffect(() => {
-        canManageEvent(eventData, authUser, mode, history);
+        canManageEventAndRedirect(eventData, authUser, mode, history);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authUser.role, eventData.name]);
 
