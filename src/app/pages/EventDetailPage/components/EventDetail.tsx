@@ -35,6 +35,7 @@ import { FiEdit } from 'react-icons/fi';
 import { RegisterEventModal } from 'app/components/RegisterRaceModal/RegisterEventModal';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
+import { canLeaveEvent, canManageEvent } from 'utils/permission-helpers';
 
 export const EventDetail = () => {
 
@@ -165,19 +166,9 @@ export const EventDetail = () => {
         only_owner_canview: t(translations.tip.only_owner_cansearch_view_event)
     }
 
-    const canManageEvent = () => {
-        return event.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!);
-    }
-
     const navigateToEventHostProfile = (profileId) => {
         if (!profileId) return;
         history.push(`/profile/${profileId}`);
-    }
-
-    const canLeaveEvent = () => {
-        return event.isParticipant
-            && event.participantDetail?.participantId
-            && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status!);
     }
 
     const showLeaveEventModal = () => {
@@ -216,7 +207,7 @@ export const EventDetail = () => {
     const renderEventActions = () => {
         return <EventActions>
             <Space wrap style={{ justifyContent: 'flex-end' }}>
-                {canManageEvent() &&
+                {canManageEvent(event) &&
                     <>
                         {menus.map((item, index) => {
                             return item.show && <Spin key={index} spinning={item.spinning}>
@@ -225,7 +216,7 @@ export const EventDetail = () => {
                         })}
                         <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                     </>}
-                {canLeaveEvent() && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
+                {canLeaveEvent(event) && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
                 {canRegisterEvent() && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
                 <Tooltip title={t(translations.tip.download_icalendar_file)}>
                     <Button type="link" onClick={() => {
@@ -318,7 +309,7 @@ export const EventDetail = () => {
                     </EventSection>
 
                     <EventSection>
-                        <RaceList canManageEvent={canManageEvent} event={event} />
+                        <RaceList event={event} />
                     </EventSection>
 
                     <EventSection>
@@ -326,7 +317,7 @@ export const EventDetail = () => {
                     </EventSection>
 
                     <EventSection>
-                        <ParticipantList eventId={eventId} event={event} canManageEvent={canManageEvent} />
+                        <ParticipantList eventId={eventId} event={event} />
                     </EventSection>
 
                     <PDFUploadForm reloadParent={fetchEvent} fullWidth event={event} />

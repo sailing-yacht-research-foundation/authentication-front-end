@@ -1,5 +1,5 @@
 import { Spin, Tooltip } from 'antd';
-import { PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
+import { EditorItem, PageHeaderContainer, PageHeaderTextSmall } from 'app/components/SyrfGeneral';
 import { translations } from 'locales/translations';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -118,21 +118,4 @@ export const EventAdmins = (props: IEventAdmins) => {
 const EditorWrapper = styled.div`
     display: flex;
     align-items: center;
-`;
-
-const EditorItem = styled.div`
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
-    &:not(:last-child) {
-        margin-right: 7px;
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 1px solid #eee;
-    }
 `;

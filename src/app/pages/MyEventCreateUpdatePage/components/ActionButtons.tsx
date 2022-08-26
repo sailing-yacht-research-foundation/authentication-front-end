@@ -14,6 +14,7 @@ import { media } from 'styles/media';
 import { DeleteButton, IconWrapper } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router-dom';
 import { ConfirmModal } from 'app/components/ConfirmModal';
+import { canDeleteEvent } from 'utils/permission-helpers';
 
 export const ActionButtons = ({
     mode,
@@ -98,7 +99,7 @@ export const ActionButtons = ({
         },
         {
             name: t(translations.general.delete),
-            show: event.status === EventState.DRAFT && event.ownerId === localStorage.getItem('user_id'),
+            show: canDeleteEvent(event),
             handler: () => setShowDeleteModal(true),
             icon: <BiTrash />,
             spinning: false,

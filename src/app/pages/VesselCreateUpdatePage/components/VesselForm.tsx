@@ -24,6 +24,7 @@ import { VerifyPhoneModal } from 'app/components/VerifyModal/VerifyPhoneModal';
 import { VesselFormFields } from './VesselFormFields';
 import { Vessel } from 'types/Vessel';
 import { VerifyEmailModal } from 'app/components/VerifyModal/VerifyEmailModal';
+import { canDeleteVessel } from 'utils/permission-helpers';
 
 const fieldsValidate = {
     STATELINE: 'isVerifiedSatelliteNumber',
@@ -306,7 +307,7 @@ export const VesselForm = () => {
                     </PageInfoContainer>
                 </PageInfoOutterWrapper>
                 <Space size={10}>
-                    {mode === MODE.UPDATE && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
+                    {mode === MODE.UPDATE && canDeleteVessel(vessel) && <DeleteButton onClick={() => setShowDeleteModal(true)} danger icon={<BiTrash
                         style={{ marginRight: '5px' }}
                         size={18} />}>{t(translations.general.delete)}</DeleteButton>}
 

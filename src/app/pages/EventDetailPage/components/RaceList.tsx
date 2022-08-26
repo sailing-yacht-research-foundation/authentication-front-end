@@ -19,7 +19,7 @@ export const RaceList = (props) => {
 
     const { t } = useTranslation();
 
-    const { event, canManageEvent }: { event: CalendarEvent, canManageEvent: Function } = props;
+    const { event }: { event: CalendarEvent } = props;
 
     const columns: any = [
         {
@@ -60,7 +60,6 @@ export const RaceList = (props) => {
             render: (text, record) => {
                 return <RaceManageButtons
                     race={record}
-                    canManageEvent={canManageEvent}
                     event={event}
                     reloadParent={reloadParent}
                     isAuthenticated={isAuthenticated}
