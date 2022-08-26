@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Space, Spin, Table, Tooltip } from 'antd';
+import { Space, Spin, Table, Tooltip, Typography } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -13,7 +13,9 @@ import { Link } from 'react-router-dom';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
-import { renderRaceStartTime, truncateName } from 'utils/helpers';
+import { renderRaceStartTime, renderEmptyValue } from 'utils/helpers';
+import { EditFilled } from '@ant-design/icons';
+import { FaTrash } from 'react-icons/fa';
 
 export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: CalendarEvent }) => {
 
@@ -29,8 +31,10 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             key: 'name',
             render: (text, record) => {
                 return (
-                    <Tooltip title={t(translations.tip.view_this_race_in_the_playback)}>
-                        <Link to={`/playback/?raceId=${record.id}`}>{truncateName(text)}</Link>
+                    <Tooltip title={text}>
+                        <Typography.Text ellipsis={true} style={{ maxWidth: '10vw' }}>
+                            <Link to={`/playback/?raceId=${record.id}`}>{renderEmptyValue(text)}</Link>
+                        </Typography.Text>
                     </Tooltip>
                 );
             },
@@ -64,14 +68,12 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
                 <Space size="middle">
                     {record.status === RaceStatus.ON_GOING && <CreateButton onClick={() => openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
                     <Tooltip title={t(translations.tip.update_race)}>
-                        <BorderedButton onClick={() => {
+                        <BorderedButton icon={<EditFilled />} onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)
-                        }} type="primary">{t(translations.general.update)}</BorderedButton>
+                        }} type="primary"/>
                     </Tooltip>
                     {record.status !== RaceStatus.COMPLETED && <Tooltip title={t(translations.tip.delete_race)}>
-                        <BorderedButton danger onClick={() => showDeleteCompetitionUnitModal(record)}>
-                            {t(translations.general.delete)}
-                        </BorderedButton>
+                        <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteCompetitionUnitModal(record)}/>
                     </Tooltip>}
                 </Space>
             ),

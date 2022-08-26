@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Table, Space, Spin, Tag, Tooltip } from 'antd';
+import { Table, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilter, selectIsChangingPage, selectPageSize, selectResults, selectSorter } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
@@ -14,7 +14,7 @@ import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, usePrevious } from 'utils/helpers';
 import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -112,7 +112,9 @@ export const EventList = () => {
       render: (text, record) => {
         return <>
         <Tooltip title={text}>
-          <Link to={`/events/${record.id}`}>{truncateName(text)}</Link>
+          <Typography.Text ellipsis={true} style={{ maxWidth: '30vw' }}>
+            <Link to={`/events/${record.id}`}>{renderEmptyValue(text)}</Link>
+          </Typography.Text>
         </Tooltip>
           { record.isSimulation && <><br/><span>{t(translations.general.simulation)}</span></> }
         </>;
@@ -216,7 +218,8 @@ export const EventList = () => {
             </Tooltip>}
           </Space >
         );
-      }
+      },
+      width: '2%'
     },
   ];
 
