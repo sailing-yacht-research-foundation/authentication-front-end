@@ -55,7 +55,7 @@ export const FilterResult = (props) => {
                             height={400}
                             width={400} />
 
-                        <LottieMessage>{isSearching ? t(translations.home_page.filter_tab.filter_result.searching) : t(translations.home_page.filter_tab.filter_result.no_results_found)}</LottieMessage>
+                        <LottieMessage>{isSearching ? t(translations.home_page.searching) : t(translations.home_page.no_results_found)}</LottieMessage>
                     </LottieWrapper> : <LiveAndHappeningRaces />}
                 </>
             );
@@ -70,7 +70,7 @@ export const FilterResult = (props) => {
             {(results.length > 0 && !isSearching) ?
                 (<>
                     <ResultWrapper>
-                        <ResultCountText>{t(translations.home_page.filter_tab.filter_result.about_number_result, { total: renderNumberWithCommas(total) })}</ResultCountText>
+                        <ResultCountText>{t(translations.home_page.about_number_result, { total: renderNumberWithCommas(total) })}</ResultCountText>
                         {renderResult()}
                     </ResultWrapper>
                     <PaginationWrapper>

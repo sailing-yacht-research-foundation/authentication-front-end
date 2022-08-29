@@ -37,7 +37,7 @@ export const FormItemEndLocationAddress = ({ form, address, endAddress, handleEn
                                 <SyrfInputField
                                     allowClear
                                     {...getInputProps({
-                                        placeholder: t(translations.profile_page.update_profile.search_places),
+                                        placeholder: t(translations.profile_page.search_places),
                                         className: 'location-search-input',
                                     })}
                                     value={endAddress || ''}

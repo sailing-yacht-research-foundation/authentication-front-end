@@ -37,7 +37,7 @@ export const ConfirmSharingInformationModal = ({ showModal, setShowModal, event,
 
     return (
         <Modal visible={showModal}
-            okText={t(translations.event_detail_page.accept)}
+            okText={t(translations.general.accept)}
             title={t(translations.event_detail_page.share_information_to_the_organizers)}
             onOk={shareInformation}
             confirmLoading={isLoading}

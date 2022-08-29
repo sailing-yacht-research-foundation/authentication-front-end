@@ -60,11 +60,11 @@ export function ForgotPasswordForm() {
             <Form.Item
               label={t(translations.forgot_password_page.your_email)}
               name="email"
-              rules={[{ required: true, message: t(translations.forms.email_is_required) }, {
+              rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                 type: 'email', message: t(translations.forms.email_must_be_valid)
               }, {
                 pattern: /^\S+$/,
-                message: t(translations.misc.email_must_not_contain_blank)
+                message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.email) })
               },]}
             >
               <InputWithNoBrowserSupportAttributes  />

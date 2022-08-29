@@ -63,7 +63,7 @@ export const DeveloperOptionSetting = () => {
                 onValuesChange={() => setFormHasBeenChanged(true)}
                 onFinish={onFinish}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.enable_developer_feature)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.profile_page.enable_developer_feature)}</SyrfFieldLabel>}
                     name={'isDeveloper'}
                     valuePropName="checked">
                     <Switch />
@@ -71,19 +71,19 @@ export const DeveloperOptionSetting = () => {
 
                 <Form.Item>
                     <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
-                        {t(translations.profile_page.update_profile.save)}
+                        {t(translations.general.save)}
                     </SyrfFormButton>
                 </Form.Item>
             </Form>
-            {authUser.developerAccountId && <DeveloperEnabledText>{t(translations.profile_page.update_profile.developer_mode_activated_account_id, { developerId: authUser.developerAccountId })}</DeveloperEnabledText>}
+            {authUser.developerAccountId && <DeveloperEnabledText>{t(translations.profile_page.developer_mode_activated_account_id, { developerId: authUser.developerAccountId })}</DeveloperEnabledText>}
 
             <DeveloperIntroductionSection>
                 <div>
-                    <BorderedButton onClick={() => window.open('https://developers.syrf.io/', '_blank')}>{t(translations.profile_page.update_profile.visit_developer_documentation)}</BorderedButton>
+                    <BorderedButton onClick={() => window.open('https://developers.syrf.io/', '_blank')}>{t(translations.profile_page.visit_developer_documentation)}</BorderedButton>
                 </div>
                 <DeveloperIntroductionDescription>
                     <Trans
-                        i18nKey={translations.profile_page.update_profile.developer_description} // optional -> fallbacks to defaults if not provided
+                        i18nKey={translations.profile_page.developer_description} // optional -> fallbacks to defaults if not provided
                         defaults="Don’t forget to get your developer token by following the instructions in the developer documentation. You should also join our <a target='_blank' href='https://discord.com/invite/EfvufEsDua'>Discord group for support!</a>" // eslint-disable-next-line
                         components={{ a:  <a /> }}
                     />

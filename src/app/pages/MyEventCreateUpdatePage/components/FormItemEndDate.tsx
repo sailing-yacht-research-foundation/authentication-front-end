@@ -54,7 +54,7 @@ export const FormItemEndDate = ({ endDateLimiter, renderTimezoneDropdownList, fo
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.end_time)}</SyrfFieldLabel>}
                         name="endTime"
-                        rules={[{ required: true, message: t(translations.forms.start_time_is_required) }, ({ getFieldValue }) => ({
+                        rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, ({ getFieldValue }) => ({
                             validator(_, value) {
                                 const startTime = getFieldValue('startTime');
                                 const startDate = getFieldValue('startDate').local().set({ hour: startTime.hour(), minute: startTime.minutes(), second: startTime.seconds() });

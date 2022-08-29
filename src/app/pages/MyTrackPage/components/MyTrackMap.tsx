@@ -98,7 +98,7 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
         switch (error.code) {
             case error.PERMISSION_DENIED:
                 if (type === MAP_MOVE_TYPE.animation)
-                    toast.error(t(translations.home_page.map_view_tab.please_share_your_location_to_use_this_feature))
+                    toast.error(t(translations.home_page.please_share_your_location_to_use_this_feature))
                 break;
         }
     }
@@ -197,13 +197,13 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
         return (
             <>
                 {
-                    race.event.isPrivate ? (<div>{t(translations.home_page.map_view_tab.name)} {race.name}</div>) :
-                        (<div>{t(translations.home_page.map_view_tab.name)} {[race.event?.name, race.name].filter(Boolean).join(' - ')}</div>)
+                    race.event.isPrivate ? (<div>{t(translations.home_page.name)} {race.name}</div>) :
+                        (<div>{t(translations.home_page.name)} {[race.event?.name, race.name].filter(Boolean).join(' - ')}</div>)
                 }
-                <div>{t(translations.home_page.map_view_tab.date)} {moment(race.approximateStart).format(TIME_FORMAT.date_text)}</div>
-                {race.description && <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race.description)}</div>}
-                {race.city && <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race.city)}</div>}
-                {race.country && <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race.country)}</div>}
+                <div>{t(translations.home_page.date)} {moment(race.approximateStart).format(TIME_FORMAT.date_text)}</div>
+                {race.description && <div>{t(translations.home_page.description)} {renderEmptyValue(race.description)}</div>}
+                {race.city && <div>{t(translations.home_page.city)} {renderEmptyValue(race.city)}</div>}
+                {race.country && <div>{t(translations.home_page.country)} {renderEmptyValue(race.country)}</div>}
             </>
         )
     }

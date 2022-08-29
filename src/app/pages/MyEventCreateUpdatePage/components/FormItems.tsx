@@ -145,7 +145,7 @@ export const FormItems = (props) => {
                     <Form.Item
                         label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.hashtag)}</SyrfFieldLabel>}
                         name="hashtag"
-                        rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_255_characters) }]}
+                        rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 255 }) }]}
                     >
                         <SyrfInputField />
                     </Form.Item>

@@ -44,7 +44,7 @@ export const LiveAndHappeningRaceFilter = ({ className } : { className?: any }) 
     const distances = [5, 10, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
 
     const { t } = useTranslation();
-    
+
     const durationToDurationName = (duration) => {
         const result = durations.find(d => {
             return d.value === duration;
@@ -83,7 +83,7 @@ export const LiveAndHappeningRaceFilter = ({ className } : { className?: any }) 
                         e.preventDefault();
                         getLiveAndUpcomingRaces(duration, distance, currentPage, pageSize);
                     }} target="_blank" rel="noopener noreferrer" href="/">
-                        {distance} {t(translations.home_page.live_and_upcoming.nmi)}
+                        {distance} {t(translations.home_page.nmi)}
                     </a>
                 </Menu.Item>)}
         </Menu>
@@ -91,7 +91,7 @@ export const LiveAndHappeningRaceFilter = ({ className } : { className?: any }) 
 
     return (
         <HeaderContainer className={className}>
-            <h3>{t(translations.home_page.live_and_upcoming.live_and_upcoming_events)}</h3>
+            <h3>{t(translations.home_page.live_and_upcoming_events)}</h3>
             <Space size={10}>
                 <Dropdown trigger={['click']} overlay={durationMenus}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
@@ -100,7 +100,7 @@ export const LiveAndHappeningRaceFilter = ({ className } : { className?: any }) 
                 </Dropdown>
                 {userCoordinates && <Dropdown trigger={['click']} overlay={distanceMenus}>
                     <a className="ant-dropdown-link" href="/" onClick={e => e.preventDefault()}>
-                        {distance} {t(translations.home_page.live_and_upcoming.nmi)} <DownOutlined />
+                        {distance} {t(translations.home_page.nmi)} <DownOutlined />
                     </a>
                 </Dropdown>}
             </Space>

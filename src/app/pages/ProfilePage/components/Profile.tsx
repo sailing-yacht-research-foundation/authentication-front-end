@@ -53,7 +53,7 @@ export const Profile = () => {
     const onUserDeleted = () => {
         dispatch(loginActions.setLogout());
         history.push('/signin');
-        toast.info(t(translations.profile_page.update_profile.we_hope_to_see_you_again));
+        toast.info(t(translations.profile_page.we_hope_to_see_you_again));
     }
 
     return (
@@ -63,23 +63,23 @@ export const Profile = () => {
                 showModal={showDeleteUserModal}
                 onOk={deleteUser}
                 onCancel={() => setShowDeleteUserModal(false)}
-                title={t(translations.profile_page.update_profile.are_you_really_sure_you_want_to_delete_your_account)}
-                content={t(translations.profile_page.update_profile.hey_your_going_to_delete_your_account, { name: authUser.firstName + ' ' + authUser.lastName })}
+                title={t(translations.profile_page.are_you_really_sure_you_want_to_delete_your_account)}
+                content={t(translations.profile_page.hey_your_going_to_delete_your_account, { name: authUser.firstName + ' ' + authUser.lastName })}
             />
             <ProfileTabs />
             {authUser.username && <UpdateInfo cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />}
             <SyrfFormWrapper className="danger-zone">
-                <SyrfFormTitle>{t(translations.profile_page.update_profile.danger_zone)}</SyrfFormTitle>
+                <SyrfFormTitle>{t(translations.profile_page.danger_zone)}</SyrfFormTitle>
                 <Row gutter={24}>
                     <Col xs={21} sm={24} md={12} lg={12}>
-                        <SyrfButtonTitle>{t(translations.profile_page.update_profile.delete_my_account)}</SyrfButtonTitle>
-                        <SyrfButtonDescription>{t(translations.profile_page.update_profile.you_will_delete_your_account_along_with_all_associated_information)}</SyrfButtonDescription>
+                        <SyrfButtonTitle>{t(translations.profile_page.delete_my_account)}</SyrfButtonTitle>
+                        <SyrfButtonDescription>{t(translations.profile_page.you_will_delete_your_account_along_with_all_associated_information)}</SyrfButtonDescription>
                     </Col>
                     <Col xs={24} sm={24} md={12} lg={12}>
                         <DeleteAccountButtonWrapper>
                             <Tooltip title={t(translations.tip.delete_account)}>
                                 <Button danger onClick={() => setShowDeleteUserModal(true)}>
-                                    {t(translations.profile_page.update_profile.permantly_delete_my_account)}
+                                    {t(translations.profile_page.permanently_delete_my_account)}
                                 </Button>
                             </Tooltip>
                         </DeleteAccountButtonWrapper>

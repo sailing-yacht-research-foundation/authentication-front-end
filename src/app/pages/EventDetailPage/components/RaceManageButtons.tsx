@@ -50,16 +50,16 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
 
     return (<Space size="middle">
         <StopRaceConfirmModal reloadParent={reloadParent} race={race} showModal={showStopRaceConfirmModal} setShowModal={setShowStopRaceConfirmModal} />
-        {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
+        {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.general.stop)}</CreateButton>}
         {canManageEvent(event) && <>
             <Tooltip title={t(translations.tip.update_race)}>
                 <BorderedButton icon={<EditFilled />} onClick={() => {
                     history.push(`/events/${race.calendarEventId}/races/${race.id}/update`);
-                }} type="primary"/>
+                }} type="primary" />
             </Tooltip>
 
             {canDeleteRace() && <Tooltip title={t(translations.tip.delete_race)}>
-                <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteRaceModal(race)}/>
+                <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteRaceModal(race)} />
             </Tooltip>}
         </>}
     </Space>)

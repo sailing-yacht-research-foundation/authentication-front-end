@@ -139,7 +139,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
         switch (error.code) {
             case error.PERMISSION_DENIED:
                 if (type === MAP_MOVE_TYPE.animation)
-                    toast.error(t(translations.home_page.map_view_tab.please_share_your_location_to_use_this_feature))
+                    toast.error(t(translations.home_page.please_share_your_location_to_use_this_feature))
                 break;
         }
     }
@@ -223,13 +223,13 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
     const renderRacePopup = (race) => {
         return (
             <>
-                <div>{t(translations.home_page.map_view_tab.name)} {race._source.name}</div>
-                {race._source.start_country && <div>{t(translations.home_page.map_view_tab.location)} {[race._source.start_city, race._source.start_country].filter(Boolean).join(', ')}</div>}
-                <div>{t(translations.home_page.map_view_tab.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}</div>
-                {race._source.event_name && <div>{t(translations.home_page.map_view_tab.event_name)} {renderEmptyValue(race._source.event_name)}</div>}
-                {race._source.event_description && <div>{t(translations.home_page.map_view_tab.description)} {renderEmptyValue(race._source.event_description)}</div>}
-                {race._source.start_city && <div>{t(translations.home_page.map_view_tab.city)} {renderEmptyValue(race._source.start_city)}</div>}
-                {race._source.start_country && <div>{t(translations.home_page.map_view_tab.country)} {renderEmptyValue(race._source.start_country)}</div>}
+                <div>{t(translations.home_page.name)} {race._source.name}</div>
+                {race._source.start_country && <div>{t(translations.home_page.location)} {[race._source.start_city, race._source.start_country].filter(Boolean).join(', ')}</div>}
+                <div>{t(translations.home_page.date)} {moment(race._source.approx_start_time_ms).format(TIME_FORMAT.date_text)}</div>
+                {race._source.event_name && <div>{t(translations.home_page.event_name)} {renderEmptyValue(race._source.event_name)}</div>}
+                {race._source.event_description && <div>{t(translations.home_page.description)} {renderEmptyValue(race._source.event_description)}</div>}
+                {race._source.start_city && <div>{t(translations.home_page.city)} {renderEmptyValue(race._source.start_city)}</div>}
+                {race._source.start_country && <div>{t(translations.home_page.country)} {renderEmptyValue(race._source.start_country)}</div>}
             </>
         )
     }

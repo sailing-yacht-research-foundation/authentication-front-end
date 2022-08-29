@@ -127,7 +127,7 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
             <List
                 header={<DocumentTitleWrapper>
                     <DocumentTitle>{t(translations.my_event_create_update_page.waiver_documents)}</DocumentTitle>
-                    {(!!event.noticeOfRacePDF || !!event.mediaWaiverPDF || !!event.disclaimerPDF) && <CreateButton onClick={downloadAllWaivers} icon={<DownloadOutlined />}>{t(translations.my_event_create_update_page.download_all)}</CreateButton>}
+                    {(!!event.noticeOfRacePDF || !!event.mediaWaiverPDF || !!event.disclaimerPDF) && <CreateButton onClick={downloadAllWaivers} icon={<DownloadOutlined />}>{t(translations.general.download_all)}</CreateButton>}
                 </DocumentTitleWrapper>}
                 itemLayout="horizontal"
                 loading={false}
@@ -146,8 +146,8 @@ export const PDFUploadForm = (props: IPDFUploadForm) => {
                         <Space size={5}>
                             {event.isEditor && <CreateButton
                                 onClick={() => setShowArbitraryDocumentUploadModal(true)}
-                                icon={<IconWrapper><FaUpload /></IconWrapper>}>{t(translations.my_event_create_update_page.upload)}</CreateButton>}
-                            {arbitraryPagination.rows.length > 0 && <CreateButton onClick={downloadAllDocuments} icon={<DownloadOutlined />}>{t(translations.my_event_create_update_page.download_all)}</CreateButton>}
+                                icon={<IconWrapper><FaUpload /></IconWrapper>}>{t(translations.general.upload)}</CreateButton>}
+                            {arbitraryPagination.rows.length > 0 && <CreateButton onClick={downloadAllDocuments} icon={<DownloadOutlined />}>{t(translations.general.download_all)}</CreateButton>}
                         </Space>
 
                     </DocumentTitleWrapper>}

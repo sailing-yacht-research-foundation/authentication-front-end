@@ -85,10 +85,10 @@ export const PendingJoinRequests = (props) => {
         return (
             <Space size={10}>
                 <Button type="primary" onClick={() => decideJoinRequest(member, GroupMemberStatus.ACCEPTED)} icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
-                    {t(translations.group.accept)}
+                    {t(translations.general.accept)}
                 </Button>
                 <Button onClick={() => decideJoinRequest(member, GroupMemberStatus.DECLINED)} icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
-                    {t(translations.group.reject)}
+                    {t(translations.general.reject)}
                 </Button>
             </Space>
         );

@@ -31,7 +31,7 @@ export const Settings = () => {
                     <NotificationSettings />
                 </StyledCollapsedPanel>
                 <StyledCollapsedPanel header={<>
-                    {t(translations.profile_page.update_profile.developer_option)}<br />
+                    {t(translations.profile_page.developer_option)}<br />
                     <CollapseDescription>{t(translations.settings_page.developer_description)}</CollapseDescription>
                 </>} key="3">
                     <DeveloperOptionSetting />
@@ -114,7 +114,7 @@ const Wrapper = styled.div`
             }
         }
     }
-    
+
     ${media.small`
         .ant-form-item-control-input {
             text-align: none;
