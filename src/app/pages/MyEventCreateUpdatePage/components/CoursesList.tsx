@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Space, Spin, Table, Tooltip } from 'antd';
+import { Space, Spin, Table, Tooltip, Typography } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
 import { Course } from 'types/Course';
-import { truncateName } from 'utils/helpers';
+import { renderEmptyValue } from 'utils/helpers';
 
 export const CoursesList = (props) => {
 
@@ -33,7 +33,9 @@ export const CoursesList = (props) => {
             dataIndex: 'name',
             key: 'name',
             render: (value) => <Tooltip title={value}>
-                {truncateName(value, 50)}
+                <Typography.Text ellipsis={true} style={{ maxWidth: '20vw' }}>
+                    {renderEmptyValue(value)}
+                </Typography.Text>
             </Tooltip>,
         },
         {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Spin, Space, Tooltip } from 'antd';
+import { Table, Spin, Space, Tooltip, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import styled from 'styled-components';
@@ -19,7 +19,7 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, usePrevious } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
@@ -98,7 +98,9 @@ export const MyTrackList = () => {
                                 </NoImageContainer>
                             }
                             <Tooltip title={t(translations.my_tracks_page.watch_this_track, { trackName: trackName })}>
-                                <Link to={() => renderTrackParamIfExists(record)}>{truncateName(trackName, 50)}</Link>
+                                <Typography.Text ellipsis={true} style={{ maxWidth: '30vw' }}>
+                                    <Link to={() => renderTrackParamIfExists(record)}>{renderEmptyValue(trackName)}</Link>
+                                </Typography.Text>
                             </Tooltip>
                         </FlexWrapper>
                     );
@@ -107,7 +109,9 @@ export const MyTrackList = () => {
                         <NoImageContainer>
                             <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                         </NoImageContainer>
-                        <div>{truncateName(record.event?.name, 50)}</div>
+                        <Typography.Text ellipsis={true} style={{ maxWidth: '30vw' }}>
+                            <span>{renderEmptyValue(record.event?.name)}</span>
+                        </Typography.Text>
                     </FlexWrapper>
                 );
             }

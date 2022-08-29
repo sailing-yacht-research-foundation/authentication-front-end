@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Space, Spin, Tooltip } from 'antd';
+import { Table, Space, Spin, Tooltip, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import NoResult from '../assets/no-results.json'
@@ -14,13 +14,14 @@ import {
     PageHeaderContainerResponsive,
     TableWrapper,
     PageHeading,
-    PageDescription
+    PageDescription,
+    EditorItem
 } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
 import moment from 'moment';
 import { DeleteVesselModal } from './DeleteVesselModal';
 import { Link } from 'react-router-dom';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, truncateName, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, usePrevious } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { Vessel } from 'types/Vessel';
 import { TableSorting } from 'types/TableSorting';
@@ -33,6 +34,8 @@ import { isMobile } from 'react-device-detect';
 import { selectFilter, selectIsLoading, selectPagination, selectSorter } from '../slice/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useVesselListSlice } from '../slice';
+import { renderAvatar } from 'utils/user-utils';
+import { canDeleteVessel } from 'utils/permission-helpers';
 
 const defaultOptions = {
     loop: true,
@@ -82,7 +85,9 @@ export const VesselList = () => {
             fixed: !isMobile ? 'left' : false,
             render: (text, record) => {
                 return <Tooltip title={text}>
-                    <Link to={`/boats/${record.id}/update`}>{truncateName(text)}</Link>
+                    <Typography.Text ellipsis={true} style={{ maxWidth: '25vw' }}>
+                        <Link to={`/boats/${record.id}/update`}>{renderEmptyValue(text)}</Link>
+                    </Typography.Text>
                 </Tooltip>;
             },
         },
@@ -117,6 +122,22 @@ export const VesselList = () => {
             render: (value, record) => record?.isOwner ? t(translations.vessel_list_page.owner) : t(translations.vessel_list_page.admin),
         },
         {
+            title: t(translations.vessel_list_page.owner),
+            dataIndex: 'owner',
+            key: 'owner',
+            render: (value, record) => {
+                const owner = record.owner;
+                if (owner)
+                    return <Tooltip title={owner.name}>
+                        <EditorItem style={{ width: '25px', height: '25px' }} onClick={() => history.push(`/profile/${owner.id}`)}>
+                            <img alt={owner.name} src={renderAvatar(owner.avatar)} />
+                        </EditorItem>
+                    </Tooltip>;
+
+                return <></>;
+            },
+        },
+        {
             title: t(translations.vessel_list_page.is_default_boat),
             dataIndex: 'isDefaultVessel',
             key: 'isDefaultVessel',
@@ -142,9 +163,9 @@ export const VesselList = () => {
                             history.push(`/boats/${record.id}/update`);
                         }} type="primary" />
                     </Tooltip>
-                    <Tooltip title={t(translations.tip.delete_boat)}>
+                    {canDeleteVessel(record) && <Tooltip title={t(translations.tip.delete_boat)}>
                         <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteVesselModal(record)} />
-                    </Tooltip>
+                    </Tooltip>}
                 </Space>;
             },
         },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Table, Space, Tooltip } from 'antd';
+import { Spin, Table, Space, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { ExpeditionServerActionButtons } from 'app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons';
 import { BorderedButton } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router';
-import { renderRaceStartTime, truncateName } from 'utils/helpers';
+import { renderRaceStartTime, renderEmptyValue } from 'utils/helpers';
 import { EditFilled } from '@ant-design/icons';
 
 export const RaceList = (props) => {
@@ -27,9 +27,11 @@ export const RaceList = (props) => {
             key: 'name',
             render: (text, record) => {
                 return <Tooltip title={text}>
-                    <Link to={`/playback/?raceId=${record.id}`}>{truncateName(text)}</Link>
+                    <Typography.Text ellipsis={true} style={{ maxWidth: '30vw' }}>
+                        <Link to={`/playback/?raceId=${record.id}`}>{renderEmptyValue(text)}</Link>
+                    </Typography.Text>
                 </Tooltip>
-            },
+            }
         },
         {
             title: t(translations.general.start_date),
