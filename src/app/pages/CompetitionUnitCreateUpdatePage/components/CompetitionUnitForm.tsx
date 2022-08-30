@@ -165,7 +165,7 @@ export const CompetitionUnitForm = () => {
                     startTime: moment(),
                     startDate: moment()
                 });
-                // correctTimeIfUTC(response.data);
+                correctTimeIfUTC(response.data);
                 if (competitionUnit?.boundingBox?.coordinates)
                     setBoundingBoxCoordinates(competitionUnit?.boundingBox?.coordinates);
             } else {
@@ -180,17 +180,14 @@ export const CompetitionUnitForm = () => {
     }
 
     const correctTimeIfUTC = (competitionUnit: CompetitionUnit) => {
-        if (competitionUnit.approximateStart_zone === etcUTCTimezone) {
-            form.setFieldsValue({
-                startTime: moment(competitionUnit.approximateStart).tz(competitionUnit.approximateStart_zone),
-                startDate: moment(competitionUnit.approximateStart).tz(competitionUnit.approximateStart_zone)
-            });
-        } else {
-            form.setFieldsValue({
-                startDate: moment(competitionUnit.approximateStart),
-                startTime: moment(competitionUnit.approximateStart)
-            });
-        }
+        const startTimezone = competitionUnit.approximateStart_zone;
+        const startTime = competitionUnit.approximateStart;
+        const momentStartTime = startTimezone === etcUTCTimezone ? moment(startTime).tz(startTimezone) : moment(startTime);
+
+        form.setFieldsValue({
+            startDate: momentStartTime,
+            startTime: momentStartTime
+        });
     }
 
     const getEventData = async () => {

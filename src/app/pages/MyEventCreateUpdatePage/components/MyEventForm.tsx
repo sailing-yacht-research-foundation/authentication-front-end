@@ -82,19 +82,11 @@ export const MyEventForm = () => {
 
         let response;
         let requiredCompetitorFields = requiredFields || [];
-        let currentDate = moment();
-        let currentTime = moment();
+        let currentDate = endDate ?? moment();
+        let currentTime = endTime ?? moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
         const certifications = requiredCertifications || [];
         const hasPositiveParticipatingFee = (values.participatingFee && values.participatingFee !== 0);
-
-        if (endDate) {
-            currentDate = endDate;
-        }
-
-        if (endTime) {
-            currentTime = endTime;
-        }
 
         let data = {
             ...values,
@@ -143,46 +135,27 @@ export const MyEventForm = () => {
         setIsSavingEvent(false);
     }
 
+    const checkIfStartTimezoneEtcUTC = (event) => event.approximateStartTime_zone === etcUTCTimezone;
+    const checkIfEndTimezoneEtcUTC = (event) => event.approximateEndTime_zone === etcUTCTimezone;
+
     const adjustTimeForScrapedRace = (data, startDate, startTime, currentDate, currentTime) => {
-        let approximateStartTimeParam, approximateEndTimeParam;
-        let startDayParam, endDayParam;
-        let startMonthParam, endMonthParam;
-        let startYearParam, endYearParam;
-
-        if (event.approximateStartTime_zone === etcUTCTimezone) {
-            approximateStartTimeParam = startDate ? moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).format(TIME_FORMAT.number_with_time) : moment().format(TIME_FORMAT.number_with_time)
-            startDayParam = startDate.format('DD')
-            startMonthParam = startDate.format('MM')
-            startYearParam = startDate.format('YYYY')
-        } else {
-            approximateStartTimeParam = startDate ? moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc() : moment().utc().format(TIME_FORMAT.number_with_time)
-            startDayParam = startDate.utc().format('DD')
-            startMonthParam = startDate.utc().format('MM')
-            startYearParam = startDate.utc().format('YYYY')
-        }
-
-        if (event.approximateEndTime_zone === etcUTCTimezone) {
-            approximateEndTimeParam = moment(currentDate.format(TIME_FORMAT.number) + ' ' + currentTime.format(TIME_FORMAT.time)).format(TIME_FORMAT.number_with_time)
-            endDayParam = currentDate.format('DD')
-            endMonthParam = currentDate.format('MM')
-            endYearParam = currentDate.format('YYYY')
-        } else {
-            approximateEndTimeParam = moment(currentDate.format(TIME_FORMAT.number) + ' ' + currentTime.format(TIME_FORMAT.time)).utc()
-            endDayParam = currentDate.utc().format('DD')
-            endMonthParam = currentDate.utc().format('MM')
-            endYearParam = currentDate.utc().format('YYYY')
-        }
+        const isStartTimezoneEtcUTC = checkIfStartTimezoneEtcUTC(event);
+        const isEndTimezoneEtcUTC = checkIfEndTimezoneEtcUTC(event);
+        const startDateAsMonent = !isStartTimezoneEtcUTC ? moment(startDate).utc() : startDate;
+        const endDateAsMoment = !isEndTimezoneEtcUTC ? moment(currentDate).utc() : currentDate;
+        const approximateStartTimeAsMoment = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time))
+        const approximateEndTimeAsMoment = moment(currentDate.format(TIME_FORMAT.number) + ' ' + currentTime.format(TIME_FORMAT.time));
 
         return {
             ...data,
-            approximateStartTime: approximateStartTimeParam,
-            startDay: startDayParam,
-            startMonth: startMonthParam,
-            startYear: startYearParam,
-            approximateEndTime: approximateEndTimeParam,
-            endDay: endDayParam,
-            endMonth: endMonthParam,
-            endYear: endYearParam
+            approximateStartTime: isStartTimezoneEtcUTC ? approximateStartTimeAsMoment.format(TIME_FORMAT.number_with_time) : approximateStartTimeAsMoment.utc().format(TIME_FORMAT.number_with_time),
+            startDay: startDateAsMonent.format('DD'),
+            startMonth: startDateAsMonent.format('MM'),
+            startYear: startDateAsMonent.format('YYYY'),
+            approximateEndTime: isEndTimezoneEtcUTC ? approximateEndTimeAsMoment.format(TIME_FORMAT.number_with_time) : approximateEndTimeAsMoment.utc(),
+            endDay: endDateAsMoment.format('DD'),
+            endMonth: endDateAsMoment.format('MM'),
+            endYear: endDateAsMoment.format('YYYY')
         };
     }
 
@@ -191,21 +164,15 @@ export const MyEventForm = () => {
         const endTime = event?.approximateEndTime;
         const startTimezone = event?.approximateStartTime_zone;
         const endTimezone = event?.approximateEndTime_zone;
+        const startTimeAsMoment = checkIfStartTimezoneEtcUTC(event) ? moment(startTime).tz(startTimezone) : moment(startTime);
+        const endTimeAsMoment = checkIfEndTimezoneEtcUTC(event) ? moment(endTime).tz(endTimezone) : moment(endTime);
 
-        form.setFieldsValue({ startDate: moment({ month: Number(event.startMonth) - 1, day: event.startDay, year: event.startYear }) });
-        form.setFieldsValue({ endDate: moment({ month: Number(event.endMonth) - 1, day: event.endDay, year: event.endYear }) });
-
-        if (startTimezone === etcUTCTimezone) {
-            form.setFieldsValue({ startTime: moment(startTime).tz(startTimezone) });
-        } else {
-            form.setFieldsValue({ startTime: moment(startTime) });
-        }
-
-        if (endTimezone === etcUTCTimezone) {
-            form.setFieldsValue({ endTime: moment(endTime).tz(endTimezone) });
-        } else {
-            form.setFieldsValue({ endTime: moment(endTime) });
-        }
+            form.setFieldsValue({
+                startDate: checkIfStartTimezoneEtcUTC(event) ? moment({ month: Number(event.startMonth) - 1, day: event.startDay, year: event.startYear }) : startTimeAsMoment,
+                endDate: checkIfEndTimezoneEtcUTC(event) ?  moment({ month: Number(event.endMonth) - 1, day: event.endDay, year: event.endYear }) : endTimeAsMoment,
+                startTime: startTimeAsMoment,
+                endTime: endTimeAsMoment,
+            });
     }
 
     const onEventSaved = async (response, startLocation, endLocation) => {
