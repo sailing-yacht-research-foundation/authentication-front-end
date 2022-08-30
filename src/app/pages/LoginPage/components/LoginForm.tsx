@@ -72,13 +72,7 @@ export const LoginForm = (props) => {
   const redirectToURLOrMainPage = (url) => {
     const param = new URLSearchParams(location.search);
     const redirectURL = param.get('redirectBack');
-
-    if (redirectURL) {
-      const decodedURL = new URL(decodeURIComponent(redirectURL));
-      history.push(decodedURL.hostname.includes('syrf') ? decodedURL.pathname : url);
-    } else {
-      history.push(url);
-    }
+    history.push(redirectURL || url);
   }
 
   return (

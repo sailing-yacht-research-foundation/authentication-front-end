@@ -16,7 +16,7 @@ export const PublicRoute = ({ component: Component, ...rest }) => {
 }
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {
-  const url = encodeURIComponent(window.location.href);
+  const url = encodeURIComponent(window.location.pathname);
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
