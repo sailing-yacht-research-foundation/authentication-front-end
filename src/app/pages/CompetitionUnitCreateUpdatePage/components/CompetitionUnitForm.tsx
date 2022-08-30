@@ -160,12 +160,7 @@ export const CompetitionUnitForm = () => {
                 const competitionUnit = response.data;
                 setCompetitionUnit(competitionUnit);
                 showPostponedMessageToUserIfRaceIsPostponed(competitionUnit);
-                form.setFieldsValue({
-                    ...competitionUnit,
-                    startTime: moment(),
-                    startDate: moment()
-                });
-                correctTimeIfUTC(response.data);
+                correctTimeIfUTCAndSetFormFields(competitionUnit);
                 if (competitionUnit?.boundingBox?.coordinates)
                     setBoundingBoxCoordinates(competitionUnit?.boundingBox?.coordinates);
             } else {
@@ -179,12 +174,13 @@ export const CompetitionUnitForm = () => {
         }
     }
 
-    const correctTimeIfUTC = (competitionUnit: CompetitionUnit) => {
+    const correctTimeIfUTCAndSetFormFields = (competitionUnit: CompetitionUnit) => {
         const startTimezone = competitionUnit.approximateStart_zone;
         const startTime = competitionUnit.approximateStart;
         const momentStartTime = startTimezone === etcUTCTimezone ? moment(startTime).tz(startTimezone) : moment(startTime);
 
         form.setFieldsValue({
+            ...competitionUnit,
             startDate: momentStartTime,
             startTime: momentStartTime
         });
