@@ -58,7 +58,7 @@ export const LiveAndHappeningRaces = () => {
         if (results.length > 0)
             return results.map((result, index) => <ResultItem item={result} key={index} index={index} />);
 
-        return <span>{t(translations.home_page.live_and_upcoming.there_are_no_live_or_upcoming_races)}</span>
+        return <span>{t(translations.home_page.there_are_no_live_or_upcoming_races)}</span>
     }
 
     const onPaginationPageChanged = (page, pageSize) => {

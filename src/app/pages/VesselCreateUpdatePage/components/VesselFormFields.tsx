@@ -74,7 +74,7 @@ export const VesselFormFields = (props) => {
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.general.public_name)}</SyrfFieldLabel>}
                 name="publicName"
-                rules={[{ required: true, message: t(translations.forms.boat_name_is_required) },
+                rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) },
                 { max: 45, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 45 }) }]}
             >
                 <SyrfInputField />
@@ -253,7 +253,7 @@ export const VesselFormFields = (props) => {
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             inputProps={{ autoComplete: 'none' }}
-                            placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                            placeholder={t(translations.profile_page.enter_phone_number)} />
                     </Form.Item>
                 </Col>
             </Row>
@@ -268,7 +268,7 @@ export const VesselFormFields = (props) => {
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             inputProps={{ autoComplete: 'none' }}
-                            placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                            placeholder={t(translations.profile_page.enter_phone_number)} />
                     </Form.Item>
                     {vessel?.satelliteNumber && renderVerifiedStatus('isVerifiedSatelliteNumber')}
                 </Col>
@@ -282,7 +282,7 @@ export const VesselFormFields = (props) => {
                             inputClass="syrf-phone-number-input"
                             buttonClass="syrf-flag-dropdown"
                             inputProps={{ autoComplete: 'none' }}
-                            placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                            placeholder={t(translations.profile_page.enter_phone_number)} />
                     </Form.Item>
                     {vessel?.onboardPhone && renderVerifiedStatus('isVerifiedOnboardPhone')}
                 </Col>

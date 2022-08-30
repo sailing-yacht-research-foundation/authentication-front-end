@@ -52,9 +52,9 @@ export const PDFItem = (props) => {
                 showUploadList={false}
                 customRequest={options => uploadPDF(options, item.formFieldName)}
             >
-                <Button type="link">{t(translations.vessel_create_update_page.upload)}</Button>
+                <Button type="link">{t(translations.general.upload)}</Button>
             </Upload>
-        </Spin>, checkIfPdfExist(item.formFieldName) && <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.vessel_create_update_page.download)}</a>]}
+        </Spin>, checkIfPdfExist(item.formFieldName) && <a rel="noreferrer" target='_blank' download href={getFileDownloadURLUsingPdfKey(item.formFieldName)}>{t(translations.general.download)}</a>]}
     >
         <span>{item.name}</span>
     </List.Item>)

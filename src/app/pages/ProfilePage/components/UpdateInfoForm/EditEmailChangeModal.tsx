@@ -19,7 +19,7 @@ export const EditEmailChangeModal = (props) => {
         setFormFieldsBeforeUpdate } = props;
 
     return (
-        <Modal title={t(translations.profile_page.update_profile.email_change_confirmation)}
+        <Modal title={t(translations.profile_page.email_change_confirmation)}
             visible={showEmailChangeAlertModal}
             onOk={() => {
                 updateUserInfo(formFieldsBeforeUpdate);
@@ -33,7 +33,7 @@ export const EditEmailChangeModal = (props) => {
                 });
             }}>
             <EmailChangeMessageText>
-                {t(translations.profile_page.update_profile.hey_your_about_to_change_your_email, { name: getUserAttribute(authUser, 'name') })}
+                {t(translations.profile_page.hey_your_about_to_change_your_email, { name: getUserAttribute(authUser, 'name') })}
             </EmailChangeMessageText>
         </Modal>
     )

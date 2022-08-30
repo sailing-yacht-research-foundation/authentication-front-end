@@ -27,7 +27,7 @@ export const EULA = () => {
   const handleAgree = (eula: EulaInterface) => {
     dispatch(eulaActions.signEulaVersion(eula.version));
   }
-  
+
   const EulaContent = eula.Component;
   const showAgreeButton = user?.id && user?.acceptEulaVersion !== eula.version;
 
@@ -39,14 +39,14 @@ export const EULA = () => {
         {/* <EulaDropdown eulaList={eulaList} eula={eula} onChange={handleSelectVersion} /> */}
       </h1>
       <ReleaseDate>Release Date: {moment(eula.releaseDate).format('LL')}</ReleaseDate>
-      
+
       <EulaContent />
 
-      { showAgreeButton && 
+      { showAgreeButton &&
           <ButtonParentContainer>
             <ButtonContainer>
               <Button onClick={() => handleAgree(eula)} block size="large" type="primary">
-                {t(translations.eulapage.agree)}
+                {t(translations.general.agree)}
               </Button>
             </ButtonContainer>
           </ButtonParentContainer>

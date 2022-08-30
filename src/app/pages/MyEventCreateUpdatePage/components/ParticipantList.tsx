@@ -5,7 +5,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
+import { DeleteParticipantModal } from './DeleteParticipantModal';
 import styled from 'styled-components';
 import { DownOutlined } from '@ant-design/icons';
 import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
@@ -62,7 +62,7 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
-            title: t(translations.participant_list.status),
+            title: t(translations.general.status),
             dataIndex: 'invitationStatus',
             key: 'invitationStatus',
             render: (text, record) => {
@@ -78,19 +78,13 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
-            title: t(translations.participant_list.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => (
                 <>
                     {canManageEvent(event) ? (<Space size={10}>
-                        <Tooltip title={t(translations.participant_list.remove)}>
-                            <DeleteButton icon={<FaTrash />} onClick={() => showDeleteParticipanModal(record)} danger/>
-                        </Tooltip>
-                        { record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED &&
-                            <Tooltip title={t(translations.participant_list.block)}>
-                                <DeleteButton icon={<BiBlock />} onClick={() => showBlockParticipant(record)} danger/>
-                            </Tooltip>
-                        }
+                        <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.general.remove)}</DeleteButton>
+                        {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.general.block)}</DeleteButton>}
                     </Space>) : <></>}
                 </>
             ),
@@ -104,7 +98,7 @@ export const ParticipantList = (props) => {
         <Menu>
             <Menu.Item>
                 <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.all)}>
-                    {t(translations.participant_list.all)}
+                    {t(translations.general.all)}
                 </a>
             </Menu.Item>
             <Menu.Item>
@@ -247,7 +241,7 @@ export const ParticipantList = (props) => {
                                 <CreateButton onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
                                     style={{ marginRight: '5px' }}
                                     size={18} />}>
-                                    {t(translations.participant_list.invite)}
+                                    {t(translations.general.invite)}
                                 </CreateButton>
                             </Tooltip>
                         }

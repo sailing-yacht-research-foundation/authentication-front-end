@@ -99,7 +99,7 @@ export const InvitedEventLists = (props) => {
             }
         },
         {
-            title: t(translations.my_event_list_page.start_date),
+            title: t(translations.general.start_date),
             dataIndex: 'approximateStartTime',
             key: 'approximateStartTime',
             render: (value, record) => {
@@ -124,10 +124,10 @@ export const InvitedEventLists = (props) => {
             render: (text, record) => {
                 return <Space size="middle">
                     <Button type="primary" onClick={() => acceptInviteRequest(record)} icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
-                        {t(translations.group.accept)}
+                        {t(translations.general.accept)}
                     </Button>
                     <Button onClick={() => rejectInviteRequest(record)} icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
-                        {t(translations.group.reject)}
+                        {t(translations.general.reject)}
                     </Button>
                 </Space>;
             }

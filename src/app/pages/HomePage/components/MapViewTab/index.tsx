@@ -119,7 +119,7 @@ export const MapViewTab = (props) => {
 
             {results.length === 0 && <MyLocationWrapper onClick={() => zoomToUserLocation()}>
                 <StyledMyLocationIcon />
-                <MyLocationText>{t(translations.home_page.map_view_tab.my_location)}</MyLocationText>
+                <MyLocationText>{t(translations.home_page.my_location)}</MyLocationText>
             </MyLocationWrapper>}
         </Wrapper>
     )

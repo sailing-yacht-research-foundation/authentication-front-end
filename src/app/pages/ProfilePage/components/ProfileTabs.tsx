@@ -13,10 +13,10 @@ export const ProfileTabs = () => {
     const location = useLocation();
 
     const tabs = [
-        { path: '/account', name: t(translations.profile_page.update_profile.account_information) },
-        { path: '/account/integrations', name: t(translations.profile_page.update_profile.integrations) },
-        { path: '/account/settings', name: t(translations.profile_page.update_profile.account_settings) },
-        { path: '/account/subscription', name: t(translations.profile_page.update_profile.subscription) },
+        { path: '/account', name: t(translations.profile_page.account_information) },
+        { path: '/account/integrations', name: t(translations.profile_page.integrations) },
+        { path: '/account/settings', name: t(translations.profile_page.account_settings) },
+        { path: '/account/subscription', name: t(translations.profile_page.subscription) },
     ];
 
     return (

@@ -73,7 +73,7 @@ export const GroupInvitationItemRow = (props) => {
                     !hideButtons && <ItemButtonContainer>
                         <Space size={5}>
                             <Button onClick={acceptJoinRequest} type="primary">{t(translations.group.join)}</Button>
-                            <Button onClick={rejectJoinRequest}>{t(translations.group.cancel)}</Button>
+                            <Button onClick={rejectJoinRequest}>{t(translations.general.cancel)}</Button>
                         </Space>
                     </ItemButtonContainer>
                 }

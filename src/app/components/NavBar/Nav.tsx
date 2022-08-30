@@ -89,7 +89,7 @@ export const Nav = () => {
               className={TourStepClassName.CREATE_EVENT_BUTTON}
               onClick={() => history.push("/events/create")} icon={<AiFillPlusCircle
                 style={{ marginRight: '5px' }}
-                size={18} />}>{t(translations.home_page.nav.create)}</StyledButtonCreate>}
+                size={18} />}>{t(translations.general.create)}</StyledButtonCreate>}
           </Tooltip>
           <DropDownWrapper>
             <UserDropdown logout={logout} />
@@ -106,7 +106,7 @@ export const Nav = () => {
         </>
       ) : (
         <>
-          <AboutLink to="/about">{t(translations.about_page.nav.about)}</AboutLink>
+          <AboutLink to="/about">{t(translations.general.about)}</AboutLink>
           <Space size={15}>
             <div>
               <LinkStyled to="/signin">{t(translations.about_page.nav.log_in)}</LinkStyled>

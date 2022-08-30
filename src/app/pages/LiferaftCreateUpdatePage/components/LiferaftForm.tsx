@@ -162,8 +162,8 @@ export const LiferaftForm = () => {
                                         label={<SyrfFieldLabel>{t(translations.liferaft_create_update_page.serial_number)}</SyrfFieldLabel>}
                                         name="serialNumber"
                                         rules={[
-                                            { required: true, message: t(translations.forms.serial_number_is_required) },
-                                            { max: 20, message: t(translations.forms.serial_number_must_not_be_greater_than_20_chars) }
+                                            { required: true, message: t(translations.forms.please_fill_out_this_field) },
+                                            { max: 20, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 20 }) }
                                         ]}
                                     >
                                         <SyrfInputField  />

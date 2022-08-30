@@ -12,7 +12,7 @@ import { get as getEventById } from 'services/live-data-server/event-calendars';
 import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';
 import Select from 'rc-select';
-import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
+import { DeleteCompetitionUnitModal } from 'app/pages/EventDetailPage/components/DeleteCompetitionUnitModal';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
@@ -410,8 +410,8 @@ export const CompetitionUnitForm = () => {
                             <Form.Item
                                 label={<SyrfFieldLabel>{t(translations.general.name)}</SyrfFieldLabel>}
                                 name="name"
-                                rules={[{ required: true, message: t(translations.forms.race_name_is_required) }, {
-                                    max: 150, message: t(translations.forms.race_name_must_not_be_longer_than_150_chars)
+                                rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
+                                    max: 150, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 150 })
                                 }]}
                             >
                                 <SyrfInputField />
@@ -420,7 +420,7 @@ export const CompetitionUnitForm = () => {
 
                         <Tooltip title={t(translations.tip.race_description)}>
                             <Form.Item
-                                rules={[{ max: 255, message: t(translations.forms.race_description_must_not_be_longer_than_255_chars) }]}
+                                rules={[{ max: 1000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 1000 }) }]}
                                 label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                                 name="description"
                             >
@@ -435,11 +435,11 @@ export const CompetitionUnitForm = () => {
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Tooltip title={t(translations.tip.race_start_date)}>
                                     <Form.Item
-                                        label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_date)}</SyrfFieldLabel>}
+                                        label={<SyrfFieldLabel>{t(translations.general.start_date)}</SyrfFieldLabel>}
                                         name="startDate"
                                         rules={[{ type: 'date' }, {
                                             required: true,
-                                            message: t(translations.forms.start_date_is_required)
+                                            message: t(translations.forms.please_fill_out_this_field)
                                         }]}
                                     >
 
@@ -466,9 +466,9 @@ export const CompetitionUnitForm = () => {
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Tooltip title={t(translations.tip.race_start_time)}>
                                     <Form.Item
-                                        label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_time)}</SyrfFieldLabel>}
+                                        label={<SyrfFieldLabel>{t(translations.general.start_time)}</SyrfFieldLabel>}
                                         name="startTime"
-                                        rules={[{ required: true, message: t(translations.forms.start_time_is_required) }]}
+                                        rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                                         validateStatus={(renderErrorField(error, 'startTime') && 'error') || ''}
                                         help={renderErrorField(error, 'startTime')}
                                     >

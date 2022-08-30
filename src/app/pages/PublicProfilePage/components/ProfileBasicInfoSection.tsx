@@ -77,8 +77,8 @@ export const ProfileBasicInfoSection = ({
         <Menu>
             {
                 !profile.isBlocking ?
-                    (<Menu.Item key="1" onClick={() => setShowConfirmBlockModal(true)}>{t(translations.public_profile.block)}</Menu.Item>) :
-                    (<Menu.Item key="2" onClick={unblock}>{t(translations.public_profile.unblock)}</Menu.Item>)
+                    (<Menu.Item key="1" onClick={() => setShowConfirmBlockModal(true)}>{t(translations.general.block)}</Menu.Item>) :
+                    (<Menu.Item key="2" onClick={unblock}>{t(translations.general.unblock)}</Menu.Item>)
             }
         </Menu >
     );

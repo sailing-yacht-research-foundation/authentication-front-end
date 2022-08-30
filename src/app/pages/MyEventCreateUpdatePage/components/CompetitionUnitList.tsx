@@ -7,7 +7,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
+import { DeleteCompetitionUnitModal } from 'app/pages/EventDetailPage/components/DeleteCompetitionUnitModal';
 import { RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { Link } from 'react-router-dom';
 import { StopRaceConfirmModal } from './modals/StopRaceConfirmModal';
@@ -48,7 +48,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             width: '20%',
         },
         {
-            title: t(translations.competition_unit_list_page.start_date),
+            title: t(translations.general.start_date),
             dataIndex: 'approximateStart',
             key: 'approximateStart',
             render: (value, record) => renderRaceStartTime(value, t),
@@ -66,7 +66,7 @@ export const CompetitionUnitList = ({ eventId }: { eventId: string, event?: Cale
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    {record.status === RaceStatus.ON_GOING && <CreateButton onClick={() => openStopRaceConfirmModal(record)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
+                    {record.status === RaceStatus.ON_GOING && <CreateButton onClick={() => openStopRaceConfirmModal(record)}>{t(translations.general.stop)}</CreateButton>}
                     <Tooltip title={t(translations.tip.update_race)}>
                         <BorderedButton icon={<EditFilled />} onClick={() => {
                             history.push(`/events/${record.calendarEventId}/races/${record.id}/update`)

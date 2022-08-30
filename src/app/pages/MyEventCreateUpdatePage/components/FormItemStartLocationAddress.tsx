@@ -15,7 +15,7 @@ export const FormItemStartLocationAddress = ({ handleAddressChange, handleSelect
             <Form.Item
                 label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_location)}</SyrfFieldLabel>}
                 name="location"
-                rules={[{ required: true, message: t(translations.forms.location_is_required) }]}
+                rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
             >
                 <PlacesAutocomplete
                     value={address}
@@ -27,7 +27,7 @@ export const FormItemStartLocationAddress = ({ handleAddressChange, handleSelect
                             <>
                                 <SyrfInputField
                                     {...getInputProps({
-                                        placeholder: t(translations.profile_page.update_profile.search_places),
+                                        placeholder: t(translations.profile_page.search_places),
                                         className: 'location-search-input',
                                     })}
                                     value={address}

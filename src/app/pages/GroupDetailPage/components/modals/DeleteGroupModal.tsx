@@ -75,7 +75,7 @@ export const DeleteGroupModal = (props) => {
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.group.name_of_the_group)}</SyrfFieldLabel>}
                     name="groupName"
-                    rules={[{ required: true, message: t(translations.group.group_name_is_required) }]}
+                    rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                 >
                     <SyrfInputField
                         placeholder={t(translations.group.please_input_group_name_to_continue)}

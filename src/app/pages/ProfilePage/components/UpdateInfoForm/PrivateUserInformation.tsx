@@ -75,7 +75,7 @@ export const PrivateUserInformation = (props) => {
         const response = await sendPhoneVerification();
 
         if (response.success) {
-            toast.success(t(translations.profile_page.update_profile.you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number))
+            toast.success(t(translations.profile_page.you_will_receive_an_sms_or_phone_call_to_verify_your_phone_number))
         } else {
             showToastMessageOnRequestError(response.error);
         }
@@ -86,18 +86,18 @@ export const PrivateUserInformation = (props) => {
         const userPhoneNumberExists = !!getUserAttribute(authUser, 'phone_number');
 
         if (type === FIELD_VALIDATE.email)
-            return <ItemVerifyMessage className={verified ? 'verified' : ''}>{t(translations.profile_page.update_profile.your_email_is, { verify_status: (verified ? 'verified' : 'not verified') })}
-                { !verified && <Link to="/account-not-verified"> {t(translations.profile_page.update_profile.verify)}</Link>}
+            return <ItemVerifyMessage className={verified ? 'verified' : ''}>{t(translations.profile_page.your_email_is, { verify_status: (verified ? 'verified' : 'not verified') })}
+                { !verified && <Link to="/account-not-verified"> {t(translations.profile_page.verify)}</Link>}
             </ItemVerifyMessage>;
 
         if (userPhoneNumberExists) {
-            return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.update_profile.your_phone_is_verified)}</ItemVerifyMessage>) :
+            return verified ? (<ItemVerifyMessage className={'verified'}>{t(translations.profile_page.your_phone_is_verified)}</ItemVerifyMessage>) :
                 (
-                    <ItemVerifyMessage>{t(translations.profile_page.update_profile.your_phone_is_not_verified)} <a href="/" onClick={(e) => {
+                    <ItemVerifyMessage>{t(translations.profile_page.your_phone_is_not_verified)} <a href="/" onClick={(e) => {
                         e.preventDefault();
                         sendVerificationCode();
                         setShowPhoneVerifyModal(true);
-                    }}>{t(translations.profile_page.update_profile.verify)}</a></ItemVerifyMessage>
+                    }}>{t(translations.profile_page.verify)}</a></ItemVerifyMessage>
                 )
         }
     }
@@ -145,7 +145,7 @@ export const PrivateUserInformation = (props) => {
     const verifyPhone = async (code) => {
         const response = await verifyPhoneNumber(code);
         if (response.success) {
-            toast.success(t(translations.profile_page.update_profile.your_phone_number_has_been_verified));
+            toast.success(t(translations.profile_page.your_phone_number_has_been_verified));
             dispatch(actions.getUser());
             setShowPhoneVerifyModal(false);
         } else {
@@ -156,7 +156,7 @@ export const PrivateUserInformation = (props) => {
     return (
         <Wrapper>
             <VerifyPhoneModal verifyPhone={verifyPhone} sendPhoneVerification={sendVerificationCode} showPhoneVerifyModal={showPhoneVerifyModal} setShowPhoneVerifyModal={setShowPhoneVerifyModal} />
-            <SyrfFormTitle>{t(translations.profile_page.update_profile.private_user_details)}</SyrfFormTitle>
+            <SyrfFormTitle>{t(translations.profile_page.private_user_details)}</SyrfFormTitle>
             <Tooltip title={t(translations.tip.email)}>
                 <Form.Item
                     label={<SyrfFieldLabel>Email</SyrfFieldLabel>}
@@ -170,7 +170,7 @@ export const PrivateUserInformation = (props) => {
 
             <Tooltip title={t(translations.tip.address)}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.address)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.profile_page.address)}</SyrfFieldLabel>}
                     name="address"
                 >
                     <PlacesAutocomplete
@@ -182,7 +182,7 @@ export const PrivateUserInformation = (props) => {
                                 <>
                                     <SyrfInputField
                                         {...getInputProps({
-                                            placeholder: t(translations.profile_page.update_profile.search_places),
+                                            placeholder: t(translations.profile_page.search_places),
                                             className: 'location-search-input',
                                         })}
                                         value={address}
@@ -222,11 +222,11 @@ export const PrivateUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.date_of_birth)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.date_of_birth)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.profile_page.date_of_birth)}</SyrfFieldLabel>}
                             name="birthdate"
                             rules={[{ type: 'date' }, {
                                 required: true,
-                                message: t(translations.forms.birth_date_is_required)
+                                message: t(translations.forms.please_fill_out_this_field)
                             }]}
                         >
                             <DatePicker
@@ -256,7 +256,7 @@ export const PrivateUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.world_sailing_number)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.world_sailing_number)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.profile_page.world_sailing_number)}</SyrfFieldLabel>}
                             name="sailing_number"
                             style={{ position: 'relative' }}
                         >
@@ -278,7 +278,7 @@ export const PrivateUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.phone_number)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.phone_number)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.profile_page.phone_number)}</SyrfFieldLabel>}
                             name="phone_number"
                             rules={[{ type: 'string' }]}
                         >
@@ -286,7 +286,7 @@ export const PrivateUserInformation = (props) => {
                                 inputProps={{ autoComplete: 'none' }}
                                 inputClass="syrf-phone-number-input"
                                 buttonClass="syrf-flag-dropdown"
-                                placeholder={t(translations.profile_page.update_profile.enter_phone_number)} />
+                                placeholder={t(translations.profile_page.enter_phone_number)} />
                         </Form.Item>
                     </Tooltip>
                     {renderVerifiedStatus(FIELD_VALIDATE.phone)}
@@ -295,11 +295,11 @@ export const PrivateUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.language)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.language)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.profile_page.language)}</SyrfFieldLabel>}
                             name="language"
                             rules={[{ required: true }]}
                         >
-                            <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_language)}
+                            <SyrfFormSelect placeholder={t(translations.profile_page.select_a_language)}
                                 showSearch
                                 filterOption={(input, option) => {
                                     if (option) {
@@ -321,7 +321,7 @@ export const PrivateUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.profile_mode)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.profile_mode)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.profile_page.profile_mode)}</SyrfFieldLabel>}
                             name="isPrivate"
                             valuePropName="checked"
                         >

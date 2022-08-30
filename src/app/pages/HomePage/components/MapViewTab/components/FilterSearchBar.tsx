@@ -108,7 +108,7 @@ export const FilterSearchBar = (props) => {
                     autoCapitalize="none"
                     onFocus={handleOnSearchInputFocus}
                     onBlur={handleOnSearchInputBlur}
-                    placeholder={t(translations.home_page.map_view_tab.search_race_with_syrf)}
+                    placeholder={t(translations.home_page.search_race_with_syrf)}
                     onKeyUp={searchForRaces}
                     ref={searchBarRef}
                     onKeyDown={(e) => {
@@ -130,7 +130,7 @@ export const FilterSearchBar = (props) => {
                 <a href="/" onClick={(e) => {
                     e.preventDefault();
                     dispatch(actions.setShowAdvancedSearch(true));
-                }}>{t(translations.home_page.map_view_tab.advanced_search)}</a>
+                }}>{t(translations.home_page.advanced_search)}</a>
             </AdvancedSearchTextWrapper>
         </SearchBarWrapper>
     )

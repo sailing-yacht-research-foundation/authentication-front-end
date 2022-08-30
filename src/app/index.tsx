@@ -26,7 +26,6 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ProfilePage } from './pages/ProfilePage/Loadable';
 import { PrivacyPage } from './pages/PrivacyPolicyPage/Loadable';
 import { EULAPage } from './pages/EULAPage/Loadable';
-import { DealsPage } from './pages/DealsPage/Loadable';
 import { AboutPage } from './pages/AboutPage/Loadable';
 import { PlaybackPage } from './pages/PlaybackPage/Loadable';
 import { CourseCreatePage } from './pages/CourseCreateUpdatePage/Loadable';
@@ -34,10 +33,8 @@ import { DataPage } from './pages/DataPage/Loadable';
 import { MyEventPage } from './pages/MyEventPage/Loadable';
 import { MyEventCreateUpdatePage } from './pages/MyEventCreateUpdatePage/Loadable';
 import { CompetitionUnitCreateUpdatePage } from './pages/CompetitionUnitCreateUpdatePage/Loadable';
-import { CompetitionUnitListPage } from './pages/CompetitionUnitListPage/Loadable';
 import { VesselListPage } from './pages/VesselListPage/Loadable';
 import { VesselCreateUpdatePage } from './pages/VesselCreateUpdatePage/Loadable';
-import { ParticipantCreateUpdatePage } from './pages/ParticipantCreateUpdatePage/Loadable';
 import { EventDetailPage } from './pages/EventDetailPage/Loadable';
 import { MyTrackPage } from './pages/MyTrackPage/Loadable';
 import { MyGroupsPage } from './pages/MyGroupPage/Loadable';
@@ -202,7 +199,6 @@ export function App(props) {
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/account/integrations'} component={ExternalCredentialsManagePage} />
                 <Route exact path={process.env.PUBLIC_URL + '/privacy-policy'} component={PrivacyPage} />
                 <Route exact path={process.env.PUBLIC_URL + '/eula'} component={EULAPage} />
-                <PrivateRoute exact path={process.env.PUBLIC_URL + '/deals'} component={DealsPage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/data'} component={DataPage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/events'} component={MyEventPage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/create'} component={MyEventCreateUpdatePage} />
@@ -212,13 +208,9 @@ export function App(props) {
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/races/:competitionUnitId/update'} component={CompetitionUnitCreateUpdatePage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/create'} component={CourseCreatePage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/courses/:courseId/update'} component={CourseCreatePage} />
-                <PrivateRoute exact path={process.env.PUBLIC_URL + '/races/create'} component={CompetitionUnitCreateUpdatePage} />
-                <PrivateRoute exact path={process.env.PUBLIC_URL + '/races'} component={CompetitionUnitListPage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/'} component={VesselListPage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/create'} component={VesselCreateUpdatePage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/boats/:id/update'} component={VesselCreateUpdatePage} />
-                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/create'} component={ParticipantCreateUpdatePage} />
-                <PrivateRoute exact path={process.env.PUBLIC_URL + '/events/:eventId/competitors/:id/update'} component={ParticipantCreateUpdatePage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups'} component={MyGroupsPage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/create'} component={GroupCreateUpdatePage} />
                 <PrivateRoute exact path={process.env.PUBLIC_URL + '/groups/:groupId/update'} component={GroupCreateUpdatePage} />
