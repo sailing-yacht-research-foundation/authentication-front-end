@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Input, Form, Button, Spin } from 'antd';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -28,6 +28,8 @@ export const LoginForm = (props) => {
 
   const history = useHistory();
 
+  const location = useLocation();
+
   const [isSigningIn, setIsSigningIn] = React.useState<boolean>(false);
 
   const { t } = useTranslation();
@@ -50,11 +52,11 @@ export const LoginForm = (props) => {
       dispatch(actions.setIsAuthenticated(true));
       localStorage.removeItem('is_guest');
       localStorage.setItem('user_id', response.user.id);
-      history.push('/');
+      redirectToURLOrMainPage('/');
       subscribeUser();
       if (!response.user?.email_verified) {
         toast.info(t(translations.login_page.please_verify_your_account));
-        history.push('/account-not-verified');
+        redirectToURLOrMainPage('/account-not-verified');
       }
     } else {
       switch (response.error?.response.data.errorCode) {
@@ -64,6 +66,18 @@ export const LoginForm = (props) => {
         default:
           toast.info(t(translations.login_page.cannot_login_at_the_moment));
       }
+    }
+  }
+
+  const redirectToURLOrMainPage = (url) => {
+    const param = new URLSearchParams(location.search);
+    const redirectURL = param.get('redirectBack');
+
+    if (redirectURL) {
+      const decodedURL = new URL(decodeURIComponent(redirectURL));
+      history.push(decodedURL.hostname.includes('syrf') ? decodedURL.pathname : url);
+    } else {
+      history.push(url);
     }
   }
 

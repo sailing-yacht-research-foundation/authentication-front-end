@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { GlobalStyle } from '../styles/global-styles';
 
 import * as React from 'react';
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Layout } from 'antd';
 import { media } from 'styles/media';
@@ -67,34 +67,10 @@ import { initUserLocation } from 'utils/location';
 import { AgreementModal } from './components/AgreementModal/AgreementModal';
 import { selectIsSimplifiedPlayback } from './pages/PlaybackPage/components/slice/selectors';
 import { EmailNotVerifiedPage } from './pages/EmailNotVerifiedPage/Loadable';
+import { PublicRoute, PrivateRoute } from './components/SYRFRoute';
 
 
 const { Sider, Content } = Layout;
-
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-
-  return (
-    <Route {...rest} render={(props) => (
-      isAuthenticated === true
-        ? <Component {...props} />
-        : <Redirect to='/signin' />
-    )} />
-  )
-}
-
-const PublicRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-
-  return (
-    <Route {...rest} render={(props) => (
-      isAuthenticated === false
-        ? <Component {...props} />
-        : <Redirect to='/404' />
-    )} />
-  )
-}
-
 let siderToggled = true;
 
 export function App(props) {
