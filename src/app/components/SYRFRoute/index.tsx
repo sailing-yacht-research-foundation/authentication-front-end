@@ -4,7 +4,6 @@ import { Redirect, Route } from 'react-router-dom';
 import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 
 export const PublicRoute = ({ component: Component, ...rest }) => {
-
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
@@ -17,9 +16,8 @@ export const PublicRoute = ({ component: Component, ...rest }) => {
 }
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-
   const url = encodeURIComponent(window.location.href);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
     <Route {...rest} render={(props) => (
