@@ -36,6 +36,7 @@ import { RegisterEventModal } from 'app/components/RegisterRaceModal/RegisterEve
 import { useSelector } from 'react-redux';
 import { canLeaveEvent, canManageEvent, canRegisterEvent, isSuperAdminAndIsScraped } from 'utils/permission-helpers';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { checkIfStartTimezoneEtcUTC } from 'utils/event-helpers';
 
 export const EventDetail = () => {
 
@@ -226,6 +227,8 @@ export const EventDetail = () => {
         </EventActions >;
     }
 
+    const eventTime = checkIfStartTimezoneEtcUTC(event) ? moment(event.approximateStartTime).tz(event.approximateStartTime_zone!).format(TIME_FORMAT.date_text_with_time) : moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time);
+
     return (
         <Spin spinning={isFetchingEvent}>
             <ConfirmModal
@@ -253,7 +256,7 @@ export const EventDetail = () => {
                     <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
                         <EventTitle>{event.name}</EventTitle>
                         {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={() => navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
-                        <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
+                        <EventDate>{eventTime} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
                         {event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee> {event.isPaid && <PaidStatusContainer> - <BsBagCheckFill /> Paid</PaidStatusContainer>}</EventEntranceFeeWrapper>}
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>

@@ -11,7 +11,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, etcUTCTimezone, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, RaceSource, requiredCompetitorsInformation, TIME_FORMAT } from 'utils/constants';
+import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, RaceSource, requiredCompetitorsInformation, TIME_FORMAT } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -38,6 +38,7 @@ import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { canManageEventAndRedirect } from 'utils/permission-helpers';
+import { checkIfEndTimezoneEtcUTC, checkIfStartTimezoneEtcUTC } from 'utils/event-helpers';
 
 require('@turf/destination');
 
@@ -140,9 +141,6 @@ export const MyEventForm = () => {
 
         setIsSavingEvent(false);
     }
-
-    const checkIfStartTimezoneEtcUTC = (event) => event.approximateStartTime_zone === etcUTCTimezone;
-    const checkIfEndTimezoneEtcUTC = (event) => event.approximateEndTime_zone === etcUTCTimezone;
 
     const adjustTimeForScrapedRace = (data, startDate, startTime, currentDate, currentTime) => {
         const isStartTimezoneEtcUTC = checkIfStartTimezoneEtcUTC(event);
