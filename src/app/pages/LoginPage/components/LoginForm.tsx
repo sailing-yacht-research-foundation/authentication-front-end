@@ -72,7 +72,7 @@ export const LoginForm = (props) => {
   const redirectToURLOrMainPage = (url) => {
     const param = new URLSearchParams(location.search);
     const redirectURL = param.get('redirectBack');
-    history.push(redirectURL || url);
+    history.push(redirectURL ? decodeURIComponent(redirectURL) : url);
   }
 
   return (
