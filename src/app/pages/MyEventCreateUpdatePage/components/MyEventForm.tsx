@@ -42,7 +42,7 @@ import { checkIfEndTimezoneEtcUTC, checkIfStartTimezoneEtcUTC } from 'utils/even
 
 require('@turf/destination');
 
-type OnChoseLocationOptions = {
+type OnChooseLocationOptions = {
     shouldFetchAddress?: boolean,
     shouldUpdateCoordinate?: boolean,
     shouldUpdateTimezone?: boolean
@@ -277,7 +277,7 @@ export const MyEventForm = () => {
         return response.data.id;
     }
 
-    const onChoseLocation = (lat, lon, selector = 'start', options: OnChoseLocationOptions = {
+    const onChooseLocation = (lat, lon, selector = 'start', options: OnChooseLocationOptions = {
         shouldFetchAddress: true,
         shouldUpdateCoordinate: false,
         shouldUpdateTimezone: true
@@ -392,7 +392,7 @@ export const MyEventForm = () => {
                 lat: responseData?.lat,
                 lng: responseData?.lon
             });
-            onChoseLocation(responseData.lat, responseData.lon, 'start', {
+            onChooseLocation(responseData.lat, responseData.lon, 'start', {
                 shouldFetchAddress: true,
                 shouldUpdateCoordinate: true,
                 shouldUpdateTimezone: false
@@ -405,7 +405,7 @@ export const MyEventForm = () => {
                     lat: endLat,
                     lng: endLon
                 });
-                onChoseLocation(endLat, endLon, 'end', {
+                onChooseLocation(endLat, endLon, 'end', {
                     shouldFetchAddress: true,
                     shouldUpdateCoordinate: true,
                     shouldUpdateTimezone: false
@@ -442,7 +442,7 @@ export const MyEventForm = () => {
         setAddress(addr);
         geocodeByAddress(addr)
             .then(results => getLatLng(results[0]))
-            .then(coordinate => onChoseLocation(coordinate.lat, coordinate.lng, 'start', {
+            .then(coordinate => onChooseLocation(coordinate.lat, coordinate.lng, 'start', {
                 shouldFetchAddress: false,
                 shouldUpdateCoordinate: true,
                 shouldUpdateTimezone: true
@@ -466,7 +466,7 @@ export const MyEventForm = () => {
 
         geocodeByAddress(addr)
             .then(results => getLatLng(results[0]))
-            .then(coordinate => onChoseLocation(coordinate.lat, coordinate.lng, 'end', {
+            .then(coordinate => onChooseLocation(coordinate.lat, coordinate.lng, 'end', {
                 shouldFetchAddress: false,
                 shouldUpdateCoordinate: true,
                 shouldUpdateTimezone: true
@@ -481,7 +481,7 @@ export const MyEventForm = () => {
                     lat: coords.latitude,
                     lng: coords.longitude
                 });
-                onChoseLocation(coords.latitude, coords.longitude, 'start');
+                onChooseLocation(coords.latitude, coords.longitude, 'start');
             });
         }
     }
@@ -586,7 +586,7 @@ export const MyEventForm = () => {
 
                         <FormItemHidden />
 
-                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoseLocation={(lat, lon, selector) => onChoseLocation(lat, lon, selector, {
+                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChooseLocation={(lat, lon, selector) => onChooseLocation(lat, lon, selector, {
                             shouldFetchAddress: true,
                             shouldUpdateCoordinate: true,
                             shouldUpdateTimezone: (mode === MODE.CREATE || (mode === MODE.UPDATE && event.source === RaceSource.SYRF))
