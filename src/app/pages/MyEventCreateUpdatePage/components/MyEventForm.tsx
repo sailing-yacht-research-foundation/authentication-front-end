@@ -82,8 +82,8 @@ export const MyEventForm = () => {
 
         let response;
         const requiredCompetitorFields = requiredFields || [];
-        const currentDate = endDate ?? moment();
-        const currentTime = endTime ?? moment();
+        const currentDate = endDate || moment();
+        const currentTime = endTime || moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
         const certifications = requiredCertifications || [];
         const hasPositiveParticipatingFee = (values.participatingFee && values.participatingFee !== 0);
