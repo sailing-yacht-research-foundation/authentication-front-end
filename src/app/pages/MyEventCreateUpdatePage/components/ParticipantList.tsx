@@ -83,8 +83,14 @@ export const ParticipantList = (props) => {
             render: (text, record) => (
                 <>
                     {canManageEvent(event) ? (<Space size={10}>
-                        <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.general.remove)}</DeleteButton>
-                        {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.general.block)}</DeleteButton>}
+                        <Tooltip title={t(translations.general.remove)}>
+                            <DeleteButton icon={<FaTrash />} onClick={() => showDeleteParticipanModal(record)} danger />
+                        </Tooltip>
+                        {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED &&
+                            <Tooltip title={t(translations.general.block)}>
+                                <DeleteButton icon={<BiBlock />} onClick={() => showBlockParticipant(record)} danger />
+                            </Tooltip>
+                        }
                     </Space>) : <></>}
                 </>
             ),

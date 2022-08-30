@@ -260,7 +260,7 @@ export const EventDetail = () => {
                 {renderEventActions()}
             </PageHeaderContainerResponsive>
 
-            <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
+            <LocationPicker hideLocationControls noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
 
             <EventDescriptionContainer>
                 <EventSection>

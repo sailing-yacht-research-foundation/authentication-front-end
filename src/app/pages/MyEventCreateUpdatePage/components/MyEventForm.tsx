@@ -41,6 +41,12 @@ import { canManageEventAndRedirect } from 'utils/permission-helpers';
 
 require('@turf/destination');
 
+type OnChoseLocationOptions = {
+    shouldFetchAddress?: boolean,
+    shouldUpdateCoordinate?: boolean,
+    shouldUpdateTimezone?: boolean
+}
+
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
 const { getTimeZones } = require("@vvo/tzdb");
@@ -141,7 +147,7 @@ export const MyEventForm = () => {
     const adjustTimeForScrapedRace = (data, startDate, startTime, currentDate, currentTime) => {
         const isStartTimezoneEtcUTC = checkIfStartTimezoneEtcUTC(event);
         const isEndTimezoneEtcUTC = checkIfEndTimezoneEtcUTC(event);
-        const startDateAsMonent = !isStartTimezoneEtcUTC ? moment(startDate).utc() : startDate;
+        const startDateAsMoment = !isStartTimezoneEtcUTC ? moment(startDate).utc() : startDate;
         const endDateAsMoment = !isEndTimezoneEtcUTC ? moment(currentDate).utc() : currentDate;
         const approximateStartTimeAsMoment = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time))
         const approximateEndTimeAsMoment = moment(currentDate.format(TIME_FORMAT.number) + ' ' + currentTime.format(TIME_FORMAT.time));
@@ -149,9 +155,9 @@ export const MyEventForm = () => {
         return {
             ...data,
             approximateStartTime: isStartTimezoneEtcUTC ? approximateStartTimeAsMoment.format(TIME_FORMAT.number_with_time) : approximateStartTimeAsMoment.utc().format(TIME_FORMAT.number_with_time),
-            startDay: startDateAsMonent.format('DD'),
-            startMonth: startDateAsMonent.format('MM'),
-            startYear: startDateAsMonent.format('YYYY'),
+            startDay: startDateAsMoment.format('DD'),
+            startMonth: startDateAsMoment.format('MM'),
+            startYear: startDateAsMoment.format('YYYY'),
             approximateEndTime: isEndTimezoneEtcUTC ? approximateEndTimeAsMoment.format(TIME_FORMAT.number_with_time) : approximateEndTimeAsMoment.utc(),
             endDay: endDateAsMoment.format('DD'),
             endMonth: endDateAsMoment.format('MM'),
@@ -167,12 +173,12 @@ export const MyEventForm = () => {
         const startTimeAsMoment = checkIfStartTimezoneEtcUTC(event) ? moment(startTime).tz(startTimezone) : moment(startTime);
         const endTimeAsMoment = checkIfEndTimezoneEtcUTC(event) ? moment(endTime).tz(endTimezone) : moment(endTime);
 
-            form.setFieldsValue({
-                startDate: checkIfStartTimezoneEtcUTC(event) ? moment({ month: Number(event.startMonth) - 1, day: event.startDay, year: event.startYear }) : startTimeAsMoment,
-                endDate: checkIfEndTimezoneEtcUTC(event) ?  moment({ month: Number(event.endMonth) - 1, day: event.endDay, year: event.endYear }) : endTimeAsMoment,
-                startTime: startTimeAsMoment,
-                endTime: endTimeAsMoment,
-            });
+        form.setFieldsValue({
+            startDate: checkIfStartTimezoneEtcUTC(event) ? moment({ month: Number(event.startMonth) - 1, day: event.startDay, year: event.startYear }) : startTimeAsMoment,
+            endDate: checkIfEndTimezoneEtcUTC(event) ? moment({ month: Number(event.endMonth) - 1, day: event.endDay, year: event.endYear }) : endTimeAsMoment,
+            startTime: startTimeAsMoment,
+            endTime: endTimeAsMoment,
+        });
     }
 
     const onEventSaved = async (response, startLocation, endLocation) => {
@@ -273,7 +279,11 @@ export const MyEventForm = () => {
         return response.data.id;
     }
 
-    const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start', shouldUpdateTimezone = true) => {
+    const onChoseLocation = (lat, lon, selector = 'start', options: OnChoseLocationOptions = {
+        shouldFetchAddress: true,
+        shouldUpdateCoordinate: false,
+        shouldUpdateTimezone: true
+    }) => {
         if (lat === null
             || lat === undefined
             || lon === undefined
@@ -291,7 +301,7 @@ export const MyEventForm = () => {
             });
         }
 
-        if (shouldUpdateTimezone) {
+        if (options.shouldUpdateTimezone) {
             // Select timezone
             const currentTimezone = tzLookup(lat, lon);
 
@@ -303,7 +313,7 @@ export const MyEventForm = () => {
         }
 
         // Get address
-        if (shouldFetchAddress) {
+        if (options.shouldFetchAddress) {
             Geocode.fromLatLng(parseFloat(lat), parseFloat(lon)).then(
                 (response) => {
                     const address = response?.results[0]?.formatted_address;
@@ -322,7 +332,7 @@ export const MyEventForm = () => {
             );
         }
 
-        if (shouldUpdateCoordinate) {
+        if (options.shouldUpdateCoordinate) {
             if (selector === 'start') {
                 setCoordinates({
                     lat: lat,
@@ -384,7 +394,10 @@ export const MyEventForm = () => {
                 lat: responseData?.lat,
                 lng: responseData?.lon
             });
-            onChoosedLocation(responseData.lat, responseData.lon, true, true, 'start', false);
+            onChoseLocation(responseData.lat, responseData.lon, 'start', {
+                shouldUpdateCoordinate: true,
+                shouldUpdateTimezone: false
+            });
 
             if (responseData?.endLocation) {
                 const endLat = responseData?.endLocation?.coordinates[1];
@@ -393,7 +406,10 @@ export const MyEventForm = () => {
                     lat: endLat,
                     lng: endLon
                 });
-                onChoosedLocation(endLat, endLon, true, true, 'end', false);
+                onChoseLocation(endLat, endLon, 'end', {
+                    shouldUpdateCoordinate: true,
+                    shouldUpdateTimezone: false
+                });
             }
         } else {
             showToastMessageOnRequestError(response.error);
@@ -426,7 +442,10 @@ export const MyEventForm = () => {
         setAddress(addr);
         geocodeByAddress(addr)
             .then(results => getLatLng(results[0]))
-            .then(coordinate => onChoosedLocation(coordinate.lat, coordinate.lng, false, true))
+            .then(coordinate => onChoseLocation(coordinate.lat, coordinate.lng, 'start', {
+                shouldFetchAddress: false,
+                shouldUpdateCoordinate: true
+            }))
             .catch(error => toast.error(t(translations.my_event_create_update_page.there_is_a_problem_with_your_inputted_address)));
     }
 
@@ -446,7 +465,10 @@ export const MyEventForm = () => {
 
         geocodeByAddress(addr)
             .then(results => getLatLng(results[0]))
-            .then(coordinate => onChoosedLocation(coordinate.lat, coordinate.lng, false, true, 'end'))
+            .then(coordinate => onChoseLocation(coordinate.lat, coordinate.lng, 'end', {
+                shouldFetchAddress: false,
+                shouldUpdateCoordinate: true,
+            }))
             .catch(error => console.log('Geocode map err', error))
     }
 
@@ -457,7 +479,7 @@ export const MyEventForm = () => {
                     lat: coords.latitude,
                     lng: coords.longitude
                 });
-                onChoosedLocation(coords.latitude, coords.longitude);
+                onChoseLocation(coords.latitude, coords.longitude);
             });
         }
     }
@@ -562,7 +584,10 @@ export const MyEventForm = () => {
 
                         <FormItemHidden />
 
-                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoosedLocation={(lat, lon, selector) => onChoosedLocation(lat, lon, true, true, selector, (mode === MODE.CREATE || (mode === MODE.UPDATE && event.source === RaceSource.SYRF)))} />
+                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoseLocation={(lat, lon, selector) => onChoseLocation(lat, lon, selector, {
+                            shouldUpdateCoordinate: true,
+                            shouldUpdateTimezone: (mode === MODE.CREATE || (mode === MODE.UPDATE && event.source === RaceSource.SYRF))
+                        })} />
 
                         <FormItemStartLocationAddress address={address} handleAddressChange={handleAddressChange} handleSelectAddress={handleSelectAddress} />
 
