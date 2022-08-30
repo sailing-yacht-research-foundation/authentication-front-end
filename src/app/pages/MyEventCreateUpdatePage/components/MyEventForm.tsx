@@ -395,6 +395,7 @@ export const MyEventForm = () => {
                 lng: responseData?.lon
             });
             onChoseLocation(responseData.lat, responseData.lon, 'start', {
+                shouldFetchAddress: true,
                 shouldUpdateCoordinate: true,
                 shouldUpdateTimezone: false
             });
@@ -407,6 +408,7 @@ export const MyEventForm = () => {
                     lng: endLon
                 });
                 onChoseLocation(endLat, endLon, 'end', {
+                    shouldFetchAddress: true,
                     shouldUpdateCoordinate: true,
                     shouldUpdateTimezone: false
                 });
@@ -444,7 +446,8 @@ export const MyEventForm = () => {
             .then(results => getLatLng(results[0]))
             .then(coordinate => onChoseLocation(coordinate.lat, coordinate.lng, 'start', {
                 shouldFetchAddress: false,
-                shouldUpdateCoordinate: true
+                shouldUpdateCoordinate: true,
+                shouldUpdateTimezone: true
             }))
             .catch(error => toast.error(t(translations.my_event_create_update_page.there_is_a_problem_with_your_inputted_address)));
     }
@@ -468,6 +471,7 @@ export const MyEventForm = () => {
             .then(coordinate => onChoseLocation(coordinate.lat, coordinate.lng, 'end', {
                 shouldFetchAddress: false,
                 shouldUpdateCoordinate: true,
+                shouldUpdateTimezone: true
             }))
             .catch(error => console.log('Geocode map err', error))
     }
@@ -479,7 +483,7 @@ export const MyEventForm = () => {
                     lat: coords.latitude,
                     lng: coords.longitude
                 });
-                onChoseLocation(coords.latitude, coords.longitude);
+                onChoseLocation(coords.latitude, coords.longitude, 'start');
             });
         }
     }
@@ -585,6 +589,7 @@ export const MyEventForm = () => {
                         <FormItemHidden />
 
                         <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoseLocation={(lat, lon, selector) => onChoseLocation(lat, lon, selector, {
+                            shouldFetchAddress: true,
                             shouldUpdateCoordinate: true,
                             shouldUpdateTimezone: (mode === MODE.CREATE || (mode === MODE.UPDATE && event.source === RaceSource.SYRF))
                         })} />
