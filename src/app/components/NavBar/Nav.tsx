@@ -81,7 +81,7 @@ export const Nav = () => {
           <UserNotification />
           <FollowRequestModal />
           {lastSubscribedCompetitionUnitId && <ExpeditionServerActionButtons competitionUnit={null} />}
-          <Tooltip title={t(translations.tip.host_a_new_event_with_races)}>
+          <Tooltip title={t(translations.tip.host_a_new_event_with_races)} placement="bottom">
             {!isMobile && <StyledButtonCreate
               type="primary"
               shape="round"

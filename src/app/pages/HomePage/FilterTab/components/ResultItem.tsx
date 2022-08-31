@@ -34,7 +34,7 @@ export const ResultItem = (props) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const eventId = race._source.event;
-    const raceData= race._source;
+    const raceData = race._source;
     const eventText = renderEmptyValue(raceData.event_name, ' ');
     const eventElement = eventId && raceData.event_name ? <Link to={`/events/${eventId}`}>{eventText}</Link> : eventText;
     const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
@@ -146,8 +146,16 @@ export const ResultItem = (props) => {
         return [RaceStatus.ON_GOING].includes(raceData.status);
     }
 
+    const redirectToEditEventPage = () => {
+        history.push(`/events/${eventId}/update`);
+    }
+
     const menu = (
         <Menu>
+            <Menu.Item onClick={redirectToEditEventPage}>
+                {t(translations.general.update)}
+            </Menu.Item>
+
             <Menu.Item onClick={showMarkAsHiddenModal}>
                 {t(translations.home_page.mark_as_hidden)}
             </Menu.Item>

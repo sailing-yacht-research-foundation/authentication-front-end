@@ -34,8 +34,9 @@ import { ParticipantList } from 'app/pages/MyEventCreateUpdatePage/components/Pa
 import { FiEdit } from 'react-icons/fi';
 import { RegisterEventModal } from 'app/components/RegisterRaceModal/RegisterEventModal';
 import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
-import { canLeaveEvent, canManageEvent } from 'utils/permission-helpers';
+import { canLeaveEvent, canManageEvent, canRegisterEvent, isSuperAdminAndIsScraped } from 'utils/permission-helpers';
+import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { checkIfStartTimezoneEtcUTC } from 'utils/event-helpers';
 
 export const EventDetail = () => {
 
@@ -67,6 +68,8 @@ export const EventDetail = () => {
     const [showRegisterEventModal, setShowRegisterEventModal] = React.useState<boolean>(false);
 
     const isAuthenticated = useSelector(selectIsAuthenticated);
+
+    const authUser = useSelector(selectUser);
 
     const toggleRegistration = async (allowRegistration: boolean) => {
         setIsOpeningClosingRegistration(true);
@@ -189,13 +192,6 @@ export const EventDetail = () => {
         }
     }
 
-    const canRegisterEvent = () => {
-        const eventIsRegattaAndOngoingOrScheduled = event.isOpen && event.allowRegistration && [EventState.ON_GOING, EventState.SCHEDULED].includes(event.status!);
-        const isNotEventEditorOrParticipant = !event.isEditor && !event.isParticipant;
-
-        return eventIsRegattaAndOngoingOrScheduled && isNotEventEditorOrParticipant;
-    }
-
     const showRegisterEventModalOrRedirectToLogin = () => {
         if (isAuthenticated) {
             setShowRegisterEventModal(true);
@@ -207,17 +203,18 @@ export const EventDetail = () => {
     const renderEventActions = () => {
         return <EventActions>
             <Space wrap style={{ justifyContent: 'flex-end' }}>
-                {canManageEvent(event) &&
+                { canManageEvent(event) &&
                     <>
                         {menus.map((item, index) => {
                             return item.show && <Spin key={index} spinning={item.spinning}>
                                 {<Button shape="round" onClick={item.handler} icon={<IconWrapper>{item.icon}</IconWrapper>}>{item.name}</Button>}
                             </Spin>
                         })}
-                        <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>
                     </>}
-                {canLeaveEvent(event) && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
-                {canRegisterEvent() && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
+
+                { (canManageEvent(event) || isSuperAdminAndIsScraped(event, authUser)) && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button> }
+                { canLeaveEvent(event) && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
+                { canRegisterEvent(event) && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
                 <Tooltip title={t(translations.tip.download_icalendar_file)}>
                     <Button type="link" onClick={() => {
                         downloadIcalendarFile(event);
@@ -229,6 +226,8 @@ export const EventDetail = () => {
             </Space>
         </EventActions >;
     }
+
+    const eventTime = checkIfStartTimezoneEtcUTC(event) ? moment(event.approximateStartTime).tz(event.approximateStartTime_zone!).format(TIME_FORMAT.date_text_with_time) : moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time);
 
     return (
         <Spin spinning={isFetchingEvent}>
@@ -257,14 +256,14 @@ export const EventDetail = () => {
                     <EventHeaderInfoContainer style={{ marginTop: '10px' }}>
                         <EventTitle>{event.name}</EventTitle>
                         {event.createdBy?.name && <EventHoldBy>{t(translations.event_detail_page.organized_by)} <EventHost onClick={() => navigateToEventHostProfile(event.createdById)}>{event.createdBy?.name}</EventHost></EventHoldBy>}
-                        <EventDate>{moment(event.approximateStartTime).format(TIME_FORMAT.date_text_with_time)} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
+                        <EventDate>{eventTime} {event.approximateStartTime_zone} {renderTimezoneInUTCOffset(event.approximateStartTime_zone)} {event.city} {event.country}</EventDate>
                         {event.isPaidEvent && Number(event.participatingFee) > 0 && <EventEntranceFeeWrapper>Entrance Fee: <EventEntranceFee>${event.participatingFee}</EventEntranceFee> {event.isPaid && <PaidStatusContainer> - <BsBagCheckFill /> Paid</PaidStatusContainer>}</EventEntranceFeeWrapper>}
                     </EventHeaderInfoContainer>
                 </PageInfoOutterWrapper>
                 {renderEventActions()}
             </PageHeaderContainerResponsive>
 
-            <LocationPicker hideLocationControls onChoosedLocation={() => { }} noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
+            <LocationPicker hideLocationControls noMarkerInteraction locationDescription={renderCityAndCountryText(event)} zoom="10" coordinates={coordinates} endCoordinates={endCoordinates} height="270px" noPadding />
 
             <EventDescriptionContainer>
                 <EventSection>

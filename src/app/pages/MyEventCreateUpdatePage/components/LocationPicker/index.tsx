@@ -9,7 +9,7 @@ import { translations } from 'locales/translations';
 import { Map } from './Map';
 import { checkIfLocationIsValid } from 'utils/helpers';
 
-const DEFAULT_ZOOM = 10;
+const DEFAULT_ZOOM = 3;
 const options = [
     { label: "Start Location", value: "start" },
     { label: "End Location", value: "end" }
@@ -18,7 +18,7 @@ const options = [
 export const LocationPicker = (props) => {
 
     const {
-        onChoosedLocation,
+        onChooseLocation,
         coordinates,
         endCoordinates,
         zoom,
@@ -35,7 +35,8 @@ export const LocationPicker = (props) => {
     const [selectedOpt, setSelectedOpt] = React.useState(options[0].value);
 
     const onMapClicked = (latitude, longitude, selector) => {
-        onChoosedLocation(latitude, longitude, true, true, selector);
+        if (onChooseLocation)
+            onChooseLocation(latitude, longitude, selector);
     }
 
     const handleChangeOption = (e) => {

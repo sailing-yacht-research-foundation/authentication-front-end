@@ -17,12 +17,15 @@ import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { IoIosArrowBack } from 'react-icons/io';
-import { EventState, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
+import { etcUTCTimezone, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 import { Course } from 'types/Course';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { canManageEventAndRedirect } from 'utils/permission-helpers';
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
@@ -65,6 +68,8 @@ export const CompetitionUnitForm = () => {
 
     const [error, setError] = React.useState<any>({});
 
+    const authUser = useSelector(selectUser);
+
     const isCompetitionUnitPostponed = !moment(competitionUnit.startTime).isValid();
 
     const onFinish = async (values) => {
@@ -97,8 +102,15 @@ export const CompetitionUnitForm = () => {
         };
 
         if (!isCompetitionUnitPostponed) {
-            data.startTime = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
-            data.approximateStart = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
+            let time;
+            if (approximateStart_zone === etcUTCTimezone) {
+                time = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).format(TIME_FORMAT.number_with_time);
+            } else {
+                time = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
+            }
+
+            data.startTime = time;
+            data.approximateStart = time;
         }
 
         if (mode === MODE.CREATE)
@@ -145,15 +157,12 @@ export const CompetitionUnitForm = () => {
             setIsSaving(false);
 
             if (response.success) {
-                setCompetitionUnit(response.data);
-                showPostponedMessageToUserIfRaceIsPostponed(response.data);
-                form.setFieldsValue({
-                    ...response.data,
-                    startDate: moment(response.data?.approximateStart),
-                    startTime: moment(response.data?.approximateStart)
-                });
-                if (response.data?.boundingBox?.coordinates)
-                    setBoundingBoxCoordinates(response.data?.boundingBox?.coordinates);
+                const competitionUnit = response.data;
+                setCompetitionUnit(competitionUnit);
+                showPostponedMessageToUserIfRaceIsPostponed(competitionUnit);
+                correctTimeIfUTCAndSetFormFields(competitionUnit);
+                if (competitionUnit?.boundingBox?.coordinates)
+                    setBoundingBoxCoordinates(competitionUnit?.boundingBox?.coordinates);
             } else {
                 history.push(`/events/${eventId}`);
                 message.error(t(translations.competition_unit_create_update_page.race_not_found));
@@ -165,27 +174,23 @@ export const CompetitionUnitForm = () => {
         }
     }
 
-    const canManageRace = (event: CalendarEvent) => {
-        if (!event.isEditor) {
-            toast.info(t(translations.competition_unit_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
-            history.push('/events');
-            return false;
-        }
+    const correctTimeIfUTCAndSetFormFields = (competitionUnit: CompetitionUnit) => {
+        const startTimezone = competitionUnit.approximateStart_zone;
+        const startTime = competitionUnit.approximateStart;
+        const momentStartTime = startTimezone === etcUTCTimezone ? moment(startTime).tz(startTimezone) : moment(startTime);
 
-        if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status!)) {
-            toast.info(t(translations.competition_unit_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
-            history.push('/events');
-            return false;
-        }
-
-        return true;
+        form.setFieldsValue({
+            ...competitionUnit,
+            startDate: momentStartTime,
+            startTime: momentStartTime
+        });
     }
 
     const getEventData = async () => {
         const response = await getEventById(eventId);
         if (response.success) {
             setEventData(response.data);
-            return canManageRace(response.data);
+            return true;
         }
 
         history.push('/events');
@@ -289,6 +294,11 @@ export const CompetitionUnitForm = () => {
         getAllEventCourses();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        canManageEventAndRedirect(eventData, authUser, mode, history);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [authUser.role, eventData.name]);
 
     const checkIfNoRaceIsOngoing = async () => {
         if (mode === MODE.UPDATE) return;

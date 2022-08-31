@@ -11,7 +11,7 @@ import { create as createCompetitionUnit } from 'services/live-data-server/compe
 import moment from 'moment-timezone';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, requiredCompetitorsInformation } from 'utils/constants';
+import { AdminType, EventParticipatingTypes, EventState, GeometrySide, GeometryType, MAP_DEFAULT_VALUE, MODE, RaceSource, requiredCompetitorsInformation, TIME_FORMAT } from 'utils/constants';
 import { DeleteEventModal } from 'app/pages/MyEventPage/components/DeleteEventModal';
 import { IoIosArrowBack } from 'react-icons/io';
 import Geocode from "react-geocode";
@@ -35,8 +35,18 @@ import { FormItems } from './FormItems';
 import { CalendarEvent } from 'types/CalendarEvent';
 import * as turf from "@turf/turf";
 import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { canManageEventAndRedirect } from 'utils/permission-helpers';
+import { checkIfEndTimezoneEtcUTC, checkIfStartTimezoneEtcUTC } from 'utils/event-helpers';
 
 require('@turf/destination');
+
+type OnChooseLocationOptions = {
+    shouldFetchAddress?: boolean,
+    shouldUpdateCoordinate?: boolean,
+    shouldUpdateTimezone?: boolean
+}
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
@@ -69,6 +79,8 @@ export const MyEventForm = () => {
 
     const pdfListRef = React.useRef<any>();
 
+    const authUser = useSelector(selectUser);
+
     const onFinish = async (values) => {
         const { startDate, isOpen, lon, lat, endDate, requiredFields,
             endTime, startTime, endLat, endLon, admins,
@@ -76,35 +88,19 @@ export const MyEventForm = () => {
         } = values;
 
         let response;
-        let requiredCompetitorFields = requiredFields || [];
-        let currentDate = moment();
-        let currentTime = moment();
+        const requiredCompetitorFields = requiredFields || [];
+        const currentDate = endDate || moment();
+        const currentTime = endTime || moment();
         const editors = admins ? admins.map(item => JSON.parse(item)) : [];
         const certifications = requiredCertifications || [];
         const hasPositiveParticipatingFee = (values.participatingFee && values.participatingFee !== 0);
 
-        if (endDate) {
-            currentDate = endDate;
-        }
-
-        if (endTime) {
-            currentTime = endTime;
-        }
-
-        const data = {
+        let data = {
             ...values,
             endLocation: endLon && endLat ? {
                 lon: endLon,
                 lat: endLat
             } : null,
-            approximateStartTime: startDate ? moment(startDate.format("YYYY-MM-DD") + ' ' + startTime.format("HH:mm:ss")).utc() : moment().utc().format("YYYY-MM-DD HH:mm:ss"),
-            approximateEndTime: moment(currentDate.format('YYYY-MM-DD') + ' ' + currentTime.format("HH:mm:ss")).utc(),
-            startDay: startDate.utc().format('DD'),
-            startMonth: startDate.utc().format('MM'),
-            startYear: startDate.utc().format('YYYY'),
-            endDay: currentDate.utc().format('DD'),
-            endMonth: currentDate.utc().format('MM'),
-            endYear: currentDate.utc().format('YYYY'),
             ics: "ics",
             isPrivate: false,
             isOpen: !!isOpen,
@@ -122,6 +118,8 @@ export const MyEventForm = () => {
             requiredCertifications: certifications,
             organizerGroupId: values.organizerGroupId || null,
         };
+
+        data = adjustTimeForScrapedRace(data, startDate, startTime, currentDate, currentTime);
 
         requiredCompetitorsInformation.forEach((field) => {
             data[field] = requiredCompetitorFields.includes(field);
@@ -142,6 +140,43 @@ export const MyEventForm = () => {
         }
 
         setIsSavingEvent(false);
+    }
+
+    const adjustTimeForScrapedRace = (data, startDate, startTime, currentDate, currentTime) => {
+        const isStartTimezoneEtcUTC = checkIfStartTimezoneEtcUTC(event);
+        const isEndTimezoneEtcUTC = checkIfEndTimezoneEtcUTC(event);
+        const startDateAsMoment = !isStartTimezoneEtcUTC ? moment(startDate).utc() : startDate;
+        const endDateAsMoment = !isEndTimezoneEtcUTC ? moment(currentDate).utc() : currentDate;
+        const approximateStartTimeAsMoment = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time))
+        const approximateEndTimeAsMoment = moment(currentDate.format(TIME_FORMAT.number) + ' ' + currentTime.format(TIME_FORMAT.time));
+
+        return {
+            ...data,
+            approximateStartTime: isStartTimezoneEtcUTC ? approximateStartTimeAsMoment.format(TIME_FORMAT.number_with_time) : approximateStartTimeAsMoment.utc().format(TIME_FORMAT.number_with_time),
+            startDay: startDateAsMoment.format('DD'),
+            startMonth: startDateAsMoment.format('MM'),
+            startYear: startDateAsMoment.format('YYYY'),
+            approximateEndTime: isEndTimezoneEtcUTC ? approximateEndTimeAsMoment.format(TIME_FORMAT.number_with_time) : approximateEndTimeAsMoment.utc(),
+            endDay: endDateAsMoment.format('DD'),
+            endMonth: endDateAsMoment.format('MM'),
+            endYear: endDateAsMoment.format('YYYY')
+        };
+    }
+
+    const correctTimeIfIsAlreadyUTC = (event) => {
+        const startTime = event?.approximateStartTime;
+        const endTime = event?.approximateEndTime;
+        const startTimezone = event?.approximateStartTime_zone;
+        const endTimezone = event?.approximateEndTime_zone;
+        const startTimeAsMoment = checkIfStartTimezoneEtcUTC(event) ? moment(startTime).tz(startTimezone) : moment(startTime);
+        const endTimeAsMoment = checkIfEndTimezoneEtcUTC(event) ? moment(endTime).tz(endTimezone) : moment(endTime);
+
+        form.setFieldsValue({
+            startDate: checkIfStartTimezoneEtcUTC(event) ? moment({ month: Number(event.startMonth) - 1, day: event.startDay, year: event.startYear }) : startTimeAsMoment,
+            endDate: checkIfEndTimezoneEtcUTC(event) ? moment({ month: Number(event.endMonth) - 1, day: event.endDay, year: event.endYear }) : endTimeAsMoment,
+            startTime: startTimeAsMoment,
+            endTime: endTimeAsMoment,
+        });
     }
 
     const onEventSaved = async (response, startLocation, endLocation) => {
@@ -242,7 +277,11 @@ export const MyEventForm = () => {
         return response.data.id;
     }
 
-    const onChoosedLocation = (lat, lon, shouldFetchAddress = true, shouldUpdateCoordinate = false, selector = 'start') => {
+    const onChooseLocation = (lat, lon, selector = 'start', options: OnChooseLocationOptions = {
+        shouldFetchAddress: true,
+        shouldUpdateCoordinate: false,
+        shouldUpdateTimezone: true
+    }) => {
         if (lat === null
             || lat === undefined
             || lon === undefined
@@ -260,17 +299,19 @@ export const MyEventForm = () => {
             });
         }
 
-        // Select timezone
-        const currentTimezone = tzLookup(lat, lon);
+        if (options.shouldUpdateTimezone) {
+            // Select timezone
+            const currentTimezone = tzLookup(lat, lon);
 
-        if (selector === 'start') {
-            form.setFieldsValue({ approximateStartTime_zone: currentTimezone });
-        } else {
-            form.setFieldsValue({ approximateEndTime_zone: currentTimezone })
+            if (selector === 'start') {
+                form.setFieldsValue({ approximateStartTime_zone: currentTimezone });
+            } else {
+                form.setFieldsValue({ approximateEndTime_zone: currentTimezone });
+            }
         }
 
         // Get address
-        if (shouldFetchAddress) {
+        if (options.shouldFetchAddress) {
             Geocode.fromLatLng(parseFloat(lat), parseFloat(lon)).then(
                 (response) => {
                     const address = response?.results[0]?.formatted_address;
@@ -289,7 +330,7 @@ export const MyEventForm = () => {
             );
         }
 
-        if (shouldUpdateCoordinate) {
+        if (options.shouldUpdateCoordinate) {
             if (selector === 'start') {
                 setCoordinates({
                     lat: lat,
@@ -315,69 +356,60 @@ export const MyEventForm = () => {
         }
     }
 
-    const canManageEvent = (event) => {
-        if (!event.isEditor) {
-            toast.info(t(translations.my_event_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
-            history.push('/events');
-            return false;
-        }
-
-        if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status)) {
-            toast.info(t(translations.my_event_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
-            history.push('/events');
-            return false;
-        }
-
-        return true;
-    }
-
     const initData = async () => {
         setIsSavingEvent(true);
         const response = await get(eventId || event?.id!);
         setIsSavingEvent(false);
 
         if (response.success) {
-
-            if (!canManageEvent(response.data)) return;
-
+            const responseData = response.data;
             form.setFieldsValue({
                 ...response.data,
-                startDate: moment(response.data?.approximateStartTime),
-                startTime: moment(response.data?.approximateStartTime),
-                endDate: moment(response.data?.approximateEndTime),
-                endTime: moment(response.data?.approximateEndTime),
-                endLat: response.data?.endLocation?.coordinates[1] || response.data?.lat,
-                endLon: response.data?.endLocation?.coordinates[0] || response.data?.lon,
-                admins: [...response.data?.editors.map(editor => JSON.stringify({
+                approximateStartTime_zone: responseData?.approximateStartTime_zone,
+                approximateEndTime_zone: responseData?.approximateEndTime_zone,
+                endLat: responseData?.endLocation?.coordinates[1] || null,
+                endLon: responseData?.endLocation?.coordinates[0] || null,
+                admins: [...responseData?.editors.map(editor => JSON.stringify({
                     type: AdminType.INDIVIDUAL,
                     id: editor.id,
                     avatar: editor.avatar,
                     name: editor.name,
                     isIndividualAssignment: false
-                })), ...response.data?.groups.map(editor => JSON.stringify({
+                })), ...responseData?.groups.map(editor => JSON.stringify({
                     type: AdminType.GROUP,
                     id: editor.id,
                     avatar: editor.groupImage,
                     name: editor.groupName,
                     isIndividualAssignment: false
                 }))],
-                requiredCertifications: response.data?.requiredCertifications
+                requiredCertifications: responseData?.requiredCertifications
             });
-            setEvent(response.data);
-            setCoordinates({
-                lat: response.data?.lat,
-                lng: response.data?.lon
-            });
-            onChoosedLocation(response.data.lat, response.data.lon);
 
-            if (response.data?.endLocation) {
-                const endLat = response.data?.endLocation?.coordinates[1];
-                const endLon = response.data?.endLocation?.coordinates[0]
+            correctTimeIfIsAlreadyUTC(responseData);
+
+            setEvent(responseData);
+            setCoordinates({
+                lat: responseData?.lat,
+                lng: responseData?.lon
+            });
+            onChooseLocation(responseData.lat, responseData.lon, 'start', {
+                shouldFetchAddress: true,
+                shouldUpdateCoordinate: true,
+                shouldUpdateTimezone: false
+            });
+
+            if (responseData?.endLocation) {
+                const endLat = responseData?.endLocation?.coordinates[1];
+                const endLon = responseData?.endLocation?.coordinates[0]
                 setEndCoordinates({
                     lat: endLat,
                     lng: endLon
                 });
-                onChoosedLocation(endLat, endLon, true, true, 'end');
+                onChooseLocation(endLat, endLon, 'end', {
+                    shouldFetchAddress: true,
+                    shouldUpdateCoordinate: true,
+                    shouldUpdateTimezone: false
+                });
             }
         } else {
             showToastMessageOnRequestError(response.error);
@@ -410,7 +442,11 @@ export const MyEventForm = () => {
         setAddress(addr);
         geocodeByAddress(addr)
             .then(results => getLatLng(results[0]))
-            .then(coordinate => onChoosedLocation(coordinate.lat, coordinate.lng, false, true))
+            .then(coordinate => onChooseLocation(coordinate.lat, coordinate.lng, 'start', {
+                shouldFetchAddress: false,
+                shouldUpdateCoordinate: true,
+                shouldUpdateTimezone: true
+            }))
             .catch(error => toast.error(t(translations.my_event_create_update_page.there_is_a_problem_with_your_inputted_address)));
     }
 
@@ -430,7 +466,11 @@ export const MyEventForm = () => {
 
         geocodeByAddress(addr)
             .then(results => getLatLng(results[0]))
-            .then(coordinate => onChoosedLocation(coordinate.lat, coordinate.lng, false, true, 'end'))
+            .then(coordinate => onChooseLocation(coordinate.lat, coordinate.lng, 'end', {
+                shouldFetchAddress: false,
+                shouldUpdateCoordinate: true,
+                shouldUpdateTimezone: true
+            }))
             .catch(error => console.log('Geocode map err', error))
     }
 
@@ -441,7 +481,7 @@ export const MyEventForm = () => {
                     lat: coords.latitude,
                     lng: coords.longitude
                 });
-                onChoosedLocation(coords.latitude, coords.longitude);
+                onChooseLocation(coords.latitude, coords.longitude, 'start');
             });
         }
     }
@@ -457,6 +497,11 @@ export const MyEventForm = () => {
         });
 
     }
+
+    React.useEffect(() => {
+        canManageEventAndRedirect(event, authUser, mode, history);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [authUser.role, event.name]);
 
     React.useEffect(() => {
         initMode();
@@ -541,7 +586,11 @@ export const MyEventForm = () => {
 
                         <FormItemHidden />
 
-                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChoosedLocation={onChoosedLocation} />
+                        <LocationPicker onRemoveEndLocation={handleRemoveEventLocation} coordinates={coordinates} endCoordinates={endCoordinates} setFormChanged={setFormChanged} onChooseLocation={(lat, lon, selector) => onChooseLocation(lat, lon, selector, {
+                            shouldFetchAddress: true,
+                            shouldUpdateCoordinate: true,
+                            shouldUpdateTimezone: (mode === MODE.CREATE || (mode === MODE.UPDATE && event.source === RaceSource.SYRF))
+                        })} />
 
                         <FormItemStartLocationAddress address={address} handleAddressChange={handleAddressChange} handleSelectAddress={handleSelectAddress} />
 
