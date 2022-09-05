@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { searchGroups } from 'services/live-data-server/groups';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
+import { renderGroupAvatarAsThumbnail, renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
 import { debounce } from 'utils/helpers';
 import { useHistory } from 'react-router';
@@ -41,7 +41,7 @@ export const GroupSearchAutoComplete = ({ keyword, showSuggestions, setShowSugge
             return (
                 <GroupRow key={group.id} onClick={() => history.push(`/groups/${group.id}`)}>
                     <GroupAvatarContainer>
-                        <img alt={group?.groupName} src={group.groupImage || DEFAULT_GROUP_AVATAR} />
+                        <img alt={group?.groupName} src={renderGroupAvatarAsThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} />
                     </GroupAvatarContainer>
                     <GroupRightInfoContainer>
                         <GroupName>{group.groupName}</GroupName>

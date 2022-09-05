@@ -681,3 +681,7 @@ const areTwoFiltersEqual = (filter1, filter2) => {
 export const replaceImageExtensionWithThumbnailPostfix = (url) => {
     return `${url?.split('.').slice(0, -1).join('.')}_thumbnail.jpg`;
 }
+
+export const renderGroupAvatarAsThumbnail = (avatar) => {
+    return avatar && replaceImageExtensionWithThumbnailPostfix(avatar);
+}
