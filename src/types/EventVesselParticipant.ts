@@ -10,4 +10,5 @@ export interface VesselParticipant {
     vessel: Vessel;
     group: VesselParticipantGroup;
     participant?: Participant
+    sailNumber?: string;
 }
