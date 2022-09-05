@@ -9,6 +9,7 @@ import { renderAvatar } from 'utils/user-utils';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CalendarEvent } from 'types/CalendarEvent';
+import { replaceImageExtensionWithThumbnailPostfix } from 'utils/helpers';
 
 const editorHeadlessStyles = {
     width: '25px',

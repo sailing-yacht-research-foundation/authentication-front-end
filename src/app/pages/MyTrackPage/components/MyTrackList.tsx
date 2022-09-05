@@ -19,7 +19,7 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, replaceImageExtensionWithThumbnailPostfix, showToastMessageOnRequestError, usePrevious } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
@@ -92,7 +92,7 @@ export const MyTrackList = () => {
                     return (
                         <FlexWrapper>
                             {record.competitionUnit?.openGraphImage ?
-                                <OpenGraphImage src={record.competitionUnit.openGraphImage} alt={record.event.name} /> :
+                                <OpenGraphImage src={replaceImageExtensionWithThumbnailPostfix(record.competitionUnit.openGraphImage)} alt={record.event.name} /> :
                                 <NoImageContainer>
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>

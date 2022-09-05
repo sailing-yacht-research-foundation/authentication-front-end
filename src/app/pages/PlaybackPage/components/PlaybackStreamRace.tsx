@@ -136,7 +136,7 @@ export const PlaybackStreamRace = () => {
           type: "boat",
           track: [],
           competitor_name: vessParticipant?.vessel?.publicName,
-          competitor_sail_number: vessParticipant?.vesselParticipantId,
+          competitor_sail_number: vessParticipant?.sailNumber,
           first_ping_time: 0,
           id: vessParticipant.id,
         };
@@ -361,7 +361,7 @@ export const PlaybackStreamRace = () => {
       positions: [{ lat: position.lat, lon: position.lon }],
       lastPosition: { lon: position.lon, lat: position.lat },
       deviceType: 'boat',
-      participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },
+      participant: { competitor_name: vessel?.publicName, competitor_sail_number: vesselParticipant?.sailNumber },
       color: stringToColour(id),
       leaderPosition: Object.keys(groupedPosition.current)?.length + 1,
     };
@@ -430,7 +430,7 @@ export const PlaybackStreamRace = () => {
           positions: [{ ...lastPosition, time: currentTime }],
           lastPosition,
           vesselParticipantId,
-          participant: { competitor_name: vessel.publicName, competitor_sail_number: vessel.id },
+          participant: { competitor_name: vessel.publicName, competitor_sail_number: vessel.sailNumber },
           color: stringToColour(vesselParticipantId),
           leaderPosition: index + 1,
         });

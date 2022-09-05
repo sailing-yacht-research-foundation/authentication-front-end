@@ -93,7 +93,7 @@ export const ProfileBasicInfoSection = ({
     return <>
         <InfoSection>
             <AvatarWrapper>
-                <Image src={renderAvatar(profile.avatar)} />
+                <Image src={renderAvatar(profile.avatar, false)} />
             </AvatarWrapper>
             <ProfileName>{profile.name}</ProfileName>
             <ProfileButtonsWrapper>
