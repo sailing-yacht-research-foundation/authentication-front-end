@@ -361,7 +361,7 @@ export const PlaybackStreamRace = () => {
       positions: [{ lat: position.lat, lon: position.lon }],
       lastPosition: { lon: position.lon, lat: position.lat },
       deviceType: 'boat',
-      participant: { competitor_name: vessel?.publicName, competitor_sail_number: vesselParticipant?.sailNumber },
+      participant: { competitor_name: vessel?.publicName, competitor_sail_number: vesselParticipant?.id },
       color: stringToColour(id),
       leaderPosition: Object.keys(groupedPosition.current)?.length + 1,
     };
@@ -430,7 +430,7 @@ export const PlaybackStreamRace = () => {
           positions: [{ ...lastPosition, time: currentTime }],
           lastPosition,
           vesselParticipantId,
-          participant: { competitor_name: vessel.publicName, competitor_sail_number: vessel.sailNumber },
+          participant: { competitor_name: vessel.publicName, competitor_sail_number: vessel.id },
           color: stringToColour(vesselParticipantId),
           leaderPosition: index + 1,
         });
