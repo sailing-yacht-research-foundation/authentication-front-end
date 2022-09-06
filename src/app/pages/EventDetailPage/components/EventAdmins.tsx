@@ -9,7 +9,7 @@ import { renderAvatar } from 'utils/user-utils';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CalendarEvent } from 'types/CalendarEvent';
-import { renderGroupAvatarAsThumbnail } from 'utils/helpers';
+import { appendThumbnail } from 'utils/helpers';
 
 const editorHeadlessStyles = {
     width: '25px',
@@ -60,7 +60,7 @@ export const EventAdmins = (props: IEventAdmins) => {
             if (editor.group) editor = editor.group;
             return <Tooltip title={editor?.groupName} key={index}>
                 <EditorItem onClick={() => history.push(`/groups/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} >
-                    <img alt={editor?.groupName} src={renderGroupAvatarAsThumbnail(editor?.groupImage) || DEFAULT_GROUP_AVATAR} />
+                    <img alt={editor?.groupName} src={appendThumbnail(editor?.groupImage) || DEFAULT_GROUP_AVATAR} />
                 </EditorItem>
             </Tooltip>
         });

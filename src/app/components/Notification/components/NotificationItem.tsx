@@ -7,7 +7,7 @@ import Group from '../assets/group.png';
 import Event from '../assets/event.png';
 import Follow from '../assets/follow.png';
 import Sail from '../assets/sail.png';
-import { replaceImageExtensionWithThumbnailPostfix, showToastMessageOnRequestError } from 'utils/helpers';
+import { showToastMessageOnRequestError } from 'utils/helpers';
 import { StyleConstants } from 'styles/StyleConstants';
 import { markNotificationsAsRead } from 'services/live-data-server/notifications';
 import { useHistory } from 'react-router-dom';
@@ -155,7 +155,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
     const renderNotificationAvatar = () => {
         const thumbnail = notification.notificationThumbnail || notification.metadata?.notificationThumbnail;
         if (thumbnail)
-            return renderAvatar(replaceImageExtensionWithThumbnailPostfix(thumbnail));
+            return renderAvatar(thumbnail);
 
         switch (notification.notificationType) {
             case NotificationTypes.USER_INVITED_TO_GROUP:

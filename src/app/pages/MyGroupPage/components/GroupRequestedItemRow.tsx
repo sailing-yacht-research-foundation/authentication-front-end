@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectRequestedGroupCurrentPage } from '../slice/selectors';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { renderGroupAvatarAsThumbnail, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
+import { appendThumbnail, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
 import { Link } from 'react-router-dom';
 import { MdOutlineUndo } from 'react-icons/md';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
@@ -43,7 +43,7 @@ export const GroupRequestedItemRow = (props) => {
     return (
         <InvitationItem>
             <GroupAvatarContainer>
-                <img alt={request.group?.groupName} src={renderGroupAvatarAsThumbnail(request.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
+                <img alt={request.group?.groupName} src={appendThumbnail(request.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
             </GroupAvatarContainer>
             <RightInfoContainer>
                 <ItemInfoContainer>

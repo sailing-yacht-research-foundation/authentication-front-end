@@ -10,7 +10,7 @@ import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { revokeGroupAsEditor } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { renderGroupAvatarAsThumbnail, showToastMessageOnRequestError } from 'utils/helpers';
+import { appendThumbnail, showToastMessageOnRequestError } from 'utils/helpers';
 
 export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
 
@@ -70,7 +70,7 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
             return <Tooltip key={index} title={editor?.group?.groupName}>
                 <EditorItem>
                     <EditorItemAvatarContainer>
-                        <img alt={editor?.group?.groupName} src={renderGroupAvatarAsThumbnail(editor?.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
+                        <img alt={editor?.group?.groupName} src={appendThumbnail(editor?.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
                     </EditorItemAvatarContainer>
                     <EditorItemRightInfo>
                         <EditorRightInfoInner>

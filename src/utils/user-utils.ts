@@ -1,5 +1,5 @@
 import NoAvatar from 'app/components/NavBar/assets/no-avatar.png';
-import { replaceImageExtensionWithThumbnailPostfix } from './helpers';
+import { appendThumbnail } from './helpers';
 
 /**
  * Get user attribute based of the attribute name
@@ -45,7 +45,7 @@ export const renderAvatar = (picture, renderAsThumbnail = true) => {
     if (picture && !isNaN(picture)) return `/default-avatars/avatar-${picture}.png`;
 
     if (picture) {
-        return renderAsThumbnail ? replaceImageExtensionWithThumbnailPostfix(picture) : picture;
+        return renderAsThumbnail ? appendThumbnail(picture) : picture;
     }
 
     return NoAvatar;

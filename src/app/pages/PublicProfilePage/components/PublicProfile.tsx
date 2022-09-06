@@ -11,7 +11,7 @@ import { blockUser, unfollowProfile } from 'services/live-data-server/profile';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { UnfollowConfirmModal } from 'app/components/SocialProfile/UnfollowConfirmModal';
-import { renderGroupAvatarAsThumbnail, showToastMessageOnRequestError } from 'utils/helpers';
+import { appendThumbnail, showToastMessageOnRequestError } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { ProfileBasicInfoSection } from './ProfileBasicInfoSection';
@@ -162,7 +162,7 @@ export const PublicProfile = () => {
                             {profile.groups?.map((group, index) => {
                                 return <Tooltip title={group.group?.groupName} key={index} placement="top">
                                     <Link to={`/groups/${group.group?.id}`}>
-                                        <Avatar src={renderGroupAvatarAsThumbnail(group.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
+                                        <Avatar src={appendThumbnail(group.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
                                     </Link>
                                 </Tooltip>;
                             })}

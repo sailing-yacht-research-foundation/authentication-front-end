@@ -4,7 +4,7 @@ import { Button, Spin, Tag, Space, Tooltip } from 'antd';
 import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
-import { renderGroupAvatarAsThumbnail, renderNumberWithCommas, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
+import { appendThumbnail, renderNumberWithCommas, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
@@ -97,7 +97,7 @@ export const GroupItemRow = (props) => {
     return (
         <GroupItem onClick={showGroupItemDetail}>
             <GroupItemAvatarContainer>
-                <img src={renderGroupAvatarAsThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
+                <img src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
             </GroupItemAvatarContainer>
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>
