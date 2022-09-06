@@ -191,9 +191,9 @@ export const PlaybackOldRace = (props) => {
           color: stringToColour(vesselParticipant.id),
           positions: [],
           lastPosition: {},
+          sailNumber: vesselParticipant.sailNumber,
           participant: {
             competitor_name: vesselParticipant.vessel?.publicName,
-            competitior_sail_number: vesselParticipant.vesselParticipantId,
           },
         };
 
@@ -389,7 +389,7 @@ export const PlaybackOldRace = (props) => {
       },
       participant: {
         competitor_name: vessel?.publicName,
-        competitior_sail_number: vessel?.vesselParticipantId,
+        competitior_sail_number: vesselParticipant?.sailNumber,
       },
     };
 
