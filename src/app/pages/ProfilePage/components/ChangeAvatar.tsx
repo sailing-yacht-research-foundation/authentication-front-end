@@ -24,7 +24,7 @@ export const ChangeAvatar = (props) => {
 
     const onSubmitCroppedAvatar = async (imageData) => {
         if (base64ConvertedURL === '' && (!imageData || typeof imageData !== 'string')) {
-            toast.error(t(translations.profile_page.update_profile.please_choose_an_image_to_crop));
+            toast.error(t(translations.profile_page.please_choose_an_image_to_crop));
             return;
         }
 
@@ -61,10 +61,10 @@ export const ChangeAvatar = (props) => {
                 await updateProfile(userData);
                 props.cancelUpdateProfile();
             }
-            toast.success(t(translations.profile_page.update_profile.upload_profile_picture_successfully));
+            toast.success(t(translations.profile_page.upload_profile_picture_successfully));
         } else {
             if (response.error?.response && response.error?.response?.status === 400) // file too large
-                toast.error(t(translations.profile_page.update_profile.your_file_is_too_large_please_choose_another));
+                toast.error(t(translations.profile_page.your_file_is_too_large_please_choose_another));
             else
                 showToastMessageOnRequestError(response.error);
         }
@@ -86,7 +86,7 @@ export const ChangeAvatar = (props) => {
     return (
         <>
             <Modal
-                title={t(translations.profile_page.update_profile.change_profile_picture)}
+                title={t(translations.profile_page.change_profile_picture)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
                 visible={cropAvatarModalVisible}
                 onOk={onSubmitCroppedAvatar}
@@ -100,7 +100,7 @@ export const ChangeAvatar = (props) => {
                     onCrop={onAvatarCropped}
                 />
             </Modal>
-            <Spin spinning={isUploadingProfilePicture} tip={t(translations.profile_page.update_profile.uploading)}>
+            <Spin spinning={isUploadingProfilePicture} tip={t(translations.profile_page.uploading)}>
                 <Wrapper>
                     <AvatarHolder>
                         <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />

@@ -302,4 +302,8 @@ export const GlobalStyle = createGlobalStyle`
   .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
     padding: 12px 12px;
   }
+
+  .ant-select-multiple .ant-select-selection-item-remove > .anticon {
+    vertical-align: 0em;
+  }
 `;

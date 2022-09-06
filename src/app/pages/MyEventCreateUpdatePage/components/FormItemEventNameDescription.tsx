@@ -7,7 +7,7 @@ import { AssignAdminsFormItem } from './AssignAdminsFormItem';
 
 export const FormItemEventNameDescription = (props) => {
 
-    const { event, form } = props;
+    const { event } = props;
 
     const { t } = useTranslation();
 
@@ -17,9 +17,9 @@ export const FormItemEventNameDescription = (props) => {
                 <Form.Item
                     label={<SyrfFieldLabel>{t(translations.general.name)}</SyrfFieldLabel>}
                     name="name"
-                    rules={[{ required: true, message: t(translations.forms.event_name_is_required) },
+                    rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) },
                     {
-                        max: 150, message: t(translations.forms.event_name_must_not_be_longer_than_150_chars)
+                        max: 150, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 150 })
                     }]}
                 >
                     <SyrfInputField />
@@ -28,7 +28,7 @@ export const FormItemEventNameDescription = (props) => {
 
             <Tooltip title={t(translations.tip.event_description)}>
                 <Form.Item
-                    rules={[{ max: 255, message: t(translations.forms.event_description_must_not_be_longer_than_255_chars) }]}
+                    rules={[{ max: 1000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 1000 }) }]}
                     label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.description)}</SyrfFieldLabel>}
                     name="description"
                     data-multiline={true}
@@ -37,7 +37,7 @@ export const FormItemEventNameDescription = (props) => {
                 </Form.Item>
             </Tooltip>
 
-            <AssignAdminsFormItem form={form} event={event} />
+            <AssignAdminsFormItem event={event} />
         </>
     )
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Table, Space, Spin, Tag, Button, Tooltip } from 'antd';
+import { Table, Space, Spin, Tag, Button, Tooltip, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie';
 import Invitation from '../assets/invitation.json'
@@ -8,7 +8,7 @@ import { translations } from 'locales/translations';
 import { LottieMessage, LottieWrapper, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, truncateName, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, usePrevious } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { BiCheckCircle } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
@@ -72,7 +72,9 @@ export const InvitedEventLists = (props) => {
             key: 'name',
             render: (text, record) => {
                 return <Tooltip title={record?.event.name}>
-                    <Link to={`/events/${record?.event.id}`}>{truncateName(record?.event.name)}</Link>
+                    <Typography.Text ellipsis={true} style={{ maxWidth: '30vw' }}>
+                        <Link to={`/events/${record?.event.id}`}>{renderEmptyValue(record?.event.name)}</Link>
+                    </Typography.Text>
                 </Tooltip>;
             },
         },
@@ -97,7 +99,7 @@ export const InvitedEventLists = (props) => {
             }
         },
         {
-            title: t(translations.my_event_list_page.start_date),
+            title: t(translations.general.start_date),
             dataIndex: 'approximateStartTime',
             key: 'approximateStartTime',
             render: (value, record) => {
@@ -122,10 +124,10 @@ export const InvitedEventLists = (props) => {
             render: (text, record) => {
                 return <Space size="middle">
                     <Button type="primary" onClick={() => acceptInviteRequest(record)} icon={<BiCheckCircle style={{ marginRight: '5px' }} />}>
-                        {t(translations.group.accept)}
+                        {t(translations.general.accept)}
                     </Button>
                     <Button onClick={() => rejectInviteRequest(record)} icon={<MdRemoveCircle style={{ marginRight: '5px' }} />} danger>
-                        {t(translations.group.reject)}
+                        {t(translations.general.reject)}
                     </Button>
                 </Space>;
             }

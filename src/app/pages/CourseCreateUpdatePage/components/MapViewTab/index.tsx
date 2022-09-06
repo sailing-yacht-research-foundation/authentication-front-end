@@ -119,7 +119,7 @@ export const MapViewTab = () => {
                 <Space size={10}>
                     <Tooltip title={t(translations.tip.save_course)}>
                         <Button style={{ borderRadius: '5px' }} onClick={() => mapViewRef.current.saveCourse()} type="primary" icon={<BiSave style={{ marginRight: '5px' }} />}>
-                            {t(translations.course_create_update_page.save)}
+                            {t(translations.general.save)}
                         </Button>
                     </Tooltip>
                     {mode === MODE.UPDATE &&

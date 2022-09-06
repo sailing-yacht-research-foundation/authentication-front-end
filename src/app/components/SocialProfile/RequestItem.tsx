@@ -69,11 +69,11 @@ export const RequestItem = (props: IRequestItem) => {
                     </ItemInfoContainer>
                     <ItemButtonContainer>
                         <Space size={10} wrap style={{ justifyContent: 'flex-end' }}>
-                            <Tooltip title={t(translations.public_profile.accept)}>
+                            <Tooltip title={t(translations.general.accept)}>
                                 <Button icon={<FaCheck/>} onClick={acceptJoinRequest} type="primary" />
                             </Tooltip>
 
-                            <Tooltip title={t(translations.public_profile.reject)}>
+                            <Tooltip title={t(translations.general.reject)}>
                                 <Button icon={<FaTimes/>} onClick={rejectJoinRequest} />
                             </Tooltip>
                         </Space>

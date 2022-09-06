@@ -12,17 +12,20 @@ import { get as getEventById } from 'services/live-data-server/event-calendars';
 import { BoundingBoxPicker } from './BoundingBoxPicker';
 import { toast } from 'react-toastify';
 import Select from 'rc-select';
-import { DeleteCompetitionUnitModal } from 'app/pages/CompetitionUnitListPage/components/DeleteCompetitionUnitModal';
+import { DeleteCompetitionUnitModal } from 'app/pages/EventDetailPage/components/DeleteCompetitionUnitModal';
 import { BiTrash } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { IoIosArrowBack } from 'react-icons/io';
-import { EventState, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
+import { etcUTCTimezone, MAP_DEFAULT_VALUE, MODE, RaceStatus, TIME_FORMAT } from 'utils/constants';
 import { renderTimezoneInUTCOffset, showToastMessageOnRequestError } from 'utils/helpers';
 import { getByEventId } from 'services/live-data-server/courses';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 import { Course } from 'types/Course';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { canManageEventAndRedirect } from 'utils/permission-helpers';
 
 const { getTimeZones } = require("@vvo/tzdb");
 const timeZones = getTimeZones();
@@ -65,6 +68,8 @@ export const CompetitionUnitForm = () => {
 
     const [error, setError] = React.useState<any>({});
 
+    const authUser = useSelector(selectUser);
+
     const isCompetitionUnitPostponed = !moment(competitionUnit.startTime).isValid();
 
     const onFinish = async (values) => {
@@ -97,8 +102,15 @@ export const CompetitionUnitForm = () => {
         };
 
         if (!isCompetitionUnitPostponed) {
-            data.startTime = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
-            data.approximateStart = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
+            let time;
+            if (approximateStart_zone === etcUTCTimezone) {
+                time = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).format(TIME_FORMAT.number_with_time);
+            } else {
+                time = moment(startDate.format(TIME_FORMAT.number) + ' ' + startTime.format(TIME_FORMAT.time)).utc();
+            }
+
+            data.startTime = time;
+            data.approximateStart = time;
         }
 
         if (mode === MODE.CREATE)
@@ -145,15 +157,12 @@ export const CompetitionUnitForm = () => {
             setIsSaving(false);
 
             if (response.success) {
-                setCompetitionUnit(response.data);
-                showPostponedMessageToUserIfRaceIsPostponed(response.data);
-                form.setFieldsValue({
-                    ...response.data,
-                    startDate: moment(response.data?.approximateStart),
-                    startTime: moment(response.data?.approximateStart)
-                });
-                if (response.data?.boundingBox?.coordinates)
-                    setBoundingBoxCoordinates(response.data?.boundingBox?.coordinates);
+                const competitionUnit = response.data;
+                setCompetitionUnit(competitionUnit);
+                showPostponedMessageToUserIfRaceIsPostponed(competitionUnit);
+                correctTimeIfUTCAndSetFormFields(competitionUnit);
+                if (competitionUnit?.boundingBox?.coordinates)
+                    setBoundingBoxCoordinates(competitionUnit?.boundingBox?.coordinates);
             } else {
                 history.push(`/events/${eventId}`);
                 message.error(t(translations.competition_unit_create_update_page.race_not_found));
@@ -165,27 +174,23 @@ export const CompetitionUnitForm = () => {
         }
     }
 
-    const canManageRace = (event: CalendarEvent) => {
-        if (!event.isEditor) {
-            toast.info(t(translations.competition_unit_create_update_page.your_not_the_event_editor_therefore_you_cannot_edit_the_event))
-            history.push('/events');
-            return false;
-        }
+    const correctTimeIfUTCAndSetFormFields = (competitionUnit: CompetitionUnit) => {
+        const startTimezone = competitionUnit.approximateStart_zone;
+        const startTime = competitionUnit.approximateStart;
+        const momentStartTime = startTimezone === etcUTCTimezone ? moment(startTime).tz(startTimezone) : moment(startTime);
 
-        if ([EventState.COMPLETED, EventState.CANCELED].includes(event.status!)) {
-            toast.info(t(translations.competition_unit_create_update_page.event_is_canceled_or_completed_you_cannot_manage_it_from_this_point))
-            history.push('/events');
-            return false;
-        }
-
-        return true;
+        form.setFieldsValue({
+            ...competitionUnit,
+            startDate: momentStartTime,
+            startTime: momentStartTime
+        });
     }
 
     const getEventData = async () => {
         const response = await getEventById(eventId);
         if (response.success) {
             setEventData(response.data);
-            return canManageRace(response.data);
+            return true;
         }
 
         history.push('/events');
@@ -289,6 +294,11 @@ export const CompetitionUnitForm = () => {
         getAllEventCourses();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        canManageEventAndRedirect(eventData, authUser, mode, history);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [authUser.role, eventData.name]);
 
     const checkIfNoRaceIsOngoing = async () => {
         if (mode === MODE.UPDATE) return;
@@ -396,8 +406,8 @@ export const CompetitionUnitForm = () => {
                             <Form.Item
                                 label={<SyrfFieldLabel>{t(translations.general.name)}</SyrfFieldLabel>}
                                 name="name"
-                                rules={[{ required: true, message: t(translations.forms.race_name_is_required) }, {
-                                    max: 150, message: t(translations.forms.race_name_must_not_be_longer_than_150_chars)
+                                rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
+                                    max: 150, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 150 })
                                 }]}
                             >
                                 <SyrfInputField />
@@ -406,7 +416,7 @@ export const CompetitionUnitForm = () => {
 
                         <Tooltip title={t(translations.tip.race_description)}>
                             <Form.Item
-                                rules={[{ max: 255, message: t(translations.forms.race_description_must_not_be_longer_than_255_chars) }]}
+                                rules={[{ max: 1000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 1000 }) }]}
                                 label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.description)}</SyrfFieldLabel>}
                                 name="description"
                             >
@@ -421,11 +431,11 @@ export const CompetitionUnitForm = () => {
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Tooltip title={t(translations.tip.race_start_date)}>
                                     <Form.Item
-                                        label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_date)}</SyrfFieldLabel>}
+                                        label={<SyrfFieldLabel>{t(translations.general.start_date)}</SyrfFieldLabel>}
                                         name="startDate"
                                         rules={[{ type: 'date' }, {
                                             required: true,
-                                            message: t(translations.forms.start_date_is_required)
+                                            message: t(translations.forms.please_fill_out_this_field)
                                         }]}
                                     >
 
@@ -452,9 +462,9 @@ export const CompetitionUnitForm = () => {
                             <Col xs={24} sm={24} md={8} lg={8}>
                                 <Tooltip title={t(translations.tip.race_start_time)}>
                                     <Form.Item
-                                        label={<SyrfFieldLabel>{t(translations.competition_unit_create_update_page.start_time)}</SyrfFieldLabel>}
+                                        label={<SyrfFieldLabel>{t(translations.general.start_time)}</SyrfFieldLabel>}
                                         name="startTime"
-                                        rules={[{ required: true, message: t(translations.forms.start_time_is_required) }]}
+                                        rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }]}
                                         validateStatus={(renderErrorField(error, 'startTime') && 'error') || ''}
                                         help={renderErrorField(error, 'startTime')}
                                     >

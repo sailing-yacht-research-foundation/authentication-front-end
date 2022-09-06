@@ -322,3 +322,20 @@ export const InputWithNoBrowserSupportAttributes = styled(Input).attrs(() => ({
 export const InputPasswordWithNoBrowserSupportAttributes = styled(Input.Password).attrs(() => ({
     ...ignoreBrowserSupportAttributes
 }))``;
+
+export const EditorItem = styled.div`
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    &:not(:last-child) {
+        margin-right: 7px;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 1px solid #eee;
+    }
+`;

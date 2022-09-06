@@ -103,12 +103,13 @@ export const removeAsAdmin = (groupId: string, invitationId: string) => {
     }))
 }
 
-export const inviteUsersToGroup = (groupId: string, emails: string[], userIds: string[], groupIds: string[]) => {
+export const inviteUsersToGroup = (groupId: string, emails: string[], userIds: string[], groupIds: string[], isAdmin = false) => {
     return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/invite`, {
         groupId,
         emails,
         userIds,
-        copyGroupIds: groupIds
+        copyGroupIds: groupIds,
+        isAdmin
     }))
 }
 
@@ -205,4 +206,8 @@ export const connectStripe = (groupId: string, groupOrganizationConnectUrl: stri
 
 export const checkForStripePayout = (groupId: string) => {
     return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/connect-stripe`));
+}
+
+export const disconnectStripe = (groupId: string) => {
+    return formatServicePromiseResponse(syrfRequest.delete(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/groups/${groupId}/disconnect-stripe`));
 }

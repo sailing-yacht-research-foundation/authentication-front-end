@@ -61,10 +61,10 @@ export const GroupRequestedList = () => {
                     groupRequestedTotalPage > 10 && <PaginationContainer>
                         <Pagination
                             pageSize={groupRequestedPageSize}
-                            onChange={onPaginationChanged} 
-                            defaultCurrent={groupRequestedCurrentPage} 
+                            onChange={onPaginationChanged}
+                            defaultCurrent={groupRequestedCurrentPage}
                             showSizeChanger
-                            current={groupRequestedCurrentPage} 
+                            current={groupRequestedCurrentPage}
                             total={groupRequestedTotalPage} />
                     </PaginationContainer>
                 }
@@ -79,7 +79,6 @@ const Wrapper = styled.div`
     background: #fff;
     width: 100%;
     border: 1px solid #eee;
-    display: none;
     margin-top: 10px;
 
     ${media.medium`

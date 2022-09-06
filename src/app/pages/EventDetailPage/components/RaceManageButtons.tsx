@@ -8,10 +8,12 @@ import { useTranslation } from 'react-i18next';
 import { CompetitionUnit } from 'types/CompetitionUnit';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { StopRaceConfirmModal } from 'app/pages/MyEventCreateUpdatePage/components/modals/StopRaceConfirmModal';
+import { EditFilled } from '@ant-design/icons';
+import { FaTrash } from 'react-icons/fa';
+import { canManageEvent } from 'utils/permission-helpers';
 
 interface IRaceManageButtons {
     race: CompetitionUnit,
-    canManageEvent: Function,
     event: CalendarEvent,
     setCompetitionUnit: Function,
     showRegisterModal: boolean,
@@ -22,7 +24,7 @@ interface IRaceManageButtons {
 }
 
 export const RaceManageButtons = (props: IRaceManageButtons) => {
-    const { race, reloadParent, canManageEvent, event, setCompetitionUnit, showDeleteRaceModal } = props;
+    const { race, reloadParent, event, setCompetitionUnit, showDeleteRaceModal } = props;
 
     const history = useHistory();
 
@@ -48,16 +50,16 @@ export const RaceManageButtons = (props: IRaceManageButtons) => {
 
     return (<Space size="middle">
         <StopRaceConfirmModal reloadParent={reloadParent} race={race} showModal={showStopRaceConfirmModal} setShowModal={setShowStopRaceConfirmModal} />
-        {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.competition_unit_list_page.stop)}</CreateButton>}
-        {canManageEvent() && <>
+        {canStopRace() && <CreateButton onClick={() => openStopRaceConfirmModal(race)}>{t(translations.general.stop)}</CreateButton>}
+        {canManageEvent(event) && <>
             <Tooltip title={t(translations.tip.update_race)}>
-                <BorderedButton onClick={() => {
+                <BorderedButton icon={<EditFilled />} onClick={() => {
                     history.push(`/events/${race.calendarEventId}/races/${race.id}/update`);
-                }} type="primary">{t(translations.general.update)}</BorderedButton>
+                }} type="primary" />
             </Tooltip>
 
             {canDeleteRace() && <Tooltip title={t(translations.tip.delete_race)}>
-                <BorderedButton danger onClick={() => showDeleteRaceModal(race)}>{t(translations.general.delete)}</BorderedButton>
+                <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteRaceModal(race)} />
             </Tooltip>}
         </>}
     </Space>)

@@ -50,7 +50,7 @@ export const ParticipantDetailList = (props) => {
             render: (value, record) => renderEmptyValue(record.documentAgreements?.map(doc => doc.documentName)?.join(', '), notSetText),
         },
         {
-            title: t(translations.participant_list.email),
+            title: t(translations.general.email),
             dataIndex: 'email',
             key: 'email',
             render: (value, record) => renderParticipantDefaultData(value, record),

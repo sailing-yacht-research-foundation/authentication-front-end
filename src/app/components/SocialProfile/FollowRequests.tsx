@@ -35,7 +35,7 @@ export const FollowRequests = () => {
                 <>
                     <TitleWrapper>
                         <Title>{t(translations.public_profile.pending_follow_requests)}</Title>
-                        {pagination.total > 10 && <SeeMore onClick={() => dispatch(actions.setShowFollowRequestModal(true))}>{t(translations.public_profile.see_more)}</SeeMore>}
+                        {pagination.total > 10 && <SeeMore onClick={() => dispatch(actions.setShowFollowRequestModal(true))}>{t(translations.general.see_more)}</SeeMore>}
                     </TitleWrapper>
                     <PeopleList>
                         {renderFollowRequests()}

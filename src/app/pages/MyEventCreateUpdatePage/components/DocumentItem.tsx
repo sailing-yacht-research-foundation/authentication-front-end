@@ -82,7 +82,7 @@ export const DocumentItem = (props) => {
 
     React.useEffect(() => {
         const actions: any = [];
-        if (item.documentUrl) actions.push(<a rel="noreferrer" target='_blank' download href={item.documentUrl}>{t(translations.my_event_create_update_page.download)}</a>);
+        if (item.documentUrl) actions.push(<a rel="noreferrer" target='_blank' download href={item.documentUrl}>{t(translations.general.download)}</a>);
         if (canSignDocument()) actions.push(<Button onClick={() => setShowSignModal(true)} type='link'>{t(translations.my_event_create_update_page.sign)}</Button>);
         if (canDeleteDocument()) actions.push(<Button danger onClick={() => setShowConfirmDeleteModal(true)} type='link'>{t(translations.general.delete)}</Button>);
         setDocumentActions(actions);
@@ -107,7 +107,7 @@ export const DocumentItem = (props) => {
             width={1000}
         >
             <object width="100%" height="500" data={item.documentUrl} type="application/pdf">
-                <a href={item.documentUrl}>{t(translations.my_event_create_update_page.download)}</a>
+                <a href={item.documentUrl}>{t(translations.general.download)}</a>
             </object>
 
             <Form
@@ -126,7 +126,7 @@ export const DocumentItem = (props) => {
                         }
                     }]}
                 >
-                    <SyrfInputField  placeholder={t(translations.forms.please_input_your_name)} />
+                    <SyrfInputField  placeholder={t(translations.forms.please_fill_out_this_field)} />
                 </Form.Item>
 
                 <Form.Item

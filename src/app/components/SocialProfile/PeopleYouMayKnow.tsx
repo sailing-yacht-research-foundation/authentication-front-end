@@ -89,7 +89,7 @@ export const PeopleYouMayKnow = () => {
                 <>
                     <TitleWrapper>
                         <Title>{t(translations.public_profile.most_popular_accounts_in_country, { country: userCountry || '' })}</Title>
-                        <SeeMore onClick={() => setShowPeopleYouMayKnowModal(true)}>{t(translations.public_profile.see_more)}</SeeMore>
+                        <SeeMore onClick={() => setShowPeopleYouMayKnowModal(true)}>{t(translations.general.see_more)}</SeeMore>
                     </TitleWrapper>
                     <PeopleList>
                         {renderRecommendedProfiles()}
@@ -101,7 +101,7 @@ export const PeopleYouMayKnow = () => {
                 <>
                     <TitleWrapper>
                         <Title>{t(translations.public_profile.trending_accounts_in_country, { country: userCountry || '' })}</Title>
-                        <SeeMore onClick={() => setShowInfluencerModal(true)}>{t(translations.public_profile.see_more)}</SeeMore>
+                        <SeeMore onClick={() => setShowInfluencerModal(true)}>{t(translations.general.see_more)}</SeeMore>
                     </TitleWrapper>
                     <PeopleList>
                         {renderInfluencers()}

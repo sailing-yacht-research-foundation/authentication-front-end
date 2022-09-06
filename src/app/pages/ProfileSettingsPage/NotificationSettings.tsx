@@ -99,22 +99,22 @@ export const NotificationSettings = () => {
 
     const renderFormFieldTitle = (field) => {
         const fields = [
-        { key: "userNewFollower", title: t(translations.profile_page.update_profile.user_new_follower) },
-        { key: "requestedJoinGroup", title: t(translations.profile_page.update_profile.requested_join_group) },
-        { key: "userAchievedBadge", title: t(translations.profile_page.update_profile.user_achieved_badge) },
-        { key: "groupAchievedBadge", title: t(translations.profile_page.update_profile.group_achieved_badge) },
-        { key: "userInvitedToGroup", title: t(translations.profile_page.update_profile.user_invited_to_group) },
-        { key: "eventInactivityWarning", title: t(translations.profile_page.update_profile.event_inactivity_warning) },
-        { key: "userAddedToEventAdmin", title: t(translations.profile_page.update_profile.user_added_to_event_as_admin) },
-        { key: "openEventNearbyCreated", title: t(translations.profile_page.update_profile.open_event_nearby_created) },
-        { key: "eventInactivityDeletion", title: t(translations.profile_page.update_profile.event_inactivity_deletion) },
-        { key: "competitionStartingSoon", title: t(translations.profile_page.update_profile.race_starts_soon) },
-        { key: "newCompetitionAddedToEvent", title: t(translations.profile_page.update_profile.new_race_added_to_event) },
+        { key: "userNewFollower", title: t(translations.profile_page.user_new_follower) },
+        { key: "requestedJoinGroup", title: t(translations.profile_page.requested_join_group) },
+        { key: "userAchievedBadge", title: t(translations.profile_page.user_achieved_badge) },
+        { key: "groupAchievedBadge", title: t(translations.profile_page.group_achieved_badge) },
+        { key: "userInvitedToGroup", title: t(translations.profile_page.user_invited_to_group) },
+        { key: "eventInactivityWarning", title: t(translations.profile_page.event_inactivity_warning) },
+        { key: "userAddedToEventAdmin", title: t(translations.profile_page.user_added_to_event_as_admin) },
+        { key: "openEventNearbyCreated", title: t(translations.profile_page.open_event_nearby_created) },
+        { key: "eventInactivityDeletion", title: t(translations.profile_page.event_inactivity_deletion) },
+        { key: "competitionStartingSoon", title: t(translations.profile_page.race_starts_soon) },
+        { key: "newCompetitionAddedToEvent", title: t(translations.profile_page.new_race_added_to_event) },
         { key: "kudosReceived", title: t(translations.settings_page.kudos_received) },
         { key: "newEventDocumentUploaded", title: t(translations.settings_page.new_event_document_uploaded) },
         { key: "simulationDeletion", title: t(translations.settings_page.simulation_deletion) },
         { key: "eventMessagesReceived", title: t(translations.settings_page.new_event_messages_received) },
-        { key: "userInvitedToPrivateRegatta", title: t(translations.profile_page.update_profile.user_invited_to_regatta) }];
+        { key: "userInvitedToPrivateRegatta", title: t(translations.profile_page.user_invited_to_regatta) }];
 
         for (let i = 0; i < fields.length; i++) {
             if (field.includes(fields[i].key)) {
@@ -188,27 +188,27 @@ export const NotificationSettings = () => {
                 }}
             >
 
-                <SyrfFormSubTitle>{t(translations.profile_page.update_profile.email_notification_settings)}</SyrfFormSubTitle>
+                <SyrfFormSubTitle>{t(translations.profile_page.email_notification_settings)}</SyrfFormSubTitle>
                 {renderFormFields(emailSettingFields)}
 
                 <Divider />
 
-                <SyrfFormSubTitle>{t(translations.profile_page.update_profile.browser_notification_settings)}</SyrfFormSubTitle>
+                <SyrfFormSubTitle>{t(translations.profile_page.browser_notification_settings)}</SyrfFormSubTitle>
                 {renderFormFields(browserSettingFields)}
 
                 <Divider />
 
-                <SyrfFormSubTitle>{t(translations.profile_page.update_profile.mobile_notification_settings)}</SyrfFormSubTitle>
+                <SyrfFormSubTitle>{t(translations.profile_page.mobile_notification_settings)}</SyrfFormSubTitle>
                 {renderFormFields(mobileSettingFields)}
 
                 <Divider />
 
-                <SyrfFormSubTitle>{t(translations.profile_page.update_profile.persistent_notification_settings)}</SyrfFormSubTitle>
+                <SyrfFormSubTitle>{t(translations.profile_page.persistent_notification_settings)}</SyrfFormSubTitle>
                 {renderFormFields(persistentSettingFields)}
 
                 <Form.Item>
                     <SyrfFormButton disabled={!formHasBeenChanged} type="primary" htmlType="submit">
-                        {t(translations.profile_page.update_profile.save)}
+                        {t(translations.general.save)}
                     </SyrfFormButton>
                 </Form.Item>
             </Form>}

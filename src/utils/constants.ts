@@ -334,3 +334,5 @@ export const ignoreBrowserSupportAttributes = {
     autoCorrect: "off",
     autoCapitalize: "none"
 }
+
+export const etcUTCTimezone = 'Etc/UTC';

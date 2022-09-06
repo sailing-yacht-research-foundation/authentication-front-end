@@ -22,11 +22,11 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter, for
             <Col xs={24} sm={24} md={8} lg={8}>
                 <Tooltip title={t(translations.tip.event_start_date)}>
                     <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_date)}</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.general.start_date)}</SyrfFieldLabel>}
                         name="startDate"
                         rules={[{ type: 'date' }, {
                             required: true,
-                            message: t(translations.forms.start_date_is_required)
+                            message: t(translations.forms.please_fill_out_this_field)
                         }, ({ getFieldValue }) => ({
                             validator(_, value) {
                                 if (!value || !getFieldValue('endDate') || moment(value.format(TIME_FORMAT.number)).isSameOrBefore(getFieldValue('endDate').format(TIME_FORMAT.number))) {
@@ -57,9 +57,9 @@ export const FormItemStartDate = ({ renderTimezoneDropdownList, dateLimiter, for
             <Col xs={24} sm={24} md={8} lg={8}>
                 <Tooltip title={t(translations.tip.event_start_time)}>
                     <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.my_event_create_update_page.start_time)}</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(translations.general.start_time)}</SyrfFieldLabel>}
                         name="startTime"
-                        rules={[{ required: true, message: t(translations.forms.start_time_is_required) }, ({ getFieldValue }) => ({
+                        rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, ({ getFieldValue }) => ({
                             validator(_, value) {
                                 const startTime = getFieldValue('startTime');
                                 const startDate = getFieldValue('startDate').local().set({ hour: startTime.hour(), minute: startTime.minutes(), second: startTime.seconds() });

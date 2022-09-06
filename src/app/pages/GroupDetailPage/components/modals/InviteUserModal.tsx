@@ -29,7 +29,8 @@ interface IInviteUserModal {
     groupId: string,
     showModal: boolean,
     setShowModal: Function,
-    onUsersInvited: Function
+    onUsersInvited: Function,
+    isAdmin?: boolean,
 }
 
 export const InviteUserModal = (props: IInviteUserModal) => {
@@ -42,7 +43,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
 
     const [showInvitationModal, setShowInvitationModal] = React.useState<boolean>(false);
 
-    const { groupId, showModal, setShowModal, onUsersInvited } = props;
+    const { groupId, showModal, setShowModal, onUsersInvited, isAdmin } = props;
 
     const [emails, setEmails] = React.useState<string[]>([]);
 
@@ -57,12 +58,18 @@ export const InviteUserModal = (props: IInviteUserModal) => {
 
     const onSearch = async (keyword) => {
         setItems([]);
-        const responses: any[] = await Promise.all([searchGroupForAssigns(keyword), searchForProfiles(keyword, getUserAttribute(user, 'locale'))]);
+        const requestsArray: any[] = [searchForProfiles(keyword, getUserAttribute(user, 'locale'))];
+
+        if (!isAdmin) {
+            requestsArray.push(searchGroupForAssigns(keyword));
+        }
+
+        const responses: any[] = await Promise.all(requestsArray);
         let groupRows = [];
         let peopleRows = [];
 
         responses.forEach(response => {
-            if (response.data.rows) {
+            if (response.data?.rows) {
                 groupRows = response.data.rows.filter(group => {
                     return group.id !== groupId // exclude current group from the invitees.
                 }).map(group => {
@@ -74,7 +81,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                     }
                 });
             } else {
-                peopleRows = response.data.map(p => {
+                peopleRows = response.data?.map(p => {
                     return {
                         type: AdminType.INDIVIDUAL,
                         id: p.id,
@@ -129,7 +136,7 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                 }).filter(Boolean);
 
                 setIsLoading(true);
-                const response = await inviteUsersToGroup(groupId, processedEmails, userIds, groupIds);
+                const response = await inviteUsersToGroup(groupId, processedEmails, userIds, groupIds, isAdmin);
                 setIsLoading(false);
 
                 hideInviteModal();
@@ -172,11 +179,13 @@ export const InviteUserModal = (props: IInviteUserModal) => {
         </Select.Option>)
     }
 
+    const inviteDescription = isAdmin ? translations.group.search_and_choose_people_to_invite_then_as_admins : translations.my_event_create_update_page.invite_groups_or_individual_by_searching_them;
+
     return (
         <>
             <Modal
                 confirmLoading={isLoading}
-                title={t(translations.group.invite_members)}
+                title={t(isAdmin ? translations.group.invite_admins : translations.group.invite_members)}
                 bodyStyle={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}
                 visible={showModal}
                 onOk={inviteUsers}
@@ -189,12 +198,12 @@ export const InviteUserModal = (props: IInviteUserModal) => {
                     style={{ width: '100%' }}
                 >
                     <Form.Item
-                        label={<SyrfFieldLabel>{t(translations.group.search_and_choose_people_or_groups_to_invite)}</SyrfFieldLabel>}
+                        label={<SyrfFieldLabel>{t(inviteDescription)}</SyrfFieldLabel>}
                         name="invitees"
                     >
                         <SyrfFormSelect mode="multiple"
                             style={{ width: '100%' }}
-                            placeholder={t(translations.my_event_create_update_page.invite_groups_or_individual_by_searching_them)}
+                            placeholder={t(inviteDescription)}
                             onSearch={debounceSearch}
                             filterOption={false}
                             allowClear

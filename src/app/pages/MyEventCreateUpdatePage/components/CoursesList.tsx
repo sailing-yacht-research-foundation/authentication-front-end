@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Space, Spin, Table, Tooltip } from 'antd';
+import { Space, Spin, Table, Tooltip, Typography } from 'antd';
 import { BorderedButton, CreateButton, PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import moment from 'moment';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -10,7 +10,9 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { TIME_FORMAT } from 'utils/constants';
 import { Course } from 'types/Course';
-import { truncateName } from 'utils/helpers';
+import { renderEmptyValue } from 'utils/helpers';
+import { EditFilled } from '@ant-design/icons';
+import { FaTrash } from 'react-icons/fa';
 
 export const CoursesList = (props) => {
 
@@ -33,7 +35,9 @@ export const CoursesList = (props) => {
             dataIndex: 'name',
             key: 'name',
             render: (value) => <Tooltip title={value}>
-                {truncateName(value, 50)}
+                <Typography.Text ellipsis={true} style={{ maxWidth: '20vw' }}>
+                    {renderEmptyValue(value)}
+                </Typography.Text>
             </Tooltip>,
         },
         {
@@ -47,10 +51,14 @@ export const CoursesList = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <BorderedButton onClick={() => {
-                        history.push(`/events/${eventId}/courses/${record.id}/update`)
-                    }} type="primary">{t(translations.general.update)}</BorderedButton>
-                    <BorderedButton danger onClick={() => showDeleteModal(record)}>{t(translations.general.delete)}</BorderedButton>
+                    <Tooltip title={t(translations.general.update)}>
+                        <BorderedButton icon={<EditFilled />} onClick={() => {
+                            history.push(`/events/${eventId}/courses/${record.id}/update`)
+                        }} type="primary"/>
+                    </Tooltip>
+                    <Tooltip title={t(translations.general.delete)}>
+                        <BorderedButton danger icon={<FaTrash />} onClick={() => showDeleteModal(record)}/>
+                    </Tooltip>
                 </Space>
             ),
             width: '20%',

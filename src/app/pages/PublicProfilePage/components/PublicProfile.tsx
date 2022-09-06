@@ -142,7 +142,7 @@ export const PublicProfile = () => {
                 </SectionWrapper>
 
                 {profile.bio && <SectionWrapper>
-                    <SectionTitle>{t(translations.public_profile.about)}</SectionTitle>
+                    <SectionTitle>{t(translations.general.about)}</SectionTitle>
                     <p>{profile.bio}</p>
                 </SectionWrapper>}
 

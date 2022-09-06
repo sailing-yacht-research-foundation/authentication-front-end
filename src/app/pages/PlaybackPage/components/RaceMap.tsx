@@ -397,7 +397,7 @@ export const RaceMap = (props) => {
       };
 
       const popupContent = ReactDOMServer.renderToString(
-        <PlayerInfo playerData={participant.participant} coordinate={currentCoordinate} />
+        <PlayerInfo sailNumber={participant.sailNumber} playerData={participant.participant} coordinate={currentCoordinate} />
       );
       layer._popup.setContent(popupContent);
 

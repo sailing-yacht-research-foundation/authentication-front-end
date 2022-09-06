@@ -16,9 +16,7 @@ export const RightPane = () => {
 const Wrapper = styled.div`
     ${media.medium`
         width: 33%;
-        display: block;
+        padding: 30px 0 0 0;
     `}
-
-    display: none;
-    padding-top: 30px;
+    padding: 30px 10px 0px 10px;
 `;

@@ -187,8 +187,8 @@ export const GroupForm = () => {
                                 label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_name)}</SyrfFieldLabel>}
                                 name="groupName"
                                 rules={[
-                                    { required: true, message: t(translations.forms.group_name_is_required) },
-                                    { max: 100, message: t(translations.forms.group_name_must_not_be_longer_than_100_chars) }
+                                    { required: true, message: t(translations.forms.please_fill_out_this_field) },
+                                    { max: 100, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 100 }) }
                                 ]}
                             >
                                 <SyrfInputField  />
@@ -197,7 +197,7 @@ export const GroupForm = () => {
 
                         <Tooltip title={t(translations.tip.group_description)}>
                             <Form.Item
-                                rules={[{ max: 255, message: t(translations.forms.group_description_must_not_be_longer_than_255_chars) }]}
+                                rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 255 }) }]}
                                 label={<SyrfFieldLabel>{t(translations.group_create_update_page.group_description)}</SyrfFieldLabel>}
                                 name="description"
                                 data-multiline={true}

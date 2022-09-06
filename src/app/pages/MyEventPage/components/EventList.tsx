@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Table, Space, Spin, Tag, Tooltip } from 'antd';
+import { Table, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilter, selectIsChangingPage, selectPageSize, selectResults, selectSorter } from '../slice/selectors';
 import { selectPage, selectTotal } from 'app/pages/MyEventPage/slice/selectors';
@@ -14,7 +14,7 @@ import { useMyEventListSlice } from '../slice';
 import moment from 'moment';
 import { DeleteEventModal } from './DeleteEventModal';
 import { Link } from 'react-router-dom';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, truncateName, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, renderTimezoneInUTCOffset, showToastMessageOnRequestError, usePrevious } from 'utils/helpers';
 import { EventState, TIME_FORMAT } from 'utils/constants';
 import { downloadIcalendarFile } from 'services/live-data-server/event-calendars';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -32,6 +32,7 @@ import { TableFiltering } from 'types/TableFiltering';
 import { GiExitDoor } from 'react-icons/gi';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
+import { canDeleteEvent, canEditEvent, canLeaveEvent } from 'utils/permission-helpers';
 
 const defaultOptions = {
   loop: true,
@@ -112,7 +113,9 @@ export const EventList = () => {
       render: (text, record) => {
         return <>
         <Tooltip title={text}>
-          <Link to={`/events/${record.id}`}>{truncateName(text)}</Link>
+          <Typography.Text ellipsis={true} style={{ maxWidth: '30vw' }}>
+            <Link to={`/events/${record.id}`}>{renderEmptyValue(text)}</Link>
+          </Typography.Text>
         </Tooltip>
           { record.isSimulation && <><br/><span>{t(translations.general.simulation)}</span></> }
         </>;
@@ -137,7 +140,7 @@ export const EventList = () => {
       }
     },
     {
-      title: t(translations.my_event_list_page.city),
+      title: t(translations.general.city),
       dataIndex: 'city',
       key: 'city',
       render: (text) => renderEmptyValue(text),
@@ -145,7 +148,7 @@ export const EventList = () => {
       ...getColumnSearchProps('city', handleSearch, handleReset)
     },
     {
-      title: t(translations.my_event_list_page.country),
+      title: t(translations.general.country),
       dataIndex: 'country',
       key: 'country',
       sorter: true,
@@ -154,7 +157,7 @@ export const EventList = () => {
       width: '110px'
     },
     {
-      title: t(translations.my_event_list_page.start_date),
+      title: t(translations.general.start_date),
       dataIndex: 'approximateStartTime',
       key: 'start_date',
       sorter: true,
@@ -170,7 +173,7 @@ export const EventList = () => {
       render: (_, record) => <EventAdmins headless editors={record.editors || []} groups={record.groupEditors || []} event={record} />
     },
     {
-      title: t(translations.my_event_list_page.status),
+      title: t(translations.general.status),
       dataIndex: 'status',
       key: 'status',
       sorter: true,
@@ -178,7 +181,7 @@ export const EventList = () => {
       render: (value) => value,
     },
     {
-      title: t(translations.my_event_list_page.created_date),
+      title: t(translations.general.created_date),
       dataIndex: 'createdAt',
       key: 'createdAt',
       sorter: true,
@@ -216,22 +219,10 @@ export const EventList = () => {
             </Tooltip>}
           </Space >
         );
-      }
+      },
+      width: '2%'
     },
   ];
-
-  const canEditEvent = (record) => {
-    return record.isEditor && ![EventState.COMPLETED, EventState.CANCELED].includes(record.status);
-  }
-
-  const canDeleteEvent = (record) => {
-    return record.status === EventState.DRAFT
-      && record.ownerId === localStorage.getItem('user_id');
-  }
-
-  const canLeaveEvent = (record) => {
-    return record.isParticipant && record.participantId && [EventState.ON_GOING, EventState.SCHEDULED].includes(record.status);
-  }
 
   React.useEffect(() => {
     const resultsWithKey = results.map((result) => ({ ...result, key: result.id }))

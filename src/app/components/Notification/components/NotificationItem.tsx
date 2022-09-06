@@ -239,7 +239,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
         if (notification.notificationMessage.length > 150 && !isShowFull && !showFullNotificationContent)
             return <NotificationItemDetail>
                 {notification.notificationMessage.substring(0, 150)}
-                <Button style={{ paddingLeft: '0' }} type='link' onClick={showFullNotificationDetail}>...{t(translations.notifications.see_more)}</Button>
+                <Button style={{ paddingLeft: '0' }} type='link' onClick={showFullNotificationDetail}>...{t(translations.general.see_more)}</Button>
             </NotificationItemDetail>
 
         return <NotificationItemDetail>{notification.notificationMessage}</NotificationItemDetail>

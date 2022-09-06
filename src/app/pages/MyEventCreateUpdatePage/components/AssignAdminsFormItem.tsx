@@ -12,13 +12,12 @@ import { useSelector } from 'react-redux';
 import { AdminType } from 'utils/constants';
 import { ItemAvatar } from 'app/components/SyrfGeneral';
 import { useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 export const AssignAdminsFormItem = (props) => {
 
     const user = useSelector(selectUser);
 
-    const { event, form } = props;
+    const { event } = props;
 
     const history = useHistory();
 
@@ -111,16 +110,6 @@ export const AssignAdminsFormItem = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event]);
 
-    const handleOnDeselectAdmin = (value) => {
-        const parsedValue = JSON.parse(value);
-        if (parsedValue.id === localStorage.getItem('user_id') || parsedValue.id === event.ownerId) {
-            form.setFieldsValue({
-                admins: [...form.getFieldValue('admins'), value]
-            });
-            toast.info(t(translations.my_event_create_update_page.your_cannot_remove_yourself_or_the_owner_as_admin_from_the_events));
-        }
-    }
-
     return (
         <Tooltip title={t(translations.tip.set_admins_for_this_event)}>
             <Form.Item
@@ -132,7 +121,6 @@ export const AssignAdminsFormItem = (props) => {
                     onSearch={debounceSearch}
                     filterOption={false}
                     allowClear
-                    onDeselect={handleOnDeselectAdmin}
                     maxTagCount={'responsive' as const}
                 >
                     {renderItemResults()}

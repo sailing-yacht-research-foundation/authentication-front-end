@@ -39,7 +39,7 @@ export const PublicUserInformation = (props) => {
 
     return (
         <Wrapper>
-            <SyrfFormTitle>{t(translations.profile_page.update_profile.public_user_details)}</SyrfFormTitle>
+            <SyrfFormTitle>{t(translations.profile_page.public_user_details)}</SyrfFormTitle>
 
             <ChangeAvatarWrapper>
                 <ChangeAvatar cancelUpdateProfile={cancelUpdateProfile} authUser={authUser} />
@@ -49,11 +49,11 @@ export const PublicUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.first_name)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.first_name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.general.first_name)}</SyrfFieldLabel>}
                             name="first_name"
-                            rules={[{ required: true, message: t(translations.forms.first_name_is_required) }, {
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 max: 15,
-                                message: t(translations.forms.first_name_cannot_be_longer)
+                                message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 })
                             }]}
                         >
                             <SyrfInputField  />
@@ -64,11 +64,11 @@ export const PublicUserInformation = (props) => {
                 <Col xs={24} sm={24} md={12} lg={12}>
                     <Tooltip title={t(translations.tip.last_name)}>
                         <Form.Item
-                            label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.last_name)}</SyrfFieldLabel>}
+                            label={<SyrfFieldLabel>{t(translations.general.last_name)}</SyrfFieldLabel>}
                             name="last_name"
-                            rules={[{ required: true, message: t(translations.forms.last_name_is_required) }, {
+                            rules={[{ required: true, message: t(translations.forms.please_fill_out_this_field) }, {
                                 max: 15,
-                                message: t(translations.forms.last_name_cannot_be_longer)
+                                message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 15 })
                             }]}
                         >
                             <SyrfInputField  />
@@ -79,11 +79,11 @@ export const PublicUserInformation = (props) => {
 
             <Tooltip title={t(translations.tip.country)}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.country)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.general.country)}</SyrfFieldLabel>}
                     name="country"
                     rules={[{ required: true }]}
                 >
-                    <SyrfFormSelect placeholder={t(translations.profile_page.update_profile.select_a_country)}
+                    <SyrfFormSelect placeholder={t(translations.profile_page.select_a_country)}
                         showSearch
                         filterOption={(input, option) => {
                             if (option) {
@@ -101,17 +101,17 @@ export const PublicUserInformation = (props) => {
 
             <Tooltip title={t(translations.tip.bio)}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.biography)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.profile_page.biography)}</SyrfFieldLabel>}
                     name="bio"
-                    rules={[{ max: 255, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 255 }) }]}
+                    rules={[{ max: 1000, message: t(translations.forms.please_input_no_more_than_characters, { numberOfChars: 1000 }) }]}
                 >
-                    <SyrfTextArea placeholder={t(translations.profile_page.update_profile.biography_description)} />
+                    <SyrfTextArea placeholder={t(translations.profile_page.biography_description)} />
                 </Form.Item>
             </Tooltip>
 
             <Tooltip title={t(translations.tip.your_interests)}>
                 <Form.Item
-                    label={<SyrfFieldLabel>{t(translations.profile_page.update_profile.interests)}</SyrfFieldLabel>}
+                    label={<SyrfFieldLabel>{t(translations.profile_page.interests)}</SyrfFieldLabel>}
                     name="interests"
                 >
                     <SyrfFormSelect mode="multiple" maxTagCount={'responsive'}>

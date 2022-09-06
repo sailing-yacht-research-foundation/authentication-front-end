@@ -1,10 +1,10 @@
 import React from 'react';
-import { Spin, Table, Space, Tooltip } from 'antd';
+import { Spin, Table, Space, Tooltip, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { getEventRegisteredVessels } from 'services/live-data-server/event-calendars';
-import { renderEmptyValue, truncateName } from 'utils/helpers';
+import { renderEmptyValue } from 'utils/helpers';
 import styled from 'styled-components';
 import { renderAvatar } from 'utils/user-utils';
 import { useHistory } from 'react-router-dom';
@@ -29,7 +29,14 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             title: t(translations.general.public_name),
             dataIndex: 'publicName',
             key: 'publicName',
-            render: (text) => renderEmptyValue(truncateName(text)),
+            render: (text) => {
+                return <Tooltip title={text}>
+                    <Typography.Text ellipsis={true} style={{ maxWidth: '40vw' }}>
+                        ${renderEmptyValue(text)}
+                    </Typography.Text>
+                </Tooltip>;
+            },
+            width: '500px',
         },
         {
             title: t(translations.vessel_list_page.length_in_meters),

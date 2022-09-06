@@ -89,10 +89,10 @@ export const FormContent = ({ form, isLoading, onFinish, setShowModal, t, eventI
                     boats.length <= 1 ?
                         (<StyledSpace size={10}>
                             <Button type='primary' onClick={() => form.submit()}>
-                                {t(translations.my_event_list_page.yes)}
+                                {t(translations.general.yes)}
                             </Button>
                             <Button onClick={() => setShowModal(false)}>
-                                {t(translations.my_event_list_page.no)}
+                                {t(translations.general.no)}
                             </Button>
 
                         </StyledSpace>) : (<Form.Item>

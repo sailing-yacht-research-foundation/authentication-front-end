@@ -24,7 +24,7 @@ export const LeftPane = (props) => {
             </SectionContainer>
             {
                 group.description && <SectionContainer>
-                    <SectionTitle>{t(translations.group.about)}</SectionTitle>
+                    <SectionTitle>{t(translations.general.about)}</SectionTitle>
                     <GroupDescription>
                         {group.description}
                     </GroupDescription>

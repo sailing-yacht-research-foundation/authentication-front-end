@@ -5,7 +5,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { getAllByCalendarEventIdWithFilter } from 'services/live-data-server/participants';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { DeleteParticipantModal } from 'app/pages/ParticipantCreateUpdatePage/components/DeleteParticipantForm';
+import { DeleteParticipantModal } from './DeleteParticipantModal';
 import styled from 'styled-components';
 import { DownOutlined } from '@ant-design/icons';
 import { CompetitorInviteModal } from './modals/CompetitorInviteModal';
@@ -18,9 +18,11 @@ import { CalendarEvent } from 'types/CalendarEvent';
 import { Participant } from 'types/Participant';
 import { getDetailedEventParticipantsInfo } from 'services/live-data-server/event-calendars';
 import { CSVLink } from "react-csv";
-import { FaFileCsv } from 'react-icons/fa';
+import { FaFileCsv, FaTrash } from 'react-icons/fa';
+import { BiBlock } from 'react-icons/bi';
 import moment from 'moment';
 import { ParticipantDetailList } from './ParticipantDetailList';
+import { canManageEvent } from 'utils/permission-helpers';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -32,7 +34,7 @@ export const ParticipantList = (props) => {
 
     const { t } = useTranslation();
 
-    const { eventId, event, canManageEvent }: { eventId: string, event: CalendarEvent, canManageEvent?: Function } = props;
+    const { eventId, event }: { eventId: string, event: CalendarEvent } = props;
 
     const [csvData, setCSVData] = React.useState<any[]>([]);
 
@@ -60,7 +62,7 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
-            title: t(translations.participant_list.status),
+            title: t(translations.general.status),
             dataIndex: 'invitationStatus',
             key: 'invitationStatus',
             render: (text, record) => {
@@ -76,13 +78,19 @@ export const ParticipantList = (props) => {
             ellipsis: true,
         },
         {
-            title: t(translations.participant_list.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => (
                 <>
-                    {!canManageEvent || canManageEvent() ? (<Space size={10}>
-                        <DeleteButton onClick={() => showDeleteParticipanModal(record)} danger>{t(translations.participant_list.remove)}</DeleteButton>
-                        {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED && <DeleteButton onClick={() => showBlockParticipant(record)} danger>{t(translations.participant_list.block)}</DeleteButton>}
+                    {canManageEvent(event) ? (<Space size={10}>
+                        <Tooltip title={t(translations.general.remove)}>
+                            <DeleteButton icon={<FaTrash />} onClick={() => showDeleteParticipanModal(record)} danger />
+                        </Tooltip>
+                        {record?.invitationStatus !== ParticipantInvitationStatus.BLOCKED &&
+                            <Tooltip title={t(translations.general.block)}>
+                                <DeleteButton icon={<BiBlock />} onClick={() => showBlockParticipant(record)} danger />
+                            </Tooltip>
+                        }
                     </Space>) : <></>}
                 </>
             ),
@@ -96,7 +104,7 @@ export const ParticipantList = (props) => {
         <Menu>
             <Menu.Item>
                 <a target="_blank" rel="noopener noreferrer" href="/" onClick={e => filterParticipants(e, FILTER_MODE.all)}>
-                    {t(translations.participant_list.all)}
+                    {t(translations.general.all)}
                 </a>
             </Menu.Item>
             <Menu.Item>
@@ -174,19 +182,16 @@ export const ParticipantList = (props) => {
 
     const renderAssignedVessels = (participant) => {
         const vesselParticipants = participant.vesselParticipants;
-        if (vesselParticipants
-            && vesselParticipants.length > 0) {
-            return vesselParticipants?.map((vp, index) => {
-                if (vp.vessel) {
-                    if (index !== (vesselParticipants.length - 1))
-                        return vp.vessel?.publicName + ', ';
-                    return vp.vessel?.publicName;
+        if (vesselParticipants?.length > 0) {
+            return vesselParticipants.reduce((acc, vp) => {
+                if (vp.vessel?.publicName && !acc.includes(vp.vessel?.publicName)) {
+                    acc.push(vp.vessel?.publicName);
                 }
-                return t(translations.misc.not_available);
-            });
+                return acc;
+            }, []).join(', ') || t(translations.misc.not_available);
         }
 
-        return t(translations.misc.not_available);
+        return participant.vessel?.publicName || t(translations.misc.not_available);
     }
 
     const getParticipantDetail = async () => {
@@ -236,13 +241,13 @@ export const ParticipantList = (props) => {
             <Spin spinning={isLoading}>
                 <PageHeaderContainer>
                     <PageHeaderTextSmall>{t(translations.participant_list.participants)}</PageHeaderTextSmall>
-                    {(!canManageEvent || canManageEvent()) && <Space size={10}>
+                    {(canManageEvent(event)) && <Space size={10}>
                         {
                             ![EventState.COMPLETED, EventState.CANCELED].includes(event.status!) && <Tooltip title={t(translations.tip.create_competitor)}>
                                 <CreateButton onClick={() => setShowInviteModal(true)} icon={<AiFillPlusCircle
                                     style={{ marginRight: '5px' }}
                                     size={18} />}>
-                                    {t(translations.participant_list.invite)}
+                                    {t(translations.general.invite)}
                                 </CreateButton>
                             </Tooltip>
                         }

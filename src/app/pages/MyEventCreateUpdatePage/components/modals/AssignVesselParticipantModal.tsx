@@ -46,7 +46,7 @@ export const AssignVesselParticipantModal = (props) => {
             width: '33%',
         },
         {
-            title: t(translations.assign_vessel_participant_modal.action),
+            title: t(translations.general.action),
             key: 'action',
             render: (text, record) => {
                 if (checkIfParticipantExistsOnVesselParticipant(record.participants)) {
@@ -126,7 +126,7 @@ export const AssignVesselParticipantModal = (props) => {
     }, [showAssignModal]);
 
     return (
-        <StyledModal 
+        <StyledModal
             title={t(translations.assign_vessel_participant_modal.assign_vessel_to_vessel_group)}
             visible={showAssignModal}
             onCancel={() => setShowAssignModal(false)}

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Input, Form, Button, Spin } from 'antd';
 import { useDispatch } from 'react-redux';
 import { UseLoginSlice } from '../slice';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -28,6 +28,8 @@ export const LoginForm = (props) => {
 
   const history = useHistory();
 
+  const location = useLocation();
+
   const [isSigningIn, setIsSigningIn] = React.useState<boolean>(false);
 
   const { t } = useTranslation();
@@ -50,11 +52,11 @@ export const LoginForm = (props) => {
       dispatch(actions.setIsAuthenticated(true));
       localStorage.removeItem('is_guest');
       localStorage.setItem('user_id', response.user.id);
-      history.push('/');
+      redirectToURLOrMainPage('/');
       subscribeUser();
       if (!response.user?.email_verified) {
         toast.info(t(translations.login_page.please_verify_your_account));
-        history.push('/account-not-verified');
+        redirectToURLOrMainPage('/account-not-verified');
       }
     } else {
       switch (response.error?.response.data.errorCode) {
@@ -65,6 +67,12 @@ export const LoginForm = (props) => {
           toast.info(t(translations.login_page.cannot_login_at_the_moment));
       }
     }
+  }
+
+  const redirectToURLOrMainPage = (url) => {
+    const param = new URLSearchParams(location.search);
+    const redirectURL = param.get('redirectBack');
+    history.push(redirectURL ? decodeURIComponent(redirectURL) : url);
   }
 
   return (
@@ -90,31 +98,31 @@ export const LoginForm = (props) => {
             <Form.Item
               name="email"
               rules={[
-                { required: true, message: t(translations.forms.email_is_required) },
+                { required: true, message: t(translations.forms.please_fill_out_this_field) },
                 {
                   pattern: /^\S+$/,
-                  message: t(translations.misc.email_must_not_contain_blank)
+                  message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.email) })
                 },
                 { type: 'email', message: t(translations.forms.email_must_be_valid) }]}
             >
               <SyrfInput
-                placeholder={t(translations.login_page.email.label)} />
+                placeholder={t(translations.general.email)} />
             </Form.Item>
 
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: t(translations.forms.password_is_required) },
+                { required: true, message: t(translations.forms.please_fill_out_this_field) },
                 {
                   pattern: /^\S+$/,
-                  message: t(translations.misc.password_must_not_contain_blank)
+                  message: t(translations.forms.must_not_contain_blank, { field: t(translations.general.password) })
                 },
                 {
-                  max: 16, min: 8, message: t(translations.forms.password_must_be_between)
+                  max: 16, min: 8, message: t(translations.forms.please_input_between, { min: 8, max: 16, field: t(translations.general.password) })
                 },
               ]}
             >
-              <SyrfInputPassword placeholder={t(translations.login_page.password.label)} />
+              <SyrfInputPassword placeholder={t(translations.general.password)} />
             </Form.Item>
 
             <Form.Item
