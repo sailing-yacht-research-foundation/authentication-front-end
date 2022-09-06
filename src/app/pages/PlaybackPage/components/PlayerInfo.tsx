@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 export const PlayerInfo = (props) => {
-    const { competitor_name, competitor_sail_number } = props.playerData;
+    const { sailNumber } = props;
+    const { competitor_name } = props.playerData;
     const { coordinate } = props;
 
     const { t } = useTranslation();
@@ -14,7 +15,7 @@ export const PlayerInfo = (props) => {
         <RacerInfoContainer>
             <hr/>
             <RacerInfoTitle>
-                {t(translations.playback_page.coordinate)} 
+                {t(translations.playback_page.coordinate)}
                 <span style={{ color: '#999' }}>{t(translations.playback_page.lat_lon)}</span>:
             </RacerInfoTitle>
             <br />
@@ -31,12 +32,12 @@ export const PlayerInfo = (props) => {
                 {competitor_name}
             </RacerInfoContainer>
 
-            {competitor_sail_number &&
+            {sailNumber &&
                 <RacerInfoContainer>
                     <RacerInfoTitle>
                         {t(translations.playback_page.sail_number)}
                     </RacerInfoTitle>
-                    {competitor_sail_number}
+                    {sailNumber}
                 </RacerInfoContainer>
             }
 

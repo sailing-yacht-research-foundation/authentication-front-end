@@ -130,13 +130,16 @@ export const PlaybackStreamRace = () => {
       const participantTracks: any[] = [];
       vesselParticipants.forEach((vessParticipant) => {
         const { id } = vessParticipant;
-        groupedResult[id] = { ...vessParticipant, positions: currentValue?.[id]?.positions || [] };
+        groupedResult[id] = {
+          ...vessParticipant,
+          positions: currentValue?.[id]?.positions || [],
+          sailNumber: vessParticipant?.sailNumber
+        };
 
         const data = {
           type: "boat",
           track: [],
           competitor_name: vessParticipant?.vessel?.publicName,
-          competitor_sail_number: vessParticipant?.vesselParticipantId,
           first_ping_time: 0,
           id: vessParticipant.id,
         };
@@ -361,7 +364,8 @@ export const PlaybackStreamRace = () => {
       positions: [],
       lastPosition: {  },
       deviceType: 'boat',
-      participant: { competitor_name: vessel?.publicName, competitor_sail_number: vessel?.id },
+      sailNumber: vesselParticipant.sailNumber,
+      participant: { competitor_name: vessel?.publicName },
       color: stringToColour(id),
       leaderPosition: Object.keys(groupedPosition.current)?.length + 1,
     };
@@ -428,7 +432,8 @@ export const PlaybackStreamRace = () => {
           positions: [{ ...lastPosition, time: currentTime }],
           lastPosition,
           vesselParticipantId,
-          participant: { competitor_name: vessel.publicName, competitor_sail_number: vessel.id },
+          sailNumber: grouped[key].sailNumber,
+          participant: { competitor_name: vessel.publicName },
           color: stringToColour(vesselParticipantId),
           leaderPosition: index + 1,
         });
