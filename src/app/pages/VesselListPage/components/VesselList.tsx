@@ -36,6 +36,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useVesselListSlice } from '../slice';
 import { renderAvatar } from 'utils/user-utils';
 import { canDeleteVessel } from 'utils/permission-helpers';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 const defaultOptions = {
     loop: true,
@@ -130,7 +131,7 @@ export const VesselList = () => {
                 if (owner)
                     return <Tooltip title={owner.name}>
                         <EditorItem style={{ width: '25px', height: '25px' }} onClick={() => history.push(`/profile/${owner.id}`)}>
-                            <img alt={owner.name} src={renderAvatar(owner.avatar)} />
+                            <SYRFImage alt={owner.name} src={renderAvatar(owner.avatar)} />
                         </EditorItem>
                     </Tooltip>;
 

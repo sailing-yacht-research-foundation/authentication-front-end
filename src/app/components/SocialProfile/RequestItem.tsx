@@ -8,6 +8,7 @@ import { acceptFollowRequest, rejectFollowRequest } from '../../../services/live
 import { translations } from 'locales/translations';
 import { showToastMessageOnRequestError } from 'utils/helpers';
 import { FaCheck, FaTimes } from 'react-icons/fa';
+import { SYRFImage } from '../SyrfGeneral/SYRFImage';
 
 interface IRequestItem {
     request: any,
@@ -60,7 +61,7 @@ export const RequestItem = (props: IRequestItem) => {
         <Spin spinning={isLoading}>
             <InvitationItem>
                 <AvatarContainer>
-                    <img alt={request.name} src={renderAvatar(request.avatar)} />
+                    <SYRFImage alt={request.name} src={renderAvatar(request.avatar)} />
                 </AvatarContainer>
                 <RightInfoContainer>
                     <ItemInfoContainer>

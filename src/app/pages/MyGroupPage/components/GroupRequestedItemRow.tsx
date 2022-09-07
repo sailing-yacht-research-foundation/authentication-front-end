@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { MdOutlineUndo } from 'react-icons/md';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 export const GroupRequestedItemRow = (props) => {
 
@@ -43,7 +44,7 @@ export const GroupRequestedItemRow = (props) => {
     return (
         <InvitationItem>
             <GroupAvatarContainer>
-                <img alt={request.group?.groupName} src={appendThumbnail(request.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
+                <SYRFImage alt={request.group?.groupName} src={appendThumbnail(request.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
             </GroupAvatarContainer>
             <RightInfoContainer>
                 <ItemInfoContainer>

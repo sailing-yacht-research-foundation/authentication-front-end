@@ -89,7 +89,7 @@ export const GroupAvatar = (props) => {
             <Spin spinning={isUploadingGroupAvatar} tip={t(translations.group.uploading)}>
                 <Wrapper>
                     <AvatarHolder>
-                        <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={group?.groupImage || DEFAULT_GROUP_AVATAR} />
+                        <Image fallback='/app-logo.png' style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={group?.groupImage || DEFAULT_GROUP_AVATAR} />
                     </AvatarHolder>
                     {
                         group?.isAdmin && <ChangeAvatarButton>

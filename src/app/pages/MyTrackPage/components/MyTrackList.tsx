@@ -29,6 +29,7 @@ import { useMyTracksSlice } from '../slice';
 import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
 import { isMobile } from 'react-device-detect';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 const defaultOptions = {
     loop: true,
@@ -334,7 +335,7 @@ const FlexWrapper = styled.div`
     align-items: center;
 `;
 
-const OpenGraphImage = styled.img`
+const OpenGraphImage = styled(SYRFImage)`
     width: 40px;
     height: 40px;
     border-radius: 4px;

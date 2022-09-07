@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGroupSlice } from '../slice';
 import { selectGroupCurrentPage, selectGroupPageSize, selectRequestedGroupCurrentPage } from '../slice/selectors';
 import { renderAvatar } from 'utils/user-utils';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 export const GroupItemRow = (props) => {
 
@@ -84,7 +85,7 @@ export const GroupItemRow = (props) => {
                             e.stopPropagation();
                             history.push(`/profile/${member.userId}`)
                         }}>
-                            <img src={renderAvatar(member.avatar)} alt={member.name} />
+                            <SYRFImage src={renderAvatar(member.avatar)} alt={member.name} />
                         </GroupMemberItem>
                     </Tooltip>
                 )}
@@ -97,7 +98,7 @@ export const GroupItemRow = (props) => {
     return (
         <GroupItem onClick={showGroupItemDetail}>
             <GroupItemAvatarContainer>
-                <img src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
+                <SYRFImage src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
             </GroupItemAvatarContainer>
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>

@@ -5,6 +5,7 @@ import { debounce } from 'utils/helpers';
 import { useHistory } from 'react-router';
 import { searchForProfiles } from 'services/live-data-server/profile';
 import { getUserAttribute, renderAvatar } from 'utils/user-utils';
+import { SYRFImage } from '../SyrfGeneral/SYRFImage';
 
 export const SearchProfilesAutoComplete = ({ keyword, user }) => {
 
@@ -35,7 +36,7 @@ export const SearchProfilesAutoComplete = ({ keyword, user }) => {
             return (
                 <Row key={profile.id} onClick={() => history.push(`/profile/${profile.id}`)}>
                     <AvatarContainer>
-                        <img src={renderAvatar(profile.avatar)} alt={profile.name} />
+                        <SYRFImage src={renderAvatar(profile.avatar)} alt={profile.name} />
                     </AvatarContainer>
                     <RightInfoContainer>
                         <Name>{profile.name}</Name>
