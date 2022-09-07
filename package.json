@@ -168,7 +168,8 @@
         "lines": 90,
         "statements": 90
       }
-    }
+    },
+    "resetMocks": false
   },
   "devDependencies": {}
 }
