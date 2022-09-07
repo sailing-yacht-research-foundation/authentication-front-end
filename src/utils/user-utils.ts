@@ -1,9 +1,10 @@
 import NoAvatar from 'app/components/NavBar/assets/no-avatar.png';
+import { appendThumbnail } from './helpers';
 
 /**
  * Get user attribute based of the attribute name
- * @param user 
- * @param attribute 
+ * @param user
+ * @param attribute
  * @returns attribute
  */
 export const getUserAttribute = (user, attribute: string) => {
@@ -16,7 +17,7 @@ export const getUserAttribute = (user, attribute: string) => {
 
 /**
  * Get the profile picture of the user
- * @param user 
+ * @param user
  * @returns profile picture
  */
 export const getProfilePicture = (user) => {
@@ -31,27 +32,29 @@ export const getProfilePicture = (user) => {
 
 /**
  * Check if user's phone number is verified
- * @param user 
- * @param field 
- * @returns 
+ * @param user
+ * @param field
+ * @returns
  */
 export const checkForVerifiedField = (user, field) => {
     return field === 'email' ? user.emailVerified : user.phone_number_verified;
 }
 
-export const renderAvatar = (picture) => {
+export const renderAvatar = (picture, renderAsThumbnail = true) => {
 
     if (picture && !isNaN(picture)) return `/default-avatars/avatar-${picture}.png`;
 
-    if (picture) return picture;
+    if (picture) {
+        return renderAsThumbnail ? appendThumbnail(picture) : picture;
+    }
 
     return NoAvatar;
 }
 
 /**
  * Convert interest object into array.
- * @param user 
- * @returns 
+ * @param user
+ * @returns
  */
 export const getUserInterestsAsArray = (user) => {
     return !!user.interests ? Object.entries(user.interests).reduce((acc: any[], [key, value]) => {

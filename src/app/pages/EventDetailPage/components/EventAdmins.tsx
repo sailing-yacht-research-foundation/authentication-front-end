@@ -9,6 +9,8 @@ import { renderAvatar } from 'utils/user-utils';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { useHistory } from 'react-router-dom';
 import { CalendarEvent } from 'types/CalendarEvent';
+import { appendThumbnail } from 'utils/helpers';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 const editorHeadlessStyles = {
     width: '25px',
@@ -59,7 +61,7 @@ export const EventAdmins = (props: IEventAdmins) => {
             if (editor.group) editor = editor.group;
             return <Tooltip title={editor?.groupName} key={index}>
                 <EditorItem onClick={() => history.push(`/groups/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}} >
-                    <img alt={editor?.groupName} src={editor?.groupImage || DEFAULT_GROUP_AVATAR} />
+                    <SYRFImage fallback={editor?.groupImage || DEFAULT_GROUP_AVATAR} alt={editor?.groupName} src={appendThumbnail(editor?.groupImage) || DEFAULT_GROUP_AVATAR} />
                 </EditorItem>
             </Tooltip>
         });
@@ -72,7 +74,7 @@ export const EventAdmins = (props: IEventAdmins) => {
             if (editor.user) editor = editor.user;
             return <Tooltip title={editor?.name} key={index}>
                 <EditorItem onClick={() => history.push(`/profile/${editor?.id}`)} style={headless ? editorHeadlessStyles : {}}>
-                    <img alt={editor?.name} src={renderAvatar(editor?.avatar)} />
+                    <SYRFImage fallback={renderAvatar(editor?.avatar, false)} alt={editor?.name} src={renderAvatar(editor?.avatar)} />
                 </EditorItem>
             </Tooltip>
         });

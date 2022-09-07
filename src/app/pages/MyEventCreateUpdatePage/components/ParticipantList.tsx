@@ -23,6 +23,7 @@ import { BiBlock } from 'react-icons/bi';
 import moment from 'moment';
 import { ParticipantDetailList } from './ParticipantDetailList';
 import { canManageEvent } from 'utils/permission-helpers';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 const FILTER_MODE = {
     assigned: 'assigned',
@@ -47,7 +48,8 @@ export const ParticipantList = (props) => {
             key: 'publicName',
             render: (text, record) => <UserWrapper>
                 <AvatarWrapper>
-                    <img className="avatar-img" alt={text} src={renderAvatar(record?.profile?.avatar)} />
+                    <SYRFImage className="avatar-img" alt={text} src={renderAvatar(record?.profile?.avatar)}
+                        fallback={renderAvatar(record?.profile?.avatar, false)} />
                 </AvatarWrapper>
                 {record?.userProfileId ? <Link to={`/profile/${record?.userProfileId}`}>{text}</Link> : text}
             </UserWrapper>,

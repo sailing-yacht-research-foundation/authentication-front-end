@@ -9,6 +9,6 @@ export interface VesselParticipant {
     vesselParticipantGroupId: string;
     vessel: Vessel;
     group: VesselParticipantGroup;
-    participant?: Participant
+    participant?: Participant;
     sailNumber?: string;
 }
