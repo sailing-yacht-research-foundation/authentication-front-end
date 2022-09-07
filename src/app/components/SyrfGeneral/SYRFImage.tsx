@@ -7,7 +7,7 @@ export const SYRFImage = (props) => {
     const onError = (e) => {
         if (!errored) { // prevent infinity loop
           e.target.onerror = null;
-          e.target.src = '/app-logo.png';
+          e.target.src = props.fallback || '/app-logo.png';
           setErrored(true);
         }
       }

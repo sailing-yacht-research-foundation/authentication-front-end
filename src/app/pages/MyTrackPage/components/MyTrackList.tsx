@@ -93,7 +93,7 @@ export const MyTrackList = () => {
                     return (
                         <FlexWrapper>
                             {record.competitionUnit?.openGraphImage ?
-                                <OpenGraphImage src={appendThumbnail(record.competitionUnit.openGraphImage)} alt={record.event.name} /> :
+                                <OpenGraphImage fallback={record.competitionUnit.openGraphImage} src={appendThumbnail(record.competitionUnit.openGraphImage)} alt={record.event.name} /> :
                                 <NoImageContainer>
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>

@@ -44,7 +44,10 @@ export const GroupRequestedItemRow = (props) => {
     return (
         <InvitationItem>
             <GroupAvatarContainer>
-                <SYRFImage alt={request.group?.groupName} src={appendThumbnail(request.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
+                <SYRFImage
+                    alt={request.group?.groupName}
+                    fallback={request.group?.groupImage || DEFAULT_GROUP_AVATAR}
+                    src={appendThumbnail(request.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
             </GroupAvatarContainer>
             <RightInfoContainer>
                 <ItemInfoContainer>

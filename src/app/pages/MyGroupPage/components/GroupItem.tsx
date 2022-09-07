@@ -85,7 +85,7 @@ export const GroupItemRow = (props) => {
                             e.stopPropagation();
                             history.push(`/profile/${member.userId}`)
                         }}>
-                            <SYRFImage src={renderAvatar(member.avatar)} alt={member.name} />
+                            <SYRFImage fallback={renderAvatar(member.avatar, false)} src={renderAvatar(member.avatar)} alt={member.name} />
                         </GroupMemberItem>
                     </Tooltip>
                 )}
@@ -98,7 +98,7 @@ export const GroupItemRow = (props) => {
     return (
         <GroupItem onClick={showGroupItemDetail}>
             <GroupItemAvatarContainer>
-                <SYRFImage src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
+                <SYRFImage fallback={group.groupImage || DEFAULT_GROUP_AVATAR} src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
             </GroupItemAvatarContainer>
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>

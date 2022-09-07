@@ -153,10 +153,10 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
         </NotificationBadge>
     }
 
-    const renderNotificationAvatar = () => {
+    const renderNotificationAvatar = (renderAsThumbnail = true) => {
         const thumbnail = notification.notificationThumbnail || notification.metadata?.notificationThumbnail;
         if (thumbnail)
-            return renderAvatar(thumbnail);
+            return renderAvatar(thumbnail, renderAsThumbnail);
 
         switch (notification.notificationType) {
             case NotificationTypes.USER_INVITED_TO_GROUP:
@@ -250,7 +250,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
         <NotificationItemWrapper onClick={navigateToTarget}>
             <NotificationItemAvatarWrapper>
                 <NotificationItemAvatarContainer>
-                    <SYRFImage alt={notification.notificationTitle} src={renderNotificationAvatar()} className='avatar-img' />
+                    <SYRFImage alt={notification.notificationTitle} fallback={renderNotificationAvatar(false)} src={renderNotificationAvatar()} className='avatar-img' />
                 </NotificationItemAvatarContainer>
                 {renderNotificationBadge()}
             </NotificationItemAvatarWrapper>

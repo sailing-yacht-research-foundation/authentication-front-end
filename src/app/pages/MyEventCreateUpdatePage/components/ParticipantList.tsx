@@ -48,7 +48,8 @@ export const ParticipantList = (props) => {
             key: 'publicName',
             render: (text, record) => <UserWrapper>
                 <AvatarWrapper>
-                    <SYRFImage className="avatar-img" alt={text} src={renderAvatar(record?.profile?.avatar)} />
+                    <SYRFImage className="avatar-img" alt={text} src={renderAvatar(record?.profile?.avatar)}
+                        fallback={renderAvatar(record?.profile?.avatar, false)} />
                 </AvatarWrapper>
                 {record?.userProfileId ? <Link to={`/profile/${record?.userProfileId}`}>{text}</Link> : text}
             </UserWrapper>,

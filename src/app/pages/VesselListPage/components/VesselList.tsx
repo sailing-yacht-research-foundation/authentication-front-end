@@ -131,7 +131,7 @@ export const VesselList = () => {
                 if (owner)
                     return <Tooltip title={owner.name}>
                         <EditorItem style={{ width: '25px', height: '25px' }} onClick={() => history.push(`/profile/${owner.id}`)}>
-                            <SYRFImage alt={owner.name} src={renderAvatar(owner.avatar)} />
+                            <SYRFImage alt={owner.name} fallback={renderAvatar(owner.avatar, false)} src={renderAvatar(owner.avatar)} />
                         </EditorItem>
                     </Tooltip>;
 

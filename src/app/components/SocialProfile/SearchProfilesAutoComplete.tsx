@@ -36,7 +36,7 @@ export const SearchProfilesAutoComplete = ({ keyword, user }) => {
             return (
                 <Row key={profile.id} onClick={() => history.push(`/profile/${profile.id}`)}>
                     <AvatarContainer>
-                        <SYRFImage src={renderAvatar(profile.avatar)} alt={profile.name} />
+                        <SYRFImage fallback={renderAvatar(profile.avatar, false)} src={renderAvatar(profile.avatar)} alt={profile.name} />
                     </AvatarContainer>
                     <RightInfoContainer>
                         <Name>{profile.name}</Name>

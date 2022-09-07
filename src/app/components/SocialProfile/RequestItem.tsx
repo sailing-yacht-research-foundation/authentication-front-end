@@ -61,7 +61,7 @@ export const RequestItem = (props: IRequestItem) => {
         <Spin spinning={isLoading}>
             <InvitationItem>
                 <AvatarContainer>
-                    <SYRFImage alt={request.name} src={renderAvatar(request.avatar)} />
+                    <SYRFImage alt={request.name} fallback={renderAvatar(request.avatar, false)} src={renderAvatar(request.avatar)} />
                 </AvatarContainer>
                 <RightInfoContainer>
                     <ItemInfoContainer>

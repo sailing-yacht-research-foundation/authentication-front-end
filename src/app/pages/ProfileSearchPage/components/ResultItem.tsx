@@ -77,7 +77,7 @@ export const ResultItem = ({ profile, results }) => {
             <UnfollowConfirmModal isLoading={isLoading} profileName={profile.name} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} visible={showUnfollowModal} />
             <PeopleInnerWrapper>
                 <PeopleAvatar>
-                    <SYRFImage alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
+                    <SYRFImage alt={profile.name} fallback={renderAvatar(profile.avatar, false)} src={renderAvatar(profile.avatar)} className="avatar-img" />
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id}`}>{profile.name}</PeopleName>

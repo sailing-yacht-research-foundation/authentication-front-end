@@ -42,7 +42,7 @@ export const GroupSearchAutoComplete = ({ keyword, showSuggestions, setShowSugge
             return (
                 <GroupRow key={group.id} onClick={() => history.push(`/groups/${group.id}`)}>
                     <GroupAvatarContainer>
-                        <SYRFImage alt={group?.groupName} src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} />
+                        <SYRFImage alt={group?.groupName} fallback={group.groupImage} src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} />
                     </GroupAvatarContainer>
                     <GroupRightInfoContainer>
                         <GroupName>{group.groupName}</GroupName>

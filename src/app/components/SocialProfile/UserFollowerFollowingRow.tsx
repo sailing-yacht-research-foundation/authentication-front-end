@@ -73,7 +73,7 @@ export const UserFollowerFollowingRow = (props) => {
             <UnfollowConfirmModal isLoading={isLoading} profileName={profile.name} visible={showUnfollowModal} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} />
             <PeopleInnerWrapper>
                 <PeopleAvatar>
-                    <SYRFImage alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
+                    <SYRFImage fallback={renderAvatar(profile.avatar, false)} alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id || profileId}`}>{profile.name}</PeopleName>
