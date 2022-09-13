@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InformationNotSharedMessage should render the message if the conditional state matches 1`] = `
+<Provider
+  store={
+    Object {
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
+    }
+  }
+>
+  <InformationNotShared
+    event={
+      Object {
+        "participantDetail": Object {
+          "allowShareInformation": true,
+          "isParticipant": true,
+        },
+        "requireCovidCertificate": true,
+        "requireEmergencyContact": true,
+        "requireFoodAllergies": true,
+        "requireImmigrationInfo": true,
+        "requireMedicalProblems": true,
+      }
+    }
+    reloadParent={[Function]}
+  />
+</Provider>
+`;
+
+exports[`InformationNotSharedMessage should render to match 1`] = `
+<Provider
+  store={
+    Object {
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
+    }
+  }
+>
+  <InformationNotShared
+    event={Object {}}
+    reloadParent={[Function]}
+  />
+</Provider>
+`;
+
+exports[`InformationNotSharedMessage should render to match the snapshot 1`] = `
+<Provider
+  store={
+    Object {
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
+    }
+  }
+>
+  <InformationNotShared
+    event={Object {}}
+    reloadParent={[Function]}
+  />
+</Provider>
+`;

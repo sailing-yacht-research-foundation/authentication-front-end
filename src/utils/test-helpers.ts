@@ -13,3 +13,12 @@ export const defineWindowMatchMedia = () => {
         }))
     });
 }
+
+export const setHookTestState = (newState: any) => {
+    const setStateMockFn = () => {};
+    return Object.keys(newState).reduce((acc, val) => {
+      acc = acc?.mockImplementationOnce(() => [newState[val], setStateMockFn]);
+      return acc;
+    }, jest.fn());
+  };
+  

@@ -1,7 +1,6 @@
 import MyProvider from 'app/components/Provider';
 import * as React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
-import * as EventListModule from '../EventList';
 import { render } from '@testing-library/react';
 import { InvitedEventLists } from '../InvitedEventsList';
 import * as InvitedEventListModule from '../InvitedEventsList';
@@ -28,7 +27,7 @@ describe('InvitedEventList', () => {
     it("It should have been rendered with correct received props", () => {
         const invitedEventListComponentSpy = jest.spyOn(InvitedEventListModule, 'InvitedEventLists');
 
-        const { container, getByText } = render(
+        render(
             <MyProvider>
                 <InvitedEventLists reloadInvitationCount={10} />
             </MyProvider>
