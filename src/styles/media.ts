@@ -20,6 +20,7 @@ import {
 export const sizes = {
   small: 600,
   medium: 1024,
+  smedium: 1280,
   large: 1440,
   xlarge: 1920,
 };
