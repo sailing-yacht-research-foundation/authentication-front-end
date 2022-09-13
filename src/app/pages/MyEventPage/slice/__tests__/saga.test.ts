@@ -98,7 +98,7 @@ describe('event list Saga', () => {
     });
 });
 
-describe('home Saga Init', () => {
+describe('MyEvent Saga Init', () => {
     const homeIterator = myEventListSaga();
     it('should start task to watch for getEvents action', () => {
         const takeLatestDescriptor = homeIterator.next().value;
