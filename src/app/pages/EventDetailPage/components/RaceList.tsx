@@ -62,11 +62,8 @@ export const RaceList = (props) => {
                     race={record}
                     event={event}
                     reloadParent={reloadParent}
-                    isAuthenticated={isAuthenticated}
                     showDeleteRaceModal={showDeleteRaceModal}
-                    showRegisterModal={showRegisterModal}
-                    setCompetitionUnit={setCompetitionUnit}
-                    setShowRegisterModal={setShowRegisterModal} />;
+                    setCompetitionUnit={setCompetitionUnit} />;
             },
         },
     ];
