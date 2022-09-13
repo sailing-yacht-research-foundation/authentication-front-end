@@ -5,7 +5,9 @@ import { createRenderer } from 'react-test-renderer/shallow';
 import { i18n } from 'locales/i18n';
 import { translations } from 'locales/translations';
 import { act, fireEvent, render, } from '@testing-library/react';
+import * as ParticipantServiceModule from 'services/live-data-server/participants';
 
+const uuid = require('uuid');
 const shallowRenderer = createRenderer();
 
 const modalShowComponent = (
@@ -67,5 +69,11 @@ describe('AnnouncementModal', () => {
         });
 
         expect(setShowModalMock).toHaveBeenCalledWith(false);
+    });
+
+    it('should call getAcceptedAndSelfRegisteredParticipantByCalendarEventId when the componnent rendered', async () => {
+        const serviceCallSpy = jest.spyOn(ParticipantServiceModule, 'getAcceptedAndSelfRegisteredParticipantByCalendarEventId');
+        render(<AnnouncementModal event={{ id: uuid.v4() }} showModal={true} setShowModal={jest.fn} reloadParent={jest.fn} />);
+        expect(serviceCallSpy).toHaveBeenCalled();
     });
 });

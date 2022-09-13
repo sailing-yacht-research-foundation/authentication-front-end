@@ -55,7 +55,6 @@ describe('InformationNotSharedMessage', () => {
         const { container } = render(<Provider>
             <InformationNotShared event={event} reloadParent={jest.fn} />
         </Provider>);
-        const t = await i18n;
 
         expect(container.firstChild).toBeNull();
     });

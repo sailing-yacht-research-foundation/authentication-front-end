@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`InformationNotSharedMessage should render to match the snapshot 1`] = `
+exports[`VesselList should render and match snapshot 1`] = `
 <Provider
   store={
     Object {
@@ -16,9 +16,8 @@ exports[`InformationNotSharedMessage should render to match the snapshot 1`] = `
     }
   }
 >
-  <InformationNotShared
+  <VesselList
     event={Object {}}
-    reloadParent={[Function]}
   />
 </Provider>
 `;

@@ -5,6 +5,8 @@ import { createRenderer } from 'react-test-renderer/shallow';
 import { i18n } from 'locales/i18n';
 import { translations } from 'locales/translations';
 import { act, fireEvent, render, } from '@testing-library/react';
+import * as EventServiceModule from 'services/live-data-server/event-calendars';
+import * as Helper from 'utils/helpers';
 
 const shallowRenderer = createRenderer();
 
@@ -86,5 +88,49 @@ describe('DeleteEventModal', () => {
         });
 
         expect(setShowDeleteModalMock).toHaveBeenCalledWith(false);
+    });
+
+    it('should call deleteEvent when pressing OK text', async () => {
+        const deleteEventSpy = jest.spyOn(EventServiceModule, 'deleteEvent').mockImplementation(() => {
+            return Promise.resolve({ success: true })
+        });
+        const onRaceDeletedMock = jest.fn();
+
+        const { getByText } = render(
+            <DeleteEventModal event={{}}
+                onRaceDeleted={onRaceDeletedMock}
+                showDeleteModal={true}
+                setShowDeleteModal={jest.fn} />
+        );
+
+        act(() => {
+            fireEvent.click(getByText('OK'));
+        });
+
+        expect(deleteEventSpy).toHaveBeenCalled();
+        await act(() => Promise.resolve());
+        expect(onRaceDeletedMock).toHaveBeenCalled();
+    });
+
+    it('should call deleteEvent and show error when pressing OK text with failed response', async () => {
+        const deleteEventSpy = jest.spyOn(EventServiceModule, 'deleteEvent').mockImplementation(() => {
+            return Promise.resolve({ success: false })
+        });
+        const showToastSpy = jest.spyOn(Helper, 'showToastMessageOnRequestError');
+
+        const { getByText } = render(
+            <DeleteEventModal event={{}}
+                onRaceDeleted={jest.fn}
+                showDeleteModal={true}
+                setShowDeleteModal={jest.fn} />
+        );
+
+        act(() => {
+            fireEvent.click(getByText('OK'));
+        });
+
+        expect(deleteEventSpy).toHaveBeenCalled();
+        await act(() => Promise.resolve());
+        expect(showToastSpy).toHaveBeenCalled();
     });
 });

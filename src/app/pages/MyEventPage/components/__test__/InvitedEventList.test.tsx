@@ -5,11 +5,12 @@ import { render } from '@testing-library/react';
 import { InvitedEventLists } from '../InvitedEventsList';
 import * as InvitedEventListModule from '../InvitedEventsList';
 import { defineWindowMatchMedia } from 'utils/test-helpers';
+import * as ParticipantServiceModule from 'services/live-data-server/participants';
 
 const shallowRenderer = createRenderer();
 
 describe('InvitedEventList', () => {
-    
+
     beforeAll(() => {
         defineWindowMatchMedia();
     });
@@ -36,5 +37,17 @@ describe('InvitedEventList', () => {
         expect(invitedEventListComponentSpy).toHaveBeenCalledWith(expect.objectContaining({
             reloadInvitationCount: 10
         }), {});
+    });
+
+    it('should call getMyInvitedEvents on component render', () => {
+        const getEventsSpy = jest.spyOn(ParticipantServiceModule, 'getMyInvitedEvents');
+
+        render(
+            <MyProvider>
+                <InvitedEventLists reloadInvitationCount={10} />
+            </MyProvider>
+        );
+
+        expect(getEventsSpy).toHaveBeenCalled();
     });
 });

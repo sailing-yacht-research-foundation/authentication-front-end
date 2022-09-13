@@ -99,7 +99,7 @@ describe('ConfirmSharingInformationModal', () => {
                 success: false
             })
         });
-        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError'); 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
 
         const { getByText } = render(<ConfirmSharingInformationModal showModal={true} setShowModal={jest.fn} event={{}} requiredInformation={[]} reloadParent={jest.fn} />);
 
