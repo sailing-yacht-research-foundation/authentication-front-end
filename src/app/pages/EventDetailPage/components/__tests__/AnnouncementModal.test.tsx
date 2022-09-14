@@ -60,6 +60,6 @@ describe('AnnouncementModal', () => {
     it('should call getAcceptedAndSelfRegisteredParticipantByCalendarEventId when the componnent rendered', async () => {
         const serviceCallSpy = jest.spyOn(ParticipantServiceModule, 'getAcceptedAndSelfRegisteredParticipantByCalendarEventId');
         render(<AnnouncementModalModule.AnnouncementModal event={eventMock} showModal={true} setShowModal={jest.fn} reloadParent={jest.fn} />);
-        expect(serviceCallSpy).toHaveBeenCalled();
+        expect(serviceCallSpy).toHaveBeenCalledWith(eventMock.id, 1, 1000);
     });
 });

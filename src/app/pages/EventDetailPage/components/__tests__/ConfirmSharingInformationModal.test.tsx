@@ -74,7 +74,7 @@ describe('ConfirmSharingInformationModal', () => {
 
         expect(shareInformationAfterJoinedEventSpy).toHaveBeenCalledTimes(1);
         await act(() => Promise.resolve());
-        expect(setShowModalMock).toHaveBeenCalled();
+        expect(setShowModalMock).toHaveBeenCalledWith(false);
         expect(reloadParentMock).toHaveBeenCalled();
     });
 

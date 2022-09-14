@@ -13,7 +13,6 @@ const shallowRenderer = createRenderer();
 
 describe('InformationNotSharedMessage', () => {
     it('should render to match the snapshot', () => {
-        const eventMock = { id: uuid.v4() }
         shallowRenderer.render(
             <Provider>
                 <InformationNotShared event={{}} reloadParent={jest.fn} />

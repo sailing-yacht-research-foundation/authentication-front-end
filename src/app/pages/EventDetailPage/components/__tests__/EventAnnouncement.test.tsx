@@ -31,6 +31,6 @@ describe('EventAnnouncement', () => {
             <EventAnnouncement event={eventMock} />
         </Provider>);
 
-        expect(getEventMessagesSpy).toHaveBeenCalled();
+        expect(getEventMessagesSpy).toHaveBeenCalledWith(eventMock.id);
     });
 });
