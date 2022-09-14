@@ -169,7 +169,8 @@
         "statements": 90
       }
     },
-    "resetMocks": false
+    "resetMocks": false,
+    "coverageReporters": ["text", "text-summary", "html"]
   },
   "devDependencies": {
     "redux-mock-store": "^1.5.4"
