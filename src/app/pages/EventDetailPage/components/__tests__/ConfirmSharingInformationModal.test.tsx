@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { ConfirmSharingInformationModal } from '../ConfirmSharingInformationModal';
 import * as ConfirmSharingInformationModalModule from '../ConfirmSharingInformationModal';
 import { createRenderer } from 'react-test-renderer/shallow';
 import { i18n } from 'locales/i18n';
@@ -8,26 +7,26 @@ import { act, fireEvent, render, } from '@testing-library/react';
 import * as ParticipantServiceModule from 'services/live-data-server/participants';
 import * as Helpers from 'utils/helpers';
 
+const uuid = require('uuid');
 const shallowRenderer = createRenderer();
-
+const eventMock = { id: uuid.v4() }
 const modalShowComponent = (
-    <ConfirmSharingInformationModal showModal={true} setShowModal={jest.fn} event={{}} requiredInformation={[]} reloadParent={jest.fn} />
+    <ConfirmSharingInformationModalModule.ConfirmSharingInformationModal showModal={true} setShowModal={jest.fn} event={eventMock} requiredInformation={[]} reloadParent={jest.fn} />
 );
 
 describe('ConfirmSharingInformationModal', () => {
     it('should render and match snapshot', () => {
-        shallowRenderer.render(modalShowComponent);
+        shallowRenderer.render(<ConfirmSharingInformationModalModule.ConfirmSharingInformationModal showModal={true} setShowModal={jest.fn} event={{}} requiredInformation={[]} reloadParent={jest.fn} />);
         const renderedOutput = shallowRenderer.getRenderOutput();
         expect(renderedOutput).toMatchSnapshot();
     });
 
-    // Use 'it' to test a single attribute of a target
     it('Hide if show modal flag is false', () => {
 
-        shallowRenderer.render(<ConfirmSharingInformationModal showModal={false} setShowModal={jest.fn} event={{}} requiredInformation={[]} reloadParent={jest.fn} />);
+        shallowRenderer.render(<ConfirmSharingInformationModalModule.ConfirmSharingInformationModal showModal={false} setShowModal={jest.fn} event={eventMock} requiredInformation={[]} reloadParent={jest.fn} />);
 
         const renderedOutput = shallowRenderer.getRenderOutput();
-        expect(renderedOutput.props.visible).not.toBeTruthy();
+        expect(renderedOutput.props.visible).toBeFalsy();
     });
 
     it('Show if show modal flag is true', async () => {
@@ -46,24 +45,10 @@ describe('ConfirmSharingInformationModal', () => {
         expect(shallowRenderer.getRenderOutput().props.children[0].props.children).toBe(t(translations.event_detail_page.by_clicking_the_accept_button_you_will_share_the_following_information_to_the_organizer));
     });
 
-    it("It should have been rendered with correct received props", () => {
-        const confirmModalSpy = jest.spyOn(ConfirmSharingInformationModalModule, 'ConfirmSharingInformationModal');
-
-        render(<ConfirmSharingInformationModal showModal={true} setShowModal={jest.fn} event={{}} requiredInformation={[]} reloadParent={jest.fn} />);
-
-        expect(confirmModalSpy).toHaveBeenCalledWith({
-            showModal: true,
-            setShowModal: jest.fn,
-            event: {},
-            requiredInformation: [],
-            reloadParent: jest.fn
-        }, {});
-    });
-
     it("It should call setShowModal when pressing cancel text", () => {
         const setShowModalMock = jest.fn();
 
-        const { getByText } = render(<ConfirmSharingInformationModal showModal={true} setShowModal={setShowModalMock} event={{}} requiredInformation={[]} reloadParent={jest.fn} />);
+        const { getByText } = render(<ConfirmSharingInformationModalModule.ConfirmSharingInformationModal showModal={true} setShowModal={setShowModalMock} event={eventMock} requiredInformation={[]} reloadParent={jest.fn} />);
 
         act(() => {
             fireEvent.click(getByText('Cancel'));
@@ -81,7 +66,7 @@ describe('ConfirmSharingInformationModal', () => {
         const setShowModalMock = jest.fn();
         const reloadParentMock = jest.fn();
 
-        const { getByText } = render(<ConfirmSharingInformationModal showModal={true} setShowModal={setShowModalMock} event={{}} requiredInformation={[]} reloadParent={reloadParentMock} />);
+        const { getByText } = render(<ConfirmSharingInformationModalModule.ConfirmSharingInformationModal showModal={true} setShowModal={setShowModalMock} event={eventMock} requiredInformation={[]} reloadParent={reloadParentMock} />);
 
         act(() => {
             fireEvent.click(getByText('Accept'));
@@ -100,8 +85,10 @@ describe('ConfirmSharingInformationModal', () => {
             })
         });
         const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        const setShowModalMock = jest.fn();
+        const reloadParentMock = jest.fn();
 
-        const { getByText } = render(<ConfirmSharingInformationModal showModal={true} setShowModal={jest.fn} event={{}} requiredInformation={[]} reloadParent={jest.fn} />);
+        const { getByText } = render(<ConfirmSharingInformationModalModule.ConfirmSharingInformationModal showModal={true} setShowModal={setShowModalMock} event={eventMock} requiredInformation={[]} reloadParent={reloadParentMock} />);
 
         act(() => {
             fireEvent.click(getByText('Accept'));
@@ -110,5 +97,7 @@ describe('ConfirmSharingInformationModal', () => {
         expect(shareInformationAfterJoinedEventSpy).toHaveBeenCalled();
         await act(() => Promise.resolve());
         expect(showToastMessageOnRequestErrorSpy).toHaveBeenCalled();
+        expect(setShowModalMock).not.toHaveBeenCalled();
+        expect(reloadParentMock).not.toHaveBeenCalled();
     });
 });

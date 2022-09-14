@@ -10,6 +10,8 @@ import * as EventCalendarModule from 'services/live-data-server/event-calendars'
 import * as Helpers from 'utils/helpers';
 import { toast } from 'react-toastify';
 
+const uuid = require('uuid');
+const eventMock = { id: uuid.v4() };
 const shallowRenderer = createRenderer();
 
 jest.mock("react-redux", () => ({
@@ -29,7 +31,7 @@ describe('ParticipantNotPaidSection', () => {
 
     it('should render empty component when the condition does not match', () => {
         const { container } = render(<MyProvider>
-            <ParticipantNotPaidSection event={{}} />
+            <ParticipantNotPaidSection event={eventMock} />
         </MyProvider>);
 
         expect(container.firstChild).toBeNull();

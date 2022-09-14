@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { DeleteEventModal } from '../DeleteEventModal';
 import * as DeleteEventModalModule from '../DeleteEventModal';
 import { createRenderer } from 'react-test-renderer/shallow';
 import { i18n } from 'locales/i18n';
@@ -8,10 +7,11 @@ import { act, fireEvent, render, } from '@testing-library/react';
 import * as EventServiceModule from 'services/live-data-server/event-calendars';
 import * as Helper from 'utils/helpers';
 
+const uuid = require('uuid');
 const shallowRenderer = createRenderer();
-
+const eventMock = { id: uuid.v4() }
 const modalShowComponent = (
-    <DeleteEventModal event={{}}
+    <DeleteEventModalModule.DeleteEventModal event={{}}
         onRaceDeleted={jest.fn}
         showDeleteModal={false}
         setShowDeleteModal={jest.fn} />
@@ -24,18 +24,17 @@ describe('DeleteEventModal', () => {
         expect(renderedOutput).toMatchSnapshot();
     });
 
-    // Use 'it' to test a single attribute of a target
     it('Hide if show modal flag is false', () => {
 
         shallowRenderer.render(modalShowComponent);
 
         const renderedOutput = shallowRenderer.getRenderOutput();
-        expect(renderedOutput.props.visible).not.toBeTruthy();
+        expect(renderedOutput.props.visible).toBeFalsy();
     });
 
     it('Show if show modal flag is true', async () => {
         shallowRenderer.render(
-            <DeleteEventModal event={{}}
+            <DeleteEventModalModule.DeleteEventModal event={eventMock}
                 onRaceDeleted={jest.fn}
                 showDeleteModal={true}
                 setShowDeleteModal={jest.fn} />);
@@ -48,7 +47,7 @@ describe('DeleteEventModal', () => {
         const t = await i18n;
 
         shallowRenderer.render(
-            <DeleteEventModal event={{}}
+            <DeleteEventModalModule.DeleteEventModal event={eventMock}
                 onRaceDeleted={jest.fn}
                 showDeleteModal={true}
                 setShowDeleteModal={jest.fn} />);
@@ -57,27 +56,11 @@ describe('DeleteEventModal', () => {
         expect(t(shallowRenderer.getRenderOutput().props.children.props.children)).toBe(t(translations.delete_event_modal.you_will_delete));
     });
 
-    it("It should have been rendered with correct received props", () => {
-        const deleteEventModalSpy = jest.spyOn(DeleteEventModalModule, 'DeleteEventModal');
-
-        render(<DeleteEventModal event={{}}
-            onRaceDeleted={jest.fn}
-            showDeleteModal={true}
-            setShowDeleteModal={jest.fn} />);
-
-        expect(deleteEventModalSpy).toHaveBeenCalledWith({
-            event: {},
-            onRaceDeleted: jest.fn,
-            showDeleteModal: true,
-            setShowDeleteModal: jest.fn
-        }, {});
-    });
-
     it("It should call setShowDeleteModal when pressing cancel text", () => {
         const setShowDeleteModalMock = jest.fn();
 
         const { getByText } = render(
-            <DeleteEventModal event={{}}
+            <DeleteEventModalModule.DeleteEventModal event={eventMock}
                 onRaceDeleted={jest.fn}
                 showDeleteModal={true}
                 setShowDeleteModal={setShowDeleteModalMock} />
@@ -97,7 +80,7 @@ describe('DeleteEventModal', () => {
         const onRaceDeletedMock = jest.fn();
 
         const { getByText } = render(
-            <DeleteEventModal event={{}}
+            <DeleteEventModalModule.DeleteEventModal event={eventMock}
                 onRaceDeleted={onRaceDeletedMock}
                 showDeleteModal={true}
                 setShowDeleteModal={jest.fn} />
@@ -119,7 +102,7 @@ describe('DeleteEventModal', () => {
         const showToastSpy = jest.spyOn(Helper, 'showToastMessageOnRequestError');
 
         const { getByText } = render(
-            <DeleteEventModal event={{}}
+            <DeleteEventModalModule.DeleteEventModal event={eventMock}
                 onRaceDeleted={jest.fn}
                 showDeleteModal={true}
                 setShowDeleteModal={jest.fn} />

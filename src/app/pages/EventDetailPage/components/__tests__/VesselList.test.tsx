@@ -8,6 +8,8 @@ import { translations } from 'locales/translations';
 import { defineWindowMatchMedia } from 'utils/test-helpers';
 import { i18n } from 'locales/i18n';
 
+const uuid = require('uuid');
+const eventMock = { id: uuid.v4() };
 const shallowRenderer = createRenderer();
 
 describe('VesselList', () => {
@@ -25,7 +27,7 @@ describe('VesselList', () => {
         const serviceSpy = jest.spyOn(CalendarEventModule, 'getEventRegisteredVessels');
 
         render(<MyProvider>
-            <VesselList event={{}} />
+            <VesselList event={eventMock} />
         </MyProvider>);
 
         expect(serviceSpy).toHaveBeenCalled();
@@ -34,7 +36,7 @@ describe('VesselList', () => {
     it('should render the component with required title', async () => {
         defineWindowMatchMedia();
         const { getByText } = render(<MyProvider>
-            <VesselList event={{}} />
+            <VesselList event={eventMock} />
         </MyProvider>);
         const t = await i18n;
 

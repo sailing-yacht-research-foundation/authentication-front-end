@@ -2,7 +2,6 @@ import MyProvider from 'app/components/Provider';
 import * as React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
 import { render } from '@testing-library/react';
-import { InvitedEventLists } from '../InvitedEventsList';
 import * as InvitedEventListModule from '../InvitedEventsList';
 import { defineWindowMatchMedia } from 'utils/test-helpers';
 import * as ParticipantServiceModule from 'services/live-data-server/participants';
@@ -18,7 +17,7 @@ describe('InvitedEventList', () => {
     it('should render and match snapshot', () => {
         shallowRenderer.render(
             <MyProvider>
-                <InvitedEventLists />
+                <InvitedEventListModule.InvitedEventLists />
             </MyProvider>
         );
         const renderedOutput = shallowRenderer.getRenderOutput();
@@ -30,7 +29,7 @@ describe('InvitedEventList', () => {
 
         render(
             <MyProvider>
-                <InvitedEventLists reloadInvitationCount={10} />
+                <InvitedEventListModule.InvitedEventLists reloadInvitationCount={10} />
             </MyProvider>
         );
 
@@ -44,7 +43,7 @@ describe('InvitedEventList', () => {
 
         render(
             <MyProvider>
-                <InvitedEventLists reloadInvitationCount={10} />
+                <InvitedEventListModule.InvitedEventLists reloadInvitationCount={10} />
             </MyProvider>
         );
 

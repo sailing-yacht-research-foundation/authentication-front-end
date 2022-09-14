@@ -5,6 +5,7 @@ import { render } from '@testing-library/react';
 import { EventDetail } from '../EventDetail';
 import * as EventCalendarModule from 'services/live-data-server/event-calendars';
 
+
 const shallowRenderer = createRenderer();
 
 jest.mock("react-router", () => ({

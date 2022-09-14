@@ -8,6 +8,8 @@ import { defineWindowMatchMedia } from 'utils/test-helpers';
 import { i18n } from 'locales/i18n';
 import { translations } from 'locales/translations';
 
+const uuid = require('uuid');
+const eventMock = { id: uuid.v4() }
 const shallowRenderer = createRenderer();
 
 jest.mock("react-redux", () => ({
@@ -30,7 +32,7 @@ describe('RaceList', () => {
         const serviceSpy = jest.spyOn(EventCalendarServiceModule, 'getAllByCalendarEventId');
 
         render(<MyProvider>
-            <RaceList event={{}} />
+            <RaceList event={eventMock} />
         </MyProvider>);
 
         expect(serviceSpy).toHaveBeenCalled();
@@ -40,7 +42,7 @@ describe('RaceList', () => {
         defineWindowMatchMedia();
 
         const { getByText } = render(<MyProvider>
-            <RaceList event={{}} />
+            <RaceList event={eventMock} />
         </MyProvider>);
 
         const t = await i18n;

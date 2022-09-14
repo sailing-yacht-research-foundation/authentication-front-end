@@ -2,10 +2,12 @@ import React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
 import Provider from 'app/components/Provider/index';
 import { render } from '@testing-library/react';
-import { EventAnnouncement } from '../EventAnnouncement';
 import * as EventCalendarServiceModule from 'services/live-data-server/event-calendars';
 import { defineWindowMatchMedia } from 'utils/test-helpers';
+import { EventAnnouncement } from '../EventAnnouncement';
 
+const uuid = require('uuid');
+const eventMock = { id: uuid.v4() }
 const shallowRenderer = createRenderer();
 
 describe('EventAnnouncement', () => {
@@ -26,7 +28,7 @@ describe('EventAnnouncement', () => {
         const getEventMessagesSpy = jest.spyOn(EventCalendarServiceModule, 'getEventMessages');
 
         render(<Provider>
-            <EventAnnouncement event={{}} />
+            <EventAnnouncement event={eventMock} />
         </Provider>);
 
         expect(getEventMessagesSpy).toHaveBeenCalled();

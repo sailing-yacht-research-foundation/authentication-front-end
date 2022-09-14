@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { DeleteCompetitionUnitModal } from '../DeleteCompetitionUnitModal';
-import * as DeleteCompetitionUnitModalModule from '../DeleteCompetitionUnitModal';
 import { createRenderer } from 'react-test-renderer/shallow';
 import { i18n } from 'locales/i18n';
 import { translations } from 'locales/translations';
@@ -8,10 +7,11 @@ import { act, fireEvent, render, } from '@testing-library/react';
 import * as CompetitionUnitModule from 'services/live-data-server/competition-units';
 import * as Helpers from 'utils/helpers';
 
+const uuid = require('uuid');
 const shallowRenderer = createRenderer();
-
+const competitionUnitMock = { id: uuid.v4() };
 const modalShowComponent = (
-    <DeleteCompetitionUnitModal competitionUnit={{}}
+    <DeleteCompetitionUnitModal competitionUnit={competitionUnitMock}
         showDeleteModal={true}
         setShowDeleteModal={jest.fn}
         onCompetitionUnitDeleted={jest.fn} />
@@ -19,21 +19,23 @@ const modalShowComponent = (
 
 describe('DeleteCompetitionUnitModal', () => {
     it('should render and match snapshot', () => {
-        shallowRenderer.render(modalShowComponent);
+        shallowRenderer.render(<DeleteCompetitionUnitModal competitionUnit={{}}
+            showDeleteModal={true}
+            setShowDeleteModal={jest.fn}
+            onCompetitionUnitDeleted={jest.fn} />);
         const renderedOutput = shallowRenderer.getRenderOutput();
         expect(renderedOutput).toMatchSnapshot();
     });
 
-    // Use 'it' to test a single attribute of a target
     it('Hide if show modal flag is false', () => {
 
-        shallowRenderer.render(<DeleteCompetitionUnitModal competitionUnit={{}}
+        shallowRenderer.render(<DeleteCompetitionUnitModal competitionUnit={competitionUnitMock}
             showDeleteModal={false}
             setShowDeleteModal={jest.fn}
             onCompetitionUnitDeleted={jest.fn} />);
 
         const renderedOutput = shallowRenderer.getRenderOutput();
-        expect(renderedOutput.props.visible).not.toBeTruthy();
+        expect(renderedOutput.props.visible).toBeFalsy();
     });
 
     it('Show if show modal flag is true', async () => {
@@ -52,23 +54,10 @@ describe('DeleteCompetitionUnitModal', () => {
         expect(t(shallowRenderer.getRenderOutput().props.children.props.children)).toBe(t(translations.delete_competition_unit_modal.you_will_delete));
     });
 
-    it("It should have been rendered with correct received props", () => {
-        const deleteCompetitionUnitSpy = jest.spyOn(DeleteCompetitionUnitModalModule, 'DeleteCompetitionUnitModal');
-
-        render(<DeleteCompetitionUnitModal event={{}} showModal={true} setShowModal={jest.fn} reloadParent={jest.fn} />);
-
-        expect(deleteCompetitionUnitSpy).toHaveBeenCalledWith({
-            event: {},
-            showModal: true,
-            setShowModal: jest.fn,
-            reloadParent: jest.fn,
-        }, {});
-    });
-
     it("It should call setShowModal when pressing cancel text", async () => {
         const setShowModalMock = jest.fn();
 
-        const { getByText } = render(<DeleteCompetitionUnitModal competitionUnit={{}}
+        const { getByText } = render(<DeleteCompetitionUnitModal competitionUnit={competitionUnitMock}
             showDeleteModal={true}
             setShowDeleteModal={setShowModalMock}
             onCompetitionUnitDeleted={jest.fn} />);
@@ -89,7 +78,7 @@ describe('DeleteCompetitionUnitModal', () => {
             })
         }); 
         
-        const { getByText } = render(<DeleteCompetitionUnitModal competitionUnit={{}}
+        const { getByText } = render(<DeleteCompetitionUnitModal competitionUnit={competitionUnitMock}
             showDeleteModal={true}
             setShowDeleteModal={jest.fn}
             onCompetitionUnitDeleted={onCompetitionUnitDeletedMock} />);
@@ -109,12 +98,13 @@ describe('DeleteCompetitionUnitModal', () => {
                 success: false
             })
         });
-        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError'); 
+        const showToastMessageOnRequestErrorSpy = jest.spyOn(Helpers, 'showToastMessageOnRequestError');
+        const onCompetitionUnitDeletedMock = jest.fn();
         
-        const { getByText } = render(<DeleteCompetitionUnitModal competitionUnit={{}}
+        const { getByText } = render(<DeleteCompetitionUnitModal competitionUnit={competitionUnitMock}
             showDeleteModal={true}
             setShowDeleteModal={jest.fn}
-            onCompetitionUnitDeleted={jest.fn} />);
+            onCompetitionUnitDeleted={onCompetitionUnitDeletedMock} />);
 
         act(() => {
             fireEvent.click(getByText('OK'));
@@ -123,5 +113,6 @@ describe('DeleteCompetitionUnitModal', () => {
         expect(competitionUnitModuleMock).toHaveBeenCalled();
         await act(() => Promise.resolve()); // wait for deleteCompetitionUnit call.
         expect(showToastMessageOnRequestErrorSpy).toHaveBeenCalled();
+        expect(onCompetitionUnitDeletedMock).not.toHaveBeenCalled();
     });
 });

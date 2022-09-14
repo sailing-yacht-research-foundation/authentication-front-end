@@ -171,5 +171,7 @@
     },
     "resetMocks": false
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "redux-mock-store": "^1.5.4"
+  }
 }
