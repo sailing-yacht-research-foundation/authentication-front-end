@@ -97,7 +97,11 @@ export const RaceMap = (props) => {
   });
 
   useEffect(() => {
-    if (raceTime.start !== null && raceTime.start !== undefined && !initializedWind) {
+    if (raceTime.start !== null
+      && raceTime.start !== undefined
+      && raceTime.start !== 0
+      && moment(raceTime.start).isValid()
+      && !initializedWind) {
       initializeWind();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
