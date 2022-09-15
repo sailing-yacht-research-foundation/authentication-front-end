@@ -806,9 +806,9 @@ export const RaceMap = (props) => {
           width: 1,
           opacity: 0.2,
           visible: true,
-          numParticles: 5000,
-          speedFactor: 3,
-          maxAge: 40,
+          numParticles: 2000,
+          speedFactor: 4,
+          maxAge: 60,
           imageUnscale: [-128, 127],
           bounds: [-180, -90, 180, 90],
         })
