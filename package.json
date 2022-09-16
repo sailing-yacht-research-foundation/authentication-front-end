@@ -173,7 +173,10 @@
         "lines": 90,
         "statements": 90
       }
-    }
+    },
+    "transformIgnorePatterns": [
+      "!node_modules/"
+    ]
   },
   "devDependencies": {}
 }
