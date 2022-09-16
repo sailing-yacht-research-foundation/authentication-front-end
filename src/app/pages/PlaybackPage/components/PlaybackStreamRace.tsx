@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
 import { useLocation } from "react-router";
 import queryString from "querystring";
-import { generateLastHeading, normalizeSequencedGeometries } from "utils/race/race-helper";
+import { generateLastHeading, normalizeSequencedGeometries, unregisterEventEmitterForPlaybackAndPlayer } from "utils/race/race-helper";
 import { Playback } from "./Playback";
 import {
   selectCompetitionUnitDetail,
@@ -86,7 +86,7 @@ export const PlaybackStreamRace = () => {
 
   useEffect(() => {
     return () => {
-     clearPlayerData();
+      clearPlayerData();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -323,14 +323,7 @@ export const PlaybackStreamRace = () => {
 
   const clearPlayerData = () => {
     if (eventEmitter) {
-      eventEmitter.removeAllListeners();
-      eventEmitter.off(RaceEmitterEvent.PING, () => { });
-      eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
-      eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
-      eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
-      eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
-      eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
-      eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
+      unregisterEventEmitterForPlaybackAndPlayer(eventEmitter);
       eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
       eventEmitter.off(RaceEmitterEvent.OCS_DETECTED, () => { });
     }
@@ -367,7 +360,7 @@ export const PlaybackStreamRace = () => {
       vessel,
       vesselParticipantId: id,
       positions: [],
-      lastPosition: {  },
+      lastPosition: {},
       deviceType: 'boat',
       sailNumber: vesselParticipant.sailNumber,
       participant: { competitor_name: vessel?.publicName },
