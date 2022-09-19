@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
 import { useLocation } from "react-router";
 import queryString from "querystring";
-import { generateLastHeading, normalizeSequencedGeometries, unregisterEventEmitterForPlaybackAndPlayer } from "utils/race/race-helper";
+import { generateLastHeading, normalizeSequencedGeometries } from "utils/race/race-helper";
 import { Playback } from "./Playback";
 import {
   selectCompetitionUnitDetail,
@@ -323,9 +323,7 @@ export const PlaybackStreamRace = () => {
 
   const clearPlayerData = () => {
     if (eventEmitter) {
-      unregisterEventEmitterForPlaybackAndPlayer(eventEmitter);
-      eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
-      eventEmitter.off(RaceEmitterEvent.OCS_DETECTED, () => { });
+      eventEmitter.removeAllListeners();
     }
     dispatch(actions.setElapsedTime(0));
     dispatch(actions.setRaceLength(0));

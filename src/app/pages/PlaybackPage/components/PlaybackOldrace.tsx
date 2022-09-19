@@ -12,8 +12,7 @@ import {
   limitRaceLegsDataByElapsedTime,
   turnTracksToVesselParticipantsData,
   getRaceLengthFromSimplifiedTracks,
-  getFirstPingTimeFromSimplifiedTracks,
-  unregisterEventEmitterForPlaybackAndPlayer,
+  getFirstPingTimeFromSimplifiedTracks
 } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
@@ -331,17 +330,17 @@ export const PlaybackOldRace = (props) => {
 
   const clearPlaybackData = () => {
     if (eventEmitter) {
-        unregisterEventEmitterForPlaybackAndPlayer(eventEmitter);
-        eventEmitter = undefined;
-      }
+      eventEmitter.removeAllListeners();
+      eventEmitter = undefined;
+    }
 
-      socketWorker?.terminate();
-      mapDataWorker?.terminate();
-      socketWorker = undefined;
-      mapDataWorker = undefined;
-      dispatch(actions.setElapsedTime(0));
-      dispatch(actions.setRaceLength(0));
-      dispatch(actions.setRaceCourseDetail({}));
+    socketWorker?.terminate();
+    mapDataWorker?.terminate();
+    socketWorker = undefined;
+    mapDataWorker = undefined;
+    dispatch(actions.setElapsedTime(0));
+    dispatch(actions.setRaceLength(0));
+    dispatch(actions.setRaceCourseDetail({}));
   }
 
   const mapData = (e) => {

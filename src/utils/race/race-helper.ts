@@ -5,7 +5,6 @@ import { SimplifiedTrack, SimplifiedTrackData } from "types/SimplifiedTrack";
 import {
   VesselParticipant,
 } from "types/VesselParticipant";
-import { RaceEmitterEvent } from "utils/constants";
 
 export const generateLastHeading = (coordinate1, coordinate2) => {
   const point1 = turf.point(coordinate1);
@@ -233,13 +232,3 @@ export const getFirstPingTimeFromSimplifiedTracks = (simplifiedTracks) => {
   return startTime;
 }
 
-export const unregisterEventEmitterForPlaybackAndPlayer = (eventEmitter) => {
-  eventEmitter.removeAllListeners();
-  eventEmitter.off(RaceEmitterEvent.PING, () => { });
-  eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
-  eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
-  eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
-  eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
-  eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
-  eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
-}
