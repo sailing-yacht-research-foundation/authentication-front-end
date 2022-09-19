@@ -27,7 +27,7 @@ export const UserDropdown = (props) => {
         <Dropdown overlay={menu}>
             <UserDropdownWrapper>
                 <AvatarWrapper>
-                    <Image style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
+                    <Image fallback='/app-logo.png' style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} src={getProfilePicture(authUser)} />
                 </AvatarWrapper>
                 <UserNameWrapper>
                     <UserName className="ant-dropdown-link">{getUserName(authUser)}</UserName>

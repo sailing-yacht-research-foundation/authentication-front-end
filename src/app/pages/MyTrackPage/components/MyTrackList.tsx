@@ -19,7 +19,7 @@ import { BiTrash } from 'react-icons/bi';
 import { Track } from 'types/Track';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { toast } from 'react-toastify';
-import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, showToastMessageOnRequestError, usePrevious } from 'utils/helpers';
+import { checkIfLastFilterAndSortValueDifferentToCurrent, getFilterTypeBaseOnColumn, handleOnTableStateChanged, parseFilterParamBaseOnFilterType, renderEmptyValue, appendThumbnail, showToastMessageOnRequestError, usePrevious } from 'utils/helpers';
 import { deleteEvent } from 'services/live-data-server/event-calendars';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
@@ -29,6 +29,7 @@ import { useMyTracksSlice } from '../slice';
 import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
 import { isMobile } from 'react-device-detect';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 const defaultOptions = {
     loop: true,
@@ -92,7 +93,7 @@ export const MyTrackList = () => {
                     return (
                         <FlexWrapper>
                             {record.competitionUnit?.openGraphImage ?
-                                <OpenGraphImage src={record.competitionUnit.openGraphImage} alt={record.event.name} /> :
+                                <OpenGraphImage fallback={record.competitionUnit.openGraphImage} src={appendThumbnail(record.competitionUnit.openGraphImage)} alt={record.event.name} /> :
                                 <NoImageContainer>
                                     <AiOutlineMinus style={{ color: '#FFFFFF', fontSize: '20px' }} />
                                 </NoImageContainer>
@@ -334,7 +335,7 @@ const FlexWrapper = styled.div`
     align-items: center;
 `;
 
-const OpenGraphImage = styled.img`
+const OpenGraphImage = styled(SYRFImage)`
     width: 40px;
     height: 40px;
     border-radius: 4px;

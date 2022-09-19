@@ -352,25 +352,23 @@ export const PlaybackStreamRace = () => {
   };
 
   const addNewBoatToTheRace = (data) => {
-    const { vesselParticipant, vessel, participant, position } = data;
+    const { vesselParticipant, vessel, participant } = data;
     const { id } = vesselParticipant;
 
-    if (groupedPosition?.current[id] || !position) return;
+    if (groupedPosition?.current[id]) return;
 
     groupedPosition.current[id] = {
       id: id,
       vessel,
       vesselParticipantId: id,
-      positions: [{ lat: position.lat, lon: position.lon }],
-      lastPosition: { lon: position.lon, lat: position.lat },
+      positions: [],
+      lastPosition: {  },
       deviceType: 'boat',
       sailNumber: vesselParticipant.sailNumber,
       participant: { competitor_name: vessel?.publicName },
       color: stringToColour(id),
       leaderPosition: Object.keys(groupedPosition.current)?.length + 1,
     };
-
-    receivedPositionData.current = true;
 
     message.info(t(translations.playback_page.competitor_joined, { competitor_name: participant?.publicName, boat_name: vessel?.publicName }));
   }

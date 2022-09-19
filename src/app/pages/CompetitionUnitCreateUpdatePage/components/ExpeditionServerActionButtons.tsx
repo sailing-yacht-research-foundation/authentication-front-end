@@ -321,7 +321,7 @@ const StyledUl = styled.ul`
 const Wrapper = styled.div`
     display: none;
 
-    ${media.large`
+    ${media.medium`
         display: block !important;
     `}
 `;

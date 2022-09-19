@@ -69,7 +69,7 @@ export const ResultItem = (props) => {
     }
 
     const canRegister = () => {
-        return relation && !relation?.isAdmin && !relation?.isParticipating
+        return relation && !relation?.isAdmin && !relation?.isParticipant
             && raceData.isOpen && raceData.allowRegistration
             && [RaceStatus.SCHEDULED].includes(raceData.status);
     };

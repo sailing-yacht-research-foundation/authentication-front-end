@@ -10,7 +10,8 @@ import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
 import { revokeGroupAsEditor } from 'services/live-data-server/groups';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { showToastMessageOnRequestError } from 'utils/helpers';
+import { appendThumbnail, showToastMessageOnRequestError } from 'utils/helpers';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
 
@@ -70,7 +71,10 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
             return <Tooltip key={index} title={editor?.group?.groupName}>
                 <EditorItem>
                     <EditorItemAvatarContainer>
-                        <img alt={editor?.group?.groupName} src={editor?.group?.groupImage || DEFAULT_GROUP_AVATAR} />
+                        <SYRFImage
+                            alt={editor?.group?.groupName}
+                            src={appendThumbnail(editor?.group?.groupImage) || DEFAULT_GROUP_AVATAR}
+                            fallback={editor?.group?.groupImage || DEFAULT_GROUP_AVATAR} />
                     </EditorItemAvatarContainer>
                     <EditorItemRightInfo>
                         <EditorRightInfoInner>
@@ -90,7 +94,10 @@ export const EventAdminsManager = React.forwardRef<any, any>((props, ref) => {
             return <Tooltip key={index} title={editor?.user?.name}>
                 <EditorItem key={editor.id}>
                     <EditorItemAvatarContainer>
-                        <img alt={editor?.user?.name} src={renderAvatar(editor?.user?.avatar)} />
+                        <SYRFImage
+                            alt={editor?.user?.name}
+                            src={renderAvatar(editor?.user?.avatar)}
+                            fallback={renderAvatar(editor?.user?.avatar, false)} />
                     </EditorItemAvatarContainer>
                     <EditorItemRightInfo>
                         <EditorRightInfoInner>

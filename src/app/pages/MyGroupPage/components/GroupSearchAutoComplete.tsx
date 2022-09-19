@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { searchGroups } from 'services/live-data-server/groups';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
-import { renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
+import { appendThumbnail, renderNumberWithCommas, uppercaseFirstCharacter } from 'utils/helpers';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
 import { debounce } from 'utils/helpers';
 import { useHistory } from 'react-router';
 import { DEFAULT_GROUP_AVATAR } from 'utils/constants';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 export const GroupSearchAutoComplete = ({ keyword, showSuggestions, setShowSuggestions }) => {
 
@@ -41,7 +42,7 @@ export const GroupSearchAutoComplete = ({ keyword, showSuggestions, setShowSugge
             return (
                 <GroupRow key={group.id} onClick={() => history.push(`/groups/${group.id}`)}>
                     <GroupAvatarContainer>
-                        <img alt={group?.groupName} src={group.groupImage || DEFAULT_GROUP_AVATAR} />
+                        <SYRFImage alt={group?.groupName} fallback={group.groupImage} src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} />
                     </GroupAvatarContainer>
                     <GroupRightInfoContainer>
                         <GroupName>{group.groupName}</GroupName>

@@ -4,7 +4,7 @@ import { Button, Spin, Tag, Space, Tooltip } from 'antd';
 import { MdOutlineGroupAdd, MdOutlineUndo } from 'react-icons/md';
 import { useHistory } from 'react-router';
 import { leaveGroup, requestJoinGroup } from 'services/live-data-server/groups';
-import { renderNumberWithCommas, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
+import { appendThumbnail, renderNumberWithCommas, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGroupSlice } from '../slice';
 import { selectGroupCurrentPage, selectGroupPageSize, selectRequestedGroupCurrentPage } from '../slice/selectors';
 import { renderAvatar } from 'utils/user-utils';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 export const GroupItemRow = (props) => {
 
@@ -84,7 +85,7 @@ export const GroupItemRow = (props) => {
                             e.stopPropagation();
                             history.push(`/profile/${member.userId}`)
                         }}>
-                            <img src={renderAvatar(member.avatar)} alt={member.name} />
+                            <SYRFImage fallback={renderAvatar(member.avatar, false)} src={renderAvatar(member.avatar)} alt={member.name} />
                         </GroupMemberItem>
                     </Tooltip>
                 )}
@@ -97,7 +98,7 @@ export const GroupItemRow = (props) => {
     return (
         <GroupItem onClick={showGroupItemDetail}>
             <GroupItemAvatarContainer>
-                <img src={group.groupImage || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
+                <SYRFImage fallback={group.groupImage || DEFAULT_GROUP_AVATAR} src={appendThumbnail(group.groupImage) || DEFAULT_GROUP_AVATAR} alt={group.groupName} />
             </GroupItemAvatarContainer>
             <GroupItemInfoContainer>
                 <GroupItemTitle>{group.groupName}</GroupItemTitle>

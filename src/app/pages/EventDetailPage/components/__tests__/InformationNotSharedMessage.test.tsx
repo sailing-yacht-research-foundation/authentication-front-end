@@ -8,7 +8,6 @@ import { i18n } from 'locales/i18n';
 import { translations } from 'locales/translations';
 import { act } from 'react-test-renderer';
 
-const uuid = require('uuid');
 const shallowRenderer = createRenderer();
 
 describe('InformationNotSharedMessage', () => {
