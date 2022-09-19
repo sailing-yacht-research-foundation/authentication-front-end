@@ -28,7 +28,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
         rules={
           Array [
             Object {
-              "message": "Email is required.",
+              "message": "Please fill out this field.",
               "required": true,
             },
             Object {
@@ -42,12 +42,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
           ]
         }
       >
-        <Input
-          autoCapitalize="none"
-          autoComplete="off"
-          autoCorrect="off"
-          type="text"
-        />
+        <Styled(Input) />
       </FormItem>
       <Row
         gutter={24}
@@ -64,21 +59,17 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
             rules={
               Array [
                 Object {
-                  "message": "First name is required.",
+                  "message": "Please fill out this field.",
                   "required": true,
                 },
                 Object {
                   "max": 15,
-                  "message": "First name cannot be longer than 15 characters",
+                  "message": "Please input no more than 15 characters.",
                 },
               ]
             }
           >
-            <Input
-              autoComplete="off"
-              autoCorrect="off"
-              type="text"
-            />
+            <Styled(Input) />
           </FormItem>
         </Col>
         <Col
@@ -93,21 +84,17 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
             rules={
               Array [
                 Object {
-                  "message": "Last name is required.",
+                  "message": "Please fill out this field.",
                   "required": true,
                 },
                 Object {
                   "max": 15,
-                  "message": "Last name cannot be longer than 15 characters.",
+                  "message": "Please input no more than 15 characters.",
                 },
               ]
             }
           >
-            <Input
-              autoComplete="off"
-              autoCorrect="off"
-              type="text"
-            />
+            <Styled(Input) />
           </FormItem>
         </Col>
       </Row>
@@ -117,7 +104,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
         rules={
           Array [
             Object {
-              "message": "Password is required.",
+              "message": "Please fill out this field.",
               "required": true,
             },
             Object {
@@ -132,14 +119,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
           ]
         }
       >
-        <Password
-          action="click"
-          autoCapitalize="none"
-          autoComplete="off"
-          autoCorrect="off"
-          iconRender={[Function]}
-          visibilityToggle={true}
-        />
+        <Styled(Password) />
       </FormItem>
       <FormItem
         label="Password Confirmation"
@@ -154,14 +134,7 @@ exports[`<SignupForm /> should render and match the snapshot 1`] = `
           ]
         }
       >
-        <Password
-          action="click"
-          autoCapitalize="none"
-          autoComplete="off"
-          autoCorrect="off"
-          iconRender={[Function]}
-          visibilityToggle={true}
-        />
+        <Styled(Password) />
       </FormItem>
       <Divider />
       <FormItem
