@@ -133,7 +133,7 @@ exports[`<Footer /> should render and matchs the snapshot 1`] = `
     </Row>
     <Divider />
     <styled.div>
-      Copyright (c) 2021 Sailing Yacht Research Foundation
+      Copyright (c) 2022 Sailing Yacht Research Foundation
     </styled.div>
   </styled.div>
 </styled.div>
