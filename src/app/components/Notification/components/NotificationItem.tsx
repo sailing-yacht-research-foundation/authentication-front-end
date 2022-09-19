@@ -30,6 +30,7 @@ import { Button } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { HiDocumentAdd } from 'react-icons/hi';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 const notificationColor = {
     DELETE: '#DC6E1E',
@@ -152,10 +153,10 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
         </NotificationBadge>
     }
 
-    const renderNotificationAvatar = () => {
+    const renderNotificationAvatar = (renderAsThumbnail = true) => {
         const thumbnail = notification.notificationThumbnail || notification.metadata?.notificationThumbnail;
         if (thumbnail)
-            return renderAvatar(thumbnail);
+            return renderAvatar(thumbnail, renderAsThumbnail);
 
         switch (notification.notificationType) {
             case NotificationTypes.USER_INVITED_TO_GROUP:
@@ -249,7 +250,7 @@ export const NotificationItem = ({ notification, showFullNotificationContent }: 
         <NotificationItemWrapper onClick={navigateToTarget}>
             <NotificationItemAvatarWrapper>
                 <NotificationItemAvatarContainer>
-                    <img alt={notification.notificationTitle} src={renderNotificationAvatar()} className='avatar-img' />
+                    <SYRFImage alt={notification.notificationTitle} fallback={renderNotificationAvatar(false)} src={renderNotificationAvatar()} className='avatar-img' />
                 </NotificationItemAvatarContainer>
                 {renderNotificationBadge()}
             </NotificationItemAvatarWrapper>

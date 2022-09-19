@@ -677,3 +677,6 @@ const areTwoFiltersEqual = (filter1, filter2) => {
 
     return false;
 }
+export const appendThumbnail  = (url) => {
+    return url && `${url?.split('.').slice(0, -1).join('.')}_thumbnail.jpg`;
+}

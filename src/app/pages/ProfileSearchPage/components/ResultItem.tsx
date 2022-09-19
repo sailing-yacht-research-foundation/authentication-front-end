@@ -11,6 +11,7 @@ import { translations } from 'locales/translations';
 import { followProfile, unfollowProfile } from 'services/live-data-server/profile';
 import { useDispatch } from 'react-redux';
 import { useProfileSearchSlice } from '../slice';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 export const ResultItem = ({ profile, results }) => {
 
@@ -76,7 +77,7 @@ export const ResultItem = ({ profile, results }) => {
             <UnfollowConfirmModal isLoading={isLoading} profileName={profile.name} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} visible={showUnfollowModal} />
             <PeopleInnerWrapper>
                 <PeopleAvatar>
-                    <img alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
+                    <SYRFImage alt={profile.name} fallback={renderAvatar(profile.avatar, false)} src={renderAvatar(profile.avatar)} className="avatar-img" />
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id}`}>{profile.name}</PeopleName>

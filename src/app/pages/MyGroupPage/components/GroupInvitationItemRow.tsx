@@ -8,9 +8,10 @@ import { selectGroupCurrentPage, selectGroupPageSize, selectInvitationCurrentPag
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { DEFAULT_GROUP_AVATAR, GroupMemberStatus } from 'utils/constants';
-import { showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
+import { appendThumbnail, showToastMessageOnRequestError, uppercaseFirstCharacter } from 'utils/helpers';
 import { Link } from 'react-router-dom';
 import { VisibilityOfGroup } from './VisibilityOfGroup';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 export const GroupInvitationItemRow = (props) => {
 
@@ -62,7 +63,9 @@ export const GroupInvitationItemRow = (props) => {
     return (
         <InvitationItem>
             <GroupAvatarContainer>
-                <img alt={request.group?.groupName} src={request.group?.groupImage || DEFAULT_GROUP_AVATAR} />
+                <SYRFImage alt={request.group?.groupName}
+                    fallback={request.group?.groupImage || DEFAULT_GROUP_AVATAR}
+                    src={appendThumbnail(request.group?.groupImage) || DEFAULT_GROUP_AVATAR} />
             </GroupAvatarContainer>
             <RightInfoContainer>
                 <ItemInfoContainer>

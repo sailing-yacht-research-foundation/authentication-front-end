@@ -17,6 +17,7 @@ import { checkIfLocationIsValid, renderEmptyValue } from 'utils/helpers';
 import { TIME_FORMAT } from 'utils/constants';
 import { getProfilePicture, getUserName } from 'utils/user-utils';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
+import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
 require('leaflet.markercluster');
 
@@ -126,7 +127,7 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
         if (user.firstName && isAuthenticated && checkIfLocationIsValid(location.lon, location.lat))
             userMarker = L.marker(L.latLng(location.lat, location.lon), {
                 icon: L.divIcon({
-                    html: ReactDOMServer.renderToString(<img alt={getUserName(user)} src={getProfilePicture(user)} className='avatar-img' />),
+                    html: ReactDOMServer.renderToString(<SYRFImage alt={getUserName(user)} src={getProfilePicture(user)} className='avatar-img' />),
                     iconSize: [30, 30],
                     iconAnchor: [18, 0],
                 })

@@ -8,6 +8,7 @@ import { Button, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { UnfollowConfirmModal } from './UnfollowConfirmModal';
+import { SYRFImage } from '../SyrfGeneral/SYRFImage';
 
 export const UserFollowerFollowingRow = (props) => {
 
@@ -72,7 +73,7 @@ export const UserFollowerFollowingRow = (props) => {
             <UnfollowConfirmModal isLoading={isLoading} profileName={profile.name} visible={showUnfollowModal} unfollow={unfollow} hideModal={() => setShowUnfollowModal(false)} />
             <PeopleInnerWrapper>
                 <PeopleAvatar>
-                    <img alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
+                    <SYRFImage fallback={renderAvatar(profile.avatar, false)} alt={profile.name} src={renderAvatar(profile.avatar)} className="avatar-img" />
                 </PeopleAvatar>
                 <PeopleInfo>
                     <PeopleName to={`/profile/${profile.id || profileId}`}>{profile.name}</PeopleName>
