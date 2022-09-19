@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeleteCompetitionUnitModal should render and match snapshot 1`] = `
+<Modal
+  confirmLoading={false}
+  okType="primary"
+  onCancel={[Function]}
+  onOk={[Function]}
+  title="Are you sure you want to delete this race?"
+  visible={true}
+  width={520}
+>
+  <styled.div>
+    You will delete this race along with all associated information, are you sure you want to continue?
+  </styled.div>
+</Modal>
+`;

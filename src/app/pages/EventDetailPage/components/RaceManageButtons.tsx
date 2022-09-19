@@ -16,9 +16,6 @@ interface IRaceManageButtons {
     race: CompetitionUnit,
     event: CalendarEvent,
     setCompetitionUnit: Function,
-    showRegisterModal: boolean,
-    setShowRegisterModal: Function,
-    isAuthenticated: boolean,
     showDeleteRaceModal: Function,
     reloadParent?: Function
 }

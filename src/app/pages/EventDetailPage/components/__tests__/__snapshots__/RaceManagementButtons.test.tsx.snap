@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RaceManagementButtons should render and match snapshot 1`] = `
+<Provider
+  store={
+    Object {
+      "createReducer": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "injectedReducers": Object {},
+      "injectedSagas": Object {},
+      "replaceReducer": [Function],
+      "runSaga": [Function],
+      "subscribe": [Function],
+      Symbol(Symbol.observable): [Function],
+    }
+  }
+>
+  <RaceManageButtons
+    event={Object {}}
+    race={Object {}}
+    reloadParent={[Function]}
+    setCompetitionUnit={[Function]}
+    showDeleteRaceModal={[Function]}
+  />
+</Provider>
+`;

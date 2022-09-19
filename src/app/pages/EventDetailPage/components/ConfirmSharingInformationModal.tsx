@@ -45,7 +45,7 @@ export const ConfirmSharingInformationModal = ({ showModal, setShowModal, event,
         >
             <h4>{t(translations.event_detail_page.by_clicking_the_accept_button_you_will_share_the_following_information_to_the_organizer)}</h4>
             <ul>
-                {requiredInformation.map(information => information)}
+                {requiredInformation.map((information, key) => <span key={key}>information</span>)}
             </ul>
         </Modal>
     )
