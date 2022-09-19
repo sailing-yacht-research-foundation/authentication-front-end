@@ -41,7 +41,7 @@ export const RegisterRaceModal = ({ showModal, setShowModal, eventName, raceId, 
             hideModal();
             toast.success(t(translations.home_page.successfully_registered_to_join_this_competition));
             if (setRelation) setRelation({
-                isParticipating: true
+                isParticipant: true
             });
         } else {
             showToastMessageOnRequestError(response.error);
