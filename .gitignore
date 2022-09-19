@@ -18,6 +18,7 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 .env
+coverage
 
 # Logs
 *.log

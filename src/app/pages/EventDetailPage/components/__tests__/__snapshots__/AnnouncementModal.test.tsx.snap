@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnnouncementModal should render and match snapshot 1`] = `
+<Modal
+  bodyStyle={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "justifyContent": "center",
+      "overflow": "hidden",
+    }
+  }
+  cancelButtonProps={
+    Object {
+      "style": Object {
+        "display": "none",
+      },
+    }
+  }
+  confirmLoading={false}
+  okType="primary"
+  onCancel={[Function]}
+  onOk={[Function]}
+  title="Send Announcement"
+  visible={true}
+  width={520}
+>
+  <span>
+    Please invite at least 1 competitor to send announcement.
+  </span>
+</Modal>
+`;
