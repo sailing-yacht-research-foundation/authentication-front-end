@@ -4,7 +4,7 @@ import { useMap } from "react-leaflet";
 import ReactDOMServer from "react-dom/server";
 import copy from "copy-to-clipboard";
 import { message } from "antd";
-import { formatCoordinatesObjectToArray, generateLastArray, normalizeSequencedGeometries } from "utils/race/race-helper";
+import { formatCoordinatesObjectToArray, generateLastArray, getDepareFillColor, normalizeSequencedGeometries } from "utils/race/race-helper";
 import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
 import { PlayerInfo } from "./PlayerInfo";
@@ -33,6 +33,7 @@ import StartPinIcon from '../assets/start_pin.png';
 // deck-gl
 import { LeafletLayer } from 'deck.gl-leaflet';
 import { ParticleLayer } from 'deck.gl-particle';
+import { MVTLayer } from '@deck.gl/geo-layers';
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -59,32 +60,33 @@ const colors = {
 const NO_PING_TIMEOUT = 60000;
 
 export const RaceMap = (props) => {
+  const [layers, setLayers] = React.useState<any>([new MVTLayer({
+    data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf',
+    getFillColor: getDepareFillColor,
+    parameters: {
+      depthTest: true
+    },
+    id: 'depare',
+    pickable: true,
+    minZoom: 0,
+    maxZoom: 23
+  })]);
+  const deckLayer = new LeafletLayer({
+    layers: layers
+  });
   const { emitter } = props;
-
   const { actions } = usePlaybackSlice();
-
   const dispatch = useDispatch();
-
   const playbackType = useSelector(selectPlaybackType);
-
   const isAuthenticated = useSelector(selectIsAuthenticated);
-
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
-
   const raceTime = useSelector(selectRaceTime);
-
   const [selectedVesselParticipant, setSelectedVesselParticipant] = React.useState<any>({});
-
   const [showClaimTrackConfirModal, setShowClaimTrackConfirmModal] = React.useState<boolean>(false);
-
   const [isClaimingTrack, setIsClaimingTrack] = React.useState<boolean>(false);
-
   const [initializedWind, setInitializedWind] = React.useState<boolean>(false);
-
   const { t } = useTranslation();
-
   const map = useMap();
-
   const raceStatus = useRef<any>({ // for globally manage all markers and race states.
     boats: {}, // layers
     tracks: {}, // layers
@@ -801,25 +803,26 @@ export const RaceMap = (props) => {
     const month = raceTimeAsMoment.format('MM');
     const year = raceTimeAsMoment.format('YYYY')
     const hour = raceTimeAsMoment.format('HH');
-    const deckLayer = new LeafletLayer({
-      layers: [
-        new ParticleLayer({
-          id: 'particle',
-          image: `https://wind-tiles.s3.amazonaws.com/${year}/${month}/${date}/${hour}/wind_data.png`, // see deck.gl BitmapLayer image property
-          color: [255, 255, 255],
-          width: 1,
-          opacity: 0.2,
-          visible: true,
-          numParticles: 2000,
-          speedFactor: 4,
-          maxAge: 60,
-          imageUnscale: [-128, 127],
-          bounds: [-180, -90, 180, 90],
-        })
-      ]
-    });
-    map.addLayer(deckLayer);
+    const newLayers = [...layers, new ParticleLayer({
+      id: 'particle',
+      image: `https://wind-tiles.s3.amazonaws.com/${year}/${month}/${date}/${hour}/wind_data.png`, // see deck.gl BitmapLayer image property
+      color: [255, 255, 255],
+      width: 1,
+      opacity: 0.2,
+      visible: true,
+      numParticles: 2000,
+      speedFactor: 4,
+      maxAge: 60,
+      imageUnscale: [-128, 127],
+      bounds: [-180, -90, 180, 90],
+    })];
+    setLayers(newLayers);
+    deckLayer?.setProps({ layers: newLayers });
     setInitializedWind(true);
+  }
+
+  const initializeDeckGlLayers = () => {
+    map.addLayer(deckLayer);
   }
 
   const initializeMapView = () => {
@@ -841,6 +844,7 @@ export const RaceMap = (props) => {
         accessToken: "your.mapbox.access.token",
       }
     ).addTo(map);
+    initializeDeckGlLayers();
 
     map.on('drag', function () { // prevent zooming out of the world and looping world
       map.panInsideBounds(bounds, { animate: false });

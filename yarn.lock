@@ -1277,6 +1277,13 @@
     math.gl "^3.6.2"
     mjolnir.js "^2.7.0"
 
+"@deck.gl/extensions@^8.8.11":
+  version "8.8.11"
+  resolved "https://registry.yarnpkg.com/@deck.gl/extensions/-/extensions-8.8.11.tgz#2cd93f332c8c9df31ab20741ff78a143e7c81a4d"
+  integrity sha512-8FywVMuWKJK8xtka2JWglIxjAXUUiTyNtQKaXOaHXTgVrrCUciZP74l+xpIZNaaqchpljOIE7+aoKnxskMZi1w==
+  dependencies:
+    "@luma.gl/shadertools" "^8.5.16"
+
 "@deck.gl/geo-layers@^8.8.10":
   version "8.8.10"
   resolved "https://registry.yarnpkg.com/@deck.gl/geo-layers/-/geo-layers-8.8.10.tgz#80167d7ceec819afd48d98978bd678c5fe7449b7"
@@ -1311,6 +1318,16 @@
     "@math.gl/polygon" "^3.6.2"
     "@math.gl/web-mercator" "^3.6.2"
     earcut "^2.0.6"
+
+"@deck.gl/mesh-layers@^8.8.11":
+  version "8.8.11"
+  resolved "https://registry.yarnpkg.com/@deck.gl/mesh-layers/-/mesh-layers-8.8.11.tgz#338117dae4c82a34f17851662144913f931943dc"
+  integrity sha512-bOvEO8GoSVlALrBgunBua5bkuFNVpRtiIIiKeguMqPktgohN4dRYL8nyxe8svKP2IZ1VoUU7f0j1OJCl71sJqQ==
+  dependencies:
+    "@loaders.gl/gltf" "^3.2.5"
+    "@luma.gl/constants" "^8.5.16"
+    "@luma.gl/experimental" "^8.5.16"
+    "@luma.gl/shadertools" "^8.5.16"
 
 "@emotion/cache@^11.4.0":
   version "11.5.0"
@@ -1714,7 +1731,7 @@
     "@math.gl/polygon" "^3.5.1"
     pbf "^3.2.1"
 
-"@loaders.gl/gltf@3.2.9":
+"@loaders.gl/gltf@3.2.9", "@loaders.gl/gltf@^3.2.5":
   version "3.2.9"
   resolved "https://registry.yarnpkg.com/@loaders.gl/gltf/-/gltf-3.2.9.tgz#5698ccbf537632dda9125feb0bffabdca028ae71"
   integrity sha512-F5LqR7RR6PRHZpCWJuwQXIUQqCEDpfNMAzBI3iDySJhsOduiJJ7fFYTE0DamsU8ai50sbNnmlgv+WhoEZ/+7+Q==
@@ -1862,7 +1879,7 @@
     "@probe.gl/log" "^3.5.0"
     "@types/offscreencanvas" "^2019.7.0"
 
-"@luma.gl/shadertools@8.5.16":
+"@luma.gl/shadertools@8.5.16", "@luma.gl/shadertools@^8.5.16":
   version "8.5.16"
   resolved "https://registry.yarnpkg.com/@luma.gl/shadertools/-/shadertools-8.5.16.tgz#90eeed64fc4dfce9e87cd096238988cff06dda30"
   integrity sha512-L3M3v6bQhIT8McCeqLvHnLJBmBXYDog1QblF4PVszuIB/WH+cHxZ0I26X2a1eEsVCvdeCrxRBxr42743oyfUNA==

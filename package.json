@@ -5,8 +5,10 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
     "@deck.gl/core": "^8.8.10",
+    "@deck.gl/extensions": "^8.8.11",
     "@deck.gl/geo-layers": "^8.8.10",
     "@deck.gl/layers": "^8.8.10",
+    "@deck.gl/mesh-layers": "^8.8.11",
     "@reactour/tour": "^2.2.0",
     "@reduxjs/toolkit": "1.4.0",
     "@testing-library/jest-dom": "5.11.4",
