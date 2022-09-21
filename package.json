@@ -176,9 +176,13 @@
         "statements": 90
       }
     },
+    "resetMocks": false,
+    "coverageReporters": ["text", "text-summary", "html"],
     "transformIgnorePatterns": [
       "!node_modules/"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "redux-mock-store": "^1.5.4"
+  }
 }

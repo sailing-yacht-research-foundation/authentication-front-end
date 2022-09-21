@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfirmSharingInformationModal should render and match snapshot 1`] = `
+<Modal
+  confirmLoading={false}
+  okText="Accept"
+  okType="primary"
+  onCancel={[Function]}
+  onOk={[Function]}
+  title="Share Information to the organizer"
+  visible={true}
+  width={520}
+>
+  <h4>
+    By clicking the accept button you will share the following information to the organizer:
+  </h4>
+  <ul />
+</Modal>
+`;

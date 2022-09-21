@@ -8,8 +8,6 @@ import { Link } from 'react-router-dom';
 import { PageHeaderContainer, PageHeaderTextSmall, TableWrapper } from 'app/components/SyrfGeneral';
 import { getAllByCalendarEventId } from 'services/live-data-server/competition-units';
 import { DeleteCompetitionUnitModal } from './DeleteCompetitionUnitModal';
-import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from 'app/pages/LoginPage/slice/selectors';
 import { RaceManageButtons } from './RaceManageButtons';
 import { CalendarEvent } from 'types/CalendarEvent';
 import { CompetitionUnit } from 'types/CompetitionUnit';
@@ -62,11 +60,8 @@ export const RaceList = (props) => {
                     race={record}
                     event={event}
                     reloadParent={reloadParent}
-                    isAuthenticated={isAuthenticated}
                     showDeleteRaceModal={showDeleteRaceModal}
-                    showRegisterModal={showRegisterModal}
-                    setCompetitionUnit={setCompetitionUnit}
-                    setShowRegisterModal={setShowRegisterModal} />;
+                    setCompetitionUnit={setCompetitionUnit} />;
             },
         },
     ];
@@ -83,10 +78,6 @@ export const RaceList = (props) => {
     const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
     const [competitionUnit, setCompetitionUnit] = React.useState<Partial<CompetitionUnit>>({});
-
-    const isAuthenticated = useSelector(selectIsAuthenticated);
-
-    const [showRegisterModal, setShowRegisterModal] = React.useState<boolean>(false);
 
     const getAll = async (page, size) => {
         setIsLoading(true);

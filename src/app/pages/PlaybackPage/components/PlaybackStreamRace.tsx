@@ -86,20 +86,7 @@ export const PlaybackStreamRace = () => {
 
   useEffect(() => {
     return () => {
-      if (eventEmitter) {
-        eventEmitter.removeAllListeners();
-        eventEmitter.off(RaceEmitterEvent.PING, () => { });
-        eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
-        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
-        eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
-        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
-        eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
-        eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
-        eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
-        eventEmitter.off(RaceEmitterEvent.OCS_DETECTED, () => { });
-      }
-      dispatch(actions.setElapsedTime(0));
-      dispatch(actions.setRaceLength(0));
+      clearPlayerData();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -334,6 +321,15 @@ export const PlaybackStreamRace = () => {
     }
   }
 
+  const clearPlayerData = () => {
+    if (eventEmitter) {
+      eventEmitter.removeAllListeners();
+    }
+    dispatch(actions.setElapsedTime(0));
+    dispatch(actions.setRaceLength(0));
+    dispatch(actions.setRaceCourseDetail({}));
+  }
+
   const adjustCompetitionUnitStartTime = (time) => {
     if (competitionUnitDetail.startTime === time) return;
     dispatch(actions.setCompetitionUnitDetail({
@@ -362,7 +358,7 @@ export const PlaybackStreamRace = () => {
       vessel,
       vesselParticipantId: id,
       positions: [],
-      lastPosition: {  },
+      lastPosition: {},
       deviceType: 'boat',
       sailNumber: vesselParticipant.sailNumber,
       participant: { competitor_name: vessel?.publicName },
