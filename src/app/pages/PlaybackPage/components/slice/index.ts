@@ -118,6 +118,14 @@ const slice = createSlice({
         },
         setVesselParticipantIdForShowingKudos(state, action: PayloadAction<any>) {
             state.vesselParticipantForShowingKudos = action.payload;
+        },
+        clearData(state) {
+            state.elapsedTime = 0;
+            state.raceLength = 0;
+            state.raceCourseDetail = {};
+            state.raceTime.start = 0;
+            state.raceTime.end = 0;
+            state.realRaceTime = state.raceTime;
         }
     },
 });
