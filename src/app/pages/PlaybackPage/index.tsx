@@ -24,6 +24,8 @@ import { SimulateRaceButton } from "./components/SimulateRaceButton";
 import { ModalDataIsBeingProcessed } from "./components/ModalDataIsBeingProcessed";
 import { CompetitionUnit } from "types/CompetitionUnit";
 import { Tooltip, Typography } from "antd";
+import { selectUser } from "../LoginPage/slice/selectors";
+import { RaceStatus } from "utils/constants";
 
 export const PlaybackPage = () => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
@@ -38,6 +40,7 @@ export const PlaybackPage = () => {
   const searchRaceData = useSelector(selectSearchRaceDetail);
   const playbackType = useSelector(selectPlaybackType);
   const isSimplifiedPlayback = useSelector(selectIsSimplifiedPlayback);
+  const authUser = useSelector(selectUser);
 
   const headerInfoElementRef = useRef<any>();
   const contentContainerRef = useRef<any>();
@@ -157,7 +160,11 @@ export const PlaybackPage = () => {
                   && playbackType !== PlaybackTypes.RACENOTFOUND
                   && (
                     <>
-                      <SimulateRaceButton />
+                      {playbackType === PlaybackTypes.OLDRACE
+                        && authUser.developerAccountId
+                        && !competitionUnitDetail.calendarEvent?.isPrivate 
+                        && ![RaceStatus.CANCELED].includes(competitionUnitDetail.status)
+                        && <SimulateRaceButton />}
                       {!competitionUnitDetail?.calendarEvent?.isPrivate && <Share />}
                       <FullScreen container={playbackContainerRef} />
                     </>
