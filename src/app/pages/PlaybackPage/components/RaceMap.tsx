@@ -3,7 +3,7 @@ import * as L from "leaflet";
 import { useMap } from "react-leaflet";
 import ReactDOMServer from "react-dom/server";
 import copy from "copy-to-clipboard";
-import { message } from "antd";
+import { message, Select } from "antd";
 import { formatCoordinatesObjectToArray, generateLastArray, getDepareFillColor, normalizeSequencedGeometries } from "utils/race/race-helper";
 import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
@@ -59,6 +59,10 @@ const colors = {
 
 const NO_PING_TIMEOUT = 60000;
 
+const deckLayer = new LeafletLayer({
+  layers: []
+});
+
 export const RaceMap = (props) => {
   const [layers, setLayers] = React.useState<any>([new MVTLayer({
     data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf',
@@ -71,9 +75,6 @@ export const RaceMap = (props) => {
     minZoom: 0,
     maxZoom: 23
   })]);
-  const deckLayer = new LeafletLayer({
-    layers: layers
-  });
   const { emitter } = props;
   const { actions } = usePlaybackSlice();
   const dispatch = useDispatch();
@@ -157,6 +158,11 @@ export const RaceMap = (props) => {
       emitter.on(RaceEmitterEvent.UPDATE_BOAT_COLOR, _updateBoatColorIfPingNotReceived);
 
       emitter.on(RaceEmitterEvent.CHANGE_BOAT_COLOR_TO_GRAY, _changeBoatColorToGray);
+    }
+
+    return () => {
+      deckLayer.setProps({ layers: [] });
+      map.removeLayer(deckLayer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -821,8 +827,28 @@ export const RaceMap = (props) => {
     setInitializedWind(true);
   }
 
-  const initializeDeckGlLayers = () => {
-    map.addLayer(deckLayer);
+  const toggleSoundingLayer = (values) => {
+    const toggled = !!values; // we only have 1 value for now.
+    const soundingsLayer = new MVTLayer({
+      data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/soundg/{z}/{x}/{y}.pbf',
+      id: 'soundings',
+      pointType: 'text',
+      getText: (d) => parseFloat(d.properties.depth).toFixed(2) + '',
+      getTextSize: 10,
+      getLabel: f => {
+        return f.properties.depth;
+      },
+      getLabelSize: f => 1000,
+      getTextColor: f => [255, 255, 255],
+      labelSizeUnits: 'meters',
+      getPointRadius: 100,
+    });
+    const newLayers = toggled ? [...layers, soundingsLayer] : layers.filter(l => {
+      return l.id !== 'soundings';
+    });;
+
+    setLayers(newLayers);
+    deckLayer?.setProps({ layers: newLayers });
   }
 
   const initializeMapView = () => {
@@ -844,7 +870,7 @@ export const RaceMap = (props) => {
         accessToken: "your.mapbox.access.token",
       }
     ).addTo(map);
-    initializeDeckGlLayers();
+    map.addLayer(deckLayer);
 
     map.on('drag', function () { // prevent zooming out of the world and looping world
       map.panInsideBounds(bounds, { animate: false });
@@ -868,6 +894,11 @@ export const RaceMap = (props) => {
   };
 
   return <>
+    <LayerSelector>
+      <Select placeholder={'Select Layers'} onChange={toggleSoundingLayer} allowClear>
+        <Select.Option value={'soundings'}>Soundings</Select.Option>
+      </Select>
+    </LayerSelector>
     <ConfirmModal
       title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
       content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
@@ -905,4 +936,11 @@ const KudoReactionMenuButton = styled(VscReactions)`
 
 const ClaimTrackButton = styled(FaRegHandPointer)`
   ${boatActionStyles};
-`
+`;
+
+const LayerSelector = styled.div`
+  position: absolute;
+  z-index: 9999;
+  right: 5px;
+  top: 5px;
+`;
