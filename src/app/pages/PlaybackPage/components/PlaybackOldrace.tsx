@@ -338,9 +338,7 @@ export const PlaybackOldRace = (props) => {
     mapDataWorker?.terminate();
     socketWorker = undefined;
     mapDataWorker = undefined;
-    dispatch(actions.setElapsedTime(0));
-    dispatch(actions.setRaceLength(0));
-    dispatch(actions.setRaceCourseDetail({}));
+    dispatch(actions.clearData());
   }
 
   const mapData = (e) => {

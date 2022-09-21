@@ -325,9 +325,7 @@ export const PlaybackStreamRace = () => {
     if (eventEmitter) {
       eventEmitter.removeAllListeners();
     }
-    dispatch(actions.setElapsedTime(0));
-    dispatch(actions.setRaceLength(0));
-    dispatch(actions.setRaceCourseDetail({}));
+    dispatch(actions.clearData());
   }
 
   const adjustCompetitionUnitStartTime = (time) => {
