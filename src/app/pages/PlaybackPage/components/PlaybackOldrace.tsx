@@ -127,7 +127,6 @@ export const PlaybackOldRace = (props) => {
     // Get old race additional data
     if (competitionUnitDetail?.id) {
       dispatch(actions.getOldRaceData({ raceId: competitionUnitDetail.id }));
-      getSimplifiedTracks();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -165,6 +164,7 @@ export const PlaybackOldRace = (props) => {
   // Set vessel participants, update format to object
   useEffect(() => {
     if (vesselParticipants?.length) {
+      getSimplifiedTracks();
       const vesselParticipantsObject = {};
       vesselParticipants.forEach((vesselParticipant) => {
         // Set new participant data
