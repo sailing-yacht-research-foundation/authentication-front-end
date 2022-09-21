@@ -864,7 +864,7 @@ export const RaceMap = (props) => {
           '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
         maxZoom: 19,
         minZoom: 2,
-        id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",
+        id: "jweisbaum89/cl0fp8ji7000c14pfpnbrz6xf",
         tileSize: 512,
         zoomOffset: -1,
         accessToken: "your.mapbox.access.token",
@@ -895,7 +895,7 @@ export const RaceMap = (props) => {
 
   return <>
     <LayerSelector>
-      <Select placeholder={'Select Layers'} onChange={toggleSoundingLayer} allowClear>
+      <Select placeholder={t(translations.playback_page.select_layers)} onChange={toggleSoundingLayer} allowClear>
         <Select.Option value={'soundings'}>Soundings</Select.Option>
       </Select>
     </LayerSelector>
