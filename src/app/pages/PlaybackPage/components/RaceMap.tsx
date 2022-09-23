@@ -3,8 +3,8 @@ import * as L from "leaflet";
 import { useMap } from "react-leaflet";
 import ReactDOMServer from "react-dom/server";
 import copy from "copy-to-clipboard";
-import { message } from "antd";
-import { formatCoordinatesObjectToArray, generateLastArray, normalizeSequencedGeometries } from "utils/race/race-helper";
+import { message, Select } from "antd";
+import { formatCoordinatesObjectToArray, generateLastArray, getDepareFillColor, normalizeSequencedGeometries } from "utils/race/race-helper";
 import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
 import { PlayerInfo } from "./PlayerInfo";
@@ -33,6 +33,7 @@ import StartPinIcon from '../assets/start_pin.png';
 // deck-gl
 import { LeafletLayer } from 'deck.gl-leaflet';
 import { ParticleLayer } from 'deck.gl-particle';
+import { MVTLayer } from '@deck.gl/geo-layers';
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -58,33 +59,35 @@ const colors = {
 
 const NO_PING_TIMEOUT = 60000;
 
+const deckLayer = new LeafletLayer({
+  layers: []
+});
+
 export const RaceMap = (props) => {
+  const [layers, setLayers] = React.useState<any>([new MVTLayer({
+    data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf',
+    getFillColor: getDepareFillColor,
+    parameters: {
+      depthTest: true
+    },
+    id: 'depare',
+    pickable: true,
+    minZoom: 0,
+    maxZoom: 23
+  })]);
   const { emitter } = props;
-
   const { actions } = usePlaybackSlice();
-
   const dispatch = useDispatch();
-
   const playbackType = useSelector(selectPlaybackType);
-
   const isAuthenticated = useSelector(selectIsAuthenticated);
-
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
-
   const raceTime = useSelector(selectRaceTime);
-
   const [selectedVesselParticipant, setSelectedVesselParticipant] = React.useState<any>({});
-
   const [showClaimTrackConfirModal, setShowClaimTrackConfirmModal] = React.useState<boolean>(false);
-
   const [isClaimingTrack, setIsClaimingTrack] = React.useState<boolean>(false);
-
   const [initializedWind, setInitializedWind] = React.useState<boolean>(false);
-
   const { t } = useTranslation();
-
   const map = useMap();
-
   const raceStatus = useRef<any>({ // for globally manage all markers and race states.
     boats: {}, // layers
     tracks: {}, // layers
@@ -155,6 +158,11 @@ export const RaceMap = (props) => {
       emitter.on(RaceEmitterEvent.UPDATE_BOAT_COLOR, _updateBoatColorIfPingNotReceived);
 
       emitter.on(RaceEmitterEvent.CHANGE_BOAT_COLOR_TO_GRAY, _changeBoatColorToGray);
+    }
+
+    return () => {
+      deckLayer.setProps({ layers: [] });
+      map.removeLayer(deckLayer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -801,25 +809,45 @@ export const RaceMap = (props) => {
     const month = raceTimeAsMoment.format('MM');
     const year = raceTimeAsMoment.format('YYYY')
     const hour = raceTimeAsMoment.format('HH');
-    const deckLayer = new LeafletLayer({
-      layers: [
-        new ParticleLayer({
-          id: 'particle',
-          image: `https://wind-tiles.s3.amazonaws.com/${year}/${month}/${date}/${hour}/wind_data.png`, // see deck.gl BitmapLayer image property
-          color: [255, 255, 255],
-          width: 1,
-          opacity: 0.2,
-          visible: true,
-          numParticles: 2000,
-          speedFactor: 4,
-          maxAge: 60,
-          imageUnscale: [-128, 127],
-          bounds: [-180, -90, 180, 90],
-        })
-      ]
-    });
-    map.addLayer(deckLayer);
+    const newLayers = [...layers, new ParticleLayer({
+      id: 'particle',
+      image: `https://wind-tiles.s3.amazonaws.com/${year}/${month}/${date}/${hour}/wind_data.png`, // see deck.gl BitmapLayer image property
+      color: [255, 255, 255],
+      width: 1,
+      opacity: 0.2,
+      visible: true,
+      numParticles: 2000,
+      speedFactor: 4,
+      maxAge: 60,
+      imageUnscale: [-128, 127],
+      bounds: [-180, -90, 180, 90],
+    })];
+    setLayers(newLayers);
+    deckLayer?.setProps({ layers: newLayers });
     setInitializedWind(true);
+  }
+
+  const toggleSoundingLayer = (values) => {
+    const soundingsLayer = new MVTLayer({
+      data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/soundg/{z}/{x}/{y}.pbf',
+      id: 'soundings',
+      pointType: 'text',
+      getText: (d) => parseFloat(d.properties.depth).toFixed(2) + '',
+      getTextSize: 10,
+      getLabel: f => {
+        return f.properties.depth;
+      },
+      getLabelSize: f => 1000,
+      getTextColor: f => [255, 255, 255],
+      labelSizeUnits: 'meters',
+      getPointRadius: 100,
+    });
+    const newLayers = values?.includes('soundings') ? [...layers, soundingsLayer] : layers.filter(l => {
+      return l.id !== 'soundings';
+    });;
+
+    setLayers(newLayers);
+    deckLayer?.setProps({ layers: newLayers });
   }
 
   const initializeMapView = () => {
@@ -835,12 +863,13 @@ export const RaceMap = (props) => {
           '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
         maxZoom: 19,
         minZoom: 2,
-        id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",
+        id: "jweisbaum89/cl0fp8ji7000c14pfpnbrz6xf",
         tileSize: 512,
         zoomOffset: -1,
         accessToken: "your.mapbox.access.token",
       }
     ).addTo(map);
+    map.addLayer(deckLayer);
 
     map.on('drag', function () { // prevent zooming out of the world and looping world
       map.panInsideBounds(bounds, { animate: false });
@@ -864,6 +893,16 @@ export const RaceMap = (props) => {
   };
 
   return <>
+    <LayerSelector>
+      <Select placeholder={t(translations.playback_page.select_layers)}
+        mode={'multiple'}
+        maxTagCount={'responsive'}
+        onChange={toggleSoundingLayer}
+        showArrow
+        allowClear>
+        <Select.Option value={'soundings'}>Soundings</Select.Option>
+      </Select>
+    </LayerSelector>
     <ConfirmModal
       title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
       content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
@@ -901,4 +940,15 @@ const KudoReactionMenuButton = styled(VscReactions)`
 
 const ClaimTrackButton = styled(FaRegHandPointer)`
   ${boatActionStyles};
-`
+`;
+
+const LayerSelector = styled.div`
+  position: absolute;
+  z-index: 9999;
+  right: 5px;
+  top: 5px;
+
+  .ant-select-multiple {
+    min-width: 130px;
+  }
+`;

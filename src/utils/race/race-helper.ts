@@ -232,3 +232,22 @@ export const getFirstPingTimeFromSimplifiedTracks = (simplifiedTracks) => {
   return startTime;
 }
 
+export const getDepareFillColor = (f) => {
+  const properties = f.properties;
+  const val1 = properties.drval1;
+  let color = [255, 0, 0];
+
+  if (val1 < 5) {
+    color = [1, 235, 247]
+  } else if (5 <= val1 && val1 < 10) {
+    color = [1, 34, 184]
+  } else if (10 <= val1 && val1 < 20) {
+    color = [1, 34, 68]
+  } else if (20 <= val1 && val1 < 150) {
+    color = [1, 121, 247]
+  } else {
+    color = [1, 17, 68]
+  }
+
+  return color;
+}
