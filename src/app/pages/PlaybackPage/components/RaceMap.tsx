@@ -828,7 +828,6 @@ export const RaceMap = (props) => {
   }
 
   const toggleSoundingLayer = (values) => {
-    const toggled = !!values; // we only have 1 value for now.
     const soundingsLayer = new MVTLayer({
       data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/soundg/{z}/{x}/{y}.pbf',
       id: 'soundings',
@@ -843,7 +842,7 @@ export const RaceMap = (props) => {
       labelSizeUnits: 'meters',
       getPointRadius: 100,
     });
-    const newLayers = toggled ? [...layers, soundingsLayer] : layers.filter(l => {
+    const newLayers = values?.includes('soundings') ? [...layers, soundingsLayer] : layers.filter(l => {
       return l.id !== 'soundings';
     });;
 
@@ -895,7 +894,12 @@ export const RaceMap = (props) => {
 
   return <>
     <LayerSelector>
-      <Select placeholder={t(translations.playback_page.select_layers)} onChange={toggleSoundingLayer} allowClear>
+      <Select placeholder={t(translations.playback_page.select_layers)}
+        mode={'multiple'}
+        maxTagCount={'responsive'}
+        onChange={toggleSoundingLayer}
+        showArrow
+        allowClear>
         <Select.Option value={'soundings'}>Soundings</Select.Option>
       </Select>
     </LayerSelector>
@@ -943,4 +947,8 @@ const LayerSelector = styled.div`
   z-index: 9999;
   right: 5px;
   top: 5px;
+
+  .ant-select-multiple {
+    min-width: 130px;
+  }
 `;
