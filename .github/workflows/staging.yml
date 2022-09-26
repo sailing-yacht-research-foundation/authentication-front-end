@@ -37,6 +37,8 @@ jobs:
           --build-arg REACT_APP_PUBLIC_VAPID_KEY='${{ secrets.PUBLIC_DEV_VAPID_KEY }}'
           --build-arg REACT_APP_DOWNLOAD_LINK_ANDROID='https://play.google.com/store/apps/details?id=io.syrf.tracker'
           --build-arg REACT_APP_DOWNLOAD_LINK_IOS='https://apps.apple.com/app/liveping-by-syrf-io/id1579555734'
+          --build-arg REACT_APP_CHART_DATA_URL='https://chart-tiles.s3-website-us-east-1.amazonaws.com'
+          --build-arg REACT_APP_WIND_DATA_URL='https://wind-tiles.s3.amazonaws.com'
           --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to registry
         # This is where you will update the PAT to GITHUB_TOKEN
