@@ -189,7 +189,7 @@ export const RaceMap = (props) => {
   const updateWindLayer = () => {
     if (windTime.year === '0') return; // in case the windtime is not initialized.
     const newLayers = [...layers.filter(l => l.id !== 'particle'), new ParticleLayer({
-      image: `https://wind-tiles.s3.amazonaws.com/${windTime.year}/${windTime.month}/${windTime.date}/${windTime.hour}/wind_data.png`, // see deck.gl BitmapLayer image property
+      image: `${process.env.REACT_APP_WIND_DATA_URL}/${windTime.year}/${windTime.month}/${windTime.date}/${windTime.hour}/wind_data.png`, // see deck.gl BitmapLayer image property
       ...windLayerOptions
     })];
     setLayers(newLayers);
