@@ -65,7 +65,7 @@ const deckLayer = new LeafletLayer({
 
 export const RaceMap = (props) => {
   const [layers, setLayers] = React.useState<any>([new MVTLayer({
-    data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf',
+    data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf`,
     getFillColor: getDepareFillColor,
     parameters: {
       depthTest: true
@@ -811,7 +811,7 @@ export const RaceMap = (props) => {
     const hour = raceTimeAsMoment.format('HH');
     const newLayers = [...layers, new ParticleLayer({
       id: 'particle',
-      image: `https://wind-tiles.s3.amazonaws.com/${year}/${month}/${date}/${hour}/wind_data.png`, // see deck.gl BitmapLayer image property
+      image: `${process.env.REACT_APP_WIND_DATA_URL}/${year}/${month}/${date}/${hour}/wind_data.png`, // see deck.gl BitmapLayer image property
       color: [255, 255, 255],
       width: 1,
       opacity: 0.2,
@@ -829,7 +829,7 @@ export const RaceMap = (props) => {
 
   const toggleSoundingLayer = (values) => {
     const soundingsLayer = new MVTLayer({
-      data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/soundg/{z}/{x}/{y}.pbf',
+      data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/soundg/{z}/{x}/{y}.pbf`,
       id: 'soundings',
       pointType: 'text',
       getText: (d) => parseFloat(d.properties.depth).toFixed(2) + '',
