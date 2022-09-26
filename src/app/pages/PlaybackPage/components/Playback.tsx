@@ -237,6 +237,7 @@ export const Playback = (props) => {
 
     React.useEffect(() => {
         updateWindTimeBaseOnElapsedTime();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [elapsedTime]);
 
     const updateWindTimeBaseOnElapsedTime = () => {

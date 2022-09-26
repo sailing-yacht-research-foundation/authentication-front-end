@@ -183,6 +183,7 @@ export const RaceMap = (props) => {
 
   React.useEffect(() => {
     updateWindLayer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [windTime]);
 
   const updateWindLayer = () => {
