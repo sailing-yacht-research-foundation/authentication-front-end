@@ -25,6 +25,7 @@ export interface PlaybackState {
     canIncreaseDecreaseSpeed: boolean;
     isSimplifiedPlayback: boolean;
     vesselParticipantForShowingKudos: any;
+    windTime: any;
 }
 
 export type ContainerState = PlaybackState;

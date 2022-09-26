@@ -17,7 +17,7 @@ import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCompetitionUnitDetail, selectPlaybackType, selectRaceTime } from "./slice/selectors";
+import { selectCompetitionUnitDetail, selectPlaybackType, selectRaceTime, selectWindTime } from "./slice/selectors";
 import { PlaybackTypes } from "types/Playback";
 import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 import moment from "moment";
@@ -63,6 +63,19 @@ const deckLayer = new LeafletLayer({
   layers: []
 });
 
+const windLayerOptions = {
+  id: 'particle',
+  color: [255, 255, 255],
+  width: 1,
+  opacity: 0.2,
+  visible: true,
+  numParticles: 2000,
+  speedFactor: 4,
+  maxAge: 60,
+  imageUnscale: [-128, 127],
+  bounds: [-180, -90, 180, 90],
+}
+
 export const RaceMap = (props) => {
   const [layers, setLayers] = React.useState<any>([new MVTLayer({
     data: 'http://chart-tiles.s3-website-us-east-1.amazonaws.com/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf',
@@ -98,6 +111,7 @@ export const RaceMap = (props) => {
     zoomedToRaceLocation: false,
     courseData: [] /// sequenced courses raw data.
   });
+  const windTime = useSelector(selectWindTime);
 
   useEffect(() => {
     if (raceTime.start !== null
@@ -166,6 +180,20 @@ export const RaceMap = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    updateWindLayer();
+  }, [windTime]);
+
+  const updateWindLayer = () => {
+    if (windTime.year === '0') return; // in case the windtime is not initialized.
+    const newLayers = [...layers.filter(l => l.id !== 'particle'), new ParticleLayer({
+      image: `https://wind-tiles.s3.amazonaws.com/${windTime.year}/${windTime.month}/${windTime.date}/${windTime.hour}/wind_data.png`, // see deck.gl BitmapLayer image property
+      ...windLayerOptions
+    })];
+    setLayers(newLayers);
+    deckLayer.setProps({ layers: newLayers });
+  }
 
   const _changeBoatColorToGray = (vesselParticipantId: string) => {
     const { current } = raceStatus;
@@ -810,21 +838,18 @@ export const RaceMap = (props) => {
     const year = raceTimeAsMoment.format('YYYY')
     const hour = raceTimeAsMoment.format('HH');
     const newLayers = [...layers, new ParticleLayer({
-      id: 'particle',
       image: `https://wind-tiles.s3.amazonaws.com/${year}/${month}/${date}/${hour}/wind_data.png`, // see deck.gl BitmapLayer image property
-      color: [255, 255, 255],
-      width: 1,
-      opacity: 0.2,
-      visible: true,
-      numParticles: 2000,
-      speedFactor: 4,
-      maxAge: 60,
-      imageUnscale: [-128, 127],
-      bounds: [-180, -90, 180, 90],
+      ...windLayerOptions
     })];
     setLayers(newLayers);
     deckLayer?.setProps({ layers: newLayers });
     setInitializedWind(true);
+    dispatch(actions.setWindTime({
+      year: year,
+      month: month,
+      date: date,
+      hour: hour
+    }));
   }
 
   const toggleSoundingLayer = (values) => {
