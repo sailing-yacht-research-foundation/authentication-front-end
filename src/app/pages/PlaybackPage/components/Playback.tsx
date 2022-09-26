@@ -245,8 +245,7 @@ export const Playback = (props) => {
         const playbackElapsedTimeAsDate = playbackElapsedTimeAsMoment.format('DD');
         const playbackElapsedTimeAsHour = playbackElapsedTimeAsMoment.format('HH');
 
-        if (windTime.hour !== 0
-            && windTime.date !== 0
+        if (windTime.date !== '0'
             && (windTime.date !== playbackElapsedTimeAsDate
                 || windTime.hour !== playbackElapsedTimeAsHour)) {
             dispatch(actions.setWindTime({

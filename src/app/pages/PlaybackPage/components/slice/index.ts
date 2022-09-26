@@ -132,6 +132,12 @@ const slice = createSlice({
             state.raceTime.start = 0;
             state.raceTime.end = 0;
             state.realRaceTime = state.raceTime;
+            state.windTime = {
+                year: '0',
+                month: '0',
+                date: '0',
+                hour: '0'
+            }
         },
         setWindTime(state, action: PayloadAction<any>) {
             state.windTime = action.payload;
