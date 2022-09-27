@@ -5,7 +5,10 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCanIncreaseDecreaseSpeed, selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectRaceTime, selectRealRaceTime, selectViewCounts, selectWindTime } from './slice/selectors';
+import {
+    selectCanIncreaseDecreaseSpeed, selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying,
+    selectPlaybackType, selectRaceLength, selectRaceTime, selectRealRaceTime, selectViewCounts, selectWindTime
+} from './slice/selectors';
 import { usePlaybackSlice } from './slice';
 import { PlaybackTypes } from 'types/Playback';
 import { media } from 'styles/media';
