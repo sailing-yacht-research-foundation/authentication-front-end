@@ -2,6 +2,7 @@
 export interface PublicProfileState {
     followers: any[];
     following: any[];
+    events: any;
     currentFollowerPage: number;
     currentFollowingPage: number;
     followerTotalRecords: number;

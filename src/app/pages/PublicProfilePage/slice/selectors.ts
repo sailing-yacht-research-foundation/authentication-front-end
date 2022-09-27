@@ -21,6 +21,11 @@ export const selectFollowing = createSelector(
   siderState => siderState.following,
 );
 
+export const selectEvents = createSelector(
+  [selectDomain],
+  siderState => siderState.events,
+);
+
 export const selectFollowerCurrentPage = createSelector(
   [selectDomain],
   siderState => siderState.currentFollowerPage,

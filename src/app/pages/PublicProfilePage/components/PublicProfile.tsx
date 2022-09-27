@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Avatar, Spin, Tooltip } from 'antd';
+import { Avatar, Spin, Tooltip, List } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePublicProfileSlice } from '../slice';
-import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile } from '../slice/selectors';
+import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile, selectEvents } from '../slice/selectors';
 import { FollowerModal } from './modals/FollowerModal';
 import { FollowingModal } from './modals/FollowingModal';
 import { blockUser, unfollowProfile } from 'services/live-data-server/profile';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
 import { UnfollowConfirmModal } from 'app/components/SocialProfile/UnfollowConfirmModal';
-import { appendThumbnail, showToastMessageOnRequestError } from 'utils/helpers';
+import { appendThumbnail, showToastMessageOnRequestError, renderEmptyValue } from 'utils/helpers';
 import { toast } from 'react-toastify';
 import { ConfirmModal } from 'app/components/ConfirmModal';
 import { ProfileBasicInfoSection } from './ProfileBasicInfoSection';
@@ -26,6 +26,8 @@ export const PublicProfile = () => {
     const { profileId } = useParams<{ profileId: string }>();
 
     const profile = useSelector(selectProfile);
+
+    const publicEvents = useSelector(selectEvents);
 
     const location = useLocation();
 
@@ -56,7 +58,9 @@ export const PublicProfile = () => {
     const getUserProfile = async () => {
         dispatch(actions.getProfile(profileId || currentUserId));
     }
-
+    const getEvents = async (page) => {
+        dispatch(actions.getEvents({ profileId: (profileId || currentUserId), page }));
+    }
     const unfollow = async () => {
         setIsLoading(true);
         const response = await unfollowProfile(profile.id);
@@ -89,6 +93,15 @@ export const PublicProfile = () => {
         dispatch(actions.getFollowers({ profileId: profile.id, page: 1 }));
         getUserProfile();
     }
+
+    const onPaginationEventChanged = (page: number) => {
+        getEvents(page);
+    }
+
+    React.useEffect(() => {
+        getEvents(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     React.useEffect(() => {
         if (getProfileFailed)
@@ -168,6 +181,26 @@ export const PublicProfile = () => {
                             })}
                         </Avatar.Group>
                     </SectionWrapper>}
+
+                {publicEvents?.rows?.length > 0 &&
+                    <SectionWrapper>
+                        <SectionTitle>{t(translations.my_event_list_page.my_events)}</SectionTitle>
+                        <List
+                            itemLayout="vertical"
+                            dataSource={publicEvents.rows}
+                            pagination={{
+                                position: 'top',
+                                defaultPageSize: 10,
+                                current: publicEvents.page,
+                                total: publicEvents.count,
+                                onChange: onPaginationEventChanged
+                            }}
+                            renderItem={ (event: any) => (
+                                <List.Item>
+                                    <Link to={`/events/${event.id}`}>{renderEmptyValue(event.name)}</Link>
+                                </List.Item>)
+                            } />
+                    </SectionWrapper>}
             </Spin>
         </Wrapper>
     );
@@ -179,7 +212,7 @@ const SectionWrapper = styled.div`
     border: 1px solid #eee;
     border-radius: 10px;
     &:not(:first-child) {
-        margin-top: 10px;
+        margin: 10px 0px;
     }
 `;
 

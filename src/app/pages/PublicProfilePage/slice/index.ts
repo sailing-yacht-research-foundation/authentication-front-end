@@ -8,6 +8,7 @@ export const initialState: PublicProfileState = {
     profile: {},
     followers: [],
     following: [],
+    events: {},
     currentFollowerPage: 1,
     currentFollowingPage: 1,
     followerPageSize: 10,
@@ -28,6 +29,7 @@ const slice = createSlice({
         getProfile(state, action: PayloadAction<any>) { },
         getFollowers(state, action: PayloadAction<any>) { },
         getFollowing(state, action: PayloadAction<any>) { },
+        getEvents(state, action: PayloadAction<any>) { },
         setProfile(state, action: PayloadAction<any>) {
             state.profile = action.payload;
         },
@@ -36,6 +38,9 @@ const slice = createSlice({
         },
         setFollowing(state, action: PayloadAction<any[]>) {
             state.following = action.payload;
+        },
+        setEvents(state, action: PayloadAction<any>) {
+            state.events = action.payload;
         },
         setCurrentFollowerPage(state, action: PayloadAction<number>) {
             state.currentFollowerPage = action.payload;
