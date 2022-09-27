@@ -19,6 +19,12 @@ import { getProfilePicture, getUserName } from 'utils/user-utils';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 
+// deck-gl
+import { LeafletLayer } from 'deck.gl-leaflet';
+import { MVTLayer } from '@deck.gl/geo-layers';
+import { getDepareFillColor } from 'utils/race/race-helper';
+import { NauticalChartSelector } from 'app/components/NauticalChartSelector';
+
 require('leaflet.markercluster');
 
 let markerCluster, userMarker;
@@ -33,6 +39,10 @@ const MAP_MOVE_TYPE = {
 let geoLoc;
 
 let watchID;
+
+const deckLayer = new LeafletLayer({
+    layers: []
+});
 
 export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInput }, ref) => {
 
@@ -54,6 +64,18 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
         lon: null,
         lat: null
     });
+
+    const [layers, setLayers] = React.useState<any>([new MVTLayer({
+        data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf`,
+        getFillColor: getDepareFillColor,
+        parameters: {
+            depthTest: true
+        },
+        id: 'depare',
+        pickable: true,
+        minZoom: 0,
+        maxZoom: 23
+    })]);
 
     useEffect(() => {
         initializeMapView();
@@ -155,6 +177,8 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
             zoomOffset: -1,
             accessToken: 'your.mapbox.access.token',
         }).addTo(map);
+        map.addLayer(deckLayer);
+        deckLayer?.setProps({ layers: layers });
     }
 
     const attachRaceMarkersToMap = () => {
@@ -236,7 +260,6 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
     }
 
     return (
-        <>
-        </>
+        <NauticalChartSelector layers={layers} deckLayer={deckLayer} setLayers={setLayers}  />
     );
 })

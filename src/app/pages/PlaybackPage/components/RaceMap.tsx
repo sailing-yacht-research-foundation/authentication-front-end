@@ -34,6 +34,7 @@ import StartPinIcon from '../assets/start_pin.png';
 import { LeafletLayer } from 'deck.gl-leaflet';
 import { ParticleLayer } from 'deck.gl-particle';
 import { MVTLayer } from '@deck.gl/geo-layers';
+import { NauticalChartSelector } from "app/components/NauticalChartSelector";
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -827,29 +828,6 @@ export const RaceMap = (props) => {
     setInitializedWind(true);
   }
 
-  const toggleSoundingLayer = (values) => {
-    const soundingsLayer = new MVTLayer({
-      data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/soundg/{z}/{x}/{y}.pbf`,
-      id: 'soundings',
-      pointType: 'text',
-      getText: (d) => parseFloat(d.properties.depth).toFixed(2) + '',
-      getTextSize: 10,
-      getLabel: f => {
-        return f.properties.depth;
-      },
-      getLabelSize: f => 1000,
-      getTextColor: f => [255, 255, 255],
-      labelSizeUnits: 'meters',
-      getPointRadius: 100,
-    });
-    const newLayers = values?.includes('soundings') ? [...layers, soundingsLayer] : layers.filter(l => {
-      return l.id !== 'soundings';
-    });;
-
-    setLayers(newLayers);
-    deckLayer?.setProps({ layers: newLayers });
-  }
-
   const initializeMapView = () => {
     const southWest = L.latLng(-89.98155760646617, -180),
       northEast = L.latLng(89.99346179538875, 180);
@@ -893,16 +871,7 @@ export const RaceMap = (props) => {
   };
 
   return <>
-    <LayerSelector>
-      <Select placeholder={t(translations.playback_page.select_layers)}
-        mode={'multiple'}
-        maxTagCount={'responsive'}
-        onChange={toggleSoundingLayer}
-        showArrow
-        allowClear>
-        <Select.Option value={'soundings'}>Soundings</Select.Option>
-      </Select>
-    </LayerSelector>
+    <NauticalChartSelector layers={layers} deckLayer={deckLayer} setLayers={setLayers} />
     <ConfirmModal
       title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
       content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
@@ -942,13 +911,3 @@ const ClaimTrackButton = styled(FaRegHandPointer)`
   ${boatActionStyles};
 `;
 
-const LayerSelector = styled.div`
-  position: absolute;
-  z-index: 9999;
-  right: 5px;
-  top: 5px;
-
-  .ant-select-multiple {
-    min-width: 130px;
-  }
-`;
