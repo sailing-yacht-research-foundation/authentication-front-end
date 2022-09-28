@@ -5,6 +5,7 @@
 import { publicProfileActions } from ".";
 import { put, takeLatest, call } from 'redux-saga/effects';
 import { getFollowers, getFollowings, getProfileById } from "services/live-data-server/profile";
+import { getProfileEvents } from "services/live-data-server/event-calendars";
 import { showToastMessageOnRequestError } from "utils/helpers";
 
 function* getProfile({ type, payload }) {
@@ -56,8 +57,23 @@ function* getProfileFollowing({ type, payload }) {
     }
 }
 
+function* getEvents({ type, payload }) {
+    if (!payload) return;
+    const { profileId, page, size } = payload;
+    yield put(publicProfileActions.setIsLoadingProfile(true));
+    const response = yield call(getProfileEvents, profileId, page, size);
+    yield put(publicProfileActions.setIsLoadingProfile(false));
+
+    if (response.success) {
+        yield put(publicProfileActions.setEvents(response.data));
+    } else {
+        yield put(publicProfileActions.setEvents({}));
+    }
+}
+
 export default function* privacyPolicySaga() {
     yield takeLatest(publicProfileActions.getProfile.type, getProfile);
     yield takeLatest(publicProfileActions.getFollowers.type, getProfileFollowers);
     yield takeLatest(publicProfileActions.getFollowing.type, getProfileFollowing);
+    yield takeLatest(publicProfileActions.getEvents.type, getEvents);
 }
