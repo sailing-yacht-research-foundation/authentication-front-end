@@ -32,7 +32,7 @@ export const VesselList = (props: { event: Partial<CalendarEvent> }) => {
             render: (text) => {
                 return <Tooltip title={text}>
                     <Typography.Text ellipsis={true} style={{ maxWidth: '40vw' }}>
-                        ${renderEmptyValue(text)}
+                        {renderEmptyValue(text)}
                     </Typography.Text>
                 </Tooltip>;
             },
