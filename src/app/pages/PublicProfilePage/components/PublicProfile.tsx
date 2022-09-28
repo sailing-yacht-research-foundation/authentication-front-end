@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Avatar, Spin, Tooltip, List } from 'antd';
+import { Avatar, Spin, Tooltip, List, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { GiPositionMarker } from 'react-icons/gi';
 import { usePublicProfileSlice } from '../slice';
 import { selectGetProfileFailed, selectIsLoadingProfile, selectProfile, selectEvents } from '../slice/selectors';
 import { FollowerModal } from './modals/FollowerModal';
@@ -189,7 +190,6 @@ export const PublicProfile = () => {
                             itemLayout="vertical"
                             dataSource={publicEvents.rows}
                             pagination={{
-                                position: 'top',
                                 defaultPageSize: 10,
                                 current: publicEvents.page,
                                 total: publicEvents.count,
@@ -197,7 +197,15 @@ export const PublicProfile = () => {
                             }}
                             renderItem={ (event: any) => (
                                 <List.Item>
-                                    <Link to={`/events/${event.id}`}>{renderEmptyValue(event.name)}</Link>
+                                    <LocationWrapper>
+                                        {event.country ?
+                                            <Space size={5}>
+                                                <GiPositionMarker />
+                                                {[event.city, event.country].filter(Boolean).join(', ')}
+                                            </Space> : <div></div>
+                                        }
+                                    </LocationWrapper>
+                                    <h3><Link to={`/events/${event.id}`}>{renderEmptyValue(event.name)}</Link></h3>
                                 </List.Item>)
                             } />
                     </SectionWrapper>}
@@ -252,4 +260,10 @@ const ItemAvatar = styled.img`
     height: 25px;
     margin-right: 5px;
     border-radius: 50%;
+`;
+
+const LocationWrapper = styled.div`
+    color: #70757a;
+    display: flex;
+    justify-content: space-between;
 `;

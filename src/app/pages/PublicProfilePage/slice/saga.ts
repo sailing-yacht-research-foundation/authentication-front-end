@@ -65,7 +65,6 @@ function* getEvents({ type, payload }) {
     yield put(publicProfileActions.setIsLoadingProfile(false));
 
     if (response.success) {
-        console.log('response.data', response.data.rows);
         yield put(publicProfileActions.setEvents(response.data));
     } else {
         yield put(publicProfileActions.setEvents({}));
