@@ -13,8 +13,8 @@ import { selectResults, selectUpcomingRaces } from '../../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { checkIfLocationIsValid, renderEmptyValue } from 'utils/helpers';
-import { TIME_FORMAT } from 'utils/constants';
+import { checkIfDeckGLDataSourceValidAndRender, checkIfLocationIsValid, renderEmptyValue } from 'utils/helpers';
+import { depthAreaChartOptions, mapboxStyleId, TIME_FORMAT } from 'utils/constants';
 import { getProfilePicture, getUserName } from 'utils/user-utils';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
@@ -22,7 +22,6 @@ import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
 // deck-gl
 import { LeafletLayer } from 'deck.gl-leaflet';
 import { MVTLayer } from '@deck.gl/geo-layers';
-import { getDepareFillColor } from 'utils/race/race-helper';
 import { NauticalChartSelector } from 'app/components/NauticalChartSelector';
 
 require('leaflet.markercluster');
@@ -66,21 +65,18 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
     });
 
     const [layers, setLayers] = React.useState<any>([new MVTLayer({
-        data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf`,
-        getFillColor: getDepareFillColor,
-        parameters: {
-            depthTest: true
-        },
-        id: 'depare',
-        pickable: true,
-        minZoom: 0,
-        maxZoom: 23
+        ...depthAreaChartOptions
     })]);
 
     useEffect(() => {
         initializeMapView();
         if (results.length === 0 || upcomingRaceResults.length === 0) // no results and focus on user location
             zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
+
+        return () => {
+            deckLayer.setProps({ layers: [] });
+            map.removeLayer(deckLayer);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -172,13 +168,13 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
             attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
             maxZoom: 18,
             minZoom: 2,
-            id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
+            id: mapboxStyleId,
             tileSize: 512,
             zoomOffset: -1,
             accessToken: 'your.mapbox.access.token',
         }).addTo(map);
         map.addLayer(deckLayer);
-        deckLayer?.setProps({ layers: layers });
+        checkIfDeckGLDataSourceValidAndRender(deckLayer, layers);
     }
 
     const attachRaceMarkersToMap = () => {
@@ -260,6 +256,6 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
     }
 
     return (
-        <NauticalChartSelector layers={layers} deckLayer={deckLayer} setLayers={setLayers}  />
+        <NauticalChartSelector layers={layers} deckLayer={deckLayer} setLayers={setLayers} />
     );
 })

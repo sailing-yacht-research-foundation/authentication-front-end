@@ -681,3 +681,9 @@ const areTwoFiltersEqual = (filter1, filter2) => {
 export const appendThumbnail = (url) => {
     return url && `${url?.split('.').slice(0, -1).join('.')}_thumbnail.jpg`;
 }
+
+export const checkIfDeckGLDataSourceValidAndRender = (deckLayer, layers) => {
+    if (process.env.REACT_APP_WIND_DATA_URL && process.env.REACT_APP_CHART_DATA_URL) {
+        deckLayer?.setProps({ layers: layers });
+    }
+}

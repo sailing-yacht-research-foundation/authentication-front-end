@@ -35,7 +35,8 @@ export const initialState: PlaybackState = {
     viewsCount: 0,
     canIncreaseDecreaseSpeed: true,
     isSimplifiedPlayback: false,
-    vesselParticipantForShowingKudos: {}
+    vesselParticipantForShowingKudos: {},
+    isHaving5MinsCountdown: false
 };
 
 const slice = createSlice({
@@ -126,6 +127,9 @@ const slice = createSlice({
             state.raceTime.start = 0;
             state.raceTime.end = 0;
             state.realRaceTime = state.raceTime;
+        },
+        setIsHaving5MinsCountdown(state, action: PayloadAction<boolean>) {
+            state.isHaving5MinsCountdown = action.payload
         }
     },
 });

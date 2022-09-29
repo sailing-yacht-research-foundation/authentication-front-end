@@ -57,6 +57,7 @@ export const ModalCountdownTimer = React.memo(() => {
   if (!timeBeforeRaceBegin || timeBeforeRaceBegin <= 0) return null;
   const isMoreThen5Minutes = (timeBeforeRaceBegin && timeBeforeRaceBegin > 300000) || false;
   const renderedDate = moment(new Date(competitionUnitDetail?.startTime!)).format("LLLL");
+  dispatch(actions.setIsHaving5MinsCountdown(!isMoreThen5Minutes));
 
   const goBack = () => {
     if (history.action !== "POP") {

@@ -4,6 +4,7 @@ import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import { MVTLayer } from '@deck.gl/geo-layers';
 import styled from 'styled-components';
+import { checkIfDeckGLDataSourceValidAndRender } from 'utils/helpers';
 
 export const NauticalChartSelector = (props) => {
 
@@ -31,12 +32,12 @@ export const NauticalChartSelector = (props) => {
         });;
 
         setLayers(newLayers);
-        deckLayer?.setProps({ layers: newLayers });
+        checkIfDeckGLDataSourceValidAndRender(deckLayer, newLayers);
     }
 
 
     return (
-        <LayerSelector>
+        <LayerSelector style={props.style}>
             <Select placeholder={t(translations.playback_page.select_layers)}
                 mode={'multiple'}
                 maxTagCount={'responsive'}

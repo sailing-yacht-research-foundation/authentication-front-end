@@ -1,3 +1,4 @@
+import { getDepareFillColor } from "./race/race-helper";
 
 export const FIELD_VALIDATE = {
     phone: 'phone',
@@ -336,3 +337,17 @@ export const ignoreBrowserSupportAttributes = {
 }
 
 export const etcUTCTimezone = 'Etc/UTC';
+
+export const depthAreaChartOptions = {
+    data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf`,
+    getFillColor: getDepareFillColor,
+    parameters: {
+        depthTest: true
+    },
+    id: 'depare',
+    pickable: true,
+    minZoom: 0,
+    maxZoom: 23
+}
+
+export const mapboxStyleId = "jweisbaum89/cl0fp8ji7000c14pfpnbrz6xf";
