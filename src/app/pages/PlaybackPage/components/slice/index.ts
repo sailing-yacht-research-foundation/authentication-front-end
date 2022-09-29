@@ -36,7 +36,7 @@ export const initialState: PlaybackState = {
     canIncreaseDecreaseSpeed: true,
     isSimplifiedPlayback: false,
     vesselParticipantForShowingKudos: {},
-    isHaving5MinsCountdown: false
+    isHavingCountdown: false
 };
 
 const slice = createSlice({
@@ -128,8 +128,8 @@ const slice = createSlice({
             state.raceTime.end = 0;
             state.realRaceTime = state.raceTime;
         },
-        setIsHaving5MinsCountdown(state, action: PayloadAction<boolean>) {
-            state.isHaving5MinsCountdown = action.payload
+        setIsHavingCountdown(state, action: PayloadAction<boolean>) {
+            state.isHavingCountdown = action.payload
         }
     },
 });

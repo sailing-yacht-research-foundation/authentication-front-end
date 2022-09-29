@@ -17,7 +17,7 @@ import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCompetitionUnitDetail, selectIsHaving5MinsCountdown, selectPlaybackType, selectRaceTime } from "./slice/selectors";
+import { selectCompetitionUnitDetail, selectIsHavingCountdown, selectPlaybackType, selectRaceTime } from "./slice/selectors";
 import { PlaybackTypes } from "types/Playback";
 import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 import moment from "moment";
@@ -75,7 +75,7 @@ export const RaceMap = (props) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
   const raceTime = useSelector(selectRaceTime);
-  const isHaving5MinsCountdown = useSelector(selectIsHaving5MinsCountdown);
+  const isHaving5MinsCountdown = useSelector(selectIsHavingCountdown);
   const [selectedVesselParticipant, setSelectedVesselParticipant] = React.useState<any>({});
   const [showClaimTrackConfirModal, setShowClaimTrackConfirmModal] = React.useState<boolean>(false);
   const [isClaimingTrack, setIsClaimingTrack] = React.useState<boolean>(false);

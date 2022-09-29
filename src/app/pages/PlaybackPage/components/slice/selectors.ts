@@ -116,7 +116,7 @@ export const selectVesselParticipantDataForShowingKudos = createSelector(
   (playbackState) => playbackState.vesselParticipantForShowingKudos
 )
 
-export const selectIsHaving5MinsCountdown = createSelector(
+export const selectIsHavingCountdown = createSelector(
   [selectDomain],
-  (playbackState) => playbackState.isHaving5MinsCountdown
+  (playbackState) => playbackState.isHavingCountdown
 )
