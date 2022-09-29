@@ -23,15 +23,15 @@ import { usePlaybackSlice } from "./slice";
 import { MAP_DEFAULT_VALUE, RaceDataUpdate, RaceEmitterEvent, RaceSource, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType, WSTrackingStateUpdate } from "utils/constants";
 import { canStreamToExpedition, getBoatNameFromVesselParticipantObject, stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
-import { ModalCountdownTimer } from "./ModalCountdownTimer";
+import { ModalCountdownTimer } from "./Modals/ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
 import { ExpeditionServerActionButtons } from "app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons";
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { KudosReaction } from "./KudosReaction";
-import { ModalRacePostponed } from "./ModalRacePostponed";
-import { ModalRaceCompleted } from "./ModalRaceCompleted";
-import { ModalRaceCanceled } from "./ModalRaceCanceled";
+import { ModalRacePostponed } from "./Modals/ModalRacePostponed";
+import { ModalRaceCompleted } from "./Modals/ModalRaceCompleted";
+import { ModalRaceCanceled } from "./Modals/ModalRaceCanceled";
 
 export const PlaybackStreamRace = () => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;

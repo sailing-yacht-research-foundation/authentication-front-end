@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { SYRF_SERVER } from 'services/service-constants';
 import { EventState, KudoTypes } from 'utils/constants';
-import { formatServicePromiseResponse, parseKeyword } from 'utils/helpers';
+import { formatServicePromiseResponse, parseKeyword, showToastMessageOnRequestError } from 'utils/helpers';
 import syrfRequest from 'utils/syrf-request';
 
 export const search = (params) => {
@@ -43,21 +43,21 @@ export const search = (params) => {
     }
 
     const searchParams: any = {
-      query: {
-        function_score: {
-          query,
-          script_score: {
-            script: {
-              id: "search-score",
-              params: {
-                now: Date.now(),
-              },
+        query: {
+            function_score: {
+                query,
+                script_score: {
+                    script: {
+                        id: "search-score",
+                        params: {
+                            now: Date.now(),
+                        },
+                    },
+                },
+                boost_mode: "sum",
             },
-          },
-          boost_mode: "sum",
         },
-      },
-      sort: ["_score"],
+        sort: ["_score"],
     };
 
     searchParams._source = [
@@ -381,3 +381,30 @@ export const simulateRace = (competitionUnitId: string, isOpen: boolean) => {
         isOpen
     }));
 }
+
+export const getSlicedGribs = (competitionUnitId: string, page: number, size: number) => {
+    return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/sliced-weathers`, {
+        params: {
+            page, size
+        }
+    }));
+}
+
+export const downloadGrib = (competitionUnitId: string, gribId: string) => {
+    return syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/competition-units/${competitionUnitId}/sliced-weathers/${gribId}/download`, { responseType: 'blob' })
+        .then(response => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${gribId}.grib`); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+        }).catch(error => {
+            showToastMessageOnRequestError(error);
+            return {
+                success: false,
+                error: error
+            }
+        })
+}
+

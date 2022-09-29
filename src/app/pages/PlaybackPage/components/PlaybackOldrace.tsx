@@ -34,7 +34,7 @@ import { stringToColour, usePrevious } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { Playback } from "./Playback";
 import { RaceMap } from "./RaceMap";
-import { ConnectionLoader } from './ConnectionLoader';
+import { ConnectionLoader } from './Modals/ConnectionLoader';
 import WebsocketWorker from "../workers/old-race-websocket-worker";
 import MapFrameDataWorker from "../workers/old-race-map-frame-data";
 import { getSimplifiedTracksByCompetitionUnit } from "services/live-data-server/competition-units";

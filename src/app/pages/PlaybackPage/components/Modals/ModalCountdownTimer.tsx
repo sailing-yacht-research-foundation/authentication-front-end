@@ -6,8 +6,8 @@ import { Button, Modal } from "antd";
 import moment from "moment";
 
 import { timeMillisToHours } from "utils/time";
-import { selectCompetitionUnitDetail, selectTimeBeforeRaceBegin } from "./slice/selectors";
-import { usePlaybackSlice } from "./slice";
+import { selectCompetitionUnitDetail, selectTimeBeforeRaceBegin } from "../slice/selectors";
+import { usePlaybackSlice } from "../slice";
 import { translations } from "locales/translations";
 import { useHistory } from "react-router";
 import { RaceStatus } from "utils/constants";
