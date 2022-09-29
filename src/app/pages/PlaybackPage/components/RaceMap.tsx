@@ -75,7 +75,7 @@ export const RaceMap = (props) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
   const raceTime = useSelector(selectRaceTime);
-  const isHaving5MinsCountdown = useSelector(selectIsHavingCountdown);
+  const isHavingCountdown = useSelector(selectIsHavingCountdown);
   const [selectedVesselParticipant, setSelectedVesselParticipant] = React.useState<any>({});
   const [showClaimTrackConfirModal, setShowClaimTrackConfirmModal] = React.useState<boolean>(false);
   const [isClaimingTrack, setIsClaimingTrack] = React.useState<boolean>(false);
@@ -864,7 +864,7 @@ export const RaceMap = (props) => {
   };
 
   return <>
-    <NauticalChartSelector style={{ top: isHaving5MinsCountdown ? '55px' : '5px' }} layers={layers} deckLayer={deckLayer} setLayers={setLayers} />
+    <NauticalChartSelector style={{ top: isHavingCountdown ? '55px' : '5px' }} layers={layers} deckLayer={deckLayer} setLayers={setLayers} />
     <ConfirmModal
       title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
       content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
