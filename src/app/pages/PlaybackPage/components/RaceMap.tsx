@@ -12,7 +12,7 @@ import MarkIcon from "../assets/mark.svg";
 import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
 import { MarkerInfo } from "./MarkerInfo";
-import { depthAreaChartOptions, GeometrySide, mapboxStyleId, RaceEmitterEvent, RaceSource } from "utils/constants";
+import { depthAreaChartOptions, GeometrySide, mapInitializationParams, RaceEmitterEvent, RaceSource } from "utils/constants";
 import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
@@ -23,7 +23,7 @@ import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 import moment from "moment";
 import { ConfirmModal } from "app/components/ConfirmModal";
 import { claimTrack } from "services/live-data-server/my-tracks";
-import { checkIfDeckGLDataSourceValidAndRender, showToastMessageOnRequestError } from "utils/helpers";
+import { createMVTLayer, showToastMessageOnRequestError } from "utils/helpers";
 import { FaRegHandPointer } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
@@ -33,7 +33,6 @@ import StartPinIcon from '../assets/start_pin.png';
 // deck-gl
 import { LeafletLayer } from 'deck.gl-leaflet';
 import { ParticleLayer } from 'deck.gl-particle';
-import { MVTLayer } from '@deck.gl/geo-layers';
 import { NauticalChartSelector } from "app/components/NauticalChartSelector";
 
 require("leaflet-hotline");
@@ -65,7 +64,7 @@ const deckLayer = new LeafletLayer({
 });
 
 export const RaceMap = (props) => {
-  const [layers, setLayers] = React.useState<any>([new MVTLayer({
+  const [layers, setLayers] = React.useState<any>([createMVTLayer({
     ...depthAreaChartOptions
   })]);
   const { emitter } = props;
@@ -817,7 +816,7 @@ export const RaceMap = (props) => {
       bounds: [-180, -90, 180, 90],
     })];
     setLayers(newLayers);
-    checkIfDeckGLDataSourceValidAndRender(deckLayer, newLayers);
+    deckLayer?.setProps({ layers: newLayers });
     setInitializedWind(true);
   }
 
@@ -829,16 +828,7 @@ export const RaceMap = (props) => {
     map.setMaxBounds(bounds);
     new L.TileLayer(
       `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`,
-      {
-        attribution:
-          '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-        maxZoom: 19,
-        minZoom: 2,
-        id: mapboxStyleId,
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: "your.mapbox.access.token",
-      }
+      mapInitializationParams
     ).addTo(map);
     map.addLayer(deckLayer);
 

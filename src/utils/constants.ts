@@ -350,4 +350,11 @@ export const depthAreaChartOptions = {
     maxZoom: 23
 }
 
-export const mapboxStyleId = "jweisbaum89/cl0fp8ji7000c14pfpnbrz6xf";
+export const mapInitializationParams = {
+    attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
+    maxZoom: 18,
+    minZoom: 2,
+    id: 'jweisbaum89/cl0fp8ji7000c14pfpnbrz6xf',
+    tileSize: 512,
+    zoomOffset: -1,
+}

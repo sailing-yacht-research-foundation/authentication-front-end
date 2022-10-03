@@ -2,9 +2,8 @@ import React from 'react';
 import { Select } from 'antd';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
-import { MVTLayer } from '@deck.gl/geo-layers';
 import styled from 'styled-components';
-import { checkIfDeckGLDataSourceValidAndRender } from 'utils/helpers';
+import { createMVTLayer } from 'utils/helpers';
 
 export const NauticalChartSelector = (props) => {
 
@@ -13,7 +12,8 @@ export const NauticalChartSelector = (props) => {
     const { t } = useTranslation();
 
     const toggleLayers = (values, layerArray, setLayers, deckLayer) => {
-        const soundingsLayer = new MVTLayer({
+        if (!process.env.REACT_APP_CHART_DATA_URL) return;
+        const soundingsLayer = createMVTLayer({
             data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/soundg/{z}/{x}/{y}.pbf`,
             id: 'soundings',
             pointType: 'text',
@@ -31,8 +31,8 @@ export const NauticalChartSelector = (props) => {
             return l.id !== 'soundings';
         });;
 
-        setLayers(newLayers);
-        checkIfDeckGLDataSourceValidAndRender(deckLayer, newLayers);
+        setLayers(newLayers.filter(Boolean));
+        deckLayer?.setProps({ layers: newLayers });
     }
 
 
@@ -41,7 +41,7 @@ export const NauticalChartSelector = (props) => {
             <Select placeholder={t(translations.playback_page.select_layers)}
                 mode={'multiple'}
                 maxTagCount={'responsive'}
-                onChange={(values)=> toggleLayers(values, layers, setLayers, deckLayer)}
+                onChange={(values) => toggleLayers(values, layers, setLayers, deckLayer)}
                 showArrow
                 allowClear>
                 <Select.Option value={'soundings'}>Soundings</Select.Option>

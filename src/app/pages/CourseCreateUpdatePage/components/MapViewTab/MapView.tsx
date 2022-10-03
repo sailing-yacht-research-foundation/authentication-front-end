@@ -15,13 +15,13 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { create, getById, update } from 'services/live-data-server/courses';
-import { addNonGroupLayers, checkIfDeckGLDataSourceValidAndRender, showToastMessageOnRequestError } from 'utils/helpers';
+import { addNonGroupLayers, createMVTLayer, showToastMessageOnRequestError } from 'utils/helpers';
 import ReactDOMServer from 'react-dom/server';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { CourseDeleteModal } from '../CourseDeleteModal';
-import { depthAreaChartOptions, GeometrySide, GeometryType, mapboxStyleId, MODE } from 'utils/constants';
+import { depthAreaChartOptions, GeometrySide, GeometryType, mapInitializationParams, MODE } from 'utils/constants';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import BoatPinIcon from '../../assets/boat_pin.png';
@@ -29,7 +29,6 @@ import StartPinIcon from '../../assets/start_pin.png';
 import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
 
 import { LeafletLayer } from 'deck.gl-leaflet';
-import { MVTLayer } from '@deck.gl/geo-layers';
 import { NauticalChartSelector } from 'app/components/NauticalChartSelector';
 
 require('leaflet-draw');
@@ -96,9 +95,7 @@ const deckLayer = new LeafletLayer({
 
 export const MapView = React.forwardRef((props, ref) => {
 
-    const [layers, setLayers] = React.useState<any>([new MVTLayer({
-        ...depthAreaChartOptions
-    })]);
+    const [layers, setLayers] = React.useState<any>([createMVTLayer(depthAreaChartOptions)]);
 
     const map = useMap();
 
@@ -153,18 +150,10 @@ export const MapView = React.forwardRef((props, ref) => {
     }));
 
     const initializeMapView = () => {
-        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
-            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-            maxZoom: 18,
-            minZoom: 2,
-            id: mapboxStyleId,
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token'
-        }).addTo(map);
+        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, mapInitializationParams).addTo(map);
 
         map.addLayer(deckLayer); // initialize deckgl for drawing nautical charts.
-        checkIfDeckGLDataSourceValidAndRender(deckLayer, layers);
+        deckLayer?.setProps({ layers: layers });
 
         const drawnItems = L.featureGroup().addTo(map);
         drawControl = new L.Control.Draw({

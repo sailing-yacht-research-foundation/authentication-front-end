@@ -10,8 +10,8 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { checkIfDeckGLDataSourceValidAndRender, renderEmptyValue } from 'utils/helpers';
-import { depthAreaChartOptions, mapboxStyleId, TIME_FORMAT } from 'utils/constants';
+import { renderEmptyValue } from 'utils/helpers';
+import { depthAreaChartOptions, mapInitializationParams, TIME_FORMAT } from 'utils/constants';
 import { useSelector } from 'react-redux';
 import { selectPagination } from '../slice/selectors';
 
@@ -38,9 +38,7 @@ const deckLayer = new LeafletLayer({
 
 export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInput }, ref) => {
 
-    const [layers, setLayers] = React.useState<any>([new MVTLayer({
-        ...depthAreaChartOptions
-    })]);
+    const [layers, setLayers] = React.useState<any>([new MVTLayer(depthAreaChartOptions)]);
 
     const map = useMap();
 
@@ -119,18 +117,9 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
     }
 
     const initializeMapView = () => {
-        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
-            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-            maxZoom: 18,
-            minZoom: 2,
-            id: mapboxStyleId,
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token'
-        }).addTo(map);
-
+        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, mapInitializationParams).addTo(map);
         map.addLayer(deckLayer);
-        checkIfDeckGLDataSourceValidAndRender(deckLayer, layers);
+        deckLayer?.setProps({ layers: layers });
     }
 
     const attachRaceMarkersToMap = () => {
