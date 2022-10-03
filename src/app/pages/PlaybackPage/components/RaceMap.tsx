@@ -814,7 +814,7 @@ export const RaceMap = (props) => {
       maxAge: 60,
       imageUnscale: [-128, 127],
       bounds: [-180, -90, 180, 90],
-    })];
+    })].filter(Boolean);
     setLayers(newLayers);
     deckLayer?.setProps({ layers: newLayers });
     setInitializedWind(true);

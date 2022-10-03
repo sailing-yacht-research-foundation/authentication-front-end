@@ -29,9 +29,9 @@ export const NauticalChartSelector = (props) => {
         });
         const newLayers = values?.includes('soundings') ? [...layerArray, soundingsLayer] : layerArray.filter(l => {
             return l.id !== 'soundings';
-        });;
+        }).filter(Boolean);
 
-        setLayers(newLayers.filter(Boolean));
+        setLayers(newLayers);
         deckLayer?.setProps({ layers: newLayers });
     }
 
