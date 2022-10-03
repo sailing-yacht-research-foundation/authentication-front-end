@@ -797,6 +797,7 @@ export const RaceMap = (props) => {
   };
 
   const initializeWind = () => {
+    if (!process.env.REACT_APP_WIND_DATA_URL) return;
     const raceTimeAsMoment = moment(raceTime.start);
     const date = raceTimeAsMoment.format('DD');
     const month = raceTimeAsMoment.format('MM');

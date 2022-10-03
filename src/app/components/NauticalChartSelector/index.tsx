@@ -28,7 +28,7 @@ export const NauticalChartSelector = (props) => {
             getPointRadius: 100,
         });
         const newLayers = values?.includes('soundings') ? [...layerArray, soundingsLayer] : layerArray.filter(l => {
-            return l.id !== 'soundings';
+            return l?.id !== 'soundings';
         }).filter(Boolean);
 
         setLayers(newLayers);

@@ -153,7 +153,7 @@ export const MapView = React.forwardRef((props, ref) => {
         new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, mapInitializationParams).addTo(map);
 
         map.addLayer(deckLayer); // initialize deckgl for drawing nautical charts.
-        deckLayer?.setProps({ layers: layers });
+        deckLayer?.setProps({ layers: layers.filter(Boolean) });
 
         const drawnItems = L.featureGroup().addTo(map);
         drawControl = new L.Control.Draw({

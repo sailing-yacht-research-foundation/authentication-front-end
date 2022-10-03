@@ -119,7 +119,7 @@ export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearch
     const initializeMapView = () => {
         new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, mapInitializationParams).addTo(map);
         map.addLayer(deckLayer);
-        deckLayer?.setProps({ layers: layers });
+        deckLayer?.setProps({ layers: layers.filter(Boolean) });
     }
 
     const attachRaceMarkersToMap = () => {
