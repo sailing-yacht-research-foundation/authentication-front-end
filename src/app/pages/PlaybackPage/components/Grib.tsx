@@ -55,12 +55,10 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
         {
             title: 'Model Name',
             dataIndex: 'modelName',
-            key: 'model',
+            key: 'modelName',
             render: (text) => {
                 return text;
             },
-            ...getColumnSearchProps('modelName', handleSearch, handleReset),
-            sorter: true,
         },
         {
             title: t(translations.general.start_time),
