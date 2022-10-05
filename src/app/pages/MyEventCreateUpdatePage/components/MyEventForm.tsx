@@ -501,7 +501,7 @@ export const MyEventForm = () => {
     React.useEffect(() => {
         canManageEventAndRedirect(event, authUser, mode, history);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authUser.role, event.name]);
+    }, [authUser.role, event.isEditor]);
 
     React.useEffect(() => {
         initMode();
