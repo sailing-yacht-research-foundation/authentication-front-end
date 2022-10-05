@@ -12,7 +12,7 @@ import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
 import { getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, usePrevious, checkIfLastFilterAndSortValueDifferentToCurrent, handleOnTableStateChanged } from 'utils/helpers';
-import { getColumnCheckboxProps, getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
+import { getColumnCheckboxProps, getColumnTimeProps } from 'app/components/TableFilter';
 
 export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
 
