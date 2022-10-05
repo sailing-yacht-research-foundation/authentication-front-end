@@ -141,7 +141,7 @@ export const RaceMap = (props) => {
       });
 
       // Update the courses
-      emitter.on(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
+      emitter.once(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
         current.courseData = JSON.parse(JSON.stringify(sequencedCourses)); // save this for later update.
         _drawCourse(sequencedCourses);
       });
