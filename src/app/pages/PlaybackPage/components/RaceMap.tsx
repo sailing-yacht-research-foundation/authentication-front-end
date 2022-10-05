@@ -920,4 +920,3 @@ const KudoReactionMenuButton = styled(VscReactions)`
 const ClaimTrackButton = styled(FaRegHandPointer)`
   ${boatActionStyles};
 `;
-
