@@ -96,7 +96,10 @@ export function* getRaceData({ type, payload }) {
       return;
     }
 
-    // Streaming race
+    // Streaming race, since the start time of streaming race is the current time when user opens the player so we set current time.
+    const startMillis = new Date().getTime();
+    const endMillis = new Date().getTime();
+    yield put(playbackActions.setRaceTime({ start: startMillis, end: endMillis }));
     return yield put(playbackActions.setPlaybackType(PlaybackTypes.STREAMINGRACE));
   }
 

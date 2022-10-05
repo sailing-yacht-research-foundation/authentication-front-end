@@ -35,7 +35,14 @@ export const initialState: PlaybackState = {
     viewsCount: 0,
     canIncreaseDecreaseSpeed: true,
     isSimplifiedPlayback: false,
-    vesselParticipantForShowingKudos: {}
+    vesselParticipantForShowingKudos: {},
+    windTime: {
+        year: '0',
+        month: '0',
+        date: '0',
+        hour: '0'
+    },
+    isHavingCountdown: false
 };
 
 const slice = createSlice({
@@ -93,17 +100,17 @@ const slice = createSlice({
         setIsConnecting(state, action: PayloadAction<boolean>) {
             state.isConnecting = action.payload;
         },
-        getCompetitionUnitDetail(state, action: PayloadAction<any>) {},
-        getVesselParticipants(state, action: PayloadAction<any>) {},
-        getSearchRaceDetail(state, action: PayloadAction<any>) {},
-        getRaceData(state, action: PayloadAction<any>) {},
-        getRaceSimplifiedTracks(state, action: PayloadAction<any>) {},
-        getRaceLegs(state, action: PayloadAction<any>) {},
-        getRaceStartTimeAndEndTime(state, action: PayloadAction<any>) {},
-        getRaceCourseDetail(state, action: PayloadAction<any>) {},
-        getOldRaceData(state, action: PayloadAction<any>) {},
-        getTimeBeforeRaceBegin(state, action: PayloadAction<any>) {},
-        getAndSetRaceLengthUsingServerData(state, action: PayloadAction<any>) {},
+        getCompetitionUnitDetail(state, action: PayloadAction<any>) { },
+        getVesselParticipants(state, action: PayloadAction<any>) { },
+        getSearchRaceDetail(state, action: PayloadAction<any>) { },
+        getRaceData(state, action: PayloadAction<any>) { },
+        getRaceSimplifiedTracks(state, action: PayloadAction<any>) { },
+        getRaceLegs(state, action: PayloadAction<any>) { },
+        getRaceStartTimeAndEndTime(state, action: PayloadAction<any>) { },
+        getRaceCourseDetail(state, action: PayloadAction<any>) { },
+        getOldRaceData(state, action: PayloadAction<any>) { },
+        getTimeBeforeRaceBegin(state, action: PayloadAction<any>) { },
+        getAndSetRaceLengthUsingServerData(state, action: PayloadAction<any>) { },
         setPlaybackSpeed(state, action: PayloadAction<number>) {
             state.speed = action.payload;
         },
@@ -126,6 +133,18 @@ const slice = createSlice({
             state.raceTime.start = 0;
             state.raceTime.end = 0;
             state.realRaceTime = state.raceTime;
+            state.windTime = {
+                year: '0',
+                month: '0',
+                date: '0',
+                hour: '0'
+            }
+        },
+        setWindTime(state, action: PayloadAction<any>) {
+            state.windTime = action.payload;
+        },
+        setIsHavingCountdown(state, action: PayloadAction<boolean>) {
+            state.isHavingCountdown = action.payload
         }
     },
 });

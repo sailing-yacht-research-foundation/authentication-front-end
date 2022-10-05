@@ -8,6 +8,7 @@ import { TableFiltering } from 'types/TableFiltering';
 import { TableSorting } from 'types/TableSorting';
 import { CRITERIA_TO_RAW_CRITERIA, formattedSupportedSearchCriteria, RaceSource, RaceStatus, RAW_CRITERIA_TO_CRITERIA, supportedSearchCriteria, TableFilteringType, TIME_FORMAT } from 'utils/constants';
 import { AuthCode } from './constants';
+import { MVTLayer } from '@deck.gl/geo-layers';
 
 /**
  * Check if is mobile
@@ -677,6 +678,17 @@ const areTwoFiltersEqual = (filter1, filter2) => {
 
     return false;
 }
-export const appendThumbnail  = (url) => {
+
+export const appendThumbnail = (url) => {
     return url && `${url?.split('.').slice(0, -1).join('.')}_thumbnail.jpg`;
 }
+
+export const createMVTLayer = (layerOptions) => {
+    if (!!process.env.REACT_APP_CHART_DATA_URL) {
+        return new MVTLayer({
+            ...layerOptions
+        });
+    }
+
+    return null;
+  };

@@ -2,6 +2,7 @@ import React from 'react';
 import * as L from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { addNonGroupLayers } from 'utils/helpers';
+import { mapInitializationParams } from 'utils/constants';
 
 require('leaflet-draw');
 
@@ -44,15 +45,7 @@ export const Map = (props) => {
     }
 
     const initializeMapView = () => {
-        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
-            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-            maxZoom: 18,
-            minZoom: 2,
-            id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token'
-        }).addTo(map);
+        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, mapInitializationParams).addTo(map);
 
         drawnItems = L.featureGroup().addTo(map);
         drawControlFull = new L.Control.Draw({
