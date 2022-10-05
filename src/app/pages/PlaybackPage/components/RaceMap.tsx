@@ -3,8 +3,8 @@ import * as L from "leaflet";
 import { useMap } from "react-leaflet";
 import ReactDOMServer from "react-dom/server";
 import copy from "copy-to-clipboard";
-import { message, Select } from "antd";
-import { formatCoordinatesObjectToArray, generateLastArray, getDepareFillColor, normalizeSequencedGeometries } from "utils/race/race-helper";
+import { message } from "antd";
+import { formatCoordinatesObjectToArray, generateLastArray, normalizeSequencedGeometries } from "utils/race/race-helper";
 import { MappedCourseGeometrySequenced } from "types/CourseGeometry";
 
 import { PlayerInfo } from "./PlayerInfo";
@@ -12,18 +12,18 @@ import MarkIcon from "../assets/mark.svg";
 import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
 import { MarkerInfo } from "./MarkerInfo";
-import { GeometrySide, RaceEmitterEvent, RaceSource } from "utils/constants";
+import { depthAreaChartOptions, GeometrySide, mapInitializationParams, RaceEmitterEvent, RaceSource } from "utils/constants";
 import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCompetitionUnitDetail, selectPlaybackType, selectRaceTime } from "./slice/selectors";
+import { selectCompetitionUnitDetail, selectIsHavingCountdown, selectPlaybackType, selectRaceTime } from "./slice/selectors";
 import { PlaybackTypes } from "types/Playback";
 import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 import moment from "moment";
 import { ConfirmModal } from "app/components/ConfirmModal";
 import { claimTrack } from "services/live-data-server/my-tracks";
-import { showToastMessageOnRequestError } from "utils/helpers";
+import { createMVTLayer, showToastMessageOnRequestError } from "utils/helpers";
 import { FaRegHandPointer } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
@@ -33,7 +33,7 @@ import StartPinIcon from '../assets/start_pin.png';
 // deck-gl
 import { LeafletLayer } from 'deck.gl-leaflet';
 import { ParticleLayer } from 'deck.gl-particle';
-import { MVTLayer } from '@deck.gl/geo-layers';
+import { NauticalChartSelector } from "app/components/NauticalChartSelector";
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -64,16 +64,8 @@ const deckLayer = new LeafletLayer({
 });
 
 export const RaceMap = (props) => {
-  const [layers, setLayers] = React.useState<any>([new MVTLayer({
-    data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf`,
-    getFillColor: getDepareFillColor,
-    parameters: {
-      depthTest: true
-    },
-    id: 'depare',
-    pickable: true,
-    minZoom: 0,
-    maxZoom: 23
+  const [layers, setLayers] = React.useState<any>([createMVTLayer({
+    ...depthAreaChartOptions
   })]);
   const { emitter } = props;
   const { actions } = usePlaybackSlice();
@@ -82,6 +74,7 @@ export const RaceMap = (props) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
   const raceTime = useSelector(selectRaceTime);
+  const isHavingCountdown = useSelector(selectIsHavingCountdown);
   const [selectedVesselParticipant, setSelectedVesselParticipant] = React.useState<any>({});
   const [showClaimTrackConfirModal, setShowClaimTrackConfirmModal] = React.useState<boolean>(false);
   const [isClaimingTrack, setIsClaimingTrack] = React.useState<boolean>(false);
@@ -804,6 +797,7 @@ export const RaceMap = (props) => {
   };
 
   const initializeWind = () => {
+    if (!process.env.REACT_APP_WIND_DATA_URL) return;
     const raceTimeAsMoment = moment(raceTime.start);
     const date = raceTimeAsMoment.format('DD');
     const month = raceTimeAsMoment.format('MM');
@@ -821,33 +815,10 @@ export const RaceMap = (props) => {
       maxAge: 60,
       imageUnscale: [-128, 127],
       bounds: [-180, -90, 180, 90],
-    })];
+    })].filter(Boolean);
     setLayers(newLayers);
     deckLayer?.setProps({ layers: newLayers });
     setInitializedWind(true);
-  }
-
-  const toggleSoundingLayer = (values) => {
-    const soundingsLayer = new MVTLayer({
-      data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/soundg/{z}/{x}/{y}.pbf`,
-      id: 'soundings',
-      pointType: 'text',
-      getText: (d) => parseFloat(d.properties.depth).toFixed(2) + '',
-      getTextSize: 10,
-      getLabel: f => {
-        return f.properties.depth;
-      },
-      getLabelSize: f => 1000,
-      getTextColor: f => [255, 255, 255],
-      labelSizeUnits: 'meters',
-      getPointRadius: 100,
-    });
-    const newLayers = values?.includes('soundings') ? [...layers, soundingsLayer] : layers.filter(l => {
-      return l.id !== 'soundings';
-    });;
-
-    setLayers(newLayers);
-    deckLayer?.setProps({ layers: newLayers });
   }
 
   const initializeMapView = () => {
@@ -858,16 +829,7 @@ export const RaceMap = (props) => {
     map.setMaxBounds(bounds);
     new L.TileLayer(
       `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`,
-      {
-        attribution:
-          '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-        maxZoom: 19,
-        minZoom: 2,
-        id: "jweisbaum89/cl0fp8ji7000c14pfpnbrz6xf",
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: "your.mapbox.access.token",
-      }
+      mapInitializationParams
     ).addTo(map);
     map.addLayer(deckLayer);
 
@@ -893,16 +855,7 @@ export const RaceMap = (props) => {
   };
 
   return <>
-    <LayerSelector>
-      <Select placeholder={t(translations.playback_page.select_layers)}
-        mode={'multiple'}
-        maxTagCount={'responsive'}
-        onChange={toggleSoundingLayer}
-        showArrow
-        allowClear>
-        <Select.Option value={'soundings'}>Soundings</Select.Option>
-      </Select>
-    </LayerSelector>
+    <NauticalChartSelector style={{ top: isHavingCountdown ? '55px' : '5px' }} layers={layers} deckLayer={deckLayer} setLayers={setLayers} />
     <ConfirmModal
       title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
       content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
@@ -942,13 +895,3 @@ const ClaimTrackButton = styled(FaRegHandPointer)`
   ${boatActionStyles};
 `;
 
-const LayerSelector = styled.div`
-  position: absolute;
-  z-index: 9999;
-  right: 5px;
-  top: 5px;
-
-  .ant-select-multiple {
-    min-width: 130px;
-  }
-`;

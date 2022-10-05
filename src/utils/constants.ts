@@ -1,3 +1,4 @@
+import { getDepareFillColor } from "./race/race-helper";
 
 export const FIELD_VALIDATE = {
     phone: 'phone',
@@ -336,3 +337,24 @@ export const ignoreBrowserSupportAttributes = {
 }
 
 export const etcUTCTimezone = 'Etc/UTC';
+
+export const depthAreaChartOptions = {
+    data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf`,
+    getFillColor: getDepareFillColor,
+    parameters: {
+        depthTest: true
+    },
+    id: 'depare',
+    pickable: true,
+    minZoom: 0,
+    maxZoom: 23
+}
+
+export const mapInitializationParams = {
+    attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
+    maxZoom: 18,
+    minZoom: 2,
+    id: 'jweisbaum89/cl0fp8ji7000c14pfpnbrz6xf',
+    tileSize: 512,
+    zoomOffset: -1,
+}

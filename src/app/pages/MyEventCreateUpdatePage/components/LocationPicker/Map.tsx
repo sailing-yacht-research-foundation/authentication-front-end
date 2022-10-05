@@ -5,6 +5,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import ReactDOMServer from 'react-dom/server';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
+import { mapInitializationParams } from 'utils/constants';
 
 let marker;
 let endMarker;
@@ -86,15 +87,7 @@ export const Map = (props) => {
     }
 
     const initializeMapView = () => {
-        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
-            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-            maxZoom: 18,
-            minZoom: 1,
-            id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token'
-        }).addTo(map);
+        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, mapInitializationParams).addTo(map);
         map.setZoom(10);
 
         setMarker(coordinates);

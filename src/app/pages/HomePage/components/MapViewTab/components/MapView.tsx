@@ -13,11 +13,15 @@ import { selectResults, selectUpcomingRaces } from '../../../slice/selectors';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { checkIfLocationIsValid, renderEmptyValue } from 'utils/helpers';
-import { TIME_FORMAT } from 'utils/constants';
+import { checkIfLocationIsValid, createMVTLayer, renderEmptyValue } from 'utils/helpers';
+import { depthAreaChartOptions, mapInitializationParams, TIME_FORMAT } from 'utils/constants';
 import { getProfilePicture, getUserName } from 'utils/user-utils';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { SYRFImage } from 'app/components/SyrfGeneral/SYRFImage';
+
+// deck-gl
+import { LeafletLayer } from 'deck.gl-leaflet';
+import { NauticalChartSelector } from 'app/components/NauticalChartSelector';
 
 require('leaflet.markercluster');
 
@@ -33,6 +37,10 @@ const MAP_MOVE_TYPE = {
 let geoLoc;
 
 let watchID;
+
+const deckLayer = new LeafletLayer({
+    layers: []
+});
 
 export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInput }, ref) => {
 
@@ -55,10 +63,17 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
         lat: null
     });
 
+    const [layers, setLayers] = React.useState<any>([createMVTLayer(depthAreaChartOptions)]);
+
     useEffect(() => {
         initializeMapView();
         if (results.length === 0 || upcomingRaceResults.length === 0) // no results and focus on user location
             zoomToCurrentUserLocationIfAllowed(MAP_MOVE_TYPE.immediately);
+
+        return () => {
+            deckLayer.setProps({ layers: [] });
+            map.removeLayer(deckLayer);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -146,15 +161,9 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
     }
 
     const initializeMapView = () => {
-        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
-            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-            maxZoom: 18,
-            minZoom: 2,
-            id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token',
-        }).addTo(map);
+        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, mapInitializationParams).addTo(map);
+        map.addLayer(deckLayer);
+        deckLayer?.setProps({ layers: layers.filter(Boolean) });
     }
 
     const attachRaceMarkersToMap = () => {
@@ -236,7 +245,6 @@ export const MapView = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInp
     }
 
     return (
-        <>
-        </>
+        <NauticalChartSelector layers={layers} deckLayer={deckLayer} setLayers={setLayers} />
     );
 })
