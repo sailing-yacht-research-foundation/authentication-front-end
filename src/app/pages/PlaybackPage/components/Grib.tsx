@@ -163,7 +163,8 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
             </Tooltip>
             <StyledModal
              cancelButtonProps={{ style: { display: 'none' } }}
-             okButtonProps={{ style: { display: 'none' } }} 
+             okButtonProps={{ style: { display: 'none' } }}
+             onCancel={() => setShowModal(false)}
              title={'Grib Files'} visible={showModal}>
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
