@@ -15,18 +15,21 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { create, getById, update } from 'services/live-data-server/courses';
-import { addNonGroupLayers, showToastMessageOnRequestError } from 'utils/helpers';
+import { addNonGroupLayers, createMVTLayer, showToastMessageOnRequestError } from 'utils/helpers';
 import ReactDOMServer from 'react-dom/server';
 import { translations } from 'locales/translations';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { CourseDeleteModal } from '../CourseDeleteModal';
-import { GeometrySide, GeometryType, MODE } from 'utils/constants';
+import { depthAreaChartOptions, GeometrySide, GeometryType, mapInitializationParams, MODE } from 'utils/constants';
 import styled from 'styled-components';
 import { StyleConstants } from 'styles/StyleConstants';
 import BoatPinIcon from '../../assets/boat_pin.png';
 import StartPinIcon from '../../assets/start_pin.png';
 import { addTrackerIdForCourseIfNotExists } from 'utils/api-helper';
+
+import { LeafletLayer } from 'deck.gl-leaflet';
+import { NauticalChartSelector } from 'app/components/NauticalChartSelector';
 
 require('leaflet-draw');
 
@@ -86,8 +89,13 @@ let drawControl;
 const defaultPolylineNames = ['Start/Finish', 'Start', 'Finish', 'Windward Gate', 'Leeward Gate'];
 const defaultPolygonNames = ['Course Boundary', 'Exclusion Area', 'Starting Area'];
 const defaultMarkerNames = ['Windward Mark', 'Leeward Mark', 'Offset'];
+const deckLayer = new LeafletLayer({
+    layers: []
+});
 
 export const MapView = React.forwardRef((props, ref) => {
+
+    const [layers, setLayers] = React.useState<any>([createMVTLayer(depthAreaChartOptions)]);
 
     const map = useMap();
 
@@ -142,15 +150,10 @@ export const MapView = React.forwardRef((props, ref) => {
     }));
 
     const initializeMapView = () => {
-        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, {
-            attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-            maxZoom: 18,
-            minZoom: 2,
-            id: 'jweisbaum89/cki2dpc9a2s7919o8jqyh1gss',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token'
-        }).addTo(map);
+        new L.TileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`, mapInitializationParams).addTo(map);
+
+        map.addLayer(deckLayer); // initialize deckgl for drawing nautical charts.
+        deckLayer?.setProps({ layers: layers.filter(Boolean) });
 
         const drawnItems = L.featureGroup().addTo(map);
         drawControl = new L.Control.Draw({
@@ -182,6 +185,11 @@ export const MapView = React.forwardRef((props, ref) => {
         registerOnLayersEdittedEvent();
         registerOnGeometryEditStart();
         initModeAndData(drawnItems);
+
+        return () => {
+            deckLayer.setProps({ layers: [] });
+            map.removeLayer(deckLayer);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -659,6 +667,7 @@ export const MapView = React.forwardRef((props, ref) => {
                     </Form.Item>
                 </Form>
             </Modal>
+            <NauticalChartSelector layers={layers} deckLayer={deckLayer} setLayers={setLayers} />
         </>
     );
 });

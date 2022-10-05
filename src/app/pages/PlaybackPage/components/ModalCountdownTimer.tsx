@@ -32,6 +32,7 @@ export const ModalCountdownTimer = React.memo(() => {
 
     return () => {
       clearInterval(intervalData);
+      dispatch(actions.setIsHavingCountdown(false));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -57,6 +58,7 @@ export const ModalCountdownTimer = React.memo(() => {
   if (!timeBeforeRaceBegin || timeBeforeRaceBegin <= 0) return null;
   const isMoreThen5Minutes = (timeBeforeRaceBegin && timeBeforeRaceBegin > 300000) || false;
   const renderedDate = moment(new Date(competitionUnitDetail?.startTime!)).format("LLLL");
+  dispatch(actions.setIsHavingCountdown(true));
 
   const goBack = () => {
     if (history.action !== "POP") {

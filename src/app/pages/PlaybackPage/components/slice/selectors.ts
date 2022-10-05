@@ -120,3 +120,8 @@ export const selectWindTime = createSelector(
   [selectDomain],
   (playbackState) => playbackState.windTime
 )
+
+export const selectIsHavingCountdown = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.isHavingCountdown
+)

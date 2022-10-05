@@ -41,7 +41,8 @@ export const initialState: PlaybackState = {
         month: '0',
         date: '0',
         hour: '0'
-    }
+    },
+    isHavingCountdown: false
 };
 
 const slice = createSlice({
@@ -141,6 +142,9 @@ const slice = createSlice({
         },
         setWindTime(state, action: PayloadAction<any>) {
             state.windTime = action.payload;
+        },
+        setIsHavingCountdown(state, action: PayloadAction<boolean>) {
+            state.isHavingCountdown = action.payload
         }
     },
 });
