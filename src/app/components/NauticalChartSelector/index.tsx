@@ -35,7 +35,6 @@ export const NauticalChartSelector = (props) => {
         deckLayer?.setProps({ layers: newLayers });
     }
 
-
     return (
         <LayerSelector style={props.style}>
             <Select placeholder={t(translations.playback_page.select_layers)}
@@ -53,7 +52,7 @@ export const NauticalChartSelector = (props) => {
 
 const LayerSelector = styled.div`
   position: absolute;
-  z-index: 9999;
+  z-index: 999;
   right: 5px;
   top: 5px;
 
