@@ -3,10 +3,10 @@ import { Modal } from "antd";
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCompetitionUnitDetail } from "./slice/selectors";
+import { selectCompetitionUnitDetail } from "../slice/selectors";
 import { RaceStatus } from "utils/constants";
 import { RaceStatusModalWrapper } from "app/components/SyrfGeneral";
-import { usePlaybackSlice } from "./slice";
+import { usePlaybackSlice } from "../slice";
 import { PlaybackTypes } from "types/Playback";
 
 export const ModalRaceCompleted = () => {
