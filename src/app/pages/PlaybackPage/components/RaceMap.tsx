@@ -944,7 +944,7 @@ const ClaimTrackButton = styled(FaRegHandPointer)`
 
 const LayerSelector = styled.div`
   position: absolute;
-  z-index: 9999;
+  z-index: 999;
   right: 5px;
   top: 5px;
 
