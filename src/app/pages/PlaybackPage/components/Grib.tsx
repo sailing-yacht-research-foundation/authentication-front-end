@@ -7,11 +7,37 @@ import { translations } from 'locales/translations';
 import styled from 'styled-components';
 import { media } from 'styles/media';
 import moment from 'moment';
-import { TIME_FORMAT } from 'utils/constants';
+import { gribModels, TIME_FORMAT } from 'utils/constants';
+import { TableFiltering } from 'types/TableFiltering';
+import { TableSorting } from 'types/TableSorting';
+import { FilterConfirmProps } from 'antd/lib/table/interface';
+import { getFilterTypeBaseOnColumn, parseFilterParamBaseOnFilterType, usePrevious, checkIfLastFilterAndSortValueDifferentToCurrent, handleOnTableStateChanged } from 'utils/helpers';
+import { getColumnCheckboxProps, getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 
 export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
 
     const { t } = useTranslation();
+
+    const [filter, setFilter] = React.useState<TableFiltering[]>([]);
+
+    const [sorter, setSorter] = React.useState<Partial<TableSorting>>({});
+
+    const handleSearch = (
+        selectedKeys: string[],
+        confirm: (param?: FilterConfirmProps) => void,
+        dataIndex: any,
+    ) => {
+        let param: any = selectedKeys[0];
+        const filterType = getFilterTypeBaseOnColumn(dataIndex, ['startTime', 'endTime'], ['model']);
+        param = parseFilterParamBaseOnFilterType(param, filterType);
+        confirm();
+        setFilter([...filter.filter(f => f.key !== dataIndex), ...[{ key: dataIndex, value: param, type: filterType }]]);
+    };
+
+    const handleReset = (clearFilters: () => void, columnToReset: string) => {
+        clearFilters();
+        setFilter([...filter.filter(f => f.key !== columnToReset)]);
+    };
 
     const [showModal, setShowModal] = React.useState<boolean>(false);
 
@@ -22,7 +48,9 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
             key: 'model',
             render: (text) => {
                 return text;
-            }
+            },
+            ...getColumnCheckboxProps('model', gribModels, handleSearch, handleReset),
+            sorter: true,
         },
         {
             title: 'Model Name',
@@ -30,7 +58,9 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
             key: 'model',
             render: (text) => {
                 return text;
-            }
+            },
+            ...getColumnSearchProps('modelName', handleSearch, handleReset),
+            sorter: true,
         },
         {
             title: t(translations.general.start_time),
@@ -38,7 +68,9 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
             key: 'startTime',
             render: (value) => {
                 return moment(value).format(TIME_FORMAT.date_text_with_time);
-            }
+            },
+            ...getColumnTimeProps('startTime', handleSearch, handleReset),
+            sorter: true,
         },
         {
             title: t(translations.my_event_create_update_page.end_time),
@@ -46,7 +78,9 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
             key: 'endTime',
             render: (value) => {
                 return moment(value).format(TIME_FORMAT.date_text_with_time);
-            }
+            },
+            ...getColumnTimeProps('endTime', handleSearch, handleReset),
+            sorter: true,
         },
         {
             title: t(translations.playback_page.levels),
@@ -54,7 +88,8 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
             key: 'levels',
             render: (value) => {
                 return value?.join(', ');
-            }
+            },
+            sorter: true,
         },
         {
             title: 'Variables',
@@ -62,7 +97,8 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
             key: 'variables',
             render: (value, record) => {
                 return value?.join(', ');
-            }
+            },
+            sorter: true,
         },
         {
             title: t(translations.general.action),
@@ -86,6 +122,7 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
 
     const [isChangingPage, setIsChangingPage] = React.useState<boolean>(false);
 
+    const previousValue = usePrevious<{ sorter: Partial<TableSorting>, filter: TableFiltering[] }>({ filter, sorter });
 
     React.useEffect(() => {
         if (showModal)
@@ -93,13 +130,20 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showModal]);
 
+    React.useEffect(() => {
+        if (checkIfLastFilterAndSortValueDifferentToCurrent(previousValue?.filter, previousValue?.sorter, filter, sorter)) {
+            getAll(pagination.page, pagination.size);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filter, sorter]);
+
     const performDownloadGrib = (grib) => {
-        downloadGrib(competitionUnitId, grib.id);
+        downloadGrib(competitionUnitId, grib.id, String(grib.fileType).toLowerCase());
     }
 
-    const getAll = async (page: number, size: number) => {
+    const getAll = async (page, size) => {
         setIsChangingPage(true);
-        const response = await getSlicedGribs(competitionUnitId, page, size);
+        const response = await getSlicedGribs(competitionUnitId, page, size, filter, sorter);
         setIsChangingPage(false);
 
         if (response.success) {
@@ -112,16 +156,15 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
         }
     }
 
-    const onPaginationChanged = (page: number, size) => {
-        getAll(page, size);
-    }
-
     return (
         <>
             <Tooltip title={t(translations.tip.show_grib_files)}>
                 <Button onClick={() => setShowModal(true)} type='primary'>{t(translations.playback_page.gribs)}</Button>
             </Tooltip>
-            <StyledModal width={800} title={'Grib Files'} visible={showModal}>
+            <StyledModal
+             cancelButtonProps={{ style: { display: 'none' } }}
+             okButtonProps={{ style: { display: 'none' } }} 
+             title={'Grib Files'} visible={showModal}>
                 <Spin spinning={isChangingPage}>
                     <TableWrapper>
                         <Table scroll={{ x: "max-content" }} columns={columns}
@@ -129,8 +172,17 @@ export const Grib = ({ competitionUnitId }: { competitionUnitId: string }) => {
                                 defaultPageSize: 10,
                                 current: pagination.page,
                                 total: pagination.total,
-                                onChange: onPaginationChanged
-                            }} />
+
+                            }}
+                            onChange={(antdPagination, antdFilters, antSorter) =>
+                                handleOnTableStateChanged(antdPagination,
+                                    antdFilters,
+                                    antSorter,
+                                    (param) => setSorter(param)
+                                    , pagination.page, pagination.size,
+                                    () => getAll(antdPagination.current, antdPagination.pageSize)
+                                )
+                            } />
 
                     </TableWrapper>
                 </Spin>
