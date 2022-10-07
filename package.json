@@ -6,7 +6,7 @@
     "@ant-design/icons": "^4.6.4",
     "@deck.gl/core": "^8.8.10",
     "@deck.gl/extensions": "^8.8.11",
-    "@deck.gl/geo-layers": "^8.8.10",
+    "@deck.gl/geo-layers": "^8.8.12",
     "@deck.gl/layers": "^8.8.10",
     "@deck.gl/mesh-layers": "^8.8.11",
     "@reactour/tour": "^2.2.0",
@@ -177,7 +177,11 @@
       }
     },
     "resetMocks": false,
-    "coverageReporters": ["text", "text-summary", "html"],
+    "coverageReporters": [
+      "text",
+      "text-summary",
+      "html"
+    ],
     "transformIgnorePatterns": [
       "!node_modules/"
     ]
