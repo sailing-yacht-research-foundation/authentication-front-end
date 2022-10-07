@@ -339,3 +339,7 @@ export const EditorItem = styled.div`
         border: 1px solid #eee;
     }
 `;
+
+export const ButtonNoBorder = styled(Button)`
+    border: none;
+`;  

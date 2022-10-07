@@ -80,11 +80,9 @@ export const CloneEventModal = ({ setShowModal, showModal, event }: ICloneEventM
                     name="basic"
                     onFinish={onFinish}
                     initialValues={{
-                        approximateStartTime: '',
-                        approximateEndTime: '',
+                        name: event.name || ''
                     }}
                 >
-
                     <Tooltip title={t(translations.my_event_list_page.new_name)}>
                         <Form.Item
                             label={<SyrfFieldLabel>{t(translations.my_event_list_page.new_name)}</SyrfFieldLabel>}
@@ -140,8 +138,10 @@ export const CloneEventModal = ({ setShowModal, showModal, event }: ICloneEventM
                                 validator(_, value) {
                                     const startTime = getFieldValue('approximateStartTime');
                                     const endTime = getFieldValue('approximateEndTime');
-                                    const isStartDateTimeAfterEndDateTime = endTime?.isAfter(startTime);
-
+                                    let isStartDateTimeAfterEndDateTime = true;
+                                    if (endTime) {
+                                        isStartDateTimeAfterEndDateTime = endTime?.isAfter(startTime);
+                                    }
 
                                     if (!value || !getFieldValue('approximateStartTime') || isStartDateTimeAfterEndDateTime) {
                                         return Promise.resolve();

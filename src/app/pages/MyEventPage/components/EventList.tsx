@@ -199,7 +199,7 @@ export const EventList = () => {
       render: (text, record) => {
         return (
           <Space size="small">
-            <Tooltip title={t(translations.tip.clone_event)}>
+            <Tooltip title={t(translations.my_event_list_page.clone_event)}>
               <BorderedButton icon={<FaClone />} onClick={() => {
                 showCloneEventModal(record);
               }} type="primary" />
