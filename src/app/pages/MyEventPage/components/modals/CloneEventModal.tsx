@@ -43,12 +43,16 @@ export const CloneEventModal = ({ setShowModal, showModal, event }: ICloneEventM
 
         if (response.success) {
             toast.success(t(translations.general.your_action_is_successful));
-            form.resetFields();
-            setShowModal(false);
+            hideModal();
             dispatch(actions.getEvents({ page: 1, size: 10 }));
         } else {
             showToastMessageOnRequestError(response.error);
         }
+    }
+
+    const hideModal = () => {
+        form.resetFields();
+        setShowModal(false);
     }
 
     const dateLimiter = (current) => {
@@ -68,7 +72,7 @@ export const CloneEventModal = ({ setShowModal, showModal, event }: ICloneEventM
     }, [event.name]);
 
     return (
-        <Modal onCancel={() => setShowModal(false)} title={t(translations.my_event_list_page.clone_event_name, { name: event.name })} visible={showModal} footer={null}>
+        <Modal onCancel={hideModal} title={t(translations.my_event_list_page.clone_event_name, { name: event.name })} visible={showModal} footer={null}>
             <Spin spinning={isLoading}>
                 <Form
                     form={form}
