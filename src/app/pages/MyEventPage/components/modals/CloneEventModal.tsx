@@ -69,6 +69,7 @@ export const CloneEventModal = ({ setShowModal, showModal, event }: ICloneEventM
         if (event.name) {
             form.setFieldsValue({ name: event.name });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event.name]);
 
     return (
