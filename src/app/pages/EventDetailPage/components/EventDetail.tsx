@@ -206,7 +206,6 @@ export const EventDetail = () => {
     const renderEventActions = () => {
         return <EventActions>
             <Space wrap style={{ justifyContent: 'flex-end' }}>
-                {isAuthenticated && <Tooltip title={t(translations.my_event_list_page.clone_event)}><ButtonNoBorder onClick={() => setShowCloneModal(true)} icon={<FaClone />} /></Tooltip>}
                 {canManageEvent(event) &&
                     <>
                         {menus.map((item, index) => {
@@ -219,12 +218,13 @@ export const EventDetail = () => {
                 {(canManageEvent(event) || isSuperAdminAndIsScraped(event, authUser)) && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>}
                 {canLeaveEvent(event) && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
                 {canRegisterEvent(event) && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
+                {isAuthenticated && <Tooltip title={t(translations.my_event_list_page.clone_event)}><ButtonNoBorder onClick={() => setShowCloneModal(true)} icon={<FaClone />} /></Tooltip>}
                 <Tooltip title={t(translations.tip.download_icalendar_file)}>
-                    <Button type="link" onClick={() => {
+                    <ButtonNoBorder onClick={() => {
                         downloadIcalendarFile(event);
                     }}>
                         <AiOutlineCalendar style={{ fontSize: '23px' }} />
-                    </Button>
+                    </ButtonNoBorder>
                 </Tooltip>
                 <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
             </Space>
