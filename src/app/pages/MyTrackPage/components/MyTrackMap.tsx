@@ -10,13 +10,12 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/translations';
-import { renderEmptyValue } from 'utils/helpers';
+import { createMVTLayer, renderEmptyValue } from 'utils/helpers';
 import { depthAreaChartOptions, mapInitializationParams, TIME_FORMAT } from 'utils/constants';
 import { useSelector } from 'react-redux';
 import { selectPagination } from '../slice/selectors';
 
 import { LeafletLayer } from 'deck.gl-leaflet';
-import { MVTLayer } from '@deck.gl/geo-layers';
 import { NauticalChartSelector } from 'app/components/NauticalChartSelector';
 
 require('leaflet.markercluster');
@@ -38,7 +37,7 @@ const deckLayer = new LeafletLayer({
 
 export const MyTrackMap = React.forwardRef<any, any>(({ zoom, isFocusingOnSearchInput }, ref) => {
 
-    const [layers, setLayers] = React.useState<any>([new MVTLayer(depthAreaChartOptions)]);
+    const [layers, setLayers] = React.useState<any>([createMVTLayer(depthAreaChartOptions)]);
 
     const map = useMap();
 
