@@ -15,6 +15,7 @@ import { cloneEvent } from 'services/live-data-server/event-calendars';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { useMyEventListSlice } from '../../slice';
+import { useHistory } from 'react-router-dom';
 
 interface ICloneEventModal {
     showModal: boolean,
@@ -34,6 +35,8 @@ export const CloneEventModal = ({ setShowModal, showModal, event }: ICloneEventM
 
     const { actions } = useMyEventListSlice();
 
+    const history = useHistory();
+
     const onFinish = async (values) => {
         const { approximateStartTime, approximateEndTime, name } = values;
 
@@ -45,6 +48,7 @@ export const CloneEventModal = ({ setShowModal, showModal, event }: ICloneEventM
             toast.success(t(translations.general.your_action_is_successful));
             hideModal();
             dispatch(actions.getEvents({ page: 1, size: 10 }));
+            history.push(`/events/${response.data?.id}/update`);
         } else {
             showToastMessageOnRequestError(response.error);
         }
