@@ -193,3 +193,11 @@ export const getProfileEvents = (profileId: string, page: number, size: number) 
       }
   }))
 }
+
+export const cloneEvent = (calendarEventId: string, name: string, approximateStartTime, approximateEndTime) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/clone`, {
+        name,
+        approximateEndTime,
+        approximateStartTime
+    }))
+}
