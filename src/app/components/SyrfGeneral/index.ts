@@ -302,8 +302,6 @@ export const MapPaginationWrapper = styled.div`
     max-width: 98%;
     z-index: 11;
     text-align: center;
-    z-index: 9999;
-
     .ant-pagination-item:not(.ant-pagination-item-active) a {
     color: rgba(0, 0, 0, 0.85) !important;
     }
@@ -338,4 +336,8 @@ export const EditorItem = styled.div`
         border-radius: 50%;
         border: 1px solid #eee;
     }
+`;
+
+export const ButtonNoBorder = styled(Button)`
+    border: none;
 `;

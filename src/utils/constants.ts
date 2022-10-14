@@ -1,3 +1,4 @@
+import { getDepareFillColor } from "./race/race-helper";
 
 export const FIELD_VALIDATE = {
     phone: 'phone',
@@ -336,3 +337,67 @@ export const ignoreBrowserSupportAttributes = {
 }
 
 export const etcUTCTimezone = 'Etc/UTC';
+
+export const gribModels = [
+    'GFS',
+    'GFS_025_CIN_SURFACE',
+    'GFS_025_GUST_SURFACE',
+    'GFS_025_PRES_SURFACE',
+    'GFS_025_WIND_10M',
+    'GFS_025_WIND_20M',
+    'GFS_025_WIND_30M',
+    'GFS_025_WIND_40M',
+    'GFS_025_WIND_50M',
+    'GFS_025_WIND_80M',
+    'GFS_050_CIN_SURFACE',
+    'GFS_050_GUST_SURFACE',
+    'GFS_050_PRES_SURFACE',
+    'GFS_050_WIND_10M',
+    'GFS_050_WIND_20M',
+    'GFS_050_WIND_30M',
+    'GFS_050_WIND_50M',
+    'GFS_050_WIND_80M',
+    'ERA5_025_PRES_SFC',
+    'ERA5_025_WIND_10M',
+    'ERA5_500_COEFFICENT_DRAG_10M',
+    'ERA5_500_DIRECTION_WIND_WAVES_SFC',
+    'ERA5_500_MEAN_DIRECTION_TOTAL_SWELL_SFC',
+    'ERA5_500_MEAN_PERIOD_TOTAL_SWELL_SFC',
+    'ERA5_500_MWSPER_SFC',
+    'ERA5_500_SIG_HEIGHT_TOTAL_SWELL_SFC',
+    'ERA5_500_WAVE_SPECTRAL_DIRECTION_WIDTH_SFC',
+    'ERA5_500_WAVE_SPECTRAL_DIRECTION_WIDTH_SWELL_SFC',
+    'ERA5_500_WAVE_SPECTRAL_DIRECTION_WIDTH_WIND_WAVES_SFC',
+    'ERA5_500_WVPER_SFC',
+    'ERA5_500_WWSDIR_SFC',
+    'ECMWF_OPER',
+    'HRRR_SUB_HOURLY',
+    'ARPEGE_WORLD',
+    'ARPEGE_EUROPE',
+    'RTOFS_GLOBAL',
+    'RTOFS_FORECAST_WESTERN_CONUS',
+    'RTOFS_FORECAST_WESTERN_ATLANTIC',
+    'AROME_FRANCE',
+    'AROME_FRANCE_HD'
+];
+
+export const depthAreaChartOptions = {
+    data: `${process.env.REACT_APP_CHART_DATA_URL}/data/tiles/pbftiles/depare/{z}/{x}/{y}.pbf`,
+    getFillColor: getDepareFillColor,
+    parameters: {
+        depthTest: true
+    },
+    id: 'depare',
+    pickable: true,
+    minZoom: 0,
+    maxZoom: 23
+}
+
+export const mapInitializationParams = {
+    attribution: '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
+    maxZoom: 18,
+    minZoom: 2,
+    id: 'jweisbaum89/cl0fp8ji7000c14pfpnbrz6xf',
+    tileSize: 512,
+    zoomOffset: -1,
+}

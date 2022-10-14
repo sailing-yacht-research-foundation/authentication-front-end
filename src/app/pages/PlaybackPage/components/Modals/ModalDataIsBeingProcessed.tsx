@@ -3,10 +3,10 @@ import { Modal } from "antd";
 import { translations } from "locales/translations";
 import { RaceStatusModalWrapper } from "app/components/SyrfGeneral";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCompetitionUnitDetail, selectPlaybackType } from "./slice/selectors";
+import { selectCompetitionUnitDetail, selectPlaybackType } from "../slice/selectors";
 import { RaceSource, RaceStatus } from "utils/constants";
 import { useTranslation } from "react-i18next";
-import { usePlaybackSlice } from "./slice";
+import { usePlaybackSlice } from "../slice";
 import { PlaybackTypes } from "types/Playback";
 
 let reloadInterval;

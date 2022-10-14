@@ -5,7 +5,10 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { MdReplay5, MdForward5, MdForward10, MdReplay10 } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCanIncreaseDecreaseSpeed, selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying, selectPlaybackType, selectRaceLength, selectRaceTime, selectRealRaceTime, selectViewCounts } from './slice/selectors';
+import {
+    selectCanIncreaseDecreaseSpeed, selectCompetitionUnitDetail, selectElapsedTime, selectIsPlaying,
+    selectPlaybackType, selectRaceLength, selectRaceTime, selectRealRaceTime, selectViewCounts, selectWindTime
+} from './slice/selectors';
 import { usePlaybackSlice } from './slice';
 import { PlaybackTypes } from 'types/Playback';
 import { media } from 'styles/media';
@@ -41,6 +44,7 @@ export const Playback = (props) => {
     const raceTime = useSelector(selectRaceTime);
     const realRaceTime = useSelector(selectRealRaceTime);
     const canIncreaseDecreaseSpeed = useSelector(selectCanIncreaseDecreaseSpeed);
+    const windTime = useSelector(selectWindTime);
 
     const dispatch = useDispatch();
 
@@ -233,6 +237,27 @@ export const Playback = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [realRaceTime, raceTime]);
+
+    React.useEffect(() => {
+        updateWindTimeBaseOnElapsedTime();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [elapsedTime]);
+
+    const updateWindTimeBaseOnElapsedTime = () => {
+        const playbackElapsedTimeAsMoment = moment(raceTime.start + elapsedTime);
+        const playbackElapsedTimeAsDate = playbackElapsedTimeAsMoment.format('DD');
+        const playbackElapsedTimeAsHour = playbackElapsedTimeAsMoment.format('HH');
+
+        if (windTime.date !== '0'
+            && (windTime.date !== playbackElapsedTimeAsDate
+                || windTime.hour !== playbackElapsedTimeAsHour)) {
+            dispatch(actions.setWindTime({
+                ...windTime,
+                hour: playbackElapsedTimeAsHour,
+                date: playbackElapsedTimeAsDate
+            }));
+        }
+    }
 
     const renderRaceStartTime = () => {
         if (moment(competitionUnitDetail.approximateStart).isValid())

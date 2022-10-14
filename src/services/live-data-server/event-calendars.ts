@@ -184,3 +184,20 @@ export const joinEvent = (calendarEventId: string, vesselId: string, sailNumber:
         allowShareInformation
     }));
 }
+
+export const getProfileEvents = (profileId: string, page: number, size: number) => {
+  return formatServicePromiseResponse(syrfRequest.get(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/public-events/${profileId}`, {
+      params: {
+          page: page,
+          size
+      }
+  }))
+}
+
+export const cloneEvent = (calendarEventId: string, name: string, approximateStartTime, approximateEndTime) => {
+    return formatServicePromiseResponse(syrfRequest.post(`${SYRF_SERVER.API_URL}${SYRF_SERVER.API_VERSION}/calendar-events/${calendarEventId}/clone`, {
+        name,
+        approximateEndTime,
+        approximateStartTime
+    }))
+}

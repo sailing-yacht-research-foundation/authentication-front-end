@@ -12,7 +12,7 @@ import {
   limitRaceLegsDataByElapsedTime,
   turnTracksToVesselParticipantsData,
   getRaceLengthFromSimplifiedTracks,
-  getFirstPingTimeFromSimplifiedTracks,
+  getFirstPingTimeFromSimplifiedTracks
 } from "utils/race/race-helper";
 import { useDispatch, useSelector } from "react-redux";
 import { EventEmitter } from "events";
@@ -34,7 +34,7 @@ import { stringToColour, usePrevious } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
 import { Playback } from "./Playback";
 import { RaceMap } from "./RaceMap";
-import { ConnectionLoader } from './ConnectionLoader';
+import { ConnectionLoader } from './Modals/ConnectionLoader';
 import WebsocketWorker from "../workers/old-race-websocket-worker";
 import MapFrameDataWorker from "../workers/old-race-map-frame-data";
 import { getSimplifiedTracksByCompetitionUnit } from "services/live-data-server/competition-units";
@@ -102,24 +102,7 @@ export const PlaybackOldRace = (props) => {
     mapDataWorker = new Worker(MapFrameDataWorker);
     eventEmitter = new EventEmitter();
     return () => {
-      if (eventEmitter) {
-        eventEmitter.removeAllListeners();
-        eventEmitter.off(RaceEmitterEvent.PING, () => { });
-        eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
-        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
-        eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
-        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
-        eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
-        eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
-        eventEmitter = undefined;
-      }
-
-      socketWorker?.terminate();
-      mapDataWorker?.terminate();
-      socketWorker = undefined;
-      mapDataWorker = undefined;
-      dispatch(actions.setElapsedTime(0));
-      dispatch(actions.setRaceLength(0));
+      clearPlaybackData();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -144,7 +127,6 @@ export const PlaybackOldRace = (props) => {
     // Get old race additional data
     if (competitionUnitDetail?.id) {
       dispatch(actions.getOldRaceData({ raceId: competitionUnitDetail.id }));
-      getSimplifiedTracks();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -182,6 +164,7 @@ export const PlaybackOldRace = (props) => {
   // Set vessel participants, update format to object
   useEffect(() => {
     if (vesselParticipants?.length) {
+      getSimplifiedTracks();
       const vesselParticipantsObject = {};
       vesselParticipants.forEach((vesselParticipant) => {
         // Set new participant data
@@ -343,6 +326,19 @@ export const PlaybackOldRace = (props) => {
         coursePoints: coursePoints
       }
     });
+  }
+
+  const clearPlaybackData = () => {
+    if (eventEmitter) {
+      eventEmitter.removeAllListeners();
+      eventEmitter = undefined;
+    }
+
+    socketWorker?.terminate();
+    mapDataWorker?.terminate();
+    socketWorker = undefined;
+    mapDataWorker = undefined;
+    dispatch(actions.clearData());
   }
 
   const mapData = (e) => {

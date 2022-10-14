@@ -23,15 +23,15 @@ import { usePlaybackSlice } from "./slice";
 import { MAP_DEFAULT_VALUE, RaceDataUpdate, RaceEmitterEvent, RaceSource, RaceStatus, WebsocketConnectionStatus, WebsocketRaceEvent, WSMessageDataType, WSTrackingStateUpdate } from "utils/constants";
 import { canStreamToExpedition, getBoatNameFromVesselParticipantObject, stringToColour } from "utils/helpers";
 import { selectSessionToken, selectUserCoordinate } from "../../LoginPage/slice/selectors";
-import { ModalCountdownTimer } from "./ModalCountdownTimer";
+import { ModalCountdownTimer } from "./Modals/ModalCountdownTimer";
 import { RaceMap } from "./RaceMap";
 import { ExpeditionServerActionButtons } from "app/pages/CompetitionUnitCreateUpdatePage/components/ExpeditionServerActionButtons";
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { KudosReaction } from "./KudosReaction";
-import { ModalRacePostponed } from "./ModalRacePostponed";
-import { ModalRaceCompleted } from "./ModalRaceCompleted";
-import { ModalRaceCanceled } from "./ModalRaceCanceled";
+import { ModalRacePostponed } from "./Modals/ModalRacePostponed";
+import { ModalRaceCompleted } from "./Modals/ModalRaceCompleted";
+import { ModalRaceCanceled } from "./Modals/ModalRaceCanceled";
 
 export const PlaybackStreamRace = () => {
   const streamUrl = `${process.env.REACT_APP_SYRF_STREAMING_SERVER_SOCKETURL}`;
@@ -86,20 +86,7 @@ export const PlaybackStreamRace = () => {
 
   useEffect(() => {
     return () => {
-      if (eventEmitter) {
-        eventEmitter.removeAllListeners();
-        eventEmitter.off(RaceEmitterEvent.PING, () => { });
-        eventEmitter.off(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, () => { });
-        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_LOCATION, () => { });
-        eventEmitter.off(RaceEmitterEvent.UPDATE_COURSE_MARK, () => { });
-        eventEmitter.off(RaceEmitterEvent.ZOOM_TO_PARTICIPANT, () => { });
-        eventEmitter.off(RaceEmitterEvent.RENDER_REGS, () => { });
-        eventEmitter.off(RaceEmitterEvent.REMOVE_PARTICIPANT, () => { });
-        eventEmitter.off(RaceEmitterEvent.LEG_UPDATE, () => { });
-        eventEmitter.off(RaceEmitterEvent.OCS_DETECTED, () => { });
-      }
-      dispatch(actions.setElapsedTime(0));
-      dispatch(actions.setRaceLength(0));
+      clearPlayerData();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -334,6 +321,13 @@ export const PlaybackStreamRace = () => {
     }
   }
 
+  const clearPlayerData = () => {
+    if (eventEmitter) {
+      eventEmitter.removeAllListeners();
+    }
+    dispatch(actions.clearData());
+  }
+
   const adjustCompetitionUnitStartTime = (time) => {
     if (competitionUnitDetail.startTime === time) return;
     dispatch(actions.setCompetitionUnitDetail({
@@ -362,7 +356,7 @@ export const PlaybackStreamRace = () => {
       vessel,
       vesselParticipantId: id,
       positions: [],
-      lastPosition: {  },
+      lastPosition: {},
       deviceType: 'boat',
       sailNumber: vesselParticipant.sailNumber,
       participant: { competitor_name: vessel?.publicName },

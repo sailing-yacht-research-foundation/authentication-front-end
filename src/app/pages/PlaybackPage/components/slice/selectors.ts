@@ -115,3 +115,13 @@ export const selectVesselParticipantDataForShowingKudos = createSelector(
   [selectDomain],
   (playbackState) => playbackState.vesselParticipantForShowingKudos
 )
+
+export const selectWindTime = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.windTime
+)
+
+export const selectIsHavingCountdown = createSelector(
+  [selectDomain],
+  (playbackState) => playbackState.isHavingCountdown
+)

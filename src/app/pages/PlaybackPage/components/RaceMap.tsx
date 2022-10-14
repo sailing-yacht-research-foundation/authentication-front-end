@@ -12,23 +12,28 @@ import MarkIcon from "../assets/mark.svg";
 import { ReactComponent as BoatIcon } from "../assets/ic-boat.svg";
 import { NormalizedRaceLeg } from "types/RaceLeg";
 import { MarkerInfo } from "./MarkerInfo";
-import { GeometrySide, RaceEmitterEvent, RaceSource } from "utils/constants";
+import { depthAreaChartOptions, GeometrySide, mapInitializationParams, RaceEmitterEvent, RaceSource } from "utils/constants";
 import styled from "styled-components";
 import { VscReactions } from "react-icons/vsc";
 import { usePlaybackSlice } from "./slice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCompetitionUnitDetail, selectPlaybackType } from "./slice/selectors";
+import { selectCompetitionUnitDetail, selectIsHavingCountdown, selectPlaybackType, selectRaceTime, selectWindTime } from "./slice/selectors";
 import { PlaybackTypes } from "types/Playback";
 import { selectIsAuthenticated } from "app/pages/LoginPage/slice/selectors";
 import moment from "moment";
 import { ConfirmModal } from "app/components/ConfirmModal";
 import { claimTrack } from "services/live-data-server/my-tracks";
-import { showToastMessageOnRequestError } from "utils/helpers";
+import { createMVTLayer, showToastMessageOnRequestError } from "utils/helpers";
 import { FaRegHandPointer } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { translations } from "locales/translations";
 import BoatPinIcon from '../assets/boat_pin.png';
 import StartPinIcon from '../assets/start_pin.png';
+
+// deck-gl
+import { LeafletLayer } from 'deck.gl-leaflet';
+import { ParticleLayer } from 'deck.gl-particle';
+import { NauticalChartSelector } from "app/components/NauticalChartSelector";
 
 require("leaflet-hotline");
 require("leaflet-rotatedmarker");
@@ -54,29 +59,41 @@ const colors = {
 
 const NO_PING_TIMEOUT = 60000;
 
+const deckLayer = new LeafletLayer({
+  layers: []
+});
+
+const windLayerOptions = {
+  id: 'particle',
+  color: [255, 255, 255],
+  width: 1,
+  opacity: 0.2,
+  visible: true,
+  numParticles: 2000,
+  speedFactor: 4,
+  maxAge: 60,
+  imageUnscale: [-128, 127],
+  bounds: [-180, -90, 180, 90],
+}
+
 export const RaceMap = (props) => {
+  const [layers, setLayers] = React.useState<any>([createMVTLayer({
+    ...depthAreaChartOptions
+  })]);
   const { emitter } = props;
-
   const { actions } = usePlaybackSlice();
-
   const dispatch = useDispatch();
-
   const playbackType = useSelector(selectPlaybackType);
-
   const isAuthenticated = useSelector(selectIsAuthenticated);
-
   const competitionUnitDetail = useSelector(selectCompetitionUnitDetail);
-
+  const raceTime = useSelector(selectRaceTime);
+  const isHavingCountdown = useSelector(selectIsHavingCountdown);
   const [selectedVesselParticipant, setSelectedVesselParticipant] = React.useState<any>({});
-
   const [showClaimTrackConfirModal, setShowClaimTrackConfirmModal] = React.useState<boolean>(false);
-
   const [isClaimingTrack, setIsClaimingTrack] = React.useState<boolean>(false);
-
+  const [initializedWind, setInitializedWind] = React.useState<boolean>(false);
   const { t } = useTranslation();
-
   const map = useMap();
-
   const raceStatus = useRef<any>({ // for globally manage all markers and race states.
     boats: {}, // layers
     tracks: {}, // layers
@@ -87,6 +104,18 @@ export const RaceMap = (props) => {
     zoomedToRaceLocation: false,
     courseData: [] /// sequenced courses raw data.
   });
+  const windTime = useSelector(selectWindTime);
+
+  useEffect(() => {
+    if (raceTime.start !== null
+      && raceTime.start !== undefined
+      && raceTime.start !== 0
+      && moment(raceTime.start).isValid()
+      && !initializedWind) {
+      initializeWind();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [raceTime]);
 
   useEffect(() => {
     initializeMapView();
@@ -105,7 +134,7 @@ export const RaceMap = (props) => {
       });
 
       // Update the courses
-      emitter.on(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
+      emitter.once(RaceEmitterEvent.RENDER_SEQUENCED_COURSE, (sequencedCourses: MappedCourseGeometrySequenced[]) => {
         current.courseData = JSON.parse(JSON.stringify(sequencedCourses)); // save this for later update.
         _drawCourse(sequencedCourses);
       });
@@ -137,8 +166,28 @@ export const RaceMap = (props) => {
 
       emitter.on(RaceEmitterEvent.CHANGE_BOAT_COLOR_TO_GRAY, _changeBoatColorToGray);
     }
+
+    return () => {
+      deckLayer.setProps({ layers: [] });
+      map.removeLayer(deckLayer);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    updateWindLayer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [windTime]);
+
+  const updateWindLayer = () => {
+    if (windTime.year === '0') return; // in case the windtime is not initialized.
+    const newLayers = [...layers.filter(l => l.id !== 'particle'), new ParticleLayer({
+      image: `${process.env.REACT_APP_WIND_DATA_URL}/${windTime.year}/${windTime.month}/${windTime.date}/${windTime.hour}/wind_data.png`, // see deck.gl BitmapLayer image property
+      ...windLayerOptions
+    })];
+    setLayers(newLayers);
+    deckLayer.setProps({ layers: newLayers });
+  }
 
   const _changeBoatColorToGray = (vesselParticipantId: string) => {
     const { current } = raceStatus;
@@ -776,20 +825,43 @@ export const RaceMap = (props) => {
     return false;
   };
 
+  const initializeWind = () => {
+    if (!process.env.REACT_APP_WIND_DATA_URL) return;
+    const raceTimeAsMoment = moment(raceTime.start);
+    const date = raceTimeAsMoment.format('DD');
+    const month = raceTimeAsMoment.format('MM');
+    const year = raceTimeAsMoment.format('YYYY')
+    const hour = raceTimeAsMoment.format('HH');
+    const newLayers = [...layers, new ParticleLayer({
+      image: `${process.env.REACT_APP_WIND_DATA_URL}/${year}/${month}/${date}/${hour}/wind_data.png`, // see deck.gl BitmapLayer image property
+      ...windLayerOptions
+    })];
+    setLayers(newLayers);
+    deckLayer?.setProps({ layers: newLayers });
+    setInitializedWind(true);
+    dispatch(actions.setWindTime({
+      year: year,
+      month: month,
+      date: date,
+      hour: hour
+    }));
+  }
+
   const initializeMapView = () => {
+    const southWest = L.latLng(-89.98155760646617, -180),
+      northEast = L.latLng(89.99346179538875, 180);
+    const bounds = L.latLngBounds(southWest, northEast);
+
+    map.setMaxBounds(bounds);
     new L.TileLayer(
       `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`,
-      {
-        attribution:
-          '<a href="https://www.github.com/sailing-yacht-research-foundation"><img style="width: 15px; height: 15px;" src="/favicon.ico"></img></a>',
-        maxZoom: 19,
-        minZoom: 1,
-        id: "jweisbaum89/cki2dpc9a2s7919o8jqyh1gss",
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: "your.mapbox.access.token",
-      }
+      mapInitializationParams
     ).addTo(map);
+    map.addLayer(deckLayer);
+
+    map.on('drag', function () { // prevent zooming out of the world and looping world
+      map.panInsideBounds(bounds, { animate: false });
+    });
 
     map.on('zoomstart', () => {
       let markers = document.querySelectorAll<HTMLElement>('.leaflet-marker-pane > *');
@@ -805,10 +877,11 @@ export const RaceMap = (props) => {
           marker.style.transition = 'transform .3s linear';
         })
       }, 50);
-    })
+    });
   };
 
   return <>
+    <NauticalChartSelector style={{ top: isHavingCountdown ? '55px' : '5px' }} layers={layers} deckLayer={deckLayer} setLayers={setLayers} />
     <ConfirmModal
       title={t(translations.playback_page.claim_this_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
       content={t(translations.playback_page.are_you_sure_you_want_to_claim_track, { participantName: selectedVesselParticipant.participant?.competitor_name || '' })}
@@ -846,4 +919,4 @@ const KudoReactionMenuButton = styled(VscReactions)`
 
 const ClaimTrackButton = styled(FaRegHandPointer)`
   ${boatActionStyles};
-`
+`;

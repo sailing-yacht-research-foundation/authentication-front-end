@@ -21,9 +21,12 @@ import { Link } from "react-router-dom";
 import { StyleConstants } from "styles/StyleConstants";
 import { handleGoBack, renderEmptyValue } from "utils/helpers";
 import { SimulateRaceButton } from "./components/SimulateRaceButton";
-import { ModalDataIsBeingProcessed } from "./components/ModalDataIsBeingProcessed";
+import { ModalDataIsBeingProcessed } from "./components/Modals/ModalDataIsBeingProcessed";
 import { CompetitionUnit } from "types/CompetitionUnit";
-import { Tooltip, Typography } from "antd";
+import { Space, Tooltip, Typography } from "antd";
+import { selectUser } from "../LoginPage/slice/selectors";
+import { RaceStatus } from "utils/constants";
+import { Grib } from "./components/Grib";
 
 export const PlaybackPage = () => {
   const [raceIdentity, setRaceIdentity] = useState({ name: "SYRF", description: "", eventName: "", isTrackNow: false });
@@ -38,6 +41,7 @@ export const PlaybackPage = () => {
   const searchRaceData = useSelector(selectSearchRaceDetail);
   const playbackType = useSelector(selectPlaybackType);
   const isSimplifiedPlayback = useSelector(selectIsSimplifiedPlayback);
+  const authUser = useSelector(selectUser);
 
   const headerInfoElementRef = useRef<any>();
   const contentContainerRef = useRef<any>();
@@ -153,16 +157,27 @@ export const PlaybackPage = () => {
               </div>
 
               <PageHeadingRightContainer>
-                {playbackType !== PlaybackTypes.RACELOADING
-                  && playbackType !== PlaybackTypes.RACENOTFOUND
-                  && (
-                    <>
-                      <SimulateRaceButton />
-                      {!competitionUnitDetail?.calendarEvent?.isPrivate && <Share />}
-                      <FullScreen container={playbackContainerRef} />
-                    </>
-                  )
-                }
+                <Space size={5}>
+                  {playbackType !== PlaybackTypes.RACELOADING
+                    && playbackType !== PlaybackTypes.RACENOTFOUND
+                    && (
+                      <>
+                        {playbackType === PlaybackTypes.OLDRACE &&
+                          !competitionUnitDetail.calendarEvent?.isPrivate && (
+                            <>
+                              <Grib competitionUnitId={parsedQueryString?.raceId} />
+                              { authUser.developerAccountId
+                                && ![RaceStatus.CANCELED].includes(competitionUnitDetail.status)
+                                && <SimulateRaceButton /> }
+                            </>
+                          )
+                        }
+                        {!competitionUnitDetail?.calendarEvent?.isPrivate && <Share />}
+                        <FullScreen container={playbackContainerRef} />
+                      </>
+                    )
+                  }
+                </Space>
               </PageHeadingRightContainer>
             </PageHeadingContainer>
           </PageInfoContainer>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, message, Space, Spin, Tag, Tooltip } from 'antd';
-import { GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
+import { ButtonNoBorder, GobackButton, IconWrapper, PageHeaderContainerResponsive, PageInfoOutterWrapper } from 'app/components/SyrfGeneral';
 import { LocationPicker } from 'app/pages/MyEventCreateUpdatePage/components/LocationPicker';
-import { FaSave } from 'react-icons/fa';
+import { FaClone, FaSave } from 'react-icons/fa';
 import styled from 'styled-components';
 import { EventState, MAP_DEFAULT_VALUE, TIME_FORMAT } from 'utils/constants';
 import { RaceList } from './RaceList';
@@ -37,6 +37,7 @@ import { useSelector } from 'react-redux';
 import { canLeaveEvent, canManageEvent, canRegisterEvent, isSuperAdminAndIsScraped } from 'utils/permission-helpers';
 import { selectIsAuthenticated, selectUser } from 'app/pages/LoginPage/slice/selectors';
 import { checkIfStartTimezoneEtcUTC } from 'utils/event-helpers';
+import { CloneEventModal } from 'app/pages/MyEventPage/components/modals/CloneEventModal';
 
 export const EventDetail = () => {
 
@@ -70,6 +71,8 @@ export const EventDetail = () => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
     const authUser = useSelector(selectUser);
+
+    const [showCloneModal, setShowCloneModal] = React.useState<boolean>(false);
 
     const toggleRegistration = async (allowRegistration: boolean) => {
         setIsOpeningClosingRegistration(true);
@@ -203,7 +206,7 @@ export const EventDetail = () => {
     const renderEventActions = () => {
         return <EventActions>
             <Space wrap style={{ justifyContent: 'flex-end' }}>
-                { canManageEvent(event) &&
+                {canManageEvent(event) &&
                     <>
                         {menus.map((item, index) => {
                             return item.show && <Spin key={index} spinning={item.spinning}>
@@ -212,15 +215,16 @@ export const EventDetail = () => {
                         })}
                     </>}
 
-                { (canManageEvent(event) || isSuperAdminAndIsScraped(event, authUser)) && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button> }
-                { canLeaveEvent(event) && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
-                { canRegisterEvent(event) && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
+                {(canManageEvent(event) || isSuperAdminAndIsScraped(event, authUser)) && <Button shape="round" type="primary" onClick={() => history.push(`/events/${event.id}/update`)} icon={<FaSave style={{ marginRight: '10px' }} />}>{t(translations.event_detail_page.update_this_event)}</Button>}
+                {canLeaveEvent(event) && <Button icon={<IconWrapper><GiExitDoor /></IconWrapper>} shape="round" onClick={showLeaveEventModal} danger>{t(translations.my_event_list_page.leave_event_button)}</Button>}
+                {canRegisterEvent(event) && <Button icon={<IconWrapper><FiEdit /></IconWrapper>} shape="round" onClick={showRegisterEventModalOrRedirectToLogin}>{t(translations.home_page.register_as_captain)}</Button>}
+                {isAuthenticated && <Tooltip title={t(translations.my_event_list_page.clone_event)}><ButtonNoBorder onClick={() => setShowCloneModal(true)} icon={<FaClone />} /></Tooltip>}
                 <Tooltip title={t(translations.tip.download_icalendar_file)}>
-                    <Button type="link" onClick={() => {
+                    <ButtonNoBorder onClick={() => {
                         downloadIcalendarFile(event);
                     }}>
                         <AiOutlineCalendar style={{ fontSize: '23px' }} />
-                    </Button>
+                    </ButtonNoBorder>
                 </Tooltip>
                 <Share style={{ position: 'relative', bottom: 'auto', right: 'auto' }} />
             </Space>
@@ -231,6 +235,7 @@ export const EventDetail = () => {
 
     return (
         <Spin spinning={isFetchingEvent}>
+            <CloneEventModal setShowModal={setShowCloneModal} showModal={showCloneModal} event={event} />
             <ConfirmModal
                 loading={isLeavingEvent}
                 title={t(translations.my_event_list_page.leave_event, { eventName: event.name })}

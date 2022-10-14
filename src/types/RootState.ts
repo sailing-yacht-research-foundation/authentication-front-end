@@ -39,8 +39,8 @@ export interface RootState {
   competitionUnitManager?: competitionUnitManagerState;
   publicProfile?: PublicProfileState;
   profileSearch?: ProfileSearchState;
-  social: SocialProfileState;
-  notification: NotificationState;
+  social?: SocialProfileState;
+  notification?: NotificationState;
   track?: TrackState;
   vesselList?: VesselListState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly

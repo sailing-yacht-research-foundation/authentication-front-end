@@ -26,13 +26,14 @@ import { deleteParticipant } from 'services/live-data-server/participants';
 import { toast } from 'react-toastify';
 import { getColumnCheckboxProps, getColumnSearchProps, getColumnTimeProps } from 'app/components/TableFilter';
 import { FilterConfirmProps } from 'antd/lib/table/interface';
-import { FaTrash } from 'react-icons/fa';
+import { FaClone, FaTrash } from 'react-icons/fa';
 import { TableSorting } from 'types/TableSorting';
 import { TableFiltering } from 'types/TableFiltering';
 import { GiExitDoor } from 'react-icons/gi';
 import { EditFilled } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
 import { canDeleteEvent, canEditEvent, canLeaveEvent } from 'utils/permission-helpers';
+import { CloneEventModal } from './modals/CloneEventModal';
 
 const defaultOptions = {
   loop: true,
@@ -74,6 +75,8 @@ export const EventList = () => {
 
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
+  const [showCloneModal, setShowCloneModal] = React.useState<boolean>(false);
+
   const [event, setEvent] = React.useState<Partial<CalendarEvent>>({});
 
   const [mappedResults, setMappedResults] = React.useState<any[]>([]);
@@ -112,12 +115,12 @@ export const EventList = () => {
       fixed: !isMobile ? 'left' : false,
       render: (text, record) => {
         return <>
-        <Tooltip title={text}>
-          <Typography.Text ellipsis={true} style={{ maxWidth: '30vw' }}>
-            <Link to={`/events/${record.id}`}>{renderEmptyValue(text)}</Link>
-          </Typography.Text>
-        </Tooltip>
-          { record.isSimulation && <><br/><span>{t(translations.general.simulation)}</span></> }
+          <Tooltip title={text}>
+            <Typography.Text ellipsis={true} style={{ maxWidth: '30vw' }}>
+              <Link to={`/events/${record.id}`}>{renderEmptyValue(text)}</Link>
+            </Typography.Text>
+          </Tooltip>
+          {record.isSimulation && <><br /><span>{t(translations.general.simulation)}</span></>}
         </>;
       },
       ...getColumnSearchProps('name', handleSearch, handleReset)
@@ -196,6 +199,11 @@ export const EventList = () => {
       render: (text, record) => {
         return (
           <Space size="small">
+            <Tooltip title={t(translations.my_event_list_page.clone_event)}>
+              <BorderedButton icon={<FaClone />} onClick={() => {
+                showCloneEventModal(record);
+              }} type="primary" />
+            </Tooltip>
             <Tooltip title={t(translations.tip.download_icalendar_file)}>
               <DownloadButton icon={<AiOutlineCalendar />} onClick={() => {
                 downloadIcalendarFile(record);
@@ -280,8 +288,14 @@ export const EventList = () => {
     }
   }
 
+  const showCloneEventModal = (event) => {
+    setEvent(event);
+    setShowCloneModal(true);
+  }
+
   return (
     <>
+      <CloneEventModal event={event} showModal={showCloneModal} setShowModal={setShowCloneModal} />
       <DeleteEventModal
         event={event}
         onRaceDeleted={onRaceDeleted}
@@ -342,3 +356,4 @@ const StyledTag = styled(Tag)`
     margin-top: 4px;
     margin-bottom: 4px;
 `;
+

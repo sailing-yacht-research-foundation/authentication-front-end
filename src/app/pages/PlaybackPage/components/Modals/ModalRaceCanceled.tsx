@@ -3,7 +3,7 @@ import { Button, Modal } from "antd";
 import { translations } from "locales/translations";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { selectCompetitionUnitDetail } from "./slice/selectors";
+import { selectCompetitionUnitDetail } from "../slice/selectors";
 import { RaceStatus } from "utils/constants";
 import { handleGoBack } from "utils/helpers";
 import { useHistory } from "react-router-dom";
