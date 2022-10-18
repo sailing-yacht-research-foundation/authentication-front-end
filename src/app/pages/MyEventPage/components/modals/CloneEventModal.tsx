@@ -66,7 +66,7 @@ export const CloneEventModal = ({ setShowModal, showModal, event }: ICloneEventM
     const endDateLimiter = (current) => {
         const { approximateStartTime } = form.getFieldsValue();
         const currentStartDate = (approximateStartTime || moment());
-        return current && current < currentStartDate.startOf('day');
+        return current?.isBefore(currentStartDate);
     }
 
     React.useEffect(() => {
